@@ -45,6 +45,16 @@ public sealed class PreviewZoomTests : IDisposable
         }
     }
 
+    /// <summary>A window with room for the biggest size, so the size shown is
+    /// the size picked. A smaller window shows a smaller one on purpose - see
+    /// the tests at the end.</summary>
+    private static void Roomy(MainWindow window)
+    {
+        window.Width = 2600;
+        window.Height = 1800;
+        WindowHarness.Pump();
+    }
+
     private static void ShowTab(MainWindow window, string header)
     {
         var tabs = (TabControl)window.FindName("MainTabs");
@@ -63,6 +73,7 @@ public sealed class PreviewZoomTests : IDisposable
         WindowHarness.Run(window =>
         {
             var vm = (MainViewModel)window.DataContext;
+            Roomy(window);
             ShowTab(window, "Characters");
             vm.BustPreviewZoom = zoom;
             WindowHarness.Pump();
@@ -100,6 +111,7 @@ public sealed class PreviewZoomTests : IDisposable
         WindowHarness.Run(window =>
         {
             var vm = (MainViewModel)window.DataContext;
+            Roomy(window);
             ShowTab(window, "Characters");
             var preview = Descendants<JigglePreview>(window).First();
 
@@ -113,6 +125,132 @@ public sealed class PreviewZoomTests : IDisposable
             _out.WriteLine("1.5×: " + RenderOptions.GetBitmapScalingMode(preview) + ", " + preview.Stretch);
             Assert.Equal(BitmapScalingMode.HighQuality, RenderOptions.GetBitmapScalingMode(preview));
         });
+    }
+
+    // ── A window too small for the size picked (the author, 1.6.3) ──────
+    //
+    // A 2x preview in a short window pushed the options under it - the size
+    // picker first of all - off the bottom, where nothing could be reached to
+    // make it smaller again.
+
+    /// <summary>Where <paramref name="element"/> is drawn, in the window's own
+    /// coordinates.</summary>
+    private static Rect Drawn(MainWindow window, FrameworkElement element)
+    {
+        var content = (FrameworkElement)window.Content;
+        var at = element.TranslatePoint(new Point(0, 0), content);
+        return new Rect(at, new Size(element.ActualWidth, element.ActualHeight));
+    }
+
+    /// <summary>Every option under the preview that can be seen, with where it is.</summary>
+    private static List<(string Name, Rect At)> Options(MainWindow window)
+    {
+        var options = (FrameworkElement)window.FindName("BustPreviewOptions");
+        return Descendants<Control>(options)
+            .Where(c => c.IsVisible && (c is ComboBox || c is CheckBox || c is Slider || c is Button))
+            .Select(c => (c.Name.Length > 0 ? c.Name : c.GetType().Name, Drawn(window, c)))
+            .ToList();
+    }
+
+    private static void Settle(MainWindow window)
+    {
+        WindowHarness.Pump();
+        window.UpdateLayout();
+        WindowHarness.Pump();
+        window.UpdateLayout();
+        WindowHarness.Pump();
+    }
+
+    [Fact]
+    public void InAShortWindow_EveryOptionStaysInside_AndThePreviewSaysItIsSmaller()
+    {
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            window.Width = 1400;
+            window.Height = 700;
+            ShowTab(window, "Characters");
+            vm.BustPreviewZoom = 2;
+            Settle(window);
+
+            var content = (FrameworkElement)window.Content;
+            var preview = Descendants<JigglePreview>(window).First();
+            var options = Options(window);
+            _out.WriteLine($"window content {content.ActualWidth:0}x{content.ActualHeight:0}, preview {preview.ActualWidth:0}, shown {vm.BustPreviewShownZoom}x");
+            foreach (var (name, at) in options) _out.WriteLine($"  {name}: {at}");
+
+            Assert.NotEmpty(options);
+            Assert.All(options, o => Assert.True(o.At.Bottom <= content.ActualHeight + 0.5 && o.At.Right <= content.ActualWidth + 0.5,
+                                                 $"{o.Name} is drawn at {o.At}, outside a window {content.ActualWidth:0}x{content.ActualHeight:0}"));
+
+            // Smaller, but still one of the sizes offered and pinned there.
+            Assert.True(preview.ActualWidth < JigglePreview.FixedSize * 2);
+            Assert.Contains(preview.ActualWidth / JigglePreview.FixedSize, SMSModForge.Services.EditorPrefs.ZoomSteps);
+            Assert.Equal(preview.Width, preview.MinWidth);
+
+            // The picker still says what was picked, and a line says what is shown.
+            var picker = (ComboBox)window.FindName("BustPreviewSizePicker");
+            Assert.Equal(2.0, picker.SelectedItem);
+            var note = (TextBlock)window.FindName("BustPreviewShrunkText");
+            _out.WriteLine("note: " + note.Text);
+            Assert.True(note.IsVisible, "nothing says the preview is smaller than the size picked");
+        });
+    }
+
+    [Fact]
+    public void GivenRoomAgain_ItGoesBackToTheSizePicked()
+    {
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            window.Width = 1400;
+            window.Height = 700;
+            ShowTab(window, "Characters");
+            vm.BustPreviewZoom = 2;
+            Settle(window);
+            var preview = Descendants<JigglePreview>(window).First();
+            Assert.True(preview.ActualWidth < JigglePreview.FixedSize * 2);
+
+            Roomy(window);
+            Settle(window);
+            _out.WriteLine($"roomy: preview {preview.ActualWidth:0}");
+            Assert.Equal(JigglePreview.FixedSize * 2, preview.ActualWidth);
+            Assert.False(((TextBlock)window.FindName("BustPreviewShrunkText")).IsVisible);
+        });
+    }
+
+    [Fact]
+    public void InANarrowWindow_TheOptionsStayInsideToo()
+    {
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            window.Width = window.MinWidth;
+            window.Height = 1800;
+            ShowTab(window, "Characters");
+            vm.BustPreviewZoom = 2;
+            Settle(window);
+
+            var content = (FrameworkElement)window.Content;
+            var options = Options(window);
+            _out.WriteLine($"window content {content.ActualWidth:0} wide, shown {vm.BustPreviewShownZoom}x");
+            Assert.All(options, o => Assert.True(o.At.Right <= content.ActualWidth + 0.5,
+                                                 $"{o.Name} ends at {o.At.Right:0}, past a window {content.ActualWidth:0} wide"));
+            var preview = Descendants<JigglePreview>(window).First();
+            var drawn = Drawn(window, preview);
+            Assert.True(drawn.Right <= content.ActualWidth + 0.5, $"the preview ends at {drawn.Right:0}, past the window");
+        });
+    }
+
+    [Theory]
+    [InlineData(2.0, 5000, 5000, 2.0)]    // room for it: as picked
+    [InlineData(2.0, 5000, 800, 1.5)]     // 1024 does not fit 800 tall; 768 does
+    [InlineData(2.0, 600, 5000, 1.0)]     // 512 is the widest that fits 600
+    [InlineData(1.0, 5000, 5000, 1.0)]    // never bigger than picked
+    [InlineData(2.0, 100, 100, 0.5)]      // nothing fits: the smallest
+    public void TheSizeShownIsTheLargestOfferedThatFits(double chosen, double wide, double tall, double shown)
+    {
+        Assert.Equal(shown, MainViewModel.FitBustPreviewZoom(chosen, SMSModForge.Services.EditorPrefs.ZoomSteps, wide, tall));
     }
 
     [Fact]

@@ -114,6 +114,20 @@
         </DataTemplate>
 
         <!--
+            One of the Direct Path list's paths into the game (1.6.3): the path,
+            and beside it a short note saying what it is, with an example. Like
+            NavigatorTargetOption, GamePathOption.ToString() is what lands in the
+            box - the path, slashes and all - so the note is only ever shown here.
+        -->
+        <DataTemplate DataType="{x:Type vm:GamePathOption}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Value}"/>
+                <TextBlock Text="{Binding Note}" Foreground="Gray" FontSize="11"
+                           Margin="12,0,0,0" VerticalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <!--
             Compact position / rotation / scale editor for one NpcTransformViewModel
             (a placed NPC part: body / shadow / blink / wet). Three labelled rows of
             three boxes. Shared by every part row in the Places placement editor, and
@@ -781,9 +795,9 @@
             </Grid>
         </DataTemplate>
 
-        <!-- GameObjectPath → editable ComboBox: autocompletes the pack's own
-             named GameObjects (overlays, outfit busts) while still letting the
-             author type any vanilla GO name or full hierarchy path. -->
+        <!-- GameObjectPath → editable ComboBox: offers paths into the game worth
+             knowing (DirectPathExamples, grouped, a note beside each) while still
+             letting the author type any hierarchy path. -->
         <DataTemplate x:Key="GameObjectPathParamTemplate" DataType="{x:Type vm:ParamRowViewModel}">
             <Grid Style="{StaticResource ParamRowGrid}">
                 <Grid.ColumnDefinitions>
@@ -791,13 +805,17 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <ComboBox  Grid.Column="1"
+                <ComboBox Style="{StaticResource GroupedComboBox}" Grid.Column="1"
                            IsEditable="True"
                            FontFamily="Consolas"
-                           ItemsSource="{Binding DataContext.GameObjectNameOptions,
+                           ItemsSource="{Binding DataContext.DirectPathExamples,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                           ToolTip="{Binding Tooltip}"/>
+                           ToolTip="{Binding Tooltip}">
+                    <ComboBox.GroupStyle>
+                        <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                    </ComboBox.GroupStyle>
+                </ComboBox>
             </Grid>
         </DataTemplate>
 
@@ -928,6 +946,43 @@
                     </TextBlock.Style>
                 </TextBlock>
             </Grid>
+        </DataTemplate>
+
+        <!--
+            What an action's or a condition's target looks like, under its target
+            (1.6.3): see the slots in LeafConditionTemplate and ActionRowTemplate,
+            and NodeActionViewModel.PreviewArt. Defined before both.
+        -->
+        <DataTemplate x:Key="ActionTargetPreviewTemplate" DataType="{x:Type vm:NodeActionViewModel}">
+            <StackPanel Margin="0,2,0,4" Orientation="Horizontal">
+                <ctl:ScenePreview BoxSize="{Binding PreviewBoxSize}" Background="Transparent"
+                                  ToolTip="{l:T action.preview.before.tip}"
+                                  PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  SceneSprite="{Binding PreviewScene.SceneSprite, FallbackValue=''}"
+                                  VanillaFrame="{Binding PreviewScene.VanillaFrame, FallbackValue=''}"
+                                  CustomFrameSprite="{Binding PreviewScene.CustomFrameSprite, FallbackValue=''}"
+                                  Visibility="{Binding ShowsScenePreview, Converter={StaticResource BoolToVisibility}}"/>
+                <ctl:ArtThumb BoxSize="{Binding PreviewBoxSize}"
+                              ToolTip="{l:T action.preview.before.tip}"
+                              PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
+                              Sprite="{Binding PreviewArt}"
+                              Visibility="{Binding ShowsArtPreview, Converter={StaticResource BoolToVisibility}}"/>
+                <Path Tag="swapArrow" Data="M0,7 L20,7 M13,0 L20,7 L13,14" Stroke="{DynamicResource Theme.Text}"
+                      StrokeThickness="2" Opacity="0.6" Margin="8,0" VerticalAlignment="Center"
+                      Visibility="{Binding ShowsSwap, Converter={StaticResource BoolToVisibility}}"/>
+                <ctl:ScenePreview BoxSize="{Binding PreviewBoxSize}" Background="Transparent"
+                                  ToolTip="{l:T action.preview.after.tip}"
+                                  PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  SceneSprite="{Binding SceneAfterSprite}"
+                                  VanillaFrame="{Binding PreviewScene.VanillaFrame, FallbackValue=''}"
+                                  CustomFrameSprite="{Binding PreviewScene.CustomFrameSprite, FallbackValue=''}"
+                                  Visibility="{Binding ShowsSceneAfter, Converter={StaticResource BoolToVisibility}}"/>
+                <ctl:ArtThumb BoxSize="{Binding PreviewBoxSize}"
+                              ToolTip="{l:T action.preview.after.tip}"
+                              PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
+                              Sprite="{Binding ArtAfterSprite}"
+                              Visibility="{Binding ShowsArtAfter, Converter={StaticResource BoolToVisibility}}"/>
+            </StackPanel>
         </DataTemplate>
 
         <!--
@@ -1146,6 +1201,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="{l:T condition.category}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
@@ -1168,7 +1224,7 @@
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsGoOverlayCategory}" Value="True">
+                                        <DataTrigger Binding="{Binding IsGoLevelScoped}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -1192,7 +1248,7 @@
                                 <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsGoOverlayCategory}" Value="True">
+                                        <DataTrigger Binding="{Binding IsGoLevelScoped}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -1200,7 +1256,20 @@
                             </ComboBox.Style>
                         </ComboBox>
 
-                        <TextBlock Text="{l:T condition.target}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                        <!-- "NPC" rather than "Target" for the NPCs category: the field
+                             names one NPC of the level above. -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{l:T condition.target}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding GoCategory}" Value="NPCs">
+                                            <Setter Property="Text" Value="{l:T condition.npc}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                         <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,2"
                                   IsEditable="True"
                                   IsEnabled="{Binding IsGoTargetEnabled}"
@@ -1211,9 +1280,9 @@
                             </ComboBox.GroupStyle>
                             <ComboBox.Style>
                                 <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
-                                    <!-- default: Direct Path → all pack-named GOs -->
+                                    <!-- default: Direct Path → paths into the game worth knowing (DirectPathExamples) -->
                                     <Setter Property="ItemsSource"
-                                            Value="{Binding DataContext.GameObjectNameOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            Value="{Binding DataContext.DirectPathExamples, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="Bust">
                                             <Setter Property="ItemsSource"
@@ -1221,6 +1290,9 @@
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="GameObjects">
                                             <Setter Property="ItemsSource" Value="{Binding GoOverlayOptions}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding GoCategory}" Value="NPCs">
+                                            <Setter Property="ItemsSource" Value="{Binding GoNpcOptions}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="Scene">
                                             <Setter Property="ItemsSource"
@@ -1230,6 +1302,21 @@
                                 </Style>
                             </ComboBox.Style>
                         </ComboBox>
+                        <!-- What the target looks like, as on the Set-Active action (1.6.3):
+                             built only while there is something to show. -->
+                        <ContentControl Grid.Row="3" Grid.Column="1" Focusable="False" IsTabStop="False">
+                            <ContentControl.Style>
+                                <Style TargetType="ContentControl">
+                                    <Setter Property="Content" Value="{x:Null}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ShowsAnyPreview}" Value="True">
+                                            <Setter Property="Content" Value="{Binding}"/>
+                                            <Setter Property="ContentTemplate" Value="{StaticResource ActionTargetPreviewTemplate}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ContentControl.Style>
+                        </ContentControl>
                     </Grid>
 
                     <!-- Unified Variable editor. Source picks Pack (per-pack store) vs
@@ -1724,7 +1811,7 @@
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsGoOverlayCategory}" Value="True">
+                                        <DataTrigger Binding="{Binding IsGoLevelScoped}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -1754,7 +1841,7 @@
                                 <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsGoOverlayCategory}" Value="True">
+                                        <DataTrigger Binding="{Binding IsGoLevelScoped}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -1762,7 +1849,20 @@
                             </ComboBox.Style>
                         </ComboBox>
 
-                        <TextBlock Text="{l:T action.target}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                        <!-- "NPC" rather than "Target" for the NPCs category: the field
+                             names one NPC of the level above. -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{l:T action.target}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding GoCategory}" Value="NPCs">
+                                            <Setter Property="Text" Value="{l:T action.npc}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                         <!-- IsEnabled: for GameObjects the target list is
                              level-scoped, so the combo stays disabled until a
                              Level is chosen above (always enabled otherwise). -->
@@ -1776,7 +1876,7 @@
                             <ComboBox.Style>
                                 <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="ItemsSource"
-                                            Value="{Binding DataContext.GameObjectNameOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            Value="{Binding DataContext.DirectPathExamples, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="Bust">
                                             <Setter Property="ItemsSource"
@@ -1784,6 +1884,9 @@
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="GameObjects">
                                             <Setter Property="ItemsSource" Value="{Binding GoOverlayOptions}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding GoCategory}" Value="NPCs">
+                                            <Setter Property="ItemsSource" Value="{Binding GoNpcOptions}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="Places">
                                             <Setter Property="ItemsSource"
@@ -2069,12 +2172,15 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <!-- Category, Level, Target, Layer, the preview of what the
+                                 target looks like (after the Layer, which it depends on),
+                                 Switch, and the line under Switch explaining the state. -->
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
-                            <!-- The line under the Switch picker explaining the state. -->
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
@@ -2102,7 +2208,7 @@
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Category}" Value="GameObjects">
+                                        <DataTrigger Binding="{Binding ShowsOverlayLevel}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -2132,7 +2238,7 @@
                                 <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Category}" Value="GameObjects">
+                                        <DataTrigger Binding="{Binding ShowsOverlayLevel}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -2140,7 +2246,20 @@
                             </ComboBox.Style>
                         </ComboBox>
 
-                        <TextBlock Text="{l:T action.target}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                        <!-- "NPC" rather than "Target" for the NPCs category: the field
+                             names one NPC of the level above. -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{l:T action.target}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Category}" Value="NPCs">
+                                            <Setter Property="Text" Value="{l:T action.npc}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                         <!-- IsEnabled: for GameObjects the target list is
                              level-scoped, so the combo stays disabled until a
                              Level is chosen above (always enabled otherwise). -->
@@ -2154,9 +2273,9 @@
                             </ComboBox.GroupStyle>
                             <ComboBox.Style>
                                 <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
-                                    <!-- default: Direct Path → all pack-named GOs -->
+                                    <!-- default: Direct Path → paths into the game worth knowing (DirectPathExamples) -->
                                     <Setter Property="ItemsSource"
-                                            Value="{Binding DataContext.GameObjectNameOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            Value="{Binding DataContext.DirectPathExamples, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Category}" Value="Bust">
                                             <Setter Property="ItemsSource"
@@ -2165,6 +2284,10 @@
                                         <DataTrigger Binding="{Binding Category}" Value="GameObjects">
                                             <!-- The overlays of the level chosen above (per-action). -->
                                             <Setter Property="ItemsSource" Value="{Binding OverlayOptions}"/>
+                                        </DataTrigger>
+                                        <!-- The NPCs placed in that level. -->
+                                        <DataTrigger Binding="{Binding Category}" Value="NPCs">
+                                            <Setter Property="ItemsSource" Value="{Binding NpcOptions}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Category}" Value="Scene">
                                             <Setter Property="ItemsSource"
@@ -2211,11 +2334,35 @@
                                   Visibility="{Binding ShowsPlaceLayer, Converter={StaticResource BoolToVisibility}}"
                                   ToolTip="{l:T action.whichLevelSTwo.tip}"/>
 
+                        <!-- What the target looks like, small, so it is picked by how it
+                             looks as well as by its name (1.6.3): a scene with its frame,
+                             or a bust, a level's GameObject or a whole place. A sprite
+                             swap shows it before and after, with an arrow between. Shown
+                             only once the target names something the editor can draw;
+                             every input is empty while its part is hidden, so a hidden
+                             preview loads nothing. See NodeActionViewModel.PreviewArt.
+                             No background: it sits in the row like the rest of it. -->
+                        <!-- Built only while there is something to show: every action row
+                             carries this slot, and most never preview anything. -->
+                        <ContentControl Grid.Row="4" Grid.Column="1" Focusable="False" IsTabStop="False">
+                            <ContentControl.Style>
+                                <Style TargetType="ContentControl">
+                                    <Setter Property="Content" Value="{x:Null}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ShowsAnyPreview}" Value="True">
+                                            <Setter Property="Content" Value="{Binding}"/>
+                                            <Setter Property="ContentTemplate" Value="{StaticResource ActionTargetPreviewTemplate}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ContentControl.Style>
+                        </ContentControl>
+
                         <!-- Three states, not a tick. Toggle is the one a checkbox could not
                              offer: flip it to whatever it is not. -->
-                        <TextBlock Text="{l:T action.switch}" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,2,4,0"
+                        <TextBlock Text="{l:T action.switch}" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0,2,4,0"
                                    Visibility="{Binding ShowsActiveToggle, Converter={StaticResource BoolToVisibility}}"/>
-                        <ComboBox Grid.Row="4" Grid.Column="1" Margin="0,2,0,0"
+                        <ComboBox Grid.Row="5" Grid.Column="1" Margin="0,2,0,0"
                                   ItemsSource="{x:Static vm:NodeActionViewModel.SwitchModes}"
                                   SelectedItem="{Binding SwitchMode, UpdateSourceTrigger=PropertyChanged}"
                                   Visibility="{Binding ShowsActiveToggle, Converter={StaticResource BoolToVisibility}}"
@@ -2226,7 +2373,7 @@
                                       </DataTemplate>
                                   </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <TextBlock Grid.Row="5" Grid.Column="1" Foreground="Gray" FontSize="10"
+                        <TextBlock Grid.Row="6" Grid.Column="1" Foreground="Gray" FontSize="10"
                                    TextWrapping="Wrap" Margin="0,1,0,0"
                                    Text="{Binding SwitchHelp}"
                                    Visibility="{Binding ShowsActiveToggle, Converter={StaticResource BoolToVisibility}}"/>
@@ -3729,7 +3876,7 @@
                  BUSTS TAB
                  ════════════════════════════════════════════════════ -->
             <TabItem Header="{l:T characters.characters}">
-                <Grid>
+                <Grid x:Name="CharactersGrid" SizeChanged="BustPreviewRoom_Changed">
                     <Grid.Resources>
                         <!-- Pack-authored and vanilla-borrowed characters read
                              very differently, so the tree groups by source
@@ -3776,7 +3923,7 @@
                             authors did not find them at all.
                         -->
                         <ColumnDefinition x:Name="CharacterSidebarColumn" Width="2*" MinWidth="180"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition x:Name="CharacterSplitterColumn" Width="Auto"/>
                         <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="{Binding BustPreviewColumnWidth}"/>
                     </Grid.ColumnDefinitions>
@@ -4420,7 +4567,7 @@
                                                 FontSize="10" Padding="5,0" Margin="4,0,0,0"
                                                 Command="{Binding DataContext.UseDefaultMaskCommand,
                                                          RelativeSource={RelativeSource AncestorType=Window}}"
-                                                Visibility="{Binding CanCopyFromDefaultOutfit,
+                                                Visibility="{Binding CanUseDefaultParts,
                                                              Converter={StaticResource BoolToVisibility}}"
                                                 ToolTip="{l:T characters.useDefaultMask.tip}"/>
                                         <ctl:PathPickerBox view:IssueTarget.Field="maskSprite" ToolTip="{l:T characters.whereJiggleAppliesHow.tip}"
@@ -4436,7 +4583,7 @@
                                                 FontSize="10" Padding="5,0" Margin="4,0,0,0"
                                                 Command="{Binding DataContext.UseDefaultBlinkCommand,
                                                          RelativeSource={RelativeSource AncestorType=Window}}"
-                                                Visibility="{Binding CanCopyFromDefaultOutfit,
+                                                Visibility="{Binding CanUseDefaultParts,
                                                              Converter={StaticResource BoolToVisibility}}"
                                                 ToolTip="{l:T characters.useDefaultMask.tip2}"/>
                                         <ctl:PathPickerBox view:IssueTarget.Field="blinkSprite" ToolTip="{l:T characters.eyesClosedOverlayUsed.tip}"
@@ -4456,10 +4603,11 @@
                                                 FontSize="10" Padding="5,0" Margin="4,0,0,0"
                                                 Command="{Binding DataContext.UseDefaultMouthPrefixCommand,
                                                          RelativeSource={RelativeSource AncestorType=Window}}"
-                                                Visibility="{Binding CanCopyFromDefaultOutfit,
+                                                Visibility="{Binding CanUseDefaultParts,
                                                              Converter={StaticResource BoolToVisibility}}"
                                                 ToolTip="{l:T characters.useDefaultMask.tip3}"/>
                                         <ctl:SuffixHintBox view:IssueTarget.Field="mouth"
+                                                           PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                            Text="{Binding MouthPrefix, UpdateSourceTrigger=PropertyChanged}"
                                                            Suffix="1.png/2.png/3.png/4.png"
                                                            IsEnabled="{Binding MouthEnabled}"
@@ -4490,10 +4638,11 @@
                                                 FontSize="10" Padding="5,0" Margin="4,0,0,0"
                                                 Command="{Binding DataContext.UseDefaultExpressionPrefixCommand,
                                                          RelativeSource={RelativeSource AncestorType=Window}}"
-                                                Visibility="{Binding CanCopyFromDefaultOutfit,
+                                                Visibility="{Binding CanUseDefaultParts,
                                                              Converter={StaticResource BoolToVisibility}}"
                                                 ToolTip="{l:T characters.useDefaultMask.tip4}"/>
                                             <ctl:SuffixHintBox view:IssueTarget.Field="expression"
+                                                               PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                Text="{Binding ExpressionPrefix, UpdateSourceTrigger=PropertyChanged}"
                                                                Suffix="{Binding ExpressionFilesHint}"
                                                                IsEnabled="{Binding ExpressionEnabled}"
@@ -4591,11 +4740,16 @@
                     <!-- RIGHT: live preview + issues. No GridSplitter between
                          columns 2 and 3 — this panel is intentionally fixed
                          (see the columns block above for why). -->
-                    <DockPanel view:TutorialAnchor.Id="panel:bustPreviewPane" Grid.Column="3" Margin="8">
-                        <TextBlock DockPanel.Dock="Top" FontWeight="Bold" Margin="0,0,0,4"
+                    <!-- Sized so nothing in it ever leaves the window: see
+                         BustPreviewRoom_Changed and BustPreviewShownZoom. The
+                         options do not fill what is left, so what they measure
+                         is what they take. -->
+                    <DockPanel x:Name="BustPreviewPane" view:TutorialAnchor.Id="panel:bustPreviewPane" Grid.Column="3" Margin="8"
+                               LastChildFill="False" SizeChanged="BustPreviewRoom_Changed">
+                        <TextBlock x:Name="BustPreviewHeader" DockPanel.Dock="Top" FontWeight="Bold" Margin="0,0,0,4"
                                    Text="{Binding SelectedOutfit.ShowsPackArt,
                                           Converter={x:Static conv:PreviewHeaderConverter.Instance}}"/>
-                        <Border DockPanel.Dock="Top" Background="#222" Padding="4" ClipToBounds="True">
+                        <Border x:Name="BustPreviewFrame" DockPanel.Dock="Top" Background="#222" Padding="4" ClipToBounds="True">
                             <!-- One preview for both kinds. A borrowed bust feeds
                                  the same control from the shipped vanilla art, so
                                  it sits in the same place and blinks, mouths and
@@ -4604,7 +4758,7 @@
                             <ctl:JigglePreview x:Name="PreviewControl"
                                                view:TutorialAnchor.Id="panel:characterPreview"
                                                Margin="0,12,0,-20"
-                                               Zoom="{Binding DataContext.BustPreviewZoom,
+                                               Zoom="{Binding DataContext.BustPreviewShownZoom,
                                                       RelativeSource={RelativeSource AncestorType=Window},
                                                       Mode=OneWay}"
                                                VanillaBustKey="{Binding VanillaPreviewBustKey}"
@@ -4617,7 +4771,8 @@
                                                Breathing="{Binding ElementName=BreathingToggle, Path=IsChecked, Mode=OneWay}"
                                                BreathingAmplitude="{Binding ElementName=BreathingDepth, Path=Value, Mode=OneWay}"/>
                         </Border>
-                        <Grid DockPanel.Dock="Top" Margin="0,8,0,0">
+                        <Grid x:Name="BustPreviewOptions" DockPanel.Dock="Top" Margin="0,8,0,0"
+                              SizeChanged="BustPreviewRoom_Changed">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -4632,6 +4787,7 @@
                                           SelectedItem="{Binding DataContext.BustPreviewZoom,
                                                          RelativeSource={RelativeSource AncestorType=Window},
                                                          Mode=TwoWay}"
+                                          x:Name="BustPreviewSizePicker"
                                           Margin="0,0,0,6"
                                           ToolTip="{l:T characters.previewSize.tip}">
                                     <ComboBox.ItemTemplate>
@@ -4640,6 +4796,12 @@
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
+                                <!-- Only when the window is too small for the size picked:
+                                     the picker keeps saying what was chosen, and this says
+                                     what is shown instead, and why. -->
+                                <TextBlock x:Name="BustPreviewShrunkText" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,-4,0,6"
+                                           Text="{Binding DataContext.BustPreviewShrunkNote, RelativeSource={RelativeSource AncestorType=Window}}"
+                                           Visibility="{Binding DataContext.BustPreviewShrunk, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
                                 <TextBlock Text="{l:T characters.mouthFrame}"/>
                                 <ComboBox x:Name="MouthPicker" SelectedIndex="0"
                                           ToolTip="{l:T characters.mouthPicker.tip}">
@@ -6472,6 +6634,18 @@
                                                 </StackPanel>
                                             </Button>
                                         </StackPanel>
+                                    <!-- How the line is translated: exactly as written everywhere,
+                                         or its words kept and only its letters changed. Only for
+                                         words that are the pack's - see TextIsThePacks. -->
+                                    <StackPanel DockPanel.Dock="Bottom" Margin="2,4,0,0"
+                                                Visibility="{Binding TextIsThePacks, Converter={StaticResource BoolToVisibility}}">
+                                        <CheckBox x:Name="NodeTextSameEverywhere" Content="{l:T dialogues.textSameEverywhere}"
+                                                  IsChecked="{Binding TextSameEverywhere}"
+                                                  ToolTip="{l:T dialogues.textSameEverywhere.tip}"/>
+                                        <CheckBox x:Name="NodeTextLettersOnly" Content="{l:T dialogues.textLettersOnly}" Margin="0,2,0,0"
+                                                  IsChecked="{Binding TextLettersOnly}"
+                                                  ToolTip="{l:T dialogues.textLettersOnly.tip}"/>
+                                    </StackPanel>
                                     <!-- How the line will sit in the game's box: shrunk, or running out of it. -->
                                     <TextBlock x:Name="NodeFitNote" DockPanel.Dock="Bottom" TextWrapping="Wrap" FontSize="11" Margin="2,2,2,0"
                                                Text="{Binding DataContext.SelectedNodeFitNote,

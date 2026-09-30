@@ -31,7 +31,8 @@ public sealed class PathPickerBox : DockPanel
 
     public static readonly DependencyProperty PathTextProperty =
         DependencyProperty.Register(nameof(PathText), typeof(string), typeof(PathPickerBox),
-            new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                (d, _) => ((PathPickerBox)d).ShowBorrowed()));
 
     /// <summary>The path value — bind this where the TextBox's Text was bound.</summary>
     public string PathText
@@ -42,7 +43,7 @@ public sealed class PathPickerBox : DockPanel
 
     public static readonly DependencyProperty PackRootProperty =
         DependencyProperty.Register(nameof(PackRoot), typeof(string), typeof(PathPickerBox),
-            new PropertyMetadata(null));
+            new PropertyMetadata(null, (d, _) => ((PathPickerBox)d).ShowBorrowed()));
 
     /// <summary>Pack folder for relative mode; null/empty = absolute mode.</summary>
     public string? PackRoot
@@ -88,9 +89,23 @@ public sealed class PathPickerBox : DockPanel
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
         });
         // Forward the container's tooltip to the textbox (ToolTip doesn't inherit).
-        _box.SetBinding(ToolTipProperty, new Binding(nameof(ToolTip)) { Source = this });
+        ForwardToolTip();
 
         _browse.Click += (_, __) => Browse();
+        // Its words are worked out as it draws: again when the language changes.
+        LocText.Follow(this, ShowBorrowed);
+    }
+
+    private void ForwardToolTip()
+        => _box.SetBinding(ToolTipProperty, new Binding(nameof(ToolTip)) { Source = this });
+
+    /// <summary>A value that borrows the game's own art rather than naming a
+    /// file shows as such - see <see cref="BorrowedLook"/>.</summary>
+    private void ShowBorrowed()
+    {
+        bool outside = OutsideLook.Apply(_box, PathText, PackRoot);
+        if (BorrowedLook.Apply(_box, PathText)) _box.ToolTip = BorrowedLook.Tip(PathText);
+        else if (!outside) ForwardToolTip();
     }
 
     private void Browse()
@@ -124,13 +139,71 @@ public sealed class PathPickerBox : DockPanel
         string fullPick = Path.GetFullPath(dlg.FileName);
         if (!fullPick.StartsWith(fullRoot, StringComparison.OrdinalIgnoreCase))
         {
-            MessageBox.Show(
-                Loc.F("picker.outsidePack", "folder", root),
-                Loc.T("picker.outsidePack.title"), MessageBoxButton.OK, MessageBoxImage.Warning);
+            // Offered rather than refused (1.6.3): the file is copied in, and
+            // saying where to is what shows an author that a pack's files live
+            // in its folder.
+            string to = Destination(root, fullPick, PathText);
+            if (MessageBox.Show(Loc.F("picker.outsidePack", "file", fullPick, "to", to),
+                                Loc.T("picker.outsidePack.title"), MessageBoxButton.YesNo,
+                                MessageBoxImage.Question) != MessageBoxResult.Yes)
+                return;
+            try { PathText = BringIntoPack(root, fullPick, to); }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                MessageBox.Show(Loc.F("picker.outsidePack.failed", "why", ex.Message),
+                                Loc.T("picker.outsidePack.title"), MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
             return;
         }
         // Wire format: forward slashes, pack-relative.
         PathText = fullPick.Substring(fullRoot.Length).Replace(Path.DirectorySeparatorChar, '/');
+    }
+
+    /// <summary>
+    /// Where a file from outside the pack would be copied to, inside it: beside
+    /// the file the field already names, when that is in the pack, or else in
+    /// an <c>Imported</c> folder - with a number added when that name is taken
+    /// by a different file. Forward slashes, pack-relative.
+    /// </summary>
+    internal static string Destination(string packRoot, string file, string? current)
+    {
+        string folder = "Imported";
+        if (!string.IsNullOrWhiteSpace(current) && !Shared.PackPaths.IsFullPath(current)
+            && !Shared.PackPaths.LeavesThePack(current) && !Shared.GameArt.IsBorrowed(current))
+        {
+            string? dir = Path.GetDirectoryName(current.Replace('/', Path.DirectorySeparatorChar));
+            if (!string.IsNullOrEmpty(dir)) folder = dir.Replace(Path.DirectorySeparatorChar, '/');
+        }
+
+        string name = Path.GetFileNameWithoutExtension(file), ext = Path.GetExtension(file);
+        for (int n = 1; ; n++)
+        {
+            string candidate = folder + "/" + name + (n == 1 ? "" : " (" + n + ")") + ext;
+            string abs = Path.Combine(packRoot, candidate.Replace('/', Path.DirectorySeparatorChar));
+            if (!File.Exists(abs) || SameBytes(abs, file)) return candidate;
+        }
+    }
+
+    /// <summary>Copy <paramref name="file"/> into the pack as
+    /// <paramref name="to"/> (see <see cref="Destination"/>), and give back the
+    /// path to store.</summary>
+    internal static string BringIntoPack(string packRoot, string file, string to)
+    {
+        string abs = Path.Combine(packRoot, to.Replace('/', Path.DirectorySeparatorChar));
+        Directory.CreateDirectory(Path.GetDirectoryName(abs)!);
+        if (!File.Exists(abs)) File.Copy(file, abs);
+        return to;
+    }
+
+    private static bool SameBytes(string a, string b)
+    {
+        try
+        {
+            var fa = new FileInfo(a); var fb = new FileInfo(b);
+            if (fa.Length != fb.Length) return false;
+            return File.ReadAllBytes(a).AsSpan().SequenceEqual(File.ReadAllBytes(b));
+        }
+        catch (Exception) { return false; }
     }
 
     /// <summary>

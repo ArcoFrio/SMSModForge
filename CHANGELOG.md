@@ -1,5 +1,134 @@
 # Changelog
 
+## 1.6.3
+
+A release of smaller improvements. Actions and conditions show a picture of
+what they are aimed at, and SetSprite shows it before and after; NPCs get a
+category of their own; Direct Path suggests the game's own objects worth
+knowing; a file from outside the pack's folder is caught before it goes
+missing for players; outfits added to the game's characters can borrow the
+game's own art; and a line can be kept from being translated. The plugin
+changes too, so update both: the game's pack list marks a pack made with this
+version for a player whose plugin is older.
+
+### Before you update
+
+**Targets still in "Extra GameObjects" move to GameObjects.** That was the
+GameObjects category's name until July, and neither the editor nor the game
+learned the old name when it changed: such an action or condition showed an
+empty Category and no Level, and in the game its object was looked up by name
+anywhere instead of inside its level - right while the name was unique, the
+wrong object when it was not. Opening the pack moves them over, the list of
+what was brought up to date says how many, and the first save keeps a copy of
+the original. The game also reads the old name correctly now, for a pack that
+has not been saved since.
+
+### New
+
+- **An NPCs category.** SetGameObjectActive, SetSprite and the
+  GameObjectActive condition can now aim at an NPC directly: pick the level,
+  then the NPC. The list holds the NPCs you placed there and, in a level of the
+  game's you extend, the game's own NPCs too - the crowds, the convention
+  guests, the stage audience. FadeSprite, MoveGameObject and SpinGameObject
+  have it too. The NPCs no longer crowd the GameObjects list, which keeps the
+  groups they stand in and the level's other objects. Actions you already
+  aimed at an NPC through GameObjects keep working as they are.
+
+  Where several NPCs share a name - most of the game's are called "NPC" -
+  each is listed by its place in the level instead, so every entry finds
+  exactly one.
+
+  SetSprite on an NPC also swaps its floor reflection to the new pose. Its
+  blink still uses the eyes-closed picture it had.
+- **Direct Path suggests paths into the game worth knowing.** Its list used to
+  offer your pack's own object and bust names - which the GameObjects, NPCs
+  and Bust categories reach properly, and which aren't written the way a
+  Direct Path is. Now it offers the game's own objects a pack most often
+  switches, taken from what the game's own dialogues switch most, grouped
+  under Game actions, Player's stats, The game's interface, Screen effects,
+  and Music and sounds. Each has a short note beside it saying what it is,
+  with an example: "Disable_All_CG - Hides the CG on screen. e.g. Activate as
+  a scene ends". Picking one writes its full path, slashes and the game's
+  own spelling included. You can still type any path.
+- **See what an action or a condition is aimed at.** SetGameObjectActive,
+  SetSprite and the GameObjectActive condition now show a small picture of
+  their target right under it, so you pick it by how it looks as well as by its
+  name:
+  - **Scene:** the scene, frame and all - a still, a GIF playing, or a
+    video's first frame, as the Scenes tab shows it.
+  - **Bust:** the bust, as your pack draws it or as the game does.
+  - **GameObjects:** the object's picture, in the level chosen above.
+  - **NPCs:** the NPC's pose.
+  - **Places** (SetSprite only): the layer the Layer picker names.
+
+  **SetSprite shows before and after**, side by side with an arrow between:
+  what the target looks like, and what your sprite turns it into. A scene
+  keeps its frame in both, as in the game. "Before" is how your pack sets it
+  up; something that ran earlier may have changed it since.
+
+  A picture appears only once the target names something the game will find,
+  the way the game looks it up (capitals included, except for a bust's name,
+  which the game doesn't mind), so one that
+  doesn't show is also a sign the name is off. A UI or a Direct Path shows
+  none: those only exist in the running game. The pictures are built only for
+  rows that show one and are shrunk to the size they are drawn, so a node with
+  a lot of actions still opens quickly.
+- **Two ticks under a line's text, for words that must not be translated.**
+  - **Same in every language:** the line reads exactly as written for every
+    player. It is never offered for translating, and the game never shows a
+    translation of it, not even one left over in an older translation file.
+  - **Keep the words, change only the letters:** for a made-up language, a
+    spell or a chant. Translating never turns it into real words it happens
+    to look like. In languages written in the same letters it stays as
+    written; in Russian, Japanese, Korean and Chinese each word is spelled
+    out in their letters, so players can read it aloud. A translation file
+    written for translating by hand says so above the line.
+
+  They are offered on any line whose words are your pack's, not on a line of
+  the game's that you left as the game wrote it.
+- **"= default" on outfits you add to the game's own characters.** The mask,
+  blink, mouth and expressions buttons now fill in the character's own default
+  bust from the game, where before they were hidden for those outfits. The game
+  uses its own art for them, at full size; the copies that come with ModForge
+  are smaller and only for the preview. A field filled in this way shows in
+  italics, set apart, with a note saying where the art comes from, and typing
+  a path or choosing a file puts your own art back in its place.
+- **Start a mask from one of the game's.** For an outfit added to one of the
+  game's characters, the mask painter's "copy from" list now offers the masks
+  of that character's own busts in the game, and painting over a borrowed mask
+  starts from it. Saving makes a mask file of your own.
+- **The game's own characters and busts can no longer be removed by
+  mistake.** - Character is greyed out for the game's characters and the
+  player, and - Outfit for the game's own busts. An outfit you added to one of
+  the game's characters can still be removed.
+- **Files outside your pack's folder can't slip through.** Players get only
+  what is inside the pack's folder, so a file anywhere else works on your
+  computer and nowhere else. A file field that leads outside the folder now has
+  a red border, and hovering it says why and what to do. Choosing a file from
+  outside with the … button no longer just refuses: it offers to copy the file
+  into your pack, beside the file the field named before or in an "Imported"
+  folder, and uses the copy.
+
+### Fixed
+
+- **SetSprite on a bust changes the bust.** Aimed at a bust through the Bust
+  category, it changed nothing and left only a line in the game's log: it
+  looked for the picture on the bust itself, where the game keeps it one level
+  down. It now finds it where the game keeps it, and a Mask set on the same
+  action goes on that picture too.
+- **The pack's translations window opens without the wait.** It worked out
+  how far along every language was each time it opened, which took a couple of
+  seconds on a large pack. Now that is worked out in the background when the
+  pack opens, and the window only works out again the translations whose file
+  changed since, or all of them after you change the pack's own texts.
+- **The character preview never pushes its options out of the window.** A
+  large preview size in a short or narrow window used to push the options under
+  it, the size picker included, off the edge, with no way back to a smaller
+  size. Now, when the size you picked doesn't fit, the preview is shown at the
+  largest size that does, a line under the picker says so, and it goes back to
+  your size as soon as the window has room for it. The picker keeps your
+  choice.
+
 ## 1.6.2
 
 A fix for the dialogue editor: a line given to the player could not be given

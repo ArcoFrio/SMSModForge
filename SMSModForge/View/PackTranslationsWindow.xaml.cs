@@ -53,10 +53,17 @@ public partial class PackTranslationsWindow : Window
     /// <summary>Whether any file was changed while it was open.</summary>
     public bool Changed { get; private set; }
 
-    public PackTranslationsWindow(ModPack pack, string packRoot)
+    private readonly Services.Translation.TranslationSummaryCache? _summaries;
+    private List<Row> _rows = new();
+
+    /// <param name="summaries">Where each translation's standing is kept
+    /// between openings (1.6.3); worked out afresh without one.</param>
+    public PackTranslationsWindow(ModPack pack, string packRoot,
+                                  Services.Translation.TranslationSummaryCache? summaries = null)
     {
         _pack = pack;
         _root = packRoot;
+        _summaries = summaries;
         Confirm = AskAPerson;
         InitializeComponent();
         Refresh();
@@ -76,7 +83,8 @@ public partial class PackTranslationsWindow : Window
     public void Refresh()
     {
         string? picked = (List.SelectedItem as Row)?.Code;
-        var rows = PackTranslations.Summaries(_pack, _root).Select(s => new Row { Summary = s }).ToList();
+        var summaries = _summaries?.Get(_pack, _root) ?? PackTranslations.Summaries(_pack, _root);
+        var rows = _rows = summaries.Select(s => new Row { Summary = s }).ToList();
         List.ItemsSource = rows;
         List.SelectedItem = rows.FirstOrDefault(r => r.Code == picked) ?? rows.FirstOrDefault();
         EmptyText.Visibility = rows.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
@@ -91,7 +99,7 @@ public partial class PackTranslationsWindow : Window
         string? from = (List.SelectedItem as Row)?.Code;
         string? wanted = TargetPicker.SelectedValue as string;
         var codes = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var r in PackTranslations.Summaries(_pack, _root)) codes.Add(r.Code);
+        foreach (var r in _rows) codes.Add(r.Code);
         foreach (var c in Loc.AvailableCodes()) codes.Add(c);
         codes.Remove(_pack.OwnLanguage);
         if (from != null) codes.Remove(from);

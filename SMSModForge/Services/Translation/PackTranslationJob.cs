@@ -73,10 +73,16 @@ public static class PackTranslationJob
     /// the job would offer it again for ever. Chinese and Japanese write those
     /// with punctuation of their own, so there it still counts until written.
     /// </summary>
-    public static List<TranslationRun.Line> Missing(TextFile? source, TextFile? existing, string? to = null)
+    /// <param name="lettersOnly">The lines whose words are kept and only their
+    /// letters change (<see cref="PackTranslations.LettersOnlyKeys"/>). In a
+    /// language of the same alphabet such a line is done when it reads as
+    /// written; in one with its own, it is done when it has been spelled out.</param>
+    public static List<TranslationRun.Line> Missing(TextFile? source, TextFile? existing, string? to = null,
+                                                   ISet<string>? lettersOnly = null)
     {
         var todo = new List<TranslationRun.Line>();
         if (source == null) return todo;
+        bool sameLetters = to != null && !PackNames.NeedsSpelling(to);
 
         foreach (var entry in source.Entries)
         {
@@ -84,6 +90,9 @@ public static class PackTranslationJob
             if (to != null && TranslationRun.NothingToTranslate(entry.Text, to)) continue;
 
             var already = existing?.Find(entry.Key);
+            if (sameLetters && already != null && lettersOnly != null && lettersOnly.Contains(entry.Key)
+                && Alike(already.Text, entry.Text) && !ChangedSince(already, entry.Text))
+                continue;
             if (already != null && !Untranslated(already, entry.Text)) continue;
 
             todo.Add(new TranslationRun.Line(entry.Key, entry.Text));
@@ -150,12 +159,13 @@ public static class PackTranslationJob
     {
         var list = new List<Waiting>();
         var source = PackTranslations.Source(pack);
+        var letters = PackTranslations.LettersOnlyKeys(pack);
         int total = source.Entries.Count(e => !string.IsNullOrWhiteSpace(e.Text));
         foreach (var language in Loc.Available())
         {
             if (string.Equals(language.Code, pack.OwnLanguage, StringComparison.OrdinalIgnoreCase)) continue;
             var file = string.IsNullOrEmpty(packRoot) ? null : Loc.Read(PackTranslations.PathOf(packRoot, language.Code));
-            list.Add(new Waiting(language.Code, language.Name, Missing(source, file, language.Code).Count, total, file != null));
+            list.Add(new Waiting(language.Code, language.Name, Missing(source, file, language.Code, letters).Count, total, file != null));
         }
         return list;
     }
@@ -234,7 +244,7 @@ public static class PackTranslationJob
     {
         if (string.Equals(code, pack.OwnLanguage, StringComparison.OrdinalIgnoreCase)) return 0;
         var file = Loc.Read(PackTranslations.PathOf(packRoot, code));
-        return Missing(PackTranslations.Source(pack, file), file, code).Count;
+        return Missing(PackTranslations.Source(pack, file), file, code, PackTranslations.LettersOnlyKeys(pack)).Count;
     }
 
     public static async Task<List<Done>> Run(
@@ -304,6 +314,8 @@ public static class PackTranslationJob
         // Who says what, and who each kept name is: for the languages whose
         // words change with it.
         var who = GenderHints.For(pack);
+        // The lines whose words are kept: spelled out, never translated.
+        var letters = PackTranslations.LettersOnlyKeys(pack);
 
         // What each language has left, counted before the first is started,
         // so the whole run has a size from the beginning.
@@ -345,7 +357,7 @@ public static class PackTranslationJob
             // back does not set them aside as unused. Missing skips them: with
             // no words of the pack's own there is nothing to translate from.
             var source = PackTranslations.Source(pack, file);
-            var todo = Missing(source, file, code);
+            var todo = Missing(source, file, code, letters);
 
             // Kept in hand and written from, rather than read back each time.
             // A batch is forty lines and a pack is thousands, so this is
@@ -382,13 +394,32 @@ public static class PackTranslationJob
                 if (wrote) Write(pack, packRoot, code, source, holding);
             }
 
+            // The lines whose words are kept come out of the translating
+            // altogether: as written where the alphabet is the same, and
+            // spelled out in this language's letters where it is not.
+            var spell = todo.Where(t => letters.Contains(t.Key)).ToList();
+            int spelledDone = 0;
+            if (spell.Count > 0)
+            {
+                todo.RemoveAll(t => letters.Contains(t.Key));
+                Step(code, 0, spell.Count + todo.Count);
+                spelledDone = await SpellOut(spell, holding, source, code, send, cancel, person,
+                                             fallback == null ? null : async c => (await fallback(c).ConfigureAwait(false)).Send)
+                                    .ConfigureAwait(false);
+                translated += spelledDone;
+                Write(pack, packRoot, code, source, holding);
+                Step(code, spelledDone, spell.Count + todo.Count);
+            }
+
             if (todo.Count == 0)
             {
-                Step(code, 0, 0);
+                Step(code, spelledDone, spelledDone);
                 done.Add(new Done(code, translated, 0, null));
+                finished += spelledDone;
                 continue;
             }
-            Step(code, 0, todo.Count);
+            int before = spell.Count;
+            Step(code, spelledDone, before + todo.Count);
 
             var run = new TranslationRun(send, wait)
             {
@@ -416,8 +447,8 @@ public static class PackTranslationJob
                 // Written per batch rather than at the end. This is what makes
                 // a run that is cut off keep its work.
                 Write(pack, packRoot, code, source, holding);
-                progress?.Invoke(code, translated, todo.Count);
-                Step(code, translated + damaged, todo.Count);
+                progress?.Invoke(code, translated, before + todo.Count);
+                Step(code, translated + damaged, before + todo.Count);
             }, cancel, keepNames?.Names, keepNames?.In(code), who).ConfigureAwait(false);
 
             // Switched to the website mid-run: the languages after it go on there.
@@ -427,9 +458,62 @@ public static class PackTranslationJob
                 byFallback = true;
             }
             done.Add(new Done(code, translated, damaged, run.StoppedBecause) { ByFallback = byFallback });
-            finished += todo.Count;
+            finished += before + todo.Count;
         }
 
+        return done;
+    }
+
+    /// <summary>
+    /// Put the lines whose words are kept into <paramref name="holding"/>, and
+    /// say how many were done: each as written, where
+    /// <paramref name="code"/> shares the pack's alphabet; spelled out word by
+    /// word in its letters where it has its own (<see cref="LettersOnly"/>).
+    /// <para/>
+    /// A line none of whose words came back spelled is left waiting rather
+    /// than written as it was - written, it would read as done, in letters
+    /// its players may not read, and never be asked for again.
+    /// </summary>
+    private static async Task<int> SpellOut(List<TranslationRun.Line> lines, TextFile holding, TextFile source,
+                                            string code, TranslationRun.Send send, CancellationToken cancel,
+                                            TranslationRun.AskAPerson? person,
+                                            Func<CancellationToken, Task<TranslationRun.Send?>>? instead)
+    {
+        if (!PackNames.NeedsSpelling(code))
+        {
+            foreach (var line in lines) Put(holding, source, line.Key, line.Text);
+            return lines.Count;
+        }
+
+        var words = LettersOnly.Words(lines.Select(l => l.Text));
+        var spelled = new Dictionary<string, string>(StringComparer.Ordinal);
+        // A few dozen at a time: every word is asked in two sentences, and a
+        // long list is one long request.
+        const int PerRequest = 40;
+        for (int i = 0; i < words.Count && !cancel.IsCancellationRequested; i += PerRequest)
+        {
+            try
+            {
+                var some = await SuggestSpellings(send, words.Skip(i).Take(PerRequest).ToList(), code, cancel,
+                                                  person, instead).ConfigureAwait(false);
+                foreach (var pair in some) spelled[pair.Key] = pair.Value;
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                // Refused, or no answer: what was spelled so far is used, and
+                // the rest waits for the next run.
+                break;
+            }
+        }
+
+        int done = 0;
+        foreach (var line in lines)
+        {
+            string respelled = LettersOnly.Respell(line.Text, spelled);
+            if (LettersOnly.Words(new[] { line.Text }).Count > 0 && Alike(respelled, line.Text)) continue;
+            Put(holding, source, line.Key, respelled);
+            done++;
+        }
         return done;
     }
 

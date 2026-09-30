@@ -28,7 +28,8 @@ public sealed class SuffixHintBox : Grid
 
     public static readonly DependencyProperty TextProperty =
         DependencyProperty.Register(nameof(Text), typeof(string), typeof(SuffixHintBox),
-            new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                (d, _) => ((SuffixHintBox)d).ShowBorrowed()));
 
     /// <summary>The value — bind this where the TextBox's Text was bound.</summary>
     public string Text
@@ -49,7 +50,42 @@ public sealed class SuffixHintBox : Grid
     }
 
     private static void OnSuffixChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        => ((SuffixHintBox)d)._hint.Text = (string)e.NewValue ?? "";
+        => ((SuffixHintBox)d).ShowBorrowed();
+
+    public static readonly DependencyProperty PackRootProperty =
+        DependencyProperty.Register(nameof(PackRoot), typeof(string), typeof(SuffixHintBox),
+            new PropertyMetadata(null, (d, _) => ((SuffixHintBox)d).ShowBorrowed()));
+
+    /// <summary>The pack's folder, to tell a prefix leading outside it
+    /// (<see cref="OutsideLook"/>). None, and nothing is told.</summary>
+    public string? PackRoot
+    {
+        get => (string?)GetValue(PackRootProperty);
+        set => SetValue(PackRootProperty, value);
+    }
+
+    /// <summary>
+    /// A prefix that borrows the game's own art rather than naming files shows
+    /// as such (<see cref="BorrowedLook"/>), and its hint says so instead of
+    /// listing file names the game will not look for.
+    /// </summary>
+    private void ShowBorrowed()
+    {
+        if (BorrowedLook.Apply(_box, Text))
+        {
+            // An en space: the file trims the text's own ends, and italics
+            // lean into an ordinary one.
+            _hint.Text = "\u2002" + Localization.Loc.T("picker.fromGame.hint");
+            _box.ToolTip = BorrowedLook.Tip(Text);
+        }
+        else
+        {
+            _hint.Text = Suffix ?? "";
+            _box.ClearValue(ToolTipProperty);
+        }
+        OutsideLook.Apply(_box, Text, PackRoot);
+        Reposition();
+    }
 
     // ── Construction ───────────────────────────────────────────────────
 
@@ -84,6 +120,7 @@ public sealed class SuffixHintBox : Grid
             Reposition();
         };
         Loaded += (_, _) => Reposition();
+        Localization.LocText.Follow(this, ShowBorrowed);
     }
 
     /// <summary>

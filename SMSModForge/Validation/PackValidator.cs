@@ -605,17 +605,26 @@ public static class PackValidator
                         Loc.F("validation.outfit.collidesWithVanillaBust", "name", outfit.GameObjectName), "outfit.collidesWithVanillaBust"));
 
                 CheckFile(packRoot, outfit.BaseSprite,  $"{oWhere}.baseSprite",  issues);
-                CheckOptionalFile(packRoot, outfit.MaskSprite, $"{oWhere}.maskSprite", issues);
-                if (outfit.BlinkEnabled)
+                if (Shared.GameArt.IsBorrowed(outfit.MaskSprite))
+                    CheckBorrowed(outfit.MaskSprite, $"{oWhere}.maskSprite", issues);
+                else
+                    CheckOptionalFile(packRoot, outfit.MaskSprite, $"{oWhere}.maskSprite", issues);
+                if (outfit.BlinkEnabled && Shared.GameArt.IsBorrowed(outfit.BlinkSprite))
+                    CheckBorrowed(outfit.BlinkSprite, $"{oWhere}.blinkSprite", issues);
+                else if (outfit.BlinkEnabled)
                     CheckFile(packRoot, outfit.BlinkSprite, $"{oWhere}.blinkSprite", issues);
 
-                if (outfit.Mouth.Enabled)
+                if (outfit.Mouth.Enabled && Shared.GameArt.IsBorrowed(outfit.Mouth.Prefix))
+                    CheckBorrowed(outfit.Mouth.Prefix, $"{oWhere}.mouth", issues);
+                else if (outfit.Mouth.Enabled)
                 {
                     for (int i = 1; i <= 4; i++)
                         CheckFile(packRoot, outfit.Mouth.Prefix + i + ".PNG",
                                   $"{oWhere}.mouth[{i}]", issues);
                 }
-                if (outfit.Expression.Enabled)
+                if (outfit.Expression.Enabled && Shared.GameArt.IsBorrowed(outfit.Expression.Prefix))
+                    CheckBorrowed(outfit.Expression.Prefix, $"{oWhere}.expression", issues);
+                else if (outfit.Expression.Enabled)
                 {
                     // The faces this CHARACTER has, not a fixed four. A face
                     // the author added is loaded from the same prefix as the
@@ -1731,6 +1740,18 @@ public static class PackValidator
             return Path.GetFullPath(fullPath).StartsWith(root, StringComparison.OrdinalIgnoreCase);
         }
         catch (Exception) { return false; }
+    }
+
+    /// <summary>
+    /// A part borrowed from one of the game's busts (<see cref="Shared.GameArt"/>): the
+    /// game has to have that bust, or the part is left empty in game.
+    /// </summary>
+    private static void CheckBorrowed(string field, string where, List<ValidationIssue> issues)
+    {
+        string? bust = Shared.GameArt.BustOf(field);
+        if (!string.IsNullOrEmpty(bust) && VanillaBusts.FindByGoName(bust) != null) return;
+        issues.Add(new(Severity.Error, where, Loc.F("validation.outfit.borrowsUnknownBust", "bust", bust ?? ""),
+                       "outfit.borrowsUnknownBust"));
     }
 
     private static void CheckFile(string packRoot, string relPath, string where, List<ValidationIssue> issues)

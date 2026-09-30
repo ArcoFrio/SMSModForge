@@ -187,10 +187,13 @@ public sealed class OutfitConveniencesTests : IDisposable
     }
 
     [Fact]
-    public void ABustAddedToOneOfTheGamesCharactersOffersNothing()
+    public void ABustAddedToOneOfTheGamesCharacters_HasNoPathsToCopy_ButBorrowsTheGamesArt()
     {
         // Its default is the character's own bust in the game, which has no
-        // paths. Copying from it would empty the field it was pressed on.
+        // paths: copying from it would empty the field it was pressed on. The
+        // blink, the mouth and the faces are borrowed from that bust instead
+        // (the author, 1.6.3) - the game's own, at full size, where the copies
+        // shipped with the editor are smaller.
         var vm = new MainViewModel();
         var theirs = vm.Characters.First(c => c.IsVanillaBust && c.Outfits.Count > 0);
         var added = theirs.AddOutfit();
@@ -200,6 +203,175 @@ public sealed class OutfitConveniencesTests : IDisposable
         Assert.NotNull(added.DefaultOutfit);
         Assert.False(added.DefaultOutfit!.ShowsPackArt);
         Assert.False(added.CanCopyFromDefaultOutfit);
+        Assert.True(added.CanBorrowFromGameDefault);
+        Assert.True(added.CanUseDefaultParts);
+    }
+
+    /// <summary>One of the game's characters, with a bust of the pack's added
+    /// and picked, in a view model that owns the buttons' commands.</summary>
+    private static (MainViewModel Vm, CharacterViewModel Theirs, OutfitViewModel Added) AnAddedBust(MainViewModel? vm = null)
+    {
+        vm ??= new MainViewModel();
+        var theirs = vm.Characters.First(c => c.IsVanillaBust && c.Outfits.Count > 0);
+        vm.SelectedCharacter = theirs;
+        var added = theirs.AddOutfit();
+        vm.SelectedOutfit = added;
+        return (vm, theirs, added);
+    }
+
+    [Fact]
+    public void OnABustAddedToOneOfTheGamesCharacters_EveryButtonBorrows_TheMaskToo()
+    {
+        var (vm, theirs, added) = AnAddedBust();
+        string bust = added.DefaultOutfit!.GameObjectName;
+        string wanted = SMSModForge.Shared.GameArt.From(bust);
+
+        foreach (var command in new[] { vm.UseDefaultBlinkCommand, vm.UseDefaultMouthPrefixCommand,
+                                        vm.UseDefaultExpressionPrefixCommand, vm.UseDefaultMaskCommand })
+        {
+            Assert.True(command.CanExecute(null));
+            command.Execute(null);
+        }
+        _out.WriteLine($"blink '{added.BlinkSprite}', mouth '{added.MouthPrefix}', faces '{added.ExpressionPrefix}', mask '{added.MaskSprite}'");
+        Assert.Equal(wanted, added.BlinkSprite);
+        Assert.Equal(wanted, added.MouthPrefix);
+        Assert.Equal(wanted, added.ExpressionPrefix);
+        // The mask too (the author, 1.6.3): the game's own, borrowed - no file
+        // shared, so nothing to ask about.
+        Assert.Equal(wanted, added.MaskSprite);
+    }
+
+    [Fact]
+    public void TheMaskPainterOffersTheGamesOwnMasks_ToAnOutfitAddedToOneOfItsCharacters()
+    {
+        var (_, theirs, added) = AnAddedBust();
+        var offered = ((IMaskEditorHost)added).OtherMasks;
+        foreach (var m in offered.Take(5)) _out.WriteLine($"{m.Label} -> {m.MaskPath}");
+
+        int games = theirs.Outfits.Count(o => o.IsVanillaBust);
+        Assert.True(offered.Count > 0 && offered.Count <= games);
+        Assert.All(offered, m => Assert.True(System.IO.File.Exists(m.MaskPath), m.MaskPath + " is not there to copy"));
+        Assert.All(offered, m => Assert.Contains(SMSModForge.Localization.Loc.F("maskEditor.copy.gameBust", "outfit", ""), m.Label + ""));
+
+        // The control: the game's own bust is not offered the game's masks -
+        // it IS one of them - and a character of the pack's has none of them.
+        var ownBust = theirs.Outfits.First(o => o.IsVanillaBust);
+        Assert.Empty(((IMaskEditorHost)ownBust).OtherMasks);
+        Assert.Empty(((IMaskEditorHost)Outfit(Character(), "night")).OtherMasks.Where(m => System.IO.Path.IsPathRooted(m.MaskPath)));
+    }
+
+    [Fact]
+    public void ABorrowedPartIsCheckedAgainstTheGamesBusts()
+    {
+        var (vm, _, added) = AnAddedBust();
+        vm.UseDefaultBlinkCommand.Execute(null);
+        vm.UseDefaultMouthPrefixCommand.Execute(null);
+        vm.UseDefaultExpressionPrefixCommand.Execute(null);
+
+        string root = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "smsmodforge-borrow-" + System.Guid.NewGuid().ToString("N"));
+        System.IO.Directory.CreateDirectory(root);
+        try
+        {
+            var issues = SMSModForge.Validation.PackValidator.Validate(vm.Pack, root);
+            var mine = issues.Where(i => i.Where.Contains(added.Key)).ToList();
+            foreach (var i in mine) _out.WriteLine($"{i.Severity} {i.Where}: {i.Message}");
+            Assert.DoesNotContain(mine, i => i.Where.Contains(".blinkSprite") || i.Where.Contains(".mouth") || i.Where.Contains(".expression"));
+
+            // The control: a bust the game does not have.
+            added.BlinkSprite = SMSModForge.Shared.GameArt.From("NoSuchBust_Anywhere");
+            issues = SMSModForge.Validation.PackValidator.Validate(vm.Pack, root);
+            Assert.Contains(issues, i => i.Where.Contains(added.Key) && i.Where.EndsWith(".blinkSprite") && i.Code == "outfit.borrowsUnknownBust");
+        }
+        finally { try { System.IO.Directory.Delete(root, true); } catch { } }
+    }
+
+    [Fact]
+    public void OnScreen_TheThreeButtonsAreOffered_AndABorrowedFieldLooksIt()
+    {
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            var tabs = (System.Windows.Controls.TabControl)window.FindName("MainTabs");
+            for (int i = 0; i < tabs.Items.Count; i++)
+                if (tabs.Items[i] is System.Windows.Controls.TabItem t && (t.Header as string) == "Characters")
+                { tabs.SelectedIndex = i; break; }
+            WindowHarness.Pump();
+            var (_, _, added) = AnAddedBust(vm);
+            WindowHarness.Pump();
+
+            foreach (string name in new[] { "MaskSameAsDefaultButton", "BlinkSameAsDefaultButton", "MouthSameAsDefaultButton", "ExpressionSameAsDefaultButton" })
+                Assert.True(Named(window, name)?.IsVisible == true, $"{name} is not on screen");
+
+            ((System.Windows.Controls.Button)Named(window, "BlinkSameAsDefaultButton")!).Command.Execute(null);
+            ((System.Windows.Controls.Button)Named(window, "MouthSameAsDefaultButton")!).Command.Execute(null);
+            WindowHarness.Pump();
+
+            // The fields themselves, as drawn.
+            var blinkBox = Boxes<PathPickerBox>(window).Single(b => b.PathText == added.BlinkSprite);
+            var mouthBox = Boxes<SuffixHintBox>(window).Single(b => b.Text == added.MouthPrefix);
+            var blinkText = Inner(blinkBox);
+            var mouthText = Inner(mouthBox);
+            _out.WriteLine($"blink: {blinkText.FontStyle}, tip '{blinkText.ToolTip}'");
+            Assert.Equal(System.Windows.FontStyles.Italic, blinkText.FontStyle);
+            Assert.Equal(System.Windows.FontStyles.Italic, mouthText.FontStyle);
+            Assert.Contains(added.DefaultOutfit!.GameObjectName, blinkText.ToolTip as string ?? "");
+            var hint = mouthBox.Children.OfType<System.Windows.Controls.TextBlock>().Single();
+            _out.WriteLine("mouth hint: " + hint.Text);
+            Assert.DoesNotContain("1.png", hint.Text);
+
+            // A file of the author's own, and it is an ordinary path again.
+            added.BlinkSprite = "Art/Mine/Blink.png";
+            WindowHarness.Pump();
+            Assert.Equal(System.Windows.FontStyles.Normal, blinkText.FontStyle);
+        });
+    }
+
+    private static System.Collections.Generic.IEnumerable<T> Boxes<T>(System.Windows.DependencyObject root) where T : System.Windows.DependencyObject
+    {
+        int n = System.Windows.Media.VisualTreeHelper.GetChildrenCount(root);
+        for (int i = 0; i < n; i++)
+        {
+            var child = System.Windows.Media.VisualTreeHelper.GetChild(root, i);
+            if (child is T t && ((System.Windows.UIElement)(object)t).IsVisible) yield return t;
+            foreach (var deeper in Boxes<T>(child)) yield return deeper;
+        }
+    }
+
+    private static System.Windows.Controls.TextBox Inner(System.Windows.DependencyObject box)
+        => Boxes<System.Windows.Controls.TextBox>(box).First();
+
+    [Fact]
+    public void ThePreviewDrawsABorrowedPartFromTheGamesArt()
+    {
+        var (_, _, added) = AnAddedBust();
+        string bust = added.DefaultOutfit!.GameObjectName;
+        string? root = SMSModForge.Rendering.VanillaArtResolver.FindArtRoot();
+        Assert.True(root != null, "no game art beside the tests to borrow from");
+        string blinkFile = System.IO.Path.Combine(root!, bust, "Blink.PNG");
+        Assert.True(System.IO.File.Exists(blinkFile), "the game's bust has no blink here, so this proves nothing");
+
+        string pack = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "smsmodforge-borrowpreview-" + System.Guid.NewGuid().ToString("N"));
+        System.IO.Directory.CreateDirectory(pack);
+        try
+        {
+            WindowHarness.Run(_ =>
+            {
+                var preview = new JigglePreview { PackRoot = pack, Outfit = added };
+                WindowHarness.Pump();
+                Assert.Null(preview.Loaded().Blink);          // the control: no blink yet
+
+                added.BlinkSprite = SMSModForge.Shared.GameArt.From(bust);
+                added.MouthPrefix = SMSModForge.Shared.GameArt.From(bust);
+                added.MaskSprite = SMSModForge.Shared.GameArt.From(bust);
+                WindowHarness.Pump();
+                var loaded = preview.Loaded();
+                Assert.NotNull(loaded.Blink);
+                Assert.Equal(SMSModForge.Rendering.BustComposer.LoadPng(blinkFile), loaded.Blink);
+                Assert.NotNull(loaded.Mouth[1]);
+                Assert.NotNull(loaded.Mask);
+            });
+        }
+        finally { try { System.IO.Directory.Delete(pack, true); } catch { } }
     }
 
     [Fact]

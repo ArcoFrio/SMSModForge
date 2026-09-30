@@ -131,21 +131,24 @@ internal static class ArtDimensions
 
                 Check(issues, packRoot, o.BaseSprite, $"{w}.baseSprite",
                       BustPixels, BustPixels, CodeBustSize, CodeBustAspect, Loc.T("validation.art.bust"));
-                if (o.BlinkEnabled)
+                // A part borrowed from the game's own bust is the game's, at the
+                // game's size: nothing of the pack's to measure.
+                if (o.BlinkEnabled && !Shared.GameArt.IsBorrowed(o.BlinkSprite))
                     Check(issues, packRoot, o.BlinkSprite, $"{w}.blinkSprite",
                           BustPixels, BustPixels, CodeBustSize, CodeBustAspect, Loc.T("validation.art.blink"));
 
                 // Overlays share the bust's frame exactly: they are separate
                 // sprites drawn on the same rig, so a mismatch shows as a mouth
                 // that sits in the wrong place rather than as a scaling nicety.
-                if (o.Mouth != null && o.Mouth.Enabled && !string.IsNullOrWhiteSpace(o.Mouth.Prefix))
+                if (o.Mouth != null && o.Mouth.Enabled && !string.IsNullOrWhiteSpace(o.Mouth.Prefix)
+                    && !Shared.GameArt.IsBorrowed(o.Mouth.Prefix))
                     for (int i = 1; i <= 4; i++)
                         Check(issues, packRoot, o.Mouth.Prefix + i + ".PNG",
                               $"{w}.mouth[{i}]", BustPixels, BustPixels,
                               CodeBustSize, CodeBustAspect, Loc.F("validation.art.mouthFrame", "number", i));
 
                 if (o.Expression != null && o.Expression.Enabled &&
-                    !string.IsNullOrWhiteSpace(o.Expression.Prefix))
+                    !string.IsNullOrWhiteSpace(o.Expression.Prefix) && !Shared.GameArt.IsBorrowed(o.Expression.Prefix))
                     foreach (var name in new[] { "Happy", "Angry", "Sad", "Flirty" })
                         Check(issues, packRoot, o.Expression.Prefix + name + ".PNG",
                               $"{w}.expression[{name}]", BustPixels, BustPixels,

@@ -1102,18 +1102,24 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     public ObservableCollection<string> SfxKeyOptions { get; } = new();
 
     /// <summary>
-    /// Autocomplete suggestions for the "GO path" box on GameObject-targeting
-    /// actions (<c>SetGameObjectActive</c> / <c>FadeSprite</c> / <c>MoveGameObject</c>
-    /// / <c>SpinGameObject</c>) — the GameObjects this pack creates and names:
-    /// place overlays and outfit busts. The box stays editable so any vanilla
-    /// GO or full hierarchy path can still be typed.
+    /// The Direct Path category's list, and the raw "GO path" field's: paths
+    /// into the game's own scene worth knowing, grouped, each with a short note
+    /// beside it (the author, 1.6.3; see <see cref="GamePathExamples"/>).
+    /// <para/>
+    /// It used to list the pack's own GameObject and bust NAMES - things a
+    /// Direct Path is the wrong way to reach, since GameObjects, NPCs and Bust
+    /// find them properly, and bare names rather than the slash paths a Direct
+    /// Path is written as. The box stays editable, so any path can be typed.
     /// </summary>
-    public ObservableCollection<string> GameObjectNameOptions { get; } = new();
+    public System.ComponentModel.ICollectionView DirectPathExamples
+        => _directPathExamples ??= GroupUnder(
+            GamePathExamples.All.Select(e => new GamePathOption(e)).ToList(),
+            o => o is GamePathOption g ? g.Group : "");
+    private System.ComponentModel.ICollectionView? _directPathExamples;
 
     /// <summary>
-    /// Bust GameObject names only (no overlays) — the "Bust" category of the
-    /// unified Set-Active action. Split out of <see cref="GameObjectNameOptions"/>
-    /// so the category dropdown can offer just busts. Rebuilt alongside it.
+    /// Bust GameObject names — the "Bust" category of the unified Set-Active
+    /// action, and of the condition that reads it back.
     /// </summary>
     public ObservableCollection<string> BustNameOnlyOptions { get; } = new();
 
@@ -2151,8 +2157,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     /// <summary>
     /// The same level's GameObjects, but as HIERARCHY PATHS —
     /// <c>NPCs &gt; Shower &gt; Anis &gt; Naked</c> — one entry per node, in tree
-    /// order, with NPC placements included as leaves. Backs the Set-Active /
-    /// Fade / Move / Spin target dropdowns.
+    /// order. Backs the Set-Active / Fade / Move / Spin target dropdowns. The
+    /// NPCs placed there are not in it, nor the game's own NPCs of a level the
+    /// pack extends: they have a category of their own (1.6.3, see
+    /// <see cref="NpcNamesForLevel"/>), and this lists what is around them -
+    /// the groups they stand in and the level's props.
     /// <para/>
     /// Paths rather than bare names because names repeat across the tree (every
     /// slot has a <c>Default</c> / <c>Swim</c> child), and a bare name resolves
@@ -2162,23 +2171,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     /// </summary>
     private System.Collections.Generic.List<string> OverlayPathsForLevel(string levelToken)
     {
-        System.Collections.Generic.IEnumerable<GameObjectViewModel>? source = null;
-        const string placePrefix = "place:";
-        if (!string.IsNullOrEmpty(levelToken) &&
-            levelToken.StartsWith(placePrefix, StringComparison.OrdinalIgnoreCase))
-        {
-            var key = levelToken.Substring(placePrefix.Length);
-            source = Places
-                .Where(p => string.Equals(p.Key, key, StringComparison.OrdinalIgnoreCase))
-                .SelectMany(p => p.GameObjects);
-        }
-        else if (!string.IsNullOrEmpty(levelToken) &&
-                 levelToken.StartsWith("vanilla:", StringComparison.OrdinalIgnoreCase))
-        {
-            source = VanillaExtensions
-                .Where(v => string.Equals(v.Source, levelToken, StringComparison.OrdinalIgnoreCase))
-                .SelectMany(v => v.GameObjects);
-        }
+        var source = LevelRoots(levelToken);
         if (source == null) return new();
 
         var paths = new System.Collections.Generic.List<string>();
@@ -2186,22 +2179,180 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         return paths;
     }
 
+    /// <summary>The top of a level's GameObject tree, by level token
+    /// (<c>place:&lt;key&gt;</c> or <c>vanilla:&lt;goName&gt;</c>); null for
+    /// any other token.</summary>
+    private System.Collections.Generic.IEnumerable<GameObjectViewModel>? LevelRoots(string levelToken)
+    {
+        const string placePrefix = "place:";
+        if (!string.IsNullOrEmpty(levelToken) &&
+            levelToken.StartsWith(placePrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            var key = levelToken.Substring(placePrefix.Length);
+            return Places
+                .Where(p => string.Equals(p.Key, key, StringComparison.OrdinalIgnoreCase))
+                .SelectMany(p => p.GameObjects);
+        }
+        if (!string.IsNullOrEmpty(levelToken) &&
+            levelToken.StartsWith("vanilla:", StringComparison.OrdinalIgnoreCase))
+        {
+            return VanillaExtensions
+                .Where(v => string.Equals(v.Source, levelToken, StringComparison.OrdinalIgnoreCase))
+                .SelectMany(v => v.GameObjects);
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// The GameObject a target names inside a level, found the way the runtime
+    /// finds it (the author, 1.6.3, for an action row's preview): a bare name
+    /// is the first of that name anywhere in the level; a path
+    /// (<c>NPCs &gt; Shower</c>, or with slashes) starts at a node of its
+    /// first name and walks down. Null when nothing matches - or when the row
+    /// names no level, since the runtime then looks through the whole scene
+    /// and could find something else.
+    /// </summary>
+    private GameObjectViewModel? LevelObjectAt(string levelToken, string target)
+    {
+        var roots = LevelRoots(levelToken);
+        if (roots == null) return null;
+        var parts = target.Split(new[] { '>', '/' }, StringSplitOptions.RemoveEmptyEntries)
+                          .Select(p => p.Trim()).Where(p => p.Length > 0).ToArray();
+        if (parts.Length == 0) return null;
+
+        // Case for case, as the game compares object names.
+        foreach (var start in FlattenOverlays(roots)
+                     .Where(o => string.Equals(o.Name, parts[0], StringComparison.Ordinal)))
+        {
+            GameObjectViewModel? at = start;
+            for (int i = 1; i < parts.Length && at != null; i++)
+                at = at.Children.FirstOrDefault(c => string.Equals(c.Name, parts[i], StringComparison.Ordinal));
+            if (at != null) return at;
+        }
+        return null;
+    }
+
+    /// <summary>One NPC in a level: where it stands in the tree, the name its
+    /// GameObject has, and either the pack's placement of it or, for one of the
+    /// game's own, its node.</summary>
+    private readonly record struct PlacedNpc(string Path, string Name,
+                                             NpcPlacementViewModel? Placement, GameObjectViewModel? GameNpc);
+
+    /// <summary>The name the game gives a placed NPC's GameObject: the
+    /// placement's own, or the NPC's key when it has none.</summary>
+    private static string NpcObjectName(NpcPlacementViewModel placement)
+        => string.IsNullOrWhiteSpace(placement.Name) ? placement.Npc : placement.Name;
+
+    /// <summary>Every NPC in a level, in tree order - the pack's placements and
+    /// the game's own; null for a token that names no level of the pack's.</summary>
+    private System.Collections.Generic.List<PlacedNpc>? NpcsPlacedIn(string levelToken)
+    {
+        var roots = LevelRoots(levelToken);
+        if (roots == null) return null;
+        var found = new System.Collections.Generic.List<PlacedNpc>();
+        foreach (var root in roots) CollectNpcs(root, "", found);
+        return found;
+    }
+
+    private static void CollectNpcs(GameObjectViewModel node, string prefix,
+                                    System.Collections.Generic.List<PlacedNpc> into)
+    {
+        string name = node.Name;
+        if (string.IsNullOrWhiteSpace(name)) return;   // unnamed nodes aren't addressable
+        string path = string.IsNullOrEmpty(prefix) ? name : prefix + PathSeparator + name;
+        if (node.IsGameNpc) into.Add(new PlacedNpc(path, name, null, node));
+        foreach (var npc in node.Npcs)
+        {
+            string npcName = NpcObjectName(npc);
+            if (string.IsNullOrWhiteSpace(npcName)) continue;
+            string npcPath = path + PathSeparator + npcName;
+            into.Add(new PlacedNpc(npcPath, npcName, npc, null));
+            // A prop riding on an NPC can hold NPCs of its own.
+            foreach (var child in npc.Children) CollectNpcs(child, npcPath, into);
+        }
+        foreach (var child in node.Children) CollectNpcs(child, path, into);
+    }
+
+    /// <summary>
+    /// The NPCs placed in a level, for the NPCs category (the author, 1.6.3):
+    /// each by the name the game gives its GameObject, which is what the NPC
+    /// tab's placements are known by - unless that name is used by anything
+    /// else in the level, when it is listed by its path, since the game finds
+    /// the first object of a name and it might not be this one.
+    /// </summary>
+    private System.Collections.Generic.List<string> NpcNamesForLevel(string levelToken)
+    {
+        var placed = NpcsPlacedIn(levelToken);
+        if (placed == null) return new();
+        // Every object of the level by name, once: its GameObjects (the game's
+        // NPCs among them) and the pack's placed NPCs.
+        var names = FlattenOverlays(LevelRoots(levelToken)!)
+            .Select(o => o.Name)
+            .Concat(placed.Where(p => p.Placement != null).Select(p => p.Name))
+            .GroupBy(n => n, StringComparer.Ordinal)
+            .ToDictionary(g => g.Key, g => g.Count(), StringComparer.Ordinal);
+        return placed.Select(p => names[p.Name] > 1 ? p.Path : p.Name)
+                     .Distinct(StringComparer.Ordinal)
+                     .ToList();
+    }
+
+    /// <summary>The NPC a target names in a level - by name, or by the end of
+    /// its path - found case for case as the game finds it.</summary>
+    private PlacedNpc? NpcAt(string levelToken, string target)
+    {
+        var placed = NpcsPlacedIn(levelToken);
+        if (placed == null) return null;
+        var parts = target.Split(new[] { '>', '/' }, StringSplitOptions.RemoveEmptyEntries)
+                          .Select(p => p.Trim()).Where(p => p.Length > 0).ToArray();
+        if (parts.Length == 0) return null;
+        foreach (var p in placed)
+        {
+            var path = p.Path.Split(new[] { '>' }, StringSplitOptions.RemoveEmptyEntries)
+                             .Select(s => s.Trim()).ToArray();
+            if (path.Length >= parts.Length &&
+                path.Skip(path.Length - parts.Length).SequenceEqual(parts, StringComparer.Ordinal))
+                return p;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// One of a level's two pictures, by place token and layer - the pack's own
+    /// for a pack place, the game's that comes with ModForge for one of the
+    /// game's levels. Null when there is none.
+    /// </summary>
+    private string? PlaceLayerArt(string token, string layer)
+    {
+        bool back = string.Equals(layer, NodeActionViewModel.LayerSecondary, StringComparison.OrdinalIgnoreCase);
+        const string placePrefix = "place:";
+        if (token.StartsWith(placePrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            var key = token.Substring(placePrefix.Length);
+            var place = Places.FirstOrDefault(p => string.Equals(p.Key, key, StringComparison.OrdinalIgnoreCase));
+            var sprite = place == null ? "" : back ? place.SecondarySprite : place.BaseSprite;
+            return string.IsNullOrWhiteSpace(sprite) ? null : sprite;
+        }
+        const string vanillaPrefix = "vanilla:";
+        string go = token.StartsWith(vanillaPrefix, StringComparison.OrdinalIgnoreCase)
+            ? token.Substring(vanillaPrefix.Length) : token;
+        var art = VanillaLevelCatalog.FindArt(go, back ? "Secondary.PNG" : "Base.PNG");
+        return string.IsNullOrEmpty(art) ? null : art;
+    }
+
     private const string PathSeparator = " > ";
 
-    /// <summary>Depth-first walk emitting one path per GameObject node and per
-    /// NPC placement, parents before children so the list reads as the tree.</summary>
+    /// <summary>Depth-first walk emitting one path per GameObject node, parents
+    /// before children so the list reads as the tree. NPCs are left to the NPCs
+    /// category: the ones placed at a node, and a node that is one of the
+    /// game's own, with the parts it is made of (its floor reflection).</summary>
     private static void CollectPaths(GameObjectViewModel node, string prefix,
                                      System.Collections.Generic.List<string> into)
     {
         string name = node.Name;
         if (string.IsNullOrWhiteSpace(name)) return;   // unnamed nodes aren't addressable
+        if (node.IsGameNpc) return;
         string path = string.IsNullOrEmpty(prefix) ? name : prefix + PathSeparator + name;
         into.Add(path);
-        foreach (var npc in node.Npcs)
-        {
-            string npcName = string.IsNullOrWhiteSpace(npc.Name) ? npc.Npc : npc.Name;
-            if (!string.IsNullOrWhiteSpace(npcName)) into.Add(path + PathSeparator + npcName);
-        }
         foreach (var child in node.Children) CollectPaths(child, path, into);
     }
 
@@ -2222,6 +2373,24 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         foreach (var v in VanillaExtensions)
             if (!string.IsNullOrEmpty(v.Source) &&
                 FlattenOverlays(v.GameObjects).Any(o => !string.IsNullOrWhiteSpace(o.Name)))
+                tokens.Add(new NavigatorTargetOption(v.Source, v.Display));
+        return tokens
+            .GroupBy(t => t.Token, StringComparer.OrdinalIgnoreCase)
+            .Select(g => g.First())
+            .OrderBy(t => t.DisplayLabel, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    /// <summary>Level tokens with NPCs placed in them - the NPCs category's
+    /// Level list. Fresh per call, like <see cref="OverlayLevelOptionTokens"/>.</summary>
+    private System.Collections.Generic.IEnumerable<NavigatorTargetOption> NpcLevelOptionTokens()
+    {
+        var tokens = new System.Collections.Generic.List<NavigatorTargetOption>();
+        foreach (var p in Places)
+            if (NpcsPlacedIn("place:" + p.Key) is { Count: > 0 })
+                tokens.Add(new NavigatorTargetOption("place:" + p.Key, p.Display));
+        foreach (var v in VanillaExtensions)
+            if (!string.IsNullOrEmpty(v.Source) && NpcsPlacedIn(v.Source) is { Count: > 0 })
                 tokens.Add(new NavigatorTargetOption(v.Source, v.Display));
         return tokens
             .GroupBy(t => t.Token, StringComparer.OrdinalIgnoreCase)
@@ -2833,8 +3002,77 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         {
             Services.EditorPrefs.BustPreviewZoom = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(BustPreviewColumnWidth));
+            RaiseBustPreviewShown();
         }
+    }
+
+    // ── The size the preview is actually shown at ───────────────────────
+    //
+    // The size an author picks is kept, and shown whenever it fits. When the
+    // window is too small for it, the preview drops to the largest offered size
+    // that does - still one of the steps, so still pinned and pixel-exact -
+    // and comes back up by itself when the window grows. Before, a 2x preview
+    // in a short window pushed the size picker itself off the bottom, where it
+    // could not be reached to make the preview smaller again (the author,
+    // 1.6.3).
+
+    private double _bustPreviewRoomWidth = double.NaN;
+    private double _bustPreviewRoomHeight = double.NaN;
+
+    /// <summary>
+    /// The largest box the preview can be drawn in without pushing anything
+    /// out of the window, as the window measures it. Called whenever the
+    /// window or the panel around the preview changes size.
+    /// </summary>
+    public void SetBustPreviewRoom(double width, double height)
+    {
+        if (width.Equals(_bustPreviewRoomWidth) && height.Equals(_bustPreviewRoomHeight)) return;
+        double before = BustPreviewShownZoom;
+        _bustPreviewRoomWidth = width;
+        _bustPreviewRoomHeight = height;
+        if (!BustPreviewShownZoom.Equals(before)) RaiseBustPreviewShown();
+    }
+
+    /// <summary>The size the preview is drawn at: the chosen one, or the largest
+    /// offered size below it that fits. See <see cref="FitBustPreviewZoom"/>.</summary>
+    public double BustPreviewShownZoom
+        => FitBustPreviewZoom(BustPreviewZoom, Services.EditorPrefs.ZoomSteps,
+                              _bustPreviewRoomWidth, _bustPreviewRoomHeight);
+
+    /// <summary>
+    /// The largest of <paramref name="steps"/>, no bigger than
+    /// <paramref name="chosen"/>, whose preview fits the room; the smallest step
+    /// when none does. The chosen size itself while the room is not known yet.
+    /// </summary>
+    public static double FitBustPreviewZoom(double chosen, System.Collections.Generic.IReadOnlyList<double> steps,
+                                            double roomWidth, double roomHeight)
+    {
+        if (double.IsNaN(roomWidth) || double.IsNaN(roomHeight) || steps.Count == 0) return chosen;
+        double fit = steps.Min();
+        foreach (double step in steps.OrderBy(s => s))
+        {
+            if (step > chosen) break;
+            double side = View.Controls.JigglePreview.FixedSize * step;
+            if (side <= roomWidth && side <= roomHeight) fit = step;
+        }
+        return Math.Min(fit, chosen);
+    }
+
+    /// <summary>Whether the preview is shown smaller than the size picked.</summary>
+    public bool BustPreviewShrunk => BustPreviewShownZoom < BustPreviewZoom;
+
+    /// <summary>The line under the size picker saying so, and why.</summary>
+    public string BustPreviewShrunkNote
+        => Loc.F("characters.previewSize.shrunk",
+                 "shown", BustPreviewShownZoom.ToString(System.Globalization.CultureInfo.CurrentCulture) + "×",
+                 "chosen", BustPreviewZoom.ToString(System.Globalization.CultureInfo.CurrentCulture) + "×");
+
+    private void RaiseBustPreviewShown()
+    {
+        OnPropertyChanged(nameof(BustPreviewShownZoom));
+        OnPropertyChanged(nameof(BustPreviewColumnWidth));
+        OnPropertyChanged(nameof(BustPreviewShrunk));
+        OnPropertyChanged(nameof(BustPreviewShrunkNote));
     }
 
     /// <summary>The sizes offered, for the picker.</summary>
@@ -2847,12 +3085,12 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     /// own size and a column narrower than that clips it.
     /// </summary>
     public System.Windows.GridLength BustPreviewColumnWidth
-        => new(View.Controls.JigglePreview.FixedSize * BustPreviewZoom + BustPreviewChrome);
+        => new(View.Controls.JigglePreview.FixedSize * BustPreviewShownZoom + BustPreviewChrome);
 
     /// <summary>Margins, the border's padding, and the scrollbar the panel
     /// keeps room for. Measured once off the 540 the column was fixed at when
     /// the preview was 512 wide.</summary>
-    private const double BustPreviewChrome = 28;
+    internal const double BustPreviewChrome = 28;
 
     /// <summary>Whether node rows are drawn the way the game draws a line. See
     /// EditorPrefs for why this starts off.</summary>
@@ -3033,6 +3271,23 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         // Levels offered in that row's level dropdown: only ones that actually
         // carry GameObjects (pack places + vanilla extensions).
         NodeActionViewModel.OverlayLevelProvider = OverlayLevelOptionTokens;
+        // A Set-Active row aimed at a scene previews it, found as the game
+        // finds it: by key, case for case.
+        NodeActionViewModel.SceneLookup = key => Scenes.FirstOrDefault(s => string.Equals(s.Key, key, StringComparison.Ordinal));
+        // ...and one aimed at a bust, a level's GameObject or a whole place
+        // shows that, found the way the runtime finds it.
+        NodeActionViewModel.BustArtLookup = name => Rendering.VanillaArtResolver.FindBaseSpritePath(name, Pack, PackRoot);
+        NodeActionViewModel.ObjectArtLookup = (level, target) => LevelObjectAt(level, target)?.PreviewSprite;
+        // The NPCs category: levels with NPCs placed, the NPCs in one, and the
+        // pose of the one a target names.
+        NodeActionViewModel.NpcLevelProvider = NpcLevelOptionTokens;
+        NodeActionViewModel.NpcProvider = NpcNamesForLevel;
+        NodeActionViewModel.NpcArtLookup = (level, target) => NpcAt(level, target) is { } placed
+            ? placed.Placement != null
+                ? Npcs.FirstOrDefault(n => string.Equals(n.Key, placed.Placement.Npc, StringComparison.Ordinal))?.Sprite
+                : placed.GameNpc?.PreviewSprite
+            : null;
+        NodeActionViewModel.PlaceArtLookup = PlaceLayerArt;
 
         // Keep the left-bar lists alphabetical in the UI (their default views),
         // independent of the pack's on-disk order. New/duplicated items sort in
@@ -3122,19 +3377,24 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         // from. Whether there IS a default to copy from is the outfit's own
         // question - see OutfitViewModel.CanCopyFromDefaultOutfit - and the
         // buttons are hidden rather than greyed when there is not.
-        UseDefaultMaskCommand = new RelayCommand(UseDefaultMask, CanCopyFromDefault);
+        UseDefaultMaskCommand = new RelayCommand(UseDefaultMask, CanUseDefaultParts);
+        // For an outfit added to one of the game's characters, whose default is
+        // the game's own bust, the three borrow that bust's art instead - see
+        // OutfitViewModel.CanBorrowFromGameDefault.
         UseDefaultBlinkCommand = new RelayCommand(
-            () => CopyFromDefault(d => SelectedOutfit!.BlinkSprite = d.BlinkSprite),
-            CanCopyFromDefault);
+            () => UseDefaultPart(d => d.BlinkSprite, (o, v) => o.BlinkSprite = v),
+            CanUseDefaultParts);
         UseDefaultMouthPrefixCommand = new RelayCommand(
-            () => CopyFromDefault(d => SelectedOutfit!.MouthPrefix = d.MouthPrefix),
-            CanCopyFromDefault);
+            () => UseDefaultPart(d => d.MouthPrefix, (o, v) => o.MouthPrefix = v),
+            CanUseDefaultParts);
         UseDefaultExpressionPrefixCommand = new RelayCommand(
-            () => CopyFromDefault(d => SelectedOutfit!.ExpressionPrefix = d.ExpressionPrefix),
-            CanCopyFromDefault);
-        RemoveCharacterCommand = new RelayCommand(RemoveCharacter, () => SelectedCharacter != null);
+            () => UseDefaultPart(d => d.ExpressionPrefix, (o, v) => o.ExpressionPrefix = v),
+            CanUseDefaultParts);
+        // Greyed for what the game owns: its own characters and the player, and
+        // its own busts - never for an outfit the pack added to one of them.
+        RemoveCharacterCommand = new RelayCommand(RemoveCharacter, () => SelectedCharacter?.CanRemove == true);
         RemoveOutfitCommand    = new RelayCommand(RemoveOutfit,
-            () => SelectedOutfit != null && SelectedCharacter != null);
+            () => SelectedOutfit?.CanRemove == true && SelectedCharacter != null);
         UntrackDebugDialogueCommand = new RelayCommand(p => UntrackDebugDialogue(p as DialogueViewModel));
         ClearDebugDialoguesCommand  = new RelayCommand(
             () => { foreach (var d in DebuggedDialogues.ToList()) d.DebugConditions = false;
@@ -3518,10 +3778,16 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         return null;
     }
 
+    /// <summary>How far along each of the pack's translations is, worked out
+    /// when the pack opens rather than when the translations window does
+    /// (1.6.3). See <see cref="Services.Translation.TranslationSummaryCache"/>.</summary>
+    public Services.Translation.TranslationSummaryCache TranslationSummaries { get; } = new();
+
     private void NewPack()
     {
         if (!ConfirmDiscardChanges("unsaved.beforeNewPack")) return;
         DropEditingLanguage();
+        TranslationSummaries.Forget();
         Pack = PackRepository.CreateEmpty("Untitled");
         PackRoot = null;
         RebindAll();
@@ -3634,6 +3900,12 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             Validate();
             MarkSaved();
             Undo.Reset();
+
+            // Every translation's standing, worked out now and in the
+            // background, so the translations window opens without the wait.
+            TranslationSummaries.Forget();
+            try { TranslationSummaries.Warm(Pack, PackRoot); }
+            catch (Exception) { /* worked out when the window asks instead */ }
 
             // Said after the pack is on screen, so the author reads it with
             // the thing it describes in front of them. Nothing has been
@@ -3868,6 +4140,22 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
 
     private bool CanCopyFromDefault() => SelectedOutfit?.CanCopyFromDefaultOutfit == true;
 
+    private bool CanUseDefaultParts() => SelectedOutfit?.CanUseDefaultParts == true;
+
+    /// <summary>
+    /// One of the three parts from the default outfit: its path, when the pack
+    /// draws the default too; the game's own art for it, when the default is
+    /// the bust the game gave one of its characters.
+    /// </summary>
+    private void UseDefaultPart(System.Func<OutfitViewModel, string> read, System.Action<OutfitViewModel, string> write)
+    {
+        var outfit = SelectedOutfit;
+        var from = outfit?.DefaultOutfit;
+        if (outfit == null || from == null || ReferenceEquals(from, outfit)) return;
+        if (outfit.CanBorrowFromGameDefault) write(outfit, Shared.GameArt.From(from.GameObjectName));
+        else if (outfit.CanCopyFromDefaultOutfit) write(outfit, read(from));
+    }
+
     private void CopyFromDefault(System.Action<OutfitViewModel> copy)
     {
         var outfit = SelectedOutfit;
@@ -3889,6 +4177,16 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         var outfit = SelectedOutfit;
         var from = outfit?.DefaultOutfit;
         if (outfit == null || from == null || ReferenceEquals(from, outfit)) return;
+
+        // The game's own mask, for an outfit added to one of its characters
+        // (1.6.3). Nothing to warn about: no file is shared - painting over it
+        // makes one of the pack's own.
+        if (outfit.CanBorrowFromGameDefault)
+        {
+            outfit.MaskSprite = Shared.GameArt.From(from.GameObjectName);
+            return;
+        }
+        if (!outfit.CanCopyFromDefaultOutfit) return;
 
         var answer = Ask(
             Loc.F("outfits.sameMask.ask", "outfit", outfit.Key, "from", from.Key,
@@ -4505,7 +4803,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     private void RemoveCharacter()
     {
         var ch = SelectedCharacter;
-        if (ch == null) return;
+        if (ch == null || !ch.CanRemove) return;
         // OK under the harness: a test that asked for a delete meant it.
         if (Ask(Loc.P("characters.delete.ask", ch.Outfits.Count, "name", ch.Display) +
                 System.Environment.NewLine + System.Environment.NewLine +
@@ -4525,7 +4823,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     {
         var ch = SelectedCharacter;
         var o = SelectedOutfit;
-        if (ch == null || o == null) return;
+        if (ch == null || o == null || !o.CanRemove) return;
         if (Ask(Loc.F("outfits.delete.ask", "name", o.Display), Loc.T("outfits.delete.title"),
                 MessageBoxButton.OKCancel, MessageBoxImage.Warning,
                 MessageBoxResult.OK) != MessageBoxResult.OK)
@@ -6448,26 +6746,20 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     }
 
     /// <summary>
-    /// Rebuilds <see cref="GameObjectNameOptions"/> from the GameObjects this
-    /// pack names: every place overlay plus every outfit bust GO. Read straight
-    /// from the models so a just-renamed entry is picked up. Called whenever a
-    /// dialogue node / integration rule is selected (when the GO-path editors
-    /// appear) and on pack load.
+    /// Rebuilds <see cref="BustNameOnlyOptions"/> from every outfit's bust
+    /// GameObject. Read straight from the models so a just-renamed entry is
+    /// picked up. Called whenever a dialogue node / integration rule is selected
+    /// (when the target editors appear) and on pack load.
     /// </summary>
     public void RebuildGameObjectNameOptions()
     {
-        var names = new System.Collections.Generic.SortedSet<string>(System.StringComparer.OrdinalIgnoreCase);
         var busts = new System.Collections.Generic.SortedSet<string>(System.StringComparer.OrdinalIgnoreCase);
-        foreach (var p in Places)
-            foreach (var o in FlattenOverlays(p.GameObjects))
-                if (!string.IsNullOrWhiteSpace(o.Name)) names.Add(o.Name);
         foreach (var ch in Characters)
             foreach (var o in ch.Outfits)
-                if (!string.IsNullOrWhiteSpace(o.GameObjectName)) { names.Add(o.GameObjectName); busts.Add(o.GameObjectName); }
+                if (!string.IsNullOrWhiteSpace(o.GameObjectName)) busts.Add(o.GameObjectName);
 
         // In-place sync, never Clear — see SyncOptions. This one rebuilds on
         // every node selection, so a Clear here emptied bound Target combos.
-        SyncOptions(GameObjectNameOptions, names.ToList());
         SyncOptions(BustNameOnlyOptions, busts.ToList());
     }
 

@@ -72,6 +72,14 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
     public bool IsVanillaBust => _owner?.IsVanillaBust == true && !Model.PackArt;
 
     /// <summary>
+    /// Whether - Outfit can take this one out of the pack: any outfit the pack
+    /// draws - one it added to one of the game's characters included - but not
+    /// a bust of the game's own, which the pack only says things about
+    /// (the author, 1.6.3).
+    /// </summary>
+    public bool CanRemove => !IsVanillaBust;
+
+    /// <summary>
     /// The pack draws this one, whoever wears it. True for every outfit on a
     /// pack character, and for a bust the pack added to one of the game's.
     /// </summary>
@@ -343,6 +351,8 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(IsDefaultOutfit));
             OnPropertyChanged(nameof(CanCopyFromDefaultOutfit));
+            OnPropertyChanged(nameof(CanBorrowFromGameDefault));
+            OnPropertyChanged(nameof(CanUseDefaultParts));
             _owner?.RefreshOutfitDefaults();
         }
     }
@@ -380,13 +390,41 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
         }
     }
 
-    /// <summary>Re-ask the two above. The character raises this when its
+    /// <summary>
+    /// Whether the default outfit to take the blink, mouth and faces from is the
+    /// game's own bust (the author, 1.6.3): an outfit this pack draws, added to
+    /// one of the game's characters, whose default is the bust the game gave
+    /// them. There are no paths to copy from that one, so the "= default"
+    /// buttons borrow the game's own art instead (<see cref="Shared.GameArt"/>) -
+    /// at the game's full size, where the copies shipped with the editor are
+    /// made smaller.
+    /// </summary>
+    public bool CanBorrowFromGameDefault
+    {
+        get
+        {
+            if (!ShowsPackArt) return false;
+            var def = DefaultOutfit;
+            return def != null && !ReferenceEquals(def, this) && !def.ShowsPackArt
+                   && SMSModForge.Model.VanillaBusts.FindByGoName(def.GameObjectName) != null;
+        }
+    }
+
+    /// <summary>Whether the "= default" buttons for the blink, the mouth and the
+    /// faces have anything to offer: paths to copy, or the game's art to borrow.
+    /// The mask's has only the first - a mask is the pack's own drawing of how
+    /// its bust moves.</summary>
+    public bool CanUseDefaultParts => CanCopyFromDefaultOutfit || CanBorrowFromGameDefault;
+
+    /// <summary>Re-ask the ones above. The character raises this when its
     /// default outfit changes, or when an outfit is added or removed.</summary>
     public void RefreshDefaultOutfit()
     {
         OnPropertyChanged(nameof(DefaultOutfit));
         OnPropertyChanged(nameof(IsDefaultOutfit));
         OnPropertyChanged(nameof(CanCopyFromDefaultOutfit));
+        OnPropertyChanged(nameof(CanBorrowFromGameDefault));
+        OnPropertyChanged(nameof(CanUseDefaultParts));
     }
 
     public string GameObjectName
@@ -613,7 +651,19 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
             foreach (var outfit in _owner.Outfits)
             {
                 if (ReferenceEquals(outfit, this)) continue;
-                if (string.IsNullOrWhiteSpace(outfit.MaskSprite)) continue;
+                // One of the game's own busts, for an outfit the pack added to
+                // one of its characters: the copy of its mask shipped with the
+                // editor, to start from (the author, 1.6.3).
+                if (outfit.IsVanillaBust)
+                {
+                    if (!ShowsPackArt) continue;
+                    string? theirs = Rendering.VanillaArtResolver.GameArtFile(
+                        Shared.GameArt.From(outfit.GameObjectName), "Mask.PNG");
+                    if (theirs != null)
+                        found.Add(new MaskSource(Localization.Loc.F("maskEditor.copy.gameBust", "outfit", outfit.GameObjectName), theirs));
+                    continue;
+                }
+                if (string.IsNullOrWhiteSpace(outfit.MaskSprite) || Shared.GameArt.IsBorrowed(outfit.MaskSprite)) continue;
                 found.Add(new MaskSource(outfit.Key, outfit.MaskSprite));
             }
             return found;

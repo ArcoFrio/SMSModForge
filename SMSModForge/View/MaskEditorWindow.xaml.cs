@@ -127,7 +127,11 @@ public partial class MaskEditorWindow : Window
         MaskImage.Source = _viewBitmap;
 
         var basePath = Path.Combine(_packRoot, Normalize(_host.PoseSpritePath));
-        var maskPath = Path.Combine(_packRoot, Normalize(_host.MaskPath));
+        // A mask borrowed from one of the game's busts starts from the copy of
+        // it shipped with the editor; saved, it becomes a file of the pack's.
+        var maskPath = Shared.GameArt.IsBorrowed(_host.MaskPath)
+            ? Rendering.VanillaArtResolver.GameArtFile(_host.MaskPath, "Mask.PNG") ?? ""
+            : Path.Combine(_packRoot, Normalize(_host.MaskPath));
         if (File.Exists(basePath))
         {
             _diffuse = BustComposer.LoadPng(basePath);
@@ -807,7 +811,9 @@ public partial class MaskEditorWindow : Window
     private bool Save()
     {
         string relPath = _host.MaskPath;
-        if (string.IsNullOrWhiteSpace(relPath))
+        // Borrowed from the game, the mask has no file of the pack's to write
+        // to: asked for, like one that was never saved.
+        if (string.IsNullOrWhiteSpace(relPath) || Shared.GameArt.IsBorrowed(relPath))
         {
             var (startIn, proposed) = SaveDefaults();
             var dialog = new SaveFileDialog

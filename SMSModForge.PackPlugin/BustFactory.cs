@@ -154,8 +154,10 @@ namespace SMSModForge.PackPlugin
 
             // maskSprite is deliberately absent from this list: an outfit with
             // no mask simply does not jiggle. Requiring it meant a bust with no
-            // mask art never reached the game at all.
-            if (!pack.Has(baseRel) || (blinkEnabled && !pack.Has(blinkRel)))
+            // mask art never reached the game at all. A blink borrowed from one
+            // of the game's busts is there when that bust is.
+            bool blinkBorrowed = GameArt.IsBorrowed(blinkRel);
+            if (!pack.Has(baseRel) || (blinkEnabled && !blinkBorrowed && !pack.Has(blinkRel)))
             {
                 logger.LogWarning("[SMSModForge.PackPlugin] Skipping " + goName + " — base sprite" + (blinkEnabled ? " or blink frame" : "") + " missing in archive.");
                 return null;
@@ -167,6 +169,13 @@ namespace SMSModForge.PackPlugin
             bool exprEnabled  = (bool?)expr["enabled"] ?? true;
             string mouthPrefix = (string)mouth["prefix"];
             string exprPrefix  = (string)expr["prefix"];
+
+            // Parts borrowed from one of the game's own busts rather than drawn
+            // by the pack (1.6.3): the game's sprites, at the game's size, put
+            // in this bust's slots - see GameArt.
+            Transform blinkFrom = blinkEnabled && blinkBorrowed ? GameSpriteRoot(bustManager, blinkRel, goName, logger) : null;
+            Transform mouthFrom = mouthEnabled && GameArt.IsBorrowed(mouthPrefix) ? GameSpriteRoot(bustManager, mouthPrefix, goName, logger) : null;
+            Transform exprFrom  = exprEnabled && GameArt.IsBorrowed(exprPrefix) ? GameSpriteRoot(bustManager, exprPrefix, goName, logger) : null;
 
             GameObject newBust = Object.Instantiate(baseBust, bustManager);
             newBust.name = goName;
@@ -203,7 +212,11 @@ namespace SMSModForge.PackPlugin
                 if (blinkEnabled)
                 {
                     var blinkSr = blink.GetComponent<SpriteRenderer>();
-                    if (blinkSr != null) ApplySprite(blinkSr, pack, blinkRel);
+                    if (blinkSr != null)
+                    {
+                        if (blinkBorrowed) Borrow(blinkSr, blinkFrom != null ? blinkFrom.Find("Blink") : null);
+                        else ApplySprite(blinkSr, pack, blinkRel);
+                    }
                 }
                 else
                 {
@@ -234,9 +247,13 @@ namespace SMSModForge.PackPlugin
                 }
             }
 
-            Texture2D maskTex = MaskTextures.IsAuthored(pack, maskRel)
-                ? LoadTexture(pack, maskRel, linear: true)
-                : MaskTextures.None();
+            // A mask borrowed from one of the game's busts is that bust's own,
+            // off its material (1.6.3); one it lacks leaves the bust still.
+            Texture2D maskTex = GameArt.IsBorrowed(maskRel)
+                ? BorrowedMask(bustManager, maskRel, goName, logger) ?? MaskTextures.None()
+                : MaskTextures.IsAuthored(pack, maskRel)
+                    ? LoadTexture(pack, maskRel, linear: true)
+                    : MaskTextures.None();
             mat.SetTexture("_MaskTex", maskTex);
 
             var jiggle = (JObject)o["jiggle"];
@@ -257,7 +274,9 @@ namespace SMSModForge.PackPlugin
                 // ApplySprite empties the slot when the frame is absent, so a
                 // half-authored mouth shows gaps rather than the prototype's
                 // remaining frames.
-                if (mouthEnabled && !string.IsNullOrEmpty(mouthPrefix))
+                if (mouthEnabled && GameArt.IsBorrowed(mouthPrefix))
+                    Borrow(sr, mouthFrom != null ? mouthFrom.Find("Mouth")?.Find(i.ToString()) : null);
+                else if (mouthEnabled && !string.IsNullOrEmpty(mouthPrefix))
                     ApplySprite(sr, pack, mouthPrefix + i + ".PNG");
                 else
                     sr.sprite = null;
@@ -274,6 +293,16 @@ namespace SMSModForge.PackPlugin
                 bool standard = System.Array.IndexOf(ExpressionNames, name) >= 0;
 
                 var slot = expressions.transform.Find(name);
+                if (slot == null && GameArt.IsBorrowed(exprPrefix))
+                {
+                    // A face the game's bust has and the prototype lacks comes
+                    // with it; one the game's bust lacks too has nothing to borrow.
+                    var theirs = exprFrom != null ? exprFrom.Find("Expressions")?.Find(name) : null;
+                    if (theirs == null || !exprEnabled) continue;
+                    var added = VanillaBustOverrides.FindOrAddFace(expressions.transform, name, logger);
+                    Borrow(added, theirs);
+                    continue;
+                }
                 if (slot == null)
                 {
                     // Only for a face of the pack's own, and only when there is
@@ -291,7 +320,9 @@ namespace SMSModForge.PackPlugin
 
                 var sr = slot.GetComponent<SpriteRenderer>();
                 if (sr == null) continue;
-                if (exprEnabled && !string.IsNullOrEmpty(exprPrefix))
+                if (exprEnabled && GameArt.IsBorrowed(exprPrefix))
+                    Borrow(sr, exprFrom != null ? exprFrom.Find("Expressions")?.Find(name) : null);
+                else if (exprEnabled && !string.IsNullOrEmpty(exprPrefix))
                     ApplySprite(sr, pack, exprPrefix + name + ".PNG");
                 else
                     sr.sprite = null;
@@ -322,7 +353,9 @@ namespace SMSModForge.PackPlugin
             // stepping rather than motion. A pack can still opt in per outfit
             // with "applyToOverlays": true.
             if ((bool?)jiggle?["applyToOverlays"] ?? false)
-                AttachOverlayJiggle(mBaseT, maskTex, jiggle);
+                // Only a mask it can read: the overlays sample it on the CPU,
+                // and a texture of the game's may not be readable.
+                AttachOverlayJiggle(mBaseT, maskTex != null && maskTex.isReadable ? maskTex : null, jiggle);
 
             // Drop the GC2 Conditions/Trigger components on Expressions so they
             // don't fire vanilla behaviour. Found by name to avoid a hard ref
@@ -365,6 +398,50 @@ namespace SMSModForge.PackPlugin
 
             newBust.SetActive(false);
             return newBust;
+        }
+
+        /// <summary>
+        /// The sprite root of the game's own bust a borrowing field names
+        /// (<see cref="GameArt"/>), found among the busts already under the bust
+        /// manager - or null, said in the log, when the game has no bust by that
+        /// name. The slots it would have filled are then left empty, as a
+        /// missing file leaves them.
+        /// </summary>
+        private static Transform GameSpriteRoot(Transform bustManager, string field, string goName, ManualLogSource logger)
+        {
+            string bust = GameArt.BustOf(field);
+            var theirs = string.IsNullOrEmpty(bust) ? null : bustManager.Find(bust);
+            if (theirs == null)
+            {
+                logger?.LogWarning("[SMSModForge.PackPlugin] " + goName + " borrows art from the game's bust '" + bust +
+                                   "', which this game does not have - that part is left empty.");
+                return null;
+            }
+            return ActorRegistry.FindMBase(theirs.gameObject);
+        }
+
+        /// <summary>
+        /// The jiggle mask of the game's own bust a borrowing field names: the
+        /// texture its body's material carries, or null when it has none.
+        /// </summary>
+        private static Texture2D BorrowedMask(Transform bustManager, string field, string goName, ManualLogSource logger)
+        {
+            var root = GameSpriteRoot(bustManager, field, goName, logger);
+            var sr = root != null ? root.GetComponent<SpriteRenderer>() : null;
+            var theirs = sr != null ? sr.sharedMaterial : null;
+            return theirs != null && theirs.HasProperty("_MaskTex") ? theirs.GetTexture("_MaskTex") as Texture2D : null;
+        }
+
+        /// <summary>
+        /// Put the game's own sprite from <paramref name="from"/> in this slot -
+        /// the same sprite, not a copy, so it is drawn at the game's own size and
+        /// resolution - or empty the slot when there is none to borrow.
+        /// </summary>
+        private static void Borrow(SpriteRenderer sr, Transform from)
+        {
+            if (sr == null) return;
+            var theirs = from != null ? from.GetComponent<SpriteRenderer>() : null;
+            sr.sprite = theirs != null ? theirs.sprite : null;
         }
 
         /// <summary>

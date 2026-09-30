@@ -333,6 +333,21 @@ public sealed class DialogueViewModel : ObservableObject
     public bool HasChanges(DialogueNodeDef node) => ChangedFields(node).Count > 0;
 
     /// <summary>
+    /// Whether a line's words are the pack's: every line of a conversation of
+    /// its own, a line it added to one of the game's, and a line of the game's
+    /// whose words it changed. Not a line of the game's it left as written -
+    /// those words are the game's, and nothing the pack says about translating
+    /// them is saved with it.
+    /// </summary>
+    public bool TextIsThePacks(DialogueNodeDef node)
+    {
+        if (node == null || !IsVanillaBased) return true;
+        var baseline = Baseline?.Node(node.Id);
+        if (baseline == null) return true;
+        return VanillaDialogueDelta.ChangedFields(node, baseline).Contains("text");
+    }
+
+    /// <summary>
     /// Take a row on, and follow it.
     /// <para/>
     /// The summary is worked out from the model rather than kept as a running

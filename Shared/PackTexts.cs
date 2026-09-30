@@ -121,6 +121,10 @@ namespace SMSModForge.Shared
             /// <summary>For a line, the character who says it, by key.</summary>
             public string Speaker;
 
+            /// <summary>For a line, whether only its letters are to change: see
+            /// <see cref="LettersOnlyKey"/>.</summary>
+            public bool LettersOnly;
+
             public string Text
             {
                 get { return (string)Holder[Field] ?? ""; }
@@ -166,9 +170,16 @@ namespace SMSModForge.Shared
                     // text blanked: the words are still the game's, not the
                     // pack's, and not empty either.
                     if (KeepsTheGamesText(n)) continue;
+                    // Meant to read as written in every language: not a text to
+                    // translate, and nothing is ever put over it.
+                    if (IsTicked(n, SameEverywhereKey)) continue;
                     string idText = ((long)id).ToString(System.Globalization.CultureInfo.InvariantCulture);
                     var site = walk.Add(n, "text", Kind.Line, key, idText, LineKey(key, idText));
-                    if (site != null) site.Speaker = (string)n["actor"];
+                    if (site != null)
+                    {
+                        site.Speaker = (string)n["actor"];
+                        site.LettersOnly = IsTicked(n, LettersOnlyKey);
+                    }
                 }
             }
 
@@ -262,6 +273,29 @@ namespace SMSModForge.Shared
 
         /// <summary>A saved line's list of what it changes about the game's.</summary>
         public const string OverridesKey = "overrides";
+
+        /// <summary>
+        /// On a saved line: it reads exactly as written in every language
+        /// (1.6.3). Left out of <see cref="Of"/>, so it is never offered for
+        /// translating and no translation is ever applied to it - the one rule,
+        /// for the editor and the game alike.
+        /// </summary>
+        public const string SameEverywhereKey = "textSameEverywhere";
+
+        /// <summary>
+        /// On a saved line: its words are kept and only its letters change
+        /// (1.6.3) - as written where the alphabet is the same, spelled out in
+        /// the letters of a language that has its own. A text like any other to
+        /// the game; the editor's translating is what treats it differently.
+        /// </summary>
+        public const string LettersOnlyKey = "textLettersOnly";
+
+        /// <summary>Whether a saved node has <paramref name="key"/> set to true.</summary>
+        public static bool IsTicked(JObject node, string key)
+        {
+            var value = node == null ? null : node[key];
+            return value != null && value.Type == JTokenType.Boolean && (bool)value;
+        }
 
         /// <summary>Whether <paramref name="key"/> is a line of the conversation
         /// <paramref name="dialogueKey"/> - see <see cref="LineKey"/>.</summary>

@@ -3,8 +3,8 @@ action.listVariablePickRandom.tip = ランダムに要素を1つ選ぶリスト�
 action.optionalEntriesRemovedList.tip = 任意です。選ぶ前に「リストから」から除く項目です。先頭に $ を付けるとリスト変数を読みます（例：$HarborHome_Occupied）。ほかの誰も持っていない枠を確保するにはこれを使います。
 action.valueWrittenTargetWhen.tip = 「リストから」が空、またはすべて除外されたときに「対象」へ書き込む値です。容量無制限のあふれ先になります。「$name」は変数を読みます。空欄にすると「対象」を消去します。
 action.whichVariablesNameValue.tip = 値の中の $name がどの変数を指すかです。パック = このパック自身の変数、ゲーム = ゲーム 1.8E にすでにある変数です。
-action.howTargetResolvesChanges.tip = 対象の見つけ方です。下の「対象」リストが変わります。シーンはパックのシーン登録を通り（有効にするとその音を再生します）、場所は場所トークンでレベル全体を指します。
-action.whichLevelGameobjectLives.tip2 = GameObject があるレベルです。作成した GameObject があるレベルだけが表示されます。移動「先」のレベルを選んでください。下の「対象」リストはこの選択に従い、選ぶまで無効のままです。
+action.howTargetResolvesChanges.tip = 対象の見つけ方です。下の「対象」リストが変わります。シーンはパックのシーン登録を通り（有効にするとその音を再生します）、場所は場所トークンでレベル全体を、NPC はレベルに配置した NPC のひとつを指します。
+action.whichLevelGameobjectLives.tip2 = GameObject があるレベルです。作成した GameObject があるレベルだけが表示されます（NPC の場合は NPC を配置したレベル）。移動「先」のレベルを選んでください。下の「対象」リストはこの選択に従い、選ぶまで無効のままです。
 action.autocompletesSelectedCategoryStays.tip = 選んだカテゴリから補完します。編集もできるので、どんな GO の名前やパスでも使えます。
 action.whichLevelSTwo.tip = レベルの2つのスプライトのどちらを操作するかです。場所タブで作るのと同じ「奥」と「手前」です。手前の描画順は −10、奥は −12 です。パックにはゲーム本来の名前で保存されます：手前は layer=Base、奥は layer=Secondary と書かれます。
 action.activateSwitchesDeactivateSwitches.tip = 有効化はオンに、無効化はオフにし、切り替えは今の状態の反対にします。シーンの場合、有効化するとその音も再生されます（切り替えでオンになったときも同じです）。

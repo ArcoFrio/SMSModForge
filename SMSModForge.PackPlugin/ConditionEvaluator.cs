@@ -342,7 +342,7 @@ namespace SMSModForge.PackPlugin
                             // in the level being left cannot answer for the one being
                             // entered. Anything else resolves globally.
                             GameObject levelGo = null;
-                            if (kind == "GameObjects" || kind == "Level Overlay")
+                            if (ActionRuntime.IsOverlayKind(kind))   // GameObjects and NPCs
                             {
                                 string overlayLevel = DerefValue((string)p["overlayLevel"] ?? "", p, vars);
                                 if (!string.IsNullOrEmpty(overlayLevel))

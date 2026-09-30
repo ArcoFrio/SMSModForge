@@ -144,6 +144,27 @@ public sealed class DialogueNodeDef
     /// it sits on.</summary>
     public bool OverridesField(string field)
         => Overrides != null && Overrides.Contains(field);
+
+    /// <summary>
+    /// The line reads exactly as written in every language: it is not a text
+    /// to translate at all (1.6.3). Nothing offers it for translating, and the
+    /// game never puts a translation over it, even one left in an older file.
+    /// See <see cref="Shared.PackTexts.SameEverywhereKey"/>.
+    /// </summary>
+    [JsonProperty(Shared.PackTexts.SameEverywhereKey, Order = 16)]
+    public bool TextSameEverywhere { get; set; }
+    public bool ShouldSerializeTextSameEverywhere() => TextSameEverywhere;
+
+    /// <summary>
+    /// The line's words are kept, and only its letters change (1.6.3): as
+    /// written in a language of the same alphabet, and spelled out in the
+    /// letters of one that has its own - for a made-up language, which a
+    /// translator would otherwise read as words it is not. See
+    /// <see cref="Shared.PackTexts.LettersOnlyKey"/>.
+    /// </summary>
+    [JsonProperty(Shared.PackTexts.LettersOnlyKey, Order = 17)]
+    public bool TextLettersOnly { get; set; }
+    public bool ShouldSerializeTextLettersOnly() => TextLettersOnly;
 }
 
 /// <summary>

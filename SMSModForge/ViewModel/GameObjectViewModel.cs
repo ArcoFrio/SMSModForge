@@ -114,6 +114,11 @@ public sealed class GameObjectViewModel : ObservableObject
     /// fields only mean something for an object this pack actually creates.</summary>
     public bool IsCreated => !Model.Bind;
 
+    /// <summary>One of the game's own NPCs, in a level of the game's this pack
+    /// extends - listed under the NPCs category rather than GameObjects, beside
+    /// the pack's own (1.6.3).</summary>
+    public bool IsGameNpc => Model.Bind && VanillaLevelCatalog.IsNpc(Model.Baseline);
+
     /// <summary>
     /// True while this node actually changes the vanilla object it's bound to.
     /// Compared live against the seeded baseline — the override flags are only

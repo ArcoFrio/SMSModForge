@@ -172,6 +172,10 @@ public static class PackMigration
         if (neutral > 0)
             report.Note(Loc.T("migration.neutralGiven"), neutral);
 
+        int recategorised = RenameTheOldGameObjectsCategory(pack);
+        if (recategorised > 0)
+            report.Note(Loc.T("migration.oldGameObjectsCategory"), recategorised);
+
         if (GiveItAVersion(pack))
             report.Note(Loc.F("migration.versionGiven", "version", pack.Version));
 
@@ -746,6 +750,103 @@ public static class PackMigration
             }
         }
         return changed;
+    }
+
+    /// <summary>
+    /// What the GameObjects category was called before July 2026.
+    /// </summary>
+    private const string OldGameObjectsCategory = "Extra GameObjects";   // English on purpose: a value packs stored.
+
+    /// <summary>
+    /// Give targets stored under the GameObjects category's old name,
+    /// "Extra GameObjects", the name it has had since (the author, 1.6.3).
+    /// <para/>
+    /// The rename taught neither the editor nor the game the old name. The
+    /// editor showed such a row with its Category empty and no Level field;
+    /// the game, not knowing the category, looked the name up anywhere rather
+    /// than inside the row's level - so it worked while the name was unique,
+    /// and found the wrong object when it was not.
+    /// <para/>
+    /// Every action and condition the pack holds, wherever it lives: a category
+    /// row is in dialogues, rules, quests, screens and objects' own conditions
+    /// alike, and a walk that knew only some of them would leave the rest
+    /// showing the empty box.
+    /// </summary>
+    private static int RenameTheOldGameObjectsCategory(ModPack pack)
+    {
+        int renamed = 0;
+        foreach (var p in EveryParams(pack))
+            foreach (string key in new[] { "kind", "targetKind" })
+                if (p.TryGetValue(key, out string? kind) && kind == OldGameObjectsCategory)
+                {
+                    p[key] = "GameObjects";
+                    renamed++;
+                }
+        return renamed;
+    }
+
+    /// <summary>
+    /// The params of every action and condition in the pack, found by walking
+    /// everything the pack saves rather than a list of places to look: a list
+    /// goes stale the day something new learns to hold an action.
+    /// <para/>
+    /// Follows the members that are written to the manifest (a public setter,
+    /// not [JsonIgnore]) through the pack's own model types, so nothing the
+    /// editor only computes or borrows from the game's catalog is visited.
+    /// </summary>
+    private static IEnumerable<Dictionary<string, string>> EveryParams(ModPack pack)
+    {
+        var seen = new HashSet<object>(ReferenceEqualityComparer.Instance);
+        var found = new List<Dictionary<string, string>>();
+        Visit(pack);
+        return found;
+
+        void Visit(object? o)
+        {
+            if (o == null || o is string || o.GetType().IsPrimitive || o.GetType().IsEnum) return;
+            if (!seen.Add(o)) return;
+            if (o is NodeActionDef a && a.Params != null) found.Add(a.Params);
+            if (o is NodeConditionDef c && c.Params != null) found.Add(c.Params);
+
+            if (o is System.Collections.IDictionary dict)
+            {
+                foreach (var v in dict.Values) Visit(v);
+                return;
+            }
+            if (o is System.Collections.IEnumerable list)
+            {
+                foreach (var v in list) Visit(v);
+                return;
+            }
+            if (o.GetType().Namespace != typeof(ModPack).Namespace) return;
+
+            foreach (var prop in SavedMembers(o.GetType()))
+            {
+                object? value;
+                try { value = prop.GetValue(o); }
+                catch (Exception) { continue; }
+                Visit(value);
+            }
+        }
+    }
+
+    private static readonly Dictionary<Type, System.Reflection.PropertyInfo[]> _savedMembers = new();
+
+    private static System.Reflection.PropertyInfo[] SavedMembers(Type type)
+    {
+        lock (_savedMembers)
+        {
+            if (_savedMembers.TryGetValue(type, out var known)) return known;
+            var props = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+                .Where(p => p.CanRead && p.GetIndexParameters().Length == 0
+                            && p.SetMethod != null && p.SetMethod.IsPublic
+                            && !Attribute.IsDefined(p, typeof(Newtonsoft.Json.JsonIgnoreAttribute))
+                            && !p.PropertyType.IsPrimitive && p.PropertyType != typeof(string)
+                            && !p.PropertyType.IsEnum)
+                .ToArray();
+            _savedMembers[type] = props;
+            return props;
+        }
     }
 
     /// <summary>Every action a pack holds, wherever it lives.</summary>

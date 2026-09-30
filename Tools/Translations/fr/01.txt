@@ -297,8 +297,8 @@ condition.negate.tip = Inverse le résultat de cette condition avant qu'il ne se
 condition.whichListKeysChoose.tip = Dans quelle liste de touches choisir. Pour le jeu, les boutons de souris sont des touches comme les autres ; cela ne filtre que le sélecteur ci-dessous.
 condition.inputKeyPicker.tip = La touche ou le bouton à surveiller. Les groupes du bas sont à des endroits différents selon la disposition du clavier : préférez ceux du dessus pour tout ce qu'un joueur doit pouvoir presser.
 condition.pressedReleasedMomentsTrue.tip = Appuyée et Relâchée sont des instants : vrais une fois par pression, et utiles seulement là où la condition est revérifiée en continu (règles d'intégration, visibilité de boutons, conditions de début de dialogue). Enfoncée et Levée sont des états et fonctionnent partout.
-condition.howTargetResolvesBust.tip = Comment la cible est résolue : un buste, un GameObject dans un niveau, une scène, ou un nom/chemin de GO brut. Pour savoir si un niveau entier est à l'écran, il y a LevelActive.
-condition.whichLevelObjectLives.tip = Dans quel niveau se trouve l'objet : seuls les niveaux avec des GameObjects créés sont listés. La liste Cible suit ce choix et reste désactivée tant qu'aucun n'est choisi.
+condition.howTargetResolvesBust.tip = Comment la cible est résolue : un buste, un GameObject dans un niveau, l'un des PNJ placés dans un niveau, une scène, ou un nom/chemin de GO brut. Pour savoir si un niveau entier est à l'écran, il y a LevelActive.
+condition.whichLevelObjectLives.tip = Dans quel niveau se trouve l'objet : seuls les niveaux avec des GameObjects créés sont listés, ou, pour les PNJ, les niveaux où des PNJ sont placés. La liste Cible suit ce choix et reste désactivée tant qu'aucun n'est choisi.
 condition.autocompletesSelectedCategoryStays.tip = Complète automatiquement à partir de la Catégorie choisie ; reste modifiable, donc tout nom/chemin de GO fonctionne. Un objet introuvable compte comme éteint.
 condition.packPackSOwn.tip = Pack = une variable de ce pack ; Jeu = une variable qui existe déjà dans le jeu 1.8E.
 condition.whatVariableHoldsYes.tip = Ce que contient cette variable. Un oui/non se choisit avec Vrai ou Faux au lieu de se taper ; tout le reste est comparé tel que vous l'écrivez.
@@ -346,6 +346,6 @@ action.remove = − Branche
 action.addDiceBranch = + Ajouter une branche
 action.copy.tip = Copier cette action dans le presse-papiers
 action.remove.tip = Supprimer cette action
-action.howTargetResolvesPlain.tip = Comment la cible est résolue : un chemin de GO brut, un overlay dans un niveau, un niveau entier ou un buste.
-action.whichLevelGameobjectLives.tip = Dans quel niveau se trouve le GameObject : seuls les niveaux avec des GameObjects créés sont listés. La liste Cible reste désactivée tant qu'aucun n'est choisi.
+action.howTargetResolvesPlain.tip = Comment la cible est résolue : un chemin de GO brut, un overlay dans un niveau, l'un des PNJ placés dans un niveau, un niveau entier ou un buste.
+action.whichLevelGameobjectLives.tip = Dans quel niveau se trouve le GameObject : seuls les niveaux avec des GameObjects créés sont listés, ou, pour les PNJ, les niveaux où des PNJ sont placés. La liste Cible reste désactivée tant qu'aucun n'est choisi.
 action.packPackSOwn.tip = Pack = une variable de ce pack ; Jeu = une variable qui existe déjà dans le jeu 1.8E.

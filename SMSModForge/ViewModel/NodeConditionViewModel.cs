@@ -224,8 +224,12 @@ public sealed class NodeConditionViewModel : ObservableObject
             OnPropertyChanged(nameof(GoTarget));
             OnPropertyChanged(nameof(GoOverlayLevel));
             OnPropertyChanged(nameof(IsGoOverlayCategory));
+            OnPropertyChanged(nameof(IsGoLevelScoped));
             OnPropertyChanged(nameof(IsGoTargetEnabled));
             OnPropertyChanged(nameof(GoOverlayOptions));
+            OnPropertyChanged(nameof(GoNpcOptions));
+            OnPropertyChanged(nameof(GoOverlayLevelOptions));
+            NotifyPreview();
             OnPropertyChanged(nameof(IsInputFamily));
             OnPropertyChanged(nameof(InputDevice));
             OnPropertyChanged(nameof(InputKeyOptions));
@@ -791,7 +795,7 @@ public sealed class NodeConditionViewModel : ObservableObject
     /// the Set-Active action does. Drives which controls the row shows.</summary>
     public bool IsGoActiveFamily => Model.Type == NodeConditionTypes.GameObjectActive;
 
-    /// <summary>Categories offered here — the same four the Set-Active action
+    /// <summary>Categories offered here — the same ones the Set-Active action
     /// offers. No Places: asking whether a whole level is on screen is what
     /// LevelActive already does, and it resolves place tokens through the
     /// registry rather than by name.</summary>
@@ -828,15 +832,19 @@ public sealed class NodeConditionViewModel : ObservableObject
             // leave a name the new list cannot offer sitting in the box, looking
             // chosen.
             Model.Params.Remove("target");
-            if (value != NodeActionViewModel.CatOverlay) Model.Params.Remove("overlayLevel");
+            if (!NodeActionViewModel.IsLevelScoped(value)) Model.Params.Remove("overlayLevel");
             OnPropertyChanged();
             OnPropertyChanged(nameof(GoTarget));
             OnPropertyChanged(nameof(GoOverlayLevel));
             OnPropertyChanged(nameof(IsGoOverlayCategory));
+            OnPropertyChanged(nameof(IsGoLevelScoped));
             OnPropertyChanged(nameof(IsGoTargetEnabled));
             OnPropertyChanged(nameof(GoOverlayOptions));
+            OnPropertyChanged(nameof(GoNpcOptions));
+            OnPropertyChanged(nameof(GoOverlayLevelOptions));
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(ParamsAsText));
+            NotifyPreview();
         }
     }
 
@@ -852,10 +860,11 @@ public sealed class NodeConditionViewModel : ObservableObject
             OnPropertyChanged();
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(ParamsAsText));
+            NotifyPreview();
         }
     }
 
-    /// <summary>GameObjects category only: which level the object lives in, as a
+    /// <summary>GameObjects and NPCs only: which level the object lives in, as a
     /// level token. Empty resolves globally, which is the pre-category
     /// behaviour and can answer with a same-named object in another level.</summary>
     public string GoOverlayLevel
@@ -867,18 +876,25 @@ public sealed class NodeConditionViewModel : ObservableObject
             else Model.Params["overlayLevel"] = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(GoOverlayOptions));
+            OnPropertyChanged(nameof(GoNpcOptions));
             OnPropertyChanged(nameof(IsGoTargetEnabled));
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(ParamsAsText));
+            NotifyPreview();
         }
     }
 
     public bool IsGoOverlayCategory => GoCategory == NodeActionViewModel.CatOverlay;
 
-    /// <summary>The GameObjects target list is level-scoped, so its combo stays
-    /// disabled until a level is chosen. Every other category is always on.</summary>
+    /// <summary>Whether the Level field shows: GameObjects and NPCs are both
+    /// looked up inside one level.</summary>
+    public bool IsGoLevelScoped => NodeActionViewModel.IsLevelScoped(GoCategory);
+
+    /// <summary>The GameObjects and NPCs target lists are level-scoped, so their
+    /// combo stays disabled until a level is chosen. Every other category is
+    /// always on.</summary>
     public bool IsGoTargetEnabled =>
-        !IsGoOverlayCategory || !string.IsNullOrEmpty(GoOverlayLevel);
+        !IsGoLevelScoped || !string.IsNullOrEmpty(GoOverlayLevel);
 
     /// <summary>Strictly the chosen level's GameObjects — no whole-pack fallback,
     /// since the combo is disabled until a level is picked and a name from some
@@ -889,11 +905,55 @@ public sealed class NodeConditionViewModel : ObservableObject
             : NodeActionViewModel.StrictOverlayProvider?.Invoke(GoOverlayLevel)
               ?? Array.Empty<string>();
 
+    /// <summary>The NPCs placed in the chosen level - the same list the
+    /// action's NPCs category offers.</summary>
+    public IEnumerable<string> GoNpcOptions =>
+        string.IsNullOrEmpty(GoOverlayLevel)
+            ? Array.Empty<string>()
+            : NodeActionViewModel.NpcProvider?.Invoke(GoOverlayLevel)
+              ?? Array.Empty<string>();
+
     /// <summary>Levels that actually carry GameObjects — pack places and vanilla
-    /// extensions alike.</summary>
+    /// extensions alike - or, for the NPCs category, levels with NPCs placed.</summary>
     public IEnumerable<NavigatorTargetOption> GoOverlayLevelOptions =>
-        NodeActionViewModel.OverlayLevelProvider?.Invoke()
+        (GoCategory == NodeActionViewModel.CatNpcs
+            ? NodeActionViewModel.NpcLevelProvider
+            : NodeActionViewModel.OverlayLevelProvider)?.Invoke()
         ?? Array.Empty<NavigatorTargetOption>();
+
+    // ── What the target looks like (the author, 1.6.3) ────────────────────
+    //
+    // The same small picture the Set-Active action shows under its target,
+    // found the same way (NodeActionViewModel.ArtOf / SceneOf), and bound by
+    // the same template - so these carry the names that template reads. A
+    // condition changes nothing, so it never has an "after".
+
+    public SceneViewModel? PreviewScene
+        => IsGoActiveFamily ? NodeActionViewModel.SceneOf(GoCategory, GoTarget) : null;
+
+    public string PreviewArt
+        => IsGoActiveFamily
+            ? NodeActionViewModel.ArtOf(GoCategory, GoTarget, GoOverlayLevel, "", placesToo: false)
+            : "";
+
+    public bool ShowsScenePreview => PreviewScene != null;
+    public bool ShowsArtPreview => PreviewArt.Length > 0;
+    public bool ShowsAnyPreview => ShowsScenePreview || ShowsArtPreview;
+    public bool ShowsSwap => false;
+    public string SceneAfterSprite => "";
+    public string ArtAfterSprite => "";
+    public bool ShowsSceneAfter => false;
+    public bool ShowsArtAfter => false;
+    public double PreviewBoxSize => 160;
+
+    private void NotifyPreview()
+    {
+        OnPropertyChanged(nameof(PreviewScene));
+        OnPropertyChanged(nameof(PreviewArt));
+        OnPropertyChanged(nameof(ShowsScenePreview));
+        OnPropertyChanged(nameof(ShowsArtPreview));
+        OnPropertyChanged(nameof(ShowsAnyPreview));
+    }
 
     /// <summary>
     /// Shortcut for the <c>level</c> param used by

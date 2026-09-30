@@ -562,7 +562,7 @@ public partial class MainWindow : Window
         var deleted = new List<string>();
         vm.WithTranslationFilesCurrent(pack =>
         {
-            var window = new View.PackTranslationsWindow(pack, root) { Owner = this };
+            var window = new View.PackTranslationsWindow(pack, root, vm.TranslationSummaries) { Owner = this };
             window.ShowDialog();
             deleted.AddRange(window.Deleted);
             return window.Changed;
@@ -1404,6 +1404,64 @@ public partial class MainWindow : Window
     /// requires a code-behind nudge. Only outfit selection drives the editor;
     /// selecting a character is a no-op (the user can expand it).
     /// </summary>
+    /// <summary>
+    /// How much room the bust preview has, handed to the view model, which
+    /// shows it at the largest offered size that fits (see
+    /// <see cref="MainViewModel.BustPreviewShownZoom"/>).
+    /// <para/>
+    /// Tall: the pane's height, less everything in it but the picture - the
+    /// header over it, the frame around it and the options under it. Wide: the
+    /// tab, less the sidebar at its narrowest, the splitter, and a working
+    /// width for the outfit's fields beside it.
+    /// <para/>
+    /// Neither depends on the size the preview is shown at, so showing it
+    /// smaller cannot make the room it is measured against change, and the
+    /// two cannot chase each other.
+    /// </summary>
+    private void BustPreviewRoom_Changed(object sender, SizeChangedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm || !BustPreviewPane.IsLoaded) return;
+
+        double around = BustPreviewHeader.ActualHeight + BustPreviewHeader.Margin.Top + BustPreviewHeader.Margin.Bottom
+                      + BustPreviewFrame.Padding.Top + BustPreviewFrame.Padding.Bottom
+                      + BustPreviewFrame.BorderThickness.Top + BustPreviewFrame.BorderThickness.Bottom
+                      + PreviewControl.Margin.Top + PreviewControl.Margin.Bottom
+                      + NaturalHeight(BustPreviewOptions) + BustPreviewOptions.Margin.Top + BustPreviewOptions.Margin.Bottom;
+        double tall = BustPreviewPane.ActualHeight - around;
+
+        double wide = CharactersGrid.ActualWidth
+                    - CharacterSidebarColumn.MinWidth
+                    - CharacterSplitterColumn.ActualWidth
+                    - OutfitFieldsWorkingWidth
+                    - MainViewModel.BustPreviewChrome;
+
+        vm.SetBustPreviewRoom(Math.Max(0, wide), Math.Max(0, tall));
+    }
+
+    /// <summary>What the outfit's fields keep, at the least, beside the preview
+    /// when the window is narrow: enough for a label and a path to be read.</summary>
+    private const double OutfitFieldsWorkingWidth = 220;
+
+    /// <summary>
+    /// How tall the options under the preview need to be, rather than how tall
+    /// they were left: squeezed under a preview too big for the window, the
+    /// grid reports the few pixels it was given. Its columns are stacks, and a
+    /// stack measures what it holds at full height whatever it is given, so
+    /// the tallest column's sum is what the options take.
+    /// </summary>
+    private static double NaturalHeight(Grid options)
+    {
+        double tallest = 0;
+        foreach (UIElement column in options.Children)
+        {
+            double h = column is StackPanel stack
+                ? stack.Children.Cast<UIElement>().Sum(c => c.DesiredSize.Height)
+                : column.DesiredSize.Height;
+            tallest = Math.Max(tallest, h);
+        }
+        return tallest;
+    }
+
     /// <summary>
     /// Stops the Characters sidebar being dragged narrower than its own
     /// toolbar.

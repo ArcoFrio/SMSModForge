@@ -44,32 +44,113 @@ public static class PackTranslations
     /// dropped it. Every other empty text is left out, as it always was.
     /// </summary>
     public static TextFile Source(ModPack pack, TextFile? withWordsIn = null)
+        => Snapshot(pack).For(withWordsIn);
+
+    /// <summary>
+    /// The pack's texts to translate, worked out once and handed to as many
+    /// translations as are being looked at (1.6.3).
+    /// <para/>
+    /// Each language's file adds only the lines typed in it alone, so the rest
+    /// is the same for all of them - and working it out means writing the
+    /// whole pack out, a tenth of a second for a large one. Done for every
+    /// language in turn, twice, it was most of the two seconds the pack's
+    /// translations window took to open.
+    /// </summary>
+    public sealed class SourceSnapshot
+    {
+        private readonly List<(TextFile.Entry Entry, bool Empty)> _pack;
+        private readonly List<TextFile.Entry> _game;
+
+        internal SourceSnapshot(List<(TextFile.Entry, bool)> pack, List<TextFile.Entry> game,
+                                HashSet<string> lettersOnly, string ownLanguage)
+        {
+            _pack = pack;
+            _game = game;
+            LettersOnly = lettersOnly;
+            OwnLanguage = ownLanguage;
+            var sb = new System.Text.StringBuilder(ownLanguage).Append('\u0001');
+            foreach (var (e, _) in _pack) sb.Append(e.Key).Append('\u0002').Append(e.Text).Append('\u0003');
+            foreach (var e in _game) sb.Append(e.Key).Append('\u0002').Append(e.Text).Append('\u0003');
+            foreach (var k in lettersOnly.OrderBy(k => k, StringComparer.Ordinal)) sb.Append(k).Append('\u0004');
+            Signature = Convert.ToHexString(System.Security.Cryptography.SHA1.HashData(
+                System.Text.Encoding.UTF8.GetBytes(sb.ToString())));
+        }
+
+        /// <summary>The lines whose words are kept and only their letters change.</summary>
+        public HashSet<string> LettersOnly { get; }
+
+        /// <summary>The language the pack's own words are in.</summary>
+        public string OwnLanguage { get; }
+
+        /// <summary>Changes whenever any of the pack's texts do: what a
+        /// translation's standing was worked out against.</summary>
+        public string Signature { get; }
+
+        /// <summary>The texts as the translation <paramref name="withWordsIn"/>
+        /// is measured against - see <see cref="Source"/>. A new file each time,
+        /// with entries of its own.</summary>
+        public TextFile For(TextFile? withWordsIn)
+        {
+            var file = new TextFile();
+            var taken = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var (e, empty) in _pack)
+            {
+                if (empty && PackTexts.IsEmpty(withWordsIn?.Translated(e.Key))) continue;
+                file.Add(Copy(e));
+                taken.Add(e.Key);
+            }
+            foreach (var e in _game)
+                if (!taken.Contains(e.Key)) file.Add(Copy(e));
+            return file;
+        }
+
+        private static TextFile.Entry Copy(TextFile.Entry e) => new()
+        {
+            Key = e.Key,
+            Text = e.Text,
+            Notes = new List<string>(e.Notes),
+            Heading = e.Heading,
+        };
+    }
+
+    /// <summary>The pack's texts to translate, from one writing-out of the pack.</summary>
+    public static SourceSnapshot Snapshot(ModPack pack)
     {
         var json = JObject.Parse(PackRepository.SerializeAsSaved(pack));
         var names = new Names(json);
-        var file = new TextFile();
-        foreach (var site in PackTexts.Of(json, withEmpty: withWordsIn != null))
+        var entries = new List<(TextFile.Entry, bool)>();
+        var letters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var wordsTaken = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var site in PackTexts.Of(json, withEmpty: true))
         {
-            if (PackTexts.IsEmpty(site.Text) && PackTexts.IsEmpty(withWordsIn?.Translated(site.Key)))
-                continue;
-            file.Add(new TextFile.Entry
+            bool empty = PackTexts.IsEmpty(site.Text);
+            var notes = new List<string> { Note(site, names) };
+            // Said in the file, so whoever translates it by hand - or the AI
+            // tool it is handed to - leaves the words alone.
+            if (site.LettersOnly)
+            {
+                notes.Add(Loc.T("packText.note.lettersOnly"));
+                letters.Add(site.Key);
+            }
+            entries.Add((new TextFile.Entry
             {
                 Key = site.Key,
                 Text = site.Text,
-                Notes = new List<string> { Note(site, names) },
+                Notes = notes,
                 Heading = Heading(site, names),
-            });
+            }, empty));
+            if (!empty) wordsTaken.Add(site.Key);
         }
 
         // And the game's own lines in the conversations the pack extends, after
         // everything of the pack's: shown only to a player who chooses to see
         // the game's lines translated, and never in the pack's own language,
         // where they are the game's words.
-        var taken = new HashSet<string>(file.Entries.Select(e => e.Key), StringComparer.OrdinalIgnoreCase);
-        foreach (var line in GameLines.Of(pack, taken))
+        var game = new List<TextFile.Entry>();
+        foreach (var line in GameLines.Of(pack, wordsTaken))
         {
             string id = line.Node.Id.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            file.Add(new TextFile.Entry
+            game.Add(new TextFile.Entry
             {
                 Key = line.Key,
                 Text = line.Text,
@@ -82,7 +163,7 @@ public static class PackTranslations
                 Heading = Loc.F("packText.heading.gameLines", "name", names.Dialogue(line.Dialogue.Key)),
             });
         }
-        return file;
+        return new SourceSnapshot(entries, game, letters, pack.OwnLanguage);
     }
 
     /// <summary>
@@ -152,15 +233,48 @@ public static class PackTranslations
         var list = new List<Checked>();
         string folder = FolderOf(packRoot);
         if (!Directory.Exists(folder)) return list;
-        foreach (string path in Directory.EnumerateFiles(folder, "*" + PackTexts.Extension).OrderBy(p => p, StringComparer.OrdinalIgnoreCase))
+        var snapshot = Snapshot(pack);
+        foreach (string path in Files(packRoot))
         {
             string code = System.IO.Path.GetFileNameWithoutExtension(path);
-            if (!TextFile.IsKey(code)) continue;
             var file = Loc.Read(path);
             if (file == null) continue;
-            list.Add(new Checked(code, path, TextCheck.Run(Source(pack, file), file, code, pack.OwnLanguage)));
+            list.Add(new Checked(code, path, Check(snapshot, code, file)));
         }
         return list;
+    }
+
+    /// <summary>The translation files beside the pack, in order.</summary>
+    public static List<string> Files(string packRoot)
+    {
+        string folder = FolderOf(packRoot);
+        if (!Directory.Exists(folder)) return new List<string>();
+        return Directory.EnumerateFiles(folder, "*" + PackTexts.Extension)
+                        .Where(p => TextFile.IsKey(System.IO.Path.GetFileNameWithoutExtension(p)))
+                        .OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToList();
+    }
+
+    /// <summary>One translation, checked against the pack's texts.</summary>
+    private static TextCheck.Result Check(SourceSnapshot snapshot, string code, TextFile file)
+    {
+        var result = TextCheck.Run(snapshot.For(file), file, code, snapshot.OwnLanguage);
+        // A line whose words are kept reads as written in a language of the
+        // same alphabet: that is it done, not waiting.
+        if (!Services.Translation.PackNames.NeedsSpelling(code))
+            result.Findings.RemoveAll(f => f.Kind == TextCheck.Kind.Untranslated && snapshot.LettersOnly.Contains(f.Key));
+        return result;
+    }
+
+    /// <summary>
+    /// The keys of the lines whose words are kept and only their letters
+    /// change (<see cref="PackTexts.LettersOnlyKey"/>), as the pack would be
+    /// saved.
+    /// </summary>
+    public static HashSet<string> LettersOnlyKeys(ModPack pack)
+    {
+        var json = JObject.Parse(PackRepository.SerializeAsSaved(pack));
+        return new HashSet<string>(PackTexts.Of(json).Where(s => s.LettersOnly).Select(s => s.Key),
+                                   StringComparer.OrdinalIgnoreCase);
     }
 
     // ── The pack's translations, as a list to work on ───────────────
@@ -194,16 +308,32 @@ public static class PackTranslations
     /// </summary>
     public static List<Summary> Summaries(ModPack pack, string packRoot)
     {
+        var snapshot = Snapshot(pack);
         var list = new List<Summary>();
-        foreach (var c in CheckAll(pack, packRoot))
+        foreach (string path in Files(packRoot))
         {
-            var file = Loc.Read(c.Path);
-            var source = Source(pack, file);
-            int total = source.Entries.Count(e => !string.IsNullOrWhiteSpace(e.Text));
-            int left = Services.Translation.PackTranslationJob.Missing(source, file, c.Code).Count;
-            list.Add(new Summary(c.Code, c.Path, total - left, total, c.Result.Of(TextCheck.Kind.EnglishChanged)));
+            var one = SummaryOf(snapshot, path);
+            if (one != null) list.Add(one);
         }
         return list;
+    }
+
+    /// <summary>
+    /// How far along the translation in <paramref name="path"/> is, against
+    /// <paramref name="snapshot"/>; null when the file cannot be read. Reads
+    /// only the file: safe away from the window's thread, which is where the
+    /// editor works these out after a pack loads.
+    /// </summary>
+    public static Summary? SummaryOf(SourceSnapshot snapshot, string path)
+    {
+        string code = System.IO.Path.GetFileNameWithoutExtension(path);
+        var file = Loc.Read(path);
+        if (file == null) return null;
+        var source = snapshot.For(file);
+        var result = Check(snapshot, code, file);
+        int total = source.Entries.Count(e => !string.IsNullOrWhiteSpace(e.Text));
+        int left = Services.Translation.PackTranslationJob.Missing(source, file, code, snapshot.LettersOnly).Count;
+        return new Summary(code, path, total - left, total, result.Of(TextCheck.Kind.EnglishChanged));
     }
 
     /// <summary>

@@ -32,6 +32,24 @@ namespace SMSModForge.Shared
         }
 
         /// <summary>
+        /// Whether a path inside the pack climbs out of it: "../Art/Elf.png",
+        /// or "Art/../../Elf.png" - more steps up than down, at any point. Such
+        /// a file is not in the pack, and a player never has it (1.6.3).
+        /// </summary>
+        public static bool LeavesThePack(string path)
+        {
+            if (string.IsNullOrEmpty(path) || IsFullPath(path)) return false;
+            int depth = 0;
+            foreach (string part in path.Split('/', '\\'))
+            {
+                if (part.Length == 0 || part == ".") continue;
+                depth += part == ".." ? -1 : 1;
+                if (depth < 0) return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// The file in the pack <paramref name="fullPath"/> names: of
         /// <paramref name="inPack"/> (paths inside the pack, forward slashes), the
         /// longest the full path ends with, following a folder separator. Null

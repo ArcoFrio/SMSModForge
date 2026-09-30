@@ -294,8 +294,8 @@ condition.negate.tip = 周りのリストと組み合わせる前に、この条
 condition.whichListKeysChoose.tip = どのキーの一覧から選ぶか。ゲームにとってマウスボタンもほかのキーと同じです。これは下の選択欄を絞り込むだけです。
 condition.inputKeyPicker.tip = 監視するキーやボタン。下のほうのグループはキーボード配列によって位置が変わります。プレイヤーが確実に押せる必要があるものには、上のグループを選んでください。
 condition.pressedReleasedMomentsTrue.tip = 「押した瞬間」と「離した瞬間」は瞬間です。1 回押すごとに 1 度だけ真になり、条件が常に再チェックされる場所（統合ルール、ボタンの表示、会話の開始条件）でのみ役立ちます。「押している間」と「押していない間」は状態で、どこでも使えます。
-condition.howTargetResolvesBust.tip = 対象の解決方法：立ち絵、レベル内の GameObject、シーン、または GO の名前／パスそのもの。レベル全体が画面に出ているかを調べるなら LevelActive を使います。
-condition.whichLevelObjectLives.tip = オブジェクトがあるレベル。GameObject を作成したレベルだけが表示されます。「対象」の一覧はこの選択に従い、選ぶまで無効のままです。
+condition.howTargetResolvesBust.tip = 対象の解決方法：立ち絵、レベル内の GameObject、レベルに配置した NPC、シーン、または GO の名前／パスそのもの。レベル全体が画面に出ているかを調べるなら LevelActive を使います。
+condition.whichLevelObjectLives.tip = オブジェクトがあるレベル。GameObject を作成したレベルだけが表示されます（NPC の場合は NPC を配置したレベル）。「対象」の一覧はこの選択に従い、選ぶまで無効のままです。
 condition.autocompletesSelectedCategoryStays.tip = 選んだカテゴリから自動補完します。編集もできるので、どんな GO の名前／パスでも使えます。見つからないオブジェクトはオフとして扱われます。
 condition.packPackSOwn.tip = パック = このパック自身の変数、ゲーム = ゲーム 1.8E に既にある変数。
 condition.whatVariableHoldsYes.tip = この変数が保持するもの。はい／いいえは入力ではなく「真」か「偽」で選び、それ以外は書いたとおりに比較されます。
@@ -343,6 +343,6 @@ action.remove = − 分岐
 action.addDiceBranch = + 分岐を追加
 action.copy.tip = このアクションをクリップボードにコピー
 action.remove.tip = このアクションを削除
-action.howTargetResolvesPlain.tip = 対象の解決方法：GO のパスそのもの、レベル内のオーバーレイ、レベル全体、または立ち絵。
-action.whichLevelGameobjectLives.tip = GameObject があるレベル。GameObject を作成したレベルだけが表示されます。選ぶまで「対象」の一覧は無効のままです。
+action.howTargetResolvesPlain.tip = 対象の解決方法：GO のパスそのもの、レベル内のオーバーレイ、レベルに配置した NPC、レベル全体、または立ち絵。
+action.whichLevelGameobjectLives.tip = GameObject があるレベル。GameObject を作成したレベルだけが表示されます（NPC の場合は NPC を配置したレベル）。選ぶまで「対象」の一覧は無効のままです。
 action.packPackSOwn.tip = パック = このパック自身の変数、ゲーム = ゲーム 1.8E に既にある変数。

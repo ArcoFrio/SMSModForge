@@ -80,7 +80,15 @@ public static class VanillaArtResolver
                 if (!string.Equals(o.GameObjectName, bustGoName, StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(packRoot)) continue;
                 var replaced = Replacement(o, Shared.SpriteSlotNames.Expression(face), packRoot);
                 if (replaced != null) return replaced;
-                if (o.Expression.Enabled && !string.IsNullOrEmpty(o.Expression.Prefix))
+                if (o.Expression.Enabled && Shared.GameArt.IsBorrowed(o.Expression.Prefix))
+                {
+                    // Borrowed from one of the game's busts: that bust's face.
+                    var root = FindArtRoot();
+                    var borrowed = root == null ? null
+                        : Path.Combine(root, Shared.GameArt.BustOf(o.Expression.Prefix)!, "Expression" + face + ".PNG");
+                    if (borrowed != null && File.Exists(borrowed)) return borrowed;
+                }
+                else if (o.Expression.Enabled && !string.IsNullOrEmpty(o.Expression.Prefix))
                 {
                     var rel = o.Expression.Prefix + face + ".PNG";
                     var abs = Path.Combine(packRoot, rel.Replace('/', Path.DirectorySeparatorChar));
@@ -92,6 +100,21 @@ public static class VanillaArtResolver
         if (artRoot == null) return null;
         var vp = Path.Combine(artRoot, bustGoName, "Expression" + face + ".PNG");
         return File.Exists(vp) ? vp : null;
+    }
+
+    /// <summary>
+    /// The shipped copy of one file of the game's bust a borrowing field names
+    /// (<see cref="Shared.GameArt"/>) - <c>Blink.PNG</c>, <c>Mask.PNG</c>,
+    /// <c>Mouth1.PNG</c> - or null when there is none. Smaller than the game's
+    /// own, which the game uses; for the editor to show and start from.
+    /// </summary>
+    public static string? GameArtFile(string? field, string file)
+    {
+        string? bust = Shared.GameArt.BustOf(field);
+        string? root = FindArtRoot();
+        if (string.IsNullOrEmpty(bust) || root == null) return null;
+        string path = Path.Combine(root, bust, file);
+        return File.Exists(path) ? path : null;
     }
 
     /// <summary>The file a pack paints over <paramref name="slot"/> of one of

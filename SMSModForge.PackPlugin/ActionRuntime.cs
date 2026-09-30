@@ -199,6 +199,15 @@ namespace SMSModForge.PackPlugin
                         }
 
                         var sr = go.GetComponent<SpriteRenderer>();
+                        // A bust draws its body on its sprite root (MBase1,
+                        // D1Base on some rigs), not on the bust object the
+                        // Bust category names, which has no renderer at all -
+                        // so aimed at a bust, this changed nothing (1.6.3).
+                        if (sr == null && (string)p["kind"] == "Bust")
+                        {
+                            var body = ActorRegistry.FindMBase(go);
+                            if (body != null) sr = body.GetComponent<SpriteRenderer>();
+                        }
                         if (sr == null)
                         {
                             ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetSprite: '" + go.name +
@@ -268,6 +277,31 @@ namespace SMSModForge.PackPlugin
                                     : new Vector2(0.5f, 0.5f);
                                 sr.sprite = Sprite.Create(
                                     tex, new Rect(0, 0, tex.width, tex.height), pivot, ppu);
+
+                                // An NPC's floor reflection is a copy of its
+                                // pose, hung one pose-height below it; left
+                                // alone it would go on mirroring the old pose,
+                                // at the old pose's height (1.6.3). A pack NPC's
+                                // is the child called Reflection; the game's own
+                                // NPCs name theirs anything ("Square (1)"), and
+                                // are told by the reflection material instead.
+                                if ((string)p["kind"] == "NPCs")
+                                {
+                                    float was = old != null ? old.bounds.size.y : 0f;
+                                    for (int i = 0; i < go.transform.childCount; i++)
+                                    {
+                                        var mirror = go.transform.GetChild(i);
+                                        var mirrorSr = mirror.GetComponent<SpriteRenderer>();
+                                        if (mirrorSr == null) continue;
+                                        var mat = mirrorSr.sharedMaterial;
+                                        bool isMirror = mirror.name == "Reflection"
+                                            || (mat != null && mat.name.IndexOf("Reflection", System.StringComparison.OrdinalIgnoreCase) >= 0);
+                                        if (!isMirror) continue;
+                                        mirrorSr.sprite = sr.sprite;
+                                        var at = mirror.localPosition;
+                                        mirror.localPosition = new Vector3(at.x, at.y + was - sr.sprite.bounds.size.y, at.z);
+                                    }
+                                }
                             }
                         }
 
@@ -1106,11 +1140,14 @@ namespace SMSModForge.PackPlugin
         /// <see cref="ResolveActionTarget"/>, so actions authored before
         /// categories (a bare level token or GO name) keep resolving.
         /// </summary>
-        /// <summary>True for the Extra-GameObject (level-scoped) target category.
-        /// Accepts the legacy "Level Overlay" token so packs authored before the
-        /// rename still resolve.</summary>
-        private static bool IsOverlayKind(string kind)
-            => kind == "GameObjects" || kind == "Level Overlay";
+        /// <summary>True for the level-scoped target categories: GameObjects,
+        /// and NPCs (1.6.3), whose placed NPCs are GameObjects of the level too
+        /// and are found the same way. Accepts GameObjects' two older names,
+        /// "Level Overlay" and "Extra GameObjects", so a pack exported before
+        /// either rename still resolves inside its level.</summary>
+        internal static bool IsOverlayKind(string kind)
+            => kind == "GameObjects" || kind == "Level Overlay" || kind == "Extra GameObjects"
+               || kind == "NPCs";
 
         /// <summary>A pack scene's GameObject, by scene key.</summary>
         private static GameObject ResolveSceneGo(string sceneKey, PackContext ctx)
@@ -1295,7 +1332,7 @@ namespace SMSModForge.PackPlugin
             {
                 string level = (string)p["overlayLevel"];
                 if (!string.IsNullOrEmpty(level))
-                    return "overlay '" + target + "' under level '" + level + "'";
+                    return (kind == "NPCs" ? "NPC '" : "overlay '") + target + "' under level '" + level + "'";
             }
 
             return "'" + target + "'";

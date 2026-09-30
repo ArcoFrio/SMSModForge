@@ -144,6 +144,8 @@ public sealed class NodeActionViewModel : ObservableObject
                     OnPropertyChanged(nameof(BustKey));
                     OnPropertyChanged(nameof(Expression));
                     OnPropertyChanged(nameof(Scene));
+                    // The Sprite field is what a swap's "after" shows.
+                    NotifyPreview();
                     // Mirror the condition rows: a write may flip a sibling's
                     // EnabledWhen gate. No action schema declares one today,
                     // but wiring it here means adding one just works.
@@ -287,6 +289,20 @@ public sealed class NodeActionViewModel : ObservableObject
     /// <c>&lt;Key&gt;_Secondary</c>, reachable through GameObjects.</summary>
     public const string CatPlaces = "Places";
 
+    /// <summary>
+    /// One of the pack's NPCs, placed in a level (the author, 1.6.3): picked by
+    /// level and then by NPC, the way the NPC tab's placements are laid out.
+    /// Resolved inside that level exactly like <see cref="CatOverlay"/> - an NPC
+    /// is a GameObject there - but listed apart from the level's other objects,
+    /// which are its props and the groups NPCs stand in.
+    /// </summary>
+    public const string CatNpcs = "NPCs";
+
+    /// <summary>Whether a category's target is looked up inside one level,
+    /// chosen in the Level field above it.</summary>
+    internal static bool IsLevelScoped(string category)
+        => category == CatOverlay || category == CatNpcs;
+
     /// <summary>A UI the pack built, by its id. This is what makes one screen
     /// open another: showing and hiding whole UIs IS the navigation, the same
     /// way it is in the game, where 34 of 49 canvases sit switched off waiting
@@ -297,13 +313,13 @@ public sealed class NodeActionViewModel : ObservableObject
     /// activating or deactivating a whole level is the transition system's job,
     /// not something an author should reach for from an action row.</summary>
     public static readonly IReadOnlyList<string> SetActiveCategories =
-        new[] { CatBust, CatOverlay, CatScene, CatUi, CatPath };
+        new[] { CatBust, CatOverlay, CatNpcs, CatScene, CatUi, CatPath };
 
     /// <summary>Categories offered when swapping a sprite. Places is the point of
     /// the difference: a level's own GameObject carries the base backdrop's
     /// SpriteRenderer, so repainting a place means targeting the level itself.</summary>
     public static readonly IReadOnlyList<string> SetSpriteCategories =
-        new[] { CatBust, CatOverlay, CatPlaces, CatScene, CatPath };
+        new[] { CatBust, CatOverlay, CatNpcs, CatPlaces, CatScene, CatPath };
 
     /// <summary>
     /// The category list for THIS row. The two actions share one row but not one
@@ -361,6 +377,7 @@ public sealed class NodeActionViewModel : ObservableObject
             OnPropertyChanged();
             OnPropertyChanged(nameof(PlaceLayerShown));
             OnPropertyChanged(nameof(Display));
+            NotifyPreview();
         }
     }
 
@@ -419,6 +436,153 @@ public sealed class NodeActionViewModel : ObservableObject
     /// <summary>True when the Scene category is selected. (Scene supports both
     /// activate and deactivate, so this no longer hides the Active checkbox.)</summary>
     public bool IsSceneCategory => Category == CatScene;
+
+    /// <summary>
+    /// The pack's scene for a key, exactly as the game finds it - keys are
+    /// matched case for case, the way the runtime's scene registry does.
+    /// Set once by the MainViewModel.
+    /// </summary>
+    public static Func<string, SceneViewModel?>? SceneLookup;
+
+    // ── What the target looks like (the author, 1.6.3) ────────────────────
+    //
+    // A Set-Active row shows what it switches, small, under its target; a
+    // sprite swap shows it before and after, with an arrow between. Only for
+    // what the editor can draw - a bust, a level's GameObject, a whole place,
+    // a scene. A UI or a direct path names something only the running game
+    // has. Nothing is shown for a name the game would not find either, so a
+    // missing preview is also a sign the name is off.
+    //
+    // Everything here is "" or null unless its preview is showing: a hidden
+    // preview bound to a real path would still load it.
+
+    /// <summary>Whether this row previews its target at all: the two actions
+    /// that asked for it, not the component setter sharing the row.</summary>
+    private bool Previews =>
+        Model.Type == NodeActionTypes.SetGameObjectActive ||
+        Model.Type == NodeActionTypes.ActivateScene ||
+        Model.Type == NodeActionTypes.SetSprite;
+
+    /// <summary>A name the row can look up now: not blank, and not a
+    /// <c>$variable</c>, whose value only exists while the game runs.</summary>
+    internal static bool Fixed(string value)
+        => !string.IsNullOrWhiteSpace(value) && !value.TrimStart().StartsWith("$", StringComparison.Ordinal);
+
+    /// <summary>
+    /// The scene this row targets, for the preview under its target: a row in
+    /// the Scene category whose target names one of the pack's scenes. Null
+    /// otherwise - another category, or a key that names no scene - and no
+    /// scene preview is shown.
+    /// </summary>
+    public SceneViewModel? PreviewScene => Previews ? SceneOf(Category, Target) : null;
+
+    /// <summary>The pack's scene a Scene-category target names, or null.
+    /// Shared with the GameObjectActive condition, which asks about the same
+    /// things the Set-Active action switches.</summary>
+    internal static SceneViewModel? SceneOf(string category, string target)
+        => category == CatScene && Fixed(target) ? SceneLookup?.Invoke(target) : null;
+
+    /// <summary>
+    /// The picture of what a target names, in any category that has one: a
+    /// bust, a GameObject or NPC of a level, or one layer of a whole place
+    /// (when <paramref name="placesToo"/>). Pack-relative, or a full path to
+    /// art that comes with ModForge; "" for none. Shared with the condition.
+    /// </summary>
+    internal static string ArtOf(string category, string target, string level, string layer, bool placesToo)
+    {
+        if (!Fixed(target)) return "";
+        string? art = category switch
+        {
+            CatBust => BustArtLookup?.Invoke(target),
+            CatOverlay => ObjectArtLookup?.Invoke(level, target),
+            CatNpcs => NpcArtLookup?.Invoke(level, target),
+            CatPlaces when placesToo => PlaceArtLookup?.Invoke(target, layer),
+            _ => null,
+        };
+        return string.IsNullOrWhiteSpace(art) ? "" : art!;
+    }
+
+    /// <summary>A bust's picture by its GameObject name: the pack's, or the
+    /// game's that comes with ModForge. Null for no bust by that name. Set once
+    /// by the MainViewModel.</summary>
+    public static Func<string, string?>? BustArtLookup;
+
+    /// <summary>The picture of a GameObject of a level, by level token and
+    /// target path. Null for none, or one without art. Set once by the
+    /// MainViewModel.</summary>
+    public static Func<string, string, string?>? ObjectArtLookup;
+
+    /// <summary>The pose of an NPC placed in a level, by level token and the
+    /// NPC's name there (or its path). Set once by the MainViewModel.</summary>
+    public static Func<string, string, string?>? NpcArtLookup;
+
+    /// <summary>One layer of a whole level, by place token and layer
+    /// (<see cref="LayerBase"/> / <see cref="LayerSecondary"/>). Set once by
+    /// the MainViewModel.</summary>
+    public static Func<string, string, string?>? PlaceArtLookup;
+
+    /// <summary>
+    /// The picture of a bust, GameObject, NPC or place this row targets, as it
+    /// looks before the row runs: pack-relative, or a full path to art that
+    /// comes with ModForge. "" when there is none to show.
+    /// <para/>
+    /// "Before" is as the pack sets it up. Something that ran earlier may have
+    /// changed it since, which only the running game knows.
+    /// </summary>
+    public string PreviewArt
+        => Previews
+            // A whole level is only offered to the sprite swap.
+            ? ArtOf(Category, Target, OverlayLevel, PlaceLayer, Model.Type == NodeActionTypes.SetSprite)
+            : "";
+
+    public bool ShowsArtPreview => PreviewArt.Length > 0;
+
+    public bool ShowsScenePreview => PreviewScene != null;
+
+    /// <summary>Whether the row shows a preview at all. Until it does, the
+    /// preview's controls are not even built: every action row has the slot,
+    /// and most never show anything.</summary>
+    public bool ShowsAnyPreview => ShowsScenePreview || ShowsArtPreview;
+
+    /// <summary>The picture a sprite swap puts in, "" when this row is not one
+    /// or has none yet (or names a <c>$variable</c>).</summary>
+    private string SwapSprite
+        => Model.Type == NodeActionTypes.SetSprite
+           && Model.Params.TryGetValue("sprite", out var s) && Fixed(s ?? "") ? s!.Trim() : "";
+
+    /// <summary>Whether the "after" half shows: a sprite swap, with a sprite
+    /// chosen, aimed at something previewed.</summary>
+    public bool ShowsSwap => SwapSprite.Length > 0 && (ShowsScenePreview || ShowsArtPreview);
+
+    /// <summary>The scene's art after the swap, "" unless that is shown.</summary>
+    public string SceneAfterSprite => ShowsSwap && ShowsScenePreview ? SwapSprite : "";
+
+    /// <summary>The picture after the swap for a bust, GameObject or place,
+    /// "" unless that is shown.</summary>
+    public string ArtAfterSprite => ShowsSwap && ShowsArtPreview ? SwapSprite : "";
+
+    public bool ShowsSceneAfter => SceneAfterSprite.Length > 0;
+    public bool ShowsArtAfter => ArtAfterSprite.Length > 0;
+
+    /// <summary>How big each preview is: a pair side by side shares the width
+    /// one alone has.</summary>
+    public double PreviewBoxSize => ShowsSwap ? 128 : 160;
+
+    /// <summary>Tell the previews their inputs moved.</summary>
+    private void NotifyPreview()
+    {
+        OnPropertyChanged(nameof(PreviewScene));
+        OnPropertyChanged(nameof(ShowsScenePreview));
+        OnPropertyChanged(nameof(PreviewArt));
+        OnPropertyChanged(nameof(ShowsArtPreview));
+        OnPropertyChanged(nameof(ShowsAnyPreview));
+        OnPropertyChanged(nameof(ShowsSwap));
+        OnPropertyChanged(nameof(SceneAfterSprite));
+        OnPropertyChanged(nameof(ArtAfterSprite));
+        OnPropertyChanged(nameof(ShowsSceneAfter));
+        OnPropertyChanged(nameof(ShowsArtAfter));
+        OnPropertyChanged(nameof(PreviewBoxSize));
+    }
 
     /// <summary>The action type shown in the row's Type combo. Maps any stray
     /// ActivateScene onto the unified SetGameObjectActive entry.</summary>
@@ -900,6 +1064,7 @@ public sealed class NodeActionViewModel : ObservableObject
             else Model.Params["target"] = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(Display));
+            NotifyPreview();
         }
     }
 
@@ -974,21 +1139,28 @@ public sealed class NodeActionViewModel : ObservableObject
             else Model.Params["overlayLevel"] = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(OverlayOptions));
+            OnPropertyChanged(nameof(NpcOptions));
             OnPropertyChanged(nameof(IsOverlayTargetEnabled));
+            NotifyPreview();
         }
     }
+
+    /// <summary>Whether the Level field shows: a category looked up inside
+    /// one level.</summary>
+    public bool ShowsOverlayLevel => IsLevelScoped(Category);
 
     /// <summary>Levels offered in the Set-Active row's Level dropdown — only
     /// ones that actually carry GameObjects (pack places + vanilla
     /// extensions). Same provider as the Fade/Move/Spin family.</summary>
     public IEnumerable<NavigatorTargetOption> OverlayLevelOptions =>
-        OverlayLevelProvider?.Invoke() ?? Array.Empty<NavigatorTargetOption>();
+        (Category == CatNpcs ? NpcLevelProvider : OverlayLevelProvider)?.Invoke()
+        ?? Array.Empty<NavigatorTargetOption>();
 
     /// <summary>Target combo enable gate for the Set-Active row: the Extra
     /// GameObjects target list is level-scoped, so it's disabled until a
     /// Level is chosen. Other categories always enabled.</summary>
     public bool IsOverlayTargetEnabled =>
-        Category != CatOverlay || !string.IsNullOrEmpty(OverlayLevel);
+        !IsLevelScoped(Category) || !string.IsNullOrEmpty(OverlayLevel);
 
     /// <summary>
     /// Resolves a level token to its overlay GameObject names (empty token →
@@ -1011,6 +1183,18 @@ public sealed class NodeActionViewModel : ObservableObject
     /// the Set-Active row's level dropdown. Set once by the MainViewModel.</summary>
     public static Func<IEnumerable<NavigatorTargetOption>>? OverlayLevelProvider;
 
+    /// <summary>Level tokens with NPCs placed in them - the NPCs category's
+    /// level list. Set once by the MainViewModel.</summary>
+    public static Func<IEnumerable<NavigatorTargetOption>>? NpcLevelProvider;
+
+    /// <summary>
+    /// The NPCs placed in a level, by the name the game gives each one's
+    /// GameObject - the placement's name, or the NPC's key when it has none.
+    /// A name used twice in the level is listed by its path instead, so each
+    /// entry finds exactly one. Set once by the MainViewModel.
+    /// </summary>
+    public static Func<string, IEnumerable<string>>? NpcProvider;
+
     /// <summary>
     /// The selected node's inferred level — the overlay-list fallback when an
     /// action's <see cref="OverlayLevel"/> isn't set yet. Maintained by the
@@ -1027,6 +1211,12 @@ public sealed class NodeActionViewModel : ObservableObject
             ? Array.Empty<string>()
             : StrictOverlayProvider?.Invoke(OverlayLevel) ?? Array.Empty<string>();
 
+    /// <summary>The NPCs of the chosen level, for the NPCs category's list.</summary>
+    public IEnumerable<string> NpcOptions =>
+        string.IsNullOrEmpty(OverlayLevel)
+            ? Array.Empty<string>()
+            : NpcProvider?.Invoke(OverlayLevel) ?? Array.Empty<string>();
+
     // ── Category + Target for GameObject-targeting actions ────────────────
     //
     // FadeSprite / MoveGameObject / SpinGameObject share a Category + Target
@@ -1042,7 +1232,7 @@ public sealed class NodeActionViewModel : ObservableObject
     public bool IsGoCategoryFamily => _goCategoryTypes.Contains(Model.Type);
 
     public static IReadOnlyList<string> GoCategories { get; } =
-        new[] { CatPath, CatOverlay, "Places", CatBust };
+        new[] { CatPath, CatOverlay, CatNpcs, "Places", CatBust };
 
     public string GoCategory
     {
@@ -1051,9 +1241,11 @@ public sealed class NodeActionViewModel : ObservableObject
         {
             if (value == GoCategory) return;
             if (value == CatPath) Model.Params.Remove("kind"); else Model.Params["kind"] = value;
-            if (value != CatOverlay) Model.Params.Remove("overlayLevel");
+            if (!IsLevelScoped(value)) Model.Params.Remove("overlayLevel");
             OnPropertyChanged();
             OnPropertyChanged(nameof(IsGoOverlayCategory));
+            OnPropertyChanged(nameof(IsGoLevelScoped));
+            OnPropertyChanged(nameof(GoNpcOptions));
             OnPropertyChanged(nameof(GoOverlayOptions));
             OnPropertyChanged(nameof(GoOverlayLevelOptions));
             OnPropertyChanged(nameof(IsGoOverlayTargetEnabled));
@@ -1061,6 +1253,9 @@ public sealed class NodeActionViewModel : ObservableObject
         }
     }
     public bool IsGoOverlayCategory => GoCategory == CatOverlay;
+
+    /// <summary>Whether this row's Level field shows.</summary>
+    public bool IsGoLevelScoped => IsLevelScoped(GoCategory);
 
     /// <summary>Canonical target; falls back to legacy 'path' (FadeSprite) for display.</summary>
     public string GoTarget
@@ -1086,6 +1281,7 @@ public sealed class NodeActionViewModel : ObservableObject
             else Model.Params["overlayLevel"] = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(GoOverlayOptions));
+            OnPropertyChanged(nameof(GoNpcOptions));
             OnPropertyChanged(nameof(IsGoOverlayTargetEnabled));
         }
     }
@@ -1101,13 +1297,20 @@ public sealed class NodeActionViewModel : ObservableObject
     /// <summary>Levels offered in the Set-Active row's level dropdown — only
     /// ones that actually carry GameObjects.</summary>
     public IEnumerable<NavigatorTargetOption> GoOverlayLevelOptions =>
-        OverlayLevelProvider?.Invoke() ?? Array.Empty<NavigatorTargetOption>();
+        (GoCategory == CatNpcs ? NpcLevelProvider : OverlayLevelProvider)?.Invoke()
+        ?? Array.Empty<NavigatorTargetOption>();
+
+    /// <summary>The NPCs of this row's chosen level.</summary>
+    public IEnumerable<string> GoNpcOptions =>
+        string.IsNullOrEmpty(GoOverlayLevel)
+            ? Array.Empty<string>()
+            : NpcProvider?.Invoke(GoOverlayLevel) ?? Array.Empty<string>();
 
     /// <summary>The target combo is a dead end for the GameObjects
     /// category until a level is chosen (targets are level-scoped), so it's
     /// disabled then. Every other category keeps it enabled.</summary>
     public bool IsGoOverlayTargetEnabled =>
-        !IsGoOverlayCategory || !string.IsNullOrEmpty(GoOverlayLevel);
+        !IsGoLevelScoped || !string.IsNullOrEmpty(GoOverlayLevel);
 
     /// <summary>Switch the action into the unified Set-Active form for
     /// <paramref name="category"/>, keeping the existing target and clearing any
@@ -1137,8 +1340,8 @@ public sealed class NodeActionViewModel : ObservableObject
         Model.Params.Remove("path");
         Model.Params.Remove("scene");
         Model.Params.Remove("targetKind");
-        // overlayLevel only means something for Level Overlay.
-        if (category != CatOverlay) Model.Params.Remove("overlayLevel");
+        // overlayLevel only means something for a category looked up in a level.
+        if (!IsLevelScoped(category)) Model.Params.Remove("overlayLevel");
         // …and a layer only means something for a whole level.
         if (category != CatPlaces) Model.Params.Remove("layer");
         OnPropertyChanged(nameof(Type));
@@ -1147,11 +1350,14 @@ public sealed class NodeActionViewModel : ObservableObject
         OnPropertyChanged(nameof(PlaceLayerShown));
         OnPropertyChanged(nameof(ShowsPlaceLayer));
         OnPropertyChanged(nameof(IsSceneCategory));
+        NotifyPreview();
         OnPropertyChanged(nameof(Target));
         OnPropertyChanged(nameof(Active));
         OnPropertyChanged(nameof(OverlayLevel));
         OnPropertyChanged(nameof(OverlayOptions));
+        OnPropertyChanged(nameof(NpcOptions));
         OnPropertyChanged(nameof(OverlayLevelOptions));
+        OnPropertyChanged(nameof(ShowsOverlayLevel));
         OnPropertyChanged(nameof(IsOverlayTargetEnabled));
         OnPropertyChanged(nameof(Display));
         NotifySetActiveFamily();
@@ -1164,6 +1370,7 @@ public sealed class NodeActionViewModel : ObservableObject
         OnPropertyChanged(nameof(IsSetActiveFamily));
         OnPropertyChanged(nameof(ShowsActiveToggle));
         OnPropertyChanged(nameof(IsSceneCategory));
+        NotifyPreview();
         // Variable family too, so its row hides/shows the moment the Type
         // changes (otherwise Source/Operation linger until the row rebinds).
         OnPropertyChanged(nameof(IsVariableFamily));
@@ -1179,9 +1386,11 @@ public sealed class NodeActionViewModel : ObservableObject
         OnPropertyChanged(nameof(IsGoCategoryFamily));
         OnPropertyChanged(nameof(GoCategory));
         OnPropertyChanged(nameof(IsGoOverlayCategory));
+        OnPropertyChanged(nameof(IsGoLevelScoped));
         OnPropertyChanged(nameof(GoTarget));
         OnPropertyChanged(nameof(GoOverlayLevel));
         OnPropertyChanged(nameof(GoOverlayOptions));
+        OnPropertyChanged(nameof(GoNpcOptions));
         OnPropertyChanged(nameof(GoOverlayLevelOptions));
         OnPropertyChanged(nameof(IsGoOverlayTargetEnabled));
         NotifyQuestFamily();

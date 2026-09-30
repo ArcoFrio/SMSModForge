@@ -633,6 +633,14 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     public bool IsPlayer => Model.IsPlayer;
 
     /// <summary>
+    /// Whether - Character can take this one out of the pack: not one of the
+    /// game's own characters, and not the player. Both are the game's, fixed
+    /// from it; the pack says things about them but does not own them
+    /// (the author, 1.6.3).
+    /// </summary>
+    public bool CanRemove => !Model.IsVanillaCharacter && !Model.IsPlayer;
+
+    /// <summary>
     /// Whether the name, the internal names and the bust source are the
     /// author's to change.
     /// <para/>

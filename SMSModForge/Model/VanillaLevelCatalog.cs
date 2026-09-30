@@ -221,6 +221,23 @@ public static class VanillaLevelCatalog
     }
 
     /// <summary>
+    /// Whether a level object is one of the game's own NPCs: drawn with the
+    /// game's NPC material (NPCCoreMat and its variants), and not the
+    /// reflection material that draws their mirror on the floor.
+    /// <para/>
+    /// The material, because nothing else tells them apart: most are called
+    /// "NPC", "NPC (2)", but the convention guests, the stage crowd, Adrian at
+    /// the door and the villa's agents (named "Square") are NPCs too, and plenty
+    /// of them stand outside any "NPCs" object.
+    /// </summary>
+    public static bool IsNpc(Node? node)
+    {
+        var sr = node?.SpriteRenderer;
+        return sr != null && !sr.IsReflection
+            && (sr.Material ?? "").StartsWith("NPCCore", System.StringComparison.Ordinal);
+    }
+
+    /// <summary>
     /// ABSOLUTE path to the PNG extracted for one node inside a level, or ""
     /// when it has none. The extractor writes every SpriteRenderer except the
     /// level's own and its secondary child into <c>_extra/&lt;path&gt;.PNG</c>,

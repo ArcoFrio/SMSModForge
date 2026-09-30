@@ -77,6 +77,22 @@ public sealed class ScenePreview : Grid
         set => SetValue(CustomFrameSpriteProperty, value);
     }
 
+    public static readonly DependencyProperty BoxSizeProperty =
+        DependencyProperty.Register(nameof(BoxSize), typeof(double), typeof(ScenePreview),
+            new PropertyMetadata(FixedSize, OnBoxSizeChanged));
+
+    /// <summary>
+    /// How big the preview is, square. The Scenes tab's is <see cref="FixedSize"/>;
+    /// a Set-Active row aimed at a scene shows a small one under its target
+    /// (1.6.3). Everything inside scales with it by the same factor, so a small
+    /// preview is the big one shrunk rather than a different composition.
+    /// </summary>
+    public double BoxSize
+    {
+        get => (double)GetValue(BoxSizeProperty);
+        set => SetValue(BoxSizeProperty, value);
+    }
+
     // ── Visual children ────────────────────────────────────────────────
 
     // Both layers stay at native size (Stretch.None) and get the SAME zoom, so
@@ -88,9 +104,28 @@ public sealed class ScenePreview : Grid
     // The art layer then divides that zoom by how far off 256x256 the file is,
     // because the runtime fits it to that square. The frame does not, and must
     // not: its size is the design.
-    /// <summary>How much bigger than life both layers are drawn. One number,
-    /// applied to both, so they stay registered with each other.</summary>
+    /// <summary>How much bigger than life both layers are drawn in a preview
+    /// of <see cref="FixedSize"/>. One number, applied to both, so they stay
+    /// registered with each other.</summary>
     private const double PreviewZoom = 1.5;
+
+    /// <summary>The zoom for this preview's size: <see cref="PreviewZoom"/>
+    /// scaled with the box, so the art fills the same share of it at any size.</summary>
+    private double Zoom => PreviewZoom * BoxSize / FixedSize;
+
+    /// <summary>
+    /// A preview smaller than the Scenes tab's: the one under an action's
+    /// target (1.6.3), built again each time its node is selected. Its still
+    /// art is decoded no bigger than twice the size it is drawn, and its
+    /// pictures are remembered (<see cref="Thumbnails"/>), so selecting a node
+    /// does not decode every scene on it whole, again. Drawn at the same size
+    /// either way: the art is fitted to a scene's square from its own pixel
+    /// size, whatever that is.
+    /// </summary>
+    private bool IsSmall => BoxSize > 0 && BoxSize < FixedSize;
+
+    /// <summary>The longest side a small preview decodes its art to.</summary>
+    private int SmallArtSide => (int)Math.Ceiling(ArtFitPixels * Zoom * 2);
 
     private readonly Image _sceneImage = new()
     {
@@ -195,6 +230,14 @@ public sealed class ScenePreview : Grid
     /// <summary>Fixed display size. Pinned the same way as <see cref="JigglePreview.FixedSize"/>.</summary>
     public const double FixedSize = 480;
 
+    static ScenePreview()
+    {
+        var backdrop = new SolidColorBrush(Color.FromRgb(0x22, 0x22, 0x22));
+        backdrop.Freeze();
+        BackgroundProperty.OverrideMetadata(typeof(ScenePreview), new FrameworkPropertyMetadata(
+            backdrop, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.SubPropertiesDoNotAffectRender));
+    }
+
     public ScenePreview()
     {
         // A tooltip that outlived its owner sits over the one thing an
@@ -204,13 +247,13 @@ public sealed class ScenePreview : Grid
         // changes, so none is left in the old one.
         LocText.Follow(this, Refresh);
 
-        Width = MinWidth = MaxWidth = FixedSize;
-        Height = MinHeight = MaxHeight = FixedSize;
+        ApplySize();
         HorizontalAlignment = HorizontalAlignment.Left;
         VerticalAlignment = VerticalAlignment.Top;
-        Background = new SolidColorBrush(Color.FromRgb(0x22, 0x22, 0x22));
-        RenderOptions.SetBitmapScalingMode(_sceneImage, BitmapScalingMode.NearestNeighbor);
-        RenderOptions.SetBitmapScalingMode(_frameImage, BitmapScalingMode.NearestNeighbor);
+        // The dark backdrop is the Background's default (see the static
+        // constructor), not set here: a value set in a constructor outranks
+        // one set in a template, and an action row's small preview sets
+        // Transparent there to sit in the row seamlessly (1.6.3).
         // Scene image behind, frame in front — same z-order as the game.
         Children.Add(_sceneImage);
         Children.Add(_sceneVideo);
@@ -251,6 +294,37 @@ public sealed class ScenePreview : Grid
 
     private static void OnInputChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         => ((ScenePreview)d).Refresh();
+
+    private static void OnBoxSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var preview = (ScenePreview)d;
+        preview.ApplySize();
+        preview.Refresh();
+    }
+
+    /// <summary>
+    /// Pin the box to <see cref="BoxSize"/> and scale every layer with it.
+    /// <para/>
+    /// Shrunk below life size, the picture is smoothed rather than drawn
+    /// pixel by pixel: nearest-neighbour keeps pixel art crisp when it is
+    /// enlarged, and drops whole rows of it - thin lines of a frame included -
+    /// when it is made smaller.
+    /// </summary>
+    private void ApplySize()
+    {
+        double size = BoxSize > 0 ? BoxSize : FixedSize;
+        Width = MinWidth = MaxWidth = size;
+        Height = MinHeight = MaxHeight = size;
+
+        double zoom = Zoom;
+        _frameImage.LayoutTransform = new ScaleTransform(zoom, zoom);
+        _sceneVideo.Width = ArtFitPixels * zoom;
+        _sceneVideo.Height = ArtFitPixels * zoom;
+
+        var scaling = zoom < 1 ? BitmapScalingMode.HighQuality : BitmapScalingMode.NearestNeighbor;
+        RenderOptions.SetBitmapScalingMode(_sceneImage, scaling);
+        RenderOptions.SetBitmapScalingMode(_frameImage, scaling);
+    }
 
     private void Refresh()
     {
@@ -306,7 +380,7 @@ public sealed class ScenePreview : Grid
         if (art == null)
         {
             StopGif();
-            art = TryLoad(scenePath);
+            art = IsSmall ? Thumbnails.Load(scenePath, SmallArtSide) : TryLoad(scenePath);
         }
 
         _sceneImage.Source = art;
@@ -338,9 +412,10 @@ public sealed class ScenePreview : Grid
     ///   512px inside a 480px box, spilling out of its own frame.</item>
     /// </list>
     /// </summary>
-    private static ScaleTransform ArtScale(BitmapSource? art)
+    private ScaleTransform ArtScale(BitmapSource? art)
     {
-        if (art == null) return new ScaleTransform(PreviewZoom, PreviewZoom);
+        double zoom = Zoom;
+        if (art == null) return new ScaleTransform(zoom, zoom);
 
         double fit = Rendering.ArtFit.SceneScale(art.PixelWidth, art.PixelHeight);
 
@@ -349,8 +424,8 @@ public sealed class ScenePreview : Grid
         double dpiX = art.DpiX > 0 ? art.DpiX : 96.0;
         double dpiY = art.DpiY > 0 ? art.DpiY : 96.0;
 
-        return new ScaleTransform(PreviewZoom / fit * (dpiX / 96.0),
-                                  PreviewZoom / fit * (dpiY / 96.0));
+        return new ScaleTransform(zoom / fit * (dpiX / 96.0),
+                                  zoom / fit * (dpiY / 96.0));
     }
 
     /// <summary>The frame around the art — custom wins over vanilla, matching
@@ -361,7 +436,8 @@ public sealed class ScenePreview : Grid
         string? framePath = ResolveFramePath(packRoot);
         if (framePath != null && File.Exists(framePath))
         {
-            _frameImage.Source = TryLoad(framePath);
+            // Never shrunk: a frame's size is the design. Only remembered.
+            _frameImage.Source = IsSmall ? Thumbnails.Load(framePath, int.MaxValue) : TryLoad(framePath);
             _frameImage.Visibility = Visibility.Visible;
         }
         else

@@ -453,12 +453,16 @@ public sealed class JigglePreview : Image
         }
         var m = Outfit.Model;
         _base = LoadIfExists(Path.Combine(PackRoot, Normalize(m.BaseSprite)));
-        _mask = LoadIfExists(Path.Combine(PackRoot, Normalize(m.MaskSprite)));
-        _blink = LoadIfExists(Path.Combine(PackRoot, Normalize(m.BlinkSprite)));
+        _mask = Shared.GameArt.IsBorrowed(m.MaskSprite)
+            ? LoadBorrowed(m.MaskSprite, "Mask.PNG")
+            : LoadIfExists(Path.Combine(PackRoot, Normalize(m.MaskSprite)));
+        _blink = Shared.GameArt.IsBorrowed(m.BlinkSprite)
+            ? LoadBorrowed(m.BlinkSprite, "Blink.PNG")
+            : LoadIfExists(Path.Combine(PackRoot, Normalize(m.BlinkSprite)));
         for (int i = 1; i <= 4; i++)
-            _mouth[i] = m.Mouth.Enabled
-                ? LoadIfExists(Path.Combine(PackRoot, Normalize(m.Mouth.Prefix) + i + ".PNG"))
-                : null;
+            _mouth[i] = !m.Mouth.Enabled ? null
+                : Shared.GameArt.IsBorrowed(m.Mouth.Prefix) ? LoadBorrowed(m.Mouth.Prefix, "Mouth" + i + ".PNG")
+                : LoadIfExists(Path.Combine(PackRoot, Normalize(m.Mouth.Prefix) + i + ".PNG"));
         _expressions.Clear();
         // Every face the game will build this bust with - the four, and each
         // one the character declares - not the four alone, which left a face
@@ -466,7 +470,22 @@ public sealed class JigglePreview : Image
         // showed it.
         if (m.Expression.Enabled)
             foreach (var name in Outfit.PackFaces)
-                _expressions[name] = LoadIfExists(Path.Combine(PackRoot, Normalize(m.Expression.Prefix) + name + ".PNG")) ?? Empty();
+                _expressions[name] = (Shared.GameArt.IsBorrowed(m.Expression.Prefix)
+                                         ? LoadBorrowed(m.Expression.Prefix, "Expression" + name + ".PNG")
+                                         : LoadIfExists(Path.Combine(PackRoot, Normalize(m.Expression.Prefix) + name + ".PNG")))
+                                     ?? Empty();
+    }
+
+    /// <summary>
+    /// A part the outfit borrows from one of the game's busts
+    /// (<see cref="Shared.GameArt"/>), from the copy of that bust's art shipped
+    /// with the editor. Smaller than the game's own, which the game uses; fitted
+    /// to the frame here like any other art, so it sits where the game's will.
+    /// </summary>
+    private static byte[]? LoadBorrowed(string field, string file)
+    {
+        string? path = Rendering.VanillaArtResolver.GameArtFile(field, file);
+        return path == null ? null : LoadIfExists(path);
     }
 
     /// <summary>

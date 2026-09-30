@@ -351,6 +351,45 @@ public sealed class DialogueNodeViewModel : ObservableObject
             OnPropertyChanged();
             OnPropertyChanged(nameof(TextPreview));
             OnPropertyChanged(nameof(Display));
+            OnPropertyChanged(nameof(TextIsThePacks));
+        }
+    }
+
+    // ── How the line is translated (1.6.3) ───────────────────────────────
+    //
+    // Two ticks under the text, and one at a time: they ask for different
+    // things wherever the alphabet is not the same, so ticking one lets go of
+    // the other.
+
+    /// <summary>Whether the translating ticks are offered: only for words that
+    /// are the pack's (see <see cref="DialogueViewModel.TextIsThePacks"/>).</summary>
+    public bool TextIsThePacks => Owner?.TextIsThePacks(Model) ?? true;
+
+    /// <summary>The line reads exactly as written in every language.</summary>
+    public bool TextSameEverywhere
+    {
+        get => Model.TextSameEverywhere;
+        set
+        {
+            if (value == Model.TextSameEverywhere) return;
+            Model.TextSameEverywhere = value;
+            if (value) Model.TextLettersOnly = false;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(TextLettersOnly));
+        }
+    }
+
+    /// <summary>The line's words are kept, and only its letters change.</summary>
+    public bool TextLettersOnly
+    {
+        get => Model.TextLettersOnly;
+        set
+        {
+            if (value == Model.TextLettersOnly) return;
+            Model.TextLettersOnly = value;
+            if (value) Model.TextSameEverywhere = false;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(TextSameEverywhere));
         }
     }
 
