@@ -94,6 +94,9 @@ public partial class MainWindow : Window
             vm.PromptForText = (title, label, initial) => TextPromptWindow.Prompt(this, title, label, initial);
             vm.ShowInfo = (title, message) => MessageBox.Show(this, message, title,
                 MessageBoxButton.OK, MessageBoxImage.Information);
+            vm.ShowNotice = ShowNotice;
+            vm.CommitEditsInProgress = CommitPendingEdits;
+            WatchRenamesThroughFocus();
             vm.ConfirmSave = (changes, packRoot) =>
             {
                 bool ok = SaveConfirmWindow.Ask(this, changes, packRoot, out bool suppress);
@@ -809,6 +812,60 @@ public partial class MainWindow : Window
         => NodeTextBox?.Surround(View.Controls.MarkupTextBox.Markup.OpenSize,
                                  View.Controls.MarkupTextBox.Markup.CloseSize);
 
+    /// <summary>
+    /// The pack's auto-trigger patterns, under the button: pick one to write
+    /// it into the line, or press its play button to hear what it plays.
+    /// </summary>
+    private void SfxPattern_Click(object sender, RoutedEventArgs e)
+    {
+        if (NodeTextBox == null) return;
+        var menu = SfxPatternMenu(NodeTextBox.InsertionPoint);
+        if (menu == null) return;
+        menu.PlacementTarget = (UIElement)sender;
+        menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+        menu.IsOpen = true;
+    }
+
+    /// <summary>
+    /// The list behind that button, writing into the line at
+    /// <paramref name="at"/> - read before the menu opens, since a menu takes
+    /// the keyboard and the box only vouches for its caret while it has it.
+    /// </summary>
+    internal ContextMenu? SfxPatternMenu(int at)
+    {
+        if (DataContext is not MainViewModel vm || NodeTextBox == null) return null;
+        var menu = new ContextMenu();
+        var options = vm.SfxPatternOptions();
+        if (options.Count == 0)
+            menu.Items.Add(new MenuItem { Header = Loc.T("dialogues.sfxPattern.none"), IsEnabled = false });
+
+        foreach (var option in options)
+        {
+            // The play button leads the row, so every one of them lines up.
+            var play = new Button
+            {
+                Content = "▶",   // English on purpose: a play symbol, not a word.
+                Width = 22, Height = 20, Padding = new Thickness(0), Margin = new Thickness(0, 0, 8, 0),
+                Focusable = false,
+                ToolTip = Loc.F("dialogues.sfxPattern.play.tip", "sound", option.SfxName),
+                IsEnabled = vm.PlaySfxCommand.CanExecute(option.Sfx),
+            };
+            var sound = option.Sfx;
+            play.Click += (_, args) => { vm.PlaySfxCommand.Execute(sound); args.Handled = true; };
+
+            var row = new StackPanel { Orientation = Orientation.Horizontal };
+            row.Children.Add(play);
+            row.Children.Add(new TextBlock { Text = option.Pattern, FontWeight = FontWeights.SemiBold, VerticalAlignment = VerticalAlignment.Center });
+            row.Children.Add(new TextBlock { Text = option.SfxName, Opacity = 0.6, Margin = new Thickness(10, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center });
+
+            var item = new MenuItem { Header = row, ToolTip = Loc.F("dialogues.sfxPattern.item.tip", "sound", option.SfxName) };
+            string pattern = option.Pattern;
+            item.Click += (_, _) => NodeTextBox.Insert(pattern, at);
+            menu.Items.Add(item);
+        }
+        return menu;
+    }
+
     private void NodeTextBox_ContextMenuOpening(object sender, ContextMenuEventArgs e)
     {
         var box = NodeTextBox;
@@ -1154,22 +1211,24 @@ public partial class MainWindow : Window
         };
     }
 
+    /// <summary>A slider let go of, or moved with the keys: one undo step for
+    /// where it was left, rather than one for every value it passed.</summary>
+    private void UndoStep_Event(object sender, RoutedEventArgs e)
+        => (DataContext as MainViewModel)?.Undo.Checkpoint();
+
+    /// <summary>Rename on a folder's right-click menu: its name becomes a box
+    /// where it stands (see <see cref="FolderRename"/>).</summary>
+    private void FolderRenameMenu_Click(object sender, RoutedEventArgs e)
+    {
+        if ((sender as FrameworkElement)?.DataContext is IRenamableFolder folder)
+            folder.IsRenaming = true;
+    }
+
     private void UnitAddFolder_Click(object sender, RoutedEventArgs e)
     {
         if ((sender as FrameworkElement)?.Tag is not UnitTreeController ctrl) return;
         (DataContext as MainViewModel)?.Undo.Checkpoint();
         ctrl.AddFolder();
-    }
-
-    private void UnitRenameFolder_Click(object sender, RoutedEventArgs e)
-    {
-        if ((sender as FrameworkElement)?.Tag is not UnitTreeController ctrl) return;
-        if (ctrl.Selected is not UnitFolderNode folder) return;
-        var name = TextPromptWindow.Prompt(this, Loc.T("folders.rename.title"), Loc.T("folders.rename.prompt"), folder.Name);
-        if (string.IsNullOrWhiteSpace(name)) return;
-        (DataContext as MainViewModel)?.Undo.Checkpoint();
-        folder.Name = name.Trim();
-        ctrl.SyncToModel();
     }
 
     /// <summary>
@@ -1354,6 +1413,58 @@ public partial class MainWindow : Window
         fade.KeyFrames.Add(new LinearDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(1.2))));
         fade.KeyFrames.Add(new LinearDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(2.0))));
         SaveToast.BeginAnimation(OpacityProperty, fade);
+    }
+
+    /// <summary>
+    /// A notice in passing, under the Saved toast's corner: in, a few seconds
+    /// to read, out. Nothing to click and nothing in the way - it is said when
+    /// a name box is left, so a dialog there would come up in the middle of the
+    /// click that left it.
+    /// </summary>
+    private void ShowNotice(string message)
+    {
+        NoticeToastText.Text = message;
+        double hold = Math.Clamp(message.Length / 18.0, 3.0, 8.0);
+        var fade = new DoubleAnimationUsingKeyFrames();
+        fade.KeyFrames.Add(new LinearDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.Zero)));
+        fade.KeyFrames.Add(new LinearDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.15))));
+        fade.KeyFrames.Add(new LinearDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(hold))));
+        fade.KeyFrames.Add(new LinearDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(hold + 0.8))));
+        NoticeToast.BeginAnimation(OpacityProperty, fade);
+    }
+
+    /// <summary>
+    /// Renames typed into a record's own boxes are followed when the author is
+    /// done with the box (the author, 1.7.0: "on commit of the new name, or
+    /// just moving away from it").
+    /// <para/>
+    /// Coming to any box of a record remembers the record's name; leaving the
+    /// box, or pressing Enter in it, follows whatever it was renamed to. Done
+    /// for the whole window rather than box by box, so a name box added later
+    /// is covered without anybody remembering to - the view model decides what
+    /// is a record with a name to follow, and ignores the rest.
+    /// </summary>
+    private void WatchRenamesThroughFocus()
+    {
+        AddHandler(Keyboard.GotKeyboardFocusEvent, new KeyboardFocusChangedEventHandler((_, e) =>
+        {
+            if (e.NewFocus is FrameworkElement { DataContext: { } record } && e.NewFocus is System.Windows.Controls.Primitives.TextBoxBase or ComboBox
+                && DataContext is MainViewModel vm)
+                vm.WatchRename(record);
+        }), handledEventsToo: true);
+
+        AddHandler(Keyboard.LostKeyboardFocusEvent, new KeyboardFocusChangedEventHandler((_, e) =>
+        {
+            if (e.OldFocus is System.Windows.Controls.Primitives.TextBoxBase or ComboBox && DataContext is MainViewModel vm)
+                vm.CommitPendingRenames();
+        }), handledEventsToo: true);
+
+        AddHandler(Keyboard.PreviewKeyDownEvent, new KeyEventHandler((_, e) =>
+        {
+            if (e.Key == Key.Enter && e.OriginalSource is TextBox { AcceptsReturn: false }
+                && DataContext is MainViewModel vm)
+                vm.CommitPendingRenames();
+        }), handledEventsToo: true);
     }
 
     /// <summary>
@@ -2269,17 +2380,6 @@ public partial class MainWindow : Window
         if (vm.SelectedNode is { } node) Reveal("", NodeList, node);
     }
 
-    private void RenameFolder_Click(object sender, RoutedEventArgs e)
-    {
-        if (DataContext is not MainViewModel vm) return;
-        if (vm.SelectedDialogueTreeItem is not DialogueFolderNode folder) return;
-        var name = TextPromptWindow.Prompt(this, Loc.T("folders.rename.title"), Loc.T("folders.rename.prompt"), folder.Name);
-        if (string.IsNullOrWhiteSpace(name)) return;
-        vm.Undo.Checkpoint();
-        folder.Name = name.Trim();
-        vm.SyncFoldersToModel();
-    }
-
     // ── Variable folder tree: selection, drag-drop, rename (mirrors dialogues) ──
 
     private void VariableTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -2394,17 +2494,6 @@ public partial class MainWindow : Window
         return (src as System.Windows.Controls.TreeViewItem)?.DataContext as VariableTreeItem;
     }
 
-    private void RenameVariableFolder_Click(object sender, RoutedEventArgs e)
-    {
-        if (DataContext is not MainViewModel vm) return;
-        if (vm.SelectedVariableTreeItem is not VariableFolderNode folder) return;
-        var name = TextPromptWindow.Prompt(this, Loc.T("folders.rename.title"), Loc.T("folders.rename.prompt"), folder.Name);
-        if (string.IsNullOrWhiteSpace(name)) return;
-        vm.Undo.Checkpoint();
-        folder.Name = name.Trim();
-        vm.SyncVariableFoldersToModel();
-    }
-
     // ── Integration folder tree: selection, drag-drop, rename (mirrors variables) ──
 
     private void IntegrationTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -2517,17 +2606,6 @@ public partial class MainWindow : Window
         while (src != null && src is not System.Windows.Controls.TreeViewItem)
             src = System.Windows.Media.VisualTreeHelper.GetParent(src);
         return (src as System.Windows.Controls.TreeViewItem)?.DataContext as IntegrationTreeItem;
-    }
-
-    private void RenameIntegrationFolder_Click(object sender, RoutedEventArgs e)
-    {
-        if (DataContext is not MainViewModel vm) return;
-        if (vm.SelectedIntegrationTreeItem is not IntegrationFolderNode folder) return;
-        var name = TextPromptWindow.Prompt(this, Loc.T("folders.rename.title"), Loc.T("folders.rename.prompt"), folder.Name);
-        if (string.IsNullOrWhiteSpace(name)) return;
-        vm.Undo.Checkpoint();
-        folder.Name = name.Trim();
-        vm.SyncIntegrationFoldersToModel();
     }
 
     // ──────────────────────────────────────────────────────────────────────

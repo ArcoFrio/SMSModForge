@@ -136,7 +136,10 @@ public static class VanillaUiLibrary
     {
         get
         {
-            lock (Gate) return _assets ??= new VanillaUiAssets(Root);
+            // The source fonts of the game's dynamic font assets ship beside
+            // the overlays, where the places preview loads them too.
+            lock (Gate) return _assets ??= new VanillaUiAssets(Root,
+                new[] { Path.Combine(AppContext.BaseDirectory, "VanillaOverlays") });
         }
     }
 

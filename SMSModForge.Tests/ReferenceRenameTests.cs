@@ -350,9 +350,11 @@ public sealed class ReferenceRenameTests
         // Found the way these always are: a dialog appeared over the work of
         // the person running the tests.
         //
-        // ShowInfo is wired straight to a real MessageBox by the window, so
-        // invoking it under the harness does not fail a run - it STOPS one,
-        // waiting for a click nobody is there to give. It had been reachable
+        // ShowInfo was wired straight to a real MessageBox by the window, so
+        // invoking it under the harness did not fail a run - it STOPPED one,
+        // waiting for a click nobody is there to give. A rename says itself
+        // through ShowNotice now (1.7.0), a toast rather than a dialog, and
+        // it keeps the same rule. It had been reachable
         // all along and went unnoticed because only a variable rename reached
         // it and the suite rarely renamed one; following references on every
         // kind of rename reached it constantly.
@@ -364,7 +366,7 @@ public sealed class ReferenceRenameTests
             var vm = (MainViewModel)window.DataContext;
 
             int announced = 0;
-            vm.ShowInfo = (_, _) => announced++;
+            vm.ShowNotice = _ => announced++;
 
             vm.AddCharacterCommand.Execute(null);
             WindowHarness.Pump();
@@ -408,7 +410,7 @@ public sealed class ReferenceRenameTests
             var vm = (MainViewModel)window.DataContext;
 
             int announced = 0;
-            vm.ShowInfo = (_, _) => announced++;
+            vm.ShowNotice = _ => announced++;
 
             vm.AddCharacterCommand.Execute(null);
             WindowHarness.Pump();
@@ -427,7 +429,7 @@ public sealed class ReferenceRenameTests
                 // The only thing in this path that can put a window on screen
                 // is the hook, and the hook is the counter above.
                 Services.TestMode.Active = false;
-                vm.CommitPendingCharacterRename();
+                vm.CommitPendingRenames();
             }
             finally { Services.TestMode.Active = was; }
 
@@ -473,7 +475,7 @@ public sealed class ReferenceRenameTests
             vm.Pack.Dialogues.Add(d);
 
             int announced = 0;
-            vm.ShowInfo = (_, _) => announced++;
+            vm.ShowNotice = _ => announced++;
 
             // Click one, then the other, then somewhere else - the ordinary
             // way anybody browses a cast of a hundred and nineteen.

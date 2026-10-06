@@ -49,6 +49,10 @@ public sealed class DialogueLinePreview : Control
         // while showing, so a row that has gone is not kept alive by it.
         Loaded += (_, _) => { Services.Speller.Changed -= SpellingChanged; Services.Speller.Changed += SpellingChanged; };
         Unloaded += (_, _) => Services.Speller.Changed -= SpellingChanged;
+
+        // So does a character's name colour, which a token is drawn in.
+        Loaded += (_, _) => { DialogueMarkup.TokenColorsChanged -= SpellingChanged; DialogueMarkup.TokenColorsChanged += SpellingChanged; };
+        Unloaded += (_, _) => DialogueMarkup.TokenColorsChanged -= SpellingChanged;
     }
 
     private void SpellingChanged()
@@ -391,11 +395,12 @@ public sealed class DialogueLinePreview : Control
         }
     }
 
-    /// <summary>What one piece is written in: the token mark, the colour its
+    /// <summary>What one piece is written in: a token in the name colour of
+    /// whoever it stands in for, or the token mark; otherwise the colour its
     /// markup asked for, or the ordinary white.</summary>
     private static UiColor InkFor(Piece piece)
     {
-        if (piece.Token) return DialogueLook.TokenColor;
+        if (piece.Token) return DialogueMarkup.TokenColor?.Invoke(piece.Text) ?? DialogueLook.TokenColor;
 
         // The game's reading of the value, shared with the Text box so the two
         // cannot disagree - see TmpColor. A fully transparent colour is drawn

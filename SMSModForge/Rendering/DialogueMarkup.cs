@@ -100,6 +100,40 @@ public static class DialogueMarkup
     public static readonly IReadOnlyList<string> Tokens =
         new[] { "{PC}", "{M}", "{D}", "{B}", "{S}", "{DA}", "{F}" };
 
+    /// <summary>The player's name.</summary>
+    public const string PlayerToken = "{PC}";
+
+    /// <summary>
+    /// Whom each family word is said of, so the token can be drawn in that
+    /// character's name colour (the author, 1.7.0): what the player calls Anna,
+    /// Josef and Adrian, the word for a son - Adrian - and for a daughter,
+    /// Emma. <c>{F}</c>, the family as a whole, is nobody's, and keeps the
+    /// token mark; so does <see cref="PlayerToken"/>, which is the player's own.
+    /// </summary>
+    public static readonly IReadOnlyDictionary<string, string> TokenCharacters =
+        new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            // English on purpose: the game's characters, by the names its cast is filed under.
+            ["{M}"] = "Anna",
+            ["{D}"] = "Josef",
+            ["{B}"] = "Adrian",
+            ["{S}"] = "Adrian",
+            ["{DA}"] = "Emma",
+        };
+
+    /// <summary>
+    /// The colour a token is drawn in: the name colour of whoever it stands in
+    /// for, or null for the token mark. Set by the editor, which knows the
+    /// pack's cast - and so each pack's own colour for them.
+    /// </summary>
+    public static Func<string, UiColor?>? TokenColor { get; set; }
+
+    /// <summary>Said when one of those colours may have changed, so a line on
+    /// screen draws its tokens again.</summary>
+    public static event Action? TokenColorsChanged;
+
+    public static void RaiseTokenColorsChanged() => TokenColorsChanged?.Invoke();
+
     /// <summary>
     /// Split a line into tags and the styled text between them.
     /// <para/>

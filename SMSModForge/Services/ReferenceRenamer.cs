@@ -94,14 +94,324 @@ public static class ReferenceRenamer
 
         int n = 0;
         foreach (var (condition, _) in PackWalk.Conditions(pack))
+        {
             n += RenameParams(condition.Params, ConditionSchemas.For(condition.Type), kind, oldName, newName);
+            n += RenameTargets(condition.Params, ConditionSchemas.For(condition.Type), kind, oldName, newName, rewrite: true);
+        }
 
         foreach (var (action, _) in PackWalk.Actions(pack))
+        {
             n += RenameParams(action.Params, ActionSchemas.For(action.Type), kind, oldName, newName);
+            n += RenameTargets(action.Params, ActionSchemas.For(action.Type), kind, oldName, newName, rewrite: true);
+        }
+
+        // An NPC placed without a name of its own is named after the NPC, so
+        // a row aimed at it names the NPC's key. Done before the placements
+        // themselves move on, while they still say which NPC they are.
+        if (kind == RefKind.Npc)
+            foreach (var (level, placement) in Placements(pack))
+                if (placement.Npc == oldName && string.IsNullOrWhiteSpace(placement.Name))
+                    n += RenameLevelObject(pack, placement, oldName, newName);
 
         n += RenameStructural(pack, kind, oldName, newName, rewrite: true);
         return n;
     }
+
+    /// <summary>
+    /// Point every row aimed at one expression of one character at the
+    /// expression's new key.
+    /// <para/>
+    /// An expression key is only unique within its character - everybody has a
+    /// Happy - so the character is part of the match: a line Sarah speaks
+    /// asking for "Smirk" is about Sarah's Smirk, and Anna's lines are left
+    /// alone.
+    /// </summary>
+    public static int RenameExpression(ModPack? pack, string characterKey, string oldKey, string newKey)
+    {
+        if (pack == null || string.IsNullOrEmpty(oldKey) || oldKey == newKey) return 0;
+
+        int n = 0;
+        foreach (var d in pack.Dialogues)
+            foreach (var node in d.Nodes)
+                if (string.Equals(node.Actor, characterKey, StringComparison.OrdinalIgnoreCase)
+                    && node.Expression == oldKey)
+                {
+                    node.Expression = newKey;
+                    n++;
+                }
+
+        // A row that names both - an actor param and an expression param.
+        void Row(Dictionary<string, string>? ps, IEnumerable<ParamSchema> schemas)
+        {
+            if (ps == null) return;
+            var all = schemas.ToList();
+            var actor = all.FirstOrDefault(s => s.Type == ParamType.ActorRef);
+            if (actor == null || !ps.TryGetValue(actor.Key, out var who)
+                || !string.Equals(who, characterKey, StringComparison.OrdinalIgnoreCase)) return;
+            foreach (var s in all.Where(s => s.Type == ParamType.ExpressionRef))
+                if (ps.TryGetValue(s.Key, out var face) && face == oldKey)
+                {
+                    ps[s.Key] = newKey;
+                    n++;
+                }
+        }
+        foreach (var (c, _) in PackWalk.Conditions(pack)) Row(c.Params, ConditionSchemas.For(c.Type));
+        foreach (var (a, _) in PackWalk.Actions(pack)) Row(a.Params, ActionSchemas.For(a.Type));
+        return n;
+    }
+
+    // ── Objects inside a level ────────────────────────────────────────────
+
+    /// <summary>
+    /// Point every row aimed at one object in a level - one of a place's
+    /// GameObjects, or an NPC placed there - at the object's new name.
+    /// <para/>
+    /// Those rows name it by a path (<c>NPCs &gt; Shower &gt; Anis</c>) or a bare
+    /// name, inside the level their Level field picks. Each is followed the way
+    /// the game follows it, and only a path that leads THROUGH this object
+    /// changes - another object of the same name elsewhere in the level is a
+    /// different object, and so is one in another level.
+    /// <para/>
+    /// <paramref name="holder"/> is the <see cref="GameObjectDef"/> or
+    /// <see cref="NpcPlacementDef"/> renamed; the model may already carry the
+    /// new name, since the lookup reads it as <paramref name="oldName"/>.
+    /// </summary>
+    public static int RenameLevelObject(ModPack? pack, object holder, string oldName, string newName)
+    {
+        if (pack == null || holder == null || string.IsNullOrEmpty(oldName) || oldName == newName) return 0;
+
+        int n = 0;
+        foreach (var (token, roots) in Levels(pack))
+        {
+            var tree = LevelTree(roots, holder, oldName);
+            if (!Contains(tree, holder)) continue;
+
+            void Row(Dictionary<string, string>? ps)
+            {
+                if (ps == null) return;
+                string category = Category(ps);
+                if (category != "GameObjects" && category != "NPCs") return;
+                ps.TryGetValue("overlayLevel", out var level);
+                // A row naming no level is looked up wherever the object is,
+                // which includes here.
+                if (!string.IsNullOrEmpty(level) && !string.Equals(level, token, StringComparison.OrdinalIgnoreCase))
+                    return;
+                if (!ps.TryGetValue("target", out var target) || string.IsNullOrEmpty(target)) return;
+
+                var (segments, separators) = SplitPath(target);
+                var chain = Resolve(tree, segments);
+                if (chain == null) return;
+                int at = chain.FindIndex(link => ReferenceEquals(link.Object.Holder, holder));
+                if (at < 0) return;
+                segments[chain[at].Segment] = newName;
+                ps["target"] = JoinPath(segments, separators);
+                n++;
+            }
+
+            foreach (var (c, _) in PackWalk.Conditions(pack)) Row(c.Params);
+            foreach (var (a, _) in PackWalk.Actions(pack)) Row(a.Params);
+        }
+        return n;
+    }
+
+    /// <summary>One object in a level as the game names it, and what is
+    /// parented under it.</summary>
+    private sealed class LevelObject
+    {
+        public object Holder = null!;
+        public string Name = "";
+        public List<LevelObject> Children = new();
+    }
+
+    /// <summary>Every level the pack fills with objects, by the token a row's
+    /// Level field holds.</summary>
+    private static IEnumerable<(string Token, List<GameObjectDef> Roots)> Levels(ModPack pack)
+    {
+        foreach (var p in pack.Places) yield return ("place:" + p.Key, p.GameObjects);
+        foreach (var v in pack.VanillaExtensions) yield return (v.Source, v.GameObjects);
+    }
+
+    /// <summary>Every NPC placement, with the level it is in.</summary>
+    private static IEnumerable<(string Token, NpcPlacementDef Placement)> Placements(ModPack pack)
+    {
+        foreach (var (token, roots) in Levels(pack))
+            foreach (var placement in PlacementsIn(roots))
+                yield return (token, placement);
+    }
+
+    private static IEnumerable<NpcPlacementDef> PlacementsIn(IEnumerable<GameObjectDef>? nodes)
+    {
+        if (nodes == null) yield break;
+        foreach (var node in nodes)
+        {
+            foreach (var placement in node.Npcs)
+            {
+                yield return placement;
+                foreach (var inner in PlacementsIn(placement.Children)) yield return inner;
+            }
+            foreach (var inner in PlacementsIn(node.Children)) yield return inner;
+        }
+    }
+
+    /// <summary>A level's objects as the game has them: each node with its
+    /// children, then the NPCs placed under it - named by the placement, or
+    /// after the NPC when it has no name of its own.</summary>
+    private static List<LevelObject> LevelTree(IEnumerable<GameObjectDef>? nodes, object renamed, string oldName)
+    {
+        var list = new List<LevelObject>();
+        if (nodes == null) return list;
+        foreach (var node in nodes)
+        {
+            var o = new LevelObject
+            {
+                Holder = node,
+                Name = ReferenceEquals(node, renamed) ? oldName : node.Name ?? "",
+            };
+            o.Children.AddRange(LevelTree(node.Children, renamed, oldName));
+            foreach (var placement in node.Npcs)
+            {
+                string own = string.IsNullOrWhiteSpace(placement.Name) ? placement.Npc : placement.Name;
+                var p = new LevelObject
+                {
+                    Holder = placement,
+                    Name = ReferenceEquals(placement, renamed) ? oldName : own ?? "",
+                };
+                p.Children.AddRange(LevelTree(placement.Children, renamed, oldName));
+                o.Children.Add(p);
+            }
+            list.Add(o);
+        }
+        return list;
+    }
+
+    private static bool Contains(IEnumerable<LevelObject> tree, object holder)
+        => PreOrder(tree).Any(o => ReferenceEquals(o.Holder, holder));
+
+    private static IEnumerable<LevelObject> PreOrder(IEnumerable<LevelObject> tree)
+    {
+        foreach (var o in tree)
+        {
+            yield return o;
+            foreach (var c in PreOrder(o.Children)) yield return c;
+        }
+    }
+
+    /// <summary>
+    /// What a target leads to, the way the game looks it up
+    /// (<c>TransformExtensions.FindDescendantIncludingInactive</c>): its first
+    /// name anywhere in the level, then each further name as a child of the
+    /// last. Case for case. Null when it leads nowhere; otherwise each object
+    /// on the way with the segment that named it.
+    /// </summary>
+    private static List<(LevelObject Object, int Segment)>? Resolve(List<LevelObject> tree, List<string> segments)
+    {
+        int first = segments.FindIndex(s => s.Length > 0);
+        if (first < 0) return null;
+        foreach (var anchor in PreOrder(tree))
+        {
+            if (anchor.Name != segments[first]) continue;
+            var chain = new List<(LevelObject, int)> { (anchor, first) };
+            var at = anchor;
+            for (int i = first + 1; i < segments.Count && at != null; i++)
+            {
+                if (segments[i].Length == 0) continue;
+                at = at.Children.FirstOrDefault(c => c.Name == segments[i]);
+                if (at != null) chain.Add((at, i));
+            }
+            if (at != null) return chain;
+        }
+        return null;
+    }
+
+    /// <summary>A target's names, and what stood between them - kept, so a
+    /// rewritten path is spelled the way the author's was.</summary>
+    private static (List<string> Segments, List<string> Separators) SplitPath(string target)
+    {
+        var segments = new List<string>();
+        var separators = new List<string>();
+        var parts = System.Text.RegularExpressions.Regex.Split(target, @"(\s*>\s*|/)");
+        for (int i = 0; i < parts.Length; i++)
+            if (i % 2 == 0) segments.Add(parts[i]);
+            else separators.Add(parts[i]);
+        return (segments, separators);
+    }
+
+    private static string JoinPath(List<string> segments, List<string> separators)
+    {
+        var sb = new System.Text.StringBuilder();
+        for (int i = 0; i < segments.Count; i++)
+        {
+            sb.Append(segments[i]);
+            if (i < separators.Count) sb.Append(separators[i]);
+        }
+        return sb.ToString();
+    }
+
+    // ── The category row ──────────────────────────────────────────────────
+
+    /// <summary>The category a row's target picker is set to, under the name
+    /// it has now: rows written before a category was renamed say the old one
+    /// until they are next saved.</summary>
+    private static string Category(Dictionary<string, string> ps)
+    {
+        if (!ps.TryGetValue("kind", out var k) || string.IsNullOrEmpty(k))
+            ps.TryGetValue("targetKind", out k);
+        return k switch
+        {
+            "Level Overlay" or "Extra GameObjects" => "GameObjects",   // English on purpose: values packs stored.
+            null => "",
+            _ => k,
+        };
+    }
+
+    /// <summary>
+    /// The names a row holds outside its typed params: the target picker shared
+    /// by switching things on and off, sprite swaps, fades, moves and the
+    /// matching condition (Category, Level and Target, stored as <c>kind</c>,
+    /// <c>overlayLevel</c> and <c>target</c>), and the level tokens
+    /// (<c>place:Key</c>) a Level field holds.
+    /// <para/>
+    /// Not schema types, which is why renames used to miss them: the row draws
+    /// them itself. A scene renamed while a Set-Active row pointed at it left
+    /// the row pointing at nothing.
+    /// </summary>
+    private static int RenameTargets(Dictionary<string, string>? ps, IEnumerable<ParamSchema> schemas,
+                                     RefKind kind, string oldName, string newName, bool rewrite)
+    {
+        if (ps == null) return 0;
+        int n = 0;
+
+        void Value(string key, string from, string to)
+        {
+            if (!ps.TryGetValue(key, out var v) || v != from) return;
+            n++;
+            if (rewrite) ps[key] = to;
+        }
+
+        string category = Category(ps);
+        switch (kind)
+        {
+            case RefKind.Scene:
+                if (category == "Scene") Value("target", oldName, newName);
+                break;
+
+            case RefKind.Outfit:
+                if (category == "Bust") Value("target", oldName, newName);
+                break;
+
+            case RefKind.Place:
+                string from = PlaceToken + oldName, to = PlaceToken + newName;
+                if (category == "Places") Value("target", from, to);
+                Value("overlayLevel", from, to);
+                foreach (var s in schemas.Where(s => s.Type == ParamType.LevelRef))
+                    Value(s.Key, from, to);
+                break;
+        }
+        return n;
+    }
+
+    /// <summary>How a Level field names one of the pack's places.</summary>
+    private const string PlaceToken = "place:";
 
     /// <summary>
     /// Point every row that names one task of one of the pack's quests at the
@@ -153,12 +463,20 @@ public static class ReferenceRenamer
         if (pack == null || string.IsNullOrEmpty(name)) return hits;
 
         foreach (var (condition, where) in PackWalk.Conditions(pack))
-            if (CountParams(condition.Params, ConditionSchemas.For(condition.Type), kind, name) > 0)
+        {
+            var schemas = ConditionSchemas.For(condition.Type);
+            if (CountParams(condition.Params, schemas, kind, name) > 0
+                || RenameTargets(condition.Params, schemas, kind, name, name, rewrite: false) > 0)
                 hits.Add(where);
+        }
 
         foreach (var (action, where) in PackWalk.Actions(pack))
-            if (CountParams(action.Params, ActionSchemas.For(action.Type), kind, name) > 0)
+        {
+            var schemas = ActionSchemas.For(action.Type);
+            if (CountParams(action.Params, schemas, kind, name) > 0
+                || RenameTargets(action.Params, schemas, kind, name, name, rewrite: false) > 0)
                 hits.Add(where);
+        }
 
         int structural = RenameStructural(pack, kind, name, name, rewrite: false);
         if (structural > 0)
@@ -311,15 +629,53 @@ public static class ReferenceRenamer
                 break;
 
             case RefKind.Npc:
-                foreach (var p in pack.Places)
-                    foreach (var placement in NpcPlacements(p))
+                foreach (var (_, placement) in Placements(pack))
+                {
+                    var x = placement;
+                    Field(() => x.Npc, v => x.Npc = v);
+                }
+                break;
+
+            case RefKind.Music:
+                // What a button changes the music to on the way.
+                foreach (var b in pack.MapButtons)
+                {
+                    var x = b;
+                    Field(() => x.Music, v => x.Music = v);
+                }
+                foreach (var b in pack.Places.SelectMany(p => p.NavigatorButtons)
+                                  .Concat(pack.VanillaExtensions.SelectMany(v => v.NavigatorButtons)))
+                {
+                    var x = b;
+                    Field(() => x.Music, v => x.Music = v);
+                }
+                break;
+
+            case RefKind.Sfx:
+                // What a screen's buttons, or one of them, sound like.
+                foreach (var ui in pack.Uis)
+                {
+                    var x = ui;
+                    Field(() => x.ButtonSound, v => x.ButtonSound = v);
+                    foreach (var node in UiNodes(ui.Nodes))
                     {
-                        var x = placement;
-                        Field(() => x.Npc, v => x.Npc = v);
+                        var y = node;
+                        Field(() => y.ClickSound, v => y.ClickSound = v);
                     }
+                }
                 break;
         }
         return n;
+    }
+
+    private static IEnumerable<UiNodeDef> UiNodes(IEnumerable<UiNodeDef>? nodes)
+    {
+        if (nodes == null) yield break;
+        foreach (var node in nodes)
+        {
+            yield return node;
+            foreach (var child in UiNodes(node.Children)) yield return child;
+        }
     }
 
     /// <summary>An action and every action inside its dice branches, which
@@ -332,24 +688,5 @@ public static class ReferenceRenamer
         foreach (var b in action.Branches)
             foreach (var inner in WithBranches(b.Action))
                 yield return inner;
-    }
-
-    /// <summary>Every NPC placement a place holds, wherever the tree keeps
-    /// them.</summary>
-    private static IEnumerable<NpcPlacementDef> NpcPlacements(PlaceDef place)
-    {
-        foreach (var node in Descend(place.GameObjects))
-            foreach (var placement in node.Npcs)
-                yield return placement;
-    }
-
-    private static IEnumerable<GameObjectDef> Descend(IEnumerable<GameObjectDef>? nodes)
-    {
-        if (nodes == null) yield break;
-        foreach (var node in nodes)
-        {
-            yield return node;
-            foreach (var child in Descend(node.Children)) yield return child;
-        }
     }
 }

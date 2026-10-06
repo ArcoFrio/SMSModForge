@@ -75,6 +75,14 @@ game.pack.installedTwice = Instalado dos veces; se usa el de la carpeta {folder}
 # en: Not translated into your language
 game.pack.notInYourLanguage = Sin traducir a tu idioma
 
+# Beside a pack in the main menu's list: it changes the same thing of the game's (a character, an object in a level...) as {packs}, other packs in the list, so only one of the two changes shows
+# en: Changes the same as {packs}
+game.pack.clashesWith = Cambia lo mismo que {packs}
+
+# Under ModForge's list of packs on the game's main menu, when there are two or more. The packs can be dragged up and down; the one lower in the list is loaded later, so its changes show
+# en: Drag a pack to move it. Lower in the list wins when two packs change the same thing.
+game.menu.orderHint = Arrastra un pack para moverlo. Si dos packs cambian lo mismo, gana el que está más abajo.
+
 # The name above the player's own lines in a pack's conversations
 # en: You
 game.player = Tú
@@ -453,7 +461,7 @@ action.incrementVariable.delta.tip = Cantidad que se suma al valor actual cada v
 # en: Focused
 param.label.focused = Enfocado
 
-# Tooltip on the 'Focused' field of the SetSpriteFocus action
+# Tooltip on the 'Focused' field of the CharacterFocus action
 # en: When true, every actor's bust in the dialogue is bumped above the CG layer; when false, their resting sorting orders are restored. No per-actor target — it focuses the whole cast, and resets automatically when the dialogue ends.
 action.setSpriteFocus.focused.tip = Si es verdadero, el busto de cada actor del diálogo pasa por encima de la capa de CG; si es falso, se restauran sus órdenes de dibujo normales. No tiene destino por actor: enfoca a todo el reparto, y se restablece solo cuando termina el diálogo.
 
@@ -658,8 +666,8 @@ action.playSFX.clip.tip = Clave de SFX del pack (declarada en la pestaña SFX).
 param.label.volume = Volumen
 
 # Tooltip on the 'Volume' field of the PlaySFX action
-# en: Playback volume (0..1). Falls back to the SFX def's defaultVolume when blank.
-action.playSFX.volume.tip = Volumen de reproducción (0..1). Si está en blanco, usa el defaultVolume de la definición del SFX.
+# en: Playback volume, 0 to 5 - 1 is the game's own level, above it louder. Falls back to the sound's default volume when blank.
+action.playSFX.volume.tip = Volumen de reproducción, de 0 a 5: 1 es el nivel propio del juego, por encima es más fuerte. Si está en blanco, se usa el volumen por defecto del sonido.
 
 # Tooltip on the 'Delay (s)' field of the PlaySFX action
 # en: Seconds to wait before the one-shot plays (action returns immediately).
@@ -670,8 +678,52 @@ action.playSFX.delay.tip = Segundos de espera antes de que suene (la acción vue
 param.label.seconds = Segundos
 
 # Tooltip on the 'Seconds' field of the Wait action
-# en: How long to pause before the next node-on-start action runs.
-action.wait.seconds.tip = Cuánto se pausa antes de que se ejecute la siguiente acción al empezar el nodo.
+# en: How long to pause before the actions after this one run.
+action.wait.seconds.tip = Cuánto tiempo pausar antes de que se ejecuten las acciones que van después de esta.
+
+# Label beside a field of an action or condition: which transition plays
+# en: Transition
+param.label.transition = Transición
+
+# Label beside a field of an action or condition: how many seconds something stays on screen
+# en: On screen (s)
+param.label.onScreenS = En pantalla (s)
+
+# Label beside a field of an action or condition: the words shown on a black screen
+# en: Text
+param.label.screenText = Texto
+
+# Tooltip on the 'Transition' field of the Transitions action
+# en: Which transition plays: the game's own fade to black, blink, white flash or travel fade, or a black screen with words on it, like the game's "A few minutes later...". It covers the dialogue too, and the actions after this one wait until the screen is covered - so whatever they change is not seen changing.
+action.transitions.style.tip = Qué transición se reproduce: el fundido a negro del juego, el parpadeo, el destello blanco o el fundido de viaje, o una pantalla negra con palabras, como el «A few minutes later...» del juego. También tapa el diálogo, y las acciones que van después esperan a que la pantalla esté cubierta, así no se ve cambiar lo que cambian.
+
+# Tooltip on the 'On screen (s)' field of the Transitions action
+# en: How long the screen stays covered, in seconds, before it clears. The blink and the flash run the game's own course, so they have no time to set.
+action.transitions.seconds.tip = Cuánto tiempo sigue cubierta la pantalla, en segundos, antes de despejarse. El parpadeo y el destello siguen sus propios tiempos del juego, así que no tienen tiempo que ajustar.
+
+# Tooltip on the 'Text' field of the Transitions action
+# en: The words on the black screen - "A few minutes later...", "That night...", anything. Translated with the pack's other texts, and [PV:name] shows a variable.
+action.transitions.text.tip = Las palabras de la pantalla negra: «A few minutes later...», «That night...», lo que sea. Se traducen con los demás textos del pack, y [PV:name] muestra una variable.
+
+# One of the transitions the Transitions action plays: the game's fade to black and back
+# en: Fade to black
+choice.style.fadeToBlack = Fundido a negro
+
+# One of the transitions the Transitions action plays: a black screen with words on it, like the game's "A few minutes later..."
+# en: Black screen with text
+choice.style.textScreen = Pantalla negra con texto
+
+# One of the transitions the Transitions action plays: the game's eyes-closing blink
+# en: Blink
+choice.style.blink = Parpadeo
+
+# One of the transitions the Transitions action plays: the game's white flash
+# en: White flash
+choice.style.whiteFlash = Destello blanco
+
+# One of the transitions the Transitions action plays: the game's fade used when travelling
+# en: Travel fade
+choice.style.travelFade = Fundido de viaje
 
 # Label beside a field of an action or condition
 # en: Source
@@ -3165,8 +3217,8 @@ characters.tickOnlyWhatReplacing = Marca solo lo que vas a reemplazar. Todo lo q
 characters.editOverrideMask = Editar máscara…
 
 # Box heading
-# en: Sprites and expressions (relative to pack root, 256×256 PNG)
-characters.outfitSprites = Sprites y expresiones (relativos a la raíz del pack, PNG de 256×256)
+# en: Sprites and expressions (PNG, relative to pack root; best at 256×256)
+characters.outfitSprites = Sprites y expresiones (PNG, relativos a la raíz del pack; mejor a 256×256)
 
 # Text
 # en: Base:
@@ -3449,12 +3501,12 @@ characters.remove.tip = Quitar esta expresión
 characters.tickReplaceTextureUnticked.tip = Marca para reemplazar esta textura. Sin marcar, el pack no dice nada de ella.
 
 # Tooltip on a part of the window
-# en: 256x256 RGBA PNG, relative to the pack folder.
-characters.256x256RGBAPNGRelative.tip = PNG RGBA de 256x256, relativo a la carpeta del pack.
+# en: RGBA PNG, relative to the pack folder. At 256x256 its pixels land exactly as drawn; other sizes are scaled to fit.
+characters.256x256RGBAPNGRelative.tip = PNG RGBA, relativo a la carpeta del pack. A 256x256 sus píxeles quedan tal como se dibujaron; los demás tamaños se escalan para encajar.
 
 # Tooltip on a part of the window
-# en: The bust itself: 256x256 RGBA, relative to the pack folder.
-characters.baseSprite.tip = El busto en sí: RGBA de 256x256, relativo a la carpeta del pack.
+# en: The bust itself: RGBA PNG, relative to the pack folder. Best at 256x256, the only size whose pixels land exactly as drawn; other sizes are scaled to fit, and a shape that is not square gets transparent bars on two sides.
+characters.baseSprite.tip = El busto en sí: PNG RGBA, relativo a la carpeta del pack. Mejor a 256x256, el único tamaño en que sus píxeles quedan tal como se dibujaron; los demás tamaños se escalan para encajar, y una forma que no es cuadrada recibe franjas transparentes en dos lados.
 
 # Tooltip on "= default"
 # en: Use the same mask file as the character's default outfit. It is the same file, not a copy — editing this outfit's mask afterwards changes the default outfit's too, so this asks first. For an outfit added to one of the game's characters, it borrows the game's own mask from the bust the game gave them instead; painting over it makes a file of your own.
@@ -3589,10 +3641,6 @@ npcs.addNpc = + NPC
 # Button
 # en: + Folder
 npcs.unitAddFolder = + Carpeta
-
-# Button
-# en: Rename
-npcs.unitRenameFolder = Renombrar
 
 # Button
 # en: − Remove
@@ -3755,12 +3803,8 @@ npcs.previewLiveJiggleShadow = Vista previa (vaivén, sombra y parpadeo en vivo)
 npcs.bodyJiggleShadowBlink = El vaivén del cuerpo, la sombra y el parpadeo se actualizan en vivo mientras editas. La inclinación de la sombra (rotación X/Y) achata la elipse; la rotación Z la gira.
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-npcs.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack).
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-npcs.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+npcs.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack). Para renombrar una carpeta, haz clic derecho sobre ella, o selecciónala y pulsa F2.
 
 # Tooltip on "− Remove"
 # en: Remove the selected NPC, or delete the selected folder (its contents move up).
@@ -3909,10 +3953,6 @@ places.addPlace = + Lugar
 places.unitAddFolder = + Carpeta
 
 # Button
-# en: Rename
-places.unitRenameFolder = Renombrar
-
-# Button
 # en: − Remove
 places.removePlace = − Quitar
 
@@ -4041,8 +4081,8 @@ places.backMaskOpt = Máscara de fondo (opc.):
 places.editPlaceSecondaryMask = Editar…
 
 # Text
-# en: Front mask (256×143):
-places.frontMask256143 = Máscara frontal (256×143):
+# en: Front mask (opt):
+places.frontMask256143 = Máscara frontal (opc.):
 
 # Text
 # en: The mod clones the Beach level and swaps in these PNGs. Each mask binds as _MaskTex on its own sprite's material, cloned per level so it can't leak into the vanilla levels that share Beach's. Only the mask's ALPHA is read — this shader has no R/G/B channels.
@@ -4162,12 +4202,8 @@ places.exitOncePerLevel = Al salir (una vez por desactivación del nivel)
 places.sameEnterButActive = Igual que «Al entrar», pero en el paso de activo a inactivo (el jugador saliendo del nivel).
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-places.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack).
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-places.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+places.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack). Para renombrar una carpeta, haz clic derecho sobre ella, o selecciónala y pulsa F2.
 
 # Tooltip on "− Remove"
 # en: Remove the selected place, or delete the selected folder (its contents move up).
@@ -4410,10 +4446,6 @@ dialogues.addDialogue = + Diálogo
 # Button
 # en: + Folder
 dialogues.addDialogueFolder = + Carpeta
-
-# Button
-# en: Rename
-dialogues.renameFolder = Renombrar
 
 # Button
 # en: − Remove
@@ -4672,12 +4704,8 @@ dialogues.nodeOneChoiceS = Este nodo es una de las opciones de una Elección, as
 dialogues.actionsOnFinishBox = Acciones al terminar
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag dialogues/folders to organize (cosmetic — doesn't change the pack).
-dialogues.addDialogueFolder.tip = Añade una carpeta. Arrastra diálogos y carpetas para organizarte (es cosmético: no cambia el pack).
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-dialogues.renameFolder.tip = Renombra la carpeta seleccionada.
+# en: Add a folder. Drag dialogues/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+dialogues.addDialogueFolder.tip = Añade una carpeta. Arrastra diálogos y carpetas para organizarte (es cosmético: no cambia el pack). Para renombrar una carpeta, haz clic derecho sobre ella, o selecciónala y pulsa F2.
 
 # Tooltip on "− Remove"
 # en: Remove the selected dialogue, or delete the selected folder (its contents move up).
@@ -4835,6 +4863,22 @@ dialogues.markupColor.tip = Color  (Ctrl+Mayús+C): elige un color y las palabra
 # en: Size  (Ctrl+Shift+S) — wraps the selection in <size=70%></size>. The one tag the game uses in its own lines, for a muttered aside.
 dialogues.markupSize.tip = Tamaño  (Ctrl+Mayús+S): envuelve la selección en <size=70%></size>. La única etiqueta que el juego usa en sus propias líneas, para un comentario en voz baja.
 
+# Tooltip on the button over a dialogue line that lists the pack's auto-trigger patterns
+# en: Sound cue - pick one of the pack's auto-trigger patterns to write it into the line where the cursor is. When the line shows it, its sound plays by itself.
+dialogues.sfxPattern.tip = Señal de sonido: elige uno de los patrones de disparo automático del pack para escribirlo en la línea donde está el cursor. Cuando la línea lo muestra, su sonido suena solo.
+
+# The only row of that list when the pack has no auto-trigger patterns
+# en: No auto-trigger patterns yet - add them to a sound in the SFX tab.
+dialogues.sfxPattern.none = Aún no hay patrones de disparo automático: añádelos a un sonido en la pestaña SFX.
+
+# Tooltip on a row of that list; {sound} is the sound's name
+# en: Write this into the line - it plays {sound}.
+dialogues.sfxPattern.item.tip = Escribirlo en la línea: hace sonar {sound}.
+
+# Tooltip on the play button on a row of that list; {sound} is the sound's name
+# en: Play {sound}
+dialogues.sfxPattern.play.tip = Reproducir {sound}
+
 # Under a line's text: the line reads exactly as written in every language, and is never translated
 # en: Same in every language
 dialogues.textSameEverywhere = Igual en todos los idiomas
@@ -4925,10 +4969,6 @@ scenes.addScene = + Escena
 scenes.unitAddFolder = + Carpeta
 
 # Button
-# en: Rename
-scenes.unitRenameFolder = Renombrar
-
-# Button
 # en: − Remove
 scenes.removeScene = − Quitar
 
@@ -5005,12 +5045,8 @@ scenes.starmakerPhoto.tip = Mostrar esta escena cuenta como hacer una foto, y pa
 scenes.starmakerPhoto.note = El humor de Anna decide si la foto salió bien, y una mala no paga nada. Se aplican los rasgos de fotografía, la cámara y el objetivo, los anuncios que estén activos y el árbol de habilidades, además de los ingresos del día y los contadores de fotos. La escena aparece en la galería del sitio de Starmaker una vez que el jugador la ha visto.
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-scenes.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack).
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-scenes.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+scenes.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack). Para renombrar una carpeta, haz clic derecho sobre ella, o selecciónala y pulsa F2.
 
 # Tooltip on "− Remove"
 # en: Remove the selected scene, or delete the selected folder (its contents move up).
@@ -5071,10 +5107,6 @@ music.addMusic = + Música
 music.unitAddFolder = + Carpeta
 
 # Button
-# en: Rename
-music.unitRenameFolder = Renombrar
-
-# Button
 # en: − Remove
 music.removeMusic = − Quitar
 
@@ -5123,12 +5155,8 @@ music.stopMusic = ■ Detener
 music.playsThroughEditorS = Suena por el audio del propio editor (OGG/WAV/MP3).
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-music.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack).
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-music.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+music.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack). Para renombrar una carpeta, haz clic derecho sobre ella, o selecciónala y pulsa F2.
 
 # Tooltip on "− Remove"
 # en: Remove the selected track, or delete the selected folder (its contents move up).
@@ -5155,12 +5183,12 @@ music.packRelativePathOGG.tip = Ruta relativa al pack. OGG / WAV / MP3: la exten
 music.leaveBlankInheritVanilla.tip = Déjalo en blanco para heredarlo (la plantilla de la playa del juego va en bucle). Si no, 'true' / 'false'.
 
 # Tooltip on a text box
-# en: 0..1. Blank = inherit from the cloned template.
-music.01BlankInherit.tip = 0..1. En blanco = se hereda de la plantilla clonada.
+# en: How loud the track plays: 1.0 is the game's own level for a track, 0 is silent, and up to 5 is louder than the game goes by itself.
+music.01BlankInherit.tip = Lo fuerte que suena la pista: 1.0 es el nivel propio del juego para una pista, 0 es silencio, y hasta 5 suena más fuerte de lo que el juego llega por sí solo.
 
 # Tooltip on "▶ Play"
-# en: Preview the track at the volume above (blank = full). Needs the pack saved to disk. Plays once — looping is a runtime behavior.
-music.playMusic.tip = Previsualiza la pista al volumen de arriba (en blanco = completo). Necesita el pack guardado en disco. Se reproduce una vez: el bucle es un comportamiento de ejecución.
+# en: Preview the track as loud as the game plays it, at the volume above. Needs the pack saved to disk. Plays once — looping is a runtime behavior.
+music.playMusic.tip = Escucha la pista tan fuerte como la reproduce el juego, al volumen de arriba. El pack tiene que estar guardado. Suena una vez: el bucle es cosa del juego.
 
 [SFX tab]
 
@@ -5175,10 +5203,6 @@ sfx.addSfx = + SFX
 # Button
 # en: + Folder
 sfx.unitAddFolder = + Carpeta
-
-# Button
-# en: Rename
-sfx.unitRenameFolder = Renombrar
 
 # Button
 # en: − Remove
@@ -5233,12 +5257,8 @@ sfx.autoTriggerPatterns = Patrones de disparo automático
 sfx.commaSeparatedListText = Lista de patrones de texto separados por comas. Cuando cualquiera de los patrones aparece en el texto de un nodo de diálogo al empezar el nodo, el SFX suena automáticamente. Si el efecto tiene variantes, se elige una al azar cada vez: añádelas poniendo archivos llamados <name>_1, <name>_2, … junto al archivo base (numerados sin huecos). Convención: tokens en minúsculas entre asteriscos, como *plap*, *smooch*. Un mismo SFX puede llevar varios patrones: *yank*,*yeet* disparan los dos el mismo clip, igual que en el mod original. Déjalo en blanco para un SFX que solo suene con acciones PlaySFX explícitas.
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-sfx.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack).
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-sfx.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+sfx.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack). Para renombrar una carpeta, haz clic derecho sobre ella, o selecciónala y pulsa F2.
 
 # Tooltip on "− Remove"
 # en: Remove the selected SFX, or delete the selected folder (its contents move up).
@@ -5261,16 +5281,208 @@ sfx.namePackItselfUses.tip = El nombre que usa el propio pack: lo que el runtime
 sfx.audioFileRelativePack.tip = El archivo de audio, relativo a la carpeta del pack. Funcionan OGG, WAV y MP3. Si hay grabaciones extra llamadas _1, _2 al lado, se elige entre ellas al azar.
 
 # Tooltip on a text box
-# en: 0..1. Used by PlaySFX when its own volume param is blank, and as the volume for auto-pattern-matched plays.
-sfx.01UsedPlaysfx.tip = 0..1. Lo usa PlaySFX cuando su propio parámetro de volumen está en blanco, y también como volumen de las reproducciones disparadas por patrón.
+# en: How loud the sound plays when PlaySFX does not say, and when an auto-trigger pattern plays it: 1.0 is the game's own level, 0 is silent, and up to 5 is louder than the game goes by itself. The game squares it on the way out, as it does with every sound it plays this way - 0.5 is a quarter, 2 is four times - and Play sounds it the same.
+sfx.01UsedPlaysfx.tip = Lo fuerte que suena el sonido cuando PlaySFX no lo indica y cuando lo reproduce un patrón de disparo automático: 1.0 es el nivel propio del juego, 0 es silencio, y hasta 5 suena más fuerte de lo que el juego llega por sí solo. El juego lo eleva al cuadrado al reproducirlo, como todo sonido que suena así (0.5 es un cuarto, 2 es el cuádruple), y Reproducir suena igual.
 
 # Tooltip on "▶ Play"
-# en: Preview the base clip at the default volume above. Needs the pack saved to disk.
-sfx.playSfx.tip = Previsualiza el clip base al volumen por defecto de arriba. Necesita el pack guardado en disco.
+# en: Preview the sound as loud as the game plays it, at the default volume above - as edited below, when it is. Needs the pack saved to disk.
+sfx.playSfx.tip = Escucha el sonido tan fuerte como lo reproduce el juego, al volumen por defecto de arriba; editado como abajo, si lo está. El pack tiene que estar guardado.
 
 # Tooltip on a text box
 # en: Words that fire this effect on their own when they appear in a line, comma-separated. The convention is a lowercase word between asterisks, like *plap*. Leave it empty for an effect only an action should play.
 sfx.wordsFireEffectTheir.tip = Palabras que disparan este efecto por sí solas cuando aparecen en una línea, separadas por comas. La convención es una palabra en minúsculas entre asteriscos, como *plap*. Déjalo vacío para un efecto que solo deba reproducir una acción.
+
+# Heading of the box on the SFX tab where a sound is cut and given effects
+# en: Edit the sound
+sfxEdit.header = Editar el sonido
+
+# Small print at the top of that box
+# en: Click the strip to pick a spot; the mouse wheel zooms in and out, and Shift with the wheel scrolls. Cut here splits the piece at the spot in two, Delete piece takes the highlighted piece out. When the pack is saved, the edited sound is written over the file, and the recording is kept in the pack's .originals folder, which is never exported - so Reset always gives it back.
+sfxEdit.help = Haz clic en la tira para elegir un punto; la rueda del ratón acerca y aleja, y Mayús con la rueda desplaza. «✂ Cortar aquí» parte en dos el trozo en ese punto, «Borrar trozo» quita el trozo resaltado. Al guardar el pack, el sonido editado se escribe sobre el archivo y la grabación se guarda en la carpeta .originals del pack, que nunca se exporta; así Restablecer siempre la devuelve.
+
+# Label before a list of the sound's files: the sound and its variants
+# en: File:
+sfxEdit.file = Archivo:
+
+# Tooltip on that list
+# en: This sound has variants the game picks between at random. Each is cut on its own; pitch, speed, echo and reverb apply to all of them.
+sfxEdit.file.tip = Este sonido tiene variantes entre las que el juego elige al azar. Cada una se corta por separado; el tono, la velocidad, el eco y la reverberación se aplican a todas.
+
+# Tooltip on the strip showing the sound's waveform
+# en: Click to pick a spot. Mouse wheel: zoom in or out. Shift + wheel: scroll. Delete: take the highlighted piece out.
+sfxEdit.strip.tip = Haz clic para elegir un punto. Rueda del ratón: acercar o alejar. Mayús + rueda: desplazar. Supr: quitar el trozo resaltado.
+
+# Button
+# en: ▶ Play
+sfxEdit.play = ▶ Reproducir
+
+# Tooltip on "▶ Play"
+# en: Play the sound as edited, from the spot picked.
+sfxEdit.play.tip = Reproduce el sonido tal como está editado, desde el punto elegido.
+
+# Button
+# en: ■ Stop
+sfxEdit.stop = ■ Detener
+
+# Button: splits the piece of the sound at the picked spot into two pieces
+# en: ✂ Cut here
+sfxEdit.split = ✂ Cortar aquí
+
+# Tooltip on "✂ Cut here"
+# en: Split the piece at the spot picked into two pieces, so either can be taken out or kept. The spot has to be inside a piece, not on its edge.
+sfxEdit.split.tip = Parte el trozo en el punto elegido en dos trozos, para poder quitar o conservar cualquiera de ellos. El punto tiene que estar dentro de un trozo, no en su borde.
+
+# Button: removes the highlighted piece of the sound
+# en: Delete piece
+sfxEdit.delete = Borrar trozo
+
+# Tooltip on "Delete piece"
+# en: Take the highlighted piece out; the pieces after it move up to close the gap. The last piece left cannot be deleted.
+sfxEdit.delete.tip = Quita el trozo resaltado; los trozos de después se adelantan y cierran el hueco. El último trozo que queda no se puede borrar.
+
+# Button: zoom in on the strip
+# en: +
+sfxEdit.zoomIn = +
+
+# Tooltip on "+"
+# en: Zoom in. The mouse wheel over the strip does the same.
+sfxEdit.zoomIn.tip = Acercar. La rueda del ratón sobre la tira hace lo mismo.
+
+# Button: zoom out on the strip
+# en: −
+sfxEdit.zoomOut = −
+
+# Tooltip on "−"
+# en: Zoom out.
+sfxEdit.zoomOut.tip = Alejar.
+
+# Button: zoom so the whole sound fits
+# en: Fit
+sfxEdit.fit = Ajustar
+
+# Tooltip on "Fit"
+# en: Show the whole sound.
+sfxEdit.fit.tip = Muestra el sonido entero.
+
+# Button: undo every edit of the sound
+# en: Reset
+sfxEdit.reset = Restablecer
+
+# Tooltip on "Reset"
+# en: Put the sound back as recorded: every cut in every file and every effect goes, and the recording plays again. Undo brings the edit back.
+sfxEdit.reset.tip = Devuelve el sonido a como se grabó: se van todos los cortes de todos los archivos y todos los efectos, y vuelve a sonar la grabación. Deshacer (Ctrl+Z) recupera la edición.
+
+# A line under the strip. {cursor}, {length} and {was} are seconds
+# en: Spot {cursor} s · piece {piece} of {pieces} · {length} s long (recorded: {was} s)
+sfxEdit.summary = Punto {cursor} s · trozo {piece} de {pieces} · dura {length} s (grabación: {was} s)
+
+# Label beside a slider
+# en: Pitch
+sfxEdit.pitch = Tono
+
+# Tooltip on the Pitch slider
+# en: Higher or lower, in semitones, without changing how long the sound lasts.
+sfxEdit.pitch.tip = Más agudo o más grave, en semitonos, sin cambiar cuánto dura el sonido.
+
+# Label beside a slider
+# en: Speed
+sfxEdit.speed = Velocidad
+
+# Tooltip on the Speed slider
+# en: Faster or slower, without changing how high the sound is.
+sfxEdit.speed.tip = Más rápido o más lento, sin cambiar lo agudo que suena.
+
+# Label beside a slider
+# en: Echo
+sfxEdit.echo = Eco
+
+# Tooltip on the Echo slider
+# en: How loud each repeat is. Off at the far left.
+sfxEdit.echo.tip = Lo fuerte que suena cada repetición. Desactivado del todo a la izquierda.
+
+# Label beside a slider
+# en: Echo delay
+sfxEdit.echoDelay = Retardo del eco
+
+# Tooltip on the Echo delay slider
+# en: The time between the sound and each repeat. Set the echo above first.
+sfxEdit.echoDelay.tip = El tiempo entre el sonido y cada repetición. Ajusta primero el eco de arriba.
+
+# Label beside a slider
+# en: Reverb
+sfxEdit.reverb = Reverberación
+
+# Tooltip on the Reverb slider
+# en: How much of the room is heard. Off at the far left.
+sfxEdit.reverb.tip = Cuánto se oye la sala. Desactivado del todo a la izquierda.
+
+# Label beside a slider
+# en: Room size
+sfxEdit.room = Tamaño de la sala
+
+# Tooltip on the Room size slider
+# en: From a small room to a hall. Set the reverb above first.
+sfxEdit.room.tip = De una habitación pequeña a un gran salón. Ajusta primero la reverberación de arriba.
+
+# Button
+# en: Reset effects
+sfxEdit.resetEffects = Restablecer efectos
+
+# Tooltip on "Reset effects"
+# en: Put pitch, speed, echo and reverb back as recorded, keeping the cuts.
+sfxEdit.resetEffects.tip = Devuelve el tono, la velocidad, el eco y la reverberación a como se grabaron, conservando los cortes.
+
+# Beside the Pitch or Speed slider when it is unchanged
+# en: as recorded
+sfxEdit.asRecorded = como se grabó
+
+# Beside the Echo or Reverb slider when it is at zero
+# en: off
+sfxEdit.off = desactivado
+
+# Beside the Pitch slider. {n} is a number with its sign, like +2 or -1.5
+# en: {n} semitones
+sfxEdit.semitones = {n} semitonos
+
+# Beside the Pitch slider, for exactly one semitone up or down. {n} is +1 or -1
+# en: {n} semitone
+sfxEdit.semitone = {n} semitono
+
+# Beside the Echo, Reverb and Room size sliders: a percentage. {n} is the number
+# en: {n}%
+sfxEdit.percent = {n}%
+
+# Beside the Echo delay slider: a time. {n} is the number of seconds
+# en: {n} s
+sfxEdit.seconds = {n} s
+
+# On the strip, when the sound has no file yet
+# en: Pick an audio file above to edit it here.
+sfxEdit.noFile = Elige arriba un archivo de audio para editarlo aquí.
+
+# On the strip, when the pack has never been saved
+# en: Save the pack first: the sound is read from the pack's folder.
+sfxEdit.saveFirst = Guarda primero el pack: el sonido se lee de la carpeta del pack.
+
+# On the strip, when the sound's file is not there
+# en: The file '{file}' isn't in the pack's folder.
+sfxEdit.missing = El archivo «{file}» no está en la carpeta del pack.
+
+# On the strip, while the sound is read
+# en: Reading the sound…
+sfxEdit.reading = Leyendo el sonido…
+
+# Under the sound editor's strip, while a long sound - a music track - is being made with its edits before it plays
+# en: Preparing the sound to play…
+sfxEdit.preparing = Preparando el sonido para reproducirlo…
+
+# On the strip, when the file is not a sound that can be read
+# en: '{file}' could not be read as audio.
+sfxEdit.unreadable = No se pudo leer «{file}» como audio.
+
+# Message after saving, when an edited sound could not be made into its file
+# en: An edited sound could not be made: {error}. The rest of the pack was saved, and the sound plays as it did before.
+sfxEdit.renderFailed = No se pudo crear un sonido editado: {error}. El resto del pack se guardó, y el sonido suena como antes.
 
 [Wallpapers tab]
 
@@ -5285,10 +5497,6 @@ wallpapers.addWallpaper = + Fondo
 # Button
 # en: + Folder
 wallpapers.unitAddFolder = + Carpeta
-
-# Button
-# en: Rename
-wallpapers.unitRenameFolder = Renombrar
 
 # Button
 # en: − Remove
@@ -5351,12 +5559,8 @@ wallpapers.pasteUnlockConditions = Pegar
 wallpapers.overwriteUnlockConditions = Sobrescribir
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-wallpapers.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack).
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-wallpapers.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+wallpapers.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack). Para renombrar una carpeta, haz clic derecho sobre ella, o selecciónala y pulsa F2.
 
 # Tooltip on "− Remove"
 # en: Remove the selected wallpaper, or delete the selected folder (its contents move up).
@@ -5415,10 +5619,6 @@ variables.addVariable = + Variable
 # Button
 # en: + Folder
 variables.addVariableFolder = + Carpeta
-
-# Button
-# en: Rename
-variables.renameVariableFolder = Renombrar
 
 # Button
 # en: − Remove
@@ -5494,12 +5694,8 @@ variables.maxValue = Valor máx:
 variables.description = Descripción:
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag variables/folders to organize (cosmetic — doesn't change the pack).
-variables.addVariableFolder.tip = Añade una carpeta. Arrastra variables y carpetas para organizarte (es cosmético: no cambia el pack).
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-variables.renameVariableFolder.tip = Renombra la carpeta seleccionada.
+# en: Add a folder. Drag variables/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+variables.addVariableFolder.tip = Añade una carpeta. Arrastra variables y carpetas para organizarte (es cosmético: no cambia el pack). Para renombrar una carpeta, haz clic derecho sobre ella, o selecciónala y pulsa F2.
 
 # Tooltip on "− Remove"
 # en: Remove the selected variable, or delete the selected folder (its contents move up).
@@ -5578,10 +5774,6 @@ integration.addIntegrationRule = + Regla
 # Button
 # en: + Folder
 integration.addIntegrationFolder = + Carpeta
-
-# Button
-# en: Rename
-integration.renameIntegrationFolder = Renombrar
 
 # Button
 # en: − Remove
@@ -5692,12 +5884,8 @@ integration.ruleBodyJSON = Cuerpo de la regla (JSON)
 integration.editRuleSTrigger = Edita el modo de disparo, las condiciones y las acciones de la regla como un objeto JSON. Formato: { "triggerMode": "OnRisingEdge", "conditions": [...], "actions": [...], "branches": [ { "conditions": [...], "actions": [...] } ] }. branches es la cadena opcional de «si no» (gana la primera coincidencia; condiciones vacías = un «si no» simple). Los arrays conditions / actions tienen la misma forma que actionsOnStart de los nodos de diálogo.
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag rules/folders to organize (cosmetic — doesn't change when rules run).
-integration.addIntegrationFolder.tip = Añade una carpeta. Arrastra reglas y carpetas para organizarte (es cosmético: no cambia cuándo se ejecutan las reglas).
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-integration.renameIntegrationFolder.tip = Renombra la carpeta seleccionada.
+# en: Add a folder. Drag rules/folders to organize (cosmetic — doesn't change when rules run). Rename a folder by right-clicking it, or select it and press F2.
+integration.addIntegrationFolder.tip = Añade una carpeta. Arrastra reglas y carpetas para organizarte (es cosmético: no cambia cuándo se ejecutan las reglas). Para renombrar una carpeta, haz clic derecho sobre ella, o selecciónala y pulsa F2.
 
 # Tooltip on "− Remove"
 # en: Remove the selected rule, or delete the selected folder (its contents move up).
@@ -6196,10 +6384,6 @@ quests.addQuest = + Misión
 quests.unitAddFolder = + Carpeta
 
 # Button
-# en: Rename
-quests.unitRenameFolder = Renombrar
-
-# Button
 # en: − Remove
 quests.removeQuest = − Quitar
 
@@ -6404,12 +6588,8 @@ quests.gameStillMovesOwn = El juego sigue moviendo su propia misión: sus escena
 quests.questMovesAlongItself = Una misión avanza sola: empieza cuando se cumplen sus condiciones de inicio, y cada tarea se completa cuando se cumplen sus propias condiciones de completado, ejecutando sus acciones de completado. Solo una tarea sin subtareas tiene condiciones y acciones de completado: una tarea con subtareas termina a través de ellas. Un diálogo o una regla pueden mover una misión con la acción de Misión, y consultarla con las condiciones QuestState y QuestCounter. Completar una misión le da al jugador la misma recompensa que las misiones del propio juego.
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-quests.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack).
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-quests.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+quests.unitAddFolder.tip = Añade una carpeta. Arrastra elementos y carpetas para organizarte (es cosmético: no cambia el pack). Para renombrar una carpeta, haz clic derecho sobre ella, o selecciónala y pulsa F2.
 
 # Tooltip on "− Remove"
 # en: Remove the selected quest, or delete the selected folder (its contents move up).
@@ -10795,8 +10975,8 @@ docs.actions.emptyListCompletely = Vacía una lista por completo.
 docs.actions.heading.actors = Actores
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: SetSpriteFocus
-docs.actions.liftCastSBusts.term = SetSpriteFocus
+# en: CharacterFocus
+docs.actions.liftCastSBusts.term = CharacterFocus
 
 # Docs: a point in the topic
 # en: Lift the cast's busts above a full-screen scene, or put them back down. It affects everyone in the dialogue, and resets by itself when the dialogue ends.
@@ -10873,6 +11053,14 @@ docs.actions.crossFadeOnePlace.term = TransitionLevels
 # Docs: a point in the topic
 # en: Cross-fade from one place to another, moving the player mid-conversation.
 docs.actions.crossFadeOnePlace = Funde de un lugar a otro, moviendo al jugador en mitad de una conversación.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Transitions
+docs.actions.coverScreenWhileChanges.term = Transitions
+
+# Docs: a point in the topic
+# en: Cover the screen with one of the game's transitions, or a black screen with your own words, for as long as you like - and change the scene behind it with the actions after it.
+docs.actions.coverScreenWhileChanges = Cubrir la pantalla con una de las transiciones del juego, o con una pantalla negra con tus propias palabras, el tiempo que quieras, y cambiar la escena detrás con las acciones que van después.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: DeactivateAllScenes
@@ -11007,8 +11195,8 @@ docs.actions.activatesceneSeparateActionShowing = ActivateScene era una acción 
 docs.actions.heading.worthKnowing = Conviene saber
 
 # Docs: a point in the topic
-# en: Actions run in the order they are listed.
-docs.actions.actionsRunOrderThey = Las acciones se ejecutan en el orden en que están listadas.
+# en: Actions run in the order they are listed. A Wait holds the ones after it, and so does Transitions until the screen is covered.
+docs.actions.actionsRunOrderThey = Las acciones se ejecutan en el orden en que están. Un Wait retiene las que van después, y Transitions también, hasta que la pantalla está cubierta.
 
 # Docs: a point in the topic
 # en: Anything that targets an object gives you the same picker — see The target picker.
@@ -12519,8 +12707,8 @@ tutorial.soundInARoom.addTrack.hint = + Música, y luego Ruta del audio en el pa
 tutorial.soundInARoom.hearWithoutLeavingEditor.title = Escúchala sin salir del editor
 
 # Tutorials: what the step says
-# en: Play sounds the track at the volume beside it. It plays ONCE here whatever Loop says — looping is a runtime behaviour, and the preview is for checking the file is the file you meant.\n\nLoop and Volume can both be left blank, and blank means "do what the game normally does" rather than zero. Fill them in only when you want to differ from that.
-tutorial.soundInARoom.hearWithoutLeavingEditor.body = Reproducir suena la pista al volumen que hay al lado. Aquí suena UNA vez diga lo que diga Bucle: el bucle es un comportamiento de ejecución, y la vista previa es para comprobar que el archivo es el archivo que querías.\n\nBucle y Volumen se pueden dejar los dos en blanco, y en blanco significa «haz lo que el juego hace normalmente», no cero. Rellénalos solo cuando quieras apartarte de eso.
+# en: Play sounds the track at the volume beside it. It plays ONCE here whatever Loop says — looping is a runtime behaviour, and the preview is for checking the file is the file you meant.\n\nLoop can be left blank, and blank means "do what the game normally does" rather than off. Volume starts at 1.0, which is the game's own level for a track. Change either only when you want to differ from that.
+tutorial.soundInARoom.hearWithoutLeavingEditor.body = Reproducir suena la pista al volumen que hay al lado. Aquí suena UNA vez diga lo que diga Bucle: el bucle es un comportamiento de ejecución, y la vista previa es para comprobar que el archivo es el archivo que querías.\n\nBucle se puede dejar en blanco, y en blanco significa «haz lo que el juego hace normalmente», no apagado. Volumen empieza en 1.0, el nivel propio del juego para una pista. Cambia cualquiera de los dos solo cuando quieras apartarte de eso.
 
 # Tutorials: the heading of a step
 # en: Make something play it
@@ -13893,6 +14081,298 @@ common.group.thisPack = Este pack
 # en: The game's own
 common.group.gamesOwn = Las propias del juego
 
+# Heading in a dropdown, over the pack's entries the author has not put in any folder
+# en: Not in a folder
+common.group.notInFolder = Sin carpeta
+
+# Heading in a dropdown, over the entries that belong under none of the other headings
+# en: Other
+common.group.misc = Otros
+
+# Heading in the list of action types, over the ones that act on the characters on screen
+# en: Characters
+typeGroup.characters = Personajes
+
+# Heading in the list of action types, over the ones that act on objects and scenes
+# en: Objects and scenes
+typeGroup.objects = Objetos y escenas
+
+# Heading in the list of action types, over the ones that change places, transitions and what is on the screen
+# en: Places and the screen
+typeGroup.screen = Lugares y pantalla
+
+# Heading in the list of action types, over music and sound effects
+# en: Sound
+typeGroup.sound = Sonido
+
+# Heading in the lists of action and condition types, over the ones about variables and lists
+# en: Variables
+typeGroup.variables = Variables
+
+# Heading in the list of action types, over waiting and dice rolls
+# en: Timing and chance
+typeGroup.timing = Tiempo y azar
+
+# Heading in the lists of action and condition types, over the ones about quests
+# en: Quests
+typeGroup.quests = Misiones
+
+# Heading in the list of condition types, over the ones about places, objects and the weather
+# en: Places and objects
+typeGroup.world = Lugares y objetos
+
+# Heading in the list of condition types, over chance, timers, keys pressed and "always"
+# en: Chance, time and keys
+typeGroup.chance = Azar, tiempo y teclas
+
+# Heading in the list of component types
+# en: Made for packs
+componentGroup.pack = Hechos para packs
+
+# Heading in the list of component types
+# en: The game's scripts
+componentGroup.game = Scripts del juego
+
+# Heading in the list of component types
+# en: Unity's own
+componentGroup.unity = Propios de Unity
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Lift the busts above a scene, or put them back
+note.action.characterFocus = Subir los bustos sobre una escena, o bajarlos
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Fade a character off screen
+note.action.leaveBust = Hacer salir de pantalla a un personaje
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Show or hide a scene, bust or object
+note.action.setActive = Mostrar u ocultar una escena, un busto o un objeto
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Swap the picture on something
+note.action.setSprite = Cambiar la imagen de algo
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Fade something in or out
+note.action.fadeSprite = Hacer aparecer o desvanecer algo
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Slide something to another position
+note.action.move = Deslizar algo a otra posición
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Start or stop something spinning
+note.action.spin = Hacer girar algo, o detenerlo
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Change a setting the other actions don't reach
+note.action.component = Cambiar un ajuste que las otras acciones no alcanzan
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Hide every scene this pack showed
+note.action.deactivateAllScenes = Ocultar todas las escenas que mostró este pack
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Take the player to another place
+note.action.transitionLevels = Llevar al jugador a otro lugar
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Cover the screen while things change
+note.action.transitions = Cubrir la pantalla mientras cambian las cosas
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Keep the interface hidden after the dialogue
+note.action.leaveUiFaded = Dejar la interfaz oculta tras el diálogo
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Send one of the game's signals
+note.action.emitSignal = Enviar una de las señales del juego
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Change today's weather
+note.action.setWeather = Cambiar el tiempo de hoy
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Change the music
+note.action.switchMusic = Cambiar la música
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Play a sound effect
+note.action.playSfx = Reproducir un efecto de sonido
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Set or change a variable
+note.action.variable = Fijar o cambiar una variable
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Add a value to a list
+note.action.addToList = Añadir un valor a una lista
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Take a value out of a list
+note.action.removeFromList = Quitar un valor de una lista
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Empty a list
+note.action.clearList = Vaciar una lista
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Pause before the actions after it
+note.action.wait = Pausar antes de las acciones siguientes
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Do one of several things, by chance
+note.action.diceRoll = Hacer una de varias cosas, al azar
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Start, advance or finish a quest
+note.action.quest = Empezar, avanzar o terminar una misión
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Compare a variable with a value
+note.condition.variable = Comparar una variable con un valor
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Whether a variable has been set
+note.condition.variableExists = Si una variable se ha fijado
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Whether a variable's text begins a certain way
+note.condition.variableStartsWith = Si el texto de una variable empieza de cierta forma
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Whether a list holds a value
+note.condition.listContains = Si una lista contiene un valor
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: How many values a list holds
+note.condition.listCount = Cuántos valores tiene una lista
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Whether the player is in a place
+note.condition.levelActive = Si el jugador está en un lugar
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Whether something is showing
+note.condition.gameObjectActive = Si algo se está mostrando
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: What today's weather is
+note.condition.weather = Qué tiempo hace hoy
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: How far a quest has got
+note.condition.questState = Hasta dónde ha llegado una misión
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: A quest task's counter
+note.condition.questCounter = El contador de una tarea de misión
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: A chance, rolled once a day
+note.condition.dailyChance = Una probabilidad, tirada una vez al día
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: A chance, rolled every time
+note.condition.random = Una probabilidad, tirada cada vez
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Every so many seconds
+note.condition.timer = Cada tantos segundos
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: A key or button pressed
+note.condition.inputKey = Una tecla o botón pulsado
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Always - handy for testing
+note.condition.alwaysTrue = Siempre: útil para probar
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: One of a character's busts
+note.kind.bust = Uno de los bustos de un personaje
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: An object in a place
+note.kind.gameObjects = Un objeto de un lugar
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: An NPC in a place
+note.kind.npcs = Un PNJ de un lugar
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: A whole place's picture
+note.kind.places = La imagen de un lugar entero
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: One of this pack's scenes
+note.kind.scene = Una de las escenas de este pack
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: One of this pack's screens
+note.kind.ui = Una de las pantallas de este pack
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: Anything in the game, by its path
+note.kind.directPath = Cualquier cosa del juego, por su ruta
+
+# A note beside one of the game's signals in its dropdown, saying what the game does when it is sent
+# en: A blink, with a drinking sound
+note.signal.drink = Un parpadeo, con sonido de beber
+
+# A note beside one of the game's signals in its dropdown, saying what the game does when it is sent
+# en: A white camera flash, with its sound
+note.signal.flash = Un destello blanco de cámara, con su sonido
+
+# A note beside one of the game's signals in its dropdown, saying what the game does when it is sent
+# en: A flash, with a kiss sound
+note.signal.kiss = Un destello, con sonido de beso
+
+# A note beside one of the game's signals in its dropdown, saying what the game does when it is sent
+# en: Fade the game's interface out
+note.signal.fadeUi = Desvanecer la interfaz del juego
+
+# A note beside one of the game's signals in its dropdown, saying what the game does when it is sent
+# en: Bring the game's interface back
+note.signal.forceEnableUi = Devolver la interfaz del juego
+
+# A note beside a Variable action's operation in its dropdown
+# en: Give it a value
+note.operation.set = Darle un valor
+
+# A note beside a Variable action's operation in its dropdown
+# en: Add to a number
+note.operation.increment = Sumar a un número
+
+# A note beside a Variable action's operation in its dropdown
+# en: Pick one value of a list at random
+note.operation.randomFromList = Elegir al azar un valor de una lista
+
+# A note beside a Variable action's operation in its dropdown
+# en: How many values a list holds
+note.operation.countList = Cuántos valores tiene una lista
+
+# A note beside a component type in its dropdown
+# en: Fades in when shown
+note.component.fadeIn = Aparece gradualmente al mostrarse
+
+# A note beside a component type in its dropdown
+# en: Fades out when shown
+note.component.fadeOut = Se desvanece al mostrarse
+
+# A note beside a component type in its dropdown
+# en: Shows one of its children at random
+note.component.randomChild = Muestra uno de sus hijos al azar
+
+# A note beside a component type in its dropdown
+# en: Blinks on and off
+note.component.blinking = Parpadea encendiéndose y apagándose
+
+# A note beside a component type in its dropdown
+# en: Unity's own - most settings can't be set by name
+note.component.engine = Propio de Unity: la mayoría de ajustes no se pueden fijar por nombre
+
 # The editor's title bar; {game} is the game's version, {pack} the pack's id
 # en: SMSModForge {version} for {game} — {pack}
 window.title = SMSModForge {version} para {game} — {pack}
@@ -13913,16 +14393,16 @@ window.forGame = para Starmaker Story {version}
 # en: New UI
 ui.newName = Nueva UI
 
-# Title of a message box
-# en: Rename
-rename.title = Renombrar
-
 # After a rename that other parts of the pack followed
 # one: 1 · other: 0, 2, 3, 4…
 # en: Renamed '{from}' to '{to}' and updated {count} reference.
 rename.fromTo.one = Se ha renombrado «{from}» a «{to}» y se ha actualizado {count} referencia.
 # en: Renamed '{from}' to '{to}' and updated {count} references.
 rename.fromTo.other = Se ha renombrado «{from}» a «{to}» y se han actualizado {count} referencias.
+
+# On the right-click menu of a folder in a tab's sidebar. Its name turns into a box to type the new one in
+# en: Rename
+folders.renameMenu = Renombrar
 
 # Title of a message box
 # en: Reset key
@@ -14165,17 +14645,6 @@ places.newName = Nuevo lugar
 # en: New Folder
 common.newFolder = Nueva carpeta
 
-# After a rename
-# one: 1 · other: 0, 2, 3, 4…
-# en: Renamed to '{name}' and updated {count} reference.
-rename.to.one = Renombrado a «{name}» y actualizada {count} referencia.
-# en: Renamed to '{name}' and updated {count} references.
-rename.to.other = Renombrado a «{name}» y actualizadas {count} referencias.
-
-# After a rename nothing else followed
-# en: Renamed to '{name}' (no references found).
-rename.toNothingFollowed = Renombrado a «{name}» (no se han encontrado referencias).
-
 # Beside the box in the Rename window
 # en: New name:
 rename.newName = Nombre nuevo:
@@ -14364,14 +14833,6 @@ edit.selectAll = Seleccionar todo
 # Tooltip on the UI tab's object tree
 # en: Ins: add object • Del: remove • Ctrl+C/V: copy/paste • Ctrl+D: duplicate
 ui.treeKeys.tip = Ins: añadir objeto • Supr: quitar • Ctrl+C/V: copiar/pegar • Ctrl+D: duplicar
-
-# Title of the window that renames a sidebar folder
-# en: Rename Folder
-folders.rename.title = Renombrar carpeta
-
-# Beside the box in that window
-# en: Folder name:
-folders.rename.prompt = Nombre de la carpeta:
 
 # en: You have unsaved changes. Save before closing?
 unsaved.beforeClosing = Tienes cambios sin guardar. ¿Guardar antes de cerrar?
@@ -15442,6 +15903,10 @@ walk.otherReferences.one = {count} referencia más
 # en: {count} other references
 walk.otherReferences.other = {count} referencias más
 
+# Says where something is in the pack, in the list of what a rename changed: a place the list has no name for yet
+# en: Elsewhere in the pack
+walk.elsewhere = En otra parte del pack
+
 [Places tab: preview]
 
 # Tooltip on the place preview
@@ -16009,12 +16474,20 @@ migration.wallpaperPathsRelative = Fondos de pantalla nombrados con una ruta com
 migration.playerVoice = La voz de escritura del jugador que este pack había fijado, eliminada: el jugador ahora escribe igual en todos los packs (45 caracteres por segundo, tono 0.4-0.7)
 
 # One line of the list of what was brought up to date
+# en: The player's name colour this pack set, removed: "You" is written in the game's own grey in every pack
+migration.playerColour = El color del nombre del jugador que este pack había fijado, eliminado: «You» se escribe en el gris propio del juego en todos los packs
+
+# One line of the list of what was brought up to date
 # en: Characters given the neutral expression every character now starts with
 migration.neutralGiven = Se les ha dado a los personajes la expresión neutral con la que ahora empieza todo personaje
 
 # One line of the list of what was brought up to date. "Extra GameObjects" and "GameObjects" are names of a category in the editor
 # en: Targets in "Extra GameObjects", the GameObjects category's old name, moved to GameObjects - so they are looked up inside their level again
 migration.oldGameObjectsCategory = Destinos en «Extra GameObjects», el nombre antiguo de la categoría GameObjects, pasados a GameObjects: así se vuelven a buscar dentro de su nivel
+
+# One line of the list of what was brought up to date. "SetSpriteFocus" and "CharacterFocus" are names of an action, kept in English
+# en: SetSpriteFocus actions given the action's new name, CharacterFocus
+migration.characterFocus = Acciones SetSpriteFocus con el nombre nuevo de la acción, CharacterFocus
 
 # One line of the list of what was brought up to date
 # en: Given a version to start from ({version})
@@ -17049,6 +17522,10 @@ packText.heading.buttons = Botones
 # en: Screen: {name}
 packText.heading.screen = Pantalla: {name}
 
+# A heading in a pack's translation file: the words on transitions' black screens
+# en: Transitions
+packText.heading.transitions = Transiciones
+
 # Note above a text in a pack's translation file
 # en: A character's name, shown above their lines
 packText.note.name = El nombre de un personaje, que se muestra encima de sus líneas
@@ -17108,6 +17585,14 @@ packText.note.mapButton = Un botón del mapa del mundo en {district}, hacia {tar
 # Note above a text in a pack's translation file: {path} is the object on the screen, by the names down to it
 # en: The text of {path}
 packText.note.ui = El texto de {path}
+
+# A note above a text in a pack's translation file: words on a transition's black screen, in {owner} - a rule, a place, a quest or a screen, by its name
+# en: Words on a black screen, in {owner}
+packText.note.transition = Palabras en una pantalla negra, en {owner}
+
+# A note above a text in a pack's translation file: words on a transition's black screen, at {line} of the dialogue {dialogue}
+# en: Words on a black screen, at line {line} of {dialogue}
+packText.note.transitionInLine = Palabras en una pantalla negra, en la línea {line} de {dialogue}
 
 # Report of File > Pack translations > Check
 # one: 1 · other: 0, 2, 3, 4…
@@ -17278,6 +17763,14 @@ editingLanguage.edit = Editar…
 # Tooltip on that button
 # en: See the pack's translations and how far along each one is, copy one over another language, or delete one.
 editingLanguage.edit.tip = Ver las traducciones del pack y cuánto lleva cada una, copiar una sobre otro idioma o eliminar una.
+
+# A button beside the editing language, opening the pack's folder in File Explorer
+# en: Pack folder
+packFolder.open = Carpeta del pack
+
+# Tooltip on "Pack folder"
+# en: Open the pack's folder in File Explorer - where its art, sounds and translations are, and where a file has to be for players to get it. A new pack has a folder once it is saved.
+packFolder.open.tip = Abre la carpeta del pack en el Explorador de archivos: ahí están su arte, sus sonidos y sus traducciones, y ahí debe estar un archivo para que los jugadores lo reciban. Un pack nuevo tiene carpeta en cuanto se guarda.
 
 # Title of that window
 # en: Pack translations
@@ -17507,3 +18000,83 @@ translatePack.damaged = {count} se quedaron con el texto predeterminado porque l
 
 # en: Nothing was translated.
 translatePack.nothingDone = No se tradujo nada.
+
+[Not used by this version]
+
+# en: Rename
+npcs.unitRenameFolder = Renombrar
+
+# en: Rename the selected folder.
+npcs.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+
+# en: Rename
+places.unitRenameFolder = Renombrar
+
+# en: Rename the selected folder.
+places.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+
+# en: Rename
+dialogues.renameFolder = Renombrar
+
+# en: Rename the selected folder.
+dialogues.renameFolder.tip = Renombra la carpeta seleccionada.
+
+# en: Rename
+scenes.unitRenameFolder = Renombrar
+
+# en: Rename the selected folder.
+scenes.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+
+# en: Rename
+music.unitRenameFolder = Renombrar
+
+# en: Rename the selected folder.
+music.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+
+# en: Rename
+sfx.unitRenameFolder = Renombrar
+
+# en: Rename the selected folder.
+sfx.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+
+# en: Rename
+wallpapers.unitRenameFolder = Renombrar
+
+# en: Rename the selected folder.
+wallpapers.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+
+# en: Rename
+variables.renameVariableFolder = Renombrar
+
+# en: Rename the selected folder.
+variables.renameVariableFolder.tip = Renombra la carpeta seleccionada.
+
+# en: Rename
+integration.renameIntegrationFolder = Renombrar
+
+# en: Rename the selected folder.
+integration.renameIntegrationFolder.tip = Renombra la carpeta seleccionada.
+
+# en: Rename
+quests.unitRenameFolder = Renombrar
+
+# en: Rename the selected folder.
+quests.unitRenameFolder.tip = Renombra la carpeta seleccionada.
+
+# en: Rename
+rename.title = Renombrar
+
+# en: Renamed to '{name}' and updated {count} reference.
+rename.to.one = Renombrado a «{name}» y actualizada {count} referencia.
+
+# en: Renamed to '{name}' and updated {count} references.
+rename.to.other = Renombrado a «{name}» y actualizadas {count} referencias.
+
+# en: Renamed to '{name}' (no references found).
+rename.toNothingFollowed = Renombrado a «{name}» (no se han encontrado referencias).
+
+# en: Rename Folder
+folders.rename.title = Renombrar carpeta
+
+# en: Folder name:
+folders.rename.prompt = Nombre de la carpeta:

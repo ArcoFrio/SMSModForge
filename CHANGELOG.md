@@ -1,5 +1,228 @@
 # Changelog
 
+## 1.7.0
+
+A release mostly about sound and about finding your way round the editor.
+Sounds and music tracks can be cut and given effects in the editor, and are
+written over their own files when you save; the Play buttons sound as loud as
+the game does, and a volume can go up to five times the game's own level. A
+Transitions action covers the screen while a scene changes behind it, and Wait
+finally waits. The game's main menu lets you put your packs in order and warns
+when two of them change the same thing. Renames follow everywhere they are
+used, dropdowns are under headings with a short note beside each item, and
+dialogue lines show the game's name tokens in each character's colour. The
+plugin changes too, so update both.
+
+### Before you update
+
+**SetSpriteFocus is called CharacterFocus now.** Same action, same Focused
+setting, a name that says what it does. A pack that uses it is given the new
+name when it opens, you are told how many were renamed, and the original is
+kept beside the manifest on the first save. The game answers to both names, so
+a pack nobody has re-saved still works - but a pack saved with this version
+needs this version's plugin, so update both.
+
+**No pack recolours the player any more.** The game writes "You" above every
+player line in its own grey, and a pack holding a colour for the player - one
+edited by hand, or saved before the player was fixed - repainted it in every
+scene of the game for as long as it was loaded. The editor has never let you
+choose one, so most packs have nothing to change. One that does has the colour
+removed when it opens, is told so, and keeps its original beside the manifest
+on the first save; and the game now ignores a colour for the player, or for any
+pack character shown as "You", in packs nobody has re-saved.
+
+**A track's Volume reads differently, and sounds the same.** The Music tab's
+Volume now reads 1.0 for the game's own level for a track, like the SFX tab's,
+where it used to show the number the game is given - half of that. A track you
+had at 0.8 shows 1.6, and plays exactly as loud as it did.
+
+**Wait waits now.** In the game it never did: the actions after a Wait ran at
+the same moment as the ones before it, whatever its Seconds said. They now run
+that many seconds later, as the editor always claimed. A pack with a Wait at
+the end of a list, or with nothing after it, plays exactly as before; one with
+actions after a Wait will now pause there, so play through anything you set up
+around one.
+
+### New
+
+- **A Transitions action.** Pick a transition and how long the screen stays
+  covered, and the game plays both halves: it goes in, holds, and comes back
+  out on its own. It used to take one signal to go in and another to come out,
+  timed by hand with a Wait that did not wait. The choices are the game's
+  own fade to black, its blink, its white flash and its travel fade, and a
+  black screen with text - the game's "A few minutes later..." screen with
+  any words you like on it, translated with your pack's other texts. The
+  actions after a Transitions wait until the screen is covered, so whatever
+  they change - a scene, a place, who is standing there - happens out of
+  sight. It draws over everything, the dialogue box included, and the screen
+  cannot be clicked through while it is up. The blink and the flash run the
+  game's own course, so they have no time to set.
+- **Sound cues over a dialogue line.** A new ♪ button beside the formatting
+  buttons lists the pack's auto-trigger patterns - *door*, *smooch*, whatever
+  your sounds answer to - with the sound each one plays. Pick one and it is
+  written into the line where the cursor is, spaced off the words around it;
+  press the ▶ beside it to hear the sound first, as edited if you edited it.
+  No more trips to the SFX tab to remember whether it was *kiss* or *smooch*.
+- **Dropdowns under headings.** Every list that holds both the pack's things
+  and the game's now says which is which, with the pack's own on top: the
+  busts, levels, GameObjects and NPCs of Set-Active and the actions and
+  conditions like it, bust fields, expressions, the outfits on a line, where a
+  navigator or map button goes, and a screen's button sound. Lists of the
+  pack's own things follow your folders, as the variable pickers already did:
+  scenes, sound effects and list variables. A screen's objects are under the
+  screen they are in, and the action and condition types are under what they
+  do - Characters, Objects and scenes, Places and the screen, Sound,
+  Variables, Timing and chance, Quests. Components are under made for packs,
+  the game's scripts and Unity's own; the game's conversations under the
+  folder each is in; the game's screens under the object each belongs to.
+- **Notes beside dropdown items**, the way Direct Path has them: what each
+  action and condition does, what each target category reaches, what each of
+  the game's signals sets off (flash is a camera flash with its sound, drink a
+  blink with a drinking sound), what each Variable operation and component
+  does, a game quest's journal line, a game screen's contents - and in
+  Set-Active's Bust list, whose bust each is: "Anna" beside one of hers, "Elf -
+  party" beside an outfit you made. The note shows only in the open list, and
+  typing searches it too, so "camera" finds flash.
+- **Name tokens in their character's colour.** In the dialogue lines, {M} is
+  drawn in Anna's name colour, {D} in Josef's, {B} and {S} in Adrian's, {DA}
+  in Emma's and {PC} in the player's light grey - your pack's colours for
+  them, if you changed any - still on their dark chip, in both the Game look
+  and the plain rows. {F}, the family as a whole, keeps the blue it had.
+- **Volume sliders, and louder than the game.** A sound's default volume and
+  a track's volume each have a slider from 0 to 5 beside a short box, and
+  both start at 1.0 - the game's own level. Past 1 is louder than the game
+  goes by itself: up to five times for a track, and for a sound the same
+  squared curve the game uses below 1, so 2 is four times as loud. The game
+  plays it that loud too. Before, anything past 1 did nothing, in the game and
+  in the editor - which is why changing the volume above 1 made no difference
+  to Play.
+- **Play sounds as loud as the game.** The Play buttons in the SFX and Music
+  tabs and in the sound editor now play at the level the game does, read from
+  the game's own files: everything it plays goes through one mixer that holds
+  it about 10 dB down, and a sound effect's volume is squared on the way out
+  (0.5 is a quarter). They used to play at the volume as typed, and music at
+  full when it had none - all of it louder than the game would ever play it.
+- **Edit the sound in the Music tab too.** The same strip, cuts and effects as
+  the SFX tab, for a music track. "▶ Play" on a long track takes a moment to
+  get ready the first time it plays from a spot; it says so while it does.
+- **Arrange your packs on the game's main menu.** Drag a pack up or down the
+  list there; a line shows where it will go. The list is the order packs load
+  in, and where two packs change the same thing of the game's, the one lower
+  in the list wins. Until you move one, the list is alphabetical - Z over A,
+  which is how packs have always loaded - and a pack you install later goes to
+  the bottom. Which dialogue starts when two packs' dialogues could start at
+  the same priority does not depend on the list: that stays alphabetical, so
+  moving a pack never changes which conversation plays.
+- **The pack list warns when two packs change the same thing.** Both get an
+  amber "Changes the same as ..." beside them, and the game's log says what
+  they both change and whose change shows. Only the game's own things can
+  clash - its characters, the objects in its levels and screens a pack
+  overrides, the lines of its conversations a pack rewrites or takes out, and
+  the tasks of its quests; a pack's own scenes, places and sounds are its own.
+  Finding them reuses the packs the menu already reads, so the menu does not
+  take any longer to appear.
+- **Edit a sound in the SFX tab.** A new "Edit the sound" box shows the sound
+  as a strip, like Audacity's but one channel tall. The mouse wheel zooms in
+  and out around the pointer (Shift and the wheel scroll), a click picks a
+  spot and highlights the piece it is in, "✂ Cut here" splits that piece in
+  two - as many times as you like - and "Delete piece" takes the highlighted
+  one out, the rest closing up behind it. Under the strip are Pitch (in
+  semitones, keeping the length), Speed (keeping the pitch), Echo and Reverb.
+  "▶ Play" plays the sound as edited from the spot picked, with a line
+  following it. A sound with variants (Plap_1.ogg beside Plap.ogg) lets you
+  pick which file is on the strip; each is cut on its own, and the effects
+  apply to all. When you save, the edited sound is written over its file -
+  same name, same format; an MP3 becomes an OGG of the same name, since
+  nothing here can write MP3 - so the pack holds one file per sound and ships
+  one. The recording is kept in a .originals folder in the pack, which the
+  export leaves out: every later edit is made from it again rather than from
+  the last edit, and Reset gives it back on the next save. A recording another
+  sound also plays is not written over - that would change the other sound
+  too - and gets a file of its own in an "edited" folder instead. Undo works
+  on every cut and every slider.
+- **A rename is followed everywhere, as soon as you are done with the box.**
+  Rename anything in its own box - a character, an outfit, a face, a variable,
+  a place, a dialogue, a scene, an NPC, a music track, a sound, a quest or a
+  task, an object in a place, an NPC placed in one - and when you leave the
+  box or press Enter, everything in the pack that uses the name follows it. A
+  small notice in the corner says how many places changed; it used to be a
+  dialog, which got in the way of the click that left the box.
+- **Folders are renamed where they stand.** The Rename buttons on the tabs'
+  toolbars are gone: they only ever renamed folders, and with a record
+  selected they did nothing at all. Right-click a folder and pick Rename, or
+  select it and press F2; Enter keeps the new name, Escape puts the old one
+  back.
+- **A Pack folder button**, right of Edit… at the top: it opens your pack's
+  folder in File Explorer, where its art, sounds and translations are and
+  where a file has to be for players to get it. It is greyed out until the
+  pack has a folder - a new pack gets one when it is saved.
+
+### Changed
+
+- **EmitSignal no longer offers DialogueStart, DialogueEnd or the
+  transitions.** A dialogue sends DialogueStart and DialogueEnd itself, so
+  sending them by hand only ever doubled them; the fades, the blink and the
+  white flash are what the Transitions action is for. A row that already
+  sends one still sends it, and you can still type any signal into the box.
+
+### Fixed
+
+- **The player's name was the wrong colour.** The editor wrote it in white,
+  as though the game gave the player no colour. The game writes "You" above
+  every player line in a light grey, #B0B0B0 - read from the game's own files
+  - and the editor now does too, on the dialogue rows and in the Characters
+  tab.
+- **8 and 9 were missing from the Game look.** Lines drawn the way the game
+  draws them showed nothing where an 8 or a 9 was, and the same for + @ # < =
+  > { | }. The game itself always showed them: its dialogue font fills in
+  characters as lines need them, from the Curse Casual font file, and the copy
+  that comes with ModForge was taken before anything had needed those. The
+  preview now fills them in from the same font file the same way, so they look
+  as they do in the game - and the note under the Text box, which measures
+  whether a line fits, counts them at their real width instead of none.
+- **Two group headings were in English in every language.** The variable
+  pickers filed loose variables under "Ungrouped" and the game's variables
+  without a list under "Other", whatever language the editor was in.
+- **Opening a recent pack could throw away what you had just typed.** With a
+  box still being typed in, File > Recent opened the other pack without asking
+  whether to save, because the box had not handed its text over yet. What is
+  being typed counts as a change now, there and everywhere else the editor
+  asks before closing a pack.
+- **Renames left references behind in a lot of places.** Typed params were
+  followed, and little else. An action or condition aimed at a scene, a bust,
+  a place, an object or an NPC through its Category and Target was left
+  pointing at the old name, and so were Level fields, the music a button
+  changes to, the sound a screen's buttons make, rows inside a dice roll,
+  a screen button's actions and conditions, and an object's own conditions.
+  All of them follow now. A face renamed on one character follows only that
+  character's lines - everybody has a Happy - and an object renamed in a place
+  follows only the rows that lead through that object, not another of the
+  same name.
+- **A new record's references were lost when you renamed it while its key
+  still followed its name.** A scene, place, dialogue, NPC, track or sound you
+  have just added takes its runtime name from what you type as its name, and
+  anything made to point at it in between was left pointing at the old one.
+- **Size labels no longer say art has to be 256x256.** The bust sprite fields
+  and the Sprites and expressions box said "256x256" as though nothing else
+  worked, when art of any size is scaled to fit - 256x256 is the size whose
+  pixels land exactly as drawn, and the fields now say so. The front mask of a
+  place said 256x143, which was never true: a mask can be any size, and
+  ModForge's own mask painter writes 256x256 ones. It now says it is optional,
+  like the back mask beside it.
+- **Your pack's translations follow a rename.** They file each line under
+  the name of what it belongs to - a dialogue's key, a character's - so
+  renaming one moved its translated lines to "not used" and the game showed
+  them in English. They move with the rename now, written with the next save,
+  and an undone rename leaves them where they were.
+- **Borrowed faces match your bust in the preview.** On an outfit you added to
+  one of the game's characters, "= default" borrows the game's own blink,
+  mouth and faces - and the preview drew them from the smaller copies that
+  come with ModForge, stretched back up, so they never matched the sharp
+  256x256 bust you drew. ModForge now comes with those faces at the game's
+  full size too, and a borrowed blink, mouth or face is drawn from them. The
+  game's own outfits still preview from the smaller copies, as before, and the
+  game itself always used its own full-size art.
+
 ## 1.6.3
 
 A release of smaller improvements. Actions and conditions show a picture of

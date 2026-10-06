@@ -45,8 +45,10 @@ WHAT IS DELIBERATELY LEFT OUT
     content showing them, they are excluded from Shared/VanillaCastData.cs on
     purpose, and a generated dataset is a side door into the repository.
 
-    The player. `You` has a name colour and a voice, but is not a character an
-    author picks in the Characters tab.
+    The player from the cast. `You` is not a character an author picks in the
+    Characters tab, so it is written apart, as `Speaker.Player` - with its name
+    colour from the same dump ("you"), and the voice the author of SMSAndroids
+    gave, since the actor dump never recorded the player.
 
 Usage:
     python Tools/regen_vanilla_speech.py --actors <F10 json> --scripts <F11 json>
@@ -304,7 +306,8 @@ def main():
 
     text = TEMPLATE % {"count": len(rows), "with_var": with_var,
                        "with_col": with_col,
-                       "rows": "\n".join(line(r) for r in rows)}
+                       "rows": "\n".join(line(r) for r in rows),
+                       "player_color": cs(colors.get("you"))}
 
     if args.check:
         print("(--check: nothing was written)")
@@ -456,6 +459,26 @@ TEMPLATE = '''namespace SMSModForge.Shared
             foreach (var s in All) map[s.Key] = s;
             return map;
         }
+
+        /// <summary>
+        /// The player, "You", as the game has them type: 45 characters a
+        /// second at pitch 0.4-0.7. Not read out of the game like the rest -
+        /// the extraction never recorded the player - but given by the author
+        /// of SMSAndroids, who knows the game, and matched to what their pack
+        /// had set (2026-09-27).
+        /// <para/>
+        /// The name colour IS the game's: its speaker label says "You" for
+        /// every player line - the player's Actor names itself with that
+        /// constant, not with the name the player chose - and the game's
+        /// TMPWordColorizer has "you" at #B0B0B0, a light grey (read from
+        /// 1.8E's files, 2026-10-05).
+        /// <para/>
+        /// Kept out of <see cref="All"/> and <see cref="For"/> on purpose: those
+        /// answer for the game's cast, and the plugin asks them about faces the
+        /// player does not have. The same in every pack - no pack can change it.
+        /// </summary>
+        public static readonly Speaker Player =
+            new Speaker("player", "You", null, null, true, 45, 0.4f, 0.7f, null, null, %(player_color)s);
 
         /// <summary>This character as a speaker, or null for one the game never
         /// gave a voice -- a bust in a crowd, or a pack's own character.</summary>

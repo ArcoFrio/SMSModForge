@@ -121,8 +121,11 @@ public sealed class DropdownGroupingTests
             // under different chapters do not collapse into one heading.
             Assert.Contains("deep", headings["Story / Chapter 2"]);
 
-            // And anything not filed is still offered rather than vanishing.
-            Assert.Contains("loose", headings["Ungrouped"]);
+            // And anything not filed is still offered rather than vanishing -
+            // under a heading in the editor's language (it was English in
+            // every one before 1.7.0), below the folders.
+            Assert.Contains("loose", headings[OptionGroups.NotInFolder]);
+            Assert.Equal(OptionGroups.NotInFolder, headings.Keys.Last());
         });
     }
 

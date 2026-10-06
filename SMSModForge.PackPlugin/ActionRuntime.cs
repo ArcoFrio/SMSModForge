@@ -23,21 +23,45 @@ namespace SMSModForge.PackPlugin
         /// Run every action in <paramref name="actions"/> in declaration
         /// order. Returns true if the variable store needs to be flushed.
         /// </summary>
-        public static bool ExecuteList(JArray actions, PackContext ctx)
+        public static bool ExecuteList(JArray actions, PackContext ctx) => ExecuteFrom(actions, 0, ctx);
+
+        /// <summary>
+        /// Run <paramref name="actions"/> from <paramref name="from"/> on, until
+        /// one holds the list - a Wait, or a transition until the screen is
+        /// covered - when the rest is handed to <see cref="ActionSequence"/> to
+        /// run when the time comes (1.7.0).
+        /// </summary>
+        internal static bool ExecuteFrom(JArray actions, int from, PackContext ctx)
         {
             if (actions == null) return false;
             bool dirty = false;
-            foreach (var a in actions)
+            for (int i = from; i < actions.Count; i++)
             {
-                try { if (ExecuteOne((JObject)a, ctx)) dirty = true; }
+                var a = actions[i] as JObject;
+                if (a == null) continue;
+                _hold = 0f;
+                try { if (ExecuteOne(a, ctx)) dirty = true; }
                 catch (System.Exception ex)
                 {
                     ctx.Log?.LogError("[SMSModForge.PackPlugin] Action " +
-                        (string)((JObject)a)["type"] + " threw: " + ex.Message);
+                        (string)a["type"] + " threw: " + ex.Message);
+                }
+                if (_hold > 0f && i + 1 < actions.Count)
+                {
+                    float wait = _hold;
+                    _hold = 0f;
+                    ActionSequence.Resume(actions, i + 1, ctx, wait);
+                    break;
                 }
             }
             return dirty;
         }
+
+        /// <summary>Set by an action that holds the rest of its list, for that
+        /// many seconds. Read by <see cref="ExecuteFrom"/> after each action -
+        /// and left set by the last one of a list, so a Wait at the end of a
+        /// dice branch holds the list the dice roll is in.</summary>
+        private static float _hold;
 
         private static bool ExecuteOne(JObject a, PackContext ctx)
         {
@@ -73,7 +97,8 @@ namespace SMSModForge.PackPlugin
                         return ctx.Vars.Increment(name, delta);
                     }
 
-                case "SetSpriteFocus":
+                case "CharacterFocus":
+                case "SetSpriteFocus":   // its name until 1.7.0, in packs not saved since
                     {
                         // Raise/lower the whole cast's busts over the CG layer —
                         // the ModForge replacement for the vanilla SpriteFocus
@@ -642,8 +667,29 @@ namespace SMSModForge.PackPlugin
 
                 case "Wait":
                     {
-                        float.TryParse((string)p["seconds"] ?? "0", NumberStyles.Float, CultureInfo.InvariantCulture, out var seconds);
-                        ctx.Plugin?.StartCoroutine(WaitCoroutine(seconds));
+                        // The actions after it wait - which, until 1.7.0, they
+                        // did not: this started a coroutine that waited and
+                        // then did nothing, and everything after it ran at once.
+                        // 0.5 when unset, what the editor shows an untouched
+                        // Wait as.
+                        float.TryParse((string)p["seconds"] ?? "0.5", NumberStyles.Float, CultureInfo.InvariantCulture, out var seconds);
+                        _hold = Mathf.Max(0f, seconds);
+                        return false;
+                    }
+
+                case SMSModForge.Shared.Transitions.ActionType:
+                    {
+                        // In, on screen, out - one row for what used to be two
+                        // signals timed by hand. The actions after it wait until
+                        // the screen is covered, so whatever they change is not
+                        // seen changing.
+                        string style = (string)p[SMSModForge.Shared.Transitions.StyleParam] ?? SMSModForge.Shared.Transitions.FadeToBlack;
+                        float seconds = SMSModForge.Shared.Transitions.DefaultSeconds;
+                        if (p[SMSModForge.Shared.Transitions.SecondsParam] != null)
+                            float.TryParse((string)p[SMSModForge.Shared.Transitions.SecondsParam], NumberStyles.Float,
+                                           CultureInfo.InvariantCulture, out seconds);
+                        string text = (string)p[SMSModForge.Shared.Transitions.TextParam];
+                        _hold = TransitionRuntime.Play(style, seconds, text, ctx);
                         return false;
                     }
 
@@ -814,11 +860,6 @@ namespace SMSModForge.PackPlugin
                     ctx.Log?.LogWarning("[SMSModForge.PackPlugin] Unknown action type '" + type + "'");
                     return false;
             }
-        }
-
-        private static IEnumerator WaitCoroutine(float seconds)
-        {
-            yield return new WaitForSeconds(seconds);
         }
 
         /// <summary>

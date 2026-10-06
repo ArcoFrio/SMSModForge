@@ -139,6 +139,28 @@ public sealed class DialogueLinePreviewTests
     }
 
     [Fact]
+    public void EveryDigitIsDrawn_EightAndNineIncluded()
+    {
+        // The game's dialogue font was exported without an 8 or a 9 - it fills
+        // in characters as lines need them - and the preview drew nothing for
+        // either (1.7.0; see TmpGlyphBaker). Each digit on its own has to put
+        // ink down, as much as its neighbours do; the empty line beside it is
+        // the control.
+        WindowHarness.Run(host =>
+        {
+            if (!Available) { _out.WriteLine("no font extraction - skipping"); return; }
+
+            int empty = Lit(Pixels(Shown(""), out _, out _) ?? Array.Empty<byte>());
+            var lit = "0123456789".ToDictionary(d => d, d => Lit(Pixels(Shown(d.ToString()), out _, out _)!) - empty);
+            _out.WriteLine(string.Join("  ", lit.Select(p => $"{p.Key}:{p.Value}")));
+            int least = lit.Where(p => p.Key < '8').Min(p => p.Value);
+            Assert.True(least > 30, "the digits the export has should draw");
+            Assert.True(lit['8'] > least / 2, $"8 drew {lit['8']} pixels of ink");
+            Assert.True(lit['9'] > least / 2, $"9 drew {lit['9']} pixels of ink");
+        });
+    }
+
+    [Fact]
     public void AnEmptyLineDrawsNoText()
     {
         // The control for the one above: the counter has to be able to say
@@ -577,12 +599,14 @@ public sealed class DialogueLinePreviewTests
     public void ATokenIsMarkedOnTheRow()
     {
         // The one thing a row cannot say by drawing the line the way the player
-        // will read it: the player sees their own name here, not "{PC}".
+        // will read it: the player sees a word here, not "{F}". {F} because it
+        // names nobody - the family as a whole - so it keeps the token mark
+        // where the others take a character's colour (see the test below).
         WindowHarness.Run(host =>
         {
             if (!Available) { _out.WriteLine("no font extraction - skipping"); return; }
 
-            var withToken = Pixels(Shown("Morning, {PC}."), out _, out _);
+            var withToken = Pixels(Shown("Morning, {F}."), out _, out _);
             var without = Pixels(Shown("Morning, Alex."), out _, out _);
             Assert.NotNull(withToken);
             Assert.NotNull(without);
@@ -590,9 +614,39 @@ public sealed class DialogueLinePreviewTests
             int marked = Near(withToken!, SMSModForge.Rendering.DialogueLook.TokenHex);
             int plain = Near(without!, SMSModForge.Rendering.DialogueLook.TokenHex);
 
-            _out.WriteLine($"{marked} token-coloured pixel(s) with {{PC}}, {plain} without");
+            _out.WriteLine($"{marked} token-coloured pixel(s) with {{F}}, {plain} without");
             Assert.True(marked > 20, "the token was drawn the same as the words around it");
             Assert.True(plain < 5, "an ordinary line is token-coloured too - so this says nothing");
+        });
+    }
+
+    [Fact]
+    public void ATokenIsInTheColourOfWhomItStandsFor()
+    {
+        // The author, 1.7.0: {M} in Anna's name colour and so on, from the
+        // pack's cast - given here, so the test says what it draws and not
+        // what some window left behind.
+        WindowHarness.Run(host =>
+        {
+            if (!Available) { _out.WriteLine("no font extraction - skipping"); return; }
+            var was = SMSModForge.Rendering.DialogueMarkup.TokenColor;
+            SMSModForge.Rendering.DialogueMarkup.TokenColor = t => t == "{M}"
+                ? SMSModForge.Rendering.UiColor.Parse("#FF00FF") : null;
+            try
+            {
+                var mum = Pixels(Shown("Morning, {M}."), out _, out _);
+                var family = Pixels(Shown("Morning, {F}."), out _, out _);
+                int inHers = Near(mum!, "#FF00FF");
+                int inFamily = Near(family!, "#FF00FF");
+                int marked = Near(mum!, SMSModForge.Rendering.DialogueLook.TokenHex);
+                _out.WriteLine($"{{M}}: {inHers} in her colour, {marked} in the mark; {{F}}: {inFamily} in her colour");
+                Assert.True(inHers > 20, "{M} was not drawn in the colour given for it");
+                Assert.True(marked < 5, "{M} was still drawn in the token mark");
+                Assert.True(inFamily < 5, "{F} took a colour that is not its own");
+                // Still on its chip: it is a token all the same.
+                Assert.True(Near(mum!, SMSModForge.Rendering.DialogueLook.TokenChipHex, 10) > 40);
+            }
+            finally { SMSModForge.Rendering.DialogueMarkup.TokenColor = was; }
         });
     }
 

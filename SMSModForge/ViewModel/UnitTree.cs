@@ -76,7 +76,7 @@ public abstract class UnitTreeItem : ObservableObject, IFilterableTreeNode
 }
 
 /// <summary>A folder holding nested folders and unit leaves.</summary>
-public sealed class UnitFolderNode : UnitTreeItem
+public sealed class UnitFolderNode : UnitTreeItem, IRenamableFolder
 {
     private string _name;
     public UnitFolderNode(string name)
@@ -89,6 +89,15 @@ public sealed class UnitFolderNode : UnitTreeItem
     {
         get => _name;
         set { _name = value ?? ""; OnPropertyChanged(); OnPropertyChanged(nameof(Label)); }
+    }
+
+    private bool _isRenaming;
+
+    /// <summary>Whether its name is being typed over, in place in the tree.</summary>
+    public bool IsRenaming
+    {
+        get => _isRenaming;
+        set { if (_isRenaming == value) return; _isRenaming = value; OnPropertyChanged(); }
     }
 
     public ObservableCollection<UnitTreeItem> Children { get; } = new();

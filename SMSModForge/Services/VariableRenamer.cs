@@ -40,79 +40,32 @@ public static class VariableRenamer
         if (pack == null || string.IsNullOrEmpty(oldName) || oldName == newName) return 0;
         int n = 0;
 
-        foreach (var d in pack.Dialogues)
+        // Every condition and action, wherever it lives: the walk is shared
+        // with every other rename, so a place one learns about the other does
+        // too. Written out here it had missed dice branches, screens' buttons
+        // and objects' own conditions.
+        foreach (var (c, _) in PackWalk.Conditions(pack))
+            n += RenameParams(c.Params, ConditionSchemas.For(c.Type), oldName, newName);
+        foreach (var (a, _) in PackWalk.Actions(pack))
+            n += RenameParams(a.Params, ActionSchemas.For(a.Type), oldName, newName);
+
+        // Dialogue lines and button labels.
+        foreach (var (read, write, _) in PackWalk.Texts(pack))
         {
-            n += RenameConditions(d.StartConditions, oldName, newName);
-            foreach (var node in d.Nodes)
-            {
-                n += RenameConditions(node.Conditions, oldName, newName);
-                n += RenameActions(node.ActionsOnStart, oldName, newName);
-                n += RenameActions(node.ActionsOnFinish, oldName, newName);
-                n += RenameTokens(node.Text, oldName, newName, out var text);
-                node.Text = text;
-            }
+            int c = RenameTokens(read(), oldName, newName, out var text);
+            if (c > 0) write(text);
+            n += c;
         }
 
-        foreach (var r in pack.IntegrationRules)
-        {
-            n += RenameConditions(r.Conditions, oldName, newName);
-            n += RenameActions(r.Actions, oldName, newName);
-            foreach (var b in r.Branches)
-            {
-                n += RenameConditions(b.Conditions, oldName, newName);
-                n += RenameActions(b.Actions, oldName, newName);
-            }
-        }
-
-        foreach (var p in pack.Places)
-        {
-            n += RenameHooks(p.OnEnter, oldName, newName);
-            n += RenameHooks(p.OnExit, oldName, newName);
-            n += RenameNavButtons(p.NavigatorButtons, oldName, newName);
-        }
-        foreach (var v in pack.VanillaExtensions)
-            n += RenameNavButtons(v.NavigatorButtons, oldName, newName);
-
-        foreach (var b in pack.MapButtons)
-        {
-            n += RenameConditions(b.Conditions, oldName, newName);
-            n += RenameTokens(b.Label, oldName, newName, out var lbl);
-            b.Label = lbl;
-        }
-
-        foreach (var w in pack.Wallpapers)
-            n += RenameConditions(w.UnlockConditions, oldName, newName);
-
-        // A quest's start conditions, and each task's completion conditions and
-        // actions, read and write variables like any other list.
+        // A counter following one of the pack's own variables. A game variable
+        // of the same name is a different variable.
         foreach (var q in pack.Quests)
-        {
-            n += RenameConditions(q.StartConditions, oldName, newName);
-            n += RenameConditions(q.ResetConditions, oldName, newName);
-            foreach (var place in q.SiteConditions)
-                n += RenameConditions(place.Conditions, oldName, newName);
             foreach (var t in q.AllTasks())
-            {
-                n += RenameConditions(t.Conditions, oldName, newName);
-                n += RenameConditions(t.ShowConditions, oldName, newName);
-                n += RenameActions(t.Actions, oldName, newName);
-                // A counter following one of the pack's own variables. A game
-                // variable of the same name is a different variable.
                 if (t.CountsFromVariable && !t.CountVariableIsVanilla && t.CountVariable == oldName)
                 {
                     t.CountVariable = newName;
                     n++;
                 }
-            }
-
-            // And what the pack hangs on the game's own tasks, in a quest it
-            // extends: those actions read and write variables like any other.
-            foreach (var h in q.VanillaTasks)
-            {
-                n += RenameActions(h.Actions, oldName, newName);
-                n += RenameConditions(h.ShowConditions, oldName, newName);
-            }
-        }
 
         // Every other text a player reads. [PV:name] is filled in in all of
         // them now, so a rename that left one behind would leave it naming a
@@ -134,7 +87,8 @@ public static class VariableRenamer
         => Translation.LanguageSession.Slots(pack, out _)
             .Where(s => s.Kind != Shared.PackTexts.Kind.Line
                         && s.Kind != Shared.PackTexts.Kind.NavigatorLabel
-                        && s.Kind != Shared.PackTexts.Kind.MapLabel);
+                        && s.Kind != Shared.PackTexts.Kind.MapLabel
+                        && s.Kind != Shared.PackTexts.Kind.TransitionText);
 
     /// <summary>Where one of <see cref="OtherTexts"/> is, said the way the
     /// rest of the list says it.</summary>
@@ -164,51 +118,17 @@ public static class VariableRenamer
         var hits = new List<string>();
         if (pack == null || string.IsNullOrEmpty(name)) return hits;
 
-        foreach (var d in pack.Dialogues)
-        {
-            if (CountConditions(d.StartConditions, name) > 0) hits.Add(Loc.F("walk.dialogueStart", "name", d.Key));
-            foreach (var node in d.Nodes)
-            {
-                int c = CountConditions(node.Conditions, name)
-                      + CountActions(node.ActionsOnStart, name)
-                      + CountActions(node.ActionsOnFinish, name)
-                      + (HasToken(node.Text, name) ? 1 : 0);
-                if (c > 0) hits.Add(Loc.F("walk.dialogueNode", "name", d.Key, "node", node.Id));
-            }
-        }
-        foreach (var r in pack.IntegrationRules)
-        {
-            int c = CountConditions(r.Conditions, name) + CountActions(r.Actions, name);
-            foreach (var b in r.Branches)
-                c += CountConditions(b.Conditions, name) + CountActions(b.Actions, name);
-            if (c > 0) hits.Add(Loc.F("walk.rule", "name", r.Key));
-        }
-        foreach (var p in pack.Places)
-        {
-            int c = p.OnEnter.Concat(p.OnExit).Sum(h => CountConditions(h.Conditions, name) + CountActions(h.Actions, name))
-                  + p.NavigatorButtons.Sum(b => CountConditions(b.Conditions, name) + (HasToken(b.Label, name) ? 1 : 0));
-            if (c > 0) hits.Add(Loc.F("walk.place", "name", p.Key));
-        }
-        foreach (var v in pack.VanillaExtensions)
-            if (v.NavigatorButtons.Sum(b => CountConditions(b.Conditions, name) + (HasToken(b.Label, name) ? 1 : 0)) > 0)
-                hits.Add(Loc.F("walk.vanillaExtension", "name", v.Source));
-        foreach (var b in pack.MapButtons)
-            if (CountConditions(b.Conditions, name) > 0 || HasToken(b.Label, name))
-                hits.Add(Loc.F("walk.mapButton", "name", b.Label));
-        foreach (var w in pack.Wallpapers)
-            if (CountConditions(w.UnlockConditions, name) > 0)
-                hits.Add(Loc.F("walk.wallpaperUnlock", "name", w.Key));
+        void Hit(string where) { if (!hits.Contains(where)) hits.Add(where); }
+
+        foreach (var (c, where) in PackWalk.Conditions(pack))
+            if (CountParams(c.Params, ConditionSchemas.For(c.Type), name) > 0) Hit(where);
+        foreach (var (a, where) in PackWalk.Actions(pack))
+            if (CountParams(a.Params, ActionSchemas.For(a.Type), name) > 0) Hit(where);
+        foreach (var (read, _, where) in PackWalk.Texts(pack))
+            if (HasToken(read(), name)) Hit(where);
         foreach (var q in pack.Quests)
-        {
-            int c = CountConditions(q.StartConditions, name)
-                  + CountConditions(q.ResetConditions, name)
-                  + q.SiteConditions.Sum(s => CountConditions(s.Conditions, name))
-                  + q.AllTasks().Sum(t => CountConditions(t.Conditions, name) + CountConditions(t.ShowConditions, name)
-                                          + CountActions(t.Actions, name)
-                                          + (t.CountsFromVariable && !t.CountVariableIsVanilla && t.CountVariable == name ? 1 : 0))
-                  + q.VanillaTasks.Sum(h => CountActions(h.Actions, name) + CountConditions(h.ShowConditions, name));
-            if (c > 0) hits.Add(Loc.F("walk.quest", "name", q.Key));
-        }
+            if (q.AllTasks().Any(t => t.CountsFromVariable && !t.CountVariableIsVanilla && t.CountVariable == name))
+                Hit(Loc.F("walk.quest", "name", q.Key));
 
         foreach (var slot in OtherTexts(pack))
         {
@@ -221,35 +141,6 @@ public static class VariableRenamer
     }
 
     // ── Walkers ───────────────────────────────────────────────────────────
-
-    private static int RenameHooks(List<LevelHookDef> hooks, string o, string n)
-        => hooks.Sum(h => RenameConditions(h.Conditions, o, n) + RenameActions(h.Actions, o, n));
-
-    private static int RenameNavButtons(List<NavigatorButtonDef> buttons, string o, string n)
-    {
-        int c = 0;
-        foreach (var b in buttons)
-        {
-            c += RenameConditions(b.Conditions, o, n);
-            c += RenameTokens(b.Label, o, n, out var lbl);
-            b.Label = lbl;
-        }
-        return c;
-    }
-
-    private static int RenameConditions(List<NodeConditionDef> conditions, string o, string n)
-        => conditions?.Sum(c => RenameCondition(c, o, n)) ?? 0;
-
-    private static int RenameCondition(NodeConditionDef c, string o, string n)
-    {
-        // Groups carry nested conditions instead of params.
-        if (NodeConditionTypes.IsGroup(c.Type))
-            return RenameConditions(c.Conditions, o, n);
-        return RenameParams(c.Params, ConditionSchemas.For(c.Type), o, n);
-    }
-
-    private static int RenameActions(List<NodeActionDef> actions, string o, string n)
-        => actions?.Sum(a => RenameParams(a.Params, ActionSchemas.For(a.Type), o, n)) ?? 0;
 
     /// <summary>Rewrite the variable-referencing params of one action/condition.</summary>
     private static int RenameParams(Dictionary<string, string> ps, IEnumerable<ParamSchema> schemas, string o, string n)
@@ -277,17 +168,6 @@ public static class VariableRenamer
         }
         return count;
     }
-
-    private static int CountConditions(List<NodeConditionDef> cs, string name)
-        => cs?.Sum(c => CountCondition(c, name)) ?? 0;
-
-    private static int CountCondition(NodeConditionDef c, string name)
-        => NodeConditionTypes.IsGroup(c.Type)
-            ? CountConditions(c.Conditions, name)
-            : CountParams(c.Params, ConditionSchemas.For(c.Type), name);
-
-    private static int CountActions(List<NodeActionDef> acts, string name)
-        => acts?.Sum(a => CountParams(a.Params, ActionSchemas.For(a.Type), name)) ?? 0;
 
     private static int CountParams(Dictionary<string, string> ps, IEnumerable<ParamSchema> schemas, string name)
     {

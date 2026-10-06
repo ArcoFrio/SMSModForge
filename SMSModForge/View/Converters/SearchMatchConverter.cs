@@ -52,7 +52,11 @@ public sealed class SearchMatchConverter : IMultiValueConverter
         if (item is System.Windows.Data.CollectionViewGroup group)
             return group.Items.Any(child => Matches(child, box, typed));
 
-        return TextOf(item, box).IndexOf(typed, StringComparison.CurrentCultureIgnoreCase) >= 0;
+        // The note beside it counts too (1.7.0): "camera" finds flash, and a
+        // character's name finds every bust of theirs.
+        string note = OptionNotes.NoteFor(OptionNotes.GetKind(box), item);
+        return TextOf(item, box).IndexOf(typed, StringComparison.CurrentCultureIgnoreCase) >= 0
+               || (note.Length > 0 && note.IndexOf(typed, StringComparison.CurrentCultureIgnoreCase) >= 0);
     }
 
     /// <summary>

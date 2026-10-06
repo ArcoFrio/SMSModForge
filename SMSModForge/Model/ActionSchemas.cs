@@ -41,7 +41,7 @@ public static class ActionSchemas
         },
 
         // ── Actor / bust visuals ───────────────────────────────────────
-        [NodeActionTypes.SetSpriteFocus] = new[]
+        [NodeActionTypes.CharacterFocus] = new[]
         {
             new ParamSchema("focused", "param.label.focused", ParamType.Bool, "true",
                 "action.setSpriteFocus.focused.tip"),
@@ -157,6 +157,18 @@ public static class ActionSchemas
         {
             new ParamSchema("seconds", "param.label.seconds", ParamType.Float, "0.5",
                 "action.wait.seconds.tip"),
+        },
+        [NodeActionTypes.Transitions] = new[]
+        {
+            new ParamSchema(Shared.Transitions.StyleParam, "param.label.transition", ParamType.Choice,
+                Shared.Transitions.FadeToBlack, "action.transitions.style.tip",
+                fixedOptions: Shared.Transitions.Styles),
+            new ParamSchema(Shared.Transitions.SecondsParam, "param.label.onScreenS", ParamType.Float,
+                "2", "action.transitions.seconds.tip",
+                shownWhen: Shared.Transitions.StyleParam, shownWhenValues: Shared.Transitions.Timed),
+            new ParamSchema(Shared.Transitions.TextParam, "param.label.screenText", ParamType.String,
+                Shared.Transitions.DefaultText, "action.transitions.text.tip",
+                shownWhen: Shared.Transitions.StyleParam, shownWhenValues: new[] { Shared.Transitions.TextScreen }),
         },
 
         // ── List + variable helpers ────────────────────────────────────

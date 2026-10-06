@@ -36,10 +36,17 @@ public sealed class VanillaUiAssets : IUiAssets
     private readonly Dictionary<string, string> _nameByKey = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, UiSprite?> _sprites = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, UiFontSet?> _fonts = new(StringComparer.OrdinalIgnoreCase);
+    private readonly List<string> _fontFileFolders = new();
 
-    public VanillaUiAssets(string extractionRoot)
+    /// <param name="fontFileFolders">Where the font files behind the game's
+    /// dynamic font assets are, besides the extraction's own Fonts folder -
+    /// see <see cref="TmpGlyphBaker"/>.</param>
+    public VanillaUiAssets(string extractionRoot, IEnumerable<string>? fontFileFolders = null)
     {
         _root = extractionRoot ?? "";
+        _fontFileFolders.Add(Path.Combine(_root, "Fonts"));
+        _fontFileFolders.Add(_root);
+        if (fontFileFolders != null) _fontFileFolders.AddRange(fontFileFolders);
         LoadSpriteIndex();
     }
 
@@ -293,7 +300,22 @@ public sealed class VanillaUiAssets : IUiAssets
         {
             var alpha = DecodeAlpha(Path.Combine(_root, "Fonts", font.Atlas.Pages[0]));
             if (alpha != null)
-                made = new UiFontSet(font, alpha.Value.Pixels, alpha.Value.Width, alpha.Value.Height);
+            {
+                var (pixels, w, h) = alpha.Value;
+
+                // A dynamic asset fills in what it lacks from its source font,
+                // as it does in the game - into rows added below its atlas, so
+                // the atlas handed out now is the one those glyphs land in.
+                string? source = font.IsDistanceField ? TmpGlyphBaker.SourceFileIn(_fontFileFolders, font) : null;
+                if (source != null)
+                {
+                    var grown = new byte[w * h * 2];
+                    Buffer.BlockCopy(pixels, 0, grown, 0, pixels.Length);
+                    if (TmpGlyphBaker.Attach(font, source, grown, w, h, h * 2))
+                        (pixels, h) = (grown, h * 2);
+                }
+                made = new UiFontSet(font, pixels, w, h);
+            }
         }
         _fonts[name] = made;
         return made;

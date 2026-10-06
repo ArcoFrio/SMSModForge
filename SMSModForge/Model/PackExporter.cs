@@ -203,6 +203,11 @@ public static class PackExporter
         // its keys back: the author's safety net, and a file the plugin would
         // never read.
         string norm = relPath.Replace('\\', '/');
+
+        // The recordings sounds edited in the editor have replaced, kept so
+        // an edit can still be undone: the pack plays the edits, and a player
+        // has no use for the takes they were cut from.
+        if (Services.Audio.SfxEdits.IsKept(norm)) return true;
         if (norm.StartsWith(Shared.PackTexts.Folder + "/", StringComparison.OrdinalIgnoreCase)
             && norm.EndsWith(".bak", StringComparison.OrdinalIgnoreCase)) return true;
 

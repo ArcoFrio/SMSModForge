@@ -116,6 +116,10 @@ public static class PackMigration
         var report = new Report();
         if (pack == null) return report;
 
+        // Counted before the cast is merged: that is what puts the player back
+        // to the built-in one, colour and all, and it says nothing about it.
+        int playerColour = ThePlayersOwnColour(pack);
+
         // The game's own cast, adopted from whatever an older pack called them.
         // Counted rather than assumed: a pack that never declared a vanilla
         // character reports nothing, which is what keeps this quiet for packs
@@ -164,6 +168,9 @@ public static class PackMigration
         if (playerVoice > 0)
             report.Note(Loc.T("migration.playerVoice"), playerVoice);
 
+        if (playerColour > 0)
+            report.Note(Loc.T("migration.playerColour"), playerColour);
+
         int restated = DropRestatedFaces(pack);
         if (restated > 0)
             report.Note(Loc.T("migration.restatedFaces"), restated);
@@ -175,6 +182,10 @@ public static class PackMigration
         int recategorised = RenameTheOldGameObjectsCategory(pack);
         if (recategorised > 0)
             report.Note(Loc.T("migration.oldGameObjectsCategory"), recategorised);
+
+        int focus = RenameSetSpriteFocus(pack);
+        if (focus > 0)
+            report.Note(Loc.T("migration.characterFocus"), focus);
 
         if (GiveItAVersion(pack))
             report.Note(Loc.F("migration.versionGiven", "version", pack.Version));
@@ -435,6 +446,26 @@ public static class PackMigration
             changed++;
         }
         return changed;
+    }
+
+    /// <summary>
+    /// A name colour a pack set for the player (1.7.0). The player is written in
+    /// the game's grey in every pack (<see cref="Shared.PlayerLabel"/>), and the
+    /// editor has never let one be chosen - so one in the file was written by
+    /// hand or before the player was fixed, and would repaint "You" in every
+    /// scene of the game. <see cref="CharacterMerge.EnsurePlayer"/> puts the
+    /// player back to the built-in one; this only counts what that takes away,
+    /// so the author is told and the original is kept.
+    /// </summary>
+    private static int ThePlayersOwnColour(ModPack pack)
+    {
+        int found = 0;
+        if (pack.Characters != null)
+            found += pack.Characters.Count(c => c.IsPlayer && !string.IsNullOrWhiteSpace(c.NameColor));
+        if (pack.Actors != null)
+            found += pack.Actors.Count(a => string.Equals(a.Key, CharacterDef.PlayerKey, StringComparison.OrdinalIgnoreCase)
+                                            && !string.IsNullOrWhiteSpace(a.NameColor));
+        return found;
     }
 
     /// <summary>
@@ -786,68 +817,34 @@ public static class PackMigration
     }
 
     /// <summary>
+    /// Give SetSpriteFocus actions the name the action has had since 1.7.0,
+    /// CharacterFocus (the author: it is about the characters, not about
+    /// sprites). Nothing else about the action changed - the same one param,
+    /// meaning the same thing - and the runtime still answers to the old name,
+    /// so this is about what the editor lists.
+    /// </summary>
+    private static int RenameSetSpriteFocus(ModPack pack)
+    {
+        int renamed = 0;
+        foreach (var action in SavedObjects.All<NodeActionDef>(pack))
+            if (action.Type == NodeActionTypes.SetSpriteFocus)
+            {
+                action.Type = NodeActionTypes.CharacterFocus;
+                renamed++;
+            }
+        return renamed;
+    }
+
+    /// <summary>
     /// The params of every action and condition in the pack, found by walking
     /// everything the pack saves rather than a list of places to look: a list
     /// goes stale the day something new learns to hold an action.
-    /// <para/>
-    /// Follows the members that are written to the manifest (a public setter,
-    /// not [JsonIgnore]) through the pack's own model types, so nothing the
-    /// editor only computes or borrows from the game's catalog is visited.
     /// </summary>
     private static IEnumerable<Dictionary<string, string>> EveryParams(ModPack pack)
-    {
-        var seen = new HashSet<object>(ReferenceEqualityComparer.Instance);
-        var found = new List<Dictionary<string, string>>();
-        Visit(pack);
-        return found;
-
-        void Visit(object? o)
-        {
-            if (o == null || o is string || o.GetType().IsPrimitive || o.GetType().IsEnum) return;
-            if (!seen.Add(o)) return;
-            if (o is NodeActionDef a && a.Params != null) found.Add(a.Params);
-            if (o is NodeConditionDef c && c.Params != null) found.Add(c.Params);
-
-            if (o is System.Collections.IDictionary dict)
-            {
-                foreach (var v in dict.Values) Visit(v);
-                return;
-            }
-            if (o is System.Collections.IEnumerable list)
-            {
-                foreach (var v in list) Visit(v);
-                return;
-            }
-            if (o.GetType().Namespace != typeof(ModPack).Namespace) return;
-
-            foreach (var prop in SavedMembers(o.GetType()))
-            {
-                object? value;
-                try { value = prop.GetValue(o); }
-                catch (Exception) { continue; }
-                Visit(value);
-            }
-        }
-    }
-
-    private static readonly Dictionary<Type, System.Reflection.PropertyInfo[]> _savedMembers = new();
-
-    private static System.Reflection.PropertyInfo[] SavedMembers(Type type)
-    {
-        lock (_savedMembers)
-        {
-            if (_savedMembers.TryGetValue(type, out var known)) return known;
-            var props = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
-                .Where(p => p.CanRead && p.GetIndexParameters().Length == 0
-                            && p.SetMethod != null && p.SetMethod.IsPublic
-                            && !Attribute.IsDefined(p, typeof(Newtonsoft.Json.JsonIgnoreAttribute))
-                            && !p.PropertyType.IsPrimitive && p.PropertyType != typeof(string)
-                            && !p.PropertyType.IsEnum)
-                .ToArray();
-            _savedMembers[type] = props;
-            return props;
-        }
-    }
+        => SavedObjects.All<object>(pack, o => o is NodeActionDef or NodeConditionDef)
+            .Select(o => o is NodeActionDef a ? a.Params : ((NodeConditionDef)o).Params)
+            .Where(p => p != null)
+            .ToList();
 
     /// <summary>Every action a pack holds, wherever it lives.</summary>
     private static IEnumerable<NodeActionDef> EveryAction(ModPack pack)

@@ -226,9 +226,9 @@ public sealed class NodeConditionViewModel : ObservableObject
             OnPropertyChanged(nameof(IsGoOverlayCategory));
             OnPropertyChanged(nameof(IsGoLevelScoped));
             OnPropertyChanged(nameof(IsGoTargetEnabled));
-            OnPropertyChanged(nameof(GoOverlayOptions));
-            OnPropertyChanged(nameof(GoNpcOptions));
-            OnPropertyChanged(nameof(GoOverlayLevelOptions));
+            OnPropertyChanged(nameof(GoOverlayOptions)); OnPropertyChanged(nameof(GoOverlayOptionsGrouped));
+            OnPropertyChanged(nameof(GoNpcOptions)); OnPropertyChanged(nameof(GoNpcOptionsGrouped));
+            OnPropertyChanged(nameof(GoOverlayLevelOptions)); OnPropertyChanged(nameof(GoOverlayLevelOptionsGrouped));
             NotifyPreview();
             OnPropertyChanged(nameof(IsInputFamily));
             OnPropertyChanged(nameof(InputDevice));
@@ -354,6 +354,10 @@ public sealed class NodeConditionViewModel : ObservableObject
     /// The Variable* family is folded into a single "Variable" entry (the
     /// row exposes Source + Comparison separately).
     /// </summary>
+    /// <summary><see cref="AvailableTypes"/> under what each is for. A view
+    /// of its own per row, so the rows never share a current item.</summary>
+    public System.ComponentModel.ICollectionView AvailableTypesGrouped => OptionGroups.ConditionTypes(AvailableTypes);
+
     public IReadOnlyList<string> AvailableTypes => Context switch
     {
         ConditionContext.OneShot => _oneShotTypes ??= BuildPicker(NodeConditionTypes.AllOneShot),
@@ -839,9 +843,9 @@ public sealed class NodeConditionViewModel : ObservableObject
             OnPropertyChanged(nameof(IsGoOverlayCategory));
             OnPropertyChanged(nameof(IsGoLevelScoped));
             OnPropertyChanged(nameof(IsGoTargetEnabled));
-            OnPropertyChanged(nameof(GoOverlayOptions));
-            OnPropertyChanged(nameof(GoNpcOptions));
-            OnPropertyChanged(nameof(GoOverlayLevelOptions));
+            OnPropertyChanged(nameof(GoOverlayOptions)); OnPropertyChanged(nameof(GoOverlayOptionsGrouped));
+            OnPropertyChanged(nameof(GoNpcOptions)); OnPropertyChanged(nameof(GoNpcOptionsGrouped));
+            OnPropertyChanged(nameof(GoOverlayLevelOptions)); OnPropertyChanged(nameof(GoOverlayLevelOptionsGrouped));
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(ParamsAsText));
             NotifyPreview();
@@ -875,8 +879,8 @@ public sealed class NodeConditionViewModel : ObservableObject
             if (string.IsNullOrEmpty(value)) Model.Params.Remove("overlayLevel");
             else Model.Params["overlayLevel"] = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(GoOverlayOptions));
-            OnPropertyChanged(nameof(GoNpcOptions));
+            OnPropertyChanged(nameof(GoOverlayOptions)); OnPropertyChanged(nameof(GoOverlayOptionsGrouped));
+            OnPropertyChanged(nameof(GoNpcOptions)); OnPropertyChanged(nameof(GoNpcOptionsGrouped));
             OnPropertyChanged(nameof(IsGoTargetEnabled));
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(ParamsAsText));
@@ -905,6 +909,10 @@ public sealed class NodeConditionViewModel : ObservableObject
             : NodeActionViewModel.StrictOverlayProvider?.Invoke(GoOverlayLevel)
               ?? Array.Empty<string>();
 
+    /// <summary><see cref="GoOverlayOptions"/> under whose each object is.</summary>
+    public System.ComponentModel.ICollectionView GoOverlayOptionsGrouped
+        => NodeActionViewModel.ByOrigin(GoOverlayOptions, GoOverlayLevel, NodeActionViewModel.GamesOverlayProvider);
+
     /// <summary>The NPCs placed in the chosen level - the same list the
     /// action's NPCs category offers.</summary>
     public IEnumerable<string> GoNpcOptions =>
@@ -913,6 +921,9 @@ public sealed class NodeConditionViewModel : ObservableObject
             : NodeActionViewModel.NpcProvider?.Invoke(GoOverlayLevel)
               ?? Array.Empty<string>();
 
+    public System.ComponentModel.ICollectionView GoNpcOptionsGrouped
+        => NodeActionViewModel.ByOrigin(GoNpcOptions, GoOverlayLevel, NodeActionViewModel.GamesNpcProvider);
+
     /// <summary>Levels that actually carry GameObjects — pack places and vanilla
     /// extensions alike - or, for the NPCs category, levels with NPCs placed.</summary>
     public IEnumerable<NavigatorTargetOption> GoOverlayLevelOptions =>
@@ -920,6 +931,9 @@ public sealed class NodeConditionViewModel : ObservableObject
             ? NodeActionViewModel.NpcLevelProvider
             : NodeActionViewModel.OverlayLevelProvider)?.Invoke()
         ?? Array.Empty<NavigatorTargetOption>();
+
+    public System.ComponentModel.ICollectionView GoOverlayLevelOptionsGrouped
+        => OptionGroups.Levels(GoOverlayLevelOptions.ToList());
 
     // ── What the target looks like (the author, 1.6.3) ────────────────────
     //

@@ -14,9 +14,9 @@
          reports comes from Shared/ForgeVersion.cs. Kept in step, and listed
          here only so the next person to look for a version finds the note
          rather than believing these. -->
-    <Version>1.6.3</Version>
-    <AssemblyVersion>1.6.3.0</AssemblyVersion>
-    <FileVersion>1.6.3.0</FileVersion>
+    <Version>1.7.0</Version>
+    <AssemblyVersion>1.7.0.0</AssemblyVersion>
+    <FileVersion>1.7.0.0</FileVersion>
     <AssemblyName>SMSModForge.PackPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -110,6 +110,11 @@
     <Compile Include="PackManifest.cs" />
     <Compile Include="PluginLanguage.cs" />
     <Compile Include="PackSwitchSetting.cs" />
+    <Compile Include="PackOrderSetting.cs" />
+    <Compile Include="PackListDrag.cs" />
+    <Compile Include="ActionSequence.cs" />
+    <Compile Include="TransitionRuntime.cs" />
+    <Compile Include="SoundGain.cs" />
     <Compile Include="PackSwitchBox.cs" />
     <Compile Include="SaveCarry.cs" />
     <Compile Include="TypewriterTiming.cs" />
@@ -287,6 +292,9 @@
     <Compile Include="..\Shared\SaveLoadChecks.cs" Link="Shared\SaveLoadChecks.cs" />
     <Compile Include="..\Shared\SaveRecord.cs" Link="Shared\SaveRecord.cs" />
     <Compile Include="..\Shared\PackSwitches.cs" Link="Shared\PackSwitches.cs" />
+    <Compile Include="..\Shared\PackOrder.cs" Link="Shared\PackOrder.cs" />
+    <Compile Include="..\Shared\PackConflicts.cs" Link="Shared\PackConflicts.cs" />
+    <Compile Include="..\Shared\Transitions.cs" Link="Shared\Transitions.cs" />
     <Compile Include="..\Shared\RichText.cs" Link="Shared\RichText.cs" />
     <Compile Include="..\Shared\TextTemplates.cs" Link="Shared\TextTemplates.cs" />
     <Compile Include="..\Shared\XUnityLanguage.cs" Link="Shared\XUnityLanguage.cs" />
@@ -297,6 +305,7 @@
     <Compile Include="..\Shared\VanillaCastData.cs" Link="Shared\VanillaCastData.cs" />
     <Compile Include="..\Shared\VanillaBustExpressions.cs" Link="Shared\VanillaBustExpressions.cs" />
     <Compile Include="..\Shared\VanillaSpeech.cs" Link="Shared\VanillaSpeech.cs" />
+    <Compile Include="..\Shared\PlayerLabel.cs" Link="Shared\PlayerLabel.cs" />
     <Compile Include="..\Shared\SpriteSlotNames.cs" Link="Shared\SpriteSlotNames.cs" />
     <Compile Include="..\Shared\AnimationClock.cs" Link="Shared\AnimationClock.cs" />
     <Compile Include="..\Shared\MediaKinds.cs" Link="Shared\MediaKinds.cs" />

@@ -258,7 +258,9 @@ public sealed class NodeTextToolbarTests
 
             var buttons = bar.Children.OfType<Button>().ToList();
             _out.WriteLine($"{buttons.Count} button(s) over the line");
-            Assert.Equal(4, buttons.Count);
+            // Bold, italic, colour, size - and the sound cue (1.7.0).
+            Assert.Equal(5, buttons.Count);
+            Assert.Contains(buttons, b => b.Name == "SfxPatternButton");
 
             // Not focusable, every one of them: see the class doc.
             foreach (var button in buttons)
@@ -289,6 +291,82 @@ public sealed class NodeTextToolbarTests
             _out.WriteLine($"box '{box.Text}'; node '{vm.SelectedNode!.Text}'");
             Assert.Equal("<b>Finally</b>. There you are.", box.Text);
             Assert.Equal("<b>Finally</b>. There you are.", vm.SelectedNode.Text);
+        });
+    }
+
+    // ── The sound cue (the author, 1.7.0) ────────────────────────────
+
+    [Theory]
+    [InlineData("Finally there", 7, 0, "Finally *plap* there")]     // between two words: spaced off both
+    [InlineData("Finally there", 13, 0, "Finally there *plap*")]    // at the end: spaced off the last word
+    [InlineData("Finally ", 8, 0, "Finally *plap*")]                // after a space: no second one
+    [InlineData("", 0, 0, "*plap*")]                                // an empty line takes it alone
+    [InlineData("Finally there", 8, 5, "Finally there *plap*")]     // a selection is kept, the cue goes after it
+    public void ASoundCueGoesInWhereTheCursorIs_SpacedOffTheWordsAround(string line, int caret, int selected, string expected)
+    {
+        WindowHarness.Run(_ =>
+        {
+            var box = Box(line);
+            box.Focus();
+            box.Select(caret, selected);
+            WindowHarness.Pump();
+
+            box.Insert("*plap*", box.InsertionPoint);
+            WindowHarness.Pump();
+
+            _out.WriteLine($"'{box.Text}', caret {box.CaretIndex}");
+            Assert.Equal(expected, box.Text);
+            // The caret ends after the cue, ready to carry on typing.
+            Assert.Equal(expected.IndexOf("*plap*") + "*plap*".Length, box.CaretIndex);
+
+            // And it is one step to take back.
+            Assert.True(box.Undo());
+            Assert.Equal(line, box.Text);
+        });
+    }
+
+    [Fact]
+    public void TheSoundCueListOffersThePacksPatterns_AndPickingOneWritesItIn()
+    {
+        WindowHarness.Run(window =>
+        {
+            var vm = WithALine(window);
+            var box = (MarkupTextBox)window.FindName("NodeTextBox");
+
+            // With none in the pack, the list says where they come from.
+            var empty = window.SfxPatternMenu(0)!;
+            var only = Assert.Single(empty.Items.OfType<MenuItem>());
+            Assert.False(only.IsEnabled);
+            _out.WriteLine($"empty: {only.Header}");
+
+            vm.AddSfxCommand.Execute(null);
+            var smooch = vm.Sfx.Last();
+            smooch.DisplayName = "Smooch";
+            smooch.TextPatternsCsv = "*smooch*, *kiss*";
+            vm.AddSfxCommand.Execute(null);
+            var door = vm.Sfx.Last();
+            door.DisplayName = "Door";
+            door.TextPatternsCsv = "*door*";
+            WindowHarness.Pump();
+
+            box.Focus();
+            box.Select(8, 0);                       // "Finally.| There you are."
+            WindowHarness.Pump();
+
+            var menu = window.SfxPatternMenu(box.InsertionPoint)!;
+            var items = menu.Items.OfType<MenuItem>().ToList();
+            string Words(MenuItem m) => string.Join(" ", ((Panel)m.Header).Children.OfType<TextBlock>().Select(t => t.Text));
+            foreach (var m in items) _out.WriteLine(Words(m));
+            // By sound, then in the order each sound lists them.
+            Assert.Equal(new[] { "*door* Door", "*smooch* Smooch", "*kiss* Smooch" }, items.Select(Words));
+            // Each row can be heard from where it is.
+            Assert.All(items, m => Assert.Single(((Panel)m.Header).Children.OfType<Button>()));
+
+            items[2].RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent));
+            WindowHarness.Pump();
+
+            _out.WriteLine($"node '{vm.SelectedNode!.Text}'");
+            Assert.Equal("Finally. *kiss* There you are.", vm.SelectedNode.Text);
         });
     }
 

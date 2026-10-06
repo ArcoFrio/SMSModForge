@@ -64,13 +64,35 @@ public sealed class SfxViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// The recording, as the author picked it. An edited sound plays a file
+    /// made from it when the pack is saved (<see cref="SfxDef.Edit"/>); this
+    /// stays the recording, which is what there is to pick.
+    /// </summary>
     public string AudioPath
     {
-        get => Model.AudioPath;
+        get => Model.Edit?.Source is { Length: > 0 } source ? source : Model.AudioPath;
         set
         {
-            if (Model.AudioPath == value) return;
-            Model.AudioPath = value ?? "";
+            value ??= "";
+            if (AudioPath == value) return;
+            if (Model.Edit is { } edit)
+            {
+                // A different recording: the cuts were moments in the old one
+                // and mean nothing in this, while pitch, speed, echo and
+                // reverb still say what the author wants done to it.
+                bool neverMade = string.Equals(Model.AudioPath, edit.Source, System.StringComparison.OrdinalIgnoreCase);
+                edit.Source = value;
+                edit.Files = null;
+                edit.Rendered = null;
+                if (neverMade) Model.AudioPath = value;
+                if (!edit.ChangesAnything)
+                {
+                    Model.Edit = null;
+                    Model.AudioPath = value;
+                }
+            }
+            else Model.AudioPath = value;
             OnPropertyChanged();
         }
     }
@@ -87,17 +109,33 @@ public sealed class SfxViewModel : ObservableObject
     private string? _defaultVolumeText;
     public string DefaultVolumeText
     {
-        get => _defaultVolumeText ??=
-            (Model.DefaultVolume.HasValue ? Model.DefaultVolume.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "");
+        get => _defaultVolumeText ??= SMSModForge.Model.GameLoudness.VolumeText(Model.DefaultVolume ?? 1f);
         set
         {
             _defaultVolumeText = value ?? "";
-            string s = _defaultVolumeText.Trim();
-            if (string.IsNullOrEmpty(s)) Model.DefaultVolume = null;
-            else if (float.TryParse(s, System.Globalization.NumberStyles.Float,
-                                    System.Globalization.CultureInfo.InvariantCulture, out var f))
-                Model.DefaultVolume = f;
+            if (SMSModForge.Model.GameLoudness.TryReadVolume(_defaultVolumeText, out float shown))
+            {
+                Model.DefaultVolume = SMSModForge.Model.GameLoudness.SfxStored(shown);
+                OnPropertyChanged(nameof(DefaultVolumeValue));
+            }
             OnPropertyChanged();
+        }
+    }
+
+    /// <summary>
+    /// The same volume for the slider beside the box: 0 to
+    /// <see cref="SMSModForge.Model.GameLoudness.MaxVolume"/>, 1.0 - the game's own level -
+    /// when the pack leaves it (the author, 1.7.0).
+    /// </summary>
+    public double DefaultVolumeValue
+    {
+        get => Model.DefaultVolume ?? 1f;
+        set
+        {
+            Model.DefaultVolume = SMSModForge.Model.GameLoudness.SfxStored(System.Math.Round(value, 2));
+            _defaultVolumeText = null;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(DefaultVolumeText));
         }
     }
 

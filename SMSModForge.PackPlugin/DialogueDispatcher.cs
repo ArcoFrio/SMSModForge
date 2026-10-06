@@ -65,6 +65,10 @@ namespace SMSModForge.PackPlugin
 
         public DialogueDispatcher(PackContext ctx) { _ctx = ctx; }
 
+        /// <summary>The pack these dialogues are from: what a tie between two
+        /// packs' dialogues is broken by (<see cref="SMSModForge.Shared.PackOrder.DialogueTie"/>).</summary>
+        public string PackId => _ctx.PackId;
+
         public void Add(DialogueBuilder.BuiltDialogue built)
         {
             if (built == null) return;

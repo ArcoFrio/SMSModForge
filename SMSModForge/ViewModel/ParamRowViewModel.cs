@@ -156,6 +156,24 @@ public sealed class ParamRowViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// False when <see cref="ParamSchema.ShownWhen"/> names a sibling param
+    /// that doesn't hold one of <see cref="ParamSchema.ShownWhenValues"/>: the
+    /// row is not drawn at all. Read live, like <see cref="IsEnabled"/>.
+    /// </summary>
+    public bool IsShown
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(Schema.ShownWhen)) return true;
+            _params.TryGetValue(Schema.ShownWhen, out var gate);
+            if (string.IsNullOrEmpty(gate)) gate = DefaultOf(Schema.ShownWhen);
+            foreach (string v in Schema.ShownWhenValues)
+                if (string.Equals(gate, v, System.StringComparison.OrdinalIgnoreCase)) return true;
+            return false;
+        }
+    }
+
     /// <summary>Default of a sibling param, looked up through the owner's
     /// schema list. Set by the parent when it builds the rows.</summary>
     internal System.Func<string, string> DefaultOf { get; set; } = _ => "";
@@ -165,6 +183,7 @@ public sealed class ParamRowViewModel : ObservableObject
     public void RefreshEnabled()
     {
         OnPropertyChanged(nameof(IsEnabled));
+        OnPropertyChanged(nameof(IsShown));
 
         // The filter depends on a sibling too, and a picker still offering
         // stills after the author switched the target to a scene would be a

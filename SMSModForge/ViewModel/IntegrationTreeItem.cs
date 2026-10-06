@@ -43,7 +43,7 @@ public abstract class IntegrationTreeItem : ObservableObject, IFilterableTreeNod
 }
 
 /// <summary>A folder holding nested folders and rule leaves.</summary>
-public sealed class IntegrationFolderNode : IntegrationTreeItem
+public sealed class IntegrationFolderNode : IntegrationTreeItem, IRenamableFolder
 {
     private string _name;
     public IntegrationFolderNode(string name)
@@ -56,6 +56,15 @@ public sealed class IntegrationFolderNode : IntegrationTreeItem
     {
         get => _name;
         set { _name = value ?? ""; OnPropertyChanged(); OnPropertyChanged(nameof(Label)); }
+    }
+
+    private bool _isRenaming;
+
+    /// <summary>Whether its name is being typed over, in place in the tree.</summary>
+    public bool IsRenaming
+    {
+        get => _isRenaming;
+        set { if (_isRenaming == value) return; _isRenaming = value; OnPropertyChanged(); }
     }
 
     public ObservableCollection<IntegrationTreeItem> Children { get; } = new();

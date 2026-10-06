@@ -64,13 +64,20 @@ public static class NodeActionTypes
     public const string IncrementVariable = "IncrementVariable";
 
     /// <summary>
-    /// Raise or lower an actor's bust relative to the CG / scene layer —
-    /// the generalised replacement for a host sprite-focus marker
-    /// marker. When <c>focused</c> is true the bust's sprite sorting
-    /// orders are bumped so it draws over a full-screen scene; false
-    /// restores the resting orders. Params: <c>actor</c>, <c>focused</c>.
+    /// Raise or lower the cast's busts relative to the CG / scene layer —
+    /// the generalised replacement for a host sprite-focus marker. When
+    /// <c>focused</c> is true the busts' sprite sorting orders are bumped so
+    /// they draw over a full-screen scene; false restores the resting orders.
+    /// Params: <c>focused</c>.
     /// </summary>
-    public const string SetSpriteFocus = "SetSpriteFocus";
+    public const string CharacterFocus = "CharacterFocus";
+
+    /// <summary>
+    /// What <see cref="CharacterFocus"/> was called until 1.7.0 (the author
+    /// renamed it). Not offered; packs naming it are given the new name on load
+    /// (<see cref="PackMigration"/>), and the runtime still answers to it.
+    /// </summary>
+    public const string SetSpriteFocus = "SetSpriteFocus";   // English on purpose: a value older packs stored.
 
     /// <summary>
     /// Trigger the vanilla "leave" fade-out on the actor's current bust by
@@ -230,8 +237,19 @@ public static class NodeActionTypes
     /// </summary>
     public const string PlaySFX = "PlaySFX";
 
-    /// <summary>Wait the specified number of seconds before continuing. Params: <c>seconds</c>.</summary>
+    /// <summary>Wait the specified number of seconds before continuing - the
+    /// actions after it run that much later (they did not, before 1.7.0).
+    /// Params: <c>seconds</c>.</summary>
     public const string Wait = "Wait";
+
+    /// <summary>
+    /// A transition: the game's fade to black, blink, white flash or travel
+    /// fade, or a black screen with the author's words, on screen for as long
+    /// as asked and then gone (1.7.0). The actions after it run once the screen
+    /// is covered. Params: <c>style</c>, <c>seconds</c>, <c>text</c>. See
+    /// <see cref="Shared.Transitions"/>.
+    /// </summary>
+    public const string Transitions = Shared.Transitions.ActionType;
 
     /// <summary>
     /// Pick a random element from a list and write it into a target
@@ -350,7 +368,7 @@ public static class NodeActionTypes
     public static readonly string[] All =
     {
         SetVariable, IncrementVariable,
-        SetSpriteFocus, LeaveBust,
+        CharacterFocus, LeaveBust,
         // EmitSignalDelayed is not offered: EmitSignal carries a delay now, and
         // two entries for one thing made an author choose before knowing there
         // was a choice. Packs naming it still load and still run - see
@@ -358,7 +376,7 @@ public static class NodeActionTypes
         SetGameObjectActive, SetSprite, EmitSignal, LeaveUiFaded,
         TransitionLevels, FadeSprite, SetComponentProperty, MoveGameObject, SpinGameObject,
         SwitchMusic, PlaySFX,
-        Wait,
+        Wait, Transitions,
         PickRandomFromList, AddToList, RemoveFromList, ClearList, CountList,
         DiceRoll, SetWeather,
         Quest,

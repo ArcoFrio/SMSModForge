@@ -525,6 +525,81 @@ public sealed class LanguageSession
             foreach (var t in UiTexts(ui.Nodes, id, "", games)) yield return t;
         }
 
+        // The words on transitions' black screens, last and in the same order
+        // PackTexts walks them (1.7.0).
+        foreach (var d in pack.Dialogues)
+        {
+            if (string.IsNullOrEmpty(d.Key)) continue;
+            foreach (var n in d.Nodes)
+            {
+                string id = n.Id.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                foreach (var a in n.ActionsOnStart.Concat(n.ActionsOnFinish))
+                    foreach (var t in TransitionTexts(a, d.Key, id)) yield return t;
+            }
+        }
+        foreach (var r in pack.IntegrationRules)
+        {
+            if (string.IsNullOrEmpty(r.Key)) continue;
+            foreach (var a in r.Actions.Concat(r.Branches.SelectMany(b => b.Actions)))
+                foreach (var t in TransitionTexts(a, r.Key, "")) yield return t;
+        }
+        foreach (var p in pack.Places)
+        {
+            if (string.IsNullOrEmpty(p.Key)) continue;
+            foreach (var a in p.OnEnter.Concat(p.OnExit).SelectMany(h => h.Actions))
+                foreach (var t in TransitionTexts(a, p.Key, "")) yield return t;
+        }
+        foreach (var q in pack.Quests)
+        {
+            if (string.IsNullOrEmpty(q.Key)) continue;
+            foreach (var t in QuestTransitions(q.Tasks, q.Key)) yield return t;
+            foreach (var t in QuestTransitions(q.AddedTasks, q.Key)) yield return t;
+            foreach (var a in q.VanillaTasks.SelectMany(h => h.Actions))
+                foreach (var t in TransitionTexts(a, q.Key, "")) yield return t;
+        }
+        foreach (var ui in pack.Uis)
+        {
+            string id = !string.IsNullOrEmpty(ui.Id) ? ui.Id : ui.Name;
+            if (string.IsNullOrEmpty(id)) continue;
+            foreach (var t in UiTransitions(ui.Nodes, id)) yield return t;
+        }
+
+        IEnumerable<Candidate> TransitionTexts(NodeActionDef action, string owner, string detail)
+        {
+            if (action == null) yield break;
+            if (action.Type == NodeActionTypes.Transitions
+                && action.Params.TryGetValue(Shared.Transitions.StyleParam, out var style)
+                && style == Shared.Transitions.TextScreen)
+            {
+                var a = action;
+                yield return Make(PackTexts.Kind.TransitionText, owner, detail, a, Shared.Transitions.TextParam,
+                                  () => a.Params.TryGetValue(Shared.Transitions.TextParam, out var v) ? v : "",
+                                  v => a.Params[Shared.Transitions.TextParam] = v ?? "");
+            }
+            foreach (var b in action.Branches ?? new List<DiceBranchDef>())
+                foreach (var t in TransitionTexts(b.Action, owner, detail)) yield return t;
+        }
+
+        IEnumerable<Candidate> QuestTransitions(IEnumerable<QuestTaskDef> tasks, string quest)
+        {
+            foreach (var t in tasks)
+            {
+                foreach (var a in t.Actions)
+                    foreach (var c in TransitionTexts(a, quest, "")) yield return c;
+                foreach (var c in QuestTransitions(t.Subtasks, quest)) yield return c;
+            }
+        }
+
+        IEnumerable<Candidate> UiTransitions(IEnumerable<UiNodeDef> nodes, string ui)
+        {
+            foreach (var n in nodes)
+            {
+                foreach (var a in n.OnClick)
+                    foreach (var c in TransitionTexts(a, ui, "")) yield return c;
+                foreach (var c in UiTransitions(n.Children, ui)) yield return c;
+            }
+        }
+
         IEnumerable<Candidate> Tasks(IEnumerable<QuestTaskDef> tasks, string quest)
         {
             foreach (var t in tasks)

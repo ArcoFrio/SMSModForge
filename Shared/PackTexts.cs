@@ -98,6 +98,9 @@ namespace SMSModForge.Shared
             TaskQuestDescription,
             GameTaskQuestDescription,
             UiText,
+
+            /// <summary>The words on a transition's black screen (1.7.0).</summary>
+            TransitionText,
         }
 
         /// <summary>One text, where it is, and what it belongs to.</summary>
@@ -238,8 +241,108 @@ namespace SMSModForge.Shared
                 UiNodes(walk, ui["nodes"], id, "ui." + Segment(id), "", games);
             }
 
+            Transitions(walk, manifest);
+
             walk.KeyTheEmptyOnes();
             return walk.Sites;
+        }
+
+        /// <summary>
+        /// The words on a transition's black screen, wherever a pack runs
+        /// actions: its lines, its rules, its places, its quests, its screens.
+        /// Owned by what they are in, so two in one line are told apart by
+        /// order, the way two buttons to one level are.
+        /// </summary>
+        private static void Transitions(Walk walk, JObject manifest)
+        {
+            foreach (var d in Objects(manifest["dialogues"]))
+            {
+                string key = (string)d["key"];
+                if (string.IsNullOrEmpty(key)) continue;
+                foreach (var n in Objects(d["nodes"]))
+                {
+                    var id = n["id"];
+                    if (id == null || id.Type != JTokenType.Integer) continue;
+                    string idText = ((long)id).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    string root = LineKey(key, idText) + ".transition";
+                    foreach (var a in Objects(n["actionsOnStart"])) TransitionText(walk, a, key, idText, root);
+                    foreach (var a in Objects(n["actionsOnFinish"])) TransitionText(walk, a, key, idText, root);
+                }
+            }
+
+            foreach (var r in Objects(manifest["integrationRules"]))
+            {
+                string key = (string)r["key"];
+                if (string.IsNullOrEmpty(key)) continue;
+                string root = "rule." + Segment(key) + ".transition";
+                foreach (var a in Objects(r["actions"])) TransitionText(walk, a, key, "", root);
+                foreach (var b in Objects(r["branches"]))
+                    foreach (var a in Objects(b["actions"])) TransitionText(walk, a, key, "", root);
+            }
+
+            foreach (var p in Objects(manifest["places"]))
+            {
+                string key = (string)p["key"];
+                if (string.IsNullOrEmpty(key)) continue;
+                string root = "place." + Segment(key) + ".transition";
+                foreach (string hooks in new[] { "onEnter", "onExit" })
+                    foreach (var h in Objects(p[hooks]))
+                        foreach (var a in Objects(h["actions"])) TransitionText(walk, a, key, "", root);
+            }
+
+            foreach (var q in Objects(manifest["quests"]))
+            {
+                string key = (string)q["key"];
+                if (string.IsNullOrEmpty(key)) continue;
+                string root = "quest." + Segment(key) + ".transition";
+                QuestTransitions(walk, q["tasks"], key, root);
+                QuestTransitions(walk, q[QuestTreeEdits.AddedTasksKey], key, root);
+                foreach (var h in Objects(q["vanillaTasks"]))
+                    foreach (var a in Objects(h["actions"])) TransitionText(walk, a, key, "", root);
+            }
+
+            foreach (var ui in Objects(manifest["uis"]))
+            {
+                string id = (string)ui["id"];
+                if (string.IsNullOrEmpty(id)) id = (string)ui["name"];
+                if (string.IsNullOrEmpty(id)) continue;
+                UiTransitions(walk, ui["nodes"], id, "ui." + Segment(id) + ".transition");
+            }
+        }
+
+        private static void QuestTransitions(Walk walk, JToken tasks, string quest, string root)
+        {
+            foreach (var t in Objects(tasks))
+            {
+                foreach (var a in Objects(t["actions"])) TransitionText(walk, a, quest, "", root);
+                QuestTransitions(walk, t["subtasks"], quest, root);
+            }
+        }
+
+        private static void UiTransitions(Walk walk, JToken nodes, string ui, string root)
+        {
+            foreach (var n in Objects(nodes))
+            {
+                foreach (var a in Objects(n["onClick"])) TransitionText(walk, a, ui, "", root);
+                UiTransitions(walk, n["children"], ui, root);
+            }
+        }
+
+        /// <summary>One action's black-screen words, and those of the actions
+        /// inside its dice branches.</summary>
+        private static void TransitionText(Walk walk, JObject action, string owner, string detail, string root)
+        {
+            if ((string)action["type"] == SMSModForge.Shared.Transitions.ActionType)
+            {
+                var ps = action["params"] as JObject;
+                if (ps != null && (string)ps[SMSModForge.Shared.Transitions.StyleParam] == SMSModForge.Shared.Transitions.TextScreen)
+                    walk.Add(ps, SMSModForge.Shared.Transitions.TextParam, Kind.TransitionText, owner, detail, root);
+            }
+            foreach (var b in Objects(action["branches"]))
+            {
+                var inner = b["action"] as JObject;
+                if (inner != null) TransitionText(walk, inner, owner, detail, root);
+            }
         }
 
         /// <summary>Whether a text has no words of its own: absent, or nothing

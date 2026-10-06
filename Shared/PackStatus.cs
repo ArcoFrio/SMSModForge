@@ -74,6 +74,10 @@ namespace SMSModForge.Shared
             /// manifest's <c>language</c>, English when it does not say.</summary>
             public string OwnLanguage = "en";
 
+            /// <summary>The packs this one changes the same things of the
+            /// game's as - see <see cref="PackConflicts"/>. Empty for none.</summary>
+            public List<string> ClashesWith = new List<string>();
+
             private static string ForgeVersion_Current()
             {
                 return Shared.ForgeVersion.Current;
@@ -174,6 +178,17 @@ namespace SMSModForge.Shared
             {
                 Raise(report, Level.Warning);
                 report.Tags.Add(GameTexts.F("game.pack.installedTwice", "folder", facts.Folder));
+            }
+
+            // Changing the same thing of the game's as another pack switched
+            // on: only one of the two changes can be seen. A warning rather
+            // than an error - both packs load, and the list's order says
+            // whose change shows - but one a player should know about, since
+            // it is how a pack "stops working" after another is installed.
+            if (facts.ClashesWith != null && facts.ClashesWith.Count > 0)
+            {
+                Raise(report, Level.Warning);
+                report.Tags.Add(GameTexts.F("game.pack.clashesWith", "packs", GameTexts.JoinAnd(facts.ClashesWith)));
             }
 
             // Being read in a language this pack was not translated into, so

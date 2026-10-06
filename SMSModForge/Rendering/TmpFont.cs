@@ -118,10 +118,28 @@ public sealed class TmpFont
     private Dictionary<int, Glyph>? _byChar;
     private Dictionary<long, float>? _kerning;
 
+    /// <summary>
+    /// Draws a character the atlas lacks, for a dynamic asset whose source
+    /// font is at hand - see <see cref="TmpGlyphBaker"/>. Null for every other
+    /// font, whose atlas is all there is, as it is in the game.
+    /// </summary>
+    [JsonIgnore]
+    internal Func<int, Glyph?>? Bake { get; set; }
+
+    /// <summary>The characters baking was tried for and could not give, so a
+    /// line full of them asks once.</summary>
+    private readonly HashSet<int> _unbakeable = new();
+
+    private readonly object _gate = new();
+
     private void Index()
     {
         if (_byChar != null) return;
+        lock (_gate) { if (_byChar == null) BuildIndex(); }
+    }
 
+    private void BuildIndex()
+    {
         var byGlyphIndex = new Dictionary<int, Glyph>();
         foreach (var g in Glyphs) byGlyphIndex[g.Index] = g;
 
@@ -149,8 +167,25 @@ public sealed class TmpFont
     /// game resolves the rest through <see cref="Fallbacks"/>.</summary>
     public Glyph? GlyphFor(int unicode)
     {
-        Index();
-        return _byChar!.TryGetValue(unicode, out var g) ? g : null;
+        if (Bake == null)
+        {
+            Index();
+            return _byChar!.TryGetValue(unicode, out var g) ? g : null;
+        }
+
+        // Baking adds to the table, and the dialogue font is read by the
+        // validator as well as the preview - so with a baker, every look is
+        // taken under the one lock.
+        lock (_gate)
+        {
+            Index();
+            if (_byChar!.TryGetValue(unicode, out var g)) return g;
+            if (_unbakeable.Contains(unicode)) return null;
+            var baked = Bake(unicode);
+            if (baked == null) { _unbakeable.Add(unicode); return null; }
+            _byChar[unicode] = baked;
+            return baked;
+        }
     }
 
     public bool Has(int unicode) => GlyphFor(unicode) != null;

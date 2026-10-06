@@ -82,11 +82,10 @@ public static class VanillaArtResolver
                 if (replaced != null) return replaced;
                 if (o.Expression.Enabled && Shared.GameArt.IsBorrowed(o.Expression.Prefix))
                 {
-                    // Borrowed from one of the game's busts: that bust's face.
-                    var root = FindArtRoot();
-                    var borrowed = root == null ? null
-                        : Path.Combine(root, Shared.GameArt.BustOf(o.Expression.Prefix)!, "Expression" + face + ".PNG");
-                    if (borrowed != null && File.Exists(borrowed)) return borrowed;
+                    // Borrowed from one of the game's busts: that bust's face,
+                    // at full size, as the outfit's own preview shows it.
+                    var borrowed = GameArtFile(o.Expression.Prefix, "Expression" + face + ".PNG");
+                    if (borrowed != null) return borrowed;
                 }
                 else if (o.Expression.Enabled && !string.IsNullOrEmpty(o.Expression.Prefix))
                 {
@@ -105,16 +104,38 @@ public static class VanillaArtResolver
     /// <summary>
     /// The shipped copy of one file of the game's bust a borrowing field names
     /// (<see cref="Shared.GameArt"/>) - <c>Blink.PNG</c>, <c>Mask.PNG</c>,
-    /// <c>Mouth1.PNG</c> - or null when there is none. Smaller than the game's
-    /// own, which the game uses; for the editor to show and start from.
+    /// <c>Mouth1.PNG</c> - or null when there is none. For the editor to show
+    /// and start from; the game uses its own. The blink, mouths and faces are
+    /// at the game's full size; anything else is the smaller copy.
     /// </summary>
     public static string? GameArtFile(string? field, string file)
     {
         string? bust = Shared.GameArt.BustOf(field);
+        if (string.IsNullOrEmpty(bust)) return null;
+
+        // A face at the game's full size, when one ships (1.7.0): borrowed,
+        // it sits on a pack's own 256x256 bust, and the smaller copy stretched
+        // back up never matched it. Only borrowed fields come through here -
+        // the game's own outfits keep the smaller copies, all alike.
+        string? faces = FindFullFacesRoot();
+        if (faces != null)
+        {
+            string full = Path.Combine(faces, bust, file);
+            if (File.Exists(full)) return full;
+        }
+
         string? root = FindArtRoot();
-        if (string.IsNullOrEmpty(bust) || root == null) return null;
+        if (root == null) return null;
         string path = Path.Combine(root, bust, file);
         return File.Exists(path) ? path : null;
+    }
+
+    /// <summary>The shipped <c>VanillaBustFaces</c> folder - the game's busts'
+    /// blink, mouths and faces at full size - or null when it is absent.</summary>
+    public static string? FindFullFacesRoot()
+    {
+        var shipped = Path.Combine(AppContext.BaseDirectory, "VanillaBustFaces");
+        return Directory.Exists(shipped) ? shipped : null;
     }
 
     /// <summary>The file a pack paints over <paramref name="slot"/> of one of

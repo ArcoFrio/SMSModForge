@@ -345,10 +345,15 @@ public sealed class OutfitConveniencesTests : IDisposable
     {
         var (_, _, added) = AnAddedBust();
         string bust = added.DefaultOutfit!.GameObjectName;
-        string? root = SMSModForge.Rendering.VanillaArtResolver.FindArtRoot();
-        Assert.True(root != null, "no game art beside the tests to borrow from");
+        // The blink at the game's full size (1.7.0), not the smaller copy the
+        // game's own outfits are previewed with - the two must differ, or this
+        // proves nothing about which was drawn.
+        string? root = SMSModForge.Rendering.VanillaArtResolver.FindFullFacesRoot();
+        Assert.True(root != null, "no game faces beside the tests to borrow from");
         string blinkFile = System.IO.Path.Combine(root!, bust, "Blink.PNG");
         Assert.True(System.IO.File.Exists(blinkFile), "the game's bust has no blink here, so this proves nothing");
+        string smaller = System.IO.Path.Combine(SMSModForge.Rendering.VanillaArtResolver.FindArtRoot()!, bust, "Blink.PNG");
+        Assert.NotEqual(System.IO.File.ReadAllBytes(smaller), System.IO.File.ReadAllBytes(blinkFile));
 
         string pack = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "smsmodforge-borrowpreview-" + System.Guid.NewGuid().ToString("N"));
         System.IO.Directory.CreateDirectory(pack);

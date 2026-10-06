@@ -65,7 +65,7 @@ public abstract class DialogueTreeItem : ObservableObject, IFilterableTreeNode
 }
 
 /// <summary>A folder holding nested folders and dialogue leaves.</summary>
-public sealed class DialogueFolderNode : DialogueTreeItem
+public sealed class DialogueFolderNode : DialogueTreeItem, IRenamableFolder
 {
     private string _name;
     public DialogueFolderNode(string name)
@@ -78,6 +78,15 @@ public sealed class DialogueFolderNode : DialogueTreeItem
     {
         get => _name;
         set { _name = value ?? ""; OnPropertyChanged(); OnPropertyChanged(nameof(Label)); }
+    }
+
+    private bool _isRenaming;
+
+    /// <summary>Whether its name is being typed over, in place in the tree.</summary>
+    public bool IsRenaming
+    {
+        get => _isRenaming;
+        set { if (_isRenaming == value) return; _isRenaming = value; OnPropertyChanged(); }
     }
 
     public ObservableCollection<DialogueTreeItem> Children { get; } = new();

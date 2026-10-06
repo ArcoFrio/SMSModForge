@@ -1,6 +1,6 @@
 integration.ruleBodyJSON = ルール本体（JSON）
 integration.editRuleSTrigger = ルールの発動モード + 条件 + アクションを JSON オブジェクトとして編集します。形式: { "triggerMode": "OnRisingEdge", "conditions": [...], "actions": [...], "branches": [ { "conditions": [...], "actions": [...] } ] }。branches は省略可能な else-if の連なりです（最初に一致したものが優先、条件が空 = ただの Else）。conditions / actions の配列は、会話ノードの actionsOnStart と同じ形です。
-integration.addIntegrationFolder.tip = フォルダーを追加します。ルールやフォルダーをドラッグして整理できます（見た目だけで、ルールが動くタイミングは変わりません）。
+integration.addIntegrationFolder.tip = フォルダーを追加します。ルールやフォルダーをドラッグして整理できます（見た目だけで、ルールが動くタイミングは変わりません）。フォルダーの名前を変えるには、右クリックするか、選んで F2 キーを押します。
 integration.renameIntegrationFolder.tip = 選んだフォルダーの名前を変えます。
 integration.removeIntegrationRule.tip = 選んだルールを削除するか、選んだフォルダーを削除します（中身は1つ上に移ります）。
 integration.integrationTreeView.tip = Ctrl+クリック / Shift+クリックで項目を追加で選び、まとめてフォルダーにドラッグできます。詳細欄は通常の選択に従います。
@@ -177,7 +177,7 @@ quests.whenGameCompletes = ゲームが完了させたとき
 quests.runsOnceMomentGame = ゲームがこのタスクを完了にした瞬間に1回実行されます。ゲーム自身の会話によるものでも、自分の Quest アクションによるものでも同じです。
 quests.gameStillMovesOwn = ゲームは今も自分のクエストを進めます。ゲームのシーンは、これまでどおりそのタスクを完了させます。説明、隠したタスク、アクションは、クエストが終わるタイミングを何も変えません。追加したり外したりしたタスクは変えます。上の警告を見てください。プレイヤーがどこまで進んだかを調べるには QuestState と QuestCounter 条件を、クエストや中の自分のタスクを動かすには Quest アクションを使います。
 quests.questMovesAlongItself = クエストはひとりでに進みます。開始条件を満たすと始まり、各タスクは自分の完了条件を満たすと完了し、完了アクションを実行します。完了条件と完了アクションを持つのはサブタスクのないタスクだけです。サブタスクのあるタスクはサブタスクを通じて終わります。それでも会話やルールは、Quest アクションでクエストを動かし、QuestState と QuestCounter 条件で確かめられます。クエストを完了すると、ゲーム本来のクエストと同じ報酬がプレイヤーに入ります。
-quests.unitAddFolder.tip = フォルダーを追加します。項目やフォルダーをドラッグして整理できます（見た目だけで、パックは変わりません）。
+quests.unitAddFolder.tip = フォルダーを追加します。項目やフォルダーをドラッグして整理できます（見た目だけで、パックは変わりません）。フォルダーの名前を変えるには、右クリックするか、選んで F2 キーを押します。
 quests.unitRenameFolder.tip = 選んだフォルダーの名前を変えます。
 quests.removeQuest.tip = 選んだクエストを削除するか、選んだフォルダーを削除します（中身は1つ上に移ります）。
 quests.questTreeView.tip = Ctrl+クリック / Shift+クリックで項目を追加で選び、まとめてフォルダーにドラッグできます。詳細欄は通常の選択に従います。

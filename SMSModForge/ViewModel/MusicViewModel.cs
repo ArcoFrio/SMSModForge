@@ -61,13 +61,34 @@ public sealed class MusicViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// The recording, as the author picked it. An edited track plays a file
+    /// made from it when the pack is saved (<see cref="MusicDef.Edit"/>); this
+    /// stays the recording, which is what there is to pick.
+    /// </summary>
     public string AudioPath
     {
-        get => Model.AudioPath;
+        get => Model.Edit?.Source is { Length: > 0 } source ? source : Model.AudioPath;
         set
         {
-            if (Model.AudioPath == value) return;
-            Model.AudioPath = value ?? "";
+            value ??= "";
+            if (AudioPath == value) return;
+            if (Model.Edit is { } edit)
+            {
+                // A different recording: the cuts were moments in the old one,
+                // while the effects still say what the author wants done.
+                bool neverMade = string.Equals(Model.AudioPath, edit.Source, System.StringComparison.OrdinalIgnoreCase);
+                edit.Source = value;
+                edit.Files = null;
+                edit.Rendered = null;
+                if (neverMade) Model.AudioPath = value;
+                if (!edit.ChangesAnything)
+                {
+                    Model.Edit = null;
+                    Model.AudioPath = value;
+                }
+            }
+            else Model.AudioPath = value;
             OnPropertyChanged();
         }
     }
@@ -91,25 +112,41 @@ public sealed class MusicViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Volume override (0..1) exposed as a string for the same
-    /// "empty = inherit" tri-state semantics.
+    /// The track's volume against the game's own level for a track: 1.0 is
+    /// that level - the 0.5 of the game's Beach track, which every pack track
+    /// is copied from - and what the box shows when the pack leaves it; 0 is
+    /// silence and 5 five times as loud (the author, 1.7.0). The pack stores
+    /// the AudioSource's own volume, half of what is shown - see
+    /// <see cref="SMSModForge.Model.GameLoudness.MusicStored"/>.
     /// </summary>
     // Raw text backing so a mid-edit "0." / "0.0" isn't reformatted back to "0"
     // before you can type the fraction (see SfxViewModel.DefaultVolumeText).
     private string? _volumeText;
     public string VolumeText
     {
-        get => _volumeText ??=
-            (Model.Volume.HasValue ? Model.Volume.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "");
+        get => _volumeText ??= SMSModForge.Model.GameLoudness.VolumeText(SMSModForge.Model.GameLoudness.MusicShown(Model.Volume));
         set
         {
             _volumeText = value ?? "";
-            string s = _volumeText.Trim();
-            if (string.IsNullOrEmpty(s)) Model.Volume = null;
-            else if (float.TryParse(s, System.Globalization.NumberStyles.Float,
-                                    System.Globalization.CultureInfo.InvariantCulture, out var f))
-                Model.Volume = f;
+            if (SMSModForge.Model.GameLoudness.TryReadVolume(_volumeText, out float shown))
+            {
+                Model.Volume = SMSModForge.Model.GameLoudness.MusicStored(shown);
+                OnPropertyChanged(nameof(VolumeValue));
+            }
             OnPropertyChanged();
+        }
+    }
+
+    /// <summary>The same volume for the slider beside the box.</summary>
+    public double VolumeValue
+    {
+        get => SMSModForge.Model.GameLoudness.MusicShown(Model.Volume);
+        set
+        {
+            Model.Volume = SMSModForge.Model.GameLoudness.MusicStored(System.Math.Round(value, 2));
+            _volumeText = null;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(VolumeText));
         }
     }
 

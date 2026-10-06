@@ -1,6 +1,6 @@
 integration.ruleBodyJSON = Corps de la règle (JSON)
 integration.editRuleSTrigger = Modifiez le mode de déclenchement + les conditions + les actions de la règle sous forme d'objet JSON. Format : { "triggerMode": "OnRisingEdge", "conditions": [...], "actions": [...], "branches": [ { "conditions": [...], "actions": [...] } ] }. branches est la chaîne sinon-si facultative (la première qui correspond l'emporte ; conditions vides = simple Sinon). Les tableaux conditions / actions ont la même forme que actionsOnStart des nœuds de dialogue.
-integration.addIntegrationFolder.tip = Ajouter un dossier. Glissez règles et dossiers pour ranger (cosmétique – ne change pas le moment où les règles s'exécutent).
+integration.addIntegrationFolder.tip = Ajouter un dossier. Glissez règles et dossiers pour ranger (cosmétique – ne change pas le moment où les règles s'exécutent). Pour renommer un dossier, faites un clic droit dessus, ou sélectionnez-le et appuyez sur F2.
 integration.renameIntegrationFolder.tip = Renommer le dossier sélectionné.
 integration.removeIntegrationRule.tip = Retirer la règle sélectionnée, ou supprimer le dossier sélectionné (son contenu remonte d'un niveau).
 integration.integrationTreeView.tip = Ctrl+clic / Maj+clic sélectionne d'autres éléments à glisser ensemble dans un dossier. Le volet de détail suit l'élément sélectionné normalement.
@@ -177,7 +177,7 @@ quests.whenGameCompletes = Quand le jeu l'achève
 quests.runsOnceMomentGame = S'exécute une fois, au moment où le jeu marque cette tâche comme faite – par son propre dialogue, ou par une action Quest à vous.
 quests.gameStillMovesOwn = Le jeu fait toujours avancer sa propre quête : ses scènes achèvent ses tâches comme elles l'ont toujours fait. Les descriptions, les tâches masquées et les actions ne changent rien au moment où la quête se termine. Les tâches que vous ajoutez ou retirez, si – voir l'avertissement ci-dessus. Utilisez les conditions QuestState et QuestCounter pour savoir où en est un joueur, et l'action Quest pour la faire avancer, elle ou vos tâches.
 quests.questMovesAlongItself = Une quête avance d'elle-même : elle commence quand ses conditions de début sont remplies, et chaque tâche s'achève quand ses propres conditions d'achèvement le sont, en exécutant ses actions d'achèvement. Seule une tâche sans sous-tâches a des conditions et des actions d'achèvement – une tâche avec des sous-tâches se termine par elles. Un dialogue ou une règle peut quand même piloter une quête avec l'action Quest, et la vérifier avec les conditions QuestState et QuestCounter. Achever une quête donne au joueur la même récompense que les quêtes du jeu.
-quests.unitAddFolder.tip = Ajouter un dossier. Glissez éléments et dossiers pour ranger (cosmétique – ne change pas le pack).
+quests.unitAddFolder.tip = Ajouter un dossier. Glissez éléments et dossiers pour ranger (cosmétique – ne change pas le pack). Pour renommer un dossier, faites un clic droit dessus, ou sélectionnez-le et appuyez sur F2.
 quests.unitRenameFolder.tip = Renommer le dossier sélectionné.
 quests.removeQuest.tip = Retirer la quête sélectionnée, ou supprimer le dossier sélectionné (son contenu remonte d'un niveau).
 quests.questTreeView.tip = Ctrl+clic / Maj+clic sélectionne d'autres éléments à glisser ensemble dans un dossier. Le volet de détail suit l'élément sélectionné normalement.

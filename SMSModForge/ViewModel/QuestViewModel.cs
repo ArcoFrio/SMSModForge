@@ -1078,6 +1078,10 @@ public sealed class QuestTaskViewModel : ObservableObject
     public QuestTaskDef Model { get; }
     private readonly QuestViewModel _quest;
 
+    /// <summary>The quest the task is in. A task's key is only unique within
+    /// it, so renaming one follows the rows that name both.</summary>
+    internal QuestViewModel Quest => _quest;
+
     public QuestTaskViewModel(QuestTaskDef model, QuestViewModel quest)
     {
         Model = model;

@@ -215,12 +215,29 @@ public sealed class ParamSchema
     /// </summary>
     public bool EmptyIsAValue { get; }
 
+    /// <summary>
+    /// Optional key of a sibling param that decides whether this row is there
+    /// at all: hidden unless that sibling holds one of
+    /// <see cref="ShownWhenValues"/>. For a field that belongs to one choice
+    /// only - a transition's words, which only the screen with words has - where
+    /// greying it out under every other choice would be noise. Like
+    /// <see cref="EnabledWhen"/>, purely the editor's: the value is kept.
+    /// </summary>
+    public string ShownWhen { get; }
+
+    /// <summary>The values <see cref="ShownWhen"/>'s param shows this row for.
+    /// Compared case-insensitively.</summary>
+    public string[] ShownWhenValues { get; }
+
     public ParamSchema(string key, string label, ParamType type,
                        string defaultValue = "", string tooltip = "",
                        string[] fixedOptions = null,
                        string enabledWhen = null, string enabledWhenValue = "true",
-                       bool emptyIsAValue = false)
+                       bool emptyIsAValue = false,
+                       string shownWhen = null, string[] shownWhenValues = null)
     {
+        ShownWhen = shownWhen;
+        ShownWhenValues = shownWhenValues ?? System.Array.Empty<string>();
         Key = key;
         LabelKey = label;
         Type = type;

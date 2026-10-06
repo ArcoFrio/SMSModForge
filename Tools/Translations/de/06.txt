@@ -1,6 +1,6 @@
 integration.ruleBodyJSON = Regelinhalt (JSON)
 integration.editRuleSTrigger = Bearbeite Auslösemodus + Bedingungen + Aktionen der Regel als JSON-Objekt. Format: { "triggerMode": "OnRisingEdge", "conditions": [...], "actions": [...], "branches": [ { "conditions": [...], "actions": [...] } ] }. branches ist die optionale Sonst-wenn-Kette (der erste Treffer gewinnt; leere Bedingungen = einfaches Sonst). Die Arrays conditions / actions haben dieselbe Form wie actionsOnStart von Dialogknoten.
-integration.addIntegrationFolder.tip = Einen Ordner hinzufügen. Ziehe Regeln/Ordner zum Ordnen (nur optisch – ändert nicht, wann Regeln laufen).
+integration.addIntegrationFolder.tip = Einen Ordner hinzufügen. Ziehe Regeln/Ordner zum Ordnen (nur optisch – ändert nicht, wann Regeln laufen). Einen Ordner benennst du per Rechtsklick um, oder du wählst ihn aus und drückst F2.
 integration.renameIntegrationFolder.tip = Den gewählten Ordner umbenennen.
 integration.removeIntegrationRule.tip = Die gewählte Regel entfernen oder den gewählten Ordner löschen (sein Inhalt rückt eine Ebene hoch).
 integration.integrationTreeView.tip = Strg+Klick / Umschalt+Klick wählt weitere Einträge, um sie zusammen in einen Ordner zu ziehen. Der Detailbereich folgt dem normal gewählten Eintrag.
@@ -177,7 +177,7 @@ quests.whenGameCompletes = Wenn das Spiel sie abschließt
 quests.runsOnceMomentGame = Läuft einmal, in dem Moment, in dem das Spiel diese Aufgabe als erledigt markiert – durch seinen eigenen Dialog oder durch eine Quest-Aktion von dir.
 quests.gameStillMovesOwn = Das Spiel treibt seine eigene Quest weiterhin voran: Seine Szenen schließen ihre Aufgaben ab wie immer. Beschreibungen, verborgene Aufgaben und Aktionen ändern nichts daran, wann die Quest endet. Aufgaben, die du hinzufügst oder herausnimmst, schon – siehe die Warnung oben. Mit den Bedingungen QuestState und QuestCounter fragst du ab, wie weit ein Spieler darin ist, und mit der Quest-Aktion bewegst du sie oder deine Aufgaben darin.
 quests.questMovesAlongItself = Eine Quest läuft von selbst: Sie startet, wenn ihre Startbedingungen erfüllt sind, und jede Aufgabe wird abgeschlossen, wenn ihre eigenen Abschlussbedingungen erfüllt sind, und führt dabei ihre Abschlussaktionen aus. Nur eine Aufgabe ohne Unteraufgaben hat Abschlussbedingungen und -aktionen – eine Aufgabe mit Unteraufgaben endet über diese. Ein Dialog oder eine Regel kann eine Quest trotzdem mit der Quest-Aktion steuern und mit den Bedingungen QuestState und QuestCounter prüfen. Das Abschließen einer Quest gibt dem Spieler dieselbe Belohnung wie die Quests des Spiels.
-quests.unitAddFolder.tip = Einen Ordner hinzufügen. Ziehe Einträge/Ordner zum Ordnen (nur optisch – ändert das Paket nicht).
+quests.unitAddFolder.tip = Einen Ordner hinzufügen. Ziehe Einträge/Ordner zum Ordnen (nur optisch – ändert das Paket nicht). Einen Ordner benennst du per Rechtsklick um, oder du wählst ihn aus und drückst F2.
 quests.unitRenameFolder.tip = Den gewählten Ordner umbenennen.
 quests.removeQuest.tip = Die gewählte Quest entfernen oder den gewählten Ordner löschen (sein Inhalt rückt eine Ebene hoch).
 quests.questTreeView.tip = Strg+Klick / Umschalt+Klick wählt weitere Einträge, um sie zusammen in einen Ordner zu ziehen. Der Detailbereich folgt dem normal gewählten Eintrag.

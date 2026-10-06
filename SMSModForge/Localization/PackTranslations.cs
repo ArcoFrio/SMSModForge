@@ -459,6 +459,7 @@ public static class PackTranslations
         PackTexts.Kind.Line => Loc.F("packText.heading.dialogue", "name", names.Dialogue(site.Owner)),
         PackTexts.Kind.NavigatorLabel or PackTexts.Kind.MapLabel => Loc.T("packText.heading.buttons"),
         PackTexts.Kind.UiText => Loc.F("packText.heading.screen", "name", names.Ui(site.Owner)),
+        PackTexts.Kind.TransitionText => Loc.T("packText.heading.transitions"),
         _ => Loc.F("packText.heading.quest", "name", names.Quest(site.Owner)),
     };
 
@@ -490,6 +491,10 @@ public static class PackTranslations
                 return Loc.F("packText.note.mapButton", "district", site.Owner, "target", site.Detail);
             case PackTexts.Kind.UiText:
                 return Loc.F("packText.note.ui", "path", site.Detail);
+            case PackTexts.Kind.TransitionText:
+                return string.IsNullOrEmpty(site.Detail)
+                    ? Loc.F("packText.note.transition", "owner", site.Owner)
+                    : Loc.F("packText.note.transitionInLine", "dialogue", names.Dialogue(site.Owner), "line", site.Detail);
             default:
                 return "";
         }

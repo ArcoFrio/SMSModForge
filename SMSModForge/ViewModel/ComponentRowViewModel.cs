@@ -85,6 +85,21 @@ public sealed class ComponentRowViewModel : ObservableObject
     /// limited to what the plugin reimplements.</summary>
     public IReadOnlyList<string> ComponentTypes { get; } = VanillaComponentCatalog.TypeNames();
 
+    /// <summary>
+    /// The same types under what they are (1.7.0): the four made for packs, the
+    /// game's own scripts, and Unity's built-in components - whose settings
+    /// mostly cannot be set by name, which is worth knowing before picking one.
+    /// In that order, as the list already comes.
+    /// </summary>
+    public System.ComponentModel.ICollectionView ComponentTypesGrouped
+        => _typesGrouped ??= OptionGroups.Under(ComponentTypes, o =>
+               o is not string type ? ""
+               : PackComponentType.IsBuiltIn(type) ? Loc.T("componentGroup.pack")
+               : VanillaComponentCatalog.Find(type)?.IsEngineComponent == true ? Loc.T("componentGroup.unity")
+               : Loc.T("componentGroup.game"),
+               sortHeadings: false);
+    private System.ComponentModel.ICollectionView? _typesGrouped;
+
     public string Type
     {
         get => Model.Type;

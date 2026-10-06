@@ -736,6 +736,7 @@ public static class DocTopics
                     new DocBullet("docs.actions.startStopObjectRotating.term", "docs.actions.startStopObjectRotating")),
                 new DocSection("docs.actions.heading.placesScenes",
                     new DocBullet("docs.actions.crossFadeOnePlace.term", "docs.actions.crossFadeOnePlace"),
+                    new DocBullet("docs.actions.coverScreenWhileChanges.term", "docs.actions.coverScreenWhileChanges"),
                     new DocBullet("docs.actions.hideEveryScenePack.term", "docs.actions.hideEveryScenePack")),
                 new DocSection("docs.actions.heading.signalsInterface",
                     new DocBullet("docs.actions.sendOneGameS.term", "docs.actions.sendOneGameS"),

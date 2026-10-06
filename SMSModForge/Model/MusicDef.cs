@@ -60,4 +60,13 @@ public sealed class MusicDef
     /// </summary>
     [JsonProperty("volume", Order = 5, NullValueHandling = NullValueHandling.Ignore)]
     public float? Volume { get; set; }
+
+    /// <summary>
+    /// How the track was edited in the Music tab (1.7.0), or null when it plays
+    /// as recorded - the same edit an SFX can have (<see cref="SfxEditDef"/>).
+    /// The game plays <see cref="AudioPath"/>, which an edited track points at
+    /// the file the editor made from the recording when the pack was saved.
+    /// </summary>
+    [JsonProperty("edit", Order = 6, NullValueHandling = NullValueHandling.Ignore)]
+    public SfxEditDef? Edit { get; set; }
 }

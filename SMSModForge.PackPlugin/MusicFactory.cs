@@ -127,7 +127,15 @@ namespace SMSModForge.PackPlugin
                 // Apply overrides BEFORE the clip lands — Unity is fine
                 // with loop / volume changes on a clipless source.
                 if (t["loop"] != null) source.loop = (bool)t["loop"];
-                if (t["volume"] != null) source.volume = (float)t["volume"];
+                if (t["volume"] != null)
+                {
+                    // Up to five times the game's own level for a track
+                    // (1.7.0): past what an AudioSource goes to, the rest is
+                    // done on the samples as they play.
+                    float volume = Mathf.Max(0f, (float)t["volume"]);
+                    source.volume = Mathf.Min(1f, volume);
+                    if (volume > 1f) go.AddComponent<SoundGain>().Gain = volume;
+                }
 
                 // playOnAwake stays ON, matching every other track under
                 // 12_AudioPlayer. A track there sounds BECAUSE it is enabled:

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using SMSModForge.Model;
 using SMSModForge.Localization;
 
@@ -150,6 +151,17 @@ public sealed class NodeActionViewModel : ObservableObject
                     // EnabledWhen gate. No action schema declares one today,
                     // but wiring it here means adding one just works.
                     foreach (var r in ParamRows) r.RefreshEnabled();
+                    // A screen with words starts with the game's own words,
+                    // written down: words the pack only shows as a default
+                    // are not in it, and could not be translated.
+                    if (Model.Type == NodeActionTypes.Transitions
+                        && Model.Params.TryGetValue(Shared.Transitions.StyleParam, out var style)
+                        && style == Shared.Transitions.TextScreen
+                        && !Model.Params.ContainsKey(Shared.Transitions.TextParam))
+                    {
+                        Model.Params[Shared.Transitions.TextParam] = Shared.Transitions.DefaultText;
+                        foreach (var r in ParamRows) r.Refresh();
+                    }
                     // Re-check boolean variable detection for PackVarRef/BoolVarRef rows.
                     if (paramType == ParamType.PackVarRef || paramType == ParamType.BoolVarRef)
                         capturedRow?.RefreshBooleanDetection();
@@ -1138,8 +1150,8 @@ public sealed class NodeActionViewModel : ObservableObject
             if (string.IsNullOrEmpty(value)) Model.Params.Remove("overlayLevel");
             else Model.Params["overlayLevel"] = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(OverlayOptions));
-            OnPropertyChanged(nameof(NpcOptions));
+            OnPropertyChanged(nameof(OverlayOptions)); OnPropertyChanged(nameof(OverlayOptionsGrouped));
+            OnPropertyChanged(nameof(NpcOptions)); OnPropertyChanged(nameof(NpcOptionsGrouped));
             OnPropertyChanged(nameof(IsOverlayTargetEnabled));
             NotifyPreview();
         }
@@ -1155,6 +1167,11 @@ public sealed class NodeActionViewModel : ObservableObject
     public IEnumerable<NavigatorTargetOption> OverlayLevelOptions =>
         (Category == CatNpcs ? NpcLevelProvider : OverlayLevelProvider)?.Invoke()
         ?? Array.Empty<NavigatorTargetOption>();
+
+    /// <summary><see cref="OverlayLevelOptions"/>: the pack's places, and the
+    /// game's levels it extends.</summary>
+    public System.ComponentModel.ICollectionView OverlayLevelOptionsGrouped
+        => OptionGroups.Levels(OverlayLevelOptions.ToList());
 
     /// <summary>Target combo enable gate for the Set-Active row: the Extra
     /// GameObjects target list is level-scoped, so it's disabled until a
@@ -1195,6 +1212,20 @@ public sealed class NodeActionViewModel : ObservableObject
     /// </summary>
     public static Func<string, IEnumerable<string>>? NpcProvider;
 
+    /// <summary>Which of a level's GameObject paths are the game's own, for
+    /// the headings of the GameObjects list. Set once by the MainViewModel.</summary>
+    public static Func<string, ICollection<string>>? GamesOverlayProvider;
+
+    /// <summary>Which of a level's NPC entries are the game's own NPCs rather
+    /// than ones the pack placed. Set once by the MainViewModel.</summary>
+    public static Func<string, ICollection<string>>? GamesNpcProvider;
+
+    /// <summary>A level's objects or NPCs under whose each is.</summary>
+    internal static System.ComponentModel.ICollectionView ByOrigin(
+        IEnumerable<string> items, string level, Func<string, ICollection<string>>? games)
+        => OptionGroups.ByOrigin(items.ToList(),
+               string.IsNullOrEmpty(level) || games == null ? new HashSet<string>() : games(level));
+
     /// <summary>
     /// The selected node's inferred level — the overlay-list fallback when an
     /// action's <see cref="OverlayLevel"/> isn't set yet. Maintained by the
@@ -1211,11 +1242,19 @@ public sealed class NodeActionViewModel : ObservableObject
             ? Array.Empty<string>()
             : StrictOverlayProvider?.Invoke(OverlayLevel) ?? Array.Empty<string>();
 
+    /// <summary><see cref="OverlayOptions"/> under whose each object is.</summary>
+    public System.ComponentModel.ICollectionView OverlayOptionsGrouped
+        => ByOrigin(OverlayOptions, OverlayLevel, GamesOverlayProvider);
+
     /// <summary>The NPCs of the chosen level, for the NPCs category's list.</summary>
     public IEnumerable<string> NpcOptions =>
         string.IsNullOrEmpty(OverlayLevel)
             ? Array.Empty<string>()
             : NpcProvider?.Invoke(OverlayLevel) ?? Array.Empty<string>();
+
+    /// <summary><see cref="NpcOptions"/>: the pack's placed NPCs, and the game's.</summary>
+    public System.ComponentModel.ICollectionView NpcOptionsGrouped
+        => ByOrigin(NpcOptions, OverlayLevel, GamesNpcProvider);
 
     // ── Category + Target for GameObject-targeting actions ────────────────
     //
@@ -1245,9 +1284,9 @@ public sealed class NodeActionViewModel : ObservableObject
             OnPropertyChanged();
             OnPropertyChanged(nameof(IsGoOverlayCategory));
             OnPropertyChanged(nameof(IsGoLevelScoped));
-            OnPropertyChanged(nameof(GoNpcOptions));
-            OnPropertyChanged(nameof(GoOverlayOptions));
-            OnPropertyChanged(nameof(GoOverlayLevelOptions));
+            OnPropertyChanged(nameof(GoNpcOptions)); OnPropertyChanged(nameof(GoNpcOptionsGrouped));
+            OnPropertyChanged(nameof(GoOverlayOptions)); OnPropertyChanged(nameof(GoOverlayOptionsGrouped));
+            OnPropertyChanged(nameof(GoOverlayLevelOptions)); OnPropertyChanged(nameof(GoOverlayLevelOptionsGrouped));
             OnPropertyChanged(nameof(IsGoOverlayTargetEnabled));
             OnPropertyChanged(nameof(Display));
         }
@@ -1280,8 +1319,8 @@ public sealed class NodeActionViewModel : ObservableObject
             if (string.IsNullOrEmpty(value)) Model.Params.Remove("overlayLevel");
             else Model.Params["overlayLevel"] = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(GoOverlayOptions));
-            OnPropertyChanged(nameof(GoNpcOptions));
+            OnPropertyChanged(nameof(GoOverlayOptions)); OnPropertyChanged(nameof(GoOverlayOptionsGrouped));
+            OnPropertyChanged(nameof(GoNpcOptions)); OnPropertyChanged(nameof(GoNpcOptionsGrouped));
             OnPropertyChanged(nameof(IsGoOverlayTargetEnabled));
         }
     }
@@ -1294,17 +1333,26 @@ public sealed class NodeActionViewModel : ObservableObject
             ? Array.Empty<string>()
             : StrictOverlayProvider?.Invoke(GoOverlayLevel) ?? Array.Empty<string>();
 
+    public System.ComponentModel.ICollectionView GoOverlayOptionsGrouped
+        => ByOrigin(GoOverlayOptions, GoOverlayLevel, GamesOverlayProvider);
+
     /// <summary>Levels offered in the Set-Active row's level dropdown — only
     /// ones that actually carry GameObjects.</summary>
     public IEnumerable<NavigatorTargetOption> GoOverlayLevelOptions =>
         (GoCategory == CatNpcs ? NpcLevelProvider : OverlayLevelProvider)?.Invoke()
         ?? Array.Empty<NavigatorTargetOption>();
 
+    public System.ComponentModel.ICollectionView GoOverlayLevelOptionsGrouped
+        => OptionGroups.Levels(GoOverlayLevelOptions.ToList());
+
     /// <summary>The NPCs of this row's chosen level.</summary>
     public IEnumerable<string> GoNpcOptions =>
         string.IsNullOrEmpty(GoOverlayLevel)
             ? Array.Empty<string>()
             : NpcProvider?.Invoke(GoOverlayLevel) ?? Array.Empty<string>();
+
+    public System.ComponentModel.ICollectionView GoNpcOptionsGrouped
+        => ByOrigin(GoNpcOptions, GoOverlayLevel, GamesNpcProvider);
 
     /// <summary>The target combo is a dead end for the GameObjects
     /// category until a level is chosen (targets are level-scoped), so it's
@@ -1354,9 +1402,9 @@ public sealed class NodeActionViewModel : ObservableObject
         OnPropertyChanged(nameof(Target));
         OnPropertyChanged(nameof(Active));
         OnPropertyChanged(nameof(OverlayLevel));
-        OnPropertyChanged(nameof(OverlayOptions));
-        OnPropertyChanged(nameof(NpcOptions));
-        OnPropertyChanged(nameof(OverlayLevelOptions));
+        OnPropertyChanged(nameof(OverlayOptions)); OnPropertyChanged(nameof(OverlayOptionsGrouped));
+        OnPropertyChanged(nameof(NpcOptions)); OnPropertyChanged(nameof(NpcOptionsGrouped));
+        OnPropertyChanged(nameof(OverlayLevelOptions)); OnPropertyChanged(nameof(OverlayLevelOptionsGrouped));
         OnPropertyChanged(nameof(ShowsOverlayLevel));
         OnPropertyChanged(nameof(IsOverlayTargetEnabled));
         OnPropertyChanged(nameof(Display));
@@ -1389,9 +1437,9 @@ public sealed class NodeActionViewModel : ObservableObject
         OnPropertyChanged(nameof(IsGoLevelScoped));
         OnPropertyChanged(nameof(GoTarget));
         OnPropertyChanged(nameof(GoOverlayLevel));
-        OnPropertyChanged(nameof(GoOverlayOptions));
-        OnPropertyChanged(nameof(GoNpcOptions));
-        OnPropertyChanged(nameof(GoOverlayLevelOptions));
+        OnPropertyChanged(nameof(GoOverlayOptions)); OnPropertyChanged(nameof(GoOverlayOptionsGrouped));
+        OnPropertyChanged(nameof(GoNpcOptions)); OnPropertyChanged(nameof(GoNpcOptionsGrouped));
+        OnPropertyChanged(nameof(GoOverlayLevelOptions)); OnPropertyChanged(nameof(GoOverlayLevelOptionsGrouped));
         OnPropertyChanged(nameof(IsGoOverlayTargetEnabled));
         NotifyQuestFamily();
     }

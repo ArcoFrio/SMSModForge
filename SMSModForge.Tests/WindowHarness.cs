@@ -58,6 +58,22 @@ internal static class WindowHarness
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
                 ready.Wait(TimeSpan.FromSeconds(30));
+
+                // Shut the UI thread down properly when the run ends, rather
+                // than letting the process take a background thread down with
+                // WPF halfway through its deferred binding cleanup - which
+                // threw inside DataBindEngine.DoCleanup at exit, now and then,
+                // in short runs that ended on a window, and printed as an
+                // unhandled exception after every test had passed.
+                AppDomain.CurrentDomain.ProcessExit += (_, _) =>
+                {
+                    try
+                    {
+                        _dispatcher?.BeginInvokeShutdown(DispatcherPriority.Normal);
+                        thread.Join(TimeSpan.FromSeconds(5));
+                    }
+                    catch { /* the run is over either way */ }
+                };
                 return _dispatcher!;
             }
         }

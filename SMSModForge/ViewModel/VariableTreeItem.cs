@@ -43,7 +43,7 @@ public abstract class VariableTreeItem : ObservableObject, IFilterableTreeNode
 }
 
 /// <summary>A folder holding nested folders and variable leaves.</summary>
-public sealed class VariableFolderNode : VariableTreeItem
+public sealed class VariableFolderNode : VariableTreeItem, IRenamableFolder
 {
     private string _name;
     public VariableFolderNode(string name)
@@ -56,6 +56,15 @@ public sealed class VariableFolderNode : VariableTreeItem
     {
         get => _name;
         set { _name = value ?? ""; OnPropertyChanged(); OnPropertyChanged(nameof(Label)); }
+    }
+
+    private bool _isRenaming;
+
+    /// <summary>Whether its name is being typed over, in place in the tree.</summary>
+    public bool IsRenaming
+    {
+        get => _isRenaming;
+        set { if (_isRenaming == value) return; _isRenaming = value; OnPropertyChanged(); }
     }
 
     public ObservableCollection<VariableTreeItem> Children { get; } = new();

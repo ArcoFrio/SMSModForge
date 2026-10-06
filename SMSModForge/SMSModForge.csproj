@@ -5,9 +5,9 @@
     <!-- One source of truth for the version. The About line and the title
          bar read it back off the assembly, so they cannot drift from what
          was actually built. -->
-    <Version>1.6.3</Version>
-    <AssemblyVersion>1.6.3.0</AssemblyVersion>
-    <FileVersion>1.6.3.0</FileVersion>
+    <Version>1.7.0</Version>
+    <AssemblyVersion>1.7.0.0</AssemblyVersion>
+    <FileVersion>1.7.0.0</FileVersion>
     <Product>SMSModForge</Product>
     <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>SMSModForge</RootNamespace>
@@ -36,6 +36,8 @@
          runtime plugin still uses Unity's audio. -->
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
+    <!-- Writes the sounds edited in the SFX and Music tabs (MIT). -->
+    <PackageReference Include="OggVorbisEncoder" Version="1.2.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,6 +71,16 @@
     -->
     <Content Include="Resources\VanillaArtThumbs\VanillaBustArt\**\Jiggle.txt">
       <Link>VanillaBustArt\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!--
+      The same busts' faces at the game's full size (1.7.0), for a pack's own
+      outfit that borrows the game's blink, mouth or faces: the smaller copies
+      above, stretched back, never matched a pack's 256x256 bust. Made by
+      Tools/MakeFullSizeFaces.py; the game's own outfits keep the copies above.
+    -->
+    <Content Include="Resources\VanillaBustFaces\**\*.PNG">
+      <Link>VanillaBustFaces\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <!--
@@ -251,6 +263,9 @@
     <Compile Include="..\Shared\SaveLoadChecks.cs" Link="Shared\SaveLoadChecks.cs" />
     <Compile Include="..\Shared\SaveRecord.cs" Link="Shared\SaveRecord.cs" />
     <Compile Include="..\Shared\PackSwitches.cs" Link="Shared\PackSwitches.cs" />
+    <Compile Include="..\Shared\PackOrder.cs" Link="Shared\PackOrder.cs" />
+    <Compile Include="..\Shared\PackConflicts.cs" Link="Shared\PackConflicts.cs" />
+    <Compile Include="..\Shared\Transitions.cs" Link="Shared\Transitions.cs" />
     <Compile Include="..\Shared\RichText.cs" Link="Shared\RichText.cs" />
     <Compile Include="..\Shared\TextTemplates.cs" Link="Shared\TextTemplates.cs" />
     <Compile Include="..\Shared\XUnityLanguage.cs" Link="Shared\XUnityLanguage.cs" />
@@ -261,6 +276,7 @@
     <Compile Include="..\Shared\VanillaCastData.cs" Link="Shared\VanillaCastData.cs" />
     <Compile Include="..\Shared\VanillaBustExpressions.cs" Link="Shared\VanillaBustExpressions.cs" />
     <Compile Include="..\Shared\VanillaSpeech.cs" Link="Shared\VanillaSpeech.cs" />
+    <Compile Include="..\Shared\PlayerLabel.cs" Link="Shared\PlayerLabel.cs" />
     <Compile Include="..\Shared\SpriteSlotNames.cs" Link="Shared\SpriteSlotNames.cs" />
     <Compile Include="..\Shared\AnimationClock.cs" Link="Shared\AnimationClock.cs" />
     <Compile Include="..\Shared\ModsFolder.cs" Link="Shared\ModsFolder.cs" />

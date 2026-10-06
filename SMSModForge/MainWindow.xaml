@@ -119,6 +119,51 @@
             NavigatorTargetOption, GamePathOption.ToString() is what lands in the
             box - the path, slashes and all - so the note is only ever shown here.
         -->
+        <!--
+            A dropdown item with a short note beside it (1.7.0), for a ComboBox that
+            sets view:OptionNotes.Kind - what an action does, whose bust a bust is.
+            Based on the app's own item style, so search still narrows the list
+            (and finds the note too); only the open list shows the note, never the
+            closed box.
+        -->
+        <Style x:Key="DescribedItem" TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                            <StackPanel Orientation="Horizontal">
+                                <ContentPresenter VerticalAlignment="Center"/>
+                                <TextBlock Foreground="Gray" FontSize="11" Margin="12,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{x:Static conv:OptionNoteConverter.Instance}">
+                                            <Binding Path="."/>
+                                            <Binding Path="(view:OptionNotes.Kind)"
+                                                     RelativeSource="{RelativeSource AncestorType=ComboBox}"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <Trigger Property="Text" Value="">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.Accent}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <DataTemplate DataType="{x:Type vm:GamePathOption}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Value}"/>
@@ -168,13 +213,137 @@
             </Grid>
         </DataTemplate>
 
+        <!-- The sound editor's body (1.7.0): the strip, its buttons, and the
+             effects. DataContext is a SfxEditorViewModel - the SFX tab's or
+             the Music tab's. -->
+        <DataTemplate x:Key="SoundEditorTemplate">
+            <StackPanel>
+                <TextBlock Foreground="Gray" FontSize="10" Margin="0,0,0,4" TextWrapping="Wrap"
+                           Text="{l:T sfxEdit.help}"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,4"
+                            Visibility="{Binding HasVariants, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock Text="{l:T sfxEdit.file}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <ComboBox ItemsSource="{Binding Recordings}" SelectedItem="{Binding Current}" MinWidth="180"
+                              ToolTip="{l:T sfxEdit.file.tip}"/>
+                </StackPanel>
+                <Border BorderBrush="#9A9A9A" BorderThickness="1">
+                    <ctl:SfxStrip Editor="{Binding}" Height="132"
+                                  ToolTip="{l:T sfxEdit.strip.tip}"/>
+                </Border>
+                <ScrollBar Orientation="Horizontal" Minimum="0"
+                           Maximum="{Binding ScrollMax, Mode=OneWay}"
+                           ViewportSize="{Binding VisibleSeconds, Mode=OneWay}"
+                           LargeChange="{Binding VisibleSeconds, Mode=OneWay}"
+                           Value="{Binding ViewStart}"
+                           Visibility="{Binding CanScroll, Converter={StaticResource BoolToVisibility}}"/>
+                <WrapPanel Margin="0,6,0,0">
+                    <Button Content="{l:T sfxEdit.play}" Command="{Binding PlayCommand}" Padding="10,2"
+                            ToolTip="{l:T sfxEdit.play.tip}"/>
+                    <Button Content="{l:T sfxEdit.stop}" Command="{Binding StopCommand}" Padding="10,2" Margin="6,0,0,0"/>
+                    <Button Content="{l:T sfxEdit.split}" Command="{Binding SplitCommand}" Padding="10,2" Margin="14,0,0,0"
+                            ToolTip="{l:T sfxEdit.split.tip}" ToolTipService.ShowOnDisabled="True"/>
+                    <Button Content="{l:T sfxEdit.delete}" Command="{Binding DeleteCommand}" Padding="10,2" Margin="6,0,0,0"
+                            ToolTip="{l:T sfxEdit.delete.tip}" ToolTipService.ShowOnDisabled="True"/>
+                    <Button Content="{l:T sfxEdit.zoomIn}" Command="{Binding ZoomInCommand}" Padding="8,2" Margin="14,0,0,0"
+                            ToolTip="{l:T sfxEdit.zoomIn.tip}"/>
+                    <Button Content="{l:T sfxEdit.zoomOut}" Command="{Binding ZoomOutCommand}" Padding="8,2" Margin="4,0,0,0"
+                            ToolTip="{l:T sfxEdit.zoomOut.tip}"/>
+                    <Button Content="{l:T sfxEdit.fit}" Command="{Binding FitCommand}" Padding="8,2" Margin="4,0,0,0"
+                            ToolTip="{l:T sfxEdit.fit.tip}"/>
+                    <Button Content="{l:T sfxEdit.reset}" Command="{Binding ResetCommand}" Padding="10,2" Margin="14,0,0,0"
+                            ToolTip="{l:T sfxEdit.reset.tip}" ToolTipService.ShowOnDisabled="True"/>
+                </WrapPanel>
+                <TextBlock Text="{Binding Summary}" Foreground="Gray" FontSize="11" Margin="0,4,0,0"/>
+                <TextBlock Text="{l:T sfxEdit.preparing}" Foreground="Gray" FontStyle="Italic" FontSize="11"
+                           Visibility="{Binding IsPreparing, Converter={StaticResource BoolToVisibility}}"/>
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="*" MaxWidth="420"/>
+                        <ColumnDefinition Width="Auto" MinWidth="150"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{l:T sfxEdit.pitch}" VerticalAlignment="Center"/>
+                    <Slider Grid.Row="0" Grid.Column="1" Minimum="-12" Maximum="12" TickFrequency="0.5"
+                            IsSnapToTickEnabled="True" Margin="0,3"
+                            Value="{Binding Pitch}"
+                            PreviewMouseLeftButtonUp="UndoStep_Event" KeyUp="UndoStep_Event"
+                            ToolTip="{l:T sfxEdit.pitch.tip}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding PitchText}" Margin="8,0,0,0"
+                               VerticalAlignment="Center" Foreground="Gray"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{l:T sfxEdit.speed}" VerticalAlignment="Center"/>
+                    <Slider Grid.Row="1" Grid.Column="1" Minimum="0.5" Maximum="2" TickFrequency="0.05"
+                            IsSnapToTickEnabled="True" Margin="0,3"
+                            Value="{Binding Speed}"
+                            PreviewMouseLeftButtonUp="UndoStep_Event" KeyUp="UndoStep_Event"
+                            ToolTip="{l:T sfxEdit.speed.tip}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding SpeedText}" Margin="8,0,0,0"
+                               VerticalAlignment="Center" Foreground="Gray"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{l:T sfxEdit.echo}" VerticalAlignment="Center"/>
+                    <Slider Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="0.9" TickFrequency="0.05"
+                            IsSnapToTickEnabled="True" Margin="0,3"
+                            Value="{Binding EchoAmount}"
+                            PreviewMouseLeftButtonUp="UndoStep_Event" KeyUp="UndoStep_Event"
+                            ToolTip="{l:T sfxEdit.echo.tip}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding EchoText}" Margin="8,0,0,0"
+                               VerticalAlignment="Center" Foreground="Gray"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{l:T sfxEdit.echoDelay}" VerticalAlignment="Center"/>
+                    <Slider Grid.Row="3" Grid.Column="1" Minimum="0.05" Maximum="1" TickFrequency="0.01"
+                            IsSnapToTickEnabled="True" Margin="0,3"
+                            Value="{Binding EchoDelay}"
+                            IsEnabled="{Binding HasEcho}"
+                            PreviewMouseLeftButtonUp="UndoStep_Event" KeyUp="UndoStep_Event"
+                            ToolTip="{l:T sfxEdit.echoDelay.tip}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding EchoDelayText}" Margin="8,0,0,0"
+                               VerticalAlignment="Center" Foreground="Gray"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{l:T sfxEdit.reverb}" VerticalAlignment="Center"/>
+                    <Slider Grid.Row="4" Grid.Column="1" Minimum="0" Maximum="1" TickFrequency="0.05"
+                            IsSnapToTickEnabled="True" Margin="0,3"
+                            Value="{Binding ReverbAmount}"
+                            PreviewMouseLeftButtonUp="UndoStep_Event" KeyUp="UndoStep_Event"
+                            ToolTip="{l:T sfxEdit.reverb.tip}"/>
+                    <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding ReverbText}" Margin="8,0,0,0"
+                               VerticalAlignment="Center" Foreground="Gray"/>
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="{l:T sfxEdit.room}" VerticalAlignment="Center"/>
+                    <Slider Grid.Row="5" Grid.Column="1" Minimum="0" Maximum="1" TickFrequency="0.05"
+                            IsSnapToTickEnabled="True" Margin="0,3"
+                            Value="{Binding ReverbRoom}"
+                            IsEnabled="{Binding HasReverb}"
+                            PreviewMouseLeftButtonUp="UndoStep_Event" KeyUp="UndoStep_Event"
+                            ToolTip="{l:T sfxEdit.room.tip}"/>
+                    <TextBlock Grid.Row="5" Grid.Column="2" Text="{Binding RoomText}" Margin="8,0,0,0"
+                               VerticalAlignment="Center" Foreground="Gray"/>
+                </Grid>
+                <Button Content="{l:T sfxEdit.resetEffects}" Command="{Binding ResetEffectsCommand}"
+                        HorizontalAlignment="Left" Padding="10,2" Margin="0,6,0,0"
+                        ToolTip="{l:T sfxEdit.resetEffects.tip}"/>
+            </StackPanel>
+        </DataTemplate>
+
         <!-- Shared unit folder trees (Actors/Places/Scenes/Wallpapers/Music/SFX):
              one implicit template pair + one container style reused by every
              tree, so the six tabs carry no per-tree markup beyond the TreeView. -->
         <HierarchicalDataTemplate DataType="{x:Type vm:UnitFolderNode}" ItemsSource="{Binding Children}">
             <StackPanel Orientation="Horizontal">
+                <StackPanel.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{l:T folders.renameMenu}" InputGestureText="F2" Click="FolderRenameMenu_Click"/>
+                    </ContextMenu>
+                </StackPanel.ContextMenu>
                 <TextBlock Text="📁" Margin="0,0,4,0"/>
-                <TextBlock Text="{Binding Label}" FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding Label}" FontWeight="SemiBold"
+                           Visibility="{Binding IsRenaming, Converter={StaticResource InverseBoolToVisibility}}"/>
+                <!-- Renamed where it stands: F2, or Rename on the right-click menu. -->
+                <TextBox MinWidth="120" view:FolderRename.Box="True"
+                         Visibility="{Binding IsRenaming, Converter={StaticResource BoolToVisibility}}"/>
             </StackPanel>
         </HierarchicalDataTemplate>
         <DataTemplate DataType="{x:Type vm:UnitLeafNode}">
@@ -524,11 +693,16 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <ComboBox ItemsSource="{Binding DataContext.ListVariableNameOptions,
+                    <ComboBox Style="{StaticResource GroupedComboBox}"
+                           ItemsSource="{Binding DataContext.ListVariableNameOptionsGrouped,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
                            IsEditable="True"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                           ToolTip="{Binding Tooltip}"/>
+                           ToolTip="{Binding Tooltip}">
+                        <ComboBox.GroupStyle>
+                            <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                        </ComboBox.GroupStyle>
+                    </ComboBox>
                 </DockPanel>
             </Grid>
         </DataTemplate>
@@ -674,14 +848,18 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <ComboBox  Grid.Column="1"
-                           ItemsSource="{Binding DataContext.ActorBustOptions,
+                <ComboBox Style="{StaticResource GroupedComboBox}" Grid.Column="1"
+                           ItemsSource="{Binding DataContext.ActorBustOptionsGrouped,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
                            SelectedValuePath="Token"
                            SelectedValue="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                            IsEditable="True"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                           ToolTip="{Binding Tooltip}"/>
+                           ToolTip="{Binding Tooltip}">
+                    <ComboBox.GroupStyle>
+                        <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                    </ComboBox.GroupStyle>
+                </ComboBox>
             </Grid>
         </DataTemplate>
 
@@ -692,12 +870,16 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <ComboBox  Grid.Column="1"
-                           ItemsSource="{Binding DataContext.ExpressionKeyOptions,
+                <ComboBox Style="{StaticResource GroupedComboBox}" Grid.Column="1"
+                           ItemsSource="{Binding DataContext.ExpressionKeyOptionsGrouped,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
                            IsEditable="True"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                           ToolTip="{Binding Tooltip}"/>
+                           ToolTip="{Binding Tooltip}">
+                    <ComboBox.GroupStyle>
+                        <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                    </ComboBox.GroupStyle>
+                </ComboBox>
             </Grid>
         </DataTemplate>
 
@@ -708,14 +890,18 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <ComboBox  Grid.Column="1"
-                           ItemsSource="{Binding DataContext.SceneOptions,
+                <ComboBox Style="{StaticResource GroupedComboBox}" Grid.Column="1"
+                           ItemsSource="{Binding DataContext.SceneOptionsGrouped,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
                            SelectedValuePath="Token"
                            SelectedValue="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                            IsEditable="True"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                           ToolTip="{Binding Tooltip}"/>
+                           ToolTip="{Binding Tooltip}">
+                    <ComboBox.GroupStyle>
+                        <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                    </ComboBox.GroupStyle>
+                </ComboBox>
             </Grid>
         </DataTemplate>
 
@@ -751,7 +937,7 @@
                 <ComboBox  Grid.Column="1"
                            IsEditable="True"
                            ItemsSource="{Binding DataContext.SignalOptions,
-                                         RelativeSource={RelativeSource AncestorType=Window}}"
+                                         RelativeSource={RelativeSource AncestorType=Window}}" view:OptionNotes.Kind="signal" ItemContainerStyle="{StaticResource DescribedItem}"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                            ToolTip="{Binding Tooltip}"/>
             </Grid>
@@ -787,11 +973,15 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
                 <ComboBox Style="{StaticResource GroupedComboBox}"  Grid.Column="1"
-                           ItemsSource="{Binding DataContext.SfxKeyOptions,
+                           ItemsSource="{Binding DataContext.SfxKeyOptionsGrouped,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
                            IsEditable="True"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                           ToolTip="{Binding Tooltip}"/>
+                           ToolTip="{Binding Tooltip}">
+                    <ComboBox.GroupStyle>
+                        <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                    </ComboBox.GroupStyle>
+                </ComboBox>
             </Grid>
         </DataTemplate>
 
@@ -893,6 +1083,7 @@
                 <ComboBox x:Name="QuestNamePicker" Grid.Row="1" Grid.Column="1" Margin="0,0,0,2"
                           IsEditable="True"
                           ItemsSource="{Binding QuestOptions}"
+                          view:OptionNotes.Kind="gameQuest" ItemContainerStyle="{StaticResource DescribedItem}"
                           Text="{Binding QuestKey, UpdateSourceTrigger=PropertyChanged}"
                           ToolTip="{l:T questPicker.questNamePicker.tip}"/>
 
@@ -1038,11 +1229,15 @@
                              (dialogue node conditions, level hooks) also offer the
                              single-roll Random gate, which would be meaningless in
                              a per-frame-polled host. -->
-                        <ComboBox Grid.Column="1"
-                                  ItemsSource="{Binding AvailableTypes}"
+                        <ComboBox Grid.Column="1" Style="{StaticResource GroupedComboBox}"
+                                  ItemsSource="{Binding AvailableTypesGrouped}" view:OptionNotes.Kind="conditionType" ItemContainerStyle="{StaticResource DescribedItem}"
                                   SelectedItem="{Binding DisplayType, UpdateSourceTrigger=PropertyChanged}"
                                   IsEnabled="{Binding IsTypeEditable}"
-                                  ToolTip="{l:T condition.pinnedLevelactiveStartCondition.tip}"/>
+                                  ToolTip="{l:T condition.pinnedLevelactiveStartCondition.tip}">
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
+                        </ComboBox>
                         <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="4,0,0,0">
                             <Button Content="⧉" Width="22" Height="22" Padding="0"
                                     Command="{Binding CopyCommand}"
@@ -1083,6 +1278,13 @@
                          which collapses to zero height naturally. -->
                     <ItemsControl ItemsSource="{Binding ParamRows}"
                                   ItemTemplateSelector="{StaticResource ParamTypeTemplateSelector}">
+                        <!-- A row for one choice only (a transition's words) is
+                             not drawn under the others: ParamSchema.ShownWhen. -->
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Visibility" Value="{Binding IsShown, Converter={StaticResource BoolToVisibility}}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
                         <ItemsControl.Style>
                             <Style TargetType="ItemsControl">
                                 <Style.Triggers>
@@ -1206,7 +1408,7 @@
 
                         <TextBlock Text="{l:T condition.category}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
                         <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,2"
-                                  ItemsSource="{x:Static vm:NodeConditionViewModel.GoCategories}"
+                                  ItemsSource="{x:Static vm:NodeConditionViewModel.GoCategories}" view:OptionNotes.Kind="category" ItemContainerStyle="{StaticResource DescribedItem}"
                                   SelectedItem="{Binding GoCategory, UpdateSourceTrigger=PropertyChanged}"
                                   ToolTip="{l:T condition.howTargetResolvesBust.tip}">
                             <ComboBox.ItemTemplate>
@@ -1235,7 +1437,7 @@
                              shows the friendly label while ToString() (= Token) is what lands
                              in the edit box — see NavigatorTargetOption's class comment. -->
                         <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,2"
-                                  ItemsSource="{Binding GoOverlayLevelOptions}"
+                                  ItemsSource="{Binding GoOverlayLevelOptionsGrouped}"
                                   SelectedValuePath="Token"
                                   SelectedValue="{Binding GoOverlayLevel, UpdateSourceTrigger=PropertyChanged}"
                                   IsEditable="True"
@@ -1273,7 +1475,7 @@
                         <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,2"
                                   IsEditable="True"
                                   IsEnabled="{Binding IsGoTargetEnabled}"
-                                  Text="{Binding GoTarget, UpdateSourceTrigger=PropertyChanged}"
+                                  Text="{Binding GoTarget, UpdateSourceTrigger=PropertyChanged}" view:OptionNotes.Kind="target" ItemContainerStyle="{StaticResource DescribedItem}"
                                   ToolTip="{l:T condition.autocompletesSelectedCategoryStays.tip}">
                             <ComboBox.GroupStyle>
                                 <StaticResource ResourceKey="MusicOriginGroupStyle"/>
@@ -1286,17 +1488,17 @@
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="Bust">
                                             <Setter Property="ItemsSource"
-                                                    Value="{Binding DataContext.BustNameOnlyOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.BustNameOnlyOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="GameObjects">
-                                            <Setter Property="ItemsSource" Value="{Binding GoOverlayOptions}"/>
+                                            <Setter Property="ItemsSource" Value="{Binding GoOverlayOptionsGrouped}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="NPCs">
-                                            <Setter Property="ItemsSource" Value="{Binding GoNpcOptions}"/>
+                                            <Setter Property="ItemsSource" Value="{Binding GoNpcOptionsGrouped}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="Scene">
                                             <Setter Property="ItemsSource"
-                                                    Value="{Binding DataContext.SceneKeyOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.SceneKeyOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -1686,8 +1888,8 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{l:T action.type}" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,0"/>
                         <ComboBox Grid.Column="1"
-                                  ItemsSource="{Binding DataContext.ActionTypes,
-                                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                  ItemsSource="{Binding DataContext.ActionTypesGrouped,
+                                                RelativeSource={RelativeSource AncestorType=Window}}" view:OptionNotes.Kind="actionType" ItemContainerStyle="{StaticResource DescribedItem}"
                                   SelectedItem="{Binding DisplayType, UpdateSourceTrigger=PropertyChanged}">
                             <!-- A vanilla step has no type to choose: it is the
                                  game's own step, and offering the picker would
@@ -1796,7 +1998,7 @@
 
                         <TextBlock Text="{l:T action.category}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
                         <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,2"
-                                  ItemsSource="{x:Static vm:NodeActionViewModel.GoCategories}"
+                                  ItemsSource="{x:Static vm:NodeActionViewModel.GoCategories}" view:OptionNotes.Kind="category" ItemContainerStyle="{StaticResource DescribedItem}"
                                   SelectedItem="{Binding GoCategory, UpdateSourceTrigger=PropertyChanged}"
                                   ToolTip="{l:T action.howTargetResolvesPlain.tip}">
                             <ComboBox.ItemTemplate>
@@ -1828,7 +2030,7 @@
                              into the param and break selection + the strict target
                              list (see NavigatorTargetOption's class comment). -->
                         <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,2"
-                                  ItemsSource="{Binding GoOverlayLevelOptions}"
+                                  ItemsSource="{Binding GoOverlayLevelOptionsGrouped}"
                                   SelectedValuePath="Token"
                                   SelectedValue="{Binding GoOverlayLevel, UpdateSourceTrigger=PropertyChanged}"
                                   IsEditable="True"
@@ -1869,7 +2071,7 @@
                         <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,2"
                                   IsEditable="True"
                                   IsEnabled="{Binding IsGoOverlayTargetEnabled}"
-                                  Text="{Binding GoTarget, UpdateSourceTrigger=PropertyChanged}">
+                                  Text="{Binding GoTarget, UpdateSourceTrigger=PropertyChanged}" view:OptionNotes.Kind="target" ItemContainerStyle="{StaticResource DescribedItem}">
                             <ComboBox.GroupStyle>
                                 <StaticResource ResourceKey="MusicOriginGroupStyle"/>
                             </ComboBox.GroupStyle>
@@ -1880,13 +2082,13 @@
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="Bust">
                                             <Setter Property="ItemsSource"
-                                                    Value="{Binding DataContext.BustNameOnlyOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.BustNameOnlyOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="GameObjects">
-                                            <Setter Property="ItemsSource" Value="{Binding GoOverlayOptions}"/>
+                                            <Setter Property="ItemsSource" Value="{Binding GoOverlayOptionsGrouped}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="NPCs">
-                                            <Setter Property="ItemsSource" Value="{Binding GoNpcOptions}"/>
+                                            <Setter Property="ItemsSource" Value="{Binding GoNpcOptionsGrouped}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="Places">
                                             <Setter Property="ItemsSource"
@@ -1910,6 +2112,13 @@
                          SetSprite. -->
                     <ItemsControl ItemsSource="{Binding ParamRows}"
                                   ItemTemplateSelector="{StaticResource ParamTypeTemplateSelector}">
+                        <!-- A row for one choice only (a transition's words) is
+                             not drawn under the others: ParamSchema.ShownWhen. -->
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Visibility" Value="{Binding IsShown, Converter={StaticResource BoolToVisibility}}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
                         <ItemsControl.Style>
                             <Style TargetType="ItemsControl">
                                 <Style.Triggers>
@@ -1967,7 +2176,7 @@
 
                         <TextBlock Text="{l:T action.operation}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
                         <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,2"
-                                  ItemsSource="{x:Static vm:NodeActionViewModel.VariableOperations}"
+                                  ItemsSource="{x:Static vm:NodeActionViewModel.VariableOperations}" view:OptionNotes.Kind="variableOperation" ItemContainerStyle="{StaticResource DescribedItem}"
                                   SelectedItem="{Binding VarOperation, UpdateSourceTrigger=PropertyChanged}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -2109,23 +2318,31 @@
                         <!-- From list (Random-from-list only): a List variable name or a CSV literal. -->
                         <TextBlock Text="{l:T action.list}" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"
                                    Visibility="{Binding IsRandomFromList, Converter={StaticResource BoolToVisibility}}"/>
-                        <ComboBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,2"
+                        <ComboBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,2" Style="{StaticResource GroupedComboBox}"
                                   IsEditable="True"
-                                  ItemsSource="{Binding DataContext.ListVariableNameOptions, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  ItemsSource="{Binding DataContext.ListVariableNameOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"
                                   Text="{Binding VarFromList, UpdateSourceTrigger=PropertyChanged}"
                                   Visibility="{Binding IsRandomFromList, Converter={StaticResource BoolToVisibility}}"
-                                  ToolTip="{l:T action.listVariablePickRandom.tip}"/>
+                                  ToolTip="{l:T action.listVariablePickRandom.tip}">
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
+                        </ComboBox>
 
                         <!-- Excluding / If-none-left: pick-only (List count has no
                              candidate set to filter). '$name' reads a variable. -->
                         <TextBlock Text="{l:T action.excluding}" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"
                                    Visibility="{Binding IsPickRandomOnly, Converter={StaticResource BoolToVisibility}}"/>
-                        <ComboBox Grid.Row="5" Grid.Column="1" Margin="0,0,0,2"
+                        <ComboBox Grid.Row="5" Grid.Column="1" Margin="0,0,0,2" Style="{StaticResource GroupedComboBox}"
                                   IsEditable="True"
-                                  ItemsSource="{Binding DataContext.ListVariableNameOptions, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  ItemsSource="{Binding DataContext.ListVariableNameOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"
                                   Text="{Binding VarExcluding, UpdateSourceTrigger=PropertyChanged}"
                                   Visibility="{Binding IsPickRandomOnly, Converter={StaticResource BoolToVisibility}}"
-                                  ToolTip="{l:T action.optionalEntriesRemovedList.tip}"/>
+                                  ToolTip="{l:T action.optionalEntriesRemovedList.tip}">
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
+                        </ComboBox>
 
                         <TextBlock Text="{l:T action.ifNoneLeft}" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"
                                    Visibility="{Binding IsPickRandomOnly, Converter={StaticResource BoolToVisibility}}"/>
@@ -2189,7 +2406,7 @@
                              share this row but not the same choices (only SetSprite
                              offers Places). -->
                         <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,2"
-                                  ItemsSource="{Binding Categories}"
+                                  ItemsSource="{Binding Categories}" view:OptionNotes.Kind="category" ItemContainerStyle="{StaticResource DescribedItem}"
                                   SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}"
                                   ToolTip="{l:T action.howTargetResolvesChanges.tip}">
                             <ComboBox.ItemTemplate>
@@ -2225,7 +2442,7 @@
                              into the param and break selection + the strict target
                              list (see NavigatorTargetOption's class comment). -->
                         <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,2"
-                                  ItemsSource="{Binding OverlayLevelOptions}"
+                                  ItemsSource="{Binding OverlayLevelOptionsGrouped}"
                                   SelectedValuePath="Token"
                                   SelectedValue="{Binding OverlayLevel, UpdateSourceTrigger=PropertyChanged}"
                                   IsEditable="True"
@@ -2267,7 +2484,7 @@
                                   IsEditable="True"
                                   IsEnabled="{Binding IsOverlayTargetEnabled}"
                                   Text="{Binding Target, UpdateSourceTrigger=PropertyChanged}"
-                                  ToolTip="{l:T action.autocompletesSelectedCategoryStays.tip}">
+                                  ToolTip="{l:T action.autocompletesSelectedCategoryStays.tip}" view:OptionNotes.Kind="target" ItemContainerStyle="{StaticResource DescribedItem}">
                             <ComboBox.GroupStyle>
                                 <StaticResource ResourceKey="MusicOriginGroupStyle"/>
                             </ComboBox.GroupStyle>
@@ -2279,19 +2496,19 @@
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Category}" Value="Bust">
                                             <Setter Property="ItemsSource"
-                                                    Value="{Binding DataContext.BustNameOnlyOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.BustNameOnlyOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Category}" Value="GameObjects">
                                             <!-- The overlays of the level chosen above (per-action). -->
-                                            <Setter Property="ItemsSource" Value="{Binding OverlayOptions}"/>
+                                            <Setter Property="ItemsSource" Value="{Binding OverlayOptionsGrouped}"/>
                                         </DataTrigger>
                                         <!-- The NPCs placed in that level. -->
                                         <DataTrigger Binding="{Binding Category}" Value="NPCs">
-                                            <Setter Property="ItemsSource" Value="{Binding NpcOptions}"/>
+                                            <Setter Property="ItemsSource" Value="{Binding NpcOptionsGrouped}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Category}" Value="Scene">
                                             <Setter Property="ItemsSource"
-                                                    Value="{Binding DataContext.SceneKeyOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.SceneKeyOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                         <!-- A screen of the pack's own, by id -
                                              which is what makes one screen open
@@ -2303,7 +2520,7 @@
                                              "shop/Panel/Close". -->
                                         <DataTrigger Binding="{Binding Category}" Value="UI">
                                             <Setter Property="ItemsSource"
-                                                    Value="{Binding DataContext.UiIdOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.UiIdOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                         <!-- A whole level, by place token. The level's own
                                              GameObject holds the Base sprite's SpriteRenderer,
@@ -2499,13 +2716,18 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="{l:T navButton.target}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                     <ComboBox ToolTip="{l:T navButton.whereButtonTakesPlayer.tip}" Grid.Row="0" Grid.Column="1"
-                              ItemsSource="{Binding DataContext.AllTargetOptions,
+                              Style="{StaticResource GroupedComboBox}"
+                              ItemsSource="{Binding DataContext.AllTargetOptionsGrouped,
                                             RelativeSource={RelativeSource AncestorType=Window}}"
                               SelectedValuePath="Token"
                               SelectedValue="{Binding Target, UpdateSourceTrigger=PropertyChanged}"
                               ItemTemplate="{StaticResource TargetOptionItemTemplate}"
                               IsEditable="True"
-                              Text="{Binding Target, UpdateSourceTrigger=PropertyChanged}"/>
+                              Text="{Binding Target, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.GroupStyle>
+                            <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                        </ComboBox.GroupStyle>
+                    </ComboBox>
                     <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" Margin="4,0,0,0">
                         <Button Content="▲" Width="22" Height="22" Padding="0"
                                 Command="{Binding MoveUpCommand}"
@@ -2834,8 +3056,11 @@
                                                 <DockPanel>
                                                     <Button DockPanel.Dock="Right" Content="−" Width="22" Padding="0"
                                                             Command="{Binding RemoveCommand}" ToolTip="{l:T component.remove.tip}"/>
-                                                    <ComboBox Style="{StaticResource GroupedComboBox}" ItemsSource="{Binding ComponentTypes}"
-                                                              SelectedItem="{Binding Type}"/>
+                                                    <ComboBox Style="{StaticResource GroupedComboBox}" ItemsSource="{Binding ComponentTypesGrouped}"
+                                                              SelectedItem="{Binding Type}"
+                                                              view:OptionNotes.Kind="component" ItemContainerStyle="{StaticResource DescribedItem}">
+                                                        <ComboBox.GroupStyle><StaticResource ResourceKey="MusicOriginGroupStyle"/></ComboBox.GroupStyle>
+                                                    </ComboBox>
                                                 </DockPanel>
 
                                                 <!-- FadeInSprite -->
@@ -2955,12 +3180,14 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="{l:T npcPlacement.npc}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                    <ComboBox Grid.Row="0" Grid.Column="1" IsEditable="True"
-                              ItemsSource="{Binding DataContext.NpcKeyOptions, RelativeSource={RelativeSource AncestorType=Window}}"
+                    <ComboBox Grid.Row="0" Grid.Column="1" IsEditable="True" Style="{StaticResource GroupedComboBox}"
+                              ItemsSource="{Binding DataContext.NpcKeyOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"
                               DisplayMemberPath="DisplayLabel"
                               SelectedValuePath="Token"
                               SelectedValue="{Binding Npc, UpdateSourceTrigger=PropertyChanged}"
-                              ToolTip="{l:T npcPlacement.keyNPCNpcsTab.tip}"/>
+                              ToolTip="{l:T npcPlacement.keyNPCNpcsTab.tip}">
+                        <ComboBox.GroupStyle><StaticResource ResourceKey="MusicOriginGroupStyle"/></ComboBox.GroupStyle>
+                    </ComboBox>
                     <Button Grid.Row="0" Grid.Column="2" Content="−" Width="22" Height="22"
                             Padding="0" Margin="4,0,0,0" Command="{Binding RemoveCommand}"
                             ToolTip="{l:T npcPlacement.remove.tip}"/>
@@ -4887,8 +5114,6 @@
                             <Button view:TutorialAnchor.Id="btn:addNpc" Content="{l:T npcs.addNpc}" Command="{Binding AddNpcCommand}"/>
                             <Button Content="{l:T npcs.unitAddFolder}" Tag="{Binding NpcTree}" Click="UnitAddFolder_Click"
                                     ToolTip="{l:T npcs.unitAddFolder.tip}"/>
-                            <Button Content="{l:T npcs.unitRenameFolder}" Tag="{Binding NpcTree}" Click="UnitRenameFolder_Click"
-                                    ToolTip="{l:T npcs.unitRenameFolder.tip}"/>
                             <Button Content="{l:T npcs.removeNpc}" Command="{Binding RemoveNpcCommand}"
                                     ToolTip="{l:T npcs.removeNpc.tip}"/>
                         </ToolBar>
@@ -5169,8 +5394,6 @@
                                 <Button view:TutorialAnchor.Id="btn:addPlace" Content="{l:T places.addPlace}" Command="{Binding AddPlaceCommand}"/>
                                 <Button Content="{l:T places.unitAddFolder}" Tag="{Binding PlaceTree}" Click="UnitAddFolder_Click"
                                         ToolTip="{l:T places.unitAddFolder.tip}"/>
-                                <Button Content="{l:T places.unitRenameFolder}" Tag="{Binding PlaceTree}" Click="UnitRenameFolder_Click"
-                                        ToolTip="{l:T places.unitRenameFolder.tip}"/>
                                 <Button Content="{l:T places.removePlace}" Command="{Binding RemovePlaceCommand}"
                                         ToolTip="{l:T places.removePlace.tip}"/>
                             </ToolBar>
@@ -5688,13 +5911,17 @@
                                             <!-- Target -->
                                             <TextBlock Text="{l:T mapButtons.targetPlace}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                             <ComboBox Style="{StaticResource GroupedComboBox}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
-                                                      ItemsSource="{Binding DataContext.AllTargetOptions,
+                                                      ItemsSource="{Binding DataContext.AllTargetOptionsGrouped,
                                                                     RelativeSource={RelativeSource AncestorType=Window}}"
                                                       SelectedValuePath="Token"
                                                       SelectedValue="{Binding Target, UpdateSourceTrigger=PropertyChanged}"
                                                       ItemTemplate="{StaticResource TargetOptionItemTemplate}"
                                                       IsEditable="True"
-                                                      Text="{Binding Target, UpdateSourceTrigger=PropertyChanged}"/>
+                                                      Text="{Binding Target, UpdateSourceTrigger=PropertyChanged}">
+                                                <ComboBox.GroupStyle>
+                                                    <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                                                </ComboBox.GroupStyle>
+                                            </ComboBox>
 
                                             <!-- District -->
                                             <TextBlock Text="{l:T mapButtons.district}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
@@ -5777,8 +6004,6 @@
                             <Button view:TutorialAnchor.Id="btn:addDialogue" Content="{l:T dialogues.addDialogue}" Command="{Binding AddDialogueCommand}"/>
                             <Button Content="{l:T dialogues.addDialogueFolder}"   Command="{Binding AddDialogueFolderCommand}"
                                     ToolTip="{l:T dialogues.addDialogueFolder.tip}"/>
-                            <Button Content="{l:T dialogues.renameFolder}"     Click="RenameFolder_Click"
-                                    ToolTip="{l:T dialogues.renameFolder.tip}"/>
                             <Button Content="{l:T dialogues.removeDialogue}"   Command="{Binding RemoveDialogueCommand}"
                                     ToolTip="{l:T dialogues.removeDialogue.tip}"/>
                         </ToolBar>
@@ -5898,8 +6123,17 @@
                                 <HierarchicalDataTemplate DataType="{x:Type vm:DialogueFolderNode}"
                                                           ItemsSource="{Binding Children}">
                                     <StackPanel Orientation="Horizontal">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="{l:T folders.renameMenu}" InputGestureText="F2" Click="FolderRenameMenu_Click"/>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
                                         <TextBlock Text="📁" Margin="0,0,4,0"/>
-                                        <TextBlock Text="{Binding Label}" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding Label}" FontWeight="SemiBold"
+                                                   Visibility="{Binding IsRenaming, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                        <!-- Renamed where it stands: F2, or Rename on the right-click menu. -->
+                                        <TextBox MinWidth="120" view:FolderRename.Box="True"
+                                                 Visibility="{Binding IsRenaming, Converter={StaticResource BoolToVisibility}}"/>
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
                                 <DataTemplate DataType="{x:Type vm:DialogueLeafNode}">
@@ -5975,10 +6209,12 @@
                                 <StackPanel>
                                     <DockPanel Margin="0,0,0,4">
                                         <TextBlock Text="{l:T dialogues.conversation}" Width="120" VerticalAlignment="Center"/>
-                                        <ComboBox ItemsSource="{Binding DataContext.AvailableVanillaDialogues,
+                                        <ComboBox ItemsSource="{Binding DataContext.AvailableVanillaDialoguesGrouped,
                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  Style="{StaticResource GroupedComboBox}"
                                                   SelectedItem="{Binding VanillaSource, UpdateSourceTrigger=PropertyChanged}"
                                                   ToolTip="{l:T dialogues.whichGameSConversations.tip}">
+                                            <ComboBox.GroupStyle><StaticResource ResourceKey="MusicOriginGroupStyle"/></ComboBox.GroupStyle>
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel>
@@ -6552,23 +6788,32 @@
                                     <TextBlock Text="{l:T dialogues.expression}"  Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
                                                Visibility="{Binding DataContext.SelectedNodeShowsExpressionAndOutfit, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
                                     <ComboBox x:Name="NodeExpressionPicker" ToolTip="{l:T dialogues.whichExpressionSpeakerWears.tip}" view:IssueTarget.Field="expression" Grid.Row="3" Grid.Column="1"
-                                              ItemsSource="{Binding DataContext.SelectedNodeExpressionOptions,
+                                              Style="{StaticResource GroupedComboBox}"
+                                              ItemsSource="{Binding DataContext.SelectedNodeExpressionOptionsGrouped,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
                                               Visibility="{Binding DataContext.SelectedNodeShowsExpressionAndOutfit, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"
-                                              Text="{Binding Expression, UpdateSourceTrigger=PropertyChanged}"/>
+                                              Text="{Binding Expression, UpdateSourceTrigger=PropertyChanged}">
+                                        <ComboBox.GroupStyle>
+                                            <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                                        </ComboBox.GroupStyle>
+                                    </ComboBox>
                                     <!-- Outfit: optional per-node bust switch. The picker lists the
                                          speaking actor's authored outfits; empty keeps the current bust.
                                          A $varName picks the outfit dynamically from a pack variable. -->
                                     <TextBlock Text="{l:T dialogues.outfit}"      Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
                                                Visibility="{Binding DataContext.SelectedNodeShowsExpressionAndOutfit, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
-                                    <ComboBox Grid.Row="4" Grid.Column="1"
-                                              ItemsSource="{Binding DataContext.SelectedNodeOutfitOptions,
+                                    <ComboBox Grid.Row="4" Grid.Column="1" Style="{StaticResource GroupedComboBox}"
+                                              ItemsSource="{Binding DataContext.SelectedNodeOutfitOptionsGrouped,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
                                               Visibility="{Binding DataContext.SelectedNodeShowsExpressionAndOutfit, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"
                                               Text="{Binding Outfit, UpdateSourceTrigger=PropertyChanged}"
-                                              ToolTip="{l:T dialogues.switchActorOneTheir.tip}"/>
+                                              ToolTip="{l:T dialogues.switchActorOneTheir.tip}">
+                                        <ComboBox.GroupStyle>
+                                            <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                                        </ComboBox.GroupStyle>
+                                    </ComboBox>
                                     <TextBlock Text="{l:T dialogues.text}"        Grid.Row="5" Grid.Column="0" VerticalAlignment="Top" Margin="0,4,0,0"/>
                                     <!-- The one field in the editor a player actually reads, so it's
                                          the one that gets Windows' spell checker. Language is pinned
@@ -6632,6 +6877,18 @@
                                                     <TextBlock Text="A" FontSize="9" Margin="1,0,0,0"
                                                                VerticalAlignment="Bottom"/>
                                                 </StackPanel>
+                                            </Button>
+                                            <!-- Not markup: one of the pack's auto-trigger patterns,
+                                                 the words that make a sound play when the line shows
+                                                 them. A list to pick from, each with a play button,
+                                                 so nobody has to go to the SFX tab to remember
+                                                 whether it was *smooch* or *kiss*. -->
+                                            <Border Width="1" Margin="3,3" Background="{DynamicResource Theme.Text}" Opacity="0.25"/>
+                                            <Button x:Name="SfxPatternButton"
+                                                    Style="{StaticResource Theme.MarkupButton}"
+                                                    Click="SfxPattern_Click"
+                                                    ToolTip="{l:T dialogues.sfxPattern.tip}">
+                                                <TextBlock Text="&#x266A;" FontSize="14" Margin="0,-2,0,0"/>
                                             </Button>
                                         </StackPanel>
                                     <!-- How the line is translated: exactly as written everywhere,
@@ -6859,8 +7116,6 @@
                             <Button view:TutorialAnchor.Id="btn:addScene" Content="{l:T scenes.addScene}"  Command="{Binding AddSceneCommand}"/>
                             <Button Content="{l:T scenes.unitAddFolder}" Tag="{Binding SceneTree}" Click="UnitAddFolder_Click"
                                     ToolTip="{l:T scenes.unitAddFolder.tip}"/>
-                            <Button Content="{l:T scenes.unitRenameFolder}" Tag="{Binding SceneTree}" Click="UnitRenameFolder_Click"
-                                    ToolTip="{l:T scenes.unitRenameFolder.tip}"/>
                             <Button Content="{l:T scenes.removeScene}" Command="{Binding RemoveSceneCommand}"
                                     ToolTip="{l:T scenes.removeScene.tip}"/>
                         </ToolBar>
@@ -7062,8 +7317,6 @@
                             <Button view:TutorialAnchor.Id="btn:addMusic" Content="{l:T music.addMusic}"   Command="{Binding AddMusicCommand}"/>
                             <Button Content="{l:T music.unitAddFolder}" Tag="{Binding MusicTree}" Click="UnitAddFolder_Click"
                                     ToolTip="{l:T music.unitAddFolder.tip}"/>
-                            <Button Content="{l:T music.unitRenameFolder}" Tag="{Binding MusicTree}" Click="UnitRenameFolder_Click"
-                                    ToolTip="{l:T music.unitRenameFolder.tip}"/>
                             <Button Content="{l:T music.removeMusic}" Command="{Binding RemoveMusicCommand}"
                                     ToolTip="{l:T music.removeMusic.tip}"/>
                         </ToolBar>
@@ -7128,8 +7381,19 @@
                                     <TextBox  Text="{Binding LoopText, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"
                                               ToolTip="{l:T music.leaveBlankInheritVanilla.tip}"/>
                                     <TextBlock Text="{l:T music.volume}"      Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding VolumeText, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"
-                                              ToolTip="{l:T music.01BlankInherit.tip}"/>
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                                        <!-- Short: three characters is all a volume needs, "1.0" to "5.0".
+                                             The slider comes first and does the work; the box says the
+                                             number and takes one typed. 1.0 is the game's own level. -->
+                                        <Slider Width="220" Minimum="0" Maximum="5" TickFrequency="0.1" IsSnapToTickEnabled="True"
+                                                SmallChange="0.1" LargeChange="0.5" VerticalAlignment="Center"
+                                                Value="{Binding VolumeValue}"
+                                                PreviewMouseLeftButtonUp="UndoStep_Event" KeyUp="UndoStep_Event"
+                                                ToolTip="{l:T music.01BlankInherit.tip}"/>
+                                        <TextBox Width="34" Margin="6,0,0,0"
+                                                 Text="{Binding VolumeText, UpdateSourceTrigger=PropertyChanged}"
+                                                 ToolTip="{l:T music.01BlankInherit.tip}"/>
+                                    </StackPanel>
                                 </Grid>
                             </GroupBox>
 
@@ -7146,6 +7410,21 @@
                                     <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" Foreground="Gray" FontSize="10"
                                                Text="{l:T music.playsThroughEditorS}"/>
                                 </StackPanel>
+                            </GroupBox>
+
+                            <!-- ── The sound editor (the author, 1.7.0) ──
+                                 The sound as a strip, like Audacity's but one channel
+                                 tall: the wheel zooms, a click picks a spot, Cut splits
+                                 the piece there into two, Delete takes a piece out.
+                                 Then pitch, speed, echo and reverb for the whole. Saved
+                                 as an edit; the file the game plays is made from the
+                                 recording when the pack is saved. One template, shared
+                                 by the SFX and Music tabs. -->
+                            <GroupBox Header="{l:T sfxEdit.header}"
+                                      DataContext="{Binding DataContext.MusicEditor, RelativeSource={RelativeSource AncestorType=Window}}"
+                                      Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
+                                <ContentControl Content="{Binding}" ContentTemplate="{StaticResource SoundEditorTemplate}"
+                                                Focusable="False"/>
                             </GroupBox>
                         </StackPanel>
                     </ScrollViewer>
@@ -7176,8 +7455,6 @@
                             <Button view:TutorialAnchor.Id="btn:addSfx" Content="{l:T sfx.addSfx}"     Command="{Binding AddSfxCommand}"/>
                             <Button Content="{l:T sfx.unitAddFolder}" Tag="{Binding SfxTree}" Click="UnitAddFolder_Click"
                                     ToolTip="{l:T sfx.unitAddFolder.tip}"/>
-                            <Button Content="{l:T sfx.unitRenameFolder}" Tag="{Binding SfxTree}" Click="UnitRenameFolder_Click"
-                                    ToolTip="{l:T sfx.unitRenameFolder.tip}"/>
                             <Button Content="{l:T sfx.removeSfx}" Command="{Binding RemoveSfxCommand}"
                                     ToolTip="{l:T sfx.removeSfx.tip}"/>
                         </ToolBar>
@@ -7240,8 +7517,19 @@
                                                            Filter="{x:Static view:PickerFilters.Audio}"
                                                            Grid.Row="0" Grid.Column="1"/>
                                         <TextBlock Text="{l:T sfx.defaultVolume}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                        <TextBox  Text="{Binding DefaultVolumeText, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"
-                                                  ToolTip="{l:T sfx.01UsedPlaysfx.tip}"/>
+                                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                                        <!-- Short: three characters is all a volume needs, "1.0" to "5.0".
+                                             The slider comes first and does the work; the box says the
+                                             number and takes one typed. 1.0 is the game's own level. -->
+                                        <Slider Width="220" Minimum="0" Maximum="5" TickFrequency="0.1" IsSnapToTickEnabled="True"
+                                                SmallChange="0.1" LargeChange="0.5" VerticalAlignment="Center"
+                                                Value="{Binding DefaultVolumeValue}"
+                                                PreviewMouseLeftButtonUp="UndoStep_Event" KeyUp="UndoStep_Event"
+                                                ToolTip="{l:T sfx.01UsedPlaysfx.tip}"/>
+                                        <TextBox Width="34" Margin="6,0,0,0"
+                                                 Text="{Binding DefaultVolumeText, UpdateSourceTrigger=PropertyChanged}"
+                                                 ToolTip="{l:T sfx.01UsedPlaysfx.tip}"/>
+                                    </StackPanel>
                                     </Grid>
                                     <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
                                         <Button Content="{l:T sfx.playSfx}" Padding="10,2"
@@ -7256,6 +7544,21 @@
                                                    Text="{l:T sfx.playsThroughEditorS}"/>
                                     </StackPanel>
                                 </StackPanel>
+                            </GroupBox>
+
+                            <!-- ── The sound editor (the author, 1.7.0) ──
+                                 The sound as a strip, like Audacity's but one channel
+                                 tall: the wheel zooms, a click picks a spot, Cut splits
+                                 the piece there into two, Delete takes a piece out.
+                                 Then pitch, speed, echo and reverb for the whole. Saved
+                                 as an edit; the file the game plays is made from the
+                                 recording when the pack is saved. One template, shared
+                                 by the SFX and Music tabs. -->
+                            <GroupBox Header="{l:T sfxEdit.header}"
+                                      DataContext="{Binding DataContext.SfxEditor, RelativeSource={RelativeSource AncestorType=Window}}"
+                                      Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
+                                <ContentControl Content="{Binding}" ContentTemplate="{StaticResource SoundEditorTemplate}"
+                                                Focusable="False"/>
                             </GroupBox>
 
                             <GroupBox Header="{l:T sfx.autoTriggerPatterns}">
@@ -7294,8 +7597,6 @@
                             <Button view:TutorialAnchor.Id="btn:addWallpaper" Content="{l:T wallpapers.addWallpaper}" Command="{Binding AddWallpaperCommand}"/>
                             <Button Content="{l:T wallpapers.unitAddFolder}" Tag="{Binding WallpaperTree}" Click="UnitAddFolder_Click"
                                     ToolTip="{l:T wallpapers.unitAddFolder.tip}"/>
-                            <Button Content="{l:T wallpapers.unitRenameFolder}" Tag="{Binding WallpaperTree}" Click="UnitRenameFolder_Click"
-                                    ToolTip="{l:T wallpapers.unitRenameFolder.tip}"/>
                             <Button Content="{l:T wallpapers.removeWallpaper}" Command="{Binding RemoveWallpaperCommand}"
                                     ToolTip="{l:T wallpapers.removeWallpaper.tip}"/>
                         </ToolBar>
@@ -7424,8 +7725,6 @@
                             <Button view:TutorialAnchor.Id="btn:addVariable" Content="{l:T variables.addVariable}" Command="{Binding AddVariableCommand}"/>
                             <Button Content="{l:T variables.addVariableFolder}"   Command="{Binding AddVariableFolderCommand}"
                                     ToolTip="{l:T variables.addVariableFolder.tip}"/>
-                            <Button Content="{l:T variables.renameVariableFolder}"     Click="RenameVariableFolder_Click"
-                                    ToolTip="{l:T variables.renameVariableFolder.tip}"/>
                             <Button Content="{l:T variables.removeVariable}"   Command="{Binding RemoveVariableCommand}"
                                     ToolTip="{l:T variables.removeVariable.tip}"/>
                         </ToolBar>
@@ -7458,8 +7757,17 @@
                                 <HierarchicalDataTemplate DataType="{x:Type vm:VariableFolderNode}"
                                                           ItemsSource="{Binding Children}">
                                     <StackPanel Orientation="Horizontal">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="{l:T folders.renameMenu}" InputGestureText="F2" Click="FolderRenameMenu_Click"/>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
                                         <TextBlock Text="📁" Margin="0,0,4,0"/>
-                                        <TextBlock Text="{Binding Label}" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding Label}" FontWeight="SemiBold"
+                                                   Visibility="{Binding IsRenaming, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                        <!-- Renamed where it stands: F2, or Rename on the right-click menu. -->
+                                        <TextBox MinWidth="120" view:FolderRename.Box="True"
+                                                 Visibility="{Binding IsRenaming, Converter={StaticResource BoolToVisibility}}"/>
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
                                 <DataTemplate DataType="{x:Type vm:VariableLeafNode}">
@@ -7660,8 +7968,6 @@
                             <Button view:TutorialAnchor.Id="btn:addRule" Content="{l:T integration.addIntegrationRule}"   Command="{Binding AddIntegrationRuleCommand}"/>
                             <Button Content="{l:T integration.addIntegrationFolder}" Command="{Binding AddIntegrationFolderCommand}"
                                     ToolTip="{l:T integration.addIntegrationFolder.tip}"/>
-                            <Button Content="{l:T integration.renameIntegrationFolder}"   Click="RenameIntegrationFolder_Click"
-                                    ToolTip="{l:T integration.renameIntegrationFolder.tip}"/>
                             <Button Content="{l:T integration.removeIntegrationRule}" Command="{Binding RemoveIntegrationRuleCommand}"
                                     ToolTip="{l:T integration.removeIntegrationRule.tip}"/>
                         </ToolBar>
@@ -7694,8 +8000,17 @@
                                 <HierarchicalDataTemplate DataType="{x:Type vm:IntegrationFolderNode}"
                                                           ItemsSource="{Binding Children}">
                                     <StackPanel Orientation="Horizontal">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="{l:T folders.renameMenu}" InputGestureText="F2" Click="FolderRenameMenu_Click"/>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
                                         <TextBlock Text="📁" Margin="0,0,4,0"/>
-                                        <TextBlock Text="{Binding Label}" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding Label}" FontWeight="SemiBold"
+                                                   Visibility="{Binding IsRenaming, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                        <!-- Renamed where it stands: F2, or Rename on the right-click menu. -->
+                                        <TextBox MinWidth="120" view:FolderRename.Box="True"
+                                                 Visibility="{Binding IsRenaming, Converter={StaticResource BoolToVisibility}}"/>
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
                                 <DataTemplate DataType="{x:Type vm:IntegrationLeafNode}">
@@ -7782,12 +8097,16 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="{l:T integration.eachValue}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                        <ComboBox Grid.Row="0" Grid.Column="1"
-                                                  ItemsSource="{Binding DataContext.ListVariableNameOptions,
+                                        <ComboBox Grid.Row="0" Grid.Column="1" Style="{StaticResource GroupedComboBox}"
+                                                  ItemsSource="{Binding DataContext.ListVariableNameOptionsGrouped,
                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
                                                   IsEditable="True"
                                                   Text="{Binding ForEach, UpdateSourceTrigger=PropertyChanged}"
-                                                  ToolTip="{l:T integration.listVariableNameLiteral.tip}"/>
+                                                  ToolTip="{l:T integration.listVariableNameLiteral.tip}">
+                                            <ComboBox.GroupStyle>
+                                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                                            </ComboBox.GroupStyle>
+                                        </ComboBox>
                                         <TextBlock Text="{l:T integration.placeholderName}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,4,0,0"/>
                                         <TextBox Grid.Row="1" Grid.Column="1" Margin="0,4,0,0"
                                                  Text="{Binding ForEachAs, UpdateSourceTrigger=PropertyChanged}"
@@ -8058,10 +8377,14 @@
                                 <DockPanel Margin="0,0,0,2"
                                            IsEnabled="{Binding ButtonsMakeSound}">
                                     <TextBlock Text="{l:T ui.buttonSound}" Width="96" VerticalAlignment="Center"/>
-                                    <ComboBox IsEditable="True"
+                                    <ComboBox IsEditable="True" Style="{StaticResource GroupedComboBox}"
                                               Text="{Binding ButtonSound, UpdateSourceTrigger=PropertyChanged}"
-                                              ItemsSource="{Binding DataContext.ButtonSoundOptions, RelativeSource={RelativeSource AncestorType=Window}}"
-                                              ToolTip="{l:T ui.leaveBlankGameS.tip}"/>
+                                              ItemsSource="{Binding DataContext.ButtonSoundOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"
+                                              ToolTip="{l:T ui.leaveBlankGameS.tip}">
+                                        <ComboBox.GroupStyle>
+                                            <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                                        </ComboBox.GroupStyle>
+                                    </ComboBox>
                                 </DockPanel>
 
                                 <TextBlock Margin="96,0,0,6" FontSize="10" Opacity="0.6"
@@ -8102,12 +8425,16 @@
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
-                            <ComboBox ItemsSource="{Binding DataContext.AvailableUiScreens,
+                            <ComboBox ItemsSource="{Binding DataContext.AvailableUiScreensGrouped,
                                               RelativeSource={RelativeSource AncestorType=Window}}"
+                                      Style="{StaticResource GroupedComboBox}"
                                       SelectedValue="{Binding Source, Mode=TwoWay}"
                                       SelectedValuePath="Token" DisplayMemberPath="Id"
                                       IsEditable="False" Margin="0,2,0,0"
-                                      ToolTip="{l:T ui.everyUIGameHas.tip}"/>
+                                      view:OptionNotes.Kind="gameScreen" ItemContainerStyle="{StaticResource DescribedItem}"
+                                      ToolTip="{l:T ui.everyUIGameHas.tip}">
+                                <ComboBox.GroupStyle><StaticResource ResourceKey="MusicOriginGroupStyle"/></ComboBox.GroupStyle>
+                            </ComboBox>
                             <TextBlock Text="{Binding Warning}" Foreground="#C08A2B" FontSize="11"
                                        TextWrapping="Wrap" Margin="0,4,0,0">
                                 <TextBlock.Style>
@@ -8546,10 +8873,12 @@
 
                                             <DockPanel Margin="0,0,0,4">
                                                 <TextBlock Text="{l:T ui.sound}" Width="66" VerticalAlignment="Center"/>
-                                                <ComboBox IsEditable="True"
+                                                <ComboBox IsEditable="True" Style="{StaticResource GroupedComboBox}"
                                                           Text="{Binding ClickSound, UpdateSourceTrigger=PropertyChanged}"
-                                                          ItemsSource="{Binding DataContext.ButtonSoundOptions, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                          ToolTip="{l:T ui.whatObjectSoundsLike.tip}"/>
+                                                          ItemsSource="{Binding DataContext.ButtonSoundOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                          ToolTip="{l:T ui.whatObjectSoundsLike.tip}">
+                                                    <ComboBox.GroupStyle><StaticResource ResourceKey="MusicOriginGroupStyle"/></ComboBox.GroupStyle>
+                                                </ComboBox>
                                             </DockPanel>
 
                                             <!-- The question the button asks before
@@ -8647,8 +8976,6 @@
                                 <Button view:TutorialAnchor.Id="btn:addQuest" Content="{l:T quests.addQuest}" Command="{Binding AddQuestCommand}"/>
                                 <Button Content="{l:T quests.unitAddFolder}" Tag="{Binding QuestTree}" Click="UnitAddFolder_Click"
                                         ToolTip="{l:T quests.unitAddFolder.tip}"/>
-                                <Button Content="{l:T quests.unitRenameFolder}" Tag="{Binding QuestTree}" Click="UnitRenameFolder_Click"
-                                        ToolTip="{l:T quests.unitRenameFolder.tip}"/>
                                 <Button x:Name="RemoveQuestButton" Content="{l:T quests.removeQuest}" Command="{Binding RemoveQuestCommand}"
                                         ToolTip="{l:T quests.removeQuest.tip}"/>
                             </ToolBar>
@@ -8726,6 +9053,7 @@
                                     <TextBlock Text="{l:T quests.quest}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                     <ComboBox x:Name="QuestSourcePicker" Grid.Row="0" Grid.Column="1" IsEditable="True"
                                               ItemsSource="{x:Static vm:QuestViewModel.VanillaQuestOptions}"
+                                              view:OptionNotes.Kind="gameQuest" ItemContainerStyle="{StaticResource DescribedItem}"
                                               Text="{Binding Source, UpdateSourceTrigger=PropertyChanged}"
                                               ToolTip="{l:T quests.questSourcePicker.tip}"/>
                                     <TextBlock Grid.Row="1" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,1,0,4"
@@ -9314,6 +9642,12 @@
                 <Button x:Name="EditTranslationsButton" Content="{l:T editingLanguage.edit}" Padding="8,0"
                         Margin="6,0,0,0" ToolTip="{l:T editingLanguage.edit.tip}"
                         Click="EditPackTranslations_Click"/>
+                <!-- The pack's folder, in File Explorer (1.7.0). Greyed until
+                     the pack has one; the tooltip says why even then. -->
+                <Button x:Name="OpenPackFolderButton" Content="{l:T packFolder.open}" Padding="8,0"
+                        Margin="6,0,0,0" ToolTip="{l:T packFolder.open.tip}"
+                        ToolTipService.ShowOnDisabled="True"
+                        Command="{Binding OpenPackFolderCommand}"/>
             </StackPanel>
         </Grid>
     </DockPanel>
@@ -9341,6 +9675,21 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="⭳" VerticalAlignment="Center" Margin="0,0,6,0"/>
                 <TextBlock x:Name="UpdateToastText" Foreground="White" FontWeight="SemiBold"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+        <!-- A notice in passing - what a rename reached beyond the record being
+             edited. Same corner as the Saved toast and a step below it, in
+             slate: it is information, not a result of the click. -->
+        <Border x:Name="NoticeToast"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Margin="0,64,16,0" Padding="10,5" MaxWidth="460"
+                CornerRadius="4"
+                Background="#E2404A5A" BorderBrush="#40FFFFFF" BorderThickness="1"
+                Opacity="0" IsHitTestVisible="False" Panel.ZIndex="100">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="↻" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBlock x:Name="NoticeToastText" Foreground="White" TextWrapping="Wrap"
                            VerticalAlignment="Center"/>
             </StackPanel>
         </Border>

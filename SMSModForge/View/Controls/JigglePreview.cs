@@ -479,8 +479,9 @@ public sealed class JigglePreview : Image
     /// <summary>
     /// A part the outfit borrows from one of the game's busts
     /// (<see cref="Shared.GameArt"/>), from the copy of that bust's art shipped
-    /// with the editor. Smaller than the game's own, which the game uses; fitted
-    /// to the frame here like any other art, so it sits where the game's will.
+    /// with the editor: the blink, mouths and faces at the game's full size, so
+    /// they match a pack's own bust (1.7.0), the mask smaller. Fitted to the
+    /// frame here like any other art, so it sits where the game's will.
     /// </summary>
     private static byte[]? LoadBorrowed(string field, string file)
     {

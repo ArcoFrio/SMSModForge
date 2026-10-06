@@ -72,6 +72,12 @@ public sealed class MarkupTextBox : RichTextBox
         // RichTextBox's history of the document is switched off. That one
         // recorded every redraw as an edit of its own.
         IsUndoEnabled = false;
+
+        // A token is drawn in its character's name colour, which can change
+        // while the line is on screen. Asked only while showing.
+        Loaded += (_, _) => { DialogueMarkup.TokenColorsChanged -= TokenColorsChanged; DialogueMarkup.TokenColorsChanged += TokenColorsChanged; };
+        Unloaded += (_, _) => DialogueMarkup.TokenColorsChanged -= TokenColorsChanged;
+
         CommandBindings.Add(new System.Windows.Input.CommandBinding(
             System.Windows.Input.ApplicationCommands.Undo,
             (_, e) => { e.Handled = Undo(); },
@@ -253,6 +259,36 @@ public sealed class MarkupTextBox : RichTextBox
         Focus();
         if (inside.Length > 0) Select(from + open.Length, inside.Length);
         else CaretIndex = from + open.Length;
+    }
+
+    /// <summary>
+    /// Where words a toolbar button puts in go: just after whatever is
+    /// selected - never over it - or at the caret, or at the end of the line
+    /// when the box has never had the keyboard (see <see cref="Surround"/>).
+    /// Read it BEFORE anything takes the keyboard away, a menu included.
+    /// </summary>
+    public int InsertionPoint => IsKeyboardFocusWithin ? SelectionStart + SelectionLength : Text.Length;
+
+    /// <summary>
+    /// Put <paramref name="words"/> into the line at <paramref name="at"/>,
+    /// with a space between them and a word either side so they never run
+    /// into one. One undo step of its own, and the caret ends up after them.
+    /// </summary>
+    public void Insert(string words, int at)
+    {
+        if (IsReadOnly || string.IsNullOrEmpty(words)) return;
+
+        string text = Text;
+        at = Math.Clamp(at, 0, text.Length);
+        string before = at > 0 && !char.IsWhiteSpace(text[at - 1]) ? " " : "";
+        string after = at < text.Length && !char.IsWhiteSpace(text[at]) ? " " : "";
+
+        Remember(new Step(text, SelectionStart, SelectionLength));
+        _typing = false;
+        WriteOwnEdit(text.Substring(0, at) + before + words + after + text.Substring(at));
+
+        Focus();
+        CaretIndex = at + before.Length + words.Length;
     }
 
     /// <summary>
@@ -682,13 +718,33 @@ public sealed class MarkupTextBox : RichTextBox
                 // applies, because what the game puts here in its place WILL be
                 // bold or coloured or half-size along with the rest.
                 Apply(run, span.Style);
-                run.Foreground = TagBrush;
-                run.Background = TagBackBrush;
+                var person = DialogueMarkup.TokenColor?.Invoke(lines[i]);
+                if (person is { } c)
+                {
+                    // In the name colour of whoever it stands in for, on the
+                    // dark chip the game-look row puts every token on: the
+                    // name colours are made for the game's dark panel, and on
+                    // a light box half of them would not read.
+                    run.Foreground = new SolidColorBrush(Color.FromRgb(c.R, c.G, c.B));
+                    run.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(DialogueLook.TokenChipHex)!);
+                }
+                else
+                {
+                    run.Foreground = TagBrush;
+                    run.Background = TagBackBrush;
+                }
             }
             else Apply(run, span.Style);
 
             yield return run;
         }
+    }
+
+    private void TokenColorsChanged()
+    {
+        if (!Dispatcher.CheckAccess()) { Dispatcher.BeginInvoke(new Action(TokenColorsChanged)); return; }
+        _rendered = null;
+        Render(Text);
     }
 
     /// <summary>

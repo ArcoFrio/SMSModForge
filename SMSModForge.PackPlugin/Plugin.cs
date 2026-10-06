@@ -710,6 +710,7 @@ namespace SMSModForge.PackPlugin
             XUnityLink.Detect(Logger);
             PluginLanguage.Configure(Config, Logger);
             PackSwitchSetting.Configure(Config);
+            PackOrderSetting.Configure(Config);
             // And the letters of that language, which the game's fonts lack.
             PluginFonts.AddFallbacks(PluginLanguage.Code, Logger);
             // Where it is chosen on the main menu.
@@ -856,6 +857,8 @@ namespace SMSModForge.PackPlugin
             SaveCarry.Reset();
             // The packs' lines are read again with the packs.
             TypewriterTiming.Reset();
+            // And their sounds, so the louder copies made of them go too.
+            GameAudio.Forget();
             XUnityLink.ForgetTexts();
             // Holds a material from the scene being torn down.
             NpcFactory.Reset();
@@ -903,6 +906,9 @@ namespace SMSModForge.PackPlugin
             // The key watch list was built out of the conditions those packs
             // ran; nothing should still be polled for a pack that is gone.
             InputRuntime.Reset();
+            // ...and nothing waiting to run in it, or still on screen over it.
+            ActionSequence.Clear();
+            TransitionRuntime.Reset();
             _dialogueHosts.Clear();
             _sharedSkin = null;
             _levelWatches.Clear();
@@ -951,10 +957,35 @@ namespace SMSModForge.PackPlugin
 
             try
             {
-                var packs = DiscoverPacks();
-                // Alphabetical, case-insensitive — the order the rows render in.
-                packs.Sort((a, b) => string.Compare(a.DisplayLabel, b.DisplayLabel,
-                                                    System.StringComparison.OrdinalIgnoreCase));
+                var packs = DiscoverPacks(withChanges: true);
+                // In load order, which the player arranges by dragging - see
+                // PackOrder. A file that could not be read has no id to place
+                // it by, and nothing of it loads: those go last, alphabetically.
+                {
+                    var byId = new Dictionary<string, DiscoveredPack>(System.StringComparer.OrdinalIgnoreCase);
+                    var unread = new List<DiscoveredPack>();
+                    foreach (var p in packs)
+                    {
+                        if (p.IsValid && !byId.ContainsKey(p.PackId)) byId[p.PackId] = p;
+                        else unread.Add(p);
+                    }
+                    unread.Sort((a, b) => string.Compare(a.DisplayLabel, b.DisplayLabel,
+                                                         System.StringComparison.OrdinalIgnoreCase));
+                    packs = new List<DiscoveredPack>();
+                    foreach (string id in PackOrderSetting.Arrange(byId.Keys)) packs.Add(byId[id]);
+                    packs.AddRange(unread);
+                }
+
+                // Packs switched on that change the same thing of the game's -
+                // from the manifests just read, so it costs a walk over the few
+                // parts of each that touch the game, not another read.
+                var loading = new List<KeyValuePair<string, List<SMSModForge.Shared.PackConflicts.Change>>>();
+                foreach (var p in packs)
+                    if (p.IsValid && PackSwitchSetting.IsOn(p.PackId))
+                        loading.Add(new KeyValuePair<string, List<SMSModForge.Shared.PackConflicts.Change>>(
+                            p.PackId, p.Changes ?? new List<SMSModForge.Shared.PackConflicts.Change>()));
+                var clashes = SMSModForge.Shared.PackConflicts.Find(loading);
+                if (clashes.Count > 0) LogClashes(clashes);
 
                 // Every language a pack can be played in, for the language menu
                 // - of the packs switched on, the only ones that will be played.
@@ -1027,6 +1058,7 @@ namespace SMSModForge.PackPlugin
                                 Translations = p.Translations
                                                ?? new System.Collections.Generic.List<string>(),
                                 OwnLanguage = p.Language,
+                                ClashesWith = SMSModForge.Shared.PackConflicts.With(clashes, p.PackId),
                             });
 
                         Color colour =
@@ -1045,6 +1077,15 @@ namespace SMSModForge.PackPlugin
                     }
                 }
 
+                // How to arrange them, once there is something to arrange.
+                int arrangeable = 0;
+                foreach (var p in packs) if (p.IsValid) arrangeable++;
+                if (arrangeable >= 2)
+                    foreach (string hint in SMSModForge.Shared.PackStatus.Wrap(
+                                 SMSModForge.Shared.PackStatus.Indent + SMSModForge.Shared.GameTexts.T("game.menu.orderHint"),
+                                 MenuLineWidth, SMSModForge.Shared.PackStatus.Indent))
+                        lines.Add(new MenuLine(hint, MenuSwitchedOffColour));
+
                 // Backdrop first (earlier sibling = drawn behind the text rows):
                 // a semi-transparent black panel spanning the header + all rows.
                 InjectMenuBackdrop(prototype, menuRoot, lines.Count);
@@ -1053,11 +1094,18 @@ namespace SMSModForge.PackPlugin
                 InjectMenuRow(prototype, menuRoot, row++, MenuHeader(forgeForOtherGame),
                               forgeForOtherGame ? Color.red : Color.white, MenuHeaderFontSize);
 
+                PackListDrag drag = null;
+                drag = new PackListDrag(menuRoot, MenuRowStride,
+                                        (id, gap) => MovePack(drag.Shown(), id, gap), Logger);
                 foreach (var line in lines)
                 {
                     var made = InjectMenuRow(prototype, menuRoot, row++,
                                              line.Switch == null ? line.Text : PackSwitchBox.MakeRoom(line.Text),
                                              line.Colour, MenuPackFontSize);
+                    // Every line of a pack carries it, so it can be picked up by
+                    // its name or by a warning under it. Before the box, which
+                    // has to stay on top to take its own clicks.
+                    if (line.Pack != null) drag.Add(line.Pack, made);
                     if (line.Switch == null) continue;
                     string id = line.Switch;
                     PackSwitchBox.Add(made, line.On, on => SwitchPack(id, on), Logger);
@@ -1279,12 +1327,17 @@ namespace SMSModForge.PackPlugin
             public readonly string Switch;
             public readonly bool On;
 
-            public MenuLine(string text, Color colour, string packSwitch = null, bool on = true)
+            /// <summary>The pack this line is about, on each of its lines - what
+            /// is carried when one of them is dragged; null for any other.</summary>
+            public readonly string Pack;
+
+            public MenuLine(string text, Color colour, string packSwitch = null, bool on = true, string pack = null)
             {
                 Text = text;
                 Colour = colour;
                 Switch = packSwitch;
                 On = on;
+                Pack = pack;
             }
         }
 
@@ -1292,7 +1345,56 @@ namespace SMSModForge.PackPlugin
         private static void AddPackLines(List<MenuLine> lines, List<string> rows, Color colour, string packId, bool on)
         {
             for (int i = 0; i < rows.Count; i++)
-                lines.Add(new MenuLine(rows[i], colour, i == 0 ? packId : null, on));
+                lines.Add(new MenuLine(rows[i], colour, i == 0 ? packId : null, on, packId));
+        }
+
+        /// <summary>A pack was dropped somewhere else in the list.</summary>
+        private void MovePack(IList<string> shown, string packId, int gap)
+        {
+            SaveLoadWarning.Click();
+            PackOrderSetting.Move(shown, packId, gap, Logger);
+            RedrawMenuBanner();
+        }
+
+        /// <summary>
+        /// Packs switched on that change the same thing of the game's, in the
+        /// log, field by field: the menu has room for whose, the log for what
+        /// and which one shows.
+        /// </summary>
+        private void LogClashes(List<SMSModForge.Shared.PackConflicts.Clash> clashes)
+        {
+            // Pair by pair, a few of what they share: two packs that each
+            // rework a level can clash on dozens of objects, and a log that
+            // listed every one would bury everything else in it.
+            const int shown = 6;
+            var pairs = new Dictionary<string, List<SMSModForge.Shared.PackConflicts.Clash>>();
+            var order = new List<string>();
+            foreach (var c in clashes)
+            {
+                string pair = c.Earlier + "|" + c.Later;
+                List<SMSModForge.Shared.PackConflicts.Clash> list;
+                if (!pairs.TryGetValue(pair, out list)) { pairs[pair] = list = new List<SMSModForge.Shared.PackConflicts.Clash>(); order.Add(pair); }
+                list.Add(c);
+            }
+            foreach (string pair in order)
+            {
+                var list = pairs[pair];
+                var what = new List<string>();
+                for (int i = 0; i < list.Count && i < shown; i++)
+                {
+                    var ch = list[i].LaterChange.Field == SMSModForge.Shared.PackConflicts.Whole
+                          || list[i].EarlierChange.Field == SMSModForge.Shared.PackConflicts.Whole
+                        ? list[i].LaterChange.Thing
+                        : list[i].LaterChange.Thing + " (" + list[i].LaterChange.Field + ")";
+                    what.Add(ch);
+                }
+                Logger.LogWarning("[SMSModForge.PackPlugin] '" + list[0].Earlier + "' and '" + list[0].Later
+                                  + "' both change " + list.Count + " thing(s) of the game's: "
+                                  + string.Join("; ", what.ToArray())
+                                  + (list.Count > shown ? "; and " + (list.Count - shown) + " more" : "")
+                                  + ". '" + list[0].Later + "' is lower in the pack list, so its changes are the ones "
+                                  + "that show; drag a pack on the main menu to change that.");
+            }
         }
 
         /// <summary>A pack switched off on the menu: there, but out of play.</summary>
@@ -1468,6 +1570,10 @@ namespace SMSModForge.PackPlugin
             /// English, which is what a pack that does not say is written in.</summary>
             public string Language;
 
+            /// <summary>What it changes of the game's own things, when asked
+            /// for (<see cref="SMSModForge.Shared.PackConflicts"/>).</summary>
+            public System.Collections.Generic.List<SMSModForge.Shared.PackConflicts.Change> Changes;
+
             public string DisplayLabel => string.IsNullOrEmpty(PackId) ? DirName : PackId;
 
             /// <summary>
@@ -1495,7 +1601,7 @@ namespace SMSModForge.PackPlugin
         /// who edited the copy that lost would otherwise spend an evening
         /// wondering why their changes do nothing.
         /// </summary>
-        private static System.Collections.Generic.List<DiscoveredPack> DiscoverPacks()
+        private static System.Collections.Generic.List<DiscoveredPack> DiscoverPacks(bool withChanges = false)
         {
             var result = new System.Collections.Generic.List<DiscoveredPack>();
             try
@@ -1529,6 +1635,10 @@ namespace SMSModForge.PackPlugin
                                 entry.ForgeVersion = (string)json["forgeVersion"] ?? "";
                                 entry.Language = SMSModForge.Shared.PackTexts.LanguageOf(json);
                                 entry.IsValid = !string.IsNullOrEmpty(entry.PackId);
+                                // What it changes of the game's, for the pack
+                                // list's clash warning: read off the manifest
+                                // already parsed, only when the list asks.
+                                if (withChanges) entry.Changes = SMSModForge.Shared.PackConflicts.Of(json);
                             }
 
                             // Read whether or not the manifest made sense: a
@@ -1756,6 +1866,9 @@ namespace SMSModForge.PackPlugin
                 // reads pack state, so we want the file backing it to
                 // match the currently-active NanoSave slot.
                 try { TickSaveSlot(); } catch (System.Exception ex) { FailedThisFrame("Save slot check", ex); }
+                // The rest of any action list that was waiting - a Wait, or a
+                // transition until the screen is covered (ActionSequence).
+                try { ActionSequence.Tick(); } catch (System.Exception ex) { FailedThisFrame("Waiting actions", ex); }
                 try { TickDailyCatchUp(); } catch (System.Exception ex) { FailedThisFrame("Daily catch-up", ex); }
                 try { TickSleepAutosave(); } catch (System.Exception ex) { FailedThisFrame("Sleep autosave", ex); }
                 try { TickLevelRefresh(); } catch (System.Exception ex) { FailedThisFrame("Level refresh", ex); }
@@ -1812,16 +1925,24 @@ namespace SMSModForge.PackPlugin
                 }
                 // Cross-pack fire: each dispatcher only nominates its best
                 // candidate; the actual start happens here after comparing
-                // Priority across every loaded pack (ties: pack load order).
-                // Without this, an earlier-loaded pack's priority-0 dialogue
-                // would always beat a later pack's priority-100 one.
+                // Priority across every loaded pack. Without this, an
+                // earlier-loaded pack's priority-0 dialogue would always beat a
+                // later pack's priority-100 one.
+                //
+                // Ties go to the pack first in the ALPHABET - which is what load
+                // order gave them before players could arrange the list (1.7.0).
+                // The list is about whose changes to the game show; moving a
+                // pack in it must not change which conversation plays.
                 {
                     DialogueDispatcher fireFrom = null;
                     DialogueBuilder.BuiltDialogue fireWhat = null;
                     for (int i = 0; i < _dispatchers.Count; i++)
                     {
                         var c = _dispatchers[i].PeekEligible();
-                        if (c != null && (fireWhat == null || c.Priority > fireWhat.Priority))
+                        if (c == null) continue;
+                        if (fireWhat == null || c.Priority > fireWhat.Priority
+                            || (c.Priority == fireWhat.Priority
+                                && SMSModForge.Shared.PackOrder.DialogueTie(_dispatchers[i].PackId, fireFrom.PackId) < 0))
                         {
                             fireWhat = c;
                             fireFrom = _dispatchers[i];
@@ -2452,6 +2573,24 @@ namespace SMSModForge.PackPlugin
                 return;
             }
 
+            // In the order the player put them in on the main menu - lower in
+            // the list loads later, so its changes to the game's own things are
+            // the ones that show (PackOrder). Alphabetical until anybody
+            // arranges it, as packs have always loaded.
+            {
+                var byId = new Dictionary<string, PackManifest>(System.StringComparer.OrdinalIgnoreCase);
+                foreach (var m in manifests)
+                    if (!string.IsNullOrEmpty(m.PackId) && !byId.ContainsKey(m.PackId)) byId[m.PackId] = m;
+                var ordered = new List<PackManifest>();
+                foreach (string id in PackOrderSetting.Arrange(byId.Keys)) ordered.Add(byId[id]);
+                // Anything the order has no id for still loads, after the rest,
+                // as it would have before there was an order.
+                foreach (var m in manifests) if (!ordered.Contains(m)) ordered.Add(m);
+                manifests = ordered;
+                Logger.LogInfo("[SMSModForge.PackPlugin] Load order: "
+                               + string.Join(", ", manifests.ConvertAll(m => m.PackId).ToArray()) + ".");
+            }
+
             // Pass 0 — quests. Every pack's at once: the registry replaces the
             // pack quests in the game's catalogue as a set, so registering them
             // one pack at a time would leave only the last pack's.
@@ -2750,7 +2889,11 @@ namespace SMSModForge.PackPlugin
 
                     string displayName = (string)ao["displayName"] ?? (string)ao["key"];
                     string hex = (string)ao["nameColor"];
-                    if (!string.IsNullOrEmpty(displayName) && TryParseHexColor(hex, out var col))
+                    // Never the player's: "You" is the game's grey in every
+                    // pack, and a colour here would repaint it everywhere.
+                    if (!string.IsNullOrEmpty(displayName)
+                        && SMSModForge.Shared.PlayerLabel.MayRecolour((string)ao["key"], displayName)
+                        && TryParseHexColor(hex, out var col))
                         ctx.ActorFactory?.RegisterColor(displayName, col);
 
                     // Per-actor typewriter voice (frequency + pitch range). The

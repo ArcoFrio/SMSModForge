@@ -67,4 +67,14 @@ public sealed class SfxDef
     /// </summary>
     [JsonProperty("textPatterns", Order = 5, NullValueHandling = NullValueHandling.Ignore)]
     public System.Collections.Generic.List<string>? TextPatterns { get; set; }
+
+    /// <summary>
+    /// How the sound was edited in the SFX tab (1.7.0), or null when it plays
+    /// as recorded. The editor's own record: the game plays
+    /// <see cref="AudioPath"/>, which an edited sound points at the file the
+    /// editor made from <see cref="SfxEditDef.Source"/> when the pack was
+    /// saved. Kept so the edit can be picked up again where it was left.
+    /// </summary>
+    [JsonProperty("edit", Order = 6, NullValueHandling = NullValueHandling.Ignore)]
+    public SfxEditDef? Edit { get; set; }
 }

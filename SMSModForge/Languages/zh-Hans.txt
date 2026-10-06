@@ -75,6 +75,14 @@ game.pack.installedTwice = 重复安装，正在使用 {folder} 文件夹中的�
 # en: Not translated into your language
 game.pack.notInYourLanguage = 没有翻译成你的语言
 
+# Beside a pack in the main menu's list: it changes the same thing of the game's (a character, an object in a level...) as {packs}, other packs in the list, so only one of the two changes shows
+# en: Changes the same as {packs}
+game.pack.clashesWith = 与 {packs} 修改了相同的内容
+
+# Under ModForge's list of packs on the game's main menu, when there are two or more. The packs can be dragged up and down; the one lower in the list is loaded later, so its changes show
+# en: Drag a pack to move it. Lower in the list wins when two packs change the same thing.
+game.menu.orderHint = 拖动模组包即可移动它。两个模组包修改同一内容时，排在下面的优先。
+
 # The name above the player's own lines in a pack's conversations
 # en: You
 game.player = 你
@@ -438,7 +446,7 @@ action.incrementVariable.delta.tip = 动作每次执行时加到当前值上的�
 # en: Focused
 param.label.focused = 置于前景
 
-# Tooltip on the 'Focused' field of the SetSpriteFocus action
+# Tooltip on the 'Focused' field of the CharacterFocus action
 # en: When true, every actor's bust in the dialogue is bumped above the CG layer; when false, their resting sorting orders are restored. No per-actor target — it focuses the whole cast, and resets automatically when the dialogue ends.
 action.setSpriteFocus.focused.tip = 为真时，对话中每位演员的立绘都会提到 CG 层之上；为假时恢复各自原本的绘制顺序。没有针对单个演员的目标——它作用于全体角色，并在对话结束时自动恢复。
 
@@ -643,8 +651,8 @@ action.playSFX.clip.tip = 模组包的音效键名（在 SFX 选项卡中声明�
 param.label.volume = 音量
 
 # Tooltip on the 'Volume' field of the PlaySFX action
-# en: Playback volume (0..1). Falls back to the SFX def's defaultVolume when blank.
-action.playSFX.volume.tip = 播放音量（0..1）。留空时使用音效定义中的 defaultVolume。
+# en: Playback volume, 0 to 5 - 1 is the game's own level, above it louder. Falls back to the sound's default volume when blank.
+action.playSFX.volume.tip = 播放音量，0 到 5——1 是游戏自身的音量，高于 1 更响。留空时使用该声音的默认音量。
 
 # Tooltip on the 'Delay (s)' field of the PlaySFX action
 # en: Seconds to wait before the one-shot plays (action returns immediately).
@@ -655,8 +663,52 @@ action.playSFX.delay.tip = 播放前等待的秒数（动作会立即返回）�
 param.label.seconds = 秒
 
 # Tooltip on the 'Seconds' field of the Wait action
-# en: How long to pause before the next node-on-start action runs.
-action.wait.seconds.tip = 在下一个节点开始动作执行之前暂停多久。
+# en: How long to pause before the actions after this one run.
+action.wait.seconds.tip = 在此动作之后的动作运行前暂停多久。
+
+# Label beside a field of an action or condition: which transition plays
+# en: Transition
+param.label.transition = 转场
+
+# Label beside a field of an action or condition: how many seconds something stays on screen
+# en: On screen (s)
+param.label.onScreenS = 显示时长（秒）
+
+# Label beside a field of an action or condition: the words shown on a black screen
+# en: Text
+param.label.screenText = 文字
+
+# Tooltip on the 'Transition' field of the Transitions action
+# en: Which transition plays: the game's own fade to black, blink, white flash or travel fade, or a black screen with words on it, like the game's "A few minutes later...". It covers the dialogue too, and the actions after this one wait until the screen is covered - so whatever they change is not seen changing.
+action.transitions.style.tip = 播放哪种转场：游戏自带的淡出到黑、眨眼、白光闪烁或旅行淡出，或者像游戏里“A few minutes later...”那样带文字的黑屏。它也会盖住对话，之后的动作会等到画面被完全盖住才运行——因此它们改变的东西不会被看到。
+
+# Tooltip on the 'On screen (s)' field of the Transitions action
+# en: How long the screen stays covered, in seconds, before it clears. The blink and the flash run the game's own course, so they have no time to set.
+action.transitions.seconds.tip = 画面保持被盖住的秒数，之后才会散开。眨眼和闪光按游戏自身的时长进行，因此没有可设置的时间。
+
+# Tooltip on the 'Text' field of the Transitions action
+# en: The words on the black screen - "A few minutes later...", "That night...", anything. Translated with the pack's other texts, and [PV:name] shows a variable.
+action.transitions.text.tip = 黑屏上的文字——“A few minutes later...”、“That night...”，什么都行。会和模组包的其他文本一起翻译，[PV:name] 会显示一个变量。
+
+# One of the transitions the Transitions action plays: the game's fade to black and back
+# en: Fade to black
+choice.style.fadeToBlack = 淡出到黑
+
+# One of the transitions the Transitions action plays: a black screen with words on it, like the game's "A few minutes later..."
+# en: Black screen with text
+choice.style.textScreen = 带文字的黑屏
+
+# One of the transitions the Transitions action plays: the game's eyes-closing blink
+# en: Blink
+choice.style.blink = 眨眼
+
+# One of the transitions the Transitions action plays: the game's white flash
+# en: White flash
+choice.style.whiteFlash = 白光闪烁
+
+# One of the transitions the Transitions action plays: the game's fade used when travelling
+# en: Travel fade
+choice.style.travelFade = 旅行淡出
 
 # Label beside a field of an action or condition
 # en: Source
@@ -3141,8 +3193,8 @@ characters.tickOnlyWhatReplacing = 只勾选你要替换的部分。未勾选的
 characters.editOverrideMask = 编辑遮罩…
 
 # Box heading
-# en: Sprites and expressions (relative to pack root, 256×256 PNG)
-characters.outfitSprites = 精灵图与表情（相对于模组包根目录，256×256 PNG）
+# en: Sprites and expressions (PNG, relative to pack root; best at 256×256)
+characters.outfitSprites = 精灵图与表情（PNG，相对于模组包根目录；最好是 256×256）
 
 # Text
 # en: Base:
@@ -3425,12 +3477,12 @@ characters.remove.tip = 移除这个表情
 characters.tickReplaceTextureUnticked.tip = 勾选即可替换这张贴图。不勾选时，模组包对它不作任何声明。
 
 # Tooltip on a part of the window
-# en: 256x256 RGBA PNG, relative to the pack folder.
-characters.256x256RGBAPNGRelative.tip = 256x256 的 RGBA PNG，相对于模组包文件夹。
+# en: RGBA PNG, relative to the pack folder. At 256x256 its pixels land exactly as drawn; other sizes are scaled to fit.
+characters.256x256RGBAPNGRelative.tip = RGBA 的 PNG，相对于模组包文件夹。256x256 时像素与绘制的完全一致；其他尺寸会缩放以适应。
 
 # Tooltip on a part of the window
-# en: The bust itself: 256x256 RGBA, relative to the pack folder.
-characters.baseSprite.tip = 立绘本身：256x256 RGBA，相对于模组包文件夹。
+# en: The bust itself: RGBA PNG, relative to the pack folder. Best at 256x256, the only size whose pixels land exactly as drawn; other sizes are scaled to fit, and a shape that is not square gets transparent bars on two sides.
+characters.baseSprite.tip = 立绘本身：RGBA 的 PNG，相对于模组包文件夹。最好是 256x256，这是像素与绘制完全一致的唯一尺寸；其他尺寸会缩放以适应，不是正方形的图会在两侧留出透明边。
 
 # Tooltip on "= default"
 # en: Use the same mask file as the character's default outfit. It is the same file, not a copy — editing this outfit's mask afterwards changes the default outfit's too, so this asks first. For an outfit added to one of the game's characters, it borrows the game's own mask from the bust the game gave them instead; painting over it makes a file of your own.
@@ -3565,10 +3617,6 @@ npcs.addNpc = + NPC
 # Button
 # en: + Folder
 npcs.unitAddFolder = + 文件夹
-
-# Button
-# en: Rename
-npcs.unitRenameFolder = 重命名
 
 # Button
 # en: − Remove
@@ -3731,12 +3779,8 @@ npcs.previewLiveJiggleShadow = 预览（实时晃动 + 阴影 + 眨眼）
 npcs.bodyJiggleShadowBlink = 身体晃动、阴影和眨眼会在你编辑时实时更新。阴影的倾斜（旋转 X/Y）会把椭圆压扁；旋转 Z 则让它转动。
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-npcs.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-npcs.unitRenameFolder.tip = 重命名选中的文件夹。
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+npcs.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。要重命名文件夹，请右键单击它，或选中后按 F2。
 
 # Tooltip on "− Remove"
 # en: Remove the selected NPC, or delete the selected folder (its contents move up).
@@ -3885,10 +3929,6 @@ places.addPlace = + 地点
 places.unitAddFolder = + 文件夹
 
 # Button
-# en: Rename
-places.unitRenameFolder = 重命名
-
-# Button
 # en: − Remove
 places.removePlace = − 移除
 
@@ -4017,8 +4057,8 @@ places.backMaskOpt = 后景遮罩（可选）：
 places.editPlaceSecondaryMask = 编辑…
 
 # Text
-# en: Front mask (256×143):
-places.frontMask256143 = 前景遮罩（256×143）：
+# en: Front mask (opt):
+places.frontMask256143 = 前景遮罩（可选）：
 
 # Text
 # en: The mod clones the Beach level and swaps in these PNGs. Each mask binds as _MaskTex on its own sprite's material, cloned per level so it can't leak into the vanilla levels that share Beach's. Only the mask's ALPHA is read — this shader has no R/G/B channels.
@@ -4138,12 +4178,8 @@ places.exitOncePerLevel = 离开时（每次关卡停用执行一次）
 places.sameEnterButActive = 与“进入时”相同，只是发生在从激活变为未激活的那一刻（玩家离开关卡）。
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-places.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-places.unitRenameFolder.tip = 重命名选中的文件夹。
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+places.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。要重命名文件夹，请右键单击它，或选中后按 F2。
 
 # Tooltip on "− Remove"
 # en: Remove the selected place, or delete the selected folder (its contents move up).
@@ -4380,10 +4416,6 @@ dialogues.addDialogue = + 对话
 # Button
 # en: + Folder
 dialogues.addDialogueFolder = + 文件夹
-
-# Button
-# en: Rename
-dialogues.renameFolder = 重命名
 
 # Button
 # en: − Remove
@@ -4642,12 +4674,8 @@ dialogues.nodeOneChoiceS = 这个节点是某个“选择”的一个选项，�
 dialogues.actionsOnFinishBox = 结束时的动作
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag dialogues/folders to organize (cosmetic — doesn't change the pack).
-dialogues.addDialogueFolder.tip = 添加一个文件夹。拖动对话/文件夹来整理（纯属外观——不会改动模组包）。
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-dialogues.renameFolder.tip = 重命名选中的文件夹。
+# en: Add a folder. Drag dialogues/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+dialogues.addDialogueFolder.tip = 添加一个文件夹。拖动对话/文件夹来整理（纯属外观——不会改动模组包）。要重命名文件夹，请右键单击它，或选中后按 F2。
 
 # Tooltip on "− Remove"
 # en: Remove the selected dialogue, or delete the selected folder (its contents move up).
@@ -4805,6 +4833,22 @@ dialogues.markupColor.tip = 颜色（Ctrl+Shift+C）——选一个颜色，选�
 # en: Size  (Ctrl+Shift+S) — wraps the selection in <size=70%></size>. The one tag the game uses in its own lines, for a muttered aside.
 dialogues.markupSize.tip = 字号（Ctrl+Shift+S）——把选中内容包进 <size=70%></size>。这是游戏在自己台词里唯一用到的标签，用于低声的旁白。
 
+# Tooltip on the button over a dialogue line that lists the pack's auto-trigger patterns
+# en: Sound cue - pick one of the pack's auto-trigger patterns to write it into the line where the cursor is. When the line shows it, its sound plays by itself.
+dialogues.sfxPattern.tip = 声音提示——选择模组包的一个自动触发词，把它写进台词里光标所在的位置。台词显示它时，对应的声音会自动播放。
+
+# The only row of that list when the pack has no auto-trigger patterns
+# en: No auto-trigger patterns yet - add them to a sound in the SFX tab.
+dialogues.sfxPattern.none = 还没有自动触发词——在音效选项卡里给某个声音添加。
+
+# Tooltip on a row of that list; {sound} is the sound's name
+# en: Write this into the line - it plays {sound}.
+dialogues.sfxPattern.item.tip = 写进台词——它会播放 {sound}。
+
+# Tooltip on the play button on a row of that list; {sound} is the sound's name
+# en: Play {sound}
+dialogues.sfxPattern.play.tip = 播放 {sound}
+
 # Under a line's text: the line reads exactly as written in every language, and is never translated
 # en: Same in every language
 dialogues.textSameEverywhere = 所有语言中相同
@@ -4895,10 +4939,6 @@ scenes.addScene = + 场景
 scenes.unitAddFolder = + 文件夹
 
 # Button
-# en: Rename
-scenes.unitRenameFolder = 重命名
-
-# Button
 # en: − Remove
 scenes.removeScene = − 移除
 
@@ -4975,12 +5015,8 @@ scenes.starmakerPhoto.tip = 显示这个场景就算拍了一张照片，结算�
 scenes.starmakerPhoto.note = 安娜的心情决定这张照片拍得好不好，拍砸了就没有任何收益。摄影特质、相机和镜头、正在投放的广告、技能树都会生效，当日收入和照片计数也一样。玩家看过之后，这个场景会出现在 Starmaker 网站的相册里。
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-scenes.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-scenes.unitRenameFolder.tip = 重命名选中的文件夹。
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+scenes.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。要重命名文件夹，请右键单击它，或选中后按 F2。
 
 # Tooltip on "− Remove"
 # en: Remove the selected scene, or delete the selected folder (its contents move up).
@@ -5041,10 +5077,6 @@ music.addMusic = + 音乐
 music.unitAddFolder = + 文件夹
 
 # Button
-# en: Rename
-music.unitRenameFolder = 重命名
-
-# Button
 # en: − Remove
 music.removeMusic = − 移除
 
@@ -5093,12 +5125,8 @@ music.stopMusic = ■ 停止
 music.playsThroughEditorS = 通过编辑器自己的音频播放（OGG/WAV/MP3）。
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-music.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-music.unitRenameFolder.tip = 重命名选中的文件夹。
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+music.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。要重命名文件夹，请右键单击它，或选中后按 F2。
 
 # Tooltip on "− Remove"
 # en: Remove the selected track, or delete the selected folder (its contents move up).
@@ -5125,12 +5153,12 @@ music.packRelativePathOGG.tip = 相对于模组包的路径。OGG / WAV / MP3—
 music.leaveBlankInheritVanilla.tip = 留空表示继承（游戏的海滩模板是循环的）。否则填 'true' / 'false'。
 
 # Tooltip on a text box
-# en: 0..1. Blank = inherit from the cloned template.
-music.01BlankInherit.tip = 0..1。留空 = 继承自克隆的模板。
+# en: How loud the track plays: 1.0 is the game's own level for a track, 0 is silent, and up to 5 is louder than the game goes by itself.
+music.01BlankInherit.tip = 曲目播放的响度：1.0 是游戏自身的曲目音量，0 是静音，最高到 5，比游戏自己能达到的更响。
 
 # Tooltip on "▶ Play"
-# en: Preview the track at the volume above (blank = full). Needs the pack saved to disk. Plays once — looping is a runtime behavior.
-music.playMusic.tip = 按上面的音量试听这首曲子（留空 = 满音量）。需要模组包已保存到磁盘。只播放一次——循环是运行时的行为。
+# en: Preview the track as loud as the game plays it, at the volume above. Needs the pack saved to disk. Plays once — looping is a runtime behavior.
+music.playMusic.tip = 按游戏播放时的响度、用上方的音量试听。模组包需要先保存。只播放一次——循环是游戏运行时的行为。
 
 [SFX tab]
 
@@ -5145,10 +5173,6 @@ sfx.addSfx = + 音效
 # Button
 # en: + Folder
 sfx.unitAddFolder = + 文件夹
-
-# Button
-# en: Rename
-sfx.unitRenameFolder = 重命名
 
 # Button
 # en: − Remove
@@ -5203,12 +5227,8 @@ sfx.autoTriggerPatterns = 自动触发词
 sfx.commaSeparatedListText = 以逗号分隔的文本匹配词列表。节点开始时，只要对话节点的文本里出现其中任何一个词，这个音效就会自动播放。如果该效果有变体，每次都会随机挑一个——把名为 <name>_1、<name>_2… 的文件（编号连续、不跳号）放在基础文件旁边即可添加。惯例：用星号括起来的小写词，例如 *plap*、*smooch*。同一个音效可以带多个匹配词——*yank*,*yeet* 会触发同一段音频，与原版模组一致。若某个音效只应由明确的 PlaySFX 动作播放，请留空。
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-sfx.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-sfx.unitRenameFolder.tip = 重命名选中的文件夹。
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+sfx.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。要重命名文件夹，请右键单击它，或选中后按 F2。
 
 # Tooltip on "− Remove"
 # en: Remove the selected SFX, or delete the selected folder (its contents move up).
@@ -5231,16 +5251,208 @@ sfx.namePackItselfUses.tip = 模组包自己使用的名称——运行时日志
 sfx.audioFileRelativePack.tip = 音频文件，相对于模组包文件夹。OGG、WAV 和 MP3 都可用。旁边名为 _1、_2 的额外录音会被随机挑选。
 
 # Tooltip on a text box
-# en: 0..1. Used by PlaySFX when its own volume param is blank, and as the volume for auto-pattern-matched plays.
-sfx.01UsedPlaysfx.tip = 0..1。当 PlaySFX 自己的音量参数留空时使用它，同时也作为文本自动匹配播放时的音量。
+# en: How loud the sound plays when PlaySFX does not say, and when an auto-trigger pattern plays it: 1.0 is the game's own level, 0 is silent, and up to 5 is louder than the game goes by itself. The game squares it on the way out, as it does with every sound it plays this way - 0.5 is a quarter, 2 is four times - and Play sounds it the same.
+sfx.01UsedPlaysfx.tip = 当 PlaySFX 未指定音量、以及自动触发词播放它时，声音的响度：1.0 是游戏自身的音量，0 是静音，最高到 5，比游戏自己能达到的更响。游戏输出时会把它平方，以这种方式播放的声音都是如此——0.5 是四分之一，2 是四倍——播放按钮的效果相同。
 
 # Tooltip on "▶ Play"
-# en: Preview the base clip at the default volume above. Needs the pack saved to disk.
-sfx.playSfx.tip = 按上面的默认音量试听基础音频。需要模组包已保存到磁盘。
+# en: Preview the sound as loud as the game plays it, at the default volume above - as edited below, when it is. Needs the pack saved to disk.
+sfx.playSfx.tip = 按游戏播放时的响度、用上方的默认音量试听——若已编辑，则按下方的编辑播放。模组包需要先保存。
 
 # Tooltip on a text box
 # en: Words that fire this effect on their own when they appear in a line, comma-separated. The convention is a lowercase word between asterisks, like *plap*. Leave it empty for an effect only an action should play.
 sfx.wordsFireEffectTheir.tip = 出现在台词中就会自动触发这个效果的词，用逗号分隔。惯例是用星号括起来的小写词，例如 *plap*。若这个效果只应由动作播放，请留空。
+
+# Heading of the box on the SFX tab where a sound is cut and given effects
+# en: Edit the sound
+sfxEdit.header = 编辑声音
+
+# Small print at the top of that box
+# en: Click the strip to pick a spot; the mouse wheel zooms in and out, and Shift with the wheel scrolls. Cut here splits the piece at the spot in two, Delete piece takes the highlighted piece out. When the pack is saved, the edited sound is written over the file, and the recording is kept in the pack's .originals folder, which is never exported - so Reset always gives it back.
+sfxEdit.help = 点击波形条选择一个位置；鼠标滚轮放大和缩小，按住 Shift 再滚动则横向滚动。“✂ 在此剪开”会在该位置把片段一分为二，“删除片段”会去掉高亮的片段。保存模组包时，编辑后的声音会覆盖原文件，原始录音则保存在模组包的 .originals 文件夹中——该文件夹永远不会被导出，所以“重置”随时都能把它找回来。
+
+# Label before a list of the sound's files: the sound and its variants
+# en: File:
+sfxEdit.file = 文件：
+
+# Tooltip on that list
+# en: This sound has variants the game picks between at random. Each is cut on its own; pitch, speed, echo and reverb apply to all of them.
+sfxEdit.file.tip = 这个声音有若干变体，游戏会从中随机挑选。每个变体分别剪辑；音高、速度、回声和混响对所有变体都生效。
+
+# Tooltip on the strip showing the sound's waveform
+# en: Click to pick a spot. Mouse wheel: zoom in or out. Shift + wheel: scroll. Delete: take the highlighted piece out.
+sfxEdit.strip.tip = 点击选择一个位置。鼠标滚轮：放大或缩小。Shift + 滚轮：横向滚动。Delete：去掉高亮的片段。
+
+# Button
+# en: ▶ Play
+sfxEdit.play = ▶ 播放
+
+# Tooltip on "▶ Play"
+# en: Play the sound as edited, from the spot picked.
+sfxEdit.play.tip = 从选定的位置开始，播放编辑后的声音。
+
+# Button
+# en: ■ Stop
+sfxEdit.stop = ■ 停止
+
+# Button: splits the piece of the sound at the picked spot into two pieces
+# en: ✂ Cut here
+sfxEdit.split = ✂ 在此剪开
+
+# Tooltip on "✂ Cut here"
+# en: Split the piece at the spot picked into two pieces, so either can be taken out or kept. The spot has to be inside a piece, not on its edge.
+sfxEdit.split.tip = 在选定的位置把片段分成两段，以便去掉或保留其中任意一段。该位置必须在片段内部，不能在边缘上。
+
+# Button: removes the highlighted piece of the sound
+# en: Delete piece
+sfxEdit.delete = 删除片段
+
+# Tooltip on "Delete piece"
+# en: Take the highlighted piece out; the pieces after it move up to close the gap. The last piece left cannot be deleted.
+sfxEdit.delete.tip = 去掉高亮的片段；后面的片段会前移补上空缺。最后剩下的一个片段不能删除。
+
+# Button: zoom in on the strip
+# en: +
+sfxEdit.zoomIn = +
+
+# Tooltip on "+"
+# en: Zoom in. The mouse wheel over the strip does the same.
+sfxEdit.zoomIn.tip = 放大。在波形条上滚动鼠标滚轮也一样。
+
+# Button: zoom out on the strip
+# en: −
+sfxEdit.zoomOut = −
+
+# Tooltip on "−"
+# en: Zoom out.
+sfxEdit.zoomOut.tip = 缩小。
+
+# Button: zoom so the whole sound fits
+# en: Fit
+sfxEdit.fit = 全部
+
+# Tooltip on "Fit"
+# en: Show the whole sound.
+sfxEdit.fit.tip = 显示整个声音。
+
+# Button: undo every edit of the sound
+# en: Reset
+sfxEdit.reset = 重置
+
+# Tooltip on "Reset"
+# en: Put the sound back as recorded: every cut in every file and every effect goes, and the recording plays again. Undo brings the edit back.
+sfxEdit.reset.tip = 把声音恢复成录制时的样子：所有文件里的每一处剪辑和每个效果都会去掉，重新播放原始录音。撤销（Ctrl+Z）可以找回编辑。
+
+# A line under the strip. {cursor}, {length} and {was} are seconds
+# en: Spot {cursor} s · piece {piece} of {pieces} · {length} s long (recorded: {was} s)
+sfxEdit.summary = 位置 {cursor} 秒 · 第 {piece}/{pieces} 段 · 长 {length} 秒（原始录音：{was} 秒）
+
+# Label beside a slider
+# en: Pitch
+sfxEdit.pitch = 音高
+
+# Tooltip on the Pitch slider
+# en: Higher or lower, in semitones, without changing how long the sound lasts.
+sfxEdit.pitch.tip = 以半音为单位升高或降低，不改变声音的长度。
+
+# Label beside a slider
+# en: Speed
+sfxEdit.speed = 速度
+
+# Tooltip on the Speed slider
+# en: Faster or slower, without changing how high the sound is.
+sfxEdit.speed.tip = 变快或变慢，不改变声音的音高。
+
+# Label beside a slider
+# en: Echo
+sfxEdit.echo = 回声
+
+# Tooltip on the Echo slider
+# en: How loud each repeat is. Off at the far left.
+sfxEdit.echo.tip = 每次重复的音量。拖到最左边即为关闭。
+
+# Label beside a slider
+# en: Echo delay
+sfxEdit.echoDelay = 回声延迟
+
+# Tooltip on the Echo delay slider
+# en: The time between the sound and each repeat. Set the echo above first.
+sfxEdit.echoDelay.tip = 声音与每次重复之间的时间。请先设置上面的回声。
+
+# Label beside a slider
+# en: Reverb
+sfxEdit.reverb = 混响
+
+# Tooltip on the Reverb slider
+# en: How much of the room is heard. Off at the far left.
+sfxEdit.reverb.tip = 能听到多少房间的声音。拖到最左边即为关闭。
+
+# Label beside a slider
+# en: Room size
+sfxEdit.room = 房间大小
+
+# Tooltip on the Room size slider
+# en: From a small room to a hall. Set the reverb above first.
+sfxEdit.room.tip = 从小房间到大厅。请先设置上面的混响。
+
+# Button
+# en: Reset effects
+sfxEdit.resetEffects = 重置效果
+
+# Tooltip on "Reset effects"
+# en: Put pitch, speed, echo and reverb back as recorded, keeping the cuts.
+sfxEdit.resetEffects.tip = 把音高、速度、回声和混响恢复成录制时的样子，保留剪辑。
+
+# Beside the Pitch or Speed slider when it is unchanged
+# en: as recorded
+sfxEdit.asRecorded = 与录音相同
+
+# Beside the Echo or Reverb slider when it is at zero
+# en: off
+sfxEdit.off = 关闭
+
+# Beside the Pitch slider. {n} is a number with its sign, like +2 or -1.5
+# en: {n} semitones
+sfxEdit.semitones = {n} 个半音
+
+# Beside the Pitch slider, for exactly one semitone up or down. {n} is +1 or -1
+# en: {n} semitone
+sfxEdit.semitone = {n} 个半音
+
+# Beside the Echo, Reverb and Room size sliders: a percentage. {n} is the number
+# en: {n}%
+sfxEdit.percent = {n}%
+
+# Beside the Echo delay slider: a time. {n} is the number of seconds
+# en: {n} s
+sfxEdit.seconds = {n} 秒
+
+# On the strip, when the sound has no file yet
+# en: Pick an audio file above to edit it here.
+sfxEdit.noFile = 在上面选择一个音频文件，即可在这里编辑。
+
+# On the strip, when the pack has never been saved
+# en: Save the pack first: the sound is read from the pack's folder.
+sfxEdit.saveFirst = 请先保存模组包：声音是从模组包的文件夹中读取的。
+
+# On the strip, when the sound's file is not there
+# en: The file '{file}' isn't in the pack's folder.
+sfxEdit.missing = 文件“{file}”不在模组包的文件夹中。
+
+# On the strip, while the sound is read
+# en: Reading the sound…
+sfxEdit.reading = 正在读取声音…
+
+# Under the sound editor's strip, while a long sound - a music track - is being made with its edits before it plays
+# en: Preparing the sound to play…
+sfxEdit.preparing = 正在准备要播放的声音…
+
+# On the strip, when the file is not a sound that can be read
+# en: '{file}' could not be read as audio.
+sfxEdit.unreadable = 无法把“{file}”作为音频读取。
+
+# Message after saving, when an edited sound could not be made into its file
+# en: An edited sound could not be made: {error}. The rest of the pack was saved, and the sound plays as it did before.
+sfxEdit.renderFailed = 无法生成一个编辑过的声音：{error}。模组包的其余部分已保存，该声音仍按以前的样子播放。
 
 [Wallpapers tab]
 
@@ -5255,10 +5467,6 @@ wallpapers.addWallpaper = + 壁纸
 # Button
 # en: + Folder
 wallpapers.unitAddFolder = + 文件夹
-
-# Button
-# en: Rename
-wallpapers.unitRenameFolder = 重命名
 
 # Button
 # en: − Remove
@@ -5321,12 +5529,8 @@ wallpapers.pasteUnlockConditions = 粘贴
 wallpapers.overwriteUnlockConditions = 覆盖
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-wallpapers.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-wallpapers.unitRenameFolder.tip = 重命名选中的文件夹。
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+wallpapers.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。要重命名文件夹，请右键单击它，或选中后按 F2。
 
 # Tooltip on "− Remove"
 # en: Remove the selected wallpaper, or delete the selected folder (its contents move up).
@@ -5385,10 +5589,6 @@ variables.addVariable = + 变量
 # Button
 # en: + Folder
 variables.addVariableFolder = + 文件夹
-
-# Button
-# en: Rename
-variables.renameVariableFolder = 重命名
 
 # Button
 # en: − Remove
@@ -5464,12 +5664,8 @@ variables.maxValue = 最大值：
 variables.description = 说明：
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag variables/folders to organize (cosmetic — doesn't change the pack).
-variables.addVariableFolder.tip = 添加一个文件夹。拖动变量/文件夹来整理（纯属外观——不会改动模组包）。
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-variables.renameVariableFolder.tip = 重命名选中的文件夹。
+# en: Add a folder. Drag variables/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+variables.addVariableFolder.tip = 添加一个文件夹。拖动变量/文件夹来整理（纯属外观——不会改动模组包）。要重命名文件夹，请右键单击它，或选中后按 F2。
 
 # Tooltip on "− Remove"
 # en: Remove the selected variable, or delete the selected folder (its contents move up).
@@ -5548,10 +5744,6 @@ integration.addIntegrationRule = + 规则
 # Button
 # en: + Folder
 integration.addIntegrationFolder = + 文件夹
-
-# Button
-# en: Rename
-integration.renameIntegrationFolder = 重命名
 
 # Button
 # en: − Remove
@@ -5662,12 +5854,8 @@ integration.ruleBodyJSON = 规则主体（JSON）
 integration.editRuleSTrigger = 以一个 JSON 对象来编辑规则的触发模式 + 条件 + 动作。格式：{ "triggerMode": "OnRisingEdge", "conditions": [...], "actions": [...], "branches": [ { "conditions": [...], "actions": [...] } ] }。branches 是可选的“否则如果”链（第一个匹配的生效；条件为空 = 普通的 Else）。conditions / actions 数组的结构与对话节点的 actionsOnStart 相同。
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag rules/folders to organize (cosmetic — doesn't change when rules run).
-integration.addIntegrationFolder.tip = 添加一个文件夹。拖动规则/文件夹来整理（纯属外观——不会改变规则何时运行）。
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-integration.renameIntegrationFolder.tip = 重命名选中的文件夹。
+# en: Add a folder. Drag rules/folders to organize (cosmetic — doesn't change when rules run). Rename a folder by right-clicking it, or select it and press F2.
+integration.addIntegrationFolder.tip = 添加一个文件夹。拖动规则/文件夹来整理（纯属外观——不会改变规则何时运行）。要重命名文件夹，请右键单击它，或选中后按 F2。
 
 # Tooltip on "− Remove"
 # en: Remove the selected rule, or delete the selected folder (its contents move up).
@@ -6166,10 +6354,6 @@ quests.addQuest = + 任务
 quests.unitAddFolder = + 文件夹
 
 # Button
-# en: Rename
-quests.unitRenameFolder = 重命名
-
-# Button
 # en: − Remove
 quests.removeQuest = − 移除
 
@@ -6374,12 +6558,8 @@ quests.gameStillMovesOwn = 游戏仍然推进它自己的任务：它的场景�
 quests.questMovesAlongItself = 任务会自行推进：开始条件满足时它就开始，而每个目标在自己的完成条件满足时完成，并执行它的完成动作。只有没有子目标的目标才有完成条件和动作——带子目标的目标通过子目标来完成。对话或规则仍然可以用任务动作来推动任务，并用 QuestState 和 QuestCounter 条件来查询它。完成一个任务会给玩家与游戏自身任务相同的奖励。
 
 # Tooltip on "+ Folder"
-# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack).
-quests.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。
-
-# Tooltip on "Rename"
-# en: Rename the selected folder.
-quests.unitRenameFolder.tip = 重命名选中的文件夹。
+# en: Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack). Rename a folder by right-clicking it, or select it and press F2.
+quests.unitAddFolder.tip = 添加一个文件夹。拖动条目/文件夹来整理（纯属外观——不会改动模组包）。要重命名文件夹，请右键单击它，或选中后按 F2。
 
 # Tooltip on "− Remove"
 # en: Remove the selected quest, or delete the selected folder (its contents move up).
@@ -10756,8 +10936,8 @@ docs.actions.emptyListCompletely = 把列表彻底清空。
 docs.actions.heading.actors = 角色
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: SetSpriteFocus
-docs.actions.liftCastSBusts.term = SetSpriteFocus
+# en: CharacterFocus
+docs.actions.liftCastSBusts.term = CharacterFocus
 
 # Docs: a point in the topic
 # en: Lift the cast's busts above a full-screen scene, or put them back down. It affects everyone in the dialogue, and resets by itself when the dialogue ends.
@@ -10834,6 +11014,14 @@ docs.actions.crossFadeOnePlace.term = TransitionLevels
 # Docs: a point in the topic
 # en: Cross-fade from one place to another, moving the player mid-conversation.
 docs.actions.crossFadeOnePlace = 从一个地点淡入淡出切换到另一个，在对话进行中把玩家挪过去。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Transitions
+docs.actions.coverScreenWhileChanges.term = Transitions
+
+# Docs: a point in the topic
+# en: Cover the screen with one of the game's transitions, or a black screen with your own words, for as long as you like - and change the scene behind it with the actions after it.
+docs.actions.coverScreenWhileChanges = 用游戏的某种转场，或带你自己文字的黑屏，想盖多久就盖多久——并用其后的动作在背后切换场景。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: DeactivateAllScenes
@@ -10968,8 +11156,8 @@ docs.actions.activatesceneSeparateActionShowing = ActivateScene 曾是显示场�
 docs.actions.heading.worthKnowing = 值得了解
 
 # Docs: a point in the topic
-# en: Actions run in the order they are listed.
-docs.actions.actionsRunOrderThey = 动作按列出的顺序运行。
+# en: Actions run in the order they are listed. A Wait holds the ones after it, and so does Transitions until the screen is covered.
+docs.actions.actionsRunOrderThey = 动作按列出的顺序运行。Wait 会让其后的动作等待，Transitions 也会，直到画面被盖住。
 
 # Docs: a point in the topic
 # en: Anything that targets an object gives you the same picker — see The target picker.
@@ -12480,8 +12668,8 @@ tutorial.soundInARoom.addTrack.hint = + 音乐，然后是右侧面板里的「�
 tutorial.soundInARoom.hearWithoutLeavingEditor.title = 不离开编辑器就能听
 
 # Tutorials: what the step says
-# en: Play sounds the track at the volume beside it. It plays ONCE here whatever Loop says — looping is a runtime behaviour, and the preview is for checking the file is the file you meant.\n\nLoop and Volume can both be left blank, and blank means "do what the game normally does" rather than zero. Fill them in only when you want to differ from that.
-tutorial.soundInARoom.hearWithoutLeavingEditor.body = 「播放」会按旁边的音量播放这首曲子。无论「循环」怎么设，这里都只播放「一次」——循环是运行时的行为，预览是用来确认这个文件就是你想要的那个。\n\n「循环」和「音量」都可以留空，而留空的意思是「照游戏平常的做法来」，不是零。只有当你想与之不同时才去填。
+# en: Play sounds the track at the volume beside it. It plays ONCE here whatever Loop says — looping is a runtime behaviour, and the preview is for checking the file is the file you meant.\n\nLoop can be left blank, and blank means "do what the game normally does" rather than off. Volume starts at 1.0, which is the game's own level for a track. Change either only when you want to differ from that.
+tutorial.soundInARoom.hearWithoutLeavingEditor.body = 「播放」会按旁边的音量播放这首曲子。无论「循环」怎么设，这里都只播放「一次」——循环是运行时的行为，预览是用来确认这个文件就是你想要的那个。\n\n「循环」可以留空，而留空的意思是「照游戏平常的做法来」，不是关闭。「音量」从 1.0 开始，即游戏自身的曲目音量。只有当你想与之不同时才去改。
 
 # Tutorials: the heading of a step
 # en: Make something play it
@@ -13851,6 +14039,298 @@ common.group.thisPack = 本模组包
 # en: The game's own
 common.group.gamesOwn = 游戏自有
 
+# Heading in a dropdown, over the pack's entries the author has not put in any folder
+# en: Not in a folder
+common.group.notInFolder = 不在文件夹中
+
+# Heading in a dropdown, over the entries that belong under none of the other headings
+# en: Other
+common.group.misc = 其他
+
+# Heading in the list of action types, over the ones that act on the characters on screen
+# en: Characters
+typeGroup.characters = 角色
+
+# Heading in the list of action types, over the ones that act on objects and scenes
+# en: Objects and scenes
+typeGroup.objects = 对象和场景
+
+# Heading in the list of action types, over the ones that change places, transitions and what is on the screen
+# en: Places and the screen
+typeGroup.screen = 地点和画面
+
+# Heading in the list of action types, over music and sound effects
+# en: Sound
+typeGroup.sound = 声音
+
+# Heading in the lists of action and condition types, over the ones about variables and lists
+# en: Variables
+typeGroup.variables = 变量
+
+# Heading in the list of action types, over waiting and dice rolls
+# en: Timing and chance
+typeGroup.timing = 时机和概率
+
+# Heading in the lists of action and condition types, over the ones about quests
+# en: Quests
+typeGroup.quests = 任务
+
+# Heading in the list of condition types, over the ones about places, objects and the weather
+# en: Places and objects
+typeGroup.world = 地点和对象
+
+# Heading in the list of condition types, over chance, timers, keys pressed and "always"
+# en: Chance, time and keys
+typeGroup.chance = 概率、时间和按键
+
+# Heading in the list of component types
+# en: Made for packs
+componentGroup.pack = 为模组包制作
+
+# Heading in the list of component types
+# en: The game's scripts
+componentGroup.game = 游戏的脚本
+
+# Heading in the list of component types
+# en: Unity's own
+componentGroup.unity = Unity 自带
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Lift the busts above a scene, or put them back
+note.action.characterFocus = 把立绘抬到场景上方，或放回
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Fade a character off screen
+note.action.leaveBust = 让角色淡出画面
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Show or hide a scene, bust or object
+note.action.setActive = 显示或隐藏场景、立绘或对象
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Swap the picture on something
+note.action.setSprite = 更换某物的图片
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Fade something in or out
+note.action.fadeSprite = 让某物淡入或淡出
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Slide something to another position
+note.action.move = 把某物滑到另一个位置
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Start or stop something spinning
+note.action.spin = 让某物开始或停止旋转
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Change a setting the other actions don't reach
+note.action.component = 修改其他动作改不到的设置
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Hide every scene this pack showed
+note.action.deactivateAllScenes = 隐藏本模组包显示过的所有场景
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Take the player to another place
+note.action.transitionLevels = 把玩家带到另一个地点
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Cover the screen while things change
+note.action.transitions = 在变化时盖住画面
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Keep the interface hidden after the dialogue
+note.action.leaveUiFaded = 对话结束后保持界面隐藏
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Send one of the game's signals
+note.action.emitSignal = 发送游戏的某个信号
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Change today's weather
+note.action.setWeather = 更改今天的天气
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Change the music
+note.action.switchMusic = 更换音乐
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Play a sound effect
+note.action.playSfx = 播放一个音效
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Set or change a variable
+note.action.variable = 设置或更改变量
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Add a value to a list
+note.action.addToList = 向列表添加一个值
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Take a value out of a list
+note.action.removeFromList = 从列表移除一个值
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Empty a list
+note.action.clearList = 清空列表
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Pause before the actions after it
+note.action.wait = 在后面的动作前暂停
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Do one of several things, by chance
+note.action.diceRoll = 按概率做几件事之一
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Start, advance or finish a quest
+note.action.quest = 开始、推进或完成任务
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Compare a variable with a value
+note.condition.variable = 把变量与某个值比较
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Whether a variable has been set
+note.condition.variableExists = 变量是否已设置
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Whether a variable's text begins a certain way
+note.condition.variableStartsWith = 变量的文字是否以某种方式开头
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Whether a list holds a value
+note.condition.listContains = 列表是否包含某个值
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: How many values a list holds
+note.condition.listCount = 列表有多少个值
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Whether the player is in a place
+note.condition.levelActive = 玩家是否在某个地点
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Whether something is showing
+note.condition.gameObjectActive = 某物是否正在显示
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: What today's weather is
+note.condition.weather = 今天是什么天气
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: How far a quest has got
+note.condition.questState = 任务进行到哪一步
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: A quest task's counter
+note.condition.questCounter = 任务目标的计数器
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: A chance, rolled once a day
+note.condition.dailyChance = 每天掷一次的概率
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: A chance, rolled every time
+note.condition.random = 每次都掷的概率
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Every so many seconds
+note.condition.timer = 每隔若干秒
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: A key or button pressed
+note.condition.inputKey = 按下的键或按钮
+
+# A note beside a condition type in its dropdown, saying what it asks
+# en: Always - handy for testing
+note.condition.alwaysTrue = 总是成立——方便测试
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: One of a character's busts
+note.kind.bust = 角色的某个立绘
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: An object in a place
+note.kind.gameObjects = 某个地点里的对象
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: An NPC in a place
+note.kind.npcs = 某个地点里的 NPC
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: A whole place's picture
+note.kind.places = 整个地点的图片
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: One of this pack's scenes
+note.kind.scene = 本模组包的某个场景
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: One of this pack's screens
+note.kind.ui = 本模组包的某个画面
+
+# A note beside a target category in its dropdown, saying what it reaches
+# en: Anything in the game, by its path
+note.kind.directPath = 游戏中的任何东西，按路径
+
+# A note beside one of the game's signals in its dropdown, saying what the game does when it is sent
+# en: A blink, with a drinking sound
+note.signal.drink = 一次眨眼，伴随喝东西的声音
+
+# A note beside one of the game's signals in its dropdown, saying what the game does when it is sent
+# en: A white camera flash, with its sound
+note.signal.flash = 相机白色闪光，带声音
+
+# A note beside one of the game's signals in its dropdown, saying what the game does when it is sent
+# en: A flash, with a kiss sound
+note.signal.kiss = 一次闪光，伴随亲吻声
+
+# A note beside one of the game's signals in its dropdown, saying what the game does when it is sent
+# en: Fade the game's interface out
+note.signal.fadeUi = 让游戏界面淡出
+
+# A note beside one of the game's signals in its dropdown, saying what the game does when it is sent
+# en: Bring the game's interface back
+note.signal.forceEnableUi = 让游戏界面回来
+
+# A note beside a Variable action's operation in its dropdown
+# en: Give it a value
+note.operation.set = 给它一个值
+
+# A note beside a Variable action's operation in its dropdown
+# en: Add to a number
+note.operation.increment = 加到一个数上
+
+# A note beside a Variable action's operation in its dropdown
+# en: Pick one value of a list at random
+note.operation.randomFromList = 从列表随机挑一个值
+
+# A note beside a Variable action's operation in its dropdown
+# en: How many values a list holds
+note.operation.countList = 列表有多少个值
+
+# A note beside a component type in its dropdown
+# en: Fades in when shown
+note.component.fadeIn = 显示时淡入
+
+# A note beside a component type in its dropdown
+# en: Fades out when shown
+note.component.fadeOut = 显示时淡出
+
+# A note beside a component type in its dropdown
+# en: Shows one of its children at random
+note.component.randomChild = 随机显示其中一个子对象
+
+# A note beside a component type in its dropdown
+# en: Blinks on and off
+note.component.blinking = 闪烁
+
+# A note beside a component type in its dropdown
+# en: Unity's own - most settings can't be set by name
+note.component.engine = Unity 自带——多数设置无法按名称设置
+
 # The editor's title bar; {game} is the game's version, {pack} the pack's id
 # en: SMSModForge {version} for {game} — {pack}
 window.title = SMSModForge {version}，对应 {game} — {pack}
@@ -13871,13 +14351,13 @@ window.forGame = 对应 Starmaker Story {version}
 # en: New UI
 ui.newName = 新建 UI
 
-# Title of a message box
-# en: Rename
-rename.title = 重命名
-
 # After a rename that other parts of the pack followed
 # en: Renamed '{from}' to '{to}' and updated {count} references.
 rename.fromTo.other = 已把「{from}」重命名为「{to}」，并更新了 {count} 处引用。
+
+# On the right-click menu of a folder in a tab's sidebar. Its name turns into a box to type the new one in
+# en: Rename
+folders.renameMenu = 重命名
 
 # Title of a message box
 # en: Reset key
@@ -14105,14 +14585,6 @@ places.newName = 新建地点
 # en: New Folder
 common.newFolder = 新建文件夹
 
-# After a rename
-# en: Renamed to '{name}' and updated {count} references.
-rename.to.other = 已重命名为「{name}」，并更新了 {count} 处引用。
-
-# After a rename nothing else followed
-# en: Renamed to '{name}' (no references found).
-rename.toNothingFollowed = 已重命名为「{name}」（未找到任何引用）。
-
 # Beside the box in the Rename window
 # en: New name:
 rename.newName = 新名称：
@@ -14295,14 +14767,6 @@ edit.selectAll = 全选
 # Tooltip on the UI tab's object tree
 # en: Ins: add object • Del: remove • Ctrl+C/V: copy/paste • Ctrl+D: duplicate
 ui.treeKeys.tip = Ins：添加对象 • Del：移除 • Ctrl+C/V：复制/粘贴 • Ctrl+D：创建副本
-
-# Title of the window that renames a sidebar folder
-# en: Rename Folder
-folders.rename.title = 重命名文件夹
-
-# Beside the box in that window
-# en: Folder name:
-folders.rename.prompt = 文件夹名称：
 
 # en: You have unsaved changes. Save before closing?
 unsaved.beforeClosing = 你有未保存的改动。关闭前先保存吗？
@@ -15346,6 +15810,10 @@ walk.ui = UI「{name}」
 # en: {count} other references
 walk.otherReferences.other = 另外 {count} 处引用
 
+# Says where something is in the pack, in the list of what a rename changed: a place the list has no name for yet
+# en: Elsewhere in the pack
+walk.elsewhere = 模组包的其他位置
+
 [Places tab: preview]
 
 # Tooltip on the place preview
@@ -15889,12 +16357,20 @@ migration.wallpaperPathsRelative = 用这台电脑上的完整路径指定的壁
 migration.playerVoice = 已移除此模组包设置的玩家打字声音：玩家现在在所有模组包中都以相同方式打字（每秒 45 个字符，音高 0.4-0.7）
 
 # One line of the list of what was brought up to date
+# en: The player's name colour this pack set, removed: "You" is written in the game's own grey in every pack
+migration.playerColour = 已移除此模组包设置的玩家名字颜色：“You”在所有模组包中都以游戏自带的灰色显示
+
+# One line of the list of what was brought up to date
 # en: Characters given the neutral expression every character now starts with
 migration.neutralGiven = 已给各角色补上如今每个角色都自带的中立表情
 
 # One line of the list of what was brought up to date. "Extra GameObjects" and "GameObjects" are names of a category in the editor
 # en: Targets in "Extra GameObjects", the GameObjects category's old name, moved to GameObjects - so they are looked up inside their level again
 migration.oldGameObjectsCategory = 位于“Extra GameObjects”（GameObjects 类别的旧名称）中的目标已移到 GameObjects——它们将重新在各自的关卡内查找
+
+# One line of the list of what was brought up to date. "SetSpriteFocus" and "CharacterFocus" are names of an action, kept in English
+# en: SetSpriteFocus actions given the action's new name, CharacterFocus
+migration.characterFocus = SetSpriteFocus 动作已改用该动作的新名称 CharacterFocus
 
 # One line of the list of what was brought up to date
 # en: Given a version to start from ({version})
@@ -16854,6 +17330,10 @@ packText.heading.buttons = 按钮
 # en: Screen: {name}
 packText.heading.screen = 界面：{name}
 
+# A heading in a pack's translation file: the words on transitions' black screens
+# en: Transitions
+packText.heading.transitions = 转场
+
 # Note above a text in a pack's translation file
 # en: A character's name, shown above their lines
 packText.note.name = 角色的名字，显示在他的台词上方
@@ -16913,6 +17393,14 @@ packText.note.mapButton = {district} 里通往 {target} 的一个世界地图按
 # Note above a text in a pack's translation file: {path} is the object on the screen, by the names down to it
 # en: The text of {path}
 packText.note.ui = {path} 的文本
+
+# A note above a text in a pack's translation file: words on a transition's black screen, in {owner} - a rule, a place, a quest or a screen, by its name
+# en: Words on a black screen, in {owner}
+packText.note.transition = 黑屏上的文字，位于 {owner}
+
+# A note above a text in a pack's translation file: words on a transition's black screen, at {line} of the dialogue {dialogue}
+# en: Words on a black screen, at line {line} of {dialogue}
+packText.note.transitionInLine = 黑屏上的文字，位于 {dialogue} 的第 {line} 句
 
 # Report of File > Pack translations > Check
 # en: {count} texts are missing, so they show as the pack says them:
@@ -17077,6 +17565,14 @@ editingLanguage.edit = 编辑…
 # Tooltip on that button
 # en: See the pack's translations and how far along each one is, copy one over another language, or delete one.
 editingLanguage.edit.tip = 查看模组包的各个翻译及其完成程度，把其中一个复制到另一种语言上，或删除一个。
+
+# A button beside the editing language, opening the pack's folder in File Explorer
+# en: Pack folder
+packFolder.open = 模组包文件夹
+
+# Tooltip on "Pack folder"
+# en: Open the pack's folder in File Explorer - where its art, sounds and translations are, and where a file has to be for players to get it. A new pack has a folder once it is saved.
+packFolder.open.tip = 在文件资源管理器中打开模组包的文件夹——它的图片、声音和翻译都在这里，文件必须放在这里玩家才能得到。新模组包保存后才会有文件夹。
 
 # Title of that window
 # en: Pack translations
@@ -17303,3 +17799,80 @@ translatePack.damaged = 有 {count} 条保留了默认文字，因为译文弄�
 
 # en: Nothing was translated.
 translatePack.nothingDone = 没有翻译任何内容。
+
+[Not used by this version]
+
+# en: Rename
+npcs.unitRenameFolder = 重命名
+
+# en: Rename the selected folder.
+npcs.unitRenameFolder.tip = 重命名选中的文件夹。
+
+# en: Rename
+places.unitRenameFolder = 重命名
+
+# en: Rename the selected folder.
+places.unitRenameFolder.tip = 重命名选中的文件夹。
+
+# en: Rename
+dialogues.renameFolder = 重命名
+
+# en: Rename the selected folder.
+dialogues.renameFolder.tip = 重命名选中的文件夹。
+
+# en: Rename
+scenes.unitRenameFolder = 重命名
+
+# en: Rename the selected folder.
+scenes.unitRenameFolder.tip = 重命名选中的文件夹。
+
+# en: Rename
+music.unitRenameFolder = 重命名
+
+# en: Rename the selected folder.
+music.unitRenameFolder.tip = 重命名选中的文件夹。
+
+# en: Rename
+sfx.unitRenameFolder = 重命名
+
+# en: Rename the selected folder.
+sfx.unitRenameFolder.tip = 重命名选中的文件夹。
+
+# en: Rename
+wallpapers.unitRenameFolder = 重命名
+
+# en: Rename the selected folder.
+wallpapers.unitRenameFolder.tip = 重命名选中的文件夹。
+
+# en: Rename
+variables.renameVariableFolder = 重命名
+
+# en: Rename the selected folder.
+variables.renameVariableFolder.tip = 重命名选中的文件夹。
+
+# en: Rename
+integration.renameIntegrationFolder = 重命名
+
+# en: Rename the selected folder.
+integration.renameIntegrationFolder.tip = 重命名选中的文件夹。
+
+# en: Rename
+quests.unitRenameFolder = 重命名
+
+# en: Rename the selected folder.
+quests.unitRenameFolder.tip = 重命名选中的文件夹。
+
+# en: Rename
+rename.title = 重命名
+
+# en: Renamed to '{name}' and updated {count} references.
+rename.to.other = 已重命名为「{name}」，并更新了 {count} 处引用。
+
+# en: Renamed to '{name}' (no references found).
+rename.toNothingFollowed = 已重命名为「{name}」（未找到任何引用）。
+
+# en: Rename Folder
+folders.rename.title = 重命名文件夹
+
+# en: Folder name:
+folders.rename.prompt = 文件夹名称：

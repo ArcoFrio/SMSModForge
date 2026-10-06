@@ -316,13 +316,18 @@
         /// of SMSAndroids, who knows the game, and matched to what their pack
         /// had set (2026-09-27).
         /// <para/>
+        /// The name colour IS the game's: its speaker label says "You" for
+        /// every player line - the player's Actor names itself with that
+        /// constant, not with the name the player chose - and the game's
+        /// TMPWordColorizer has "you" at #B0B0B0, a light grey (read from
+        /// 1.8E's files, 2026-10-05).
+        /// <para/>
         /// Kept out of <see cref="All"/> and <see cref="For"/> on purpose: those
-        /// answer for the game's cast, and the plugin asks them about faces and
-        /// name colours the player does not have. The same in every pack - no
-        /// pack can change it.
+        /// answer for the game's cast, and the plugin asks them about faces the
+        /// player does not have. The same in every pack - no pack can change it.
         /// </summary>
         public static readonly Speaker Player =
-            new Speaker("player", "You", null, null, true, 45, 0.4f, 0.7f, null, null, null);
+            new Speaker("player", "You", null, null, true, 45, 0.4f, 0.7f, null, null, "#B0B0B0");
 
         /// <summary>This character as a speaker, or null for one the game never
         /// gave a voice -- a bust in a crowd, or a pack's own character.</summary>
