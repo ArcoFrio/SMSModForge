@@ -339,7 +339,42 @@ public sealed class DialogueNodeViewModel : ObservableObject
     public string Outfit
     {
         get => Model.Outfit;
-        set { Model.Outfit = value; OnPropertyChanged(); }
+        set
+        {
+            Model.Outfit = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(OutfitFromVariable));
+            OnPropertyChanged(nameof(UsesOutfitVariable));
+        }
+    }
+
+    /// <summary>The outfit is a pack variable's value ("$name"), not a bust.</summary>
+    public bool OutfitFromVariable => Model.Outfit is { } o && o.StartsWith('$');
+
+    private bool _outfitVariableAsked;
+    private string? _outfitBeforeVariable;
+
+    /// <summary>
+    /// The box ticked beside "From a variable" (the author, 1.8.0: like Tag,
+    /// the list appears once it is ticked, and the outfit buttons stand aside
+    /// while it is). Ticking it changes nothing in the line until a variable
+    /// is picked; unticking puts back the button the line had before, or Keep.
+    /// </summary>
+    public bool UsesOutfitVariable
+    {
+        get => _outfitVariableAsked || OutfitFromVariable;
+        set
+        {
+            if (value == UsesOutfitVariable) return;
+            _outfitVariableAsked = value;
+            if (value) _outfitBeforeVariable = Model.Outfit;
+            else
+            {
+                if (OutfitFromVariable) Outfit = _outfitBeforeVariable is { } before && !before.StartsWith('$') ? before : "";
+                _outfitBeforeVariable = null;
+            }
+            OnPropertyChanged();
+        }
     }
 
     public string Text
@@ -350,6 +385,7 @@ public sealed class DialogueNodeViewModel : ObservableObject
             Model.Text = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(TextPreview));
+            OnPropertyChanged(nameof(ShownPreview));
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(TextIsThePacks));
         }
@@ -401,6 +437,27 @@ public sealed class DialogueNodeViewModel : ObservableObject
             Model.Tag = string.IsNullOrEmpty(value) ? null : value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(HasTag));
+            OnPropertyChanged(nameof(ShowsTag));
+        }
+    }
+
+    private bool _tagAsked;
+
+    /// <summary>
+    /// The box ticked beside Tag (the author, 1.8.0: "Hide it behind a
+    /// checkbox, that when checked makes the field appear right beside it").
+    /// Ticked whenever the line has a tag. Unticking takes the tag away -
+    /// a hidden tag would still be what a jump lands on, with nothing on
+    /// screen to say so.
+    /// </summary>
+    public bool ShowsTag
+    {
+        get => _tagAsked || HasTag;
+        set
+        {
+            _tagAsked = value;
+            if (!value && HasTag) Tag = "";
+            OnPropertyChanged();
         }
     }
 
@@ -460,6 +517,10 @@ public sealed class DialogueNodeViewModel : ObservableObject
     /// <summary>Comma-separated child ids, suitable for showing in the list.</summary>
     public string ChildrenSummary => Model.Children.Count == 0 ? Loc.T("common.none") : string.Join(", ", Model.Children);
 
+    /// <summary>The tree moved: what this node's row says about its children
+    /// (on its tooltip, since 1.8.0) is redrawn.</summary>
+    internal void TreeChanged() => OnPropertyChanged(nameof(ChildrenSummary));
+
     // ── Tree depth (set by the parent DialogueViewModel) ─────────────
 
     private int _depth;
@@ -508,6 +569,28 @@ public sealed class DialogueNodeViewModel : ObservableObject
         }
     }
 
+    /// <summary>The pack's sound patterns, with the sound each plays - for
+    /// <see cref="ShownPreview"/>. Set by the window's view model.</summary>
+    public static System.Func<System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<string, string>>>? SoundPatterns;
+
+    /// <summary>
+    /// <see cref="TextPreview"/> as the player reads it: without the sound
+    /// patterns the line hides (1.8.0). What the Game look draws.
+    /// </summary>
+    public string ShownPreview
+    {
+        get
+        {
+            string preview = TextPreview;
+            if (Model.Cues == null || Model.Cues.Count == 0 || SoundPatterns == null || string.IsNullOrEmpty(Text)) return preview;
+            var settings = Model.Cues.Select(c => c.ToSetting()).ToList();
+            return Shared.SoundCues.Hide(preview, Shared.SoundCues.Find(Text, SoundPatterns()), settings);
+        }
+    }
+
+    /// <summary>A sound's setting in the line changed.</summary>
+    public void CuesChanged() => OnPropertyChanged(nameof(ShownPreview));
+
     /// <summary>
     /// <c>"[Name]"</c> for the speaking character, or empty. Shows the
     /// character's NAME, not the key the node stores: keys are stable
@@ -525,7 +608,9 @@ public sealed class DialogueNodeViewModel : ObservableObject
             string speakerName = string.IsNullOrEmpty(Actor)
                 ? ""
                 : (ActorDisplayNameProvider?.Invoke(Actor) ?? Actor);
-            return string.IsNullOrEmpty(speakerName) ? "" : "[" + speakerName + "]";
+            // Capitalised, as every name in the node editor is (the author,
+            // 1.8.0). The Game look's SpeakerName is left as the game shows it.
+            return string.IsNullOrEmpty(speakerName) ? "" : "[" + View.Converters.CapitalizedConverter.Of(speakerName) + "]";
         }
     }
 

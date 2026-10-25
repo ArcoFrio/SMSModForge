@@ -23,9 +23,7 @@ namespace SMSModForge.Services;
 /// </summary>
 public static class TabChangeWatch
 {
-    public static readonly string FilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "SMSModForge", "tab-changes.log");
+    public static string FilePath => AppDataFolder.PathOf("tab-changes.log");
 
 
     /// <summary>

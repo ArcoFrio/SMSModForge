@@ -4,7 +4,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{l:T packTranslations.title}" Width="640" Height="440"
         MinWidth="480" MinHeight="300"
-        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource Theme.Window}"
+        Foreground="{DynamicResource Theme.Text}">
     <DockPanel Margin="12">
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="{l:T packTranslations.intro}"/>
 
@@ -41,7 +43,7 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <TextBlock x:Name="EmptyText" TextWrapping="Wrap" Margin="10,40,10,0" Foreground="Gray"
+            <TextBlock x:Name="EmptyText" TextWrapping="Wrap" Margin="10,40,10,0" Foreground="{DynamicResource Theme.TextMuted}"
                        HorizontalAlignment="Center" TextAlignment="Center" Visibility="Collapsed"
                        Text="{l:T packTranslations.none}"/>
         </Grid>

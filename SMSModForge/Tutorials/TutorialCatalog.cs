@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SMSModForge.Localization;
+using SMSModForge.ViewModel;
 
 namespace SMSModForge.Tutorials;
 
@@ -27,17 +28,17 @@ namespace SMSModForge.Tutorials;
 /// </summary>
 public static class TutorialCatalog
 {
-    // Tab indices, mirroring MainWindow's constants.
-    private const int TabModForge = 0;
-    private const int TabCharacters = 1;
-    private const int TabNpcs = 2;
-    private const int TabPlaces = 3;
-    private const int TabMapButtons = 4;
-    private const int TabDialogues = 5;
-    private const int TabScenes = 6;
-    private const int TabWallpapers = 9;
-    private const int TabVariables = 10;
-    private const int TabIntegration = 11;
+    // Tab indices, from MainTab.
+    private const int TabModForge = MainTab.ModForge;
+    private const int TabCharacters = MainTab.Characters;
+    private const int TabNpcs = MainTab.Npcs;
+    private const int TabPlaces = MainTab.Places;
+    private const int TabMapButtons = MainTab.MapButtons;
+    private const int TabDialogues = MainTab.Dialogues;
+    private const int TabScenes = MainTab.Scenes;
+    private const int TabWallpapers = MainTab.Wallpapers;
+    private const int TabVariables = MainTab.Variables;
+    private const int TabIntegration = MainTab.Integration;
 
     private static readonly TutorialDef[] _first =
     {

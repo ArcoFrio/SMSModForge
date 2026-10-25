@@ -124,4 +124,14 @@ public sealed class ActorExpressionDef
     /// </summary>
     [JsonProperty("expressionGoName", Order = 2)]
     public string ExpressionGoName { get; set; } = "";
+
+    /// <summary>
+    /// The picture the editor shows this face with - one of
+    /// <see cref="ExpressionIcons.All"/> - once its author has one. Null until
+    /// then, and the editor guesses from the name; nothing is written for it,
+    /// so a pack that never picked one saves exactly as before. The game never
+    /// reads it.
+    /// </summary>
+    [JsonProperty("icon", Order = 3, NullValueHandling = NullValueHandling.Ignore)]
+    public string? Icon { get; set; }
 }

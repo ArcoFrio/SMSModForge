@@ -72,7 +72,9 @@ public sealed class WallpaperPreview : Grid
     };
     private readonly TextBlock _placeholder = new()
     {
-        Foreground = Brushes.Gray,
+        Foreground = PreviewMessage.Ink,
+        Background = PreviewMessage.Chip,
+        Padding = new Thickness(6, 3, 6, 4),
         HorizontalAlignment = HorizontalAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center,
         FontSize = 11,
@@ -82,7 +84,9 @@ public sealed class WallpaperPreview : Grid
     };
     private readonly TextBlock _dimensions = new()
     {
-        Foreground = Brushes.Gray,
+        // On the preview's own dark backdrop, whatever the theme: a grey light
+        // enough to read there (plain Gray was 4:1, found with a real pack).
+        Foreground = new SolidColorBrush(Color.FromRgb(0xB0, 0xB0, 0xB0)),
         HorizontalAlignment = HorizontalAlignment.Right,
         VerticalAlignment = VerticalAlignment.Bottom,
         FontSize = 10,
@@ -108,9 +112,11 @@ public sealed class WallpaperPreview : Grid
         HorizontalAlignment = HorizontalAlignment.Left;
         VerticalAlignment = VerticalAlignment.Top;
         Background = new SolidColorBrush(Color.FromRgb(0x22, 0x22, 0x22));
-        // Bilinear (the default), not NearestNeighbor as the pixel-art scene
-        // frames use: this is a downscale of a large photo-like image, where
-        // point sampling would just alias.
+        // Smoothed, not NearestNeighbor as the pixel-art scene frames use: this
+        // is a downscale of a large photo-like image, where point sampling
+        // would just alias. Said here rather than left to the default, since
+        // the frame around it asks for nearest neighbour once it is enlarged.
+        RenderOptions.SetBitmapScalingMode(_image, BitmapScalingMode.HighQuality);
         Children.Add(_image);
         Children.Add(_dimensions);
         Children.Add(_placeholder);

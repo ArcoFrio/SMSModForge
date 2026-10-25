@@ -277,10 +277,31 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         private static Node BuildBareNode(JObject nj, PackContext ctx)
         {
-            string text = ResolvePlaceholders((string)nj["text"] ?? "", ctx);
-            TypewriterTiming.PackLine(text);
-            return new Node(text);
+            string text = (string)nj["text"] ?? "";
+            // A sound whose words are hidden is heard, not read (1.8.0).
+            if (ctx.Sfx != null) text = ctx.Sfx.Shown(text, SMSModForge.Shared.PackTexts.CueText(nj), nj["cues"]);
+            string now = ResolvePlaceholders(text, ctx);
+            TypewriterTiming.PackLine(now);
+
+            // [PV:name] read as the line is said, not as the pack loaded: the
+            // line's text getter is swapped for one that reads the variable
+            // each time. Where the fields cannot be reached, the words as they
+            // read now - what lines always had.
+            if (TextPlaceholders.HasAny(text) && _fldNodeText != null && _fldNodeTextString != null)
+            {
+                var node = new Node(text);
+                object words = _fldNodeText.GetValue(node);
+                if (words != null)
+                {
+                    _fldNodeTextString.SetValue(words, new PropertyGetString(new GetStringPackLine(text, ctx.PackId)));
+                    return node;
+                }
+            }
+            return new Node(now);
         }
+
+        private static readonly FieldInfo _fldNodeText = typeof(Node).GetField("m_Text", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo _fldNodeTextString = typeof(NodeText).GetField("m_Text", BindingFlags.NonPublic | BindingFlags.Instance);
 
         // Pack-variable-only substitution token. GC2 globals — including
         // the proxy-variable mirror of the host mod's SaveManager flags —
@@ -296,10 +317,9 @@ namespace SMSModForge.PackPlugin
         // Pack variables live in <see cref="PackVariableStore"/> and
         // are NOT registered as GC2 globals, so `{X}` can't resolve
         // them. <c>[PV:name]</c> remains the supported way to inline
-        // a pack variable. Resolution still happens at build time;
-        // for a pack variable that needs to update mid-dialogue,
-        // register it as a GC2 GNV through a future bridge and use
-        // `{X}` instead.
+        // a pack variable, read as the line is said (GetStringPackLine,
+        // 1.8.0); this build-time reading is only what a line falls
+        // back to.
         /// <summary>
         /// Substitute <c>[PV:name]</c> tokens in a line of dialogue text
         /// against the pack variable store. Shared implementation in

@@ -29,7 +29,7 @@ public sealed class VanillaQuestTreeTests
     private readonly ITestOutputHelper _out;
     public VanillaQuestTreeTests(ITestOutputHelper o) => _out = o;
 
-    private const int TabQuests = 13;
+    private const int TabQuests = MainTab.Quests;
 
     private static string Token(int id) => id.ToString(CultureInfo.InvariantCulture);
 
@@ -765,7 +765,7 @@ public sealed class VanillaQuestTreeTests
             var gamePanel = (GroupBox)window.FindName("VanillaTaskPanel");
             var taskName = (TextBox)window.FindName("QuestTaskNameBox");
             var list = (ListBox)window.FindName("VanillaTaskList");
-            var addTask = (Button)window.FindName("AddExtensionTaskButton");
+            var addTask = ((SMSModForge.View.Controls.NavigatorBar)window.FindName("ExtensionTaskNavigator")).Role("add")!;
 
             Assert.False(warning.IsVisible, "the orange warning shows on an entry that changes no task");
             Assert.True(gamePanel.IsVisible, "the first of the game's tasks is not open");

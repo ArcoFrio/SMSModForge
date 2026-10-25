@@ -59,12 +59,37 @@ public sealed class ComboBoxSearchTests
         return shown.ToArray();
     }
 
+    [Theory]
+    [InlineData("Anna", new[] { "Anna_Bust", "Anna_Party" })]                    // words that are no option: they search
+    [InlineData("Anna_Party", new[] { "Anna_Bust", "Anna_Party", "Tia_Beach" })] // the choice itself: the whole list
+    [InlineData("zzz", new[] { "Anna_Bust", "Anna_Party", "Tia_Beach" })]        // nothing found: the whole list
+    public void OpeningABoxWithWordsInItShowsWhatTheyFind(string inTheBox, string[] expected)
+    {
+        // The author, 2026-10-21: a box that already had text opened onto
+        // every option. Here the words were put there before the list was
+        // opened - by the view model, or typed and left - not typed into an
+        // open list, which is the case the other tests cover.
+        WindowHarness.Run(_ =>
+        {
+            var box = Dropdown("Anna_Bust", "Anna_Party", "Tia_Beach");
+            box.Text = inTheBox;
+            WindowHarness.Pump();
+            WindowHarness.SetOpen(box, true);
+            var shown = Showing(box);
+            _out.WriteLine($"'{inTheBox}' -> {string.Join(", ", shown)}");
+            Assert.Equal(expected, shown);
+            WindowHarness.SetOpen(box, false);
+            WindowHarness.Pump();
+            Assert.Equal("", SMSModForge.View.ComboBoxSearch.GetTyped(box));   // the search ends with the list
+        });
+    }
+
     /// <summary>Type, the way a person does: one character at a time into the
     /// box, with the caret after what they wrote.</summary>
     private static void Type(ComboBox box, string text)
     {
         var typing = Typing(box);
-        box.IsDropDownOpen = true;
+        WindowHarness.SetOpen(box, true);
         WindowHarness.Pump();
 
         typing.Text = text;
@@ -100,7 +125,7 @@ public sealed class ComboBoxSearchTests
         WindowHarness.Run(_ =>
         {
             var box = Dropdown("Anna", "Adrian", "Kate");
-            box.IsDropDownOpen = true;
+            WindowHarness.SetOpen(box, true);
             WindowHarness.Pump();
 
             Assert.Equal(3, Showing(box).Length);
@@ -131,7 +156,7 @@ public sealed class ComboBoxSearchTests
         {
             var box = Dropdown("Anna", "Adrian", "Kate");
             var typing = Typing(box);
-            box.IsDropDownOpen = true;
+            WindowHarness.SetOpen(box, true);
             WindowHarness.Pump();
 
             // Exactly the state completion leaves behind: the whole word, with
@@ -193,7 +218,7 @@ public sealed class ComboBoxSearchTests
             // Only one dropdown can be open at a time, so opening the second
             // closes the first and clears its search - by design. What matters
             // is that the second was never narrowed by the first.
-            second.IsDropDownOpen = true;
+            WindowHarness.SetOpen(second, true);
             WindowHarness.Pump();
             var other = Showing(second);
             _out.WriteLine("second: " + string.Join(", ", other));
@@ -290,18 +315,27 @@ public sealed class ComboBoxSearchTests
     }
 
     [Fact]
-    public void ClosingTheListLeavesItWholeForNextTime()
+    public void ClosingTheListEndsTheSearch_TheWordsLeftInTheBoxStillCount()
     {
+        // Until 1.8.0 a closed list came back whole whatever the box said; the
+        // author asked for the words in it to count (2026-10-21). Clearing the
+        // box is how to see everything again.
         WindowHarness.Run(_ =>
         {
             var box = Dropdown("Anna", "Adrian", "Kate");
             Type(box, "na");
             Assert.DoesNotContain("Kate", Showing(box));
 
-            box.IsDropDownOpen = false;
+            WindowHarness.SetOpen(box, false);
             WindowHarness.Pump();
-            box.IsDropDownOpen = true;
+            Assert.Equal("", SMSModForge.View.ComboBoxSearch.GetTyped(box));
+            WindowHarness.SetOpen(box, true);
+            Assert.Equal(new[] { "Anna" }, Showing(box));
 
+            WindowHarness.SetOpen(box, false);
+            box.Text = "";
+            WindowHarness.Pump();
+            WindowHarness.SetOpen(box, true);
             Assert.Equal(3, Showing(box).Length);
         });
     }
@@ -345,7 +379,7 @@ public sealed class ComboBoxSearchTests
             };
             window.Show();
             box.ApplyTemplate();
-            box.IsDropDownOpen = true;
+            WindowHarness.SetOpen(box, true);
             WindowHarness.Pump();
 
             Assert.Equal("", ComboBoxSearch.GetTyped(box));

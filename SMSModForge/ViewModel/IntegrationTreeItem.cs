@@ -80,7 +80,15 @@ public sealed class IntegrationFolderNode : IntegrationTreeItem, IRenamableFolde
 public sealed class IntegrationLeafNode : IntegrationTreeItem
 {
     public UpdateRuleViewModel Rule { get; }
-    public IntegrationLeafNode(UpdateRuleViewModel rule) { Rule = rule; }
+
+    /// <param name="keyChanged">Told when the rule's key changes: folders hold
+    /// rules by key, so they are written again.</param>
+    public IntegrationLeafNode(UpdateRuleViewModel rule, System.Action? keyChanged = null)
+    {
+        Rule = rule;
+        if (keyChanged != null)
+            rule.PropertyChanged += (_, e) => { if (e.PropertyName == nameof(UpdateRuleViewModel.Key)) keyChanged(); };
+    }
 
     public override string FilterKey => Rule?.Display ?? "";
     public override System.Collections.Generic.IEnumerable<IFilterableTreeNode> FilterChildren

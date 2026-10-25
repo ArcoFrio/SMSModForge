@@ -56,7 +56,8 @@ public sealed class TutorialStep
     /// it created" needs the editor pane as well as the button.
     /// <para/>
     /// Missing ids are skipped rather than throwing: a pane that is not on
-    /// screen yet simply contributes no hole.
+    /// screen yet contributes no hole until it appears - the overlay keeps
+    /// looking, for these and for <see cref="Anchor"/>.
     /// </summary>
     public string[] AlsoAllow { get; init; } = Array.Empty<string>();
 

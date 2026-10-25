@@ -41,16 +41,24 @@ public static class DialogueMarkup
         /// 1 when nothing is asking for a change.</summary>
         public double Scale { get; init; }
 
+        /// <summary>
+        /// These words are a sound's auto-trigger pattern (<see cref="CuePatterns"/>):
+        /// the player reads them, and hearing them is the point. Not something
+        /// a tag asks for, so not part of <see cref="IsPlain"/> - the editor
+        /// marks them, the game does not.
+        /// </summary>
+        public bool Cue { get; init; }
+
         public static Style Plain => new() { Scale = 1 };
 
         public bool IsPlain => !Bold && !Italic && Color == null && Math.Abs(Scale - 1) < 0.0001;
 
         public bool Equals(Style other)
             => Bold == other.Bold && Italic == other.Italic
-               && Color == other.Color && Math.Abs(Scale - other.Scale) < 0.0001;
+               && Color == other.Color && Math.Abs(Scale - other.Scale) < 0.0001 && Cue == other.Cue;
 
         public override bool Equals(object? o) => o is Style s && Equals(s);
-        public override int GetHashCode() => HashCode.Combine(Bold, Italic, Color, Scale);
+        public override int GetHashCode() => HashCode.Combine(Bold, Italic, Color, Scale, Cue);
     }
 
     /// <summary>What one stretch of a line is.</summary>
@@ -131,6 +139,15 @@ public static class DialogueMarkup
     /// <summary>Said when one of those colours may have changed, so a line on
     /// screen draws its tokens again.</summary>
     public static event Action? TokenColorsChanged;
+
+    /// <summary>
+    /// The pack's sounds' auto-trigger patterns (<c>*plap*</c>), for marking
+    /// them where a line is shown (the author, 1.8.0) - matched the way the
+    /// game matches them, ignoring case. Set by the window's view model; a
+    /// change is announced through <see cref="RaiseTokenColorsChanged"/>, which
+    /// is what every view of a line redraws on.
+    /// </summary>
+    public static Func<IReadOnlyList<string>>? CuePatterns { get; set; }
 
     public static void RaiseTokenColorsChanged() => TokenColorsChanged?.Invoke();
 
@@ -213,13 +230,43 @@ public static class DialogueMarkup
             string braced = text.Substring(open, close - open + 1);
             if (!IsToken(braced)) { at = open + 1; continue; }
 
-            if (open > start) spans.Add(new Span(start, open - start, Kind.Text, style));
+            if (open > start) AddWords(spans, text, start, open - start, style);
             spans.Add(new Span(open, braced.Length, Kind.Token, style));
 
             start = at = close + 1;
         }
 
-        if (start < end) spans.Add(new Span(start, end - start, Kind.Text, style));
+        if (start < end) AddWords(spans, text, start, end - start, style);
+    }
+
+    /// <summary>Words, with any sound cue in them split out and marked
+    /// (<see cref="Style.Cue"/>). The longest pattern wins where two start at
+    /// the same place.</summary>
+    private static void AddWords(List<Span> spans, string text, int start, int length, Style style)
+    {
+        var patterns = CuePatterns?.Invoke();
+        int end = start + length;
+        if (patterns == null || patterns.Count == 0)
+        {
+            spans.Add(new Span(start, length, Kind.Text, style));
+            return;
+        }
+
+        int at = start, from = start;
+        while (at < end)
+        {
+            string? hit = null;
+            foreach (var p in patterns)
+                if (p.Length > 0 && at + p.Length <= end && (hit == null || p.Length > hit.Length)
+                    && string.Compare(text, at, p, 0, p.Length, StringComparison.OrdinalIgnoreCase) == 0)
+                    hit = p;
+            if (hit == null) { at++; continue; }
+            if (at > from) spans.Add(new Span(from, at - from, Kind.Text, style));
+            spans.Add(new Span(at, hit.Length, Kind.Text, style with { Cue = true }));
+            at += hit.Length;
+            from = at;
+        }
+        if (from < end) spans.Add(new Span(from, end - from, Kind.Text, style));
     }
 
     /// <summary>Whether a braced word is one the game resolves. Case-sensitive:

@@ -27,7 +27,7 @@ public class UiPreviewTests
     private static void OnSta(Action body)
     {
         Exception? failure = null;
-        var thread = new Thread(() => { try { body(); } catch (Exception e) { failure = e; } });
+        var thread = new Thread(() => { try { TestDesktop.Enter(); body(); } catch (Exception e) { failure = e; } });
         thread.SetApartmentState(ApartmentState.STA);
         thread.Start();
         thread.Join();

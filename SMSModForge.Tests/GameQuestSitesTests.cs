@@ -23,7 +23,7 @@ public sealed class GameQuestSitesTests
     private readonly ITestOutputHelper _out;
     public GameQuestSitesTests(ITestOutputHelper o) => _out = o;
 
-    private const int TabDialogues = 5, TabQuests = 13;
+    private const int TabDialogues = MainTab.Dialogues, TabQuests = MainTab.Quests;
 
     private const string Himari = "Dinner Boyfriend (Himari)";
     private const string HimariFirstDinner = "1070060591";

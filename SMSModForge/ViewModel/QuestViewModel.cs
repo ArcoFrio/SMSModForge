@@ -189,7 +189,7 @@ public sealed class QuestViewModel : ObservableObject, ISiteConditionsOwner
 
     public string Display => IsVanillaExtension
         ? Loc.F("quests.gamesQuest", "quest", TheGamesTitle.Length > 0 ? TheGamesTitle : Model.Source)
-        : string.IsNullOrWhiteSpace(Title) ? Key : $"{QuestKeys.Plain(Title)} ({Key})";
+        : ListNames.Of(QuestKeys.Plain(Title), Key);
 
     // ── One of the game's own quests, extended ───────────────────────
     //

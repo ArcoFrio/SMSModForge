@@ -47,7 +47,7 @@ public sealed class SearchMatchConverter : IMultiValueConverter
     /// exactly as long as something under it does — otherwise a search leaves
     /// headings standing over nothing.
     /// </summary>
-    private static bool Matches(object? item, ComboBox box, string typed)
+    internal static bool Matches(object? item, ComboBox box, string typed)
     {
         if (item is System.Windows.Data.CollectionViewGroup group)
             return group.Items.Any(child => Matches(child, box, typed));
@@ -66,7 +66,7 @@ public sealed class SearchMatchConverter : IMultiValueConverter
     /// option that is an object rather than a string, and match everything or
     /// nothing.
     /// </summary>
-    private static string TextOf(object? item, ComboBox box)
+    internal static string TextOf(object? item, ComboBox box)
     {
         if (item == null) return "";
 

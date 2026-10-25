@@ -343,7 +343,10 @@ namespace SMSModForge.PackPlugin
         /// <summary>Every field of a line the pack owns outright.</summary>
         private static void WriteWhole(Node target, JObject node, PackContext ctx, ref int skipped)
         {
-            SetText(target, PackLine(node, ctx.Vars));
+            // A sound whose words are hidden is heard, not read (1.8.0).
+            string line = PackLine(node, ctx.Vars);
+            if (ctx.Sfx != null) line = ctx.Sfx.Shown(line, SMSModForge.Shared.PackTexts.CueText(node), node["cues"]);
+            SetText(target, line);
             SetKind(target, (string)node["kind"]);
             SetTag(target, (string)node["tag"] ?? "");
             SetDuration(target, (string)node["duration"]);
@@ -578,7 +581,7 @@ namespace SMSModForge.PackPlugin
             dialogue.EventStartNext += id =>
             {
                 Fire(run, id, "actionsOnStart");
-                PlayCues(run, id);
+                PlayCues(run, dialogue, id);
             };
             dialogue.EventFinishNext += id => Fire(run, id, "actionsOnFinish");
             return run;
@@ -598,13 +601,15 @@ namespace SMSModForge.PackPlugin
         /// pack added there had its speaker and actions, and its "*slap*"
         /// stayed silent in every language.
         /// </summary>
-        private static void PlayCues(Run run, int nodeId)
+        private static void PlayCues(Run run, Dialogue dialogue, int nodeId)
         {
             string cue;
             if (!run.Cues.TryGetValue(nodeId, out cue)) return;
             var ctx = run.Ctx;
             if (ctx == null || ctx.Sfx == null || ctx.Plugin == null) return;
-            ctx.Sfx.FireMatchingPatterns(cue, ctx.Plugin, ctx.Log);
+            JObject node;
+            run.Nodes.TryGetValue(nodeId, out node);
+            ctx.Sfx.PlayLine(cue, node != null ? node["cues"] : null, ctx.Plugin, ctx.Log, dialogue.Story?.Content?.Get(nodeId));
         }
 
         private static void Fire(Run run, int nodeId, string key)

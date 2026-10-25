@@ -125,11 +125,16 @@ public sealed class EmptyStateGatingTests
         WindowHarness.Run(window =>
         {
             var vm = (MainViewModel)window.DataContext;
+            vm.AddCharacterCommand.Execute(null);
+            string speaker = vm.Characters.Last().Key;
             vm.AddDialogueCommand.Execute(null);
             vm.AddDialogueRootNodeCommand.Execute(null);
             WindowHarness.Pump();
 
+            // Spoken by somebody: a line nobody speaks is not asked either
+            // (1.8.0, see NodeFieldsTests), and that is not what this is about.
             var prompt = vm.SelectedNode!;
+            prompt.Actor = speaker;
             prompt.Kind = DialogueNodeKind.Choice;
             vm.AddDialogueChildNodeCommand.Execute(null);
             WindowHarness.Pump();

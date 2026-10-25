@@ -206,8 +206,8 @@ public class TranslationScreenTests
     }
 
     /// <summary>Same order as MainWindow's TabItems.</summary>
-    private const int TabDialogues = 5;
-    private const int TabIntegration = 11;
+    private const int TabDialogues = MainTab.Dialogues;
+    private const int TabIntegration = MainTab.Integration;
 
     /// <summary>
     /// A text that did not come through the translation, but should not have:

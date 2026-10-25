@@ -6,8 +6,8 @@ namespace SMSModForge.PackPlugin
     /// Shared <c>[PV:name]</c> token substitution against a pack's variable
     /// store. Two consumers with different cadences:
     /// <list type="bullet">
-    ///   <item><see cref="DialogueBuilder"/> — resolves dialogue text once
-    ///   at build time (the GC2 node's text field is baked).</item>
+    ///   <item><see cref="DialogueBuilder"/> — a line's text, read by the
+    ///   game as the line is said (<see cref="GetStringPackLine"/>).</item>
     ///   <item><see cref="NavigatorRuntime"/> / <see cref="RadialButtonRuntime"/>
     ///   — resolve button labels <em>live</em> every Tick, so a label like
     ///   <c>[PV:MyVar_Label]</c> updates the moment an

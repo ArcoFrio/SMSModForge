@@ -14,9 +14,7 @@ namespace SMSModForge.Services;
 /// </summary>
 public static class UiLayoutService
 {
-    private static readonly string FilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "SMSModForge", "layout.json");
+    private static string FilePath => AppDataFolder.PathOf("layout.json");
 
     public static Dictionary<string, double> Load()
     {

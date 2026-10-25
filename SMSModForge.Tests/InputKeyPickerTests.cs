@@ -22,7 +22,7 @@ public sealed class InputKeyPickerTests
     private readonly ITestOutputHelper _out;
     public InputKeyPickerTests(ITestOutputHelper o) => _out = o;
 
-    private const int TabQuests = 13;
+    private const int TabQuests = MainTab.Quests;
 
     [Fact]
     public void TheKeyListScrollsByLinesNotByGroups()

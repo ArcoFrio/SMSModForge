@@ -28,7 +28,7 @@ public sealed class TaskShowConditionsTests
     private readonly ITestOutputHelper _out;
     public TaskShowConditionsTests(ITestOutputHelper o) => _out = o;
 
-    private const int TabQuests = 13;
+    private const int TabQuests = MainTab.Quests;
 
     private static VanillaQuests.VanillaQuest Game
         => VanillaQuests.All.First(q => q.Tasks.Any(t => t.IsTopLevel && q.Tasks.Count(c => c.Parent == t.Id) >= 2));

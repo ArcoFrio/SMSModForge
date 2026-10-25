@@ -2,6 +2,7 @@
 using System.Linq;
 using SMSModForge.Model;
 using SMSModForge.Localization;
+using SMSModForge.ViewModel;
 
 namespace SMSModForge.Tutorials;
 
@@ -15,7 +16,7 @@ namespace SMSModForge.Tutorials;
 /// </summary>
 internal static class TutorialsQuests
 {
-    private const int TabQuests = 13;
+    private const int TabQuests = MainTab.Quests;
 
     internal static IReadOnlyList<TutorialDef> All { get; } = new[]
     {

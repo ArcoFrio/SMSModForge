@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SMSModForge.Model;
 using SMSModForge.Localization;
 
@@ -22,14 +23,25 @@ namespace SMSModForge.Services;
 /// <para/>
 /// The <c>Where</c> is for telling an author what a rename touched, which is
 /// the difference between a refactor and a silent rewrite of parts of the pack
-/// they are not looking at.
+/// they are not looking at. Each place also has a path, written the way the
+/// issue list writes one, so the editor can go there - the Variables tab's
+/// "where it's used" (1.8.0).
 /// </summary>
 public static class PackWalk
 {
+    /// <summary>Where something is: in words for the author, and as the path
+    /// the issue list goes to things by (<c>dialogues[Key].nodes[id=3]</c>).
+    /// The path is empty for a place that is no one record.</summary>
+    public readonly record struct Spot(string Where, string Path);
+
     /// <summary>Every condition in the pack, groups flattened into the leaves
     /// they hold — a group carries nested conditions instead of params, so
     /// treating one as a leaf would skip everything inside it.</summary>
     public static IEnumerable<(NodeConditionDef Condition, string Where)> Conditions(ModPack? pack)
+        => ConditionsAt(pack).Select(h => (h.Condition, h.At.Where));
+
+    /// <summary><see cref="Conditions"/>, with a path to each.</summary>
+    public static IEnumerable<(NodeConditionDef Condition, Spot At)> ConditionsAt(ModPack? pack)
     {
         if (pack == null) yield break;
         var seen = new HashSet<NodeConditionDef>(ReferenceEqualityComparer.Instance);
@@ -42,70 +54,73 @@ public static class PackWalk
         // in the pack rather than not found.
         foreach (var c in SavedObjects.All<NodeConditionDef>(pack))
             if (!NodeConditionTypes.IsGroup(c.Type) && seen.Add(c))
-                yield return (c, Loc.T("walk.elsewhere"));
+                yield return (c, Elsewhere);
     }
 
-    private static IEnumerable<(NodeConditionDef Condition, string Where)> KnownConditions(ModPack pack)
+    private static Spot Elsewhere => new(Loc.T("walk.elsewhere"), "");
+
+    private static IEnumerable<(NodeConditionDef Condition, Spot At)> KnownConditions(ModPack pack)
     {
 
         foreach (var d in pack.Dialogues)
         {
-            foreach (var hit in Flatten(d.StartConditions, Loc.F("walk.dialogueStart", "name", d.Key)))
+            foreach (var hit in Flatten(d.StartConditions, DialogueStart(d)))
                 yield return hit;
 
             foreach (var node in d.Nodes)
-                foreach (var hit in Flatten(node.Conditions, Loc.F("walk.dialogueNode", "name", d.Key, "node", node.Id)))
+                foreach (var hit in Flatten(node.Conditions, DialogueNode(d, node)))
                     yield return hit;
         }
 
         foreach (var r in pack.IntegrationRules)
         {
-            foreach (var hit in Flatten(r.Conditions, Loc.F("walk.rule", "name", r.Key))) yield return hit;
+            foreach (var hit in Flatten(r.Conditions, Rule(r))) yield return hit;
             foreach (var b in r.Branches)
-                foreach (var hit in Flatten(b.Conditions, Loc.F("walk.rule", "name", r.Key)))
+                foreach (var hit in Flatten(b.Conditions, Rule(r)))
                     yield return hit;
         }
 
         foreach (var p in pack.Places)
         {
             foreach (var h in p.OnEnter)
-                foreach (var hit in Flatten(h.Conditions, Loc.F("walk.placeEnter", "name", p.Key))) yield return hit;
+                foreach (var hit in Flatten(h.Conditions, Place("walk.placeEnter", p))) yield return hit;
             foreach (var h in p.OnExit)
-                foreach (var hit in Flatten(h.Conditions, Loc.F("walk.placeExit", "name", p.Key))) yield return hit;
+                foreach (var hit in Flatten(h.Conditions, Place("walk.placeExit", p))) yield return hit;
             foreach (var b in p.NavigatorButtons)
-                foreach (var hit in Flatten(b.Conditions, Loc.F("walk.placeNavigator", "name", p.Key))) yield return hit;
+                foreach (var hit in Flatten(b.Conditions, Place("walk.placeNavigator", p))) yield return hit;
         }
 
-        foreach (var v in pack.VanillaExtensions)
-            foreach (var b in v.NavigatorButtons)
-                foreach (var hit in Flatten(b.Conditions, Loc.F("walk.vanillaExtension", "name", v.Source)))
+        for (int i = 0; i < pack.VanillaExtensions.Count; i++)
+            foreach (var b in pack.VanillaExtensions[i].NavigatorButtons)
+                foreach (var hit in Flatten(b.Conditions, Extension(pack, i)))
                     yield return hit;
 
-        foreach (var b in pack.MapButtons)
-            foreach (var hit in Flatten(b.Conditions, Loc.F("walk.mapButton", "name", b.Label))) yield return hit;
+        for (int i = 0; i < pack.MapButtons.Count; i++)
+            foreach (var hit in Flatten(pack.MapButtons[i].Conditions, MapButton(pack, i))) yield return hit;
 
         foreach (var w in pack.Wallpapers)
-            foreach (var hit in Flatten(w.UnlockConditions, Loc.F("walk.wallpaperUnlock", "name", w.Key)))
+            foreach (var hit in Flatten(w.UnlockConditions,
+                         new Spot(Loc.F("walk.wallpaperUnlock", "name", w.Key), $"wallpapers[{w.Key}]")))
                 yield return hit;
 
         foreach (var q in pack.Quests)
         {
-            foreach (var hit in Flatten(q.StartConditions, Loc.F("walk.questStart", "name", q.Key)))
+            foreach (var hit in Flatten(q.StartConditions, Quest("walk.questStart", q)))
                 yield return hit;
-            foreach (var hit in Flatten(q.ResetConditions, Loc.F("walk.questReset", "name", q.Key)))
+            foreach (var hit in Flatten(q.ResetConditions, Quest("walk.questReset", q)))
                 yield return hit;
             foreach (var place in q.SiteConditions)
-                foreach (var hit in Flatten(place.Conditions, Loc.F("walk.questPlace", "name", q.Key)))
+                foreach (var hit in Flatten(place.Conditions, Quest("walk.questPlace", q)))
                     yield return hit;
             foreach (var t in q.AllTasks())
             {
-                foreach (var hit in Flatten(t.Conditions, Loc.F("walk.questTask", "name", q.Key, "task", t.Key)))
+                foreach (var hit in Flatten(t.Conditions, Task("walk.questTask", q, t)))
                     yield return hit;
-                foreach (var hit in Flatten(t.ShowConditions, Loc.F("walk.questTaskShow", "name", q.Key, "task", t.Key)))
+                foreach (var hit in Flatten(t.ShowConditions, Task("walk.questTaskShow", q, t)))
                     yield return hit;
             }
             foreach (var h in q.VanillaTasks)
-                foreach (var hit in Flatten(h.ShowConditions, Loc.F("walk.questGameTaskShow", "name", q.Key, "task", h.Task)))
+                foreach (var hit in Flatten(h.ShowConditions, GameTask("walk.questGameTaskShow", q, h)))
                     yield return hit;
         }
 
@@ -114,21 +129,21 @@ public static class PackWalk
         // included.
         foreach (var p in pack.Places)
             foreach (var list in ObjectConditions(p.GameObjects))
-                foreach (var hit in Flatten(list, Loc.F("walk.place", "name", p.Key))) yield return hit;
-        foreach (var v in pack.VanillaExtensions)
-            foreach (var list in ObjectConditions(v.GameObjects))
-                foreach (var hit in Flatten(list, Loc.F("walk.vanillaExtension", "name", v.Source))) yield return hit;
+                foreach (var hit in Flatten(list, Place("walk.place", p))) yield return hit;
+        for (int i = 0; i < pack.VanillaExtensions.Count; i++)
+            foreach (var list in ObjectConditions(pack.VanillaExtensions[i].GameObjects))
+                foreach (var hit in Flatten(list, Extension(pack, i))) yield return hit;
 
         // A screen's: when it may open, and when each of its objects shows and
         // can be clicked.
         foreach (var ui in pack.Uis)
         {
-            string where = Loc.F("walk.ui", "name", UiName(ui));
-            foreach (var hit in Flatten(ui.OpenConditions, where)) yield return hit;
+            var at = Screen(ui);
+            foreach (var hit in Flatten(ui.OpenConditions, at)) yield return hit;
             foreach (var node in UiNodes(ui.Nodes))
             {
-                foreach (var hit in Flatten(node.ActiveConditions, where)) yield return hit;
-                foreach (var hit in Flatten(node.ClickConditions, where)) yield return hit;
+                foreach (var hit in Flatten(node.ActiveConditions, at)) yield return hit;
+                foreach (var hit in Flatten(node.ClickConditions, at)) yield return hit;
             }
         }
     }
@@ -139,16 +154,20 @@ public static class PackWalk
     /// its own to follow.
     /// </summary>
     public static IEnumerable<(NodeActionDef Action, string Where)> Actions(ModPack? pack)
+        => ActionsAt(pack).Select(h => (h.Action, h.At.Where));
+
+    /// <summary><see cref="Actions"/>, with a path to each.</summary>
+    public static IEnumerable<(NodeActionDef Action, Spot At)> ActionsAt(ModPack? pack)
     {
         if (pack == null) yield break;
         var seen = new HashSet<NodeActionDef>(ReferenceEqualityComparer.Instance);
-        foreach (var (action, where) in TopLevelActions(pack))
+        foreach (var (action, at) in TopLevelActions(pack))
             foreach (var each in WithBranches(action))
-                if (seen.Add(each)) yield return (each, where);
+                if (seen.Add(each)) yield return (each, at);
 
         // The backstop, as for conditions.
         foreach (var a in SavedObjects.All<NodeActionDef>(pack))
-            if (seen.Add(a)) yield return (a, Loc.T("walk.elsewhere"));
+            if (seen.Add(a)) yield return (a, Elsewhere);
     }
 
     private static IEnumerable<NodeActionDef> WithBranches(NodeActionDef? action)
@@ -161,51 +180,86 @@ public static class PackWalk
                 yield return inner;
     }
 
-    private static IEnumerable<(NodeActionDef Action, string Where)> TopLevelActions(ModPack pack)
+    private static IEnumerable<(NodeActionDef Action, Spot At)> TopLevelActions(ModPack pack)
     {
 
         foreach (var d in pack.Dialogues)
             foreach (var node in d.Nodes)
             {
-                string where = Loc.F("walk.dialogueNode", "name", d.Key, "node", node.Id);
-                foreach (var a in node.ActionsOnStart) yield return (a, where);
-                foreach (var a in node.ActionsOnFinish) yield return (a, where);
+                var at = DialogueNode(d, node);
+                foreach (var a in node.ActionsOnStart) yield return (a, at);
+                foreach (var a in node.ActionsOnFinish) yield return (a, at);
             }
 
         foreach (var r in pack.IntegrationRules)
         {
-            string where = Loc.F("walk.rule", "name", r.Key);
-            foreach (var a in r.Actions) yield return (a, where);
+            var at = Rule(r);
+            foreach (var a in r.Actions) yield return (a, at);
             foreach (var b in r.Branches)
-                foreach (var a in b.Actions) yield return (a, where);
+                foreach (var a in b.Actions) yield return (a, at);
         }
 
         foreach (var p in pack.Places)
         {
             foreach (var h in p.OnEnter)
-                foreach (var a in h.Actions) yield return (a, Loc.F("walk.placeEnter", "name", p.Key));
+                foreach (var a in h.Actions) yield return (a, Place("walk.placeEnter", p));
             foreach (var h in p.OnExit)
-                foreach (var a in h.Actions) yield return (a, Loc.F("walk.placeExit", "name", p.Key));
+                foreach (var a in h.Actions) yield return (a, Place("walk.placeExit", p));
         }
 
         foreach (var q in pack.Quests)
         {
             foreach (var t in q.AllTasks())
-                foreach (var a in t.Actions) yield return (a, Loc.F("walk.questTask", "name", q.Key, "task", t.Key));
+                foreach (var a in t.Actions) yield return (a, Task("walk.questTask", q, t));
 
             // What a pack hangs on the game's own tasks, in a quest it extends.
             foreach (var h in q.VanillaTasks)
-                foreach (var a in h.Actions) yield return (a, Loc.F("walk.questGameTask", "name", q.Key, "task", h.Task));
+                foreach (var a in h.Actions) yield return (a, GameTask("walk.questGameTask", q, h));
         }
 
         // What a screen's objects do when clicked.
         foreach (var ui in pack.Uis)
         {
-            string where = Loc.F("walk.ui", "name", UiName(ui));
+            var at = Screen(ui);
             foreach (var node in UiNodes(ui.Nodes))
-                foreach (var a in node.OnClick) yield return (a, where);
+                foreach (var a in node.OnClick) yield return (a, at);
         }
     }
+
+    // ── Places, in words and as paths ────────────────────────────────────
+
+    private static Spot DialogueStart(DialogueDef d)
+        => new(Loc.F("walk.dialogueStart", "name", d.Key), $"dialogues[{d.Key}]");
+
+    private static Spot DialogueNode(DialogueDef d, DialogueNodeDef node)
+        => new(Loc.F("walk.dialogueNode", "name", d.Key, "node", node.Id), $"dialogues[{d.Key}].nodes[id={node.Id}]");
+
+    private static Spot Rule(UpdateRuleDef r)
+        => new(Loc.F("walk.rule", "name", r.Key), $"integrationRules[{r.Key}]");
+
+    private static Spot Place(string words, PlaceDef p)
+        => new(Loc.F(words, "name", p.Key), $"places[{p.Key}]");
+
+    private static Spot Extension(ModPack pack, int i)
+        => new(Loc.F("walk.vanillaExtension", "name", pack.VanillaExtensions[i].Source),
+               $"vanillaExtensions[{i}:{pack.VanillaExtensions[i].Source}]");
+
+    private static Spot MapButton(ModPack pack, int i)
+        => new(Loc.F("walk.mapButton", "name", pack.MapButtons[i].Label), $"mapButtons[{i}]");
+
+    private static Spot Quest(string words, QuestDef q)
+        => new(Loc.F(words, "name", q.Key), $"quests[{q.Key}]");
+
+    /// <summary>A task of the pack's: in one of the game's quests the list
+    /// the issue list goes to is that quest's added tasks.</summary>
+    private static Spot Task(string words, QuestDef q, QuestTaskDef t)
+        => new(Loc.F(words, "name", q.Key, "task", t.Key),
+               $"quests[{q.Key}].{(string.IsNullOrEmpty(q.Source) ? "tasks" : "addedTasks")}[{t.Key}]");
+
+    private static Spot GameTask(string words, QuestDef q, VanillaTaskHookDef h)
+        => new(Loc.F(words, "name", q.Key, "task", h.Task), $"quests[{q.Key}].vanillaTasks[{h.Task}]");
+
+    private static Spot Screen(UiDef ui) => new(Loc.F("walk.ui", "name", UiName(ui)), $"uis[{ui.Id}]");
 
     // ── Trees ─────────────────────────────────────────────────────────────
 
@@ -253,6 +307,10 @@ public static class PackWalk
     /// assigned back.
     /// </summary>
     public static IEnumerable<(Func<string> Read, Action<string> Write, string Where)> Texts(ModPack? pack)
+        => TextsAt(pack).Select(t => (t.Read, t.Write, t.At.Where));
+
+    /// <summary><see cref="Texts"/>, with a path to each.</summary>
+    public static IEnumerable<(Func<string> Read, Action<string> Write, Spot At)> TextsAt(ModPack? pack)
     {
         if (pack == null) yield break;
 
@@ -260,52 +318,52 @@ public static class PackWalk
             foreach (var node in d.Nodes)
             {
                 var n = node;
-                yield return (() => n.Text, t => n.Text = t, Loc.F("walk.dialogueNode", "name", d.Key, "node", n.Id));
+                yield return (() => n.Text, t => n.Text = t, DialogueNode(d, n));
             }
 
         foreach (var p in pack.Places)
             foreach (var b in p.NavigatorButtons)
             {
                 var button = b;
-                yield return (() => button.Label, t => button.Label = t, Loc.F("walk.placeNavigator", "name", p.Key));
+                yield return (() => button.Label, t => button.Label = t, Place("walk.placeNavigator", p));
             }
 
-        foreach (var v in pack.VanillaExtensions)
-            foreach (var b in v.NavigatorButtons)
+        for (int i = 0; i < pack.VanillaExtensions.Count; i++)
+            foreach (var b in pack.VanillaExtensions[i].NavigatorButtons)
             {
                 var button = b;
-                yield return (() => button.Label, t => button.Label = t, Loc.F("walk.vanillaExtension", "name", v.Source));
+                yield return (() => button.Label, t => button.Label = t, Extension(pack, i));
             }
 
-        foreach (var b in pack.MapButtons)
+        for (int i = 0; i < pack.MapButtons.Count; i++)
         {
-            var button = b;
-            yield return (() => button.Label, t => button.Label = t, Loc.F("walk.mapButton", "name", button.Label));
+            var button = pack.MapButtons[i];
+            yield return (() => button.Label, t => button.Label = t, MapButton(pack, i));
         }
 
         // A transition's black-screen words, wherever the transition is.
-        foreach (var (action, where) in Actions(pack))
+        foreach (var (action, at) in ActionsAt(pack))
             if (action.Type == NodeActionTypes.Transitions
                 && action.Params.ContainsKey(Shared.Transitions.TextParam))
             {
                 var ps = action.Params;
                 yield return (() => ps.TryGetValue(Shared.Transitions.TextParam, out var v) ? v : "",
-                              t => ps[Shared.Transitions.TextParam] = t, where);
+                              t => ps[Shared.Transitions.TextParam] = t, at);
             }
     }
 
-    private static IEnumerable<(NodeConditionDef, string)> Flatten(
-        List<NodeConditionDef>? conditions, string where)
+    private static IEnumerable<(NodeConditionDef, Spot)> Flatten(
+        List<NodeConditionDef>? conditions, Spot at)
     {
         if (conditions == null) yield break;
         foreach (var c in conditions)
         {
             if (NodeConditionTypes.IsGroup(c.Type))
             {
-                foreach (var inner in Flatten(c.Conditions, where)) yield return inner;
+                foreach (var inner in Flatten(c.Conditions, at)) yield return inner;
                 continue;
             }
-            yield return (c, where);
+            yield return (c, at);
         }
     }
 }

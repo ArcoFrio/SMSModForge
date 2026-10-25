@@ -140,6 +140,89 @@ public static class VariableRenamer
         return hits;
     }
 
+    // ── Where it is used (the Variables tab, 1.8.0) ───────────────────────
+
+    /// <summary>How one place uses a variable.</summary>
+    public enum UseKind { Sets, Reads, Shows }
+
+    /// <summary>One place that uses a variable: how, where in words, and the
+    /// path the editor goes there by (empty when it is no one record).</summary>
+    public sealed record Use(UseKind Kind, string Where, string Path);
+
+    /// <summary>
+    /// Every place that uses <paramref name="name"/>, each once per way it
+    /// uses it: what sets it, what reads it, what shows it in its words (the
+    /// author, 1.8.0: "where the variable is used - the question every rename
+    /// and delete raises"). The same walk a rename follows, so what this lists
+    /// is what a rename would change.
+    /// </summary>
+    public static List<Use> Uses(ModPack pack, string name)
+    {
+        var uses = new List<Use>();
+        if (pack == null || string.IsNullOrEmpty(name)) return uses;
+        var seen = new HashSet<(UseKind, string)>();
+        void Add(UseKind kind, PackWalk.Spot at)
+        {
+            if (seen.Add((kind, at.Where))) uses.Add(new Use(kind, at.Where, at.Path));
+        }
+
+        foreach (var (c, at) in PackWalk.ConditionsAt(pack))
+            if (CountParams(c.Params, ConditionSchemas.For(c.Type), name) > 0) Add(UseKind.Reads, at);
+        foreach (var (a, at) in PackWalk.ActionsAt(pack))
+            foreach (var kind in HowActionUses(a.Params, ActionSchemas.For(a.Type), name))
+                Add(kind, at);
+        foreach (var (read, _, at) in PackWalk.TextsAt(pack))
+            if (HasToken(read(), name)) Add(UseKind.Shows, at);
+        foreach (var q in pack.Quests)
+            foreach (var t in q.AllTasks())
+                if (t.CountsFromVariable && !t.CountVariableIsVanilla && t.CountVariable == name)
+                    Add(UseKind.Reads, new PackWalk.Spot(Loc.F("walk.questTask", "name", q.Key, "task", t.Key),
+                        $"quests[{q.Key}].{(string.IsNullOrEmpty(q.Source) ? "tasks" : "addedTasks")}[{t.Key}]"));
+        foreach (var slot in OtherTexts(pack))
+            if (HasToken(slot.Get(), name))
+                Add(UseKind.Shows, new PackWalk.Spot(WhereIs(pack, slot), PathOf(pack, slot)));
+
+        return uses.OrderBy(u => u.Kind).ToList();
+    }
+
+    /// <summary>An action changes the variable it names, except where it only
+    /// takes from it: a list it counts, a <c>$name</c> it picks from.</summary>
+    private static IEnumerable<UseKind> HowActionUses(Dictionary<string, string> ps, IEnumerable<ParamSchema> schemas, string name)
+    {
+        if (ps == null) yield break;
+        if (ps.TryGetValue("source", out var src) &&
+            string.Equals(src, "vanilla", System.StringComparison.OrdinalIgnoreCase)) yield break;
+        foreach (var s in schemas)
+        {
+            if (!ps.TryGetValue(s.Key, out var val) || string.IsNullOrEmpty(val)) continue;
+            if ((s.Type == ParamType.PackVarRef || s.Type == ParamType.ListVarRef) && val == name)
+                yield return s.Key == "fromList" ? UseKind.Reads : UseKind.Sets;
+            else if (s.Type == ParamType.String && val == "$" + name)
+                yield return UseKind.Reads;
+        }
+    }
+
+    /// <summary>The path to one of <see cref="OtherTexts"/>, as the issue list
+    /// writes it.</summary>
+    private static string PathOf(ModPack pack, Translation.LanguageSession.Slot slot)
+    {
+        switch (slot.Kind)
+        {
+            case Shared.PackTexts.Kind.CharacterName:
+                return $"actors[{slot.Owner}]";
+            case Shared.PackTexts.Kind.TaskName:
+            case Shared.PackTexts.Kind.TaskQuestDescription:
+                bool game = pack.Quests.Any(q => q.Key == slot.Owner && !string.IsNullOrEmpty(q.Source));
+                return $"quests[{slot.Owner}].{(game ? "addedTasks" : "tasks")}[{slot.Detail}]";
+            case Shared.PackTexts.Kind.GameTaskQuestDescription:
+                return $"quests[{slot.Owner}].vanillaTasks[{slot.Detail}]";
+            case Shared.PackTexts.Kind.UiText:
+                return $"uis[{slot.Owner}]";
+            default:
+                return $"quests[{slot.Owner}]";
+        }
+    }
+
     // ── Walkers ───────────────────────────────────────────────────────────
 
     /// <summary>Rewrite the variable-referencing params of one action/condition.</summary>

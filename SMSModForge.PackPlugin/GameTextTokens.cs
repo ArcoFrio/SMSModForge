@@ -102,4 +102,32 @@ namespace SMSModForge.PackPlugin
                 ? new PropertyGetString(new GetStringPackText(text, packId))
                 : new PropertyGetString(text ?? "");
     }
+
+    /// <summary>
+    /// A line of dialogue's words, with the pack's <c>[PV:name]</c> read as the
+    /// line is said - the game reads a line's text just before it shows it.
+    /// Its words in braces are left for the game, which fills those in the
+    /// same moment. Lines used to be filled in once, as the pack loaded, so a
+    /// variable set during play still read as it was then (1.8.0, found by the
+    /// in-game suite).
+    /// </summary>
+    [Serializable]
+    internal sealed class GetStringPackLine : PropertyTypeGetString
+    {
+        private readonly string _raw;
+        private readonly string _packId;
+
+        public GetStringPackLine(string raw, string packId)
+        {
+            _raw = raw ?? "";
+            _packId = packId ?? "";
+        }
+
+        public override string String => _raw;
+        public override string EditorValue => _raw;
+
+        public override string Get(Args args) => TextPlaceholders.Resolve(_raw, Plugin.TryGetPackVars(_packId));
+
+        public override string Get(GameObject gameObject) => Get(Args.EMPTY);
+    }
 }

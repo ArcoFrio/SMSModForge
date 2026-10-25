@@ -8,7 +8,9 @@
         FocusManager.FocusedElement="{Binding ElementName=CanvasHost}"
         Loaded="Window_Loaded"
         Closing="Window_Closing"
-        KeyDown="Window_KeyDown">
+        KeyDown="Window_KeyDown"
+        Background="{DynamicResource Theme.Window}"
+        Foreground="{DynamicResource Theme.Text}">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Undo" Executed="Undo_Executed" CanExecute="UndoRedo_CanExecute"/>
         <CommandBinding Command="ApplicationCommands.Redo" Executed="Redo_Executed" CanExecute="UndoRedo_CanExecute"/>
@@ -28,7 +30,7 @@
         <DockPanel Margin="8">
             <TextBlock Text="{l:T maskEditor.layers}" FontWeight="Bold" DockPanel.Dock="Top" Margin="0,0,0,6"/>
             <StackPanel DockPanel.Dock="Top">
-                <Border BorderBrush="LightGray" BorderThickness="1" Margin="0,0,0,4" Padding="4" Background="#222">
+                <Border BorderBrush="{DynamicResource Theme.Border}" BorderThickness="1" Margin="0,0,0,4" Padding="4" Background="#222">
                     <StackPanel Orientation="Horizontal">
                         <ToggleButton x:Name="ShowDiffuseToggle" IsChecked="True"
                                       Width="22" Height="22" Click="ShowDiffuse_Click"
@@ -211,15 +213,15 @@
                           ToolTip="{l:T maskEditor.capToggle.tip}"/>
 
                 <TextBlock Text="{l:T maskEditor.zoom}" FontWeight="Bold" Margin="0,8,0,4"/>
-                <TextBlock x:Name="ZoomDisplay" Foreground="Gray" FontSize="11" TextAlignment="Center"
+                <TextBlock x:Name="ZoomDisplay" Foreground="{DynamicResource Theme.TextMuted}" FontSize="11" TextAlignment="Center"
                            Margin="0,0,0,4" Text="100%"/>
-                <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4">
+                <TextBlock Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4">
                     <Run Text="{l:T maskEditor.keys.zoom}"/><LineBreak/>
                     <Run Text="{l:T maskEditor.keys.pan}"/><LineBreak/>
                 </TextBlock>
 
                 <TextBlock Text="{l:T maskEditor.hotkeys}" FontWeight="Bold" Margin="0,12,0,4"/>
-                <TextBlock Foreground="Gray" FontSize="11" TextWrapping="Wrap" LineHeight="16">
+                <TextBlock Foreground="{DynamicResource Theme.TextMuted}" FontSize="11" TextWrapping="Wrap" LineHeight="16">
                     <Run Text="{l:T maskEditor.keys.brush}"/><LineBreak/>
                     <Run Text="{l:T maskEditor.keys.channel}"/><LineBreak/>
                     <Run Text="{l:T maskEditor.keys.toggle}"/><LineBreak/>
@@ -234,7 +236,7 @@
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Bottom" Margin="0,8,0,0">
-                <TextBlock x:Name="StatusText" Foreground="Gray" FontSize="11" Margin="0,0,0,6" TextWrapping="Wrap"/>
+                <TextBlock x:Name="StatusText" Foreground="{DynamicResource Theme.TextMuted}" FontSize="11" Margin="0,0,0,6" TextWrapping="Wrap"/>
                 <Button Content="{l:T maskEditor.saveBtn}" Click="SaveBtn_Click" Height="32" Margin="0,2" FontWeight="Bold"/>
                 <Button Content="{l:T maskEditor.closeBtn}" Click="CloseBtn_Click" Height="28" Margin="0,2"/>
             </StackPanel>

@@ -115,13 +115,29 @@ public sealed class UnitFolderNode : UnitTreeItem, IRenamableFolder
 public sealed class UnitLeafNode : UnitTreeItem
 {
     private readonly Func<object, string> _displayOf;
+    private readonly Func<object, string>? _keyOf;
+    private string? _key;
 
-    public UnitLeafNode(object item, Func<object, string> displayOf)
+    /// <param name="keyChanged">Told when the record's key is no longer the
+    /// one it had: folders remember records by key, so the tree has to write
+    /// them again (see <see cref="UnitTreeController.SyncToModel"/>).</param>
+    public UnitLeafNode(object item, Func<object, string> displayOf,
+                        Func<object, string>? keyOf = null, Action? keyChanged = null)
     {
         Item = item;
         _displayOf = displayOf;
+        _keyOf = keyOf;
+        _key = keyOf?.Invoke(item);
         if (item is INotifyPropertyChanged inpc)
-            inpc.PropertyChanged += (_, __) => OnPropertyChanged(nameof(DisplayText));
+            inpc.PropertyChanged += (_, __) =>
+            {
+                OnPropertyChanged(nameof(DisplayText));
+                if (_keyOf == null || keyChanged == null) return;
+                string now = _keyOf(Item);
+                if (now == _key) return;
+                _key = now;
+                keyChanged();
+            };
     }
 
     public object Item { get; }
@@ -225,7 +241,7 @@ public sealed class UnitTreeController : ObservableObject
         {
             var k = _keyOf(it);
             if (string.IsNullOrEmpty(k) || !placed.Contains(k))
-                Tree.Add(new UnitLeafNode(it, _displayOf));
+                Tree.Add(Leaf(it));
         }
         Sort();
         // A rebuild replaces every node, so a live search box has to be
@@ -240,9 +256,24 @@ public sealed class UnitTreeController : ObservableObject
             node.Children.Add(BuildFolder(sub, byKey, placed));
         foreach (var key in def.Items)
             if (byKey.TryGetValue(key, out var it) && placed.Add(key))
-                node.Children.Add(new UnitLeafNode(it, _displayOf));
+                node.Children.Add(Leaf(it));
         return node;
     }
+
+    /// <summary>
+    /// A leaf for a record, which writes the folders again whenever the
+    /// record's key changes.
+    /// <para/>
+    /// Folders hold their records by key, and a record the author has just
+    /// added takes its key from the display name as it is typed. Nothing wrote
+    /// the folder after that, so it went on holding the key the record was
+    /// born with - and the next time the tree was built from the pack (an
+    /// undo, a redo) the record was in no folder and dropped to the top level
+    /// (the author, 2026-10-21: a Scene made in a new folder left it).
+    /// A leaf left behind by a rebuild may still be listening; writing the
+    /// folders from the tree as it is now is right whoever asks.
+    /// </summary>
+    private UnitLeafNode Leaf(object item) => new(item, _displayOf, _keyOf, SyncToModel);
 
     /// <summary>Write the tree's folder structure back into the pack's
     /// folder-def list (membership by unit key; root leaves stay implicit).</summary>
@@ -325,7 +356,7 @@ public sealed class UnitTreeController : ObservableObject
     /// rebuild would always bounce it to the root.</summary>
     public void PlaceNew(object itemVm)
     {
-        var leaf = new UnitLeafNode(itemVm, _displayOf);
+        var leaf = Leaf(itemVm);
         DropTarget().Add(leaf);
         Sort();
         SyncToModel();

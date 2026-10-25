@@ -3,7 +3,9 @@
         xmlns:l="clr-namespace:SMSModForge.Localization"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{l:T spritePicker.choosePicture}" Width="560" Height="520"
-        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource Theme.Window}"
+        Foreground="{DynamicResource Theme.Text}">
     <DockPanel Margin="12">
 
         <!-- Two sources, because a UI image is one of two things: a sprite the
@@ -27,7 +29,7 @@
         <!-- The selected one, drawn. Picking by name alone from 840 of them is
              guesswork, and most of these names describe nothing. -->
         <Border DockPanel.Dock="Bottom" Height="120" Margin="0,8,0,0"
-                BorderBrush="#888" BorderThickness="1" Background="#222">
+                BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1" Background="#222">
             <Image x:Name="Preview" Stretch="Uniform" Margin="6"/>
         </Border>
 

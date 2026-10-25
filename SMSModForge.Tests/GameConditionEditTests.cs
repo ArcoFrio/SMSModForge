@@ -26,7 +26,7 @@ public sealed class GameConditionEditTests
     private readonly ITestOutputHelper _out;
     public GameConditionEditTests(ITestOutputHelper o) => _out = o;
 
-    private const int TabQuests = 13, TabDialogues = 5;
+    private const int TabQuests = MainTab.Quests, TabDialogues = MainTab.Dialogues;
 
     private const string Himari = "Dinner Boyfriend (Himari)";
     private const string HimariTalk = "8_Room_Talk/Entrance/HiramiQuestStart";

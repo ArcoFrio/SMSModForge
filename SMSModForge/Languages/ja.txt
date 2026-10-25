@@ -76,12 +76,12 @@ game.pack.installedTwice = 二重にインストールされています。{fold
 game.pack.notInYourLanguage = あなたの言語に翻訳されていません
 
 # Beside a pack in the main menu's list: it changes the same thing of the game's (a character, an object in a level...) as {packs}, other packs in the list, so only one of the two changes shows
-# en: Changes the same as {packs}
-game.pack.clashesWith = {packs} と同じものを変更
+# en: Clashes with {packs}
+game.pack.clashesWith = {packs} と競合
 
 # Under ModForge's list of packs on the game's main menu, when there are two or more. The packs can be dragged up and down; the one lower in the list is loaded later, so its changes show
-# en: Drag a pack to move it. Lower in the list wins when two packs change the same thing.
-game.menu.orderHint = パックをドラッグして並べ替えます。2つのパックが同じものを変える場合は、下にあるほうが優先されます。
+# en: Drag to reorder: the lower pack wins a clash.
+game.menu.orderHint = ドラッグで並べ替え：競合したときは下のパックが優先されます。
 
 # The name above the player's own lines in a pack's conversations
 # en: You
@@ -261,6 +261,30 @@ game.gameLines.title = ゲーム本来のセリフ
 # That notice. {packs} are the packs' names, {language} the player's language
 # en: {packs} also show the game's own lines in {language}, in the conversations they change. If you play the game translated by another mod, the two translations may mix in those conversations.
 game.gameLines.body.other = {packs} は、変更する会話の中でゲーム本来のセリフも{language}で表示します。別のMODでゲームを翻訳して遊んでいる場合、それらの会話では2つの翻訳が混ざることがあります。
+
+# Heading of the small window on the main menu the first time the game starts with ModForge
+# en: ModForge is installed
+game.notice.welcome.title = ModForge がインストールされています
+
+# That window, all it says. {folder} is the folder packs go in, beside the game's own files ("Mods"). The list of packs is at the top left of the main menu
+# en: Put mod packs in the game's {folder} folder. They're listed at the top left, where you can switch them on and off.
+game.notice.welcome.body = Mod パックはゲームの {folder} フォルダーに入れてください。左上に一覧が表示され、オン・オフを切り替えられます。
+
+# Heading of a list of what a version of ModForge changes for players. {version} is the version, "1.8.0"
+# en: New in {version}:
+game.notice.newIn = {version} の新機能：
+
+# Heading of the window on the main menu after ModForge was updated with something that changes for players. {version} is the new version
+# en: ModForge was updated to {version}
+game.notice.changes.title = ModForge が {version} に更新されました
+
+# The button that closes those windows
+# en: Got it
+game.notice.close = OK
+
+# What ModForge 1.8.0 changes for players, one line each (\n starts the next)
+# en: Sounds in packs play with the timing and volume their authors set.
+game.notice.news.1.8.0 = パックの効果音が、作者の設定したタイミングと音量で鳴るようになりました。
 
 [Where an NPC stands]
 
@@ -2525,6 +2549,42 @@ menu.themes = テーマ(_T)
 # en: _Options
 menu.options = オプション(_O)
 
+# A heading inside the Options menu, over how the editor looks: themes, the dialogue rows, preview quality
+# en: Look
+menu.heading.look = 見た目
+
+# A heading inside the Options menu, over spell checking and suggestions
+# en: Writing
+menu.heading.writing = 文章
+
+# A heading inside the Options menu, over what saving and exporting a pack ask and do
+# en: Saving and exporting
+menu.heading.saving = 保存とエクスポート
+
+# A heading inside the Options menu, over the game's folder
+# en: The game
+menu.heading.game = ゲーム
+
+# A heading inside the Options menu, over the editor's own updates
+# en: Updates
+menu.heading.updates = 更新
+
+# Edit menu item: takes back the last change
+# en: _Undo
+menu.undo = 元に戻す(_U)
+
+# Keyboard shortcut shown beside "Undo"
+# en: Ctrl+Z
+menu.undo.keys = Ctrl+Z
+
+# Edit menu item: puts back a change that was taken back
+# en: _Redo
+menu.redo = やり直し(_R)
+
+# Keyboard shortcut shown beside "Redo"
+# en: Ctrl+Y
+menu.redo.keys = Ctrl+Y
+
 # Menu item
 # en: _Confirm changes on save
 menu.confirmChangesSave = 保存時に変更を確認(_C)
@@ -2532,6 +2592,10 @@ menu.confirmChangesSave = 保存時に変更を確認(_C)
 # Menu item
 # en: _Spell-check node text
 menu.spellCheckNodeText = ノードのテキストをスペルチェック(_S)
+
+# Menu item (Options): a switch
+# en: Smart _suggestions in dropdowns
+menu.smartSuggestions = ドロップダウンのスマートな候補(_S)
 
 # Menu item
 # en: _Version the pack automatically
@@ -2642,8 +2706,8 @@ menu.pasteItem.keys = Ctrl+V
 menu.pasteItem.tip = コピーした同じ種類の項目を今のタブのリストに貼り付けます。リストにフォーカスがあるときは Ctrl+V でも使えます。
 
 # Tooltip on "_Rename item…"
-# en: Rename the selected list item's key (F2 or F12 while the list has focus).
-menu.renameItem.tip = 選んだリストの項目のキーの名前を変えます（リストにフォーカスがあるときは F2 か F12）。
+# en: Rename the selected list item, the same as typing in its Display name box (F2 or F12 while the list has focus).
+menu.renameItem.tip = 選んだリストの項目の名前を変えます。その「表示名」欄に入力するのと同じです（リストにフォーカスがあるときは F2 か F12）。
 
 # Keyboard shortcut shown beside it ("De_lete item")
 # en: Del
@@ -2664,6 +2728,10 @@ menu.confirmChangesSave.tip = modpack.json を書き込む前に、保存で変�
 # Tooltip on "_Spell-check node text"
 # en: Underline misspellings using Windows' own spell checker, in the language the lines are written in - the pack's own, or the one you are editing in - both in a node's Text field and down the node list, so mistakes are visible while scanning. A language Windows has no spelling dictionary for is not underlined at all; Windows' language settings can add one. Right-click a squiggle in the Text field for suggestions, to ignore it for this session, or to add the word to your Windows dictionary (the same list Edge and Office use). Turning this off also makes the node list lighter to scroll on very long dialogues. Your choice is remembered between sessions.
 menu.spellCheckNodeText.tip = 行が書かれている言語（パック自身の言語、または編集中の言語）で、Windows 自身のスペルチェッカーでつづりの誤りに下線を引きます。ノードのテキスト欄とノードの一覧の両方に表示されるので、ざっと見ても誤りがわかります。Windows に辞書のない言語には下線がまったく引かれません。辞書は Windows の言語の設定で追加できます。テキスト欄で波線を右クリックすると、候補の表示、このセッションでの無視、Windows の辞書への単語の追加（Edge や Office と同じリスト）ができます。オフにすると、非常に長い会話でノードの一覧のスクロールも軽くなります。選択はセッションをまたいで記憶されます。
+
+# Tooltip on "Smart _suggestions in dropdowns"
+# en: When you open an empty dropdown, the options that what you are editing makes likely move to the top, marked with a star: in a dialogue that mentions a character anywhere and happens at one place, a Set Active action lists that character's scenes at that place first. Everything in the dialogue, scene or rule you have up counts - the characters it names, its places, its variables, the folder it is in - and it follows your edits as you make them. Nothing is picked or hidden for you, and other dropdowns showing the same list keep their own order. Turn this off to have every list in its usual order.
+menu.smartSuggestions.tip = 空のドロップダウンを開くと、編集中のものから見てありそうな選択肢が星印付きで上に移ります。たとえば、どこかでキャラクターに触れていて一つの場所で起きる会話では、Set Active アクションがその場所にあるそのキャラクターのシーンを先に並べます。開いている会話、シーン、ルールのすべてが手がかりになります（名前が出てくるキャラクター、場所、変数、入っているフォルダー）。編集すればそのたびに追従します。代わりに何かを選んだり隠したりはせず、同じ一覧を表示するほかのドロップダウンはそれぞれの順のままです。オフにすると、どの一覧もいつもの順になります。
 
 # Tooltip on "_Version the pack automatically"
 # en: Move the pack's version on every save: up a minor when the pack gains something, up a patch when something it already had changes. The major number is never moved for you — that one says "this is a new version of the pack", which is yours to decide. Off means the version only ever changes when you type it.
@@ -2781,6 +2849,247 @@ theme.midnight = ミッドナイト
 # en: Carbon
 theme.carbon = カーボン
 
+# A colour theme, in the Themes menu: warm white, a red accent
+# en: Paper
+theme.paper = ペーパー
+
+# A colour theme, in the Themes menu: cool white, an orange accent
+# en: Daylight
+theme.daylight = デイライト
+
+# A colour theme, in the Themes menu: dark grey, a blue accent
+# en: Graphite
+theme.graphite = グラファイト
+
+# A colour theme, in the Themes menu: dark purple-grey, a violet accent (the plant)
+# en: Nightshade
+theme.nightshade = ナイトシェード
+
+# A colour theme, in the Themes menu: slate blue-grey, an icy accent
+# en: Fjord
+theme.fjord = フィヨルド
+
+# A colour theme, in the Themes menu: near black, an orange accent
+# en: Ember
+theme.ember = エンバー
+
+# A colour theme, in the Themes menu: deep blue-green, a teal accent
+# en: Deep Sea
+theme.deepsea = ディープシー
+
+# A colour theme, in the Themes menu: dark green, a lime accent
+# en: Moss
+theme.moss = モス
+
+# A colour theme, in the Themes menu: dark red-brown, a rose accent
+# en: Wine
+theme.wine = ワイン
+
+# A heading in the Themes menu, over the themes with dark text on light panels
+# en: Light
+theme.group.light = ライト
+
+# A heading in the Themes menu, over the themes with light text on dark panels
+# en: Dark
+theme.group.dark = ダーク
+
+# Themes menu: the themes in the editor's original shape, as it was drawn before EX (1.8.0)
+# en: Classic
+theme.group.normal = クラシック
+
+# Tooltip on the Themes menu's Classic
+# en: The editor as it was drawn before EX, in light and dark colours. Everything works the same in both.
+theme.group.normal.tip = EX 以前の形で描いたエディターです。明るい色と暗い色があります。どちらでもすべて同じように動きます。
+
+# Themes menu: the themes that draw the editor another way (EX, as in a game's 'extended' edition; keep EX as is unless your language says it differently)
+# en: EX
+# same in this language
+theme.group.ex = EX
+
+# Tooltip on the Themes menu's EX
+# en: The same editor drawn another way: cut corners, a glow on what you point at, lines to type on, a narrower typeface. Everything works exactly as in Classic; only the look changes.
+theme.group.ex.tip = 同じエディターを別の形で描きます。角を斜めに切り、指したものを光らせ、入力欄は線で、書体は細めです。すべての動作は「クラシック」とまったく同じで、変わるのは見た目だけです。
+
+# Themes menu: the themes the person made themselves
+# en: Yours
+theme.group.custom = マイテーマ
+
+# Tooltip on the Themes menu's Yours
+# en: The themes you made, in Your themes…
+theme.group.custom.tip = 自分で作ったテーマです。「マイテーマ…」で作ります
+
+# Themes menu item: opens the window where a person makes their own themes
+# en: Your _themes…
+menu.customThemes = マイテーマ(_T)…
+
+# Tooltip on "Your themes…"
+# en: Make themes of your own: pick a look and six colours, and the editor shows each change as you make it.
+menu.customThemes.tip = 自分のテーマを作ります。見た目と六つの色を選ぶと、エディターがその場で変化を表示します。
+
+# Title of the message shown once, at the first start that moved the person's theme to EX
+# en: A new look
+theme.moved.title = 新しい見た目
+
+# The message shown once, at the first start of this version: their theme was moved to the EX theme most like it. {from} and {to} are theme names
+# en: ModForge now opens in EX, a new way of drawing the editor: the tabs down the left, every panel a tile, everything else where it was. Your theme, {from}, has become {to}, the EX theme most like it.\n\nThe look you had is under Options > Themes > Classic. Pick it there and it stays - this is the only time the editor changes your theme.
+theme.moved.body = ModForge は EX で開くようになりました。エディターの新しい描き方で、タブは左側に縦に並び、各パネルはタイルになります。それ以外はすべて元の場所のままです。お使いのテーマ「{from}」は、いちばん近い EX テーマ「{to}」になりました。\n\nこれまでの見た目は「オプション > テーマ > クラシック」にあります。そこで選べばそのまま残ります。エディターがテーマを変えるのは今回だけです。
+
+# Title of the window where a person makes their own themes
+# en: Your themes
+theme.custom.title = マイテーマ
+
+# The name a new theme of one's own starts with
+# en: My theme
+theme.custom.newName = 自分のテーマ
+
+# Button in Your themes: a new theme, starting from the one in use
+# en: + New
+theme.custom.new = + 新規
+
+# Tooltip on "+ New" in Your themes
+# en: A new theme of your own, starting from the colours and look of the theme you are using now.
+theme.custom.new.tip = 今使っているテーマの色と見た目から始まる、新しい自分のテーマです。
+
+# Tooltip on Duplicate in Your themes
+# en: A copy of the selected theme, to try a variation without losing it.
+theme.custom.duplicate.tip = 選んだテーマのコピーです。元を残したまま別の案を試せます。
+
+# Button in Your themes: deletes the selected theme
+# en: − Remove
+theme.custom.remove = − 削除
+
+# Tooltip on "− Remove" in Your themes
+# en: Delete the selected theme. If you were using it, the editor goes back to its default theme.
+theme.custom.remove.tip = 選んだテーマを削除します。使用中だった場合、エディターは既定のテーマに戻ります。
+
+# Shown in Your themes while none of the person's themes is selected (there may be none yet)
+# en: Select one of your themes to change it, or press + New to make one. A new theme starts as a copy of the theme you are using; change its look and colours here, and the editor shows each change at once.
+theme.custom.empty = 変えたいテーマを選ぶか、「+ 新規」で作ってください。新しいテーマは今使っているテーマのコピーから始まります。ここで見た目と色を変えると、エディターがすぐに変化を表示します。
+
+# At the bottom of Your themes
+# en: The theme selected here is the one in use, and every change is kept as you make it. Light or dark follows the background, and the editor moves the words towards readable on every colour; if yours leave some hard to read, it says so here.
+theme.custom.note = ここで選んだテーマが使用中のテーマで、変更はその都度保存されます。明るいか暗いかは背景で決まり、エディターはどの色の上でも文字を読める色に寄せます。それでも選んだ色で読みにくい文字が残る場合は、ここに表示されます。
+
+# Under the colours in Your themes, when the colours chosen leave some words hard to read
+# en: Some words are hard to read with these colours: no one text colour reads on all of them. Bring Panels and Boxes closer in lightness, or move Text further from both.
+theme.custom.unreadable = この色の組み合わせでは読みにくい文字があります。どの文字色もすべての色の上では読めません。「パネル」と「入力欄」の明るさを近づけるか、「文字」を両方から離してください。
+
+# Button: closes Your themes
+# en: Close
+theme.custom.close = 閉じる
+
+# Label in Your themes: the theme's name
+# en: Name:
+theme.custom.name = 名前：
+
+# Label in Your themes: EX or Classic
+# en: Look:
+theme.custom.look = 見た目：
+
+# Tooltip on the Look choice in Your themes
+# en: EX draws the editor its other way - tabs down the left, cut corners, a narrower typeface; Classic, the way it was drawn before EX. Everything works the same in both.
+theme.custom.look.tip = EX はエディターをもう一つの形で描きます（タブは左に縦並び、角を斜めに切り、書体は細め）。クラシックは EX 以前の形です。どちらでもすべて同じように動きます。
+
+# Label in Your themes: the colour behind everything
+# en: Background:
+theme.custom.window = 背景：
+
+# Tooltip on Background in Your themes
+# en: Behind everything: the tab pages. It also decides whether the theme is light or dark.
+theme.custom.window.tip = すべての後ろ、タブのページの色です。テーマが明るいか暗いかもこれで決まります。
+
+# Label in Your themes: the colour of the bars
+# en: Bars:
+theme.custom.chrome = バー：
+
+# Tooltip on Bars in Your themes
+# en: The menu bar and the tabs' bar.
+theme.custom.chrome.tip = メニューバーとタブのバーです。
+
+# Label in Your themes: the colour of panels
+# en: Panels:
+theme.custom.surface = パネル：
+
+# Tooltip on Panels in Your themes
+# en: The panels things are grouped in, and the frames of the lists.
+theme.custom.surface.tip = 項目をまとめるパネルと、一覧の枠です。
+
+# Label in Your themes: the colour of boxes to type in
+# en: Boxes:
+theme.custom.control = 入力欄：
+
+# Tooltip on Boxes in Your themes
+# en: Boxes to type in, lists and trees.
+theme.custom.control.tip = 入力欄、一覧、ツリーです。
+
+# Label in Your themes: the colour of words
+# en: Text:
+theme.custom.text = 文字：
+
+# Tooltip on Text in Your themes
+# en: The words. Where they would be hard to read on a colour, the editor moves them towards readable on its own.
+theme.custom.text.tip = 文字の色です。ある色の上で読みにくくなる所では、エディターが自動で読める色に寄せます。
+
+# Label in Your themes: the accent colour
+# en: Accent:
+theme.custom.accent = アクセント：
+
+# Tooltip on Accent in Your themes
+# en: What is selected, focused or open, the main buttons and, in EX, the status bar.
+theme.custom.accent.tip = 選択中・フォーカス中・開いているもの、主なボタン、そして EX ではステータスバーの色です。
+
+# A theme's name (an EX light theme: cool white with violet)
+# en: Frost
+theme.frost = フロスト
+
+# A theme's name (an EX light theme: warm white with magenta)
+# en: Volt
+theme.volt = ボルト
+
+# A theme's name (an EX dark theme: near-black with hot pink-red)
+# en: Neon
+theme.neon = ネオン
+
+# A theme's name (an EX dark theme: near-black with cyan)
+# en: Pulse
+theme.pulse = パルス
+
+# A theme's name (an EX dark theme: near-black with lime green)
+# en: Venom
+theme.venom = ヴェノム
+
+# A theme's name (an EX dark theme: near-black with orange)
+# en: Blaze
+theme.blaze = ブレイズ
+
+# A theme's name (an EX light theme: cool white with electric blue; the metal)
+# en: Cobalt
+theme.cobalt = コバルト
+
+# A theme's name (an EX light theme: white with green)
+# en: Mint
+theme.mint = ミント
+
+# A theme's name (an EX light theme: warm white with orange; of the sun)
+# en: Solar
+theme.solar = ソーラー
+
+# A theme's name (an EX dark theme: near-black with violet; a ghost)
+# en: Phantom
+theme.phantom = ファントム
+
+# A theme's name (an EX dark theme: near-black navy with bright blue; the deep sea)
+# en: Abyss
+theme.abyss = アビス
+
+# A theme's name (an EX dark theme: near-black with gold; Latin for gold)
+# en: Aurum
+theme.aurum = オーラム
+
+# A theme's name (an EX dark theme: near-black with emerald green; the stone)
+# en: Jade
+theme.jade = ジェイド
+
 [Status bar]
 
 # Heading
@@ -2794,6 +3103,10 @@ statusBar.modforgeFreeGetArvus.tip = ModForge は無料のソフトウェアで�
 # How many issues the pack has
 # en: {count} issues
 statusBar.issues.other = 問題 {count} 件
+
+# Tooltip of that count, which can be clicked
+# en: Show them on the ModForge tab
+statusBar.openIssues.tip = ModForge タブに表示します
 
 [ModForge tab]
 
@@ -2863,6 +3176,34 @@ home.showIgnored.other = 無視した {count} 件を表示
 # Beside an issue that has been silenced
 # en: ignored
 home.ignoredMark = 無視
+
+# Where an issue is, in the issues list: an issue about the pack as a whole
+# en: The pack
+issue.place.pack = パック
+
+# Where an issue is: a dialogue line with no words of its own; {id} is its number
+# en: line {id}
+issue.place.line = セリフ {id}
+
+# Where an issue is: the actions a line runs as it starts, before an action's type
+# en: on start
+issue.place.onStart = 開始時
+
+# Where an issue is: the actions a line runs as it finishes, before an action's type
+# en: on finish
+issue.place.onFinish = 終了時
+
+# Where an issue is: what a dialogue needs before it can start, before a condition's type
+# en: start condition
+issue.place.startCondition = 開始条件
+
+# Where an issue is: what a line needs before it shows, before a condition's type
+# en: condition
+issue.place.condition = 条件
+
+# Where an issue is: one of a rule's or a place's actions, before its type
+# en: action
+issue.place.action = アクション
 
 # Menu item
 # en: Ignore this issue
@@ -3451,6 +3792,18 @@ characters.resetField.tip4 = 高さの範囲の下限を、このキャラクタ
 # Tooltip on "Reset"
 # en: Put the high end of the pitch range back to this character's own.
 characters.resetField.tip5 = 高さの範囲の上限を、このキャラクター本来のものに戻します。
+
+# Tooltip on "Reset" beside the voice's frequency, for a character the pack made. {value} is a number of characters a second
+# en: Put the frequency back to the default, {value}.
+characters.resetFrequency.packTip = 頻度を既定値の {value} に戻します。
+
+# Tooltip on "Reset" beside the low end of the voice's pitch, for a character the pack made. {value} is a pitch such as 1
+# en: Put the low end of the pitch range back to the default, {value}.
+characters.resetPitchMin.packTip = ピッチの範囲の下限を既定値の {value} に戻します。
+
+# Tooltip on "Reset" beside the high end of the voice's pitch, for a character the pack made. {value} is a pitch such as 1.5
+# en: Put the high end of the pitch range back to the default, {value}.
+characters.resetPitchMax.packTip = ピッチの範囲の上限を既定値の {value} に戻します。
 
 # Tooltip on a text box
 # en: How often the blip fires as text types (GC2 Typewriter frequency). Preset value: 45.
@@ -4135,8 +4488,8 @@ enum.JumpMode.Exit = 終了
 enum.JumpMode.Jump = ジャンプ
 
 # How a line advances. Kept as the program's names in the shipped translations, because the tooltip beside the list names them that way.
-# en: UntilInteraction
-enum.NodeDurationMode.UntilInteraction = UntilInteraction
+# en: Until interaction
+enum.NodeDurationMode.UntilInteraction = 操作まで
 
 # en: Timeout
 enum.NodeDurationMode.Timeout = Timeout
@@ -4246,8 +4599,16 @@ places.runtimeName.tip = 条件、アクション、ナビゲーターの行き�
 places.namePackItselfUses.tip = パック自身が使う名前です。実行時にログで呼ばれる名前、検証メッセージが示す名前、ほかのパックが参照するときの名前です。表示名から自動で書かれるので入力するものはありません。この3か所で引用されるので表示しています。選択するとコピーできます。
 
 # Tooltip on a text box
-# en: The object the level is built as in game.
-places.objectLevelBuiltGame.tip = ゲーム内でレベルとして作られるオブジェクトです。
+# en: The object the level is built as in game. This place's is named otherwise than its runtime name - from an older version, where the two were apart. Other mods may find the level by this name.
+places.objectLevelBuiltGame.tip = ゲーム内でレベルとして作られるオブジェクトです。この場所のものは実行時の名前と違う名前になっています。2つが別々だった古いバージョンのものです。ほかの MOD がこの名前でレベルを探していることがあります。
+
+# Beside that box: name the place's game object by its runtime name, as every place made now is
+# en: Use the runtime name
+places.useRuntimeName = 実行時の名前を使う
+
+# Tooltip on that button
+# en: Name the level's object by the runtime name, and keep it following the runtime name from now on, as new places do. Another mod that finds this level by its old name will not find it any more.
+places.useRuntimeName.tip = レベルのオブジェクトに実行時の名前を付け、新しい場所と同じように、これからは実行時の名前に合わせます。古い名前でこのレベルを探す MOD は、見つけられなくなります。
 
 # Tooltip on "Back sprite (2048×1136):"
 # en: The layer drawn BEHIND — usually the room itself, or the distance seen past it. Sorting order −12 by default. Written to the pack as secondarySprite.
@@ -4558,16 +4919,16 @@ dialogues.overwriteStartConditions = 上書き
 dialogues.dialogueNodes = ノード
 
 # Text
-# en: Click a node to select it. + Child and + Sibling copy everything from the selected node except its text (and its tag), and land directly under it; + Root takes only the speaker. Naming an actor who has spoken earlier in this conversation brings back the expression and outfit they last wore. Drag a node to move it (with its children): drop on the upper or lower edge of a row to place it before or after as a sibling, drop on the middle to make it a child, or drop below the list to make it a root. Ctrl+C / Ctrl+V copy a node and its children and paste them below the selection; Del removes the selected node. Nodes play top to bottom, exactly as listed.
-dialogues.clickNodeSelectChild = ノードをクリックして選びます。+ 子と + 兄弟は、選んだノードからテキスト（とタグ）以外のすべてをコピーし、そのすぐ下に作ります。+ ルートは話し手だけを引き継ぎます。この会話ですでに話したアクターを指定すると、最後にしていた表情と衣装が戻ります。ノードをドラッグすると（子と一緒に）移動します。行の上端か下端に落とすと兄弟として前か後ろに、真ん中に落とすと子に、一覧の下に落とすとルートになります。Ctrl+C / Ctrl+V でノードと子をコピーし、選択の下に貼り付けます。Del で選んだノードを削除します。ノードは一覧のとおり上から下へ再生されます。
+# en: Click a node to select it. + Sibling adds a line directly below it and + Child one inside it; both take only its speaker (actor, expression and outfit) - Duplicate (Ctrl+D) and copy and paste carry a whole node. Naming an actor who has spoken earlier in this conversation brings back the expression and outfit they last wore. Drag a node to move it (with its children): drop on the upper or lower edge of a row to place it before or after as a sibling, drop on the middle to make it a child, or drop below the list to make it a root. Ctrl+C / Ctrl+V copy a node and its children and paste them below the selection; Del removes the selected node. Nodes play top to bottom, exactly as listed.
+dialogues.clickNodeSelectChild = ノードをクリックして選びます。+ 兄弟はそのすぐ下に、+ 子はその中にセリフを追加します。どちらも話し手（アクター、表情、衣装）だけを引き継ぎます。ノードを丸ごと運ぶのは「複製」（Ctrl+D）とコピー＆貼り付けです。この会話ですでに話したアクターを指定すると、最後にしていた表情と衣装が戻ります。ノードをドラッグすると（子と一緒に）移動します。行の上端か下端に落とすと兄弟として前か後ろに、真ん中に落とすと子に、一覧の下に落とすとルートになります。Ctrl+C / Ctrl+V でノードと子をコピーし、選択の下に貼り付けます。Del で選んだノードを削除します。ノードは一覧のとおり上から下へ再生されます。
 
 # Text
 # en: Game look
 dialogues.gameLook = ゲームの見た目
 
 # Button
-# en: + Root
-dialogues.addDialogueRootNode = + ルート
+# en: + New Node
+dialogues.addFirstNode = + 新しいノード
 
 # Button
 # en: + Child
@@ -4596,6 +4957,42 @@ dialogues.pasteNodeRoot = 新しいルートとして貼り付け
 # Box heading
 # en: Preview
 dialogues.preview = プレビュー
+
+# In the Preview panel, instead of the picture, when the selected line has nobody with a bust speaking it
+# en: No bust to show: nobody with a bust speaks this line.
+dialogues.preview.noBust = 表示する立ち絵がありません：このセリフを話す立ち絵のあるキャラクターがいません。
+
+# Tooltip on a panel's title that folds the panel (Identity, Start conditions)
+# en: Fold or unfold. Remembered for this dialogue.
+dialogues.fold.tip = 折りたたむ／広げる。この会話ごとに記憶されます。
+
+# Folded Identity panel: a short tag with the dialogue's priority
+# en: Priority {value}
+dialogues.fold.priority = 優先度 {value}
+
+# Folded Identity panel: a short tag for "Prioritize this dialogue over vanilla" ticked
+# en: Over the game's
+dialogues.fold.overGame = ゲームより優先
+
+# Folded Identity panel: a short tag for "Also leave on the Talk button (replayable)" ticked
+# en: Stays on Talk
+dialogues.fold.staysOnTalk = 「話す」に残る
+
+# Folded Identity panel: a short tag for "Wait for Talk button (no auto-play)" ticked
+# en: Waits for Talk
+dialogues.fold.waitsForTalk = 「話す」を待つ
+
+# Folded Identity panel: a short tag for "Queue behind active dialogue" ticked
+# en: Queues
+dialogues.fold.queues = 順番待ち
+
+# Folded Identity panel: a short tag for "Set for condition debugging (F12)" ticked
+# en: Debugging
+dialogues.fold.debug = デバッグ
+
+# Folded Start conditions panel: a group of conditions, as a short tag. {count} is how many conditions it holds
+# en: Group of {count}
+dialogues.fold.group.other = {count} 個のグループ
 
 # Box heading
 # en: Node
@@ -4638,8 +5035,265 @@ dialogues.tag = タグ：
 dialogues.children = 子：
 
 # Text
-# en: Jump:
-dialogues.jump = ジャンプ：
+# en: Then:
+dialogues.then = 次に：
+
+# On the first button under a line's Outfit: the bust already showing stays
+# en: Keep
+dialogues.outfitKeep = そのまま
+
+# Tooltip on Keep, the first button under a line's Outfit
+# en: This line doesn't change the outfit: the character stays in what they are wearing - what the last line to set an outfit put them in, or their default outfit if no line has.
+dialogues.outfitKeep.tip = このセリフは衣装を変えません。キャラクターは今着ているもののままです（最後に衣装を設定したセリフが着せたもの、どのセリフも設定していなければ既定の衣装）。
+
+# Tick box under a line's outfit buttons: the outfit comes from a pack variable instead, picked from the list beside it
+# en: From a variable
+dialogues.outfitFromVariable = 変数から
+
+# Tooltip on "From a variable"
+# en: Take the outfit from a pack variable: the line puts the character in whatever the variable holds when it plays. While this is ticked the buttons above stand aside; untick it to go back to them.
+dialogues.outfitFromVariable.tip = 衣装をパックの変数から取ります。セリフが再生されるとき、変数に入っている衣装をキャラクターに着せます。チェックしている間は上のボタンは使われません。外すとボタンに戻ります。
+
+# Title of the window that sets a face's bust child by hand
+# en: Bust expression child
+characters.expressionChild.edit = バストの表情の子
+
+# Tooltip on the pencil beside a face's bust child
+# en: Set the child name yourself. It follows the face's name until you do, and stays as you set it after.
+characters.expressionChild.edit.tip = 子の名前を自分で決めます。決めるまでは顔の名前に追従し、決めたあとはそのままになります。
+
+# Tooltip on a face's picture in the Speech expressions box
+# en: The picture this face shows with on a line's buttons in the Dialogues tab.
+characters.expressionIcon.tip = 「会話」タブで、この顔がセリフのボタンに表示されるときの画像です。
+
+# Tooltip on a face's picture before the face has a name
+# en: Give the face a name first: its picture is picked from the name, and can be changed after.
+characters.expressionIcon.locked.tip = 先に顔に名前を付けてください。画像は名前から選ばれ、あとで変えられます。
+
+# Tooltip on the picture of one of the game's faces, or the neutral one
+# en: The picture this face shows with on a line's buttons, picked from its name.
+characters.expressionIcon.fixed.tip = この顔がセリフのボタンに表示されるときの画像です。名前から選ばれます。
+
+# A face, as one of the expression pictures is called
+# en: Neutral
+expressionIcon.neutral = 普通
+
+# A face, as one of the expression pictures is called
+# en: Happy
+expressionIcon.happy = うれしい
+
+# A face, as one of the expression pictures is called
+# en: Smile
+expressionIcon.smile = 微笑み
+
+# A face, as one of the expression pictures is called
+# en: Laugh
+expressionIcon.laugh = 笑い
+
+# A face, as one of the expression pictures is called
+# en: In love
+expressionIcon.love = 恋
+
+# A face, as one of the expression pictures is called
+# en: Flirty
+expressionIcon.flirty = 誘惑
+
+# A face, as one of the expression pictures is called
+# en: Smug
+expressionIcon.smug = 得意げ
+
+# A face, as one of the expression pictures is called
+# en: Talking
+expressionIcon.talk = 話し中
+
+# A face, as one of the expression pictures is called
+# en: Sad
+expressionIcon.sad = 悲しみ
+
+# A face, as one of the expression pictures is called
+# en: Crying
+expressionIcon.cry = 泣き
+
+# A face, as one of the expression pictures is called
+# en: Angry
+expressionIcon.angry = 怒り
+
+# A face, as one of the expression pictures is called
+# en: Furious
+expressionIcon.furious = 激怒
+
+# A face, as one of the expression pictures is called
+# en: Pouting
+expressionIcon.pout = ふくれっ面
+
+# A face, as one of the expression pictures is called
+# en: Disgusted
+expressionIcon.disgusted = 嫌悪
+
+# A face, as one of the expression pictures is called
+# en: Surprised
+expressionIcon.surprised = 驚き
+
+# A face, as one of the expression pictures is called
+# en: Shocked
+expressionIcon.shocked = ショック
+
+# A face, as one of the expression pictures is called
+# en: Scared
+expressionIcon.scared = 怯え
+
+# A face, as one of the expression pictures is called
+# en: Nervous
+expressionIcon.nervous = 緊張
+
+# A face, as one of the expression pictures is called
+# en: Embarrassed
+expressionIcon.embarrassed = 照れ
+
+# A face, as one of the expression pictures is called
+# en: Shy
+expressionIcon.shy = はにかみ
+
+# A face, as one of the expression pictures is called
+# en: Confused
+expressionIcon.confused = 困惑
+
+# A face, as one of the expression pictures is called
+# en: Thinking
+expressionIcon.thinking = 考え中
+
+# A face, as one of the expression pictures is called
+# en: Determined
+expressionIcon.determined = 決意
+
+# A face, as one of the expression pictures is called
+# en: Bored
+expressionIcon.bored = 退屈
+
+# A face, as one of the expression pictures is called
+# en: Sleepy
+expressionIcon.sleepy = 眠気
+
+# A face, as one of the expression pictures is called
+# en: In pain
+expressionIcon.pained = 苦痛
+
+# Tooltip on a file path in red: there is no file at it
+# en: There is no file at this path, so the game will have nothing to show or play. Check the name, or choose the file again.
+picker.missing.tip = このパスにはファイルがないので、ゲームは何も表示も再生もできません。名前を確かめるか、ファイルを選び直してください。
+
+# Beside "(…)" in the In dialogue text panel
+# en: Shows in light blue in game: the game colours what is in brackets.
+dialogues.hintBrackets = ゲームでは水色で表示されます。ゲームは括弧の中を色付けします。
+
+# Beside an underlined "*sfx*" in the In dialogue text panel
+# en: A sound's pattern plays that sound; the editor underlines it.
+dialogues.hintCues = 音のパターンはその音を鳴らします。エディターでは下線が付きます。
+
+# What the hint above stands beside: a made-up sound pattern, as a line would hold one (asterisks round a sound word)
+# en: *sfx*
+# same in this language
+dialogues.hintCues.sample = *sfx*
+
+# A label in the node editor, over the line's sounds (only while the line has an auto-trigger pattern)
+# en: Sounds:
+cues.label = 音：
+
+# Tooltip on 'Sounds:'
+# en: Every sound whose auto-trigger pattern is in this line, in the order they come. Each plays by itself; here you set how loud it is, when it starts, whether its words show and whether it waits for the typewriter. Every setting left as it is costs nothing in the pack.
+cues.label.tip = 自動で鳴らすパターンがこのセリフにあるすべての音を、出てくる順に並べています。それぞれが別々に鳴ります。ここでは、音の大きさ、始まるとき、言葉を表示するか、タイプライターを待つかを設定します。そのままにした設定は、パックの中で何も増やしません。
+
+# One of a line's sounds: {n} is its place in the line, {pattern} the words that play it
+# en: {n} · {pattern}
+cues.row = {n} · {pattern}
+
+# Label before a line's sound's volume slider
+# en: Volume
+cues.volume = 音量
+
+# Tooltip on a line's sound's volume
+# en: How loud this sound plays in this line, against the volume the sound itself is set to on the SFX tab: 100 % is as set, more is louder. Leaves the size of the text alone.
+cues.volume.tip = このセリフでこの音を鳴らす大きさです。SFX タブでその音自体に設定した音量が基準で、100 % は設定どおり、それより大きければ大きく鳴ります。テキストの大きさには触れません。
+
+# Tooltip on the box beside a line's sound's volume slider
+# en: The volume in percent. Type a number here to go past what the slider reaches - up to 500 %.
+cues.volumeBox.tip = 音量（パーセント）。スライダーで届かない値は、ここに数字を入力してください。500 % まで設定できます。
+
+# After the box with a line's sound's start in it: the unit, seconds
+# en: s
+cues.secondsUnit = 秒
+
+# Label before a line's sound's start slider
+# en: Starts
+cues.starts = 開始
+
+# Tooltip on a line's sound's start
+# en: When this sound starts, in seconds. The sentence beside it says from what: the first sound counts from when the line appears, each one after it from when the sound before it ends - so 0 is right after it, and below 0 plays over its end. A sound set to wait for the typewriter counts from when the typewriter reaches it.
+cues.starts.tip = この音が始まるとき（秒）。隣の文が何から数えるかを示します。最初の音はセリフが表示されたときから、次からの音はそれぞれ前の音が終わったときから数えます。つまり 0 はその直後、0 より小さいと前の音の終わりに重なります。タイプライターを待つ音は、タイプライターがそこに届いたときから数えます。
+
+# Tooltip on the box beside a line's sound's start slider
+# en: The start in seconds; a minus sign makes it play over the end of the sound before it.
+cues.delayBox.tip = 開始を秒で入力します。マイナスを付けると、前の音の終わりに重ねて鳴ります。
+
+# A line's first sound, starting at once
+# en: Starts as the line appears.
+cues.startsWithLine = セリフが表示されると同時に始まります。
+
+# A line's first sound, starting later: {seconds} is a number
+# en: Starts {seconds} s after the line appears.
+cues.startsAfterLine = セリフが表示されてから {seconds} 秒後に始まります。
+
+# A line's later sound, starting right after the one before: {pattern} is that sound's words
+# en: Starts as soon as {pattern} ends.
+cues.startsWhenPreviousEnds = {pattern} が終わるとすぐに始まります。
+
+# A line's later sound, starting a while after the one before ends
+# en: Starts {seconds} s after {pattern} ends.
+cues.startsAfterPrevious = {pattern} が終わってから {seconds} 秒後に始まります。
+
+# A line's later sound, starting before the one before has ended, so both play at once for a moment
+# en: Starts {seconds} s before {pattern} ends, playing over it.
+cues.startsBeforePreviousEnds = {pattern} が終わる {seconds} 秒前に始まり、重なって鳴ります。
+
+# A line's sound that waits for the typewriter, starting the moment it is reached
+# en: Starts when the typewriter reaches it.
+cues.startsWhenTyped = タイプライターがそこに届くと始まります。
+
+# A line's sound that waits for the typewriter, starting a while after
+# en: Starts {seconds} s after the typewriter reaches it.
+cues.startsAfterTyped = タイプライターがそこに届いてから {seconds} 秒後に始まります。
+
+# Tick box: a line's sound's words are shown in the line
+# en: Show its words
+cues.showText = 言葉を表示
+
+# Tooltip on 'Show its words'
+# en: Off, the player hears the sound but does not read its pattern: the words are taken out of the line as it shows. The pattern stays in the text here, which is what makes the sound play.
+cues.showText.tip = オフにすると、プレイヤーには音が聞こえますが、パターンは読めません。表示されるセリフから言葉が取り除かれます。ここのテキストにはパターンが残ります。音を鳴らすのはそのパターンだからです。
+
+# Tick box: a line's sound waits until the typewriter shows its words
+# en: When typed
+cues.whenTyped = 文字送りに合わせる
+
+# Tooltip on 'When typed'
+# en: Play when the typewriter reaches the pattern, as its words appear, instead of after the sound before it. Works with the words shown or hidden.
+cues.whenTyped.tip = 前の音のあとではなく、タイプライターがパターンに届いて言葉が表示されるときに鳴らします。言葉を表示していても隠していても使えます。
+
+# Button: plays the selected line's sounds as the game will play them
+# en: ▶ Play the line
+cues.play = ▶ セリフを再生
+
+# Tooltip on 'Play the line'
+# en: Plays this line's sounds with their volumes and timing, as the game will. The typewriter is timed by the speaker's typing speed. The pack has to be saved in a folder first, for its sound files to be found.
+cues.play.tip = このセリフの音を、それぞれの音量とタイミングで、ゲームと同じように鳴らします。タイプライターは話し手の文字送りの速さに合わせます。音声ファイルを見つけるため、先にパックをフォルダーに保存しておく必要があります。
+
+# Button: stops playing the line's sounds
+# en: ■ Stop
+cues.stop = ■ 停止
+
+# Under an empty Actor box in the Node panel
+# en: Nobody speaking: the line shows with no name, like a narrator's. Pick an actor to give it a speaker.
+dialogues.noSpeakerNote = 話し手なし：セリフはナレーターのように名前なしで表示されます。話し手を付けるにはアクターを選んでください。
 
 # Text
 # en: Jump to:
@@ -4666,8 +5320,8 @@ dialogues.actionsStart = 開始時のアクション
 dialogues.addNodeActionOnStart = + アクション
 
 # Text
-# en: This node is one of a Choice's options, so it has no Actions on start. When an option counts as having started is not something the pack can rely on — it may be the moment the menu is drawn rather than the moment the player picks it, which would run the actions for options nobody chose. Put them on Actions on finish, which happens when the option has actually been taken.
-dialogues.nodeOneChoiceS = このノードは選択肢の項目の1つなので、開始時のアクションはありません。項目がいつ開始したとみなされるかは、パックが頼れるものではありません。プレイヤーが選んだときではなくメニューが描かれたときかもしれず、そうなると誰も選ばなかった項目のアクションが動いてしまいます。項目が実際に選ばれたときに起こる「終了時のアクション」に入れてください。
+# en: This node is one of a Choice's options, so it has only Actions on finish. Picking an option goes straight on to the lines under it, and its actions run the moment the player picks it - never for the options nobody chose.
+dialogues.nodeOneChoiceS = このノードは選択肢の項目の1つなので、「終了時のアクション」だけがあります。項目を選ぶとそのすぐ下の行に進み、その項目のアクションはプレイヤーが選んだ瞬間に動きます。誰も選ばなかった項目のアクションは動きません。
 
 # Box heading
 # en: Actions on finish
@@ -4769,17 +5423,21 @@ dialogues.overwriteStartConditions.tip = これらの開始条件をクリップ
 # en: Draw each line in the list the way the game draws it — its own font, outline and drop shadow, the speaker's name in their colour, on a dark panel. Costs the spelling squiggles on those rows; they stay in the Text box below the list.
 dialogues.gameLookSwitch.tip = 一覧の各セリフを、ゲームと同じように描きます。ゲーム自身のフォント、縁取り、影付きで、話し手の名前はその色で、暗いパネルの上に表示します。代わりにそれらの行ではスペルチェックの波線が出なくなります。波線は一覧の下の「テキスト」欄には残ります。
 
-# Tooltip on "+ Root"
-# en: Add a new top-level node (no parent). It takes the speaker from the line it follows - actor, expression and outfit - and nothing else, because a root starts a fresh strand.
-dialogues.addDialogueRootNode.tip = 新しい最上位のノード（親なし）を追加します。直前のセリフから話し手、つまりアクター、表情、衣装だけを引き継ぎ、ほかは何も引き継ぎません。ルートは新しい流れを始めるものだからです。
-
 # Tooltip on "+ Child"
-# en: Add a child of the currently-selected node, copying its actor, expression, outfit, conditions and actions — everything but the text and the jump tag.
-dialogues.addDialogueChildNode.tip = 選んでいるノードの子を追加し、そのアクター、表情、衣装、条件、アクションをコピーします。テキストとジャンプ用タグ以外はすべてです。
+# en: Add a line inside the selected one, as its child. It takes the speaker - actor, expression and outfit - and nothing else; Duplicate copies a node whole.
+dialogues.addDialogueChildNode.tip = 選んだセリフの中に、その子としてセリフを追加します。引き継ぐのは話し手（アクター、表情、衣装）だけです。ノードを丸ごとコピーするのは「複製」です。
 
 # Tooltip on "+ Sibling"
-# en: Add a node directly below the selected one, sharing its parent (or another root when the selection is a root). Copies everything but the text and the jump tag.
-dialogues.addDialogueSiblingNode.tip = 選んだノードのすぐ下に、同じ親を持つノードを追加します（選択がルートなら、もう1つのルートになります）。テキストとジャンプ用タグ以外をすべてコピーします。
+# en: Add a line directly below the selected one, sharing its parent (or at the top level when the selected line is). It takes the speaker - actor, expression and outfit - and nothing else.
+dialogues.addDialogueSiblingNode.tip = 選んだセリフのすぐ下に、同じ親を持つセリフを追加します（選んだセリフが最上位なら最上位に）。引き継ぐのは話し手（アクター、表情、衣装）だけです。
+
+# Tooltip on "+ New Node", the only button under an empty conversation's nodes
+# en: Add the conversation's first line. Once it has one, + Sibling and + Child add the rest.
+dialogues.addFirstNode.tip = 会話の最初のセリフを追加します。一つできたら、残りは「+ 兄弟」と「+ 子」で追加します。
+
+# Tooltip on "Duplicate" under a conversation's nodes
+# en: Copy the selected node and everything under it, directly below it - all of it, conditions, actions and jumps too. A tag the conversation already has is renamed in the copy.
+dialogues.duplicateNode.tip = 選んだノードとその下のすべてを、すぐ下にコピーします。条件、アクション、ジャンプも含めて丸ごとです。会話にすでにあるタグは、コピーでは名前が変わります。
 
 # Tooltip on "− Remove"
 # en: Delete the selected node. References to it from other nodes' children + the root list are scrubbed automatically.
@@ -4881,16 +5539,16 @@ dialogues.fit.spills = 会話ボックスに対して長すぎます。最小サ
 dialogues.optionalOtherNodesCan.tip = 省略可。ほかのノードが「ジャンプ → タグ」でここから再開できます。
 
 # Tooltip on a dropdown
-# en: Where play goes after this node. Continue moves to the next node down the list, whether or not it is a child. Exit stops the conversation. Jump resumes at the node carrying the tag named below.
-dialogues.wherePlayGoesAfter.tip = このノードの後にどこへ進むか。「続ける」は、子であってもなくても一覧の次のノードへ進みます。「終了」は会話を止めます。「ジャンプ」は下で指定したタグを持つノードから再開します。
+# en: Where play goes after this node. Continue moves to the next node down the list, whether or not it is a child. Exit stops the conversation. Jump resumes at the node carrying the tag named below - and once that node and its lines are done, the game says again any line it is under, so a jump lands best on a top-level line.
+dialogues.wherePlayGoesAfter.tip = このノードの後にどこへ進むか。「続ける」は、子であってもなくても一覧の次のノードへ進みます。「終了」は会話を止めます。「ジャンプ」は下で指定したタグを持つノードから再開します。そのノードと下のセリフが終わると、ゲームはそのノードの上にあるセリフをもう一度言うので、ジャンプ先は最上位のセリフにするのが確実です。
 
 # Tooltip on a dropdown
 # en: Which tagged node to resume at. It has to match that node's Tag exactly; a tag that does not exist fails silently at runtime, so pick from the list where you can.
 dialogues.whichTaggedNodeResume.tip = どのタグ付きノードから再開するか。そのノードの「タグ」と完全に一致する必要があります。存在しないタグは実行時に何も言わずに失敗するので、できるだけ一覧から選んでください。
 
 # Tooltip on a dropdown
-# en: How a text line advances. UntilInteraction waits for the player; Timeout auto-advances after the typewriter finishes.
-dialogues.howTextLineAdvances.tip = テキストのセリフの進み方。UntilInteraction はプレイヤーを待ちます。Timeout は文字送りが終わると自動で進みます。
+# en: How a text line advances. Until interaction waits for the player; Timeout auto-advances after the typewriter finishes.
+dialogues.howTextLineAdvances.tip = テキストのセリフの進み方。「操作まで」はプレイヤーを待ちます。Timeout は文字送りが終わると自動で進みます。
 
 # Tooltip on a text box
 # en: Seconds the line lingers after typing finishes. Decimals OK, e.g. 1.5.
@@ -4974,9 +5632,9 @@ scenes.loop = ループ
 # en: Volume:
 scenes.volume = 音量：
 
-# Box heading
-# en: Frame (Core SpriteRenderer)
-scenes.frameCoreSpriterenderer = フレーム（Core の SpriteRenderer）
+# Box heading: one panel for a scene's frame, its sound and whether it counts as a Starmaker photo (Starmaker is the name of the game's photo site)
+# en: Frame, sound and Starmaker
+scenes.frameSoundStarmaker = フレーム、サウンド、Starmaker
 
 # Text
 # en: Pick a vanilla frame (shipped with the plugin) or supply a custom PNG path. When both are set, the custom frame wins at runtime.
@@ -4990,17 +5648,9 @@ scenes.vanillaFrame = ゲームのフレーム：
 # en: Custom frame:
 scenes.customFrame = 独自のフレーム：
 
-# Box heading
-# en: Sound (replaces prototype's Trigger)
-scenes.soundReplacesPrototypeS = サウンド（プロトタイプの Trigger を置き換え）
-
-# Text
-# en: Mode:
-scenes.mode = モード：
-
-# The heading over the Starmaker photo tick box.
-# en: Starmaker
-scenes.starmaker = Starmaker
+# Label before the dropdown of what a scene does with the sound of the scene it is built from
+# en: Sound:
+scenes.sound = サウンド：
 
 # A tick box. Off unless the author turns it on.
 # en: Treat as a Starmaker photo
@@ -5217,6 +5867,10 @@ sfx.stopSfx = ■ 停止
 # Text
 # en: Plays through the editor's own audio (OGG/WAV/MP3).
 sfx.playsThroughEditorS = エディター自身の音声で再生します（OGG/WAV/MP3）。
+
+# Beside the SFX tab's Play button, for a sound with variants: which file just played; {n} of {count}
+# en: Played {file} ({n} of {count})
+sfx.playedVariant = {file} を再生しました（{count} 個中 {n} 個目）
 
 # Box heading
 # en: Auto-trigger patterns
@@ -5727,6 +6381,46 @@ variables.optionalUpperClampInt.tip = Int/Float 変数の上限（省略可）�
 # en: A note to yourself. Shown only in the editor, never in game.
 variables.noteYourselfShownOnly.tip = 自分用のメモです。エディターの中でだけ表示され、ゲームには出ません。
 
+# Heading of the panel listing every place in the pack that uses the selected variable. {count} is how many places
+# en: Where it's used ({count} places)
+variables.uses.heading.other = 使われている場所（{count} 箇所）
+
+# The grey line at the top of that panel
+# en: What sets this variable, what reads it, and what shows it in its words. Click one to go there.
+variables.uses.help = この変数を設定するもの、読むもの、テキストで値を表示するものです。クリックするとそこへ移動します。
+
+# Shown in that panel when nothing uses the variable
+# en: Nothing in the pack uses it yet.
+variables.uses.none = パックの中でこの変数を使っているものはまだありません。
+
+# A short tag before a place that changes the variable (an action)
+# en: Sets
+variables.uses.sets = 設定
+
+# Tooltip on "Sets"
+# en: An action here changes the variable.
+variables.uses.sets.tip = ここのアクションが変数を変えます。
+
+# A short tag before a place that checks the variable (a condition, or an action that takes from it)
+# en: Reads
+variables.uses.reads = 読み取り
+
+# Tooltip on "Reads"
+# en: A condition here checks the variable, or an action takes from it.
+variables.uses.reads.tip = ここの条件が変数を調べるか、アクションが変数から取り出します。
+
+# A short tag before a text that shows the variable's value to the player ([PV:name] in its words)
+# en: Shows
+variables.uses.shows = 表示
+
+# Tooltip on "Shows"
+# en: Its words show the variable's value to the player.
+variables.uses.shows.tip = このテキストがプレイヤーに変数の値を見せます。
+
+# Tooltip on one of the places listed
+# en: Go there.
+variables.uses.go.tip = そこへ移動します。
+
 [Integration tab]
 
 # Tab
@@ -6007,10 +6701,6 @@ ui.copyNode = コピー
 # en: Paste
 ui.pasteNode = 貼り付け
 
-# Button
-# en: Duplicate
-ui.duplicateNode = 複製
-
 # Heading
 # en: Preview
 ui.preview = プレビュー
@@ -6058,6 +6748,18 @@ ui.shownWhen = 表示する条件
 # Button
 # en: + Condition
 ui.addActiveCondition = + 条件
+
+# Expandable section in a screen's settings: conditions that open the screen by themselves
+# en: Opens when
+ui.opensWhen = 開く条件
+
+# Text inside "Opens when", under its conditions
+# en: The screen opens by itself the moment all of these are met - as the game loads, if they already are - and again each time they are met anew. The player can still close it: it stays closed until they stop being met and are met again.
+ui.opensWhen.help = これらの条件がすべて満たされた瞬間に、画面がひとりでに開きます（ゲームの読み込み時にすでに満たされていれば、そのときに）。条件が新たに満たされるたびに、また開きます。プレイヤーは閉じることもでき、条件が満たされなくなってから再び満たされるまで閉じたままです。
+
+# Tooltip on "+ Condition" inside "Opens when"
+# en: With none, the screen opens only when an action opens it, or at the start if it is on screen from the start. With any, it opens by itself the moment they are all met.
+ui.addOpenCondition.tip = 条件がなければ、画面はアクションが開いたときだけ開きます（「最初から画面に出す」なら最初にも）。条件があれば、すべて満たされた瞬間にひとりでに開きます。
 
 # Expandable section
 # en: When it opens
@@ -6175,10 +6877,6 @@ ui.drawOrderAgainstOther.tip = ゲームのインターフェースと一緒に�
 # en: Every UI the game has that can be drawn here. One entry per screen, not per canvas — the main canvas alone holds twenty-one of them.
 ui.everyUIGameHas.tip = ここに描けるゲームの UI すべて。キャンバスごとではなく画面ごとに1項目です。メインのキャンバスだけで 21 個あります。
 
-# Keyboard shortcut shown beside it ("+ Object")
-# en: Ins
-ui.addChild.keys = Ins
-
 # Tooltip on "+ Object"
 # en: Add an empty object of your own, inside whatever is selected. (Insert)
 ui.addChild.tip = 選んでいるものの中に、自分の空のオブジェクトを追加します。（Insert）
@@ -6194,10 +6892,6 @@ ui.addShapeMenu.tip = 選んでいるものの中に、ウィンドウ、ダイ�
 # Tooltip on "+ Piece"
 # en: Add a ready-made piece - a button, a row, a label - inside whatever is selected.
 ui.addPieceMenu.tip = 選んでいるものの中に、ボタン、行、ラベルのような出来合いのパーツを追加します。
-
-# Keyboard shortcut shown beside it ("Remove")
-# en: Del
-ui.removeUi.keys = Del
 
 # Tooltip on "Remove"
 # en: Remove an object you added. Objects the game owns cannot be removed - a pack can change them, but not delete them out of the game's screen. (Delete)
@@ -6218,10 +6912,6 @@ ui.pasteNode.keys = Ctrl+V
 # Tooltip on "Paste"
 # en: Paste the copied object inside whatever is selected. Every paste is its own copy, so one Copy can be pasted as many times as you like.
 ui.pasteNode.tip = コピーしたオブジェクトを、選んでいるものの中に貼り付けます。貼り付けるたびに別のコピーになるので、1回コピーすれば何度でも貼り付けられます。
-
-# Keyboard shortcut shown beside it ("Duplicate")
-# en: Ctrl+D
-ui.duplicateNode.keys = Ctrl+D
 
 # Tooltip on "Duplicate"
 # en: Another one of these, beside it.
@@ -6408,10 +7098,6 @@ quests.textParenthesesDrawnPink = かっこ内の文字はジャーナル自身�
 # Text
 # en: Runtime name:
 quests.runtimeName = 実行時の名前：
-
-# Button
-# en: Rename…
-quests.renameQuest = 名前を変更…
 
 # Text
 # en: The game saves a player's progress on this quest under its runtime name. Renaming it after players have the pack starts the quest over for all of them.
@@ -6753,18 +7439,6 @@ saveConfirm.save = 保存
 # en: Cancel
 saveConfirm.cancel = キャンセル
 
-# Column heading
-# en: What
-saveConfirm.what = 項目
-
-# Column heading
-# en: Was
-saveConfirm.was = 変更前
-
-# Column heading
-# en: Now
-saveConfirm.now = 変更後
-
 # Tooltip on "Don't ask again"
 # en: Save straight away from now on. Turn this back on any time under Options → Confirm changes on save.
 saveConfirm.dontAskAgain.tip = これからはすぐに保存します。「オプション → 保存時に変更を確認」でいつでも元に戻せます。
@@ -6773,7 +7447,7 @@ saveConfirm.dontAskAgain.tip = これからはすぐに保存します。「オ�
 # en: Go back to the editor. Nothing is written; your edits stay exactly as they are.
 saveConfirm.cancel.tip = エディターに戻ります。何も書き込まれず、編集内容はそのまま残ります。
 
-# Tooltip on a change in the list: {0} is where, {1} what it was, {2} what it is now
+# Tooltip on a change in the save prompt's list: {0} is the change in words, {1} what it was, {2} what it is now
 # en: {0}\nwas: {1}\nnow: {2}
 saveConfirm.change.tip = {0}\n変更前: {1}\n変更後: {2}
 
@@ -6784,6 +7458,498 @@ diff.wholeManifest = （マニフェスト全体）
 # In the list of what a save changes, for a pack saved for the first time
 # en: no previous saved state to compare against
 diff.nothingToCompare = 比較できる以前の保存状態がありません
+
+# Heading over the save prompt's changes to the pack's own settings (its version, its id)
+# en: Pack
+diff.kind.pack = パック
+
+# What a heading in the save prompt's list is: 'Dialogue · Chat at the cave'
+# en: Dialogue
+diff.kind.dialogue = 会話
+
+# What a heading in the save prompt's list is
+# en: Place
+diff.kind.place = 場所
+
+# What a heading in the save prompt's list is
+# en: Character
+diff.kind.character = キャラクター
+
+# What a heading in the save prompt's list is
+# en: Scene
+diff.kind.scene = シーン
+
+# What a heading in the save prompt's list is (a sound effect, as the SFX tab holds)
+# en: SFX
+# same in this language
+diff.kind.sound = SFX
+
+# What a heading in the save prompt's list is (a music track)
+# en: Music
+diff.kind.music = 音楽
+
+# What a heading in the save prompt's list is
+# en: Variable
+diff.kind.variable = 変数
+
+# What a heading in the save prompt's list is (one of the Integration tab's rules)
+# en: Integration rule
+diff.kind.rule = 統合ルール
+
+# What a heading in the save prompt's list is
+# en: NPC
+# same in this language
+diff.kind.npc = NPC
+
+# What a heading in the save prompt's list is (one of the UI tab's screens)
+# en: UI screen
+diff.kind.screen = UI 画面
+
+# What a heading in the save prompt's list is
+# en: Quest
+diff.kind.quest = クエスト
+
+# What a heading in the save prompt's list is
+# en: Wallpaper
+diff.kind.wallpaper = 壁紙
+
+# What a heading in the save prompt's list is
+# en: Map button
+diff.kind.mapButton = マップボタン
+
+# What a heading in the save prompt's list is (one of the game's own places the pack adds to)
+# en: Game place
+diff.kind.gamePlace = ゲームの場所
+
+# What a heading in the save prompt's list is (lines said in a room)
+# en: Room talk
+diff.kind.roomTalk = 部屋での会話
+
+# What a heading in the save prompt's list is
+# en: Dialogue folder
+diff.kind.dialogueFolder = 会話のフォルダー
+
+# What a heading in the save prompt's list is
+# en: Scene folder
+diff.kind.sceneFolder = シーンのフォルダー
+
+# What a heading in the save prompt's list is
+# en: Variable folder
+diff.kind.variableFolder = 変数のフォルダー
+
+# What a heading in the save prompt's list is (a folder on the Integration tab)
+# en: Integration folder
+diff.kind.ruleFolder = 統合のフォルダー
+
+# What a heading in the save prompt's list is (a folder on any other tab)
+# en: Folder
+diff.kind.folder = フォルダー
+
+# Save prompt: under a heading, when the whole thing is new
+# en: Added
+diff.recordAdded = 追加
+
+# Save prompt: under a heading, when the whole thing is deleted
+# en: Removed
+diff.recordRemoved = 削除
+
+# Save prompt: under a heading, when the whole thing changed into something else
+# en: Changed
+diff.recordChanged = 変更
+
+# Save prompt: something new inside a record - {thing} is a line by its words, or an action by when it runs and its type
+# en: New: {thing}
+diff.newThing = 新規：{thing}
+
+# Save prompt: something taken out of a record - {thing} as above
+# en: Removed: {thing}
+diff.removedThing = 削除：{thing}
+
+# Save prompt: a list in a different order - {what} names the list
+# en: {what}: new order
+diff.newOrder = {what}：新しい順序
+
+# Save prompt, under a changed list of names: only the order changed
+# en: new order
+diff.newOrderShort = 新しい順序
+
+# Save prompt, under a changed list of names: the names now in it - {items} is the names
+# en: added {items}
+diff.listAdded = 追加：{items}
+
+# Save prompt, under a changed list of names: the names no longer in it
+# en: taken out {items}
+diff.listRemoved = 削除：{items}
+
+# Save prompt: a value that was not there before, or is not any more
+# en: not set
+diff.notSet = 未設定
+
+# Save prompt: an empty list's value
+# en: nothing
+diff.nothing = なし
+
+# Save prompt: an empty text's value
+# en: empty
+diff.empty = 空
+
+# Save prompt: a switched-on value
+# en: yes
+diff.yes = はい
+
+# Save prompt: a switched-off value
+# en: no
+diff.no = いいえ
+
+# Save prompt: something in a list with no name, by its place in the list
+# en: item {n}
+diff.thing.item = 項目 {n}
+
+# Save prompt: a choice line that has no words of its own
+# en: a choice with no words
+diff.thing.choice = 言葉のない選択肢
+
+# Save prompt: a line that has no words
+# en: a line with no words
+diff.thing.lineNoWords = 言葉のないセリフ
+
+# Save prompt: a record's settings, counted
+# en: {count} settings
+diff.settings.other = 設定 {count} 件
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Text
+diff.field.text = テキスト
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Actor
+diff.field.actor = アクター
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Expression
+diff.field.expression = 表情
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Outfit
+diff.field.outfit = 衣装
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Kind
+diff.field.kind = 種類
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Tag
+diff.field.tag = タグ
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Jump to
+diff.field.jump = ジャンプ先
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Mode
+diff.field.mode = モード
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Timeout
+diff.field.timeout = タイムアウト
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Duration
+diff.field.duration = 長さ
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Conditions
+diff.field.conditions = 条件
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Start conditions
+diff.field.startConditions = 開始条件
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: On start
+diff.field.actionsOnStart = 開始時
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: On finish
+diff.field.actionsOnFinish = 終了時
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Actions
+diff.field.actions = アクション
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: What follows
+diff.field.children = 続き
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Opening lines
+diff.field.rootNodeIds = 最初のセリフ
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Lines
+diff.field.nodes = セリフ
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Display name
+diff.field.displayName = 表示名
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Runtime name
+diff.field.key = 実行時の名前
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Name
+diff.field.name = 名前
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Title
+diff.field.title = タイトル
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Description
+diff.field.description = 説明
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Label
+diff.field.label = ラベル
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Priority
+diff.field.priority = 優先度
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Queued
+diff.field.queued = 順番待ち
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Type
+diff.field.type = 型
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Settings
+diff.field.params = 設定
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Starting value
+diff.field.defaultValue = 初期値
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Kept in the save
+diff.field.persisted = セーブに残す
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Sound
+diff.field.sound = 音
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Picture
+diff.field.sceneSprite = 画像
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Frame
+diff.field.vanillaFrame = フレーム
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Picture file
+diff.field.externalSpritePath = 画像ファイル
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Audio file
+diff.field.audioPath = 音声ファイル
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Default volume
+diff.field.defaultVolume = 既定の音量
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Auto-trigger patterns
+diff.field.textPatterns = 自動で鳴らすパターン
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Loop
+diff.field.loop = ループ
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Picture
+diff.field.spritePath = 画像
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Unlock conditions
+diff.field.unlockConditions = 解放の条件
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Contents
+diff.field.items = 中身
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Folders
+diff.field.folders = フォルダー
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Dialogues
+diff.field.dialogues = 会話
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Scenes
+diff.field.scenes = シーン
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Places
+diff.field.places = 場所
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Characters
+diff.field.characters = キャラクター
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: SFX
+# same in this language
+diff.field.sfx = SFX
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Music
+diff.field.music = 音楽
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Variables
+diff.field.variables = 変数
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Integration rules
+diff.field.integrationRules = 統合ルール
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: NPCs
+diff.field.npcs = NPC
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Quests
+diff.field.quests = クエスト
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Wallpapers
+diff.field.wallpapers = 壁紙
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: UI screens
+diff.field.uis = UI 画面
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Map buttons
+diff.field.mapButtons = マップボタン
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Tasks
+diff.field.tasks = タスク
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Name colour
+diff.field.nameColor = 名前の色
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Outfits
+diff.field.outfits = 衣装
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Expressions
+diff.field.expressions = 表情
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Default outfit
+diff.field.defaultOutfit = 既定の衣装
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Pronouns
+diff.field.pronouns = 代名詞
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Typewriter
+diff.field.typewriter = タイプライター
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Target
+diff.field.target = 対象
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: District
+diff.field.district = 地区
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Version
+diff.field.version = バージョン
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Pack id
+diff.field.packId = パック ID
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Game version
+diff.field.gameVersion = ゲームのバージョン
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: ModForge version
+diff.field.forgeVersion = ModForge のバージョン
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Silenced issues
+diff.field.ignoredIssues = 非表示にした問題
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: When it runs
+diff.field.triggerMode = 実行するとき
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Sprite
+diff.field.sprite = スプライト
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Mask
+diff.field.mask = マスク
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Sorting order
+diff.field.sortingOrder = 描画順
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Position
+diff.field.position = 位置
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Active
+diff.field.active = アクティブ
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Enabled
+diff.field.enabled = 有効
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Colour
+diff.field.color = 色
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Tint
+diff.field.tint = 色合い
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: GameObjects
+# same in this language
+diff.field.gameObjects = GameObjects
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Components
+diff.field.components = コンポーネント
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Internal name
+diff.field.internalName = 内部名
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Navigator buttons
+diff.field.navigatorButtons = ナビゲーターのボタン
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Value
+diff.field.value = 値
 
 # In the list of what a save changes: a list that was put in a new order
 # en: {count} entries
@@ -7244,8 +8410,8 @@ docs.modPack.summary = 細かい話の前に、全体の考え方です。
 docs.modPack.packOneFolderEverything = パックは1つのフォルダーです。作ったものはすべてその中の modpack.json という1つのファイルに入り、画像や音声はそのファイルの隣に置かれます。
 
 # Docs: a point in the topic
-# en: You never edit modpack.json by hand. The editor writes it, and the tabs across the top are the things it can hold.
-docs.modPack.neverEditModpackJson = modpack.json を手で編集することはありません。エディターが書き込みます。上に並ぶタブが、そこに入れられるものです。
+# en: You never edit modpack.json by hand. The editor writes it, and its tabs are the things it can hold.
+docs.modPack.neverEditModpackJson = modpack.json を手で編集することはありません。エディターが書き込みます。エディターのタブが、そこに入れられるものです。
 
 # Docs: a point in the topic
 # en: Export turns the folder into one .smspack file. That is what you hand to players, and the only thing the game reads.
@@ -8103,6 +9269,14 @@ docs.editMenu.title = 編集メニュー
 # en: Acts on the selected item in the current tab's list.
 docs.editMenu.summary = 今のタブの一覧で選んでいる項目に対して働きます。
 
+# Help page Edit menu: a term
+# en: Undo, Redo
+docs.editMenu.undo.term = 元に戻す、やり直し
+
+# Help page Edit menu: what Undo and Redo do
+# en: Take back the last change, or put it back - anywhere in the pack. What you type into a box counts as one change, made when you leave the box.
+docs.editMenu.undo = 最後の変更を取り消すか、取り消した変更をやり直します。パックのどこでも使えます。ボックスに入力した内容は、ボックスを離れた時点で1つの変更として数えます。
+
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Duplicate item
 docs.editMenu.copySelectedItemInto.term = 項目を複製
@@ -8170,8 +9344,8 @@ docs.editMenu.modforgeTabHasNo = ModForge タブには項目の一覧がない�
 docs.optionsMenu.title = オプションメニュー
 
 # Docs: the line under the topic's title
-# en: Editor preferences. All of them are remembered between sessions.
-docs.optionsMenu.summary = エディターの設定です。どれもセッションをまたいで記憶されます。
+# en: Editor preferences, in groups under headings: Look, Writing, Saving and exporting, The game and Updates. All of them are remembered between sessions.
+docs.optionsMenu.summary = エディターの設定です。見出しごとのグループに分かれています：見た目、文章、保存とエクスポート、ゲーム、更新。どれもセッションをまたいで記憶されます。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Confirm changes on save
@@ -8220,24 +9394,32 @@ docs.optionsMenu.windowsDictionarySharedRest = Windows の辞書はシステム�
 docs.themes.title = テーマ
 
 # Docs: the line under the topic's title
-# en: Recolours the editor. Your choice is remembered between sessions.
-docs.themes.summary = エディターの色を変えます。選んだものはセッションをまたいで記憶されます。
+# en: Options ▸ Themes recolours the editor, and EX draws it another way. Your choice is remembered between sessions.
+docs.themes.summary = 「オプション ▸ テーマ」でエディターの色を変えます。EX はエディターを別の描き方で表示します。選んだものはセッションをまたいで記憶されます。
 
-# Docs: the bold label in front of the next text, usually a name on screen
-# en: Light themes
-docs.themes.lightSlateForestPlum.term = 明るいテーマ
+# Help page Themes: a term
+# en: EX
+docs.themes.ex.term = EX
 
-# Docs: a point in the topic
-# en: Light, Slate, Forest, Plum, Ocean, Sandstone and Rose.
-docs.themes.lightSlateForestPlum = ライト、スレート、フォレスト、プラム、オーシャン、サンドストーン、ローズ。
+# Help page Themes: what the EX themes are
+# en: The editor drawn another way: the tabs in a rail down the left with an icon over each, the pack's name heading the page, every panel a tile. Light ones and dark ones; a first start opens in Frost.
+docs.themes.ex = 別の描き方をしたエディターです。タブは左側のレールに並び、それぞれの上にアイコンがあります。ページの見出しはパックの名前で、各パネルはタイルです。明るいものと暗いものがあり、最初の起動では Frost で開きます。
 
-# Docs: the bold label in front of the next text, usually a name on screen
-# en: Dark themes
-docs.themes.darkMidnightCarbon.term = 暗いテーマ
+# Help page Themes: a term
+# en: Classic
+docs.themes.classic.term = クラシック
 
-# Docs: a point in the topic
-# en: Dark, Midnight and Carbon.
-docs.themes.darkMidnightCarbon = ダーク、ミッドナイト、カーボン。
+# Help page Themes: what the Classic themes are
+# en: The editor in the shape it had before EX, in every colour it had, light and dark.
+docs.themes.classic = EX 以前の形のエディターです。それまでのすべての色があり、明るいものも暗いものもあります。
+
+# Help page Themes: a term
+# en: Your own
+docs.themes.yours.term = マイテーマ
+
+# Help page Themes: themes the person makes
+# en: Your themes… opens a window to make themes of your own from a few colours. They are listed under Yours once there is one.
+docs.themes.yours = 「マイテーマ…」を選ぶと、いくつかの色から自分のテーマを作るウィンドウが開きます。1つでも作ると「マイテーマ」に並びます。
 
 # Docs: a point in the topic
 # en: Themes change the editor only. They have no effect on the pack, or on anything in the game.
@@ -9482,32 +10664,40 @@ docs.dialogues.heading.nodes = ノード
 docs.dialogues.dialogueTreePlayStarts = 会話は木構造です。再生は最初のルートから始まって下へ進みます。ノードが実行され、次にその子が順に実行され、何かが終了するまで続きます。
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: + Root
-docs.dialogues.addNodeTopLevel.term = + ルート
+# en: + New Node
+docs.dialogues.addFirstNode.term = + 新しいノード
 
 # Docs: a point in the topic
-# en: Add a node at the top level, with no parent.
-docs.dialogues.addNodeTopLevel = 親のない最上位のノードを追加します。
+# en: Add a conversation's first line. Until it has one, this is the only button.
+docs.dialogues.addFirstNode = 会話の最初のセリフを追加します。セリフが一つもないうちは、これが唯一のボタンです。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: + Child
-docs.dialogues.addChildSelectedNode.term = + 子
+docs.dialogues.addChildNode.term = + 子
 
 # Docs: a point in the topic
-# en: Add a child of the selected node. The speaker, expression, outfit, timing, jump and the whole conditions and actions lists all carry over, so writing the next line of a scene is not a matter of re-picking all of it.
-docs.dialogues.addChildSelectedNode = 選んだノードの子を追加します。話し手、表情、衣装、タイミング、ジャンプ、条件とアクションの一覧がすべて引き継がれるので、場面の次のセリフを書くのに全部を選び直す必要はありません。
+# en: Add a line inside the selected one, as its child.
+docs.dialogues.addChildNode = 選んだセリフの中に、その子としてセリフを追加します。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: + Sibling
-docs.dialogues.sameButBesideSelected.term = + 兄弟
+docs.dialogues.addSiblingNode.term = + 兄弟
 
 # Docs: a point in the topic
-# en: The same, but beside the selected node rather than under it. It lands directly below what you had selected, not at the end of the row.
-docs.dialogues.sameButBesideSelected = 同じですが、選んだノードの下ではなく横に追加します。列の最後ではなく、選んでいたもののすぐ下に入ります。
+# en: Add a line beside the selected one, directly below it rather than at the end of the row. Beside a line at the top level, it is another at the top level - which is how a new strand starts.
+docs.dialogues.addSiblingNode = 選んだセリフの隣に、列の最後ではなくすぐ下にセリフを追加します。最上位のセリフの隣なら、それも最上位のセリフになります。新しい流れはこうして始まります。
 
 # Docs: a point in the topic
-# en: The text and the tag never carry over. The text is the one thing that is always different, and two nodes sharing a tag would make every jump aimed at the first one ambiguous.
-docs.dialogues.textTagNeverCarry = テキストとタグは引き継がれません。テキストはいつも違う唯一のものですし、2つのノードが同じタグを持つと、最初のノードを狙ったジャンプがすべてあいまいになります。
+# en: A new line takes the selected one's speaker - actor, expression and outfit - and nothing else: conditions, actions and a jump written for one line are as often wrong on the next as right.
+docs.dialogues.newLineTakesSpeaker = 新しいセリフは、選んだセリフの話し手（アクター、表情、衣装）だけを引き継ぎ、それ以外は引き継ぎません。あるセリフのために書いた条件、アクション、ジャンプは、次のセリフでは合っていることと同じくらい間違っていることが多いからです。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Duplicate
+docs.dialogues.duplicateNode.term = 複製
+
+# Docs: a point in the topic
+# en: Copy the selected node and everything beneath it, directly below it - the whole of each, conditions and actions too. Ctrl+D in the list. A tag the conversation already has is renamed in the copy, and the copy's own jumps follow it, so no jump becomes ambiguous.
+docs.dialogues.duplicateNode = 選んだノードとその下のすべてを、すぐ下にコピーします。それぞれ丸ごと、条件やアクションも含めてです。一覧では Ctrl+D。会話にすでにあるタグはコピーでは名前が変わり、コピー自身のジャンプもそれに合わせるので、どのジャンプもあいまいになりません。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: − Remove
@@ -9570,12 +10760,12 @@ docs.dialogues.optionalLabelSoAnother.term = タグ
 docs.dialogues.optionalLabelSoAnother = ほかのノードがここへジャンプできるようにする任意のラベル。1つのタグは1つのノードにだけ付けてください。
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: Jump
-docs.dialogues.wherePlayGoesAfter.term = ジャンプ
+# en: Then
+docs.dialogues.wherePlayGoesAfter.term = 次に
 
 # Docs: a point in the topic
-# en: Where play goes after this node. Continue, the default, moves to the next node down the list — whether that is a child of this one or something further out. Exit stops the conversation and skips everything below. Jump resumes at whichever node carries the tag you name.
-docs.dialogues.wherePlayGoesAfter = このノードの後にどこへ進むか。既定の「続ける」は、このノードの子であっても、もっと外側のものであっても、一覧の次のノードへ進みます。「終了」は会話を止め、下のものをすべて飛ばします。「ジャンプ」は指定したタグを持つノードから再開します。
+# en: Where play goes after this node. Continue, the default, moves to the next node down the list — whether that is a child of this one or something further out. Exit stops the conversation and skips everything below. Jump resumes at whichever node carries the tag you name. Once that node and the lines under it are done, the game says again any line it is under, then that line's lines - so a jump that lands under the very line that jumps goes round for ever. A node at the top level carries on cleanly, and Validate warns about the others.
+docs.dialogues.wherePlayGoesAfter = このノードの後にどこへ進むか。既定の「続ける」は、このノードの子であっても、もっと外側のものであっても、一覧の次のノードへ進みます。「終了」は会話を止め、下のものをすべて飛ばします。「ジャンプ」は指定したタグを持つノードから再開します。そのノードと下のセリフが終わると、ゲームはそのノードの上にあるセリフをもう一度言い、そのセリフの下のセリフも続けます。そのため、ジャンプするセリフ自身の下に着地するジャンプは、いつまでも回り続けます。最上位のノードならそのまま続き、ほかの場合は「検証」が警告します。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Jump to
@@ -9594,8 +10784,8 @@ docs.dialogues.veryBottomDialogueContinue = 会話のいちばん下では、「
 docs.dialogues.untilinteractionWaitsPlayerTimeout.term = 長さ
 
 # Docs: a point in the topic
-# en: UntilInteraction waits for the player; Timeout moves on by itself once the line has finished typing.
-docs.dialogues.untilinteractionWaitsPlayerTimeout = UntilInteraction はプレイヤーを待ちます。Timeout はセリフの文字送りが終わると自分で進みます。
+# en: Until interaction waits for the player; Timeout moves on by itself once the line has finished typing.
+docs.dialogues.untilinteractionWaitsPlayerTimeout = 「操作まで」はプレイヤーを待ちます。Timeout はセリフの文字送りが終わると自分で進みます。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Timeout (s)
@@ -12104,12 +13294,12 @@ tutorial.firstConversation.sayWhereHappens.hint = 開始条件の、いちばん
 tutorial.firstConversation.writeLine.title = セリフを書く
 
 # Tutorials: what the step says
-# en: Add a root node, choose your character as the actor, and give them something to say. One line is a conversation.
-tutorial.firstConversation.writeLine.body = ルートのノードを追加し、自分のキャラクターをアクターに選び、何か言わせてください。セリフ1つでも会話です。
+# en: Add the first line with + New Node, choose your character as the actor, and give them something to say. One line is a conversation.
+tutorial.firstConversation.writeLine.body = 「+ 新しいノード」で最初のセリフを追加し、自分のキャラクターをアクターに選び、何か言わせてください。セリフ1つでも会話です。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Root, then fill in Actor and Text in the Node box.
-tutorial.firstConversation.writeLine.hint = 「+ ルート」の後、「ノード」欄の「アクター」と「テキスト」を埋めます。
+# en: + New Node, then fill in Actor and Text in the Node box.
+tutorial.firstConversation.writeLine.hint = 「+ 新しいノード」の後、「ノード」欄の「アクター」と「テキスト」を埋めます。
 
 # Tutorials: the heading of a step
 # en: The rest of the Node box
@@ -12144,12 +13334,12 @@ tutorial.firstConversation.happensAfterNode.body = 「ジャンプ」で次に�
 tutorial.firstConversation.makeExitMeanSomething.title = 「終了」に意味を持たせる
 
 # Tutorials: what the step says
-# en: At the very bottom of the list Continue and Exit are the same thing, because there is nothing left to skip either way. So give Exit something to skip: add one more root node below the choice with a closing line, then set ONE of your two options to Exit. Take that option in game and the conversation stops; take the other and it carries on into the closing line.\n\nGive the closing line an actor as well. Every node that SAYS something needs one — a line with no speaker shows no name, which reads as a fault rather than as a narrator.
-tutorial.firstConversation.makeExitMeanSomething.body = 一覧のいちばん下では、「続ける」と「終了」は同じです。どちらにしても飛ばすものが残っていないからです。そこで「終了」に飛ばすものを与えましょう。選択肢の下に締めくくりのセリフを持つルートのノードをもう1つ追加し、2つの選択肢の「1つ」を「終了」にします。ゲームでその選択肢を選ぶと会話が止まり、もう一方を選ぶと締めくくりのセリフまで続きます。\n\n締めくくりのセリフにもアクターを付けてください。何かを「言う」ノードにはすべて必要です。話し手のいないセリフには名前が表示されず、語り手ではなく不具合のように見えます。
+# en: At the very bottom of the list Continue and Exit are the same thing, because there is nothing left to skip either way. So give Exit something to skip: select the choice and add one more line beside it with + Sibling - the closing line - then set ONE of your two options to Exit. Take that option in game and the conversation stops; take the other and it carries on into the closing line.\n\nGive the closing line an actor as well. Every node that SAYS something needs one — a line with no speaker shows no name, which reads as a fault rather than as a narrator.
+tutorial.firstConversation.makeExitMeanSomething.body = 一覧のいちばん下では、「続ける」と「終了」は同じです。どちらにしても飛ばすものが残っていないからです。そこで「終了」に飛ばすものを与えましょう。選択肢のノードを選び、「+ 兄弟」でその隣にセリフをもう1つ（締めくくりのセリフ）追加し、2つの選択肢の「1つ」を「終了」にします。ゲームでその選択肢を選ぶと会話が止まり、もう一方を選ぶと締めくくりのセリフまで続きます。\n\n締めくくりのセリフにもアクターを付けてください。何かを「言う」ノードにはすべて必要です。話し手のいないセリフには名前が表示されず、語り手ではなく不具合のように見えます。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Root for the closing line, then select an option and set Jump to Exit.
-tutorial.firstConversation.makeExitMeanSomething.hint = 締めくくりのセリフ用に「+ ルート」、それから選択肢を1つ選んで「ジャンプ」を「終了」にします。
+# en: Select the choice and press + Sibling for the closing line, then select an option and set Then to Exit.
+tutorial.firstConversation.makeExitMeanSomething.hint = 選択肢のノードを選んで締めくくりのセリフ用に「+ 兄弟」を押し、それから選択肢を1つ選んで「次に」を「終了」にします。
 
 # Tutorials: the heading of a step
 # en: Actions are how a line changes things
@@ -12242,12 +13432,12 @@ tutorial.linesThatChoose.someoneElseRoom.hint = ノードを追加してセリ�
 tutorial.linesThatChoose.lettingOneOptionSay.title = 1つの選択肢にもっと語らせる
 
 # Tutorials: what the step says
-# en: Last tutorial you gave one option Exit and let the other fall through to your closing line. Both are still one line long. Real dialogue is lopsided — one answer earns a reaction, the other does not — and the branch that reacts still has to end up somewhere, or you write the ending twice.\n\nA TAG is a name you give a node so another node can send play to it. Two fields do it. Tag, on the node being aimed AT: a short word, yours to choose, and it is a label rather than anything the player sees. Jump, on the node doing the aiming: set it to Jump, and a Jump to box appears listing the tags in this dialogue.\n\nBuild it in that order — the tag first, so it is there to be picked. Tag your closing line, the one you added last tutorial, with something like ending. Then take the option you did NOT set to Exit, add a Child under it, and write the reaction that answer deserves. On that child set Jump to Jump, and choose ending in the Jump to box.\n\nPlay now runs the option, the reaction, and then lands on the closing line. The other option still ends where it ended. One ending, written once, reached two ways — and nothing repeats, because every jump here goes forward.
-tutorial.linesThatChoose.lettingOneOptionSay.body = 前のチュートリアルでは、一方の選択肢を「終了」にし、もう一方は締めくくりのセリフへそのまま流しました。どちらもまだセリフ1つ分です。本当の会話はかたよっています。ある答えには反応があり、別の答えにはありません。そして反応する枝もどこかに行き着かなければならず、さもないと結末を2回書くことになります。\n\n「タグ」は、別のノードが再生をそこへ送れるようにノードに付ける名前です。2つの欄で行います。狙われる側のノードの「タグ」。自分で選ぶ短い語で、プレイヤーには見えないラベルです。狙う側のノードの「ジャンプ」。これを「ジャンプ」にすると「ジャンプ先」欄が現れ、この会話のタグが並びます。\n\nこの順に作ってください。先にタグを付ければ、選ぶ候補にあります。前のチュートリアルで足した締めくくりのセリフに、ending のようなタグを付けます。次に「終了」にしなかった方の選択肢に「子」を追加し、その答えにふさわしい反応を書きます。その子の「ジャンプ」を「ジャンプ」にし、「ジャンプ先」で ending を選びます。\n\nこれで再生は、選択肢、反応と進み、締めくくりのセリフに着きます。もう一方の選択肢は前と同じ所で終わります。一度だけ書いた1つの結末に2通りで着き、何も繰り返されません。ここでのジャンプはすべて前向きだからです。
+# en: Last tutorial you gave one option Exit and let the other fall through to your closing line. Both are still one line long. Real dialogue is lopsided — one answer earns a reaction, the other does not — and the branch that reacts still has to end up somewhere, or you write the ending twice.\n\nA TAG is a name you give a node so another node can send play to it. Two fields do it. Tag, on the node being aimed AT - tick it to give the node one: a short word, yours to choose, and it is a label rather than anything the player sees. Then, on the node doing the aiming: set it to Jump, and a Jump to box appears listing the tags in this dialogue.\n\nBuild it in that order — the tag first, so it is there to be picked. Tag your closing line, the one you added last tutorial, with something like ending. Then take the option you did NOT set to Exit, add a Child under it, and write the reaction that answer deserves. On that child set Then to Jump, and choose ending in the Jump to box.\n\nPlay now runs the option, the reaction, and then lands on the closing line. The other option still ends where it ended. One ending, written once, reached two ways — and nothing repeats, because every jump here goes forward.
+tutorial.linesThatChoose.lettingOneOptionSay.body = 前のチュートリアルでは、一方の選択肢を「終了」にし、もう一方は締めくくりのセリフへそのまま流しました。どちらもまだセリフ1つ分です。本当の会話はかたよっています。ある答えには反応があり、別の答えにはありません。そして反応する枝もどこかに行き着かなければならず、さもないと結末を2回書くことになります。\n\n「タグ」は、別のノードが再生をそこへ送れるようにノードに付ける名前です。2つの欄で行います。狙われる側のノードの「タグ」。チェックを入れるとノードにタグが付きます。自分で選ぶ短い語で、プレイヤーには見えないラベルです。次に、狙う側のノードで「ジャンプ」を選ぶと「ジャンプ先」欄が現れ、この会話のタグが並びます。\n\nこの順に作ってください。先にタグを付ければ、選ぶ候補にあります。前のチュートリアルで足した締めくくりのセリフに、ending のようなタグを付けます。次に「終了」にしなかった方の選択肢に「子」を追加し、その答えにふさわしい反応を書きます。その子の「次に」を「ジャンプ」にし、「ジャンプ先」で ending を選びます。\n\nこれで再生は、選択肢、反応と進み、締めくくりのセリフに着きます。もう一方の選択肢は前と同じ所で終わります。一度だけ書いた1つの結末に2通りで着き、何も繰り返されません。ここでのジャンプはすべて前向きだからです。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Tag the closing line, then + Child on the non-Exit option and set its Jump to that tag.
-tutorial.linesThatChoose.lettingOneOptionSay.hint = 締めくくりのセリフにタグを付け、「終了」でない方の選択肢で「+ 子」、その「ジャンプ」をそのタグにします。
+# en: Tag the closing line, then + Child on the non-Exit option, set its Then to Jump and pick that tag.
+tutorial.linesThatChoose.lettingOneOptionSay.hint = 締めくくりのセリフにタグを付け、「終了」でない方の選択肢で「+ 子」、その「次に」を「ジャンプ」にしてそのタグを選びます。
 
 # Tutorials: the heading of a step
 # en: Jumping backwards on purpose
@@ -13258,8 +14448,8 @@ validation.pack.looksLike = このパックの大部分は {language} のよう�
 validation.pack.notOwnLanguage = このパックの大部分は {own} を書く文字で書かれていませんが、パックは {own} で書かれているとしています。ModForge タブの「書かれている言語」を、実際に書かれている言語にしてください。翻訳はその言語から作られ、翻訳のないプレイヤーにはその言語が表示されます。
 
 # Validation message
-# en: This node is one of a Choice's options and has {count} actions on start. When an option counts as STARTED is not something the pack can rely on — it may be when the menu is drawn rather than when the player picks it, in which case these run for options nobody chose. Move them to Actions on finish, which happens once the option has been taken.
-validation.dialogue.choiceOptionOnStart.other = このノードは選択肢の項目の1つで、開始時のアクションが {count} 個あります。項目がいつ「開始」したとみなされるかは、パックが当てにできることではありません。プレイヤーが選んだときではなく、メニューが描かれたときかもしれず、その場合これらは誰も選んでいない項目でも実行されます。項目が選ばれた後に実行される「終了時のアクション」に移してください。
+# en: This node is one of a Choice's options and has {count} actions on start, which the editor no longer shows on an option, so you cannot see or change them here. They still run: the moment the player picks this option, just before its actions on finish. Move them to Actions on finish to see them here.
+validation.dialogue.choiceOptionOnStart.other = このノードは選択肢の項目の1つで、開始時のアクションが {count} 個あります。エディターは項目の開始時のアクションをもう表示しないので、ここでは見ることも変えることもできません。それでも動きます：プレイヤーがこの項目を選んだ瞬間、終了時のアクションの直前に。ここで見られるように「終了時のアクション」へ移してください。
 
 # Validation message
 # en: This node is a Choice with no children, so it is a menu offering nothing to pick. If it is meant to be a line, set Kind to Text. Older packs collect these on their own: adding a node with + Child or + Sibling used to copy the kind of the node it came from, so every option under a Choice was saved as a Choice as well.
@@ -13273,13 +14463,21 @@ validation.text.unknownPackVar = テキストで [PV:{name}] を使っていま�
 # en: Text has a [PV: that never closes with a ]. The token only counts when it ends in a square bracket, so this one is shown to the player exactly as it was typed.
 validation.text.malformedToken = テキストに ] で閉じられていない [PV: があります。トークンは角かっこで終わるときだけ有効なので、これは入力されたとおりにプレイヤーに表示されます。
 
-# Validation message; {name} is what the action names
-# en: '{name}' is not an effect in this pack. A runtime name follows its display name, so renaming one leaves references behind.
-validation.action.unknownSfx = 「{name}」はこのパックの効果音ではありません。実行時の名前は表示名に合わせて変わるので、名前を変えると参照が取り残されます。
+# Validation message; {language} is a language's name, {codes} the tags or tokens, e.g. {PC}  </b>
+# en: The {language} translation has lost {codes}, which the default text has - players of {language} see the line without it.
+validation.translation.lostCodes = {language} の翻訳から {codes} が消えています。既定のテキストにはあるもので、{language} のプレイヤーにはそれがないセリフが表示されます。
+
+# Validation message; {language} is a language's name, {codes} the tags or tokens
+# en: The {language} translation has {codes}, which the default text does not.
+validation.translation.addedCodes = {language} の翻訳には {codes} がありますが、既定のテキストにはありません。
 
 # Validation message; {name} is what the action names
-# en: '{name}' is not a scene in this pack. A runtime name follows its display name, so renaming one leaves references behind.
-validation.action.unknownScene = 「{name}」はこのパックのシーンではありません。実行時の名前は表示名に合わせて変わるので、名前を変えると参照が取り残されます。
+# en: '{name}' is not one of this pack's sound effects. Pick the sound again from the list.
+validation.action.unknownSfx = 「{name}」はこのパックの効果音のどれでもありません。一覧から音を選び直してください。
+
+# Validation message; {name} is what the action names
+# en: '{name}' is not one of this pack's scenes. Pick the scene again from the list.
+validation.action.unknownScene = 「{name}」はこのパックのシーンのどれでもありません。一覧からシーンを選び直してください。
 
 # Validation message; {art} is a file, {target} the category the action targets
 # en: '{art}' is animated, and animation is only supported for the Scenes category — this action targets '{target}'. Point it at a scene, or use a still image here.
@@ -13518,6 +14716,10 @@ validation.node.choicePromptEmpty = 選択肢ノードのテキストは項目�
 validation.node.emptyTextNode = テキストノードにセリフもアクションもないので、することがありません
 
 # Validation message
+# en: Nobody speaks this line, but it sets an expression or an outfit - was its actor forgotten?
+validation.node.lookWithoutActor = このセリフは誰も話していませんが、表情か衣装を設定しています。アクターを入れ忘れていませんか？
+
+# Validation message
 # en: Actor '{actor}' isn't defined in this pack, and isn't in the conversation this extends
 validation.node.unknownActor = アクター「{actor}」はこのパックにも、これが拡張する会話にも定義されていません
 
@@ -13532,6 +14734,14 @@ validation.node.jumpTagEmpty = ジャンプのモードが「ジャンプ」で�
 # Validation message
 # en: Jump target tag '{tag}' isn't a tag on any node in this dialogue
 validation.node.jumpTagUnknown = ジャンプ先のタグ「{tag}」は、この会話のどのノードにもありません
+
+# Validation message: a jump lands on a line that is under another line, and the game says that line again. {tag} is the jump's tag, {target} the first words of the line it lands on, {above} of the line that one is under.
+# en: Jump to '{tag}' lands on "{target}", which is under "{above}". After a jump the game goes back over the lines above where it landed: once "{target}" and its lines are done, "{above}" is said again, then its lines - "{target}" among them. To jump there and carry on from it, make "{target}" a top-level line.
+validation.node.jumpReplays = 「{tag}」へのジャンプは「{target}」に着地しますが、これは「{above}」の下にあります。ジャンプの後、ゲームは着地点より上のセリフをもう一度たどります。「{target}」とその下のセリフが終わると「{above}」がもう一度言われ、その下のセリフ（「{target}」も含む）が続きます。そこへジャンプしてそこから続けるには、「{target}」を最上位のセリフにしてください。
+
+# Validation message: the same, when it brings the jumping line round again, so the conversation never ends. Same placeholders.
+# en: Jump to '{tag}' lands on "{target}", which is under "{above}" - and this conversation never ends. After a jump the game goes back over the lines above where it landed, which brings this line round again, so it jumps again, for ever. To jump there and carry on from it, make "{target}" a top-level line.
+validation.node.jumpLoops = 「{tag}」へのジャンプは「{target}」に着地しますが、これは「{above}」の下にあり、この会話は終わりません。ジャンプの後、ゲームは着地点より上のセリフをもう一度たどるので、このセリフがまた回ってきて、またジャンプし、いつまでも繰り返します。そこへジャンプしてそこから続けるには、「{target}」を最上位のセリフにしてください。
 
 # Validation message
 # en: Level '{level}' doesn't exist — this condition can never pass
@@ -14042,6 +15252,10 @@ common.group.gamesOwn = ゲーム本来のもの
 # Heading in a dropdown, over the pack's entries the author has not put in any folder
 # en: Not in a folder
 common.group.notInFolder = フォルダーなし
+
+# Tooltip on the star beside an option a dropdown moved to the top (smart suggestions)
+# en: Suggested: what you are editing mentions it, or something like it
+suggestions.mark.tip = おすすめ：編集中のものがこれ、またはこれに似たものに触れています
 
 # Heading in a dropdown, over the entries that belong under none of the other headings
 # en: Other
@@ -14589,9 +15803,58 @@ common.newFolder = 新しいフォルダー
 # en: New name:
 rename.newName = 新しい名前：
 
+# Beside the box in the Rename window, when it renames by the display name
+# en: Display name:
+rename.displayName = 表示名：
+
+# Button over a tab's list
+# en: Rename
+navigator.rename = 名前を変更
+
+# Tooltip on "Rename" over a tab's list
+# en: Rename the selected item, the same as typing in its Display name box. A selected folder is renamed where it stands.
+navigator.rename.tip = 選んだ項目の名前を変えます。その「表示名」欄に入力するのと同じです。選んだフォルダーは、その場で名前が変わります。
+
+# Button over a tab's list
+# en: Duplicate
+navigator.duplicate = 複製
+
+# Tooltip on "Duplicate" over a tab's list
+# en: Put a copy of the selected item beside it. Rename the copy and its runtime name follows.
+navigator.duplicate.tip = 選んだ項目のコピーをその隣に置きます。コピーの名前を変えると、実行時の名前もそれに合わせます。
+
+# The key under "+ Add" over a list (the Insert key, as written on keyboards)
+# en: Ins
+# same in this language
+navigator.addKeys = Ins
+
+# First line of the tip on the keyboard sign over a list
+# en: More keys, while the list has the keyboard:
+navigator.moreKeys = 一覧がキーボードを受け取っているときのほかのキー：
+
+# Line of the tip on the keyboard sign over a list
+# en: Ctrl+C / Ctrl+V: copy and paste
+navigator.moreKeys.copyPaste = Ctrl+C / Ctrl+V：コピーと貼り付け
+
+# Line of the tip on the keyboard sign over a list
+# en: F12: rename, the same as F2
+navigator.moreKeys.f12 = F12：名前を変更（F2 と同じ）
+
+# Line of the tip on the keyboard sign over a list
+# en: Ctrl+Z / Ctrl+Y: undo and redo
+navigator.moreKeys.undo = Ctrl+Z / Ctrl+Y：元に戻す、やり直し
+
+# Tooltip on the pencil button beside a runtime name
+# en: Set a runtime name of your own. Everything in the pack that uses it follows, and from then on it no longer follows the display name.
+rename.editRuntimeName.tip = 自分で実行時の名前を決めます。パックの中でそれを使うものはすべて追従し、以後は表示名に追従しなくなります。
+
 # Title of the Rename window
 # en: Rename Outfit
 rename.outfit = 衣装の名前を変更
+
+# Title of the Rename window
+# en: Rename Character
+rename.character = キャラクターの名前を変更
 
 # Title of the Rename window
 # en: Rename Place
@@ -14764,10 +16027,6 @@ edit.paste = 貼り付け
 # en: Select all
 edit.selectAll = すべて選択
 
-# Tooltip on the UI tab's object tree
-# en: Ins: add object • Del: remove • Ctrl+C/V: copy/paste • Ctrl+D: duplicate
-ui.treeKeys.tip = Ins：オブジェクトを追加 • Del：削除 • Ctrl+C/V：コピー/貼り付け • Ctrl+D：複製
-
 # en: You have unsaved changes. Save before closing?
 unsaved.beforeClosing = 未保存の変更があります。閉じる前に保存しますか？
 
@@ -14830,10 +16089,6 @@ quests.reset.discarded = 次の内容が破棄されます：{changes}。クエ�
 # Title of a message box
 # en: Reset quest
 quests.reset.title = クエストのリセット
-
-# Tooltip on the lists in the sidebars
-# en: Del: delete • F2/F12: rename • Ctrl+C/V: copy/paste • Ctrl+D: duplicate
-sidebar.keys.tip = Del：削除 • F2/F12：名前を変更 • Ctrl+C/V：コピー/貼り付け • Ctrl+D：複製
 
 # Fills 'That is {risk}.' when saving a pack
 # en: the root of a drive
@@ -15876,9 +17131,231 @@ preview.place.selectedReflection = {npc} の映り込み — すべての配置�
 # en: NPC: {npc}
 preview.place.selectedNpc = NPC：{npc}
 
-# Tooltip on the grip of the hierarchy in the place preview
-# en: Drag to resize the hierarchy
-preview.place.resizeHierarchy.tip = ドラッグして階層の大きさを変えます
+# In the panel to the right of the place preview, while nothing in the place is selected
+# en: Click an object in the picture or in the hierarchy to move, turn or scale it here.
+preview.place.selectHint = 絵か階層でオブジェクトをクリックすると、ここで移動・回転・拡大縮小できます。
+
+# Tooltip on the mark in a preview's bottom-right corner
+# en: Drag to make the preview bigger or smaller. Double-click for its own size.
+preview.resize.tip = ドラッグでプレビューを大きくしたり小さくしたりします。ダブルクリックで元の大きさに戻ります。
+
+# After a panel's help folded to its first line: a link that shows the rest
+# en: more
+help.more = 続き
+
+# After a panel's help shown whole: a link that folds it back to one line
+# en: less
+help.less = 閉じる
+
+# Tooltip on the "?" at the end of a panel's title band (EX themes)
+# en: Show or hide this panel's help. Remembered for the panel.
+help.toggle.tip = このパネルのヘルプを表示／非表示にします。パネルごとに記憶されます。
+
+# EX themes: beside the pack's name at the top of the window, while there are changes not saved
+# en: unsaved
+header.unsaved = 未保存
+
+# Tooltip on that
+# en: There are changes not saved yet.
+header.unsaved.tip = まだ保存していない変更があります。
+
+# EX themes: a button beside the pack's name at the top of the window
+# en: Save
+header.save = 保存
+
+# Tooltip on it
+# en: Save the pack (Ctrl+S).
+header.save.tip = パックを保存します（Ctrl+S）。
+
+# EX themes: a button beside the pack's name at the top of the window
+# en: Validate
+header.validate = 検証
+
+# Tooltip on it
+# en: Check the pack again and bring its issues up to date (F5).
+header.validate.tip = パックをもう一度検証し、問題の一覧を最新にします（F5）。
+
+# EX themes: a button beside the pack's name at the top of the window
+# en: Export
+header.export = エクスポート
+
+# Tooltip on it
+# en: Save, then bundle the pack into the file the game loads (Ctrl+E).
+header.export.tip = 保存してから、ゲームが読み込むファイルにパックをまとめます（Ctrl+E）。
+
+[Setup: the installer and uninstaller]
+
+# The installer's window title
+# en: ModForge setup
+setup.title = ModForge のセットアップ
+
+# Installer, first step: heading over the choice of what to install
+# en: What would you like to install?
+setup.kind.heading = 何をインストールしますか？
+
+# The choice that installs the editor and the plugin
+# en: Everything - to make mods
+setup.kind.everything = すべて – MODを作る
+
+# Under that choice: what it is for
+# en: The ModForge editor, where you make your own packs and try them out, and the plugin that plays packs in the game.
+setup.kind.everything.help = 自分のパックを作って試せる ModForge エディターと、ゲームでパックを再生するプラグイン。
+
+# The choice that installs only the plugin, into the game
+# en: Only the plugin - to play mods
+setup.kind.plugin = プラグインだけ – MODを遊ぶ
+
+# Under that choice: what it is for
+# en: Only what the game needs to play packs that other people made: ModForge's plugin, in the game's folder. Nothing else is installed. To make packs later, run this again and choose Everything.
+setup.kind.plugin.help = ほかの人が作ったパックを遊ぶのに、ゲームが必要とするものだけです：ゲームのフォルダーに入れる ModForge のプラグイン。ほかには何もインストールしません。あとでパックを作るときは、これをもう一度実行して「すべて」を選んでください。
+
+# Installer, first step: heading
+# en: Where is Starmaker Story?
+setup.game.heading = Starmaker Story はどこですか？
+
+# Installer, first step: the line under the heading
+# en: ModForge puts its plugin in the game's folder, so the game can load mod packs. Pick the folder Starmaker Story is installed in.
+setup.game.help = ModForge はゲームがMODパックを読み込めるよう、ゲームのフォルダーにプラグインを入れます。Starmaker Story がインストールされているフォルダーを選んでください。
+
+# Title of the folder picker for the game's folder
+# en: Pick the Starmaker Story folder
+setup.game.pick = Starmaker Story のフォルダーを選ぶ
+
+# Under the game folder box, when it is the game
+# en: This is Starmaker Story.
+setup.game.ok = Starmaker Story です。
+
+# Under the game folder box, when no such folder exists
+# en: There is no folder there.
+setup.game.missing = そのフォルダーはありません。
+
+# Under the game folder box, when the folder is not the game. {exe} is the game's program file name
+# en: No Starmaker Story here: the folder has no {exe}.
+setup.game.notGame = ここに Starmaker Story はありません：フォルダーに {exe} がありません。
+
+# Under the game folder box, while it is empty
+# en: Pick the folder Starmaker Story is installed in.
+setup.game.empty = Starmaker Story がインストールされているフォルダーを選んでください。
+
+# Installer, second step: heading
+# en: Where should ModForge go?
+setup.folder.heading = ModForge をどこに入れますか？
+
+# Installer, second step: the line under the heading
+# en: The editor's own folder. A folder of its own outside the game is best; the one chosen already is where Windows puts a program installed for you alone.
+setup.folder.help = エディター専用のフォルダーです。ゲームの外にある専用のフォルダーがいちばんです。最初から選ばれているのは、Windows があなただけのためにインストールしたプログラムを置く場所です。
+
+# Installer, second step, when the folder chosen is inside the game's folder (every word on the page then turns yellow)
+# en: Not recommended: this is inside the game's folder. Updating or reinstalling the game can take ModForge with it, and the game's folder fills with files the game never uses.
+setup.folder.insideGame = おすすめしません：ゲームのフォルダーの中です。ゲームを更新したり入れ直したりすると ModForge も消えることがあり、ゲームのフォルダーがゲームの使わないファイルでいっぱいになります。
+
+# Title of the folder picker for where ModForge goes
+# en: Pick where ModForge goes
+setup.folder.pick = ModForge を入れる場所を選ぶ
+
+# A tick box on the installer's second step
+# en: Add ModForge to the Start menu
+setup.shortcut.start = スタートメニューに ModForge を追加する
+
+# A tick box on the installer's second step
+# en: Put a shortcut to ModForge on the desktop
+setup.shortcut.desktop = デスクトップに ModForge のショートカットを置く
+
+# A button beside a folder box
+# en: Browse…
+setup.browse = 参照…
+
+# A button: the step before
+# en: Back
+setup.back = 戻る
+
+# A button: the next step
+# en: Next
+setup.next = 次へ
+
+# A button: install
+# en: Install
+setup.install = インストール
+
+# A button: stop and close the installer
+# en: Cancel
+setup.cancel = キャンセル
+
+# Heading while it installs
+# en: Installing…
+setup.installing = インストールしています…
+
+# Heading when it has installed
+# en: ModForge is installed.
+setup.done.heading = ModForge をインストールしました。
+
+# Under that heading. {folder} is where the editor went
+# en: The plugin is in the game, and the editor in {folder}. Put mod packs in the game's Mods folder, and they are listed on the game's main menu.
+setup.done.help = プラグインはゲームに、エディターは {folder} に入りました。MODパックはゲームの Mods フォルダーに置くと、ゲームのメインメニューに並びます。
+
+# When the game already had BepInEx before ModForge was installed
+# en: The game had BepInEx already, and it is left as it was.
+setup.bepinexKept = ゲームにはすでに BepInEx があったので、そのままにしてあります。
+
+# A button: start the editor
+# en: Open ModForge
+setup.done.open = ModForge を開く
+
+# Heading when only the plugin was installed
+# en: ModForge's plugin is installed.
+setup.done.pluginHeading = ModForge のプラグインをインストールしました。
+
+# Under that heading
+# en: It is in the game now. Put mod packs (.smspack files) in the game's Mods folder, and they are listed on the game's main menu.
+setup.done.pluginHelp = プラグインはゲームに入りました。MODパック（.smspack ファイル）をゲームの Mods フォルダーに置くと、ゲームのメインメニューに並びます。
+
+# A button: close the window
+# en: Close
+setup.close = 閉じる
+
+# Heading when installing or uninstalling failed
+# en: Something went wrong
+setup.failedHeading = 問題が起きました
+
+# Under that heading. {problem} is what Windows said
+# en: Nothing more was done. What happened: {problem}
+setup.failed = これ以上は何もしていません。起きたこと：{problem}
+
+# When the editor is running from the folder chosen
+# en: ModForge is open from that folder. Close it, then press Install again.
+setup.closeEditor = ModForge がそのフォルダーから開かれています。閉じてから、もう一度「インストール」を押してください。
+
+# When the game is running
+# en: Starmaker Story is running. Close it, then press Install again.
+setup.closeGame = Starmaker Story が起動しています。閉じてから、もう一度「インストール」を押してください。
+
+# The uninstaller's window title
+# en: Uninstall ModForge
+setup.uninstall.title = ModForge のアンインストール
+
+# The uninstaller's heading
+# en: Take ModForge off this computer?
+setup.uninstall.heading = このコンピューターから ModForge を削除しますか？
+
+# Under that heading. {folder} is where the editor is
+# en: The editor goes from {folder}, with its shortcuts. Your packs and the editor's settings stay.
+setup.uninstall.help = エディターをショートカットと一緒に {folder} から削除します。パックとエディターの設定は残ります。
+
+# A tick box in the uninstaller
+# en: Also take ModForge's plugin out of the game (the Mods folder stays)
+setup.uninstall.plugin = ゲームから ModForge のプラグインも取り除く（Mods フォルダーは残ります）
+
+# Uninstalling when only the plugin was installed: what goes
+# en: ModForge's plugin comes out of the game. Your mod packs, in the game's Mods folder, stay.
+setup.uninstall.pluginOnly = ModForge のプラグインをゲームから取り除きます。ゲームの Mods フォルダーにある MODパックは残ります。
+
+# A button: uninstall
+# en: Uninstall
+setup.uninstall.go = アンインストール
+
+# Heading when it has uninstalled
+# en: ModForge has been uninstalled.
+setup.uninstall.done = ModForge をアンインストールしました。
 
 # Heading of the object list in the place preview
 # en: Hierarchy
@@ -16371,6 +17848,14 @@ migration.oldGameObjectsCategory = GameObjects カテゴリーの旧名「Extra 
 # One line of the list of what was brought up to date. "SetSpriteFocus" and "CharacterFocus" are names of an action, kept in English
 # en: SetSpriteFocus actions given the action's new name, CharacterFocus
 migration.characterFocus = SetSpriteFocus アクションをアクションの新しい名前 CharacterFocus にしました
+
+# In the list of what opening a pack changed: lines whose sound's pattern is written bigger or smaller, now playing that much louder or softer
+# en: lines whose sounds now play louder or softer to match the size their pattern is written in (the text keeps its size)
+migration.cueVolumes = パターンが書かれている文字の大きさに合わせて、音が大きく、または小さく鳴るようになったセリフ（テキストの大きさはそのままです）
+
+# In the list of what opening a pack changed: lines with more than one sound, their timing written down so they play as before
+# en: lines with more than one sound given their timing, so each keeps playing when it did
+migration.cueTiming = 音が二つ以上あるセリフに、それぞれがこれまでどおりのタイミングで鳴るよう、タイミングを書き込みました
 
 # One line of the list of what was brought up to date
 # en: Given a version to start from ({version})
@@ -17801,6 +19286,36 @@ translatePack.damaged = 翻訳で差し込み、タグ、トークンのいず�
 translatePack.nothingDone = 何も翻訳されませんでした。
 
 [Not used by this version]
+
+# en: Frame (Core SpriteRenderer)
+scenes.frameCoreSpriterenderer = フレーム（Core の SpriteRenderer）
+
+# en: Sound (replaces prototype's Trigger)
+scenes.soundReplacesPrototypeS = サウンド（プロトタイプの Trigger を置き換え）
+
+# en: Mode:
+scenes.mode = モード：
+
+# en: Starmaker
+scenes.starmaker = Starmaker
+
+# en: Light themes
+docs.themes.lightSlateForestPlum.term = 明るいテーマ
+
+# en: Light, Slate, Forest, Plum, Ocean, Sandstone and Rose.
+docs.themes.lightSlateForestPlum = ライト、スレート、フォレスト、プラム、オーシャン、サンドストーン、ローズ。
+
+# en: Dark themes
+docs.themes.darkMidnightCarbon.term = 暗いテーマ
+
+# en: Dark, Midnight and Carbon.
+docs.themes.darkMidnightCarbon = ダーク、ミッドナイト、カーボン。
+
+# en: Drag to resize the hierarchy
+preview.place.resizeHierarchy.tip = ドラッグして階層の大きさを変えます
+
+# en: Or from a variable:
+dialogues.outfitVariable = または変数から：
 
 # en: Rename
 npcs.unitRenameFolder = 名前を変更

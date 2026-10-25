@@ -45,8 +45,10 @@ internal static class Xaml
 
     public static string Text => File.ReadAllText(MainWindowPath);
 
-    private static readonly Regex AnchorRe =
-        new(@"TutorialAnchor\.Id\s*=\s*""([^""]+)""", RegexOptions.Compiled);
+    /// <summary>An anchor as the window declares it: on a control, or the Add
+    /// button a list's bar builds (NavigatorBar.AddAnchor).</summary>
+    public static readonly Regex AnchorRe =
+        new(@"(?:TutorialAnchor\.Id|AddAnchor)\s*=\s*""([^""]+)""", RegexOptions.Compiled);
 
     private static readonly Regex TabRe =
         new(@"<TabItem[^>]*?Header\s*=\s*""([^""]+)""", RegexOptions.Compiled | RegexOptions.Singleline);

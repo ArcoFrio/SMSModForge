@@ -25,7 +25,7 @@ public sealed class VanillaQuestExtensionTests
     private readonly ITestOutputHelper _out;
     public VanillaQuestExtensionTests(ITestOutputHelper o) => _out = o;
 
-    private const int TabQuests = 13;
+    private const int TabQuests = MainTab.Quests;
 
     /// <summary>One of the game's quests with tasks to hang things on. Taken
     /// from the catalogue rather than written out, so regenerating it from a

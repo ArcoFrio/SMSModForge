@@ -459,6 +459,9 @@ public sealed class UiPreview : Grid
 
     private void Say(string what)
     {
+        _message.Foreground = PreviewMessage.Ink;
+        _message.Background = PreviewMessage.Chip;
+        _message.Padding = new Thickness(6, 3, 6, 4);
         _message.Text = what;
         _message.Visibility = Visibility.Visible;
         _image.Visibility = Visibility.Collapsed;

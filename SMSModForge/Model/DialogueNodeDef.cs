@@ -138,6 +138,16 @@ public sealed class DialogueNodeDef
     /// </summary>
     [JsonProperty("overrides", Order = 15)]
     public List<string> Overrides { get; set; } = new();
+
+    /// <summary>
+    /// How the sounds whose patterns are in <see cref="Text"/> play, where
+    /// not by default: volume, start, hidden words, waiting for the typewriter
+    /// (1.8.0, <see cref="SoundCueDef"/>). Absent from the file when every
+    /// sound plays as set, which is most lines.
+    /// </summary>
+    [JsonProperty("cues", Order = 20)]
+    public List<SoundCueDef> Cues { get; set; } = new();
+    public bool ShouldSerializeCues() => Cues != null && Cues.Count > 0;
     public bool ShouldSerializeOverrides() => Overrides != null && Overrides.Count > 0;
 
     /// <summary>Whether this node changes the named field of the vanilla line

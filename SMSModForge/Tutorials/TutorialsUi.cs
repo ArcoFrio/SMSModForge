@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SMSModForge.Model;
+using SMSModForge.ViewModel;
 
 namespace SMSModForge.Tutorials;
 
@@ -20,7 +21,7 @@ namespace SMSModForge.Tutorials;
 /// </summary>
 internal static class TutorialsUi
 {
-    private const int TabUi = 12;
+    private const int TabUi = MainTab.Ui;
 
     /// <summary>Every object in a screen, however deep. The tree nests, so a
     /// count of the top level would miss the thing an author just added

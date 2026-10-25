@@ -102,7 +102,16 @@ public sealed class DialogueFolderNode : DialogueTreeItem, IRenamableFolder
 public sealed class DialogueLeafNode : DialogueTreeItem
 {
     public DialogueViewModel Dialogue { get; }
-    public DialogueLeafNode(DialogueViewModel dialogue) { Dialogue = dialogue; }
+
+    /// <param name="keyChanged">Told when the dialogue's key changes: folders
+    /// hold dialogues by key, so they are written again (see
+    /// <see cref="UnitTreeController"/>'s leaves, which do the same).</param>
+    public DialogueLeafNode(DialogueViewModel dialogue, System.Action? keyChanged = null)
+    {
+        Dialogue = dialogue;
+        if (keyChanged != null)
+            dialogue.PropertyChanged += (_, e) => { if (e.PropertyName == nameof(DialogueViewModel.Key)) keyChanged(); };
+    }
 
     public override string FilterKey => Dialogue?.Display ?? "";
     public override System.Collections.Generic.IEnumerable<IFilterableTreeNode> FilterChildren

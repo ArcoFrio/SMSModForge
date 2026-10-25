@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -369,13 +369,12 @@ namespace SMSModForge.PackPlugin
 
         // ── The window ───────────────────────────────────────────────────
 
-        /// <summary>The warning's own sentences: three quarters of the size
-        /// they were, so the window has room for the list.</summary>
-        private const float BodySize = 30f * 0.75f;
+        /// <summary>A window's sentences.</summary>
+        private const float BodySize = 26f;
 
-        /// <summary>The list of what changed - half the size the warning used
-        /// to be. It is the part that grows with every pack and every quest.</summary>
-        private const float DetailSize = 30f * 0.5f;
+        /// <summary>The list in its box - smaller than the sentences: it is the
+        /// part that grows with every pack and every quest.</summary>
+        private const float DetailSize = 20f;
 
         /// <summary>The tallest the list's box grows (in the window's 1080-high
         /// reference) before it scrolls instead.</summary>
@@ -413,16 +412,25 @@ namespace SMSModForge.PackPlugin
             }, GameFont());
 
         /// <summary>
-        /// A warning window over everything: its title, what it says, a list
-        /// in a box of its own, and buttons. This one's look, shared by every
-        /// warning ModForge puts in front of a player, so they read as the
-        /// same kind of thing. <see cref="Fold"/> takes it away.
+        /// A ModForge window over everything: its emblem and title, what it
+        /// says, a list in a box of its own, and buttons - every message
+        /// ModForge puts in front of a player is one, so they read as the same
+        /// kind of thing (the author, 1.8.0: drawn the way the game draws its
+        /// own windows - its navy, its rounded panels, its white buttons, its
+        /// blur behind - with ModForge's amber where it is ModForge speaking).
+        /// It springs in, and <see cref="Fold"/> takes it away.
         /// </summary>
+        /// <param name="width">The panel's width, in the game's 1920-wide
+        /// layout: a notice of a few lines is narrower than a warning with a
+        /// list.</param>
+        /// <param name="centred">Its sentences centred, for a short notice;
+        /// a warning's paragraphs read better from the left.</param>
         internal static GameObject Window(string name, SaveWarningText text, IList<WindowButton> buttonsLeftToRight,
-                                          TMP_FontAsset font)
+                                          TMP_FontAsset font, float width = 1100f, bool centred = false)
         {
             var root = new GameObject(name, typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster),
                                       typeof(CanvasGroup));
+            root.layer = 5;
             var canvas = root.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 32000;
@@ -432,72 +440,69 @@ namespace SMSModForge.PackPlugin
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = 1f;
 
-            // Everything behind it is dimmed, and takes no clicks.
-            var dim = Child(root.transform, "Dim");
-            Stretch(dim);
-            var dimImage = dim.gameObject.AddComponent<Image>();
-            dimImage.color = new Color(0f, 0f, 0f, 0.7f);
+            // Everything behind it blurred the way the game blurs behind its
+            // own windows, dimmed, and taking no clicks.
+            root.AddComponent<GameBlur>();
+            var dimImage = ForgeLook.Fill("Dim", root.transform).gameObject.AddComponent<Image>();
+            dimImage.color = ForgeLook.Dim;
             dimImage.raycastTarget = true;
 
-            var panel = Child(root.transform, "Panel");
+            var title = ForgeLook.Title(font);
+            var body = ForgeLook.Body(font);
+
+            var panel = ForgeLook.Rect("Panel", root.transform);
             panel.anchorMin = panel.anchorMax = new Vector2(0.5f, 0.5f);
             panel.pivot = new Vector2(0.5f, 0.5f);
-            panel.sizeDelta = new Vector2(1100, 0);
-            var panelImage = panel.gameObject.AddComponent<Image>();
-            panelImage.color = new Color(0.09f, 0.09f, 0.13f, 0.98f);
-            var outline = panel.gameObject.AddComponent<Outline>();
-            outline.effectColor = new Color(0.85f, 0.55f, 0.15f, 1f);
-            outline.effectDistance = new Vector2(3, -3);
+            panel.sizeDelta = new Vector2(width, 0);
+            ForgeLook.Surface(panel, 0.97f, raycast: true);
 
             var layout = panel.gameObject.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(48, 48, 40, 40);
-            layout.spacing = 22;
+            layout.padding = new RectOffset(56, 56, 40, 40);
+            layout.spacing = 20;
             layout.childAlignment = TextAnchor.UpperCenter;
             layout.childControlWidth = true;
             layout.childControlHeight = true;
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = false;
-            var fit = panel.gameObject.AddComponent<ContentSizeFitter>();
-            fit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            panel.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            AddLabel(panel, "Title", text.Title, 46, FontStyles.Bold, new Color(1f, 0.78f, 0.35f), font,
-                     TextAlignmentOptions.Center);
+            AddHeading(panel, text.Title, title, width - layout.padding.left - layout.padding.right);
+            var alignment = centred ? TextAlignmentOptions.Center : TextAlignmentOptions.Left;
             foreach (var paragraph in text.Paragraphs)
-                AddLabel(panel, "Paragraph", paragraph, BodySize, FontStyles.Normal, Color.white, font,
-                         TextAlignmentOptions.Left);
+                AddLabel(panel, "Paragraph", paragraph, BodySize, FontStyles.Normal, ForgeLook.Text, body, alignment);
             // What changed, in a box of its own that scrolls once it is taller
             // than the window can spare.
-            var details = text.Details.Count > 0 ? AddDetails(panel, text.Details, font) : null;
+            var details = text.Details.Count > 0 ? AddDetails(panel, text.Details, body) : null;
             foreach (var paragraph in text.After)
-                AddLabel(panel, "After", paragraph, BodySize, FontStyles.Normal, Color.white, font,
-                         TextAlignmentOptions.Left);
+                AddLabel(panel, "After", paragraph, BodySize, FontStyles.Normal, ForgeLook.TextMuted, body, alignment);
 
             var buttons = Child(panel, "Buttons");
             var row = buttons.gameObject.AddComponent<HorizontalLayoutGroup>();
-            row.spacing = 30;
+            row.padding = new RectOffset(0, 0, 8, 0);
+            row.spacing = 24;
             row.childAlignment = TextAnchor.MiddleCenter;
             row.childControlWidth = true;
             row.childControlHeight = true;
             row.childForceExpandWidth = false;
             row.childForceExpandHeight = false;
             var rowSize = buttons.gameObject.AddComponent<LayoutElement>();
-            rowSize.preferredHeight = 76;
-            rowSize.minHeight = 76;
+            rowSize.preferredHeight = rowSize.minHeight = 72;
 
             foreach (var button in buttonsLeftToRight)
-                AddButton(buttons, button.Label, button.Colour, font, button.OnClick);
+                AddButton(buttons, button.Label, button.Colour == GoOnColour, body, button.OnClick);
 
+            var appear = root.AddComponent<ForgeAppear>();
+            appear.Panel = panel;
+            appear.Group = root.GetComponent<CanvasGroup>();
             var closer = root.AddComponent<SaveWarningCloser>();
-            closer.Panel = panel;
-            closer.Dim = dimImage;
+            closer.Appear = appear;
 
             if (details != null) FitDetails(panel, details);
             return root;
         }
 
-        /// <summary>Take a <see cref="Window"/> away the way the game's own
-        /// panels go - folding flat - then destroy it and call
-        /// <paramref name="gone"/>.</summary>
+        /// <summary>Take a <see cref="Window"/> away - it fades out a little
+        /// smaller - then destroy it and call <paramref name="gone"/>.</summary>
         internal static void Fold(GameObject window, Action gone)
         {
             if (window == null) { gone?.Invoke(); return; }
@@ -512,6 +517,48 @@ namespace SMSModForge.PackPlugin
         }
 
         /// <summary>
+        /// The window's heading: ModForge's emblem and the title, centred, with
+        /// the game's thin line under it (its Game Saves heading has one).
+        /// </summary>
+        /// <param name="room">The panel's width inside its padding: the title
+        /// shrinks to fit beside the emblem rather than run past the panel (a
+        /// Japanese title did).</param>
+        private static void AddHeading(RectTransform panel, string titleText, TMP_FontAsset font, float room)
+        {
+            var heading = Child(panel, "Heading");
+            var line = heading.gameObject.AddComponent<HorizontalLayoutGroup>();
+            line.spacing = 16;
+            line.childAlignment = TextAnchor.MiddleCenter;
+            line.childControlWidth = true;
+            line.childControlHeight = true;
+            line.childForceExpandWidth = false;
+            line.childForceExpandHeight = false;
+
+            var emblem = Child(heading, "Emblem");
+            var emblemSize = emblem.gameObject.AddComponent<LayoutElement>();
+            emblemSize.preferredWidth = emblemSize.minWidth = emblemSize.preferredHeight = emblemSize.minHeight = 52;
+            ForgeEmblem.Draw(emblem);
+
+            var title = Child(heading, "Title");
+            var tmp = ForgeLook.Label(title, titleText, font, 46, ForgeLook.Text, TextAlignmentOptions.Midline, wrap: false);
+            tmp.fontStyle = FontStyles.Bold;
+            tmp.enableAutoSizing = true;
+            tmp.fontSizeMin = 24;
+            tmp.fontSizeMax = 46;
+            float titleRoom = Mathf.Max(100f, room - 52 - line.spacing);
+            var titleSize = title.gameObject.AddComponent<LayoutElement>();
+            titleSize.preferredWidth = Mathf.Min(titleRoom, tmp.GetPreferredValues(titleText).x + 4f);
+            titleSize.preferredHeight = 56;
+
+            var rule = Child(panel, "Rule");
+            var ruleSize = rule.gameObject.AddComponent<LayoutElement>();
+            ruleSize.preferredHeight = ruleSize.minHeight = 2;
+            var ruleImage = rule.gameObject.AddComponent<Image>();
+            ruleImage.color = new Color(1f, 1f, 1f, 0.16f);
+            ruleImage.raycastTarget = false;
+        }
+
+        /// <summary>
         /// The list of what changed: a box inside the window, with the list in
         /// it at <see cref="DetailSize"/>, a scrollbar down its right side, and
         /// the mouse wheel scrolling it.
@@ -521,17 +568,14 @@ namespace SMSModForge.PackPlugin
         {
             var box = Child(parent, "Details");
             // A background is what the wheel and a drag land on.
-            var background = box.gameObject.AddComponent<Image>();
-            background.color = new Color(0f, 0f, 0f, 0.35f);
-            var border = box.gameObject.AddComponent<Outline>();
-            border.effectColor = new Color(1f, 1f, 1f, 0.18f);
-            border.effectDistance = new Vector2(1, -1);
+            ForgeLook.Image(box, ForgeLook.Rounded, ForgeLook.WithAlpha(ForgeLook.Raised, 0.9f), 3f, raycast: true);
+            ForgeLook.Image(ForgeLook.Fill("Edge", box), ForgeLook.RoundedStroke, ForgeLook.Stroke, 3f);
             box.gameObject.AddComponent<LayoutElement>();
 
             var viewport = Child(box, "Viewport");
             viewport.anchorMin = Vector2.zero;
             viewport.anchorMax = Vector2.one;
-            viewport.offsetMin = new Vector2(DetailsInset + 2, DetailsInset);
+            viewport.offsetMin = new Vector2(DetailsInset + 6, DetailsInset);
             viewport.offsetMax = new Vector2(-(DetailsInset + ScrollbarWidth + 8), -DetailsInset);
             viewport.gameObject.AddComponent<RectMask2D>();
 
@@ -549,14 +593,16 @@ namespace SMSModForge.PackPlugin
             list.childForceExpandHeight = false;
             content.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            // One block per heading. The names are a pack's and the game's, so
-            // they are kept out of the text engine's tags.
+            // One block per heading, the heading in ModForge's amber. The names
+            // are a pack's and the game's, so they are kept out of the text
+            // engine's tags.
+            string amber = "#" + ColorUtility.ToHtmlStringRGB(ForgeLook.Accent);
             foreach (var section in sections)
                 AddLabel(content, "Section",
-                         "<b>" + section.Heading + "</b>"
+                         "<color=" + amber + "><b>" + section.Heading + "</b></color>"
                          + string.Concat(section.Items.Select(i => "\n" + SaveWarningText.Bullet
                                                                    + "<noparse>" + i + "</noparse>").ToArray()),
-                         DetailSize, FontStyles.Normal, Color.white, font, TextAlignmentOptions.Left);
+                         DetailSize, FontStyles.Normal, ForgeLook.Text, font, TextAlignmentOptions.Left);
 
             var bar = Child(box, "Scrollbar");
             bar.anchorMin = new Vector2(1f, 0f);
@@ -564,8 +610,7 @@ namespace SMSModForge.PackPlugin
             bar.pivot = new Vector2(1f, 0.5f);
             bar.sizeDelta = new Vector2(ScrollbarWidth, -2 * DetailsInset);
             bar.anchoredPosition = new Vector2(-DetailsInset + 4, 0f);
-            var track = bar.gameObject.AddComponent<Image>();
-            track.color = new Color(1f, 1f, 1f, 0.08f);
+            ForgeLook.Image(bar, ForgeLook.Pill, new Color(1f, 1f, 1f, 0.08f), 8f, raycast: true);
             var scrollbar = bar.gameObject.AddComponent<Scrollbar>();
             scrollbar.direction = Scrollbar.Direction.BottomToTop;
 
@@ -573,8 +618,8 @@ namespace SMSModForge.PackPlugin
             Stretch(slide);
             var handle = Child(slide, "Handle");
             Stretch(handle);
-            var grip = handle.gameObject.AddComponent<Image>();
-            grip.color = new Color(0.85f, 0.55f, 0.15f, 0.9f);   // the window's own orange
+            // The game's own scrollbars: a pale rounded handle.
+            var grip = ForgeLook.Image(handle, ForgeLook.Pill, new Color(1f, 1f, 1f, 0.75f), 8f, raycast: true);
             scrollbar.handleRect = handle;
             scrollbar.targetGraphic = grip;
 
@@ -644,32 +689,13 @@ namespace SMSModForge.PackPlugin
             tmp.raycastTarget = false;
         }
 
-        private static void AddButton(RectTransform parent, string label, Color color, TMP_FontAsset font, Action onClick)
+        private static void AddButton(RectTransform parent, string label, bool primary, TMP_FontAsset font, Action onClick)
         {
             var rect = Child(parent, label);
-            var image = rect.gameObject.AddComponent<Image>();
-            image.color = color;
-            var button = rect.gameObject.AddComponent<Button>();
-            button.targetGraphic = image;
-            var colors = button.colors;
-            colors.highlightedColor = new Color(1.15f, 1.15f, 1.15f, 1f);
-            colors.pressedColor = new Color(0.85f, 0.85f, 0.85f, 1f);
-            button.colors = colors;
-            button.onClick.AddListener(() => onClick());
             var size = rect.gameObject.AddComponent<LayoutElement>();
-            size.preferredWidth = 340;
-            size.preferredHeight = 76;
-
-            var text = Child(rect, "Label");
-            Stretch(text);
-            var tmp = text.gameObject.AddComponent<TextMeshProUGUI>();
-            if (font != null) tmp.font = font;
-            tmp.text = label;
-            tmp.fontSize = 32;
-            tmp.fontStyle = FontStyles.Bold;
-            tmp.color = Color.white;
-            tmp.alignment = TextAlignmentOptions.Center;
-            tmp.raycastTarget = false;
+            size.preferredWidth = 320;
+            size.preferredHeight = 64;
+            ForgeLook.Button(rect, label, font, primary, onClick);
         }
 
         /// <summary>The font the game's own interface is written in, so the
@@ -687,51 +713,24 @@ namespace SMSModForge.PackPlugin
     }
 
     /// <summary>
-    /// The warning window's way out: the panel folds flat and the dimming
-    /// fades, then the window goes. The fold is the game's own - its shop's
-    /// close button scales the panel to (1, 0, 1) over 0.3s on QuadInOut
-    /// before switching it off - so the window leaves the way the game's panels
-    /// do.
+    /// A ModForge window's way out (<see cref="ForgeAppear"/>): it fades out
+    /// a little smaller, takes no more clicks on the way, and still covers
+    /// what is behind it until it has gone.
     /// </summary>
     internal sealed class SaveWarningCloser : MonoBehaviour
     {
-        public RectTransform Panel;
-        public Image Dim;
-
-        private const float Duration = 0.3f;
-        private static readonly Vector3 Folded = new Vector3(1f, 0f, 1f);
+        public ForgeAppear Appear;
 
         public void Close(Action done)
         {
-            // Nothing more can be pressed on the way out, but what is behind
-            // stays covered until the window has gone.
             var group = GetComponent<CanvasGroup>();
             if (group != null)
             {
                 group.interactable = false;
                 group.blocksRaycasts = true;
             }
-            if (!isActiveAndEnabled) { done?.Invoke(); return; }
-            StartCoroutine(Fold(done));
-        }
-
-        private IEnumerator Fold(Action done)
-        {
-            Vector3 from = Panel != null ? Panel.localScale : Vector3.one;
-            float dimFrom = Dim != null ? Dim.color.a : 0f;
-            for (float t = 0f; t < Duration; t += Time.unscaledDeltaTime)
-            {
-                float k = UiOpenAnimation.Ease(t / Duration, "QuadInOut");
-                if (Panel != null) Panel.localScale = Vector3.LerpUnclamped(from, Vector3.Scale(from, Folded), k);
-                if (Dim != null)
-                {
-                    var c = Dim.color;
-                    c.a = Mathf.Lerp(dimFrom, 0f, k);
-                    Dim.color = c;
-                }
-                yield return null;
-            }
-            done?.Invoke();
+            if (Appear == null || !isActiveAndEnabled) { done?.Invoke(); return; }
+            Appear.Leave(done);
         }
     }
 }

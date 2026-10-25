@@ -61,11 +61,13 @@ public static class ComboBoxSearch
 
         box.Loaded -= OnLoaded;
         box.DropDownClosed -= OnDropDownClosed;
+        box.DropDownOpened -= OnDropDownOpened;
 
         if (!(bool)e.NewValue) return;
 
         box.Loaded += OnLoaded;
         box.DropDownClosed += OnDropDownClosed;
+        box.DropDownOpened += OnDropDownOpened;
         if (box.IsLoaded) OnLoaded(box, new RoutedEventArgs());
     }
 
@@ -140,11 +142,44 @@ public static class ComboBoxSearch
         }
     }
 
-    /// <summary>The list is whole again once it closes, so opening it next time
-    /// shows everything rather than the last thing somebody searched for.</summary>
+    /// <summary>
+    /// Opening a dropdown that already has words in it shows what those words
+    /// find (the author, 2026-10-21: boxes with text in them opened onto the
+    /// whole list). Only the words somebody typed since the box was last
+    /// closed used to count, so a half-typed name left behind, or one typed
+    /// before the box lost focus, searched for nothing the next time.
+    /// <para/>
+    /// Not when the words ARE the choice - a list opened over a chosen bust is
+    /// opened to pick another, and narrowing it to the one already chosen
+    /// would hide every other. And not when nothing matches: an empty list
+    /// says less than the whole one.
+    /// </summary>
+    private static void OnDropDownOpened(object? sender, EventArgs e)
+    {
+        if (sender is not ComboBox box) return;
+        DropDownSuggestions.Opened(box);   // an empty box: likely picks on top
+        if (!box.IsEditable) return;
+        if (GetTyped(box).Length > 0) return;   // a search already under way
+        string text = box.Text ?? "";
+        if (text.Trim().Length == 0) return;
+        if (box.SelectedItem != null &&
+            string.Equals(Converters.SearchMatchConverter.TextOf(box.SelectedItem, box), text,
+                          StringComparison.CurrentCultureIgnoreCase)) return;
+        foreach (var item in box.Items)
+        {
+            if (!Converters.SearchMatchConverter.Matches(item, box, text)) continue;
+            SetTyped(box, text);
+            return;
+        }
+    }
+
+    /// <summary>The search ends with the list. Opening it again starts from
+    /// whatever the box says then (<see cref="OnDropDownOpened"/>), which for a
+    /// box holding a choice is the whole list.</summary>
     private static void OnDropDownClosed(object? sender, EventArgs e)
     {
         if (sender is not ComboBox box) return;
+        DropDownSuggestions.Closed(box);
         SetTyped(box, "");
         ReturnToChoice(box);
     }
@@ -205,7 +240,7 @@ public static class ComboBoxSearch
 
     /// <summary>An option's value by a SelectedValuePath of one plain property
     /// name - the only shape this editor uses - or the option itself.</summary>
-    private static object? ValueOf(object? item, string? path)
+    internal static object? ValueOf(object? item, string? path)
     {
         if (item == null || string.IsNullOrEmpty(path)) return item;
         return item.GetType().GetProperty(path)?.GetValue(item);

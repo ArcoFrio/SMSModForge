@@ -70,9 +70,7 @@ public static class PreviewQualityManager
 
     public static PreviewQualityDef Current { get; private set; } = Default;
 
-    private static readonly string FilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "SMSModForge", "preview.json");
+    private static string FilePath => AppDataFolder.PathOf("preview.json");
 
     /// <summary>Select <paramref name="def"/> as the active preset + persist it.</summary>
     public static void Apply(PreviewQualityDef def)

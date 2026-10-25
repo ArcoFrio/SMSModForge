@@ -1,6 +1,12 @@
 using BepInEx.Logging;
+using GameCreator.Runtime.Common.UnityUI;
+using GameCreator.Runtime.Dialogue;
+using GameCreator.Runtime.Dialogue.UnityUI;
+using Newtonsoft.Json.Linq;
+using SMSModForge.Shared;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -79,6 +85,200 @@ namespace SMSModForge.PackPlugin
         }
 
         public IReadOnlyCollection<Entry> All => _byKey.Values;
+
+        /// <summary>
+        /// Whether the pack's lines say how their sounds play (1.8.0,
+        /// <see cref="SoundCues"/>): a pack written by ModForge 1.8.0 or later,
+        /// or one with any line that does. An older pack's sounds keep the
+        /// timing they always had (<see cref="FireMatchingPatterns"/>) - the
+        /// editor turns it into the new kind as the pack is opened, and a pack
+        /// that was never opened again must not start sounding different.
+        /// </summary>
+        public bool LinesSayHowSoundsPlay { get; set; }
+
+        /// <summary>Whether a pack's manifest says how its lines' sounds play.</summary>
+        public static bool SaysHowSoundsPlay(JObject manifest)
+        {
+            if (manifest == null) return false;
+            string stamp = (string)manifest["forgeVersion"] ?? "";
+            if (ForgeVersion.Parse(stamp) != null && ForgeVersion.Compare(stamp, "1.8.0") >= 0) return true;
+            var dialogues = manifest["dialogues"] as JArray;
+            if (dialogues == null) return false;
+            foreach (var d in dialogues)
+            {
+                var nodes = d["nodes"] as JArray;
+                if (nodes == null) continue;
+                foreach (var n in nodes)
+                    if (n["cues"] is JArray cues && cues.Count > 0) return true;
+            }
+            return false;
+        }
+
+        /// <summary>Every sound's patterns, with the sound each plays.</summary>
+        public List<KeyValuePair<string, string>> Patterns()
+        {
+            var list = new List<KeyValuePair<string, string>>();
+            foreach (var e in _byKey.Values)
+                foreach (var p in e.TextPatterns)
+                    list.Add(new KeyValuePair<string, string>(p, e.Key));
+            return list;
+        }
+
+        /// <summary>
+        /// The line as the player reads it: <paramref name="shown"/> without
+        /// the patterns its node hides, found in the pack's own words
+        /// (<paramref name="ownWords"/>). Unchanged for an older pack.
+        /// </summary>
+        public string Shown(string shown, string ownWords, JToken cues)
+        {
+            if (!LinesSayHowSoundsPlay || string.IsNullOrEmpty(shown) || cues == null) return shown;
+            var settings = SoundCues.Read(cues);
+            if (settings.Count == 0) return shown;
+            return SoundCues.Hide(shown, SoundCues.Find(ownWords ?? shown, Patterns()), settings);
+        }
+
+        /// <summary>
+        /// A line's sounds as it starts: each pattern in
+        /// <paramref name="text"/> (the pack's own words) plays its sound, at
+        /// the volume and the time its node gives it - the plan of
+        /// <see cref="SoundCues"/>, followed as the line plays: a sound that
+        /// follows another starts from when that one, as it was picked, ends;
+        /// one that waits for the typewriter starts from when the speech box
+        /// has shown it. An older pack plays them the old way.
+        /// <para/>
+        /// Called as the node starts, which is before its text: GC2 runs the
+        /// node's own On Start instructions first, and only then puts the
+        /// line in the speech box. Given the <paramref name="node"/>, the
+        /// sounds wait for that - the line starts when it can be read.
+        /// </summary>
+        public void PlayLine(string text, JToken cues, MonoBehaviour host, ManualLogSource log, Node node = null)
+        {
+            if (string.IsNullOrEmpty(text) || host == null) return;
+            if (!LinesSayHowSoundsPlay)
+            {
+                FireMatchingPatterns(text, host, log);
+                return;
+            }
+            var matches = SoundCues.Find(text, Patterns());
+            if (matches.Count == 0) return;
+            var settings = SoundCues.Read(cues);
+            if (node == null)
+            {
+                host.StartCoroutine(RunLine(text, matches, settings, log));
+                return;
+            }
+
+            // One wait per node: a line stopped before its text showed leaves
+            // its wait behind, and the next time the node runs replaces it
+            // rather than playing twice.
+            System.Action<int> old;
+            if (_waitingForText.TryGetValue(node, out old)) node.EventStartText -= old;
+            System.Action<int> once = null;
+            once = id =>
+            {
+                node.EventStartText -= once;
+                _waitingForText.Remove(node);
+                if (host != null) host.StartCoroutine(RunLine(text, matches, settings, log));
+            };
+            _waitingForText[node] = once;
+            node.EventStartText += once;
+        }
+
+        private readonly Dictionary<Node, System.Action<int>> _waitingForText = new Dictionary<Node, System.Action<int>>();
+
+        private IEnumerator RunLine(string text, List<SoundCues.Match> matches, List<SoundCues.Setting> settings,
+                                    ManualLogSource log)
+        {
+            float lineStart = Time.unscaledTime;
+            float previousEnd = lineStart;
+            int startFrame = Time.frameCount;
+            // The speech box's text for this line. Read a frame in: the box
+            // takes the line from the same moment this starts, and may be told
+            // after it.
+            string shownLine = null;
+            for (int i = 0; i < matches.Count; i++)
+            {
+                var match = matches[i];
+                var setting = SoundCues.For(match, settings);
+                float delay = setting != null && setting.Delay.HasValue ? setting.Delay.Value : 0f;
+                float target;
+                if (setting != null && setting.Typed)
+                {
+                    // The speech box shows the line a character at a time;
+                    // this one starts once its pattern's first letter is out.
+                    int at = SoundCues.VisibleIndex(text, match.Index);
+                    while (Time.frameCount == startFrame) yield return null;
+                    if (shownLine == null) shownLine = ShownText();
+                    while (true)
+                    {
+                        int total;
+                        int shown = ShownSoFar(out total);
+                        if (shown < 0) break;                        // no box to watch: play now
+                        if (ShownText() != shownLine) yield break;   // the line moved on first
+                        int own = RichText.VisibleLength(text);
+                        int there = own > 0 && total > 0 && total != own ? (int)((long)at * total / own) : at;
+                        if (shown > there) break;
+                        yield return null;
+                    }
+                    target = Time.unscaledTime + Mathf.Max(0f, delay);
+                }
+                else if (i == 0) target = lineStart + Mathf.Max(0f, delay);
+                else target = Mathf.Max(lineStart, previousEnd + delay);
+
+                while (Time.unscaledTime < target) yield return null;
+
+                var entry = Get(match.Sound);
+                var clip = PickRandomClip(entry);
+                float length = 0f;
+                if (clip != null)
+                {
+                    GameAudio.PlayUi(clip, entry.DefaultVolume * SoundCues.VolumeOf(setting));
+                    length = clip.length;
+                }
+#if DEBUG
+                log?.LogInfo("[SMSModForge.PackPlugin] Line sounds: " + match.Pattern + " #" + match.Order + " at "
+                             + (Time.unscaledTime - lineStart).ToString("0.000", System.Globalization.CultureInfo.InvariantCulture)
+                             + " s, volume " + ((entry != null ? entry.DefaultVolume : 0f) * SoundCues.VolumeOf(setting))
+                                 .ToString("0.###", System.Globalization.CultureInfo.InvariantCulture)
+                             + ", length " + length.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture));
+#endif
+                previousEnd = Mathf.Max(target, Time.unscaledTime) + length;
+            }
+#if DEBUG
+            // For the in-game check of the line's sounds (Tools/Game): the
+            // line as the box shows it, once it has it - after the sounds, so
+            // this changes none of their timing. Debug builds only - a
+            // player's log does not need a line per sound.
+            while (Time.frameCount == startFrame) yield return null;
+            log?.LogInfo("[SMSModForge.PackPlugin] Line sounds: shown '" + (shownLine ?? ShownText()) + "'");
+#endif
+        }
+
+        private static readonly FieldInfo _speechText =
+            typeof(SpeechUI).GetField("m_Text", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private static TextReference SpeechText()
+        {
+            var ui = SpeechUI.Current;
+            return ui != null && _speechText != null ? _speechText.GetValue(ui) as TextReference : null;
+        }
+
+        /// <summary>How many characters the speech box shows, and how many its
+        /// line has; -1 with no box to read.</summary>
+        private static int ShownSoFar(out int total)
+        {
+            total = 0;
+            var text = SpeechText();
+            if (text == null) return -1;
+            total = RichText.VisibleLength(text.Text ?? "");
+            return text.CharactersVisible;
+        }
+
+        private static string ShownText()
+        {
+            var text = SpeechText();
+            return text != null ? text.Text ?? "" : "";
+        }
 
         /// <summary>
         /// Pick a random clip from <paramref name="entry"/>'s loaded

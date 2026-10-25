@@ -31,7 +31,7 @@ namespace SMSModForge.Tests;
 public class TabSelectionTests
 {
     // Tab indices, same order as MainWindow's TabItems.
-    private const int TabCharacters = 1, TabNpcs = 2, TabPlaces = 3, TabIntegration = 11;
+    private const int TabCharacters = MainTab.Characters, TabNpcs = MainTab.Npcs, TabPlaces = MainTab.Places, TabIntegration = MainTab.Integration;
 
     private readonly ITestOutputHelper _out;
     public TabSelectionTests(ITestOutputHelper output) => _out = output;
@@ -194,19 +194,19 @@ public class TabSelectionTests
         // has two lists, so it has two.
         var toolbars = new (int Tab, string Anchor)[]
         {
-            (1,  "btn:addCharacter"),
-            (2,  "btn:addNpc"),
-            (3,  "btn:addPlace"),
-            (3,  "btn:addVanillaSource"),
-            (4,  "btn:addMapButton"),
-            (5,  "btn:addDialogue"),
-            (6,  "btn:addScene"),
-            (7,  "btn:addMusic"),
-            (8,  "btn:addSfx"),
-            (9,  "btn:addWallpaper"),
-            (10, "btn:addVariable"),
-            (11, "btn:addRule"),
-            (12, "btn:addUiExtension"),
+            (MainTab.Characters, "btn:addCharacter"),
+            (MainTab.Npcs,       "btn:addNpc"),
+            (MainTab.Places,     "btn:addPlace"),
+            (MainTab.Places,     "btn:addVanillaSource"),
+            (MainTab.MapButtons, "btn:addMapButton"),
+            (MainTab.Dialogues,  "btn:addDialogue"),
+            (MainTab.Scenes,     "btn:addScene"),
+            (MainTab.Music,      "btn:addMusic"),
+            (MainTab.Sfx,        "btn:addSfx"),
+            (MainTab.Wallpapers, "btn:addWallpaper"),
+            (MainTab.Variables,  "btn:addVariable"),
+            (MainTab.Integration, "btn:addRule"),
+            (MainTab.Ui,         "btn:addUiExtension"),
         };
 
         WindowHarness.Run(window =>

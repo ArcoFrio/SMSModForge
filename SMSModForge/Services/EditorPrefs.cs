@@ -18,9 +18,7 @@ namespace SMSModForge.Services;
 /// </summary>
 public static class EditorPrefs
 {
-    private static readonly string FilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "SMSModForge", "prefs.json");
+    private static string FilePath => AppDataFolder.PathOf("prefs.json");
 
     private static Dictionary<string, object>? _cache;
 
@@ -30,6 +28,7 @@ public static class EditorPrefs
     private const string KeyQuietExportSize = "quietExportSizeFor";
     private const string KeyQuietExportTranslation = "quietExportTranslationFor";
     private const string KeySpellCheckNodeText = "spellCheckNodeText";
+    private const string KeySmartSuggestions = "smartSuggestions";
 
     /// <summary>
     /// Whether Save shows the change list for confirmation first. On by
@@ -208,6 +207,18 @@ public static class EditorPrefs
     {
         get => GetBool(KeySpellCheckNodeText, defaultValue: true);
         set => SetBool(KeySpellCheckNodeText, value);
+    }
+
+    /// <summary>
+    /// Whether a dropdown opened empty puts the options the record being
+    /// edited makes likely on top (1.8.0). On by default - it only moves
+    /// options, never hides or picks one - and off for an author who wants
+    /// every list in its own order.
+    /// </summary>
+    public static bool SmartSuggestions
+    {
+        get => GetBool(KeySmartSuggestions, defaultValue: true);
+        set => SetBool(KeySmartSuggestions, value);
     }
 
     private const string KeyLanguage = "language";
@@ -408,6 +419,30 @@ public static class EditorPrefs
     /// the halves resample, which the control says by dropping nearest
     /// neighbour.</summary>
     public static readonly double[] ZoomSteps = { 0.5, 1, 1.5, 2 };
+
+    /// <summary>Whether a panel's help is unfolded (1.8.0), by the panel's
+    /// name; folded until somebody opens it.</summary>
+    public static bool GetHelpOpen(string panel) => panel.Length > 0 && GetBool("helpOpen." + panel, defaultValue: false);
+
+    public static void SetHelpOpen(string panel, bool open)
+    {
+        if (panel.Length > 0) SetBool("helpOpen." + panel, open);
+    }
+
+    /// <summary>How large a tab's preview was dragged to (1.8.0), by the
+    /// preview's name; 1 for its own size.</summary>
+    public static double GetPreviewScale(string preview, double unset = 1)
+    {
+        double scale = GetDouble("previewScale." + preview, unset);
+        return double.IsNaN(scale) || scale <= 0 ? unset : scale;
+    }
+
+    /// <summary>NaN forgets it: the preview is back to its own size.</summary>
+    public static void SetPreviewScale(string preview, double scale)
+    {
+        if (double.IsNaN(scale)) { Load().Remove("previewScale." + preview); Save(); }
+        else SetDouble("previewScale." + preview, scale);
+    }
 
     private static double GetDouble(string key, double defaultValue)
     {

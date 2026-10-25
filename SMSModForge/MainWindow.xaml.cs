@@ -104,6 +104,7 @@ public partial class MainWindow : Window
             };
             RegisterShortcuts(vm);
             RegisterListShortcuts(vm);
+            FitActorPickerToItsNames(vm);
             // Switching tabs unloads the outgoing tab's visual tree, and a
             // LostFocus-bound editor (the node Timeout box, an editable combo
             // mid-type) can be torn down without ever firing LostKeyboardFocus
@@ -130,6 +131,12 @@ public partial class MainWindow : Window
             };
             MainTabs.Loaded += (_, _) => KeepTabsClearOfLanguage();
             EditingLanguageBar.SizeChanged += (_, _) => KeepTabsClearOfLanguage();
+            // A theme between Normal and EX rebuilds the tabs' frame, and the
+            // room has to be made again in the new one, once it is laid out.
+            Action retheme = () => Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded,
+                                                          new Action(KeepTabsClearOfLanguage));
+            Services.ThemeManager.Changed += retheme;
+            Closed += (_, _) => Services.ThemeManager.Changed -= retheme;
 
             // Shared unit trees: one handler set (selection, multi-select,
             // drag-drop) wired to each — the controllers hold the behavior.
@@ -212,6 +219,15 @@ public partial class MainWindow : Window
         Loaded += async (_, _) =>
         {
             _updates.Report = ToastReport;
+
+            // Once: the start that moved somebody's theme to EX says so, and
+            // how to have the old look back (the author, 1.8.0). After the
+            // window is up, so it is said over the new look, not before it.
+            if (Services.ThemeManager.MovedAtStart is { } moved && !Services.TestMode.Active)
+                _ = Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ContextIdle, new Action(() =>
+                    MessageBox.Show(this,
+                        Loc.F("theme.moved.body", "from", moved.From.DisplayName, "to", moved.To.DisplayName),
+                        Loc.T("theme.moved.title"), MessageBoxButton.OK, MessageBoxImage.Information)));
 
             // The other end of the update: this editor is the one that was just
             // put in place, and saying so is the only confirmation there is that
@@ -549,6 +565,59 @@ public partial class MainWindow : Window
             var window = new View.TranslatePackWindow(pack, root) { Owner = this };
             return window.ShowDialog();
         });
+    }
+
+    /// <summary>
+    /// A theme picked from the menu: the menu stays open for the next one to
+    /// be tried (the author, 1.8.0) - the rows stay open on a click, and the
+    /// menus above the row are opened again if putting the theme on closed
+    /// them, which a change between EX and Classic does: it gives the menu
+    /// templates of the other look.
+    /// </summary>
+    private void ThemeRow_Click(object sender, RoutedEventArgs e)
+    {
+        var open = new List<MenuItem>();
+        for (var up = ItemsControl.ItemsControlFromItemContainer((DependencyObject)sender) as MenuItem; up != null;
+             up = ItemsControl.ItemsControlFromItemContainer(up) as MenuItem)
+            open.Insert(0, up);
+        // After the command has put the theme on and the menu has been drawn
+        // again in it.
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
+        {
+            foreach (var menu in open)
+                if (menu.IsLoaded && !menu.IsSubmenuOpen) menu.IsSubmenuOpen = true;
+        }));
+    }
+
+    /// <summary>
+    /// The status bar's issue count, clicked: the ModForge tab, on the list it
+    /// counts (the author, 1.8.0: it "does nothing").
+    /// </summary>
+    private void StatusIssues_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        vm.SelectedTabIndex = MainTab.ModForge;
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
+        {
+            IssueList.BringIntoView();
+            if (IssueList.Items.Count > 0 && IssueList.SelectedIndex < 0) IssueList.SelectedIndex = 0;
+            IssueList.Focus();
+        }));
+    }
+
+    /// <summary>Go to one of the places a variable is used (1.8.0) - by the
+    /// path the issue list goes to things by, so the two cannot disagree.</summary>
+    private void VariableUse_Click(object sender, RoutedEventArgs e)
+    {
+        if ((sender as FrameworkContentElement)?.DataContext is ViewModel.VariableUseRow { CanGo: true } row)
+            NavigateToIssue(new ValidationIssue(Severity.Info, row.Use.Path, ""));
+    }
+
+    /// <summary>Themes of one's own, made in a window of their own (1.8.0).</summary>
+    private void CustomThemes_Click(object sender, RoutedEventArgs e)
+    {
+        if (Services.TestMode.Active) return;
+        new View.CustomThemesWindow { Owner = this }.ShowDialog();
     }
 
     /// <summary>
@@ -1062,7 +1131,9 @@ public partial class MainWindow : Window
         BindFlush(vm.ExportPackCommand,   Key.E,  ModifierKeys.Control);
         BindFlush(vm.ExportPackAsCommand, Key.E,  ModifierKeys.Control | ModifierKeys.Shift);
         Bind(vm.ValidateCommand,     Key.F5, ModifierKeys.None);
-        Bind(vm.DuplicateItemCommand, Key.D, ModifierKeys.Control);
+        // The node in the Dialogues tab when its nodes were clicked last; see
+        // MainViewModel.NodeKeysActive.
+        Bind(vm.DuplicateHereCommand, Key.D, ModifierKeys.Control);
 
         // Undo/redo. BindFlush commits the focused field first so a not-yet-left
         // edit is captured before the snapshot; the command itself checkpoints
@@ -1072,65 +1143,84 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// Hotkeys scoped to the LEFT unit lists of every tab — they only fire
-    /// while the list itself has keyboard focus, so Del can't nuke a unit
-    /// while the user is editing in the right pane, and Ctrl+C/V never
-    /// competes with the dialogue-node canvas or a TextBox. Del = delete,
-    /// F2/F12 = rename, Ctrl+C/V = copy/paste unit (Ctrl+D duplicate is
-    /// window-wide, see <see cref="RegisterShortcuts"/>).
+    /// Hotkeys of the lists INSIDE a tab. The tabs' own lists get theirs from
+    /// the bar over them (<see cref="View.Controls.NavigatorBar"/>), which binds
+    /// each key from the same command as its button. All of them fire only
+    /// while their list has keyboard focus, so Del can't nuke a unit while the
+    /// user is editing in the right pane, and Ctrl+C/V never competes with a
+    /// TextBox. (Ctrl+D duplicate is window-wide as well, see
+    /// <see cref="RegisterShortcuts"/>.)
     /// </summary>
     private void RegisterListShortcuts(MainViewModel vm)
     {
-        var lists = new System.Windows.Controls.Control[]
-        {
-            CharacterTree, PlaceTreeView, DialogueTreeView, SceneTreeView,
-            VariableTreeView, WallpaperTreeView, MusicTreeView, SfxTreeView, IntegrationTreeView,
-            QuestTreeView,
-        };
-        foreach (var list in lists)
-        {
-            list.InputBindings.Add(new KeyBinding(vm.DeleteItemCommand, Key.Delete, ModifierKeys.None));
-            list.InputBindings.Add(new KeyBinding(vm.RenameItemCommand, Key.F2, ModifierKeys.None));
-            list.InputBindings.Add(new KeyBinding(vm.RenameItemCommand, Key.F12, ModifierKeys.None));
-            list.InputBindings.Add(new KeyBinding(vm.CopyItemCommand, Key.C, ModifierKeys.Control));
-            list.InputBindings.Add(new KeyBinding(vm.PasteItemCommand, Key.V, ModifierKeys.Control));
-            if (list.ToolTip == null) LocText.Bind(list, ToolTipProperty, "sidebar.keys.tip");
-        }
-
-        // The dialogue node list is its own clipboard scope: Ctrl+C/V here move
-        // NODE SUBTREES, not pack units. Scoped to the control for the same
-        // reason as above — the two meanings of Ctrl+C must never race, and
-        // whichever list has focus is the one that answers.
+        // The dialogue node list is its own clipboard scope: Ctrl+C/V there
+        // move NODE SUBTREES, not pack units. Its keys come from the bar under
+        // it, like a tab's list. Paste always lands the subtree as a sibling
+        // directly below the selected node; the context menu offers "as child"
+        // / "as new root" for the cases that need them.
         //
-        // Paste always lands the subtree as a sibling directly below the
-        // selected node. The context menu still offers "as child" / "as new
-        // root" for the cases that need them, but those are deliberate choices,
-        // not what an unqualified Ctrl+V should guess at.
-        NodeList.InputBindings.Add(new KeyBinding(vm.CopyNodeCommand, Key.C, ModifierKeys.Control));
-        NodeList.InputBindings.Add(new KeyBinding(vm.PasteNodeSiblingCommand, Key.V, ModifierKeys.Control));
-        NodeList.InputBindings.Add(new KeyBinding(vm.RemoveDialogueNodeCommand, Key.Delete, ModifierKeys.None));
+        // Which of the dialogue and its nodes the keys are about: whichever
+        // was clicked last. Tunnelling, the outer pane hears a click first and
+        // the node panes last, so a click on a node ends as "nodes".
+        void Scope(UIElement pane, bool nodes)
+        {
+            pane.PreviewMouseDown += (_, _) => vm.NodeKeysActive = nodes;
+            pane.PreviewGotKeyboardFocus += (_, _) => vm.NodeKeysActive = nodes;
+        }
+        Scope(DialogueListPane, false);
+        Scope(VanillaDialogueList, false);
+        Scope(DialogueMiddlePane, false);
+        Scope(DialogueNodesBox, true);
+        Scope(NodeEditorPane, true);
 
-        // The UI tree is a third clipboard scope, for the same reason: Ctrl+C
-        // here means a UI OBJECT. Bound through the window's DataContext rather
-        // than to a command object, because the commands belong to whichever
-        // screen is selected and that changes as the author moves about - a
-        // binding captured once would go on talking to the screen they were on
-        // when the window opened.
-        void OnTree(Func<UiViewModel, RelayCommand> pick, Key key, ModifierKeys mods)
-            => UiTree.InputBindings.Add(new KeyBinding(
-                new PassThroughCommand(
-                    () => { var ui = vm.SelectedUi; if (ui != null) pick(ui).Execute(null); },
-                    () => vm.SelectedUi != null && pick(vm.SelectedUi).CanExecute(null)),
-                key, mods));
+        vm.NodeMade += node => Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, () =>
+        {
+            NodeList.ScrollIntoView(node);
+            NodeList.UpdateLayout();
+            if (NodeList.ItemContainerGenerator.ContainerFromItem(node) is ListBoxItem row) row.Focus();
+        });
 
-        OnTree(u => u.CopyNodeCommand,      Key.C,      ModifierKeys.Control);
-        OnTree(u => u.PasteNodeCommand,     Key.V,      ModifierKeys.Control);
-        OnTree(u => u.DuplicateNodeCommand, Key.D,      ModifierKeys.Control);
-        OnTree(u => u.RemoveNodeCommand,    Key.Delete, ModifierKeys.None);
-        OnTree(u => u.AddChildCommand,      Key.Insert, ModifierKeys.None);
-
-        if (UiTree.ToolTip == null) LocText.Bind(UiTree, ToolTipProperty, "ui.treeKeys.tip");
+        // The UI tree is a third clipboard scope (a UI OBJECT), and the quest
+        // task lists have keys too: all from the bars over them, bound to the
+        // selected screen's or quest's commands as the selection moves.
     }
+
+    /// <summary>
+    /// The Actor picker as wide as the longest name it lists, with its face and
+    /// its arrow (the author, 1.8.0: "Width fits the longest actor name") - a
+    /// name is a few letters, and a box the width of the column read as a place
+    /// for a sentence. Measured in the box's own font, so it is right in every
+    /// theme and at every display scaling; again whenever the names change.
+    /// </summary>
+    private void FitActorPickerToItsNames(MainViewModel vm)
+    {
+        bool queued = false;
+        void Fit()
+        {
+            queued = false;
+            var typeface = new System.Windows.Media.Typeface(NodeActorPicker.FontFamily, NodeActorPicker.FontStyle,
+                                                             NodeActorPicker.FontWeight, NodeActorPicker.FontStretch);
+            double pixelsPerDip = System.Windows.Media.VisualTreeHelper.GetDpi(this).PixelsPerDip;
+            double widest = 0;
+            // As the names are shown: capitalised (View.CapitalizedBox).
+            foreach (string name in vm.ActorOptions.Select(View.Converters.CapitalizedConverter.Of))
+                widest = Math.Max(widest, new System.Windows.Media.FormattedText(
+                    name, System.Globalization.CultureInfo.CurrentCulture, FlowDirection.LeftToRight, typeface,
+                    NodeActorPicker.FontSize, System.Windows.Media.Brushes.Black, pixelsPerDip).WidthIncludingTrailingWhitespace);
+            // The face and its gap, then the arrow, the padding and the border.
+            NodeActorPicker.Width = Math.Max(ActorPickerNarrowest, Math.Ceiling(widest) + 30 + 44);
+        }
+        vm.ActorOptions.CollectionChanged += (_, _) =>
+        {
+            if (queued) return;
+            queued = true;
+            Dispatcher.BeginInvoke(Fit, System.Windows.Threading.DispatcherPriority.Background);
+        };
+        Fit();
+    }
+
+    /// <summary>Wide enough to type a new name into while the list is short.</summary>
+    internal const double ActorPickerNarrowest = 160;
 
     /// <summary>
     /// One handler set for every shared unit tree (Actors / Places / Scenes /
@@ -1334,11 +1424,21 @@ public partial class MainWindow : Window
     /// </summary>
     internal void KeepTabsClearOfLanguage()
     {
+        double room = EditingLanguageBar.ActualWidth + EditingLanguageBar.Margin.Right + 8;
+
+        // An EX theme stands the tabs down the side, and the language sits over
+        // the pack's name in the header instead: that is what makes room.
+        if (MainTabs.Template?.FindName("PackHeader", MainTabs) is FrameworkElement packHeader)
+        {
+            var at = packHeader.Margin;
+            if (Math.Abs(at.Right - room) >= 0.5) packHeader.Margin = new Thickness(at.Left, at.Top, room, at.Bottom);
+            return;
+        }
+
         // Its own row: a page inside it can hold a tab control of its own.
         var headers = Descendant<System.Windows.Controls.Primitives.TabPanel>(
             MainTabs, p => ReferenceEquals(p.TemplatedParent, MainTabs));
         if (headers == null) return;
-        double room = EditingLanguageBar.ActualWidth + EditingLanguageBar.Margin.Right + 8;
         var margin = headers.Margin;
         if (Math.Abs(margin.Right - room) < 0.5) return;
         headers.Margin = new Thickness(margin.Left, margin.Top, room, margin.Bottom);
@@ -1571,63 +1671,6 @@ public partial class MainWindow : Window
             tallest = Math.Max(tallest, h);
         }
         return tallest;
-    }
-
-    /// <summary>
-    /// Stops the Characters sidebar being dragged narrower than its own
-    /// toolbar.
-    /// <para/>
-    /// A <see cref="ToolBar"/> that runs out of room does not clip — it moves
-    /// the buttons that no longer fit into an overflow popup behind a small
-    /// chevron. That is tidy and almost invisible: authors dragged the splitter
-    /// in and concluded the buttons did not exist. Giving the column a minimum
-    /// width takes the situation away rather than making the popup nicer.
-    /// <para/>
-    /// The width is measured rather than written down. Button widths follow the
-    /// theme's font and the display's scaling, so a literal number would be
-    /// right on one machine and wrong on the next.
-    /// </summary>
-    private void CharacterToolBar_Loaded(object sender, RoutedEventArgs e)
-    {
-        if (sender is not ToolBar bar) return;
-
-        // Two ways of asking, because neither is guaranteed on its own: the
-        // ToolBar's own measure includes its chrome but may answer for the
-        // laid-out width rather than the natural one, while summing the items
-        // gets every button (overflowed ones included) but no chrome. Whichever
-        // is larger is the one that actually fits everything.
-        bar.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-        double whole = bar.DesiredSize.Width;
-
-        double items = 0;
-        foreach (var item in bar.Items)
-        {
-            if (item is not UIElement el) continue;
-            el.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            items += el.DesiredSize.Width;
-        }
-        // Chrome the item sum cannot see: the ToolBar's border and padding.
-        items += bar.Padding.Left + bar.Padding.Right
-               + bar.BorderThickness.Left + bar.BorderThickness.Right;
-
-        double needed = Math.Max(whole, items);
-
-        // A measure that came back with nothing means neither call answered.
-        // Leaving MinWidth at zero would look exactly like success while
-        // changing nothing, so do not pretend — leave the column alone.
-        if (double.IsNaN(needed) || double.IsInfinity(needed) || needed < 1) return;
-
-        needed = Math.Ceiling(needed);
-        CharacterSidebarColumn.MinWidth = needed;
-        if (CharacterSidebarColumn.Width.IsAbsolute &&
-            CharacterSidebarColumn.Width.Value < needed)
-            CharacterSidebarColumn.Width = new GridLength(needed);
-
-        // The measures above ran outside a layout pass; ask for a fresh one so
-        // nothing is left holding a size taken at infinite width.
-        bar.InvalidateMeasure();
-        foreach (var item in bar.Items)
-            if (item is UIElement el) el.InvalidateMeasure();
     }
 
     /// <summary>The row standing for a particular object, anywhere in the
@@ -2619,14 +2662,12 @@ public partial class MainWindow : Window
     //   vanillaExtensions[3:Beach] | mapButtons[1:District→Target]
     // ──────────────────────────────────────────────────────────────────────
 
-    // Keep in lockstep with MainViewModel's Tab* constants — index 0 is the
-    // ModForge landing tab, unit tabs start at 1 in authoring-workflow order.
-    // Indices into MainTabs, and they must track its order exactly. Actors
-    // merging into Characters removed a tab, so everything after it moved down
-    // one — the constants are the only record of that order, so a stale one
-    // silently navigates to the wrong tab rather than failing.
-    private const int TabBusts = 1, TabNpcs = 2, TabPlaces = 3,
-                      TabMapButtons = 4, TabDialogues = 5, TabVariables = 10, TabQuests = 13;
+    // Indices into MainTabs, from MainTab - the one record of the order. A
+    // number kept here instead went stale silently whenever a tab moved, and
+    // navigated to the wrong tab rather than failing.
+    private const int TabBusts = MainTab.Characters, TabNpcs = MainTab.Npcs, TabPlaces = MainTab.Places,
+                      TabMapButtons = MainTab.MapButtons, TabDialogues = MainTab.Dialogues, TabScenes = MainTab.Scenes, TabWallpapers = MainTab.Wallpapers,
+                      TabVariables = MainTab.Variables, TabIntegration = MainTab.Integration, TabUi = MainTab.Ui, TabQuests = MainTab.Quests;
 
     private void IssueList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
@@ -2634,15 +2675,25 @@ public partial class MainWindow : Window
             NavigateToIssue(issue);
     }
 
-    internal void NavigateToIssue(ValidationIssue issue)
+    /// <summary>Go to what an issue is about. False for an issue that names
+    /// no one thing (the pack as a whole) or a kind of place this does not
+    /// know - which <c>IssueNavigationTests</c> holds to none.</summary>
+    internal bool NavigateToIssue(ValidationIssue issue)
     {
-        if (DataContext is not MainViewModel vm) return;
-        ExpectTabChange("jumped to a validation issue");
+        if (DataContext is not MainViewModel vm) return false;
         var where = issue.Where ?? "";
         var head = Regex.Match(where, @"^(?<g>[A-Za-z]+)\[(?<inner>[^\]]*)\]");
-        if (!head.Success) return;   // "$.packId" and the like: no per-item target
+        if (!head.Success) return false;   // "$.packId" and the like: no per-item target
+        ExpectTabChange("jumped to a validation issue");
         string inner = head.Groups["inner"].Value;
         string field = ExtractField(where);   // the offending field, e.g. "defaultBustKey"
+
+        // A problem in one translation is looked at in that translation: a
+        // line too long in Spanish, shown in the pack's own words, is a line
+        // that fits.
+        if (issue.Language.Length > 0
+            && !string.Equals(vm.EditingLanguage, issue.Language, StringComparison.OrdinalIgnoreCase))
+            vm.EditingLanguage = issue.Language;
 
         switch (head.Groups["g"].Value)
         {
@@ -2650,7 +2701,7 @@ public partial class MainWindow : Window
             {
                 MainTabs.SelectedIndex = TabDialogues;
                 var dlg = vm.Dialogues.FirstOrDefault(d => d.Key == inner);
-                if (dlg == null) return;
+                if (dlg == null) return true;
                 vm.SelectedDialogue = dlg;
 
                 var nodeM = Regex.Match(where, @"nodes\[id=(?<id>-?\d+)\]");
@@ -2666,7 +2717,7 @@ public partial class MainWindow : Window
                             vm.SelectedNode = node;
                             Reveal(field, NodeList, node);
                         }), System.Windows.Threading.DispatcherPriority.Background);
-                        return;
+                        return true;
                     }
                 }
                 Reveal(field, null, null);   // roomTalk / node fields flash; editor already shows SelectedDialogue
@@ -2676,7 +2727,7 @@ public partial class MainWindow : Window
             {
                 MainTabs.SelectedIndex = TabPlaces;
                 var pl = vm.Places.FirstOrDefault(p => p.Key == inner);
-                if (pl == null) return;
+                if (pl == null) return true;
                 vm.SelectedPlace = pl;
                 Reveal(field, PlaceTreeView, pl);
                 break;
@@ -2710,7 +2761,7 @@ public partial class MainWindow : Window
             {
                 MainTabs.SelectedIndex = TabBusts;
                 var ac = vm.Characters.FirstOrDefault(c => c.Key == inner);
-                if (ac == null) return;
+                if (ac == null) return true;
                 Dispatcher.BeginInvoke(new Action(() => SelectInTree(ac, null)),
                                        System.Windows.Threading.DispatcherPriority.Loaded);
                 break;
@@ -2719,7 +2770,7 @@ public partial class MainWindow : Window
             {
                 MainTabs.SelectedIndex = TabQuests;
                 var quest = vm.Quests.FirstOrDefault(q => q.Key == inner);
-                if (quest == null) return;
+                if (quest == null) return true;
                 if (quest.ShowsVanillaPanel) vm.SelectedVanillaQuest = quest;
                 else if (vm.QuestTree.FindLeaf(quest) is { } leaf) vm.QuestTree.Selected = leaf;
                 else vm.SelectedQuest = quest;
@@ -2748,7 +2799,7 @@ public partial class MainWindow : Window
             {
                 MainTabs.SelectedIndex = TabVariables;
                 var va = vm.Variables.FirstOrDefault(v => v.Name == inner);
-                if (va == null) return;
+                if (va == null) return true;
                 vm.SelectedVariable = va;
                 Reveal(field, null, null);   // editor already shows SelectedVariable
                 break;
@@ -2757,7 +2808,7 @@ public partial class MainWindow : Window
             {
                 MainTabs.SelectedIndex = TabBusts;
                 var ch = vm.Characters.FirstOrDefault(c => c.Name == inner);
-                if (ch == null) return;
+                if (ch == null) return true;
                 var outfitM = Regex.Match(where, @"outfits\[(?<k>[^\]]+)\]");
                 var outfit = outfitM.Success
                     ? ch.Outfits.FirstOrDefault(o => o.Key == outfitM.Groups["k"].Value)
@@ -2779,7 +2830,56 @@ public partial class MainWindow : Window
                 }), System.Windows.Threading.DispatcherPriority.Background);
                 break;
             }
+            case "scenes":
+                MainTabs.SelectedIndex = TabScenes;
+                SelectUnit(vm.Scenes.FirstOrDefault(x => x.Key == inner), vm.SceneTree, v => vm.SelectedScene = v, field);
+                break;
+            case "npcs":
+            {
+                MainTabs.SelectedIndex = TabNpcs;
+                string key = inner.Contains(':') ? inner[(inner.IndexOf(':') + 1)..] : inner;
+                SelectUnit(vm.Npcs.FirstOrDefault(x => x.Key == key), vm.NpcTree, v => vm.SelectedNpc = v, field);
+                break;
+            }
+            case "wallpapers":
+                MainTabs.SelectedIndex = TabWallpapers;
+                SelectUnit(vm.Wallpapers.FirstOrDefault(x => x.Key == inner), vm.WallpaperTree, v => vm.SelectedWallpaper = v, field);
+                break;
+            case "integrationRules":
+            {
+                MainTabs.SelectedIndex = TabIntegration;
+                var rule = vm.IntegrationRules.FirstOrDefault(r => r.Key == inner);
+                if (rule != null) vm.SelectedIntegrationRule = rule;
+                Reveal(field, null, null);
+                break;
+            }
+            case "uis":
+            {
+                MainTabs.SelectedIndex = TabUi;
+                var ui = vm.Uis.FirstOrDefault(u => u.Model.Id == inner || u.Model.Name == inner);
+                if (ui != null) vm.SelectedUi = ui;
+                Reveal("", UiList, ui);
+                break;
+            }
+            case "vanillaGates":
+                // A change to what starts one of the game's quests: the
+                // Quests tab is where those are made.
+                MainTabs.SelectedIndex = TabQuests;
+                break;
+            default:
+                return false;
         }
+        return true;
+    }
+
+    /// <summary>Select a record on a tab whose list is a folder tree, then
+    /// flash the field the issue names, if it has one.</summary>
+    private void SelectUnit<T>(T? record, ViewModel.UnitTreeController tree, Action<T> select, string field) where T : class
+    {
+        if (record == null) return;
+        select(record);
+        if (tree.FindLeaf(record) is { } leaf) tree.Selected = leaf;
+        Reveal(field, null, null);
     }
 
     /// <summary>

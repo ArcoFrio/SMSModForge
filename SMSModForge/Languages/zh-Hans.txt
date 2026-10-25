@@ -76,12 +76,12 @@ game.pack.installedTwice = 重复安装，正在使用 {folder} 文件夹中的�
 game.pack.notInYourLanguage = 没有翻译成你的语言
 
 # Beside a pack in the main menu's list: it changes the same thing of the game's (a character, an object in a level...) as {packs}, other packs in the list, so only one of the two changes shows
-# en: Changes the same as {packs}
-game.pack.clashesWith = 与 {packs} 修改了相同的内容
+# en: Clashes with {packs}
+game.pack.clashesWith = 与 {packs} 冲突
 
 # Under ModForge's list of packs on the game's main menu, when there are two or more. The packs can be dragged up and down; the one lower in the list is loaded later, so its changes show
-# en: Drag a pack to move it. Lower in the list wins when two packs change the same thing.
-game.menu.orderHint = 拖动模组包即可移动它。两个模组包修改同一内容时，排在下面的优先。
+# en: Drag to reorder: the lower pack wins a clash.
+game.menu.orderHint = 拖动以调整顺序：发生冲突时，下方的模组包优先。
 
 # The name above the player's own lines in a pack's conversations
 # en: You
@@ -261,6 +261,30 @@ game.gameLines.title = 游戏自带的台词
 # That notice. {packs} are the packs' names, {language} the player's language
 # en: {packs} also show the game's own lines in {language}, in the conversations they change. If you play the game translated by another mod, the two translations may mix in those conversations.
 game.gameLines.body.other = {packs} 还会在它们改动的对话里，把游戏自带的台词显示为{language}。如果你在用其他模组把整个游戏翻译过来玩，这些对话里的两种翻译可能会混在一起。
+
+# Heading of the small window on the main menu the first time the game starts with ModForge
+# en: ModForge is installed
+game.notice.welcome.title = ModForge 已安装
+
+# That window, all it says. {folder} is the folder packs go in, beside the game's own files ("Mods"). The list of packs is at the top left of the main menu
+# en: Put mod packs in the game's {folder} folder. They're listed at the top left, where you can switch them on and off.
+game.notice.welcome.body = 把模组包放进游戏的 {folder} 文件夹。它们会列在左上角，你可以在那里开启或关闭。
+
+# Heading of a list of what a version of ModForge changes for players. {version} is the version, "1.8.0"
+# en: New in {version}:
+game.notice.newIn = {version} 新内容：
+
+# Heading of the window on the main menu after ModForge was updated with something that changes for players. {version} is the new version
+# en: ModForge was updated to {version}
+game.notice.changes.title = ModForge 已更新到 {version}
+
+# The button that closes those windows
+# en: Got it
+game.notice.close = 知道了
+
+# What ModForge 1.8.0 changes for players, one line each (\n starts the next)
+# en: Sounds in packs play with the timing and volume their authors set.
+game.notice.news.1.8.0 = 模组包里的音效会按作者设定的时机和音量播放。
 
 [Where an NPC stands]
 
@@ -2525,6 +2549,42 @@ menu.themes = 主题(_T)
 # en: _Options
 menu.options = 选项(_O)
 
+# A heading inside the Options menu, over how the editor looks: themes, the dialogue rows, preview quality
+# en: Look
+menu.heading.look = 外观
+
+# A heading inside the Options menu, over spell checking and suggestions
+# en: Writing
+menu.heading.writing = 写作
+
+# A heading inside the Options menu, over what saving and exporting a pack ask and do
+# en: Saving and exporting
+menu.heading.saving = 保存与导出
+
+# A heading inside the Options menu, over the game's folder
+# en: The game
+menu.heading.game = 游戏
+
+# A heading inside the Options menu, over the editor's own updates
+# en: Updates
+menu.heading.updates = 更新
+
+# Edit menu item: takes back the last change
+# en: _Undo
+menu.undo = 撤销(_U)
+
+# Keyboard shortcut shown beside "Undo"
+# en: Ctrl+Z
+menu.undo.keys = Ctrl+Z
+
+# Edit menu item: puts back a change that was taken back
+# en: _Redo
+menu.redo = 重做(_R)
+
+# Keyboard shortcut shown beside "Redo"
+# en: Ctrl+Y
+menu.redo.keys = Ctrl+Y
+
 # Menu item
 # en: _Confirm changes on save
 menu.confirmChangesSave = 保存时确认改动(_C)
@@ -2532,6 +2592,10 @@ menu.confirmChangesSave = 保存时确认改动(_C)
 # Menu item
 # en: _Spell-check node text
 menu.spellCheckNodeText = 检查节点文本拼写(_S)
+
+# Menu item (Options): a switch
+# en: Smart _suggestions in dropdowns
+menu.smartSuggestions = 下拉框中的智能建议(_S)
 
 # Menu item
 # en: _Version the pack automatically
@@ -2642,8 +2706,8 @@ menu.pasteItem.keys = Ctrl+V
 menu.pasteItem.tip = 把复制的、类型匹配的条目粘贴到当前选项卡的列表中。列表获得焦点时 Ctrl+V 也可用。
 
 # Tooltip on "_Rename item…"
-# en: Rename the selected list item's key (F2 or F12 while the list has focus).
-menu.renameItem.tip = 重命名列表中选中条目的键名（列表获得焦点时按 F2 或 F12）。
+# en: Rename the selected list item, the same as typing in its Display name box (F2 or F12 while the list has focus).
+menu.renameItem.tip = 重命名列表中选中的条目，与在它的“显示名称”框里输入相同（列表获得焦点时按 F2 或 F12）。
 
 # Keyboard shortcut shown beside it ("De_lete item")
 # en: Del
@@ -2664,6 +2728,10 @@ menu.confirmChangesSave.tip = 写入 modpack.json 之前，列出这次保存会
 # Tooltip on "_Spell-check node text"
 # en: Underline misspellings using Windows' own spell checker, in the language the lines are written in - the pack's own, or the one you are editing in - both in a node's Text field and down the node list, so mistakes are visible while scanning. A language Windows has no spelling dictionary for is not underlined at all; Windows' language settings can add one. Right-click a squiggle in the Text field for suggestions, to ignore it for this session, or to add the word to your Windows dictionary (the same list Edge and Office use). Turning this off also makes the node list lighter to scroll on very long dialogues. Your choice is remembered between sessions.
 menu.spellCheckNodeText.tip = 用 Windows 自带的拼写检查器，按台词所用的语言（模组包自己的语言，或你正在编辑的语言）标出拼写错误——既在节点的“文本”字段里，也在节点列表中，这样浏览时就能看到错误。Windows 没有词典的语言完全不会被标出；可以在 Windows 的语言设置中添加词典。在“文本”字段的波浪线上点击右键可以查看建议、在本次会话中忽略它，或把这个词加入你的 Windows 词典（与 Edge 和 Office 使用的是同一个列表）。关闭它也会让很长的对话中的节点列表滚动起来更轻快。你的选择会在不同会话之间保留。
+
+# Tooltip on "Smart _suggestions in dropdowns"
+# en: When you open an empty dropdown, the options that what you are editing makes likely move to the top, marked with a star: in a dialogue that mentions a character anywhere and happens at one place, a Set Active action lists that character's scenes at that place first. Everything in the dialogue, scene or rule you have up counts - the characters it names, its places, its variables, the folder it is in - and it follows your edits as you make them. Nothing is picked or hidden for you, and other dropdowns showing the same list keep their own order. Turn this off to have every list in its usual order.
+menu.smartSuggestions.tip = 打开空的下拉框时，根据你正在编辑的内容判断可能性较大的选项会移到顶部，并标上星号：比如在一段任意处提到某个角色、发生在某个地点的对话里，“设为激活”动作会先列出这个角色在这个地点的场景。你打开的对话、场景或规则中的一切都算数——其中提到的角色、地点、变量、所在的文件夹——并且会随着你的编辑实时更新。不会替你选择或隐藏任何东西，显示同一列表的其他下拉框也保持各自的顺序。关闭此项，所有列表都按平常的顺序排列。
 
 # Tooltip on "_Version the pack automatically"
 # en: Move the pack's version on every save: up a minor when the pack gains something, up a patch when something it already had changes. The major number is never moved for you — that one says "this is a new version of the pack", which is yours to decide. Off means the version only ever changes when you type it.
@@ -2781,6 +2849,247 @@ theme.midnight = 午夜
 # en: Carbon
 theme.carbon = 碳黑
 
+# A colour theme, in the Themes menu: warm white, a red accent
+# en: Paper
+theme.paper = 纸张
+
+# A colour theme, in the Themes menu: cool white, an orange accent
+# en: Daylight
+theme.daylight = 日光
+
+# A colour theme, in the Themes menu: dark grey, a blue accent
+# en: Graphite
+theme.graphite = 石墨
+
+# A colour theme, in the Themes menu: dark purple-grey, a violet accent (the plant)
+# en: Nightshade
+theme.nightshade = 茄紫
+
+# A colour theme, in the Themes menu: slate blue-grey, an icy accent
+# en: Fjord
+theme.fjord = 峡湾
+
+# A colour theme, in the Themes menu: near black, an orange accent
+# en: Ember
+theme.ember = 余烬
+
+# A colour theme, in the Themes menu: deep blue-green, a teal accent
+# en: Deep Sea
+theme.deepsea = 深海
+
+# A colour theme, in the Themes menu: dark green, a lime accent
+# en: Moss
+theme.moss = 苔藓
+
+# A colour theme, in the Themes menu: dark red-brown, a rose accent
+# en: Wine
+theme.wine = 酒红
+
+# A heading in the Themes menu, over the themes with dark text on light panels
+# en: Light
+theme.group.light = 浅色
+
+# A heading in the Themes menu, over the themes with light text on dark panels
+# en: Dark
+theme.group.dark = 深色
+
+# Themes menu: the themes in the editor's original shape, as it was drawn before EX (1.8.0)
+# en: Classic
+theme.group.normal = 经典
+
+# Tooltip on the Themes menu's Classic
+# en: The editor as it was drawn before EX, in light and dark colours. Everything works the same in both.
+theme.group.normal.tip = EX 之前的编辑器样子，有浅色和深色。两者的一切功能完全相同。
+
+# Themes menu: the themes that draw the editor another way (EX, as in a game's 'extended' edition; keep EX as is unless your language says it differently)
+# en: EX
+# same in this language
+theme.group.ex = EX
+
+# Tooltip on the Themes menu's EX
+# en: The same editor drawn another way: cut corners, a glow on what you point at, lines to type on, a narrower typeface. Everything works exactly as in Classic; only the look changes.
+theme.group.ex.tip = 换一种方式绘制的同一个编辑器：斜切的角、指向之处的光晕、在横线上输入、更窄的字体。一切功能与“经典”完全相同；改变的只有外观。
+
+# Themes menu: the themes the person made themselves
+# en: Yours
+theme.group.custom = 我的
+
+# Tooltip on the Themes menu's Yours
+# en: The themes you made, in Your themes…
+theme.group.custom.tip = 你自己做的主题，在“我的主题…”里制作
+
+# Themes menu item: opens the window where a person makes their own themes
+# en: Your _themes…
+menu.customThemes = 我的主题(_T)…
+
+# Tooltip on "Your themes…"
+# en: Make themes of your own: pick a look and six colours, and the editor shows each change as you make it.
+menu.customThemes.tip = 制作你自己的主题：选一种外观和六种颜色，编辑器会随着你的每次修改立即显示出来。
+
+# Title of the message shown once, at the first start that moved the person's theme to EX
+# en: A new look
+theme.moved.title = 全新外观
+
+# The message shown once, at the first start of this version: their theme was moved to the EX theme most like it. {from} and {to} are theme names
+# en: ModForge now opens in EX, a new way of drawing the editor: the tabs down the left, every panel a tile, everything else where it was. Your theme, {from}, has become {to}, the EX theme most like it.\n\nThe look you had is under Options > Themes > Classic. Pick it there and it stays - this is the only time the editor changes your theme.
+theme.moved.body = ModForge 现在以 EX 打开，这是绘制编辑器的一种新方式：标签页竖排在左侧，每个面板是一块磁贴，其他一切都在原来的位置。你的主题“{from}”已变为与它最相近的 EX 主题“{to}”。\n\n原来的外观在“选项 > 主题 > 经典”中。在那里选择它就会一直保留——这是编辑器唯一一次更改你的主题。
+
+# Title of the window where a person makes their own themes
+# en: Your themes
+theme.custom.title = 我的主题
+
+# The name a new theme of one's own starts with
+# en: My theme
+theme.custom.newName = 我的主题
+
+# Button in Your themes: a new theme, starting from the one in use
+# en: + New
+theme.custom.new = + 新建
+
+# Tooltip on "+ New" in Your themes
+# en: A new theme of your own, starting from the colours and look of the theme you are using now.
+theme.custom.new.tip = 一个新的自制主题，以你当前所用主题的颜色和外观为起点。
+
+# Tooltip on Duplicate in Your themes
+# en: A copy of the selected theme, to try a variation without losing it.
+theme.custom.duplicate.tip = 所选主题的副本，用来尝试变化而不丢失原主题。
+
+# Button in Your themes: deletes the selected theme
+# en: − Remove
+theme.custom.remove = − 移除
+
+# Tooltip on "− Remove" in Your themes
+# en: Delete the selected theme. If you were using it, the editor goes back to its default theme.
+theme.custom.remove.tip = 删除所选主题。如果你正在使用它，编辑器会回到默认主题。
+
+# Shown in Your themes while none of the person's themes is selected (there may be none yet)
+# en: Select one of your themes to change it, or press + New to make one. A new theme starts as a copy of the theme you are using; change its look and colours here, and the editor shows each change at once.
+theme.custom.empty = 选择你的某个主题来修改它，或按“+ 新建”制作一个。新主题以你当前所用主题的副本开始；在这里修改它的外观和颜色，编辑器会立即显示每次修改。
+
+# At the bottom of Your themes
+# en: The theme selected here is the one in use, and every change is kept as you make it. Light or dark follows the background, and the editor moves the words towards readable on every colour; if yours leave some hard to read, it says so here.
+theme.custom.note = 这里选中的主题就是正在使用的主题，每次修改都会即时保存。浅色还是深色取决于背景，编辑器会尽量让文字在每种颜色上都可读；如果你的颜色仍让某些文字难以阅读，这里会提示。
+
+# Under the colours in Your themes, when the colours chosen leave some words hard to read
+# en: Some words are hard to read with these colours: no one text colour reads on all of them. Bring Panels and Boxes closer in lightness, or move Text further from both.
+theme.custom.unreadable = 用这些颜色时，有些文字难以阅读：没有哪一种文字颜色能在所有这些颜色上都清晰可读。请让“面板”和“输入框”的明暗更接近，或让“文字”与两者拉开差距。
+
+# Button: closes Your themes
+# en: Close
+theme.custom.close = 关闭
+
+# Label in Your themes: the theme's name
+# en: Name:
+theme.custom.name = 名称：
+
+# Label in Your themes: EX or Classic
+# en: Look:
+theme.custom.look = 外观：
+
+# Tooltip on the Look choice in Your themes
+# en: EX draws the editor its other way - tabs down the left, cut corners, a narrower typeface; Classic, the way it was drawn before EX. Everything works the same in both.
+theme.custom.look.tip = EX 用另一种方式绘制编辑器——选项卡竖排在左侧、斜切的角、更窄的字体；经典则是 EX 之前的样子。两者的一切功能完全相同。
+
+# Label in Your themes: the colour behind everything
+# en: Background:
+theme.custom.window = 背景：
+
+# Tooltip on Background in Your themes
+# en: Behind everything: the tab pages. It also decides whether the theme is light or dark.
+theme.custom.window.tip = 位于一切之后：选项卡页面的颜色。它也决定主题是浅色还是深色。
+
+# Label in Your themes: the colour of the bars
+# en: Bars:
+theme.custom.chrome = 栏：
+
+# Tooltip on Bars in Your themes
+# en: The menu bar and the tabs' bar.
+theme.custom.chrome.tip = 菜单栏和选项卡栏。
+
+# Label in Your themes: the colour of panels
+# en: Panels:
+theme.custom.surface = 面板：
+
+# Tooltip on Panels in Your themes
+# en: The panels things are grouped in, and the frames of the lists.
+theme.custom.surface.tip = 对内容分组的面板，以及列表的边框。
+
+# Label in Your themes: the colour of boxes to type in
+# en: Boxes:
+theme.custom.control = 输入框：
+
+# Tooltip on Boxes in Your themes
+# en: Boxes to type in, lists and trees.
+theme.custom.control.tip = 输入框、列表和树。
+
+# Label in Your themes: the colour of words
+# en: Text:
+theme.custom.text = 文字：
+
+# Tooltip on Text in Your themes
+# en: The words. Where they would be hard to read on a colour, the editor moves them towards readable on its own.
+theme.custom.text.tip = 文字的颜色。在某种颜色上难以阅读的地方，编辑器会自动把它调整到可读。
+
+# Label in Your themes: the accent colour
+# en: Accent:
+theme.custom.accent = 强调色：
+
+# Tooltip on Accent in Your themes
+# en: What is selected, focused or open, the main buttons and, in EX, the status bar.
+theme.custom.accent.tip = 选中、获得焦点或打开的内容、主要按钮，以及在 EX 中的状态栏。
+
+# A theme's name (an EX light theme: cool white with violet)
+# en: Frost
+theme.frost = 霜冻
+
+# A theme's name (an EX light theme: warm white with magenta)
+# en: Volt
+theme.volt = 伏特
+
+# A theme's name (an EX dark theme: near-black with hot pink-red)
+# en: Neon
+theme.neon = 霓虹
+
+# A theme's name (an EX dark theme: near-black with cyan)
+# en: Pulse
+theme.pulse = 脉冲
+
+# A theme's name (an EX dark theme: near-black with lime green)
+# en: Venom
+theme.venom = 毒液
+
+# A theme's name (an EX dark theme: near-black with orange)
+# en: Blaze
+theme.blaze = 烈焰
+
+# A theme's name (an EX light theme: cool white with electric blue; the metal)
+# en: Cobalt
+theme.cobalt = 钴蓝
+
+# A theme's name (an EX light theme: white with green)
+# en: Mint
+theme.mint = 薄荷
+
+# A theme's name (an EX light theme: warm white with orange; of the sun)
+# en: Solar
+theme.solar = 烈阳
+
+# A theme's name (an EX dark theme: near-black with violet; a ghost)
+# en: Phantom
+theme.phantom = 幻影
+
+# A theme's name (an EX dark theme: near-black navy with bright blue; the deep sea)
+# en: Abyss
+theme.abyss = 深渊
+
+# A theme's name (an EX dark theme: near-black with gold; Latin for gold)
+# en: Aurum
+theme.aurum = 赤金
+
+# A theme's name (an EX dark theme: near-black with emerald green; the stone)
+# en: Jade
+theme.jade = 翡翠
+
 [Status bar]
 
 # Heading
@@ -2794,6 +3103,10 @@ statusBar.modforgeFreeGetArvus.tip = ModForge 是免费软件，并且只通过 
 # How many issues the pack has
 # en: {count} issues
 statusBar.issues.other = {count} 个问题
+
+# Tooltip of that count, which can be clicked
+# en: Show them on the ModForge tab
+statusBar.openIssues.tip = 在 ModForge 标签页中显示
 
 [ModForge tab]
 
@@ -2863,6 +3176,34 @@ home.showIgnored.other = 显示 {count} 条已忽略
 # Beside an issue that has been silenced
 # en: ignored
 home.ignoredMark = 已忽略
+
+# Where an issue is, in the issues list: an issue about the pack as a whole
+# en: The pack
+issue.place.pack = 模组包
+
+# Where an issue is: a dialogue line with no words of its own; {id} is its number
+# en: line {id}
+issue.place.line = 台词 {id}
+
+# Where an issue is: the actions a line runs as it starts, before an action's type
+# en: on start
+issue.place.onStart = 开始时
+
+# Where an issue is: the actions a line runs as it finishes, before an action's type
+# en: on finish
+issue.place.onFinish = 结束时
+
+# Where an issue is: what a dialogue needs before it can start, before a condition's type
+# en: start condition
+issue.place.startCondition = 开始条件
+
+# Where an issue is: what a line needs before it shows, before a condition's type
+# en: condition
+issue.place.condition = 条件
+
+# Where an issue is: one of a rule's or a place's actions, before its type
+# en: action
+issue.place.action = 动作
 
 # Menu item
 # en: Ignore this issue
@@ -3451,6 +3792,18 @@ characters.resetField.tip4 = 把音高范围的下限还原为这个角色自己
 # Tooltip on "Reset"
 # en: Put the high end of the pitch range back to this character's own.
 characters.resetField.tip5 = 把音高范围的上限还原为这个角色自己的值。
+
+# Tooltip on "Reset" beside the voice's frequency, for a character the pack made. {value} is a number of characters a second
+# en: Put the frequency back to the default, {value}.
+characters.resetFrequency.packTip = 把频率还原为默认值 {value}。
+
+# Tooltip on "Reset" beside the low end of the voice's pitch, for a character the pack made. {value} is a pitch such as 1
+# en: Put the low end of the pitch range back to the default, {value}.
+characters.resetPitchMin.packTip = 把音高范围的下限还原为默认值 {value}。
+
+# Tooltip on "Reset" beside the high end of the voice's pitch, for a character the pack made. {value} is a pitch such as 1.5
+# en: Put the high end of the pitch range back to the default, {value}.
+characters.resetPitchMax.packTip = 把音高范围的上限还原为默认值 {value}。
 
 # Tooltip on a text box
 # en: How often the blip fires as text types (GC2 Typewriter frequency). Preset value: 45.
@@ -4135,8 +4488,8 @@ enum.JumpMode.Exit = 退出
 enum.JumpMode.Jump = 跳转
 
 # How a line advances. Kept as the program's names in the shipped translations, because the tooltip beside the list names them that way.
-# en: UntilInteraction
-enum.NodeDurationMode.UntilInteraction = UntilInteraction
+# en: Until interaction
+enum.NodeDurationMode.UntilInteraction = 等待交互
 
 # en: Timeout
 enum.NodeDurationMode.Timeout = Timeout
@@ -4246,8 +4599,16 @@ places.runtimeName.tip = 条件/动作和导航目标引用这个地点时使用
 places.namePackItselfUses.tip = 模组包自己使用的名称——运行时日志里写的、验证消息里提到的，也是别的模组包引用它时用的。它会根据显示名称自动写好，所以这里没什么要填；之所以显示出来，是因为那三处都会把它原样引用给你看。选中即可复制。
 
 # Tooltip on a text box
-# en: The object the level is built as in game.
-places.objectLevelBuiltGame.tip = 关卡在游戏中构建成的那个对象。
+# en: The object the level is built as in game. This place's is named otherwise than its runtime name - from an older version, where the two were apart. Other mods may find the level by this name.
+places.objectLevelBuiltGame.tip = 关卡在游戏中构建成的那个对象。这个地点的对象名称与它的运行时名称不同——它来自两者分开的旧版本。其他模组可能会用这个名称找到这个关卡。
+
+# Beside that box: name the place's game object by its runtime name, as every place made now is
+# en: Use the runtime name
+places.useRuntimeName = 使用运行时名称
+
+# Tooltip on that button
+# en: Name the level's object by the runtime name, and keep it following the runtime name from now on, as new places do. Another mod that finds this level by its old name will not find it any more.
+places.useRuntimeName.tip = 用运行时名称来命名关卡的对象，并从此跟随运行时名称变化，就像新地点一样。用旧名称寻找这个关卡的其他模组将再也找不到它。
 
 # Tooltip on "Back sprite (2048×1136):"
 # en: The layer drawn BEHIND — usually the room itself, or the distance seen past it. Sorting order −12 by default. Written to the pack as secondarySprite.
@@ -4558,16 +4919,16 @@ dialogues.overwriteStartConditions = 覆盖
 dialogues.dialogueNodes = 节点
 
 # Text
-# en: Click a node to select it. + Child and + Sibling copy everything from the selected node except its text (and its tag), and land directly under it; + Root takes only the speaker. Naming an actor who has spoken earlier in this conversation brings back the expression and outfit they last wore. Drag a node to move it (with its children): drop on the upper or lower edge of a row to place it before or after as a sibling, drop on the middle to make it a child, or drop below the list to make it a root. Ctrl+C / Ctrl+V copy a node and its children and paste them below the selection; Del removes the selected node. Nodes play top to bottom, exactly as listed.
-dialogues.clickNodeSelectChild = 点击节点即可选中它。“+ 子节点”和“+ 同级”会复制选中节点的一切，只除了它的文本（和标签），并落在它正下方。拖动节点可移动它（连同子节点）：放在某一行的上边缘或下边缘，就作为同级放在它前面或后面；放在中间，就成为它的子节点；放到列表下方，就成为根节点。Ctrl+C / Ctrl+V 可复制一个节点及其子节点，并粘贴到所选项下方；Del 移除选中的节点。节点自上而下播放，与列出的顺序完全一致。
+# en: Click a node to select it. + Sibling adds a line directly below it and + Child one inside it; both take only its speaker (actor, expression and outfit) - Duplicate (Ctrl+D) and copy and paste carry a whole node. Naming an actor who has spoken earlier in this conversation brings back the expression and outfit they last wore. Drag a node to move it (with its children): drop on the upper or lower edge of a row to place it before or after as a sibling, drop on the middle to make it a child, or drop below the list to make it a root. Ctrl+C / Ctrl+V copy a node and its children and paste them below the selection; Del removes the selected node. Nodes play top to bottom, exactly as listed.
+dialogues.clickNodeSelectChild = 点击节点即可选中它。“+ 同级”在它正下方添加一句台词，“+ 子节点”在它里面添加一句；两者都只沿用它的说话者（演员、表情和服装）——要带走整个节点，用“复制”（Ctrl+D）或复制粘贴。指定一个在这段对话里已经说过话的演员，会恢复他上次的表情和服装。拖动节点可移动它（连同子节点）：放在某一行的上边缘或下边缘，就作为同级放在它前面或后面；放在中间，就成为它的子节点；放到列表下方，就成为根节点。Ctrl+C / Ctrl+V 可复制一个节点及其子节点，并粘贴到所选项下方；Del 移除选中的节点。节点自上而下播放，与列出的顺序完全一致。
 
 # Text
 # en: Game look
 dialogues.gameLook = 游戏观感
 
 # Button
-# en: + Root
-dialogues.addDialogueRootNode = + 根节点
+# en: + New Node
+dialogues.addFirstNode = + 新节点
 
 # Button
 # en: + Child
@@ -4596,6 +4957,42 @@ dialogues.pasteNodeRoot = 粘贴为新的根节点
 # Box heading
 # en: Preview
 dialogues.preview = 预览
+
+# In the Preview panel, instead of the picture, when the selected line has nobody with a bust speaking it
+# en: No bust to show: nobody with a bust speaks this line.
+dialogues.preview.noBust = 没有立绘可显示：这句台词不是由有立绘的角色说的。
+
+# Tooltip on a panel's title that folds the panel (Identity, Start conditions)
+# en: Fold or unfold. Remembered for this dialogue.
+dialogues.fold.tip = 折叠或展开。按对话分别记住。
+
+# Folded Identity panel: a short tag with the dialogue's priority
+# en: Priority {value}
+dialogues.fold.priority = 优先级 {value}
+
+# Folded Identity panel: a short tag for "Prioritize this dialogue over vanilla" ticked
+# en: Over the game's
+dialogues.fold.overGame = 优先于原版
+
+# Folded Identity panel: a short tag for "Also leave on the Talk button (replayable)" ticked
+# en: Stays on Talk
+dialogues.fold.staysOnTalk = 留在“交谈”上
+
+# Folded Identity panel: a short tag for "Wait for Talk button (no auto-play)" ticked
+# en: Waits for Talk
+dialogues.fold.waitsForTalk = 等待“交谈”
+
+# Folded Identity panel: a short tag for "Queue behind active dialogue" ticked
+# en: Queues
+dialogues.fold.queues = 排队
+
+# Folded Identity panel: a short tag for "Set for condition debugging (F12)" ticked
+# en: Debugging
+dialogues.fold.debug = 调试
+
+# Folded Start conditions panel: a group of conditions, as a short tag. {count} is how many conditions it holds
+# en: Group of {count}
+dialogues.fold.group.other = {count} 项的组
 
 # Box heading
 # en: Node
@@ -4638,8 +5035,265 @@ dialogues.tag = 标签：
 dialogues.children = 子节点：
 
 # Text
-# en: Jump:
-dialogues.jump = 跳转：
+# en: Then:
+dialogues.then = 然后：
+
+# On the first button under a line's Outfit: the bust already showing stays
+# en: Keep
+dialogues.outfitKeep = 保持
+
+# Tooltip on Keep, the first button under a line's Outfit
+# en: This line doesn't change the outfit: the character stays in what they are wearing - what the last line to set an outfit put them in, or their default outfit if no line has.
+dialogues.outfitKeep.tip = 这句台词不更换服装：角色保持身上穿着的——最后一句设定服装的台词给他穿上的，或者在没有台词设定过时穿默认服装。
+
+# Tick box under a line's outfit buttons: the outfit comes from a pack variable instead, picked from the list beside it
+# en: From a variable
+dialogues.outfitFromVariable = 来自变量
+
+# Tooltip on "From a variable"
+# en: Take the outfit from a pack variable: the line puts the character in whatever the variable holds when it plays. While this is ticked the buttons above stand aside; untick it to go back to them.
+dialogues.outfitFromVariable.tip = 从模组包变量中取得服装：台词播放时，让角色穿上变量中的服装。勾选期间，上方的按钮让在一旁；取消勾选即可回到按钮。
+
+# Title of the window that sets a face's bust child by hand
+# en: Bust expression child
+characters.expressionChild.edit = 立绘表情子对象
+
+# Tooltip on the pencil beside a face's bust child
+# en: Set the child name yourself. It follows the face's name until you do, and stays as you set it after.
+characters.expressionChild.edit.tip = 自己设定子对象名称。在你设定之前，它会跟随这张脸的名称；设定之后就保持你设的样子。
+
+# Tooltip on a face's picture in the Speech expressions box
+# en: The picture this face shows with on a line's buttons in the Dialogues tab.
+characters.expressionIcon.tip = 在“对话”选项卡中，这张脸在台词按钮上显示时用的图片。
+
+# Tooltip on a face's picture before the face has a name
+# en: Give the face a name first: its picture is picked from the name, and can be changed after.
+characters.expressionIcon.locked.tip = 请先给这张脸起名：它的图片按名称选出，之后可以更换。
+
+# Tooltip on the picture of one of the game's faces, or the neutral one
+# en: The picture this face shows with on a line's buttons, picked from its name.
+characters.expressionIcon.fixed.tip = 这张脸在台词按钮上显示时用的图片，按它的名称选出。
+
+# A face, as one of the expression pictures is called
+# en: Neutral
+expressionIcon.neutral = 平静
+
+# A face, as one of the expression pictures is called
+# en: Happy
+expressionIcon.happy = 开心
+
+# A face, as one of the expression pictures is called
+# en: Smile
+expressionIcon.smile = 微笑
+
+# A face, as one of the expression pictures is called
+# en: Laugh
+expressionIcon.laugh = 大笑
+
+# A face, as one of the expression pictures is called
+# en: In love
+expressionIcon.love = 爱慕
+
+# A face, as one of the expression pictures is called
+# en: Flirty
+expressionIcon.flirty = 撩人
+
+# A face, as one of the expression pictures is called
+# en: Smug
+expressionIcon.smug = 得意
+
+# A face, as one of the expression pictures is called
+# en: Talking
+expressionIcon.talk = 说话
+
+# A face, as one of the expression pictures is called
+# en: Sad
+expressionIcon.sad = 难过
+
+# A face, as one of the expression pictures is called
+# en: Crying
+expressionIcon.cry = 哭泣
+
+# A face, as one of the expression pictures is called
+# en: Angry
+expressionIcon.angry = 生气
+
+# A face, as one of the expression pictures is called
+# en: Furious
+expressionIcon.furious = 暴怒
+
+# A face, as one of the expression pictures is called
+# en: Pouting
+expressionIcon.pout = 噘嘴
+
+# A face, as one of the expression pictures is called
+# en: Disgusted
+expressionIcon.disgusted = 嫌弃
+
+# A face, as one of the expression pictures is called
+# en: Surprised
+expressionIcon.surprised = 惊讶
+
+# A face, as one of the expression pictures is called
+# en: Shocked
+expressionIcon.shocked = 震惊
+
+# A face, as one of the expression pictures is called
+# en: Scared
+expressionIcon.scared = 害怕
+
+# A face, as one of the expression pictures is called
+# en: Nervous
+expressionIcon.nervous = 紧张
+
+# A face, as one of the expression pictures is called
+# en: Embarrassed
+expressionIcon.embarrassed = 难为情
+
+# A face, as one of the expression pictures is called
+# en: Shy
+expressionIcon.shy = 害羞
+
+# A face, as one of the expression pictures is called
+# en: Confused
+expressionIcon.confused = 困惑
+
+# A face, as one of the expression pictures is called
+# en: Thinking
+expressionIcon.thinking = 思考
+
+# A face, as one of the expression pictures is called
+# en: Determined
+expressionIcon.determined = 坚定
+
+# A face, as one of the expression pictures is called
+# en: Bored
+expressionIcon.bored = 无聊
+
+# A face, as one of the expression pictures is called
+# en: Sleepy
+expressionIcon.sleepy = 困倦
+
+# A face, as one of the expression pictures is called
+# en: In pain
+expressionIcon.pained = 痛苦
+
+# Tooltip on a file path in red: there is no file at it
+# en: There is no file at this path, so the game will have nothing to show or play. Check the name, or choose the file again.
+picker.missing.tip = 这个路径下没有文件，所以游戏将没有东西可显示或播放。请检查名称，或重新选择文件。
+
+# Beside "(…)" in the In dialogue text panel
+# en: Shows in light blue in game: the game colours what is in brackets.
+dialogues.hintBrackets = 在游戏中显示为浅蓝色：游戏会给括号里的内容上色。
+
+# Beside an underlined "*sfx*" in the In dialogue text panel
+# en: A sound's pattern plays that sound; the editor underlines it.
+dialogues.hintCues = 声音的触发词会播放那个声音；编辑器会给它加下划线。
+
+# What the hint above stands beside: a made-up sound pattern, as a line would hold one (asterisks round a sound word)
+# en: *sfx*
+# same in this language
+dialogues.hintCues.sample = *sfx*
+
+# A label in the node editor, over the line's sounds (only while the line has an auto-trigger pattern)
+# en: Sounds:
+cues.label = 声音：
+
+# Tooltip on 'Sounds:'
+# en: Every sound whose auto-trigger pattern is in this line, in the order they come. Each plays by itself; here you set how loud it is, when it starts, whether its words show and whether it waits for the typewriter. Every setting left as it is costs nothing in the pack.
+cues.label.tip = 这句台词中出现了自动触发词的每个声音，按出现顺序排列。每个声音各自播放；你可以在这里设定它的响度、开始时间、是否显示它的文字，以及是否等待逐字显示。保持原样的设置在模组包里不占任何空间。
+
+# One of a line's sounds: {n} is its place in the line, {pattern} the words that play it
+# en: {n} · {pattern}
+cues.row = {n} · {pattern}
+
+# Label before a line's sound's volume slider
+# en: Volume
+cues.volume = 音量
+
+# Tooltip on a line's sound's volume
+# en: How loud this sound plays in this line, against the volume the sound itself is set to on the SFX tab: 100 % is as set, more is louder. Leaves the size of the text alone.
+cues.volume.tip = 这个声音在这句台词里播放的响度，以“音效”选项卡中为这个声音本身设定的音量为准：100 % 即按设定，更大则更响。不影响文字的字号。
+
+# Tooltip on the box beside a line's sound's volume slider
+# en: The volume in percent. Type a number here to go past what the slider reaches - up to 500 %.
+cues.volumeBox.tip = 音量百分比。要超过滑块能到达的范围，就在这里输入数字——最高 500 %。
+
+# After the box with a line's sound's start in it: the unit, seconds
+# en: s
+cues.secondsUnit = 秒
+
+# Label before a line's sound's start slider
+# en: Starts
+cues.starts = 开始
+
+# Tooltip on a line's sound's start
+# en: When this sound starts, in seconds. The sentence beside it says from what: the first sound counts from when the line appears, each one after it from when the sound before it ends - so 0 is right after it, and below 0 plays over its end. A sound set to wait for the typewriter counts from when the typewriter reaches it.
+cues.starts.tip = 这个声音开始的时间，以秒计。旁边的句子说明从什么时候算起：第一个声音从台词出现时算起，之后的每一个从前一个声音结束时算起——所以 0 是紧接其后，小于 0 则与它的结尾重叠。设为等待逐字显示的声音，从文字显示到它那里时算起。
+
+# Tooltip on the box beside a line's sound's start slider
+# en: The start in seconds; a minus sign makes it play over the end of the sound before it.
+cues.delayBox.tip = 开始时间（秒）；加上负号会让它与前一个声音的结尾重叠播放。
+
+# A line's first sound, starting at once
+# en: Starts as the line appears.
+cues.startsWithLine = 台词出现时开始。
+
+# A line's first sound, starting later: {seconds} is a number
+# en: Starts {seconds} s after the line appears.
+cues.startsAfterLine = 在台词出现后 {seconds} 秒开始。
+
+# A line's later sound, starting right after the one before: {pattern} is that sound's words
+# en: Starts as soon as {pattern} ends.
+cues.startsWhenPreviousEnds = {pattern} 一结束就开始。
+
+# A line's later sound, starting a while after the one before ends
+# en: Starts {seconds} s after {pattern} ends.
+cues.startsAfterPrevious = 在 {pattern} 结束后 {seconds} 秒开始。
+
+# A line's later sound, starting before the one before has ended, so both play at once for a moment
+# en: Starts {seconds} s before {pattern} ends, playing over it.
+cues.startsBeforePreviousEnds = 在 {pattern} 结束前 {seconds} 秒开始，与它重叠播放。
+
+# A line's sound that waits for the typewriter, starting the moment it is reached
+# en: Starts when the typewriter reaches it.
+cues.startsWhenTyped = 文字显示到它那里时开始。
+
+# A line's sound that waits for the typewriter, starting a while after
+# en: Starts {seconds} s after the typewriter reaches it.
+cues.startsAfterTyped = 文字显示到它那里后 {seconds} 秒开始。
+
+# Tick box: a line's sound's words are shown in the line
+# en: Show its words
+cues.showText = 显示它的文字
+
+# Tooltip on 'Show its words'
+# en: Off, the player hears the sound but does not read its pattern: the words are taken out of the line as it shows. The pattern stays in the text here, which is what makes the sound play.
+cues.showText.tip = 关闭时，玩家能听到声音，但读不到它的触发词：台词显示时会去掉这些文字。触发词仍保留在这里的文本中，正是它让声音播放。
+
+# Tick box: a line's sound waits until the typewriter shows its words
+# en: When typed
+cues.whenTyped = 随文字显示
+
+# Tooltip on 'When typed'
+# en: Play when the typewriter reaches the pattern, as its words appear, instead of after the sound before it. Works with the words shown or hidden.
+cues.whenTyped.tip = 在文字逐字显示到触发词、它的文字出现时播放，而不是在前一个声音之后。无论文字显示还是隐藏都有效。
+
+# Button: plays the selected line's sounds as the game will play them
+# en: ▶ Play the line
+cues.play = ▶ 播放这句台词
+
+# Tooltip on 'Play the line'
+# en: Plays this line's sounds with their volumes and timing, as the game will. The typewriter is timed by the speaker's typing speed. The pack has to be saved in a folder first, for its sound files to be found.
+cues.play.tip = 按游戏的方式，以各自的音量和时间播放这句台词的声音。逐字显示的速度按说话者的打字速度计。模组包需要先保存到一个文件夹中，才能找到它的声音文件。
+
+# Button: stops playing the line's sounds
+# en: ■ Stop
+cues.stop = ■ 停止
+
+# Under an empty Actor box in the Node panel
+# en: Nobody speaking: the line shows with no name, like a narrator's. Pick an actor to give it a speaker.
+dialogues.noSpeakerNote = 没有人说话：这句台词显示时没有名字，像旁白一样。选一个演员来给它一个说话者。
 
 # Text
 # en: Jump to:
@@ -4666,8 +5320,8 @@ dialogues.actionsStart = 开始时的动作
 dialogues.addNodeActionOnStart = + 添加动作
 
 # Text
-# en: This node is one of a Choice's options, so it has no Actions on start. When an option counts as having started is not something the pack can rely on — it may be the moment the menu is drawn rather than the moment the player picks it, which would run the actions for options nobody chose. Put them on Actions on finish, which happens when the option has actually been taken.
-dialogues.nodeOneChoiceS = 这个节点是某个“选择”的一个选项，所以它没有“开始时的动作”。一个选项从什么时候算作已开始，并不是模组包能依赖的——那可能是菜单被绘制出来的时刻，而不是玩家点选它的时刻，那样就会把没人选的选项的动作也执行掉。请把它们放到“结束时的动作”，那发生在这个选项确实被选中之后。
+# en: This node is one of a Choice's options, so it has only Actions on finish. Picking an option goes straight on to the lines under it, and its actions run the moment the player picks it - never for the options nobody chose.
+dialogues.nodeOneChoiceS = 这个节点是某个“选择”的一个选项，所以它只有“结束时的动作”。选中一个选项会直接进入它下面的台词，而它的动作会在玩家选中它的那一刻执行——没人选的选项永远不会执行。
 
 # Box heading
 # en: Actions on finish
@@ -4769,17 +5423,21 @@ dialogues.overwriteStartConditions.tip = 用剪贴板里的内容替换这些开
 # en: Draw each line in the list the way the game draws it — its own font, outline and drop shadow, the speaker's name in their colour, on a dark panel. Costs the spelling squiggles on those rows; they stay in the Text box below the list.
 dialogues.gameLookSwitch.tip = 按游戏的样子绘制列表中的每一行——游戏自己的字体、描边和投影，说话者的名字用他们的颜色，衬在深色面板上。代价是这些行上不再显示拼写波浪线；它们仍会出现在列表下方的“文本”框里。
 
-# Tooltip on "+ Root"
-# en: Add a new top-level node (no parent). It takes the speaker from the line it follows - actor, expression and outfit - and nothing else, because a root starts a fresh strand.
-dialogues.addDialogueRootNode.tip = 添加一个新的顶层节点（没有父节点）。
-
 # Tooltip on "+ Child"
-# en: Add a child of the currently-selected node, copying its actor, expression, outfit, conditions and actions — everything but the text and the jump tag.
-dialogues.addDialogueChildNode.tip = 为当前选中的节点添加一个子节点，并复制它的演员、表情、服装、条件和动作——除了文本和跳转标签之外的一切。
+# en: Add a line inside the selected one, as its child. It takes the speaker - actor, expression and outfit - and nothing else; Duplicate copies a node whole.
+dialogues.addDialogueChildNode.tip = 在所选台词里面添加一句台词，作为它的子节点。它只沿用说话者——演员、表情和服装——别的都不沿用；要完整复制一个节点，用“复制”。
 
 # Tooltip on "+ Sibling"
-# en: Add a node directly below the selected one, sharing its parent (or another root when the selection is a root). Copies everything but the text and the jump tag.
-dialogues.addDialogueSiblingNode.tip = 在选中节点的正下方添加一个节点，与它同父（若选中的是根节点，则新增另一个根节点）。除文本和跳转标签外，其余全部复制。
+# en: Add a line directly below the selected one, sharing its parent (or at the top level when the selected line is). It takes the speaker - actor, expression and outfit - and nothing else.
+dialogues.addDialogueSiblingNode.tip = 在所选台词正下方添加一句与它同父的台词（若所选台词在最上层，则添加在最上层）。它只沿用说话者——演员、表情和服装——别的都不沿用。
+
+# Tooltip on "+ New Node", the only button under an empty conversation's nodes
+# en: Add the conversation's first line. Once it has one, + Sibling and + Child add the rest.
+dialogues.addFirstNode.tip = 添加这段对话的第一句台词。有了一句之后，用“+ 同级”和“+ 子节点”添加其余的。
+
+# Tooltip on "Duplicate" under a conversation's nodes
+# en: Copy the selected node and everything under it, directly below it - all of it, conditions, actions and jumps too. A tag the conversation already has is renamed in the copy.
+dialogues.duplicateNode.tip = 把所选节点及其下方的一切复制到它正下方——全部内容，包括条件、动作和跳转。对话中已有的标签会在副本中改名。
 
 # Tooltip on "− Remove"
 # en: Delete the selected node. References to it from other nodes' children + the root list are scrubbed automatically.
@@ -4881,16 +5539,16 @@ dialogues.fit.spills = 对话框放不下：即使缩到最小，游戏里也会
 dialogues.optionalOtherNodesCan.tip = 可选。其他节点可以用“跳转 → 标签”从这里继续。
 
 # Tooltip on a dropdown
-# en: Where play goes after this node. Continue moves to the next node down the list, whether or not it is a child. Exit stops the conversation. Jump resumes at the node carrying the tag named below.
-dialogues.wherePlayGoesAfter.tip = 这个节点之后播放往哪走。“继续”会移到列表中的下一个节点，无论它是不是子节点。“退出”结束对话。“跳转”会从带有下面所指标签的节点继续。
+# en: Where play goes after this node. Continue moves to the next node down the list, whether or not it is a child. Exit stops the conversation. Jump resumes at the node carrying the tag named below - and once that node and its lines are done, the game says again any line it is under, so a jump lands best on a top-level line.
+dialogues.wherePlayGoesAfter.tip = 这个节点之后播放往哪走。“继续”会移到列表中的下一个节点，无论它是不是子节点。“退出”结束对话。“跳转”会从带有下面所指标签的节点继续——而那个节点和它下面的台词结束后，游戏会把它上方的每句台词再说一遍，所以跳转最好落在最上层的台词上。
 
 # Tooltip on a dropdown
 # en: Which tagged node to resume at. It has to match that node's Tag exactly; a tag that does not exist fails silently at runtime, so pick from the list where you can.
 dialogues.whichTaggedNodeResume.tip = 从哪个带标签的节点继续。它必须与那个节点的“标签”完全一致；不存在的标签在运行时会悄无声息地失败，所以尽量从列表里选。
 
 # Tooltip on a dropdown
-# en: How a text line advances. UntilInteraction waits for the player; Timeout auto-advances after the typewriter finishes.
-dialogues.howTextLineAdvances.tip = 文本台词如何推进。UntilInteraction 会等待玩家；Timeout 会在打字结束后自动推进。
+# en: How a text line advances. Until interaction waits for the player; Timeout auto-advances after the typewriter finishes.
+dialogues.howTextLineAdvances.tip = 文本台词如何推进。“等待交互”会等待玩家；Timeout 会在逐字显示结束后自动推进。
 
 # Tooltip on a text box
 # en: Seconds the line lingers after typing finishes. Decimals OK, e.g. 1.5.
@@ -4974,9 +5632,9 @@ scenes.loop = 循环
 # en: Volume:
 scenes.volume = 音量：
 
-# Box heading
-# en: Frame (Core SpriteRenderer)
-scenes.frameCoreSpriterenderer = 边框（Core 的 SpriteRenderer）
+# Box heading: one panel for a scene's frame, its sound and whether it counts as a Starmaker photo (Starmaker is the name of the game's photo site)
+# en: Frame, sound and Starmaker
+scenes.frameSoundStarmaker = 边框、声音和 Starmaker
 
 # Text
 # en: Pick a vanilla frame (shipped with the plugin) or supply a custom PNG path. When both are set, the custom frame wins at runtime.
@@ -4990,17 +5648,9 @@ scenes.vanillaFrame = 原版边框：
 # en: Custom frame:
 scenes.customFrame = 自定义边框：
 
-# Box heading
-# en: Sound (replaces prototype's Trigger)
-scenes.soundReplacesPrototypeS = 声音（替换原型的 Trigger）
-
-# Text
-# en: Mode:
-scenes.mode = 模式：
-
-# The heading over the Starmaker photo tick box.
-# en: Starmaker
-scenes.starmaker = Starmaker
+# Label before the dropdown of what a scene does with the sound of the scene it is built from
+# en: Sound:
+scenes.sound = 声音：
 
 # A tick box. Off unless the author turns it on.
 # en: Treat as a Starmaker photo
@@ -5217,6 +5867,10 @@ sfx.stopSfx = ■ 停止
 # Text
 # en: Plays through the editor's own audio (OGG/WAV/MP3).
 sfx.playsThroughEditorS = 通过编辑器自己的音频播放（OGG/WAV/MP3）。
+
+# Beside the SFX tab's Play button, for a sound with variants: which file just played; {n} of {count}
+# en: Played {file} ({n} of {count})
+sfx.playedVariant = 已播放 {file}（第 {n} 个，共 {count} 个）
 
 # Box heading
 # en: Auto-trigger patterns
@@ -5727,6 +6381,46 @@ variables.optionalUpperClampInt.tip = Int/Float 变量的可选上限。它同�
 # en: A note to yourself. Shown only in the editor, never in game.
 variables.noteYourselfShownOnly.tip = 给自己看的备注。只在编辑器里显示，游戏里永远不会出现。
 
+# Heading of the panel listing every place in the pack that uses the selected variable. {count} is how many places
+# en: Where it's used ({count} places)
+variables.uses.heading.other = 使用位置（{count} 处）
+
+# The grey line at the top of that panel
+# en: What sets this variable, what reads it, and what shows it in its words. Click one to go there.
+variables.uses.help = 设置这个变量的、读取它的、以及在文字中显示它的值的地方。点击一项即可跳转过去。
+
+# Shown in that panel when nothing uses the variable
+# en: Nothing in the pack uses it yet.
+variables.uses.none = 模组包中还没有用到它的地方。
+
+# A short tag before a place that changes the variable (an action)
+# en: Sets
+variables.uses.sets = 设置
+
+# Tooltip on "Sets"
+# en: An action here changes the variable.
+variables.uses.sets.tip = 这里的动作会改变这个变量。
+
+# A short tag before a place that checks the variable (a condition, or an action that takes from it)
+# en: Reads
+variables.uses.reads = 读取
+
+# Tooltip on "Reads"
+# en: A condition here checks the variable, or an action takes from it.
+variables.uses.reads.tip = 这里的条件会检查这个变量，或动作会从中取值。
+
+# A short tag before a text that shows the variable's value to the player ([PV:name] in its words)
+# en: Shows
+variables.uses.shows = 显示
+
+# Tooltip on "Shows"
+# en: Its words show the variable's value to the player.
+variables.uses.shows.tip = 它的文字会向玩家显示这个变量的值。
+
+# Tooltip on one of the places listed
+# en: Go there.
+variables.uses.go.tip = 跳转到那里。
+
 [Integration tab]
 
 # Tab
@@ -6007,10 +6701,6 @@ ui.copyNode = 复制
 # en: Paste
 ui.pasteNode = 粘贴
 
-# Button
-# en: Duplicate
-ui.duplicateNode = 再来一个
-
 # Heading
 # en: Preview
 ui.preview = 预览
@@ -6058,6 +6748,18 @@ ui.shownWhen = 显示条件
 # Button
 # en: + Condition
 ui.addActiveCondition = + 条件
+
+# Expandable section in a screen's settings: conditions that open the screen by themselves
+# en: Opens when
+ui.opensWhen = 打开条件
+
+# Text inside "Opens when", under its conditions
+# en: The screen opens by itself the moment all of these are met - as the game loads, if they already are - and again each time they are met anew. The player can still close it: it stays closed until they stop being met and are met again.
+ui.opensWhen.help = 这些条件全部满足的那一刻，界面会自己打开（如果游戏加载时就已满足，就在加载时打开），之后每次重新满足时都会再次打开。玩家仍然可以关掉它：它会一直关着，直到条件不再满足、然后再次满足为止。
+
+# Tooltip on "+ Condition" inside "Opens when"
+# en: With none, the screen opens only when an action opens it, or at the start if it is on screen from the start. With any, it opens by itself the moment they are all met.
+ui.addOpenCondition.tip = 一条都没有时，界面只在有动作打开它时才打开（如果它一开始就在屏幕上，开始时也会打开）。只要有条件，就会在全部满足的那一刻自己打开。
 
 # Expandable section
 # en: When it opens
@@ -6175,10 +6877,6 @@ ui.drawOrderAgainstOther.tip = 相对于其他不随游戏界面隐藏的 UI 的
 # en: Every UI the game has that can be drawn here. One entry per screen, not per canvas — the main canvas alone holds twenty-one of them.
 ui.everyUIGameHas.tip = 游戏中所有可以在这里绘制的 UI。按界面列出，而不是按画布——光是主画布就有二十一个。
 
-# Keyboard shortcut shown beside it ("+ Object")
-# en: Ins
-ui.addChild.keys = Ins
-
 # Tooltip on "+ Object"
 # en: Add an empty object of your own, inside whatever is selected. (Insert)
 ui.addChild.tip = 在选中的对象里添加一个你自己的空对象。（Insert）
@@ -6194,10 +6892,6 @@ ui.addShapeMenu.tip = 在选中的对象里添加一整个形状——一个窗�
 # Tooltip on "+ Piece"
 # en: Add a ready-made piece - a button, a row, a label - inside whatever is selected.
 ui.addPieceMenu.tip = 在选中的对象里添加一个现成的部件——一个按钮、一行、一个标签。
-
-# Keyboard shortcut shown beside it ("Remove")
-# en: Del
-ui.removeUi.keys = Del
 
 # Tooltip on "Remove"
 # en: Remove an object you added. Objects the game owns cannot be removed - a pack can change them, but not delete them out of the game's screen. (Delete)
@@ -6218,10 +6912,6 @@ ui.pasteNode.keys = Ctrl+V
 # Tooltip on "Paste"
 # en: Paste the copied object inside whatever is selected. Every paste is its own copy, so one Copy can be pasted as many times as you like.
 ui.pasteNode.tip = 把复制的对象粘贴到选中的对象里。每次粘贴都是独立的一份，所以复制一次可以粘贴任意多次。
-
-# Keyboard shortcut shown beside it ("Duplicate")
-# en: Ctrl+D
-ui.duplicateNode.keys = Ctrl+D
 
 # Tooltip on "Duplicate"
 # en: Another one of these, beside it.
@@ -6408,10 +7098,6 @@ quests.textParenthesesDrawnPink = 括号里的文字由日志本身绘制成粉�
 # Text
 # en: Runtime name:
 quests.runtimeName = 运行时名称：
-
-# Button
-# en: Rename…
-quests.renameQuest = 重命名…
 
 # Text
 # en: The game saves a player's progress on this quest under its runtime name. Renaming it after players have the pack starts the quest over for all of them.
@@ -6753,18 +7439,6 @@ saveConfirm.save = 保存
 # en: Cancel
 saveConfirm.cancel = 取消
 
-# Column heading
-# en: What
-saveConfirm.what = 内容
-
-# Column heading
-# en: Was
-saveConfirm.was = 原为
-
-# Column heading
-# en: Now
-saveConfirm.now = 现为
-
 # Tooltip on "Don't ask again"
 # en: Save straight away from now on. Turn this back on any time under Options → Confirm changes on save.
 saveConfirm.dontAskAgain.tip = 从现在起直接保存。随时可以在“选项 → 保存时确认改动”里重新打开。
@@ -6773,7 +7447,7 @@ saveConfirm.dontAskAgain.tip = 从现在起直接保存。随时可以在“选�
 # en: Go back to the editor. Nothing is written; your edits stay exactly as they are.
 saveConfirm.cancel.tip = 返回编辑器。不会写入任何内容；你的改动原样保留。
 
-# Tooltip on a change in the list: {0} is where, {1} what it was, {2} what it is now
+# Tooltip on a change in the save prompt's list: {0} is the change in words, {1} what it was, {2} what it is now
 # en: {0}\nwas: {1}\nnow: {2}
 saveConfirm.change.tip = {0}\n原为：{1}\n现为：{2}
 
@@ -6784,6 +7458,496 @@ diff.wholeManifest = （整个清单）
 # In the list of what a save changes, for a pack saved for the first time
 # en: no previous saved state to compare against
 diff.nothingToCompare = 没有可供比较的上一次保存状态
+
+# Heading over the save prompt's changes to the pack's own settings (its version, its id)
+# en: Pack
+diff.kind.pack = 模组包
+
+# What a heading in the save prompt's list is: 'Dialogue · Chat at the cave'
+# en: Dialogue
+diff.kind.dialogue = 对话
+
+# What a heading in the save prompt's list is
+# en: Place
+diff.kind.place = 地点
+
+# What a heading in the save prompt's list is
+# en: Character
+diff.kind.character = 角色
+
+# What a heading in the save prompt's list is
+# en: Scene
+diff.kind.scene = 场景
+
+# What a heading in the save prompt's list is (a sound effect, as the SFX tab holds)
+# en: SFX
+diff.kind.sound = 音效
+
+# What a heading in the save prompt's list is (a music track)
+# en: Music
+diff.kind.music = 音乐
+
+# What a heading in the save prompt's list is
+# en: Variable
+diff.kind.variable = 变量
+
+# What a heading in the save prompt's list is (one of the Integration tab's rules)
+# en: Integration rule
+diff.kind.rule = 集成规则
+
+# What a heading in the save prompt's list is
+# en: NPC
+# same in this language
+diff.kind.npc = NPC
+
+# What a heading in the save prompt's list is (one of the UI tab's screens)
+# en: UI screen
+diff.kind.screen = UI 界面
+
+# What a heading in the save prompt's list is
+# en: Quest
+diff.kind.quest = 任务
+
+# What a heading in the save prompt's list is
+# en: Wallpaper
+diff.kind.wallpaper = 壁纸
+
+# What a heading in the save prompt's list is
+# en: Map button
+diff.kind.mapButton = 地图按钮
+
+# What a heading in the save prompt's list is (one of the game's own places the pack adds to)
+# en: Game place
+diff.kind.gamePlace = 游戏地点
+
+# What a heading in the save prompt's list is (lines said in a room)
+# en: Room talk
+diff.kind.roomTalk = 房间闲谈
+
+# What a heading in the save prompt's list is
+# en: Dialogue folder
+diff.kind.dialogueFolder = 对话文件夹
+
+# What a heading in the save prompt's list is
+# en: Scene folder
+diff.kind.sceneFolder = 场景文件夹
+
+# What a heading in the save prompt's list is
+# en: Variable folder
+diff.kind.variableFolder = 变量文件夹
+
+# What a heading in the save prompt's list is (a folder on the Integration tab)
+# en: Integration folder
+diff.kind.ruleFolder = 集成文件夹
+
+# What a heading in the save prompt's list is (a folder on any other tab)
+# en: Folder
+diff.kind.folder = 文件夹
+
+# Save prompt: under a heading, when the whole thing is new
+# en: Added
+diff.recordAdded = 已添加
+
+# Save prompt: under a heading, when the whole thing is deleted
+# en: Removed
+diff.recordRemoved = 已删除
+
+# Save prompt: under a heading, when the whole thing changed into something else
+# en: Changed
+diff.recordChanged = 已更改
+
+# Save prompt: something new inside a record - {thing} is a line by its words, or an action by when it runs and its type
+# en: New: {thing}
+diff.newThing = 新增：{thing}
+
+# Save prompt: something taken out of a record - {thing} as above
+# en: Removed: {thing}
+diff.removedThing = 已移除：{thing}
+
+# Save prompt: a list in a different order - {what} names the list
+# en: {what}: new order
+diff.newOrder = {what}：新顺序
+
+# Save prompt, under a changed list of names: only the order changed
+# en: new order
+diff.newOrderShort = 新顺序
+
+# Save prompt, under a changed list of names: the names now in it - {items} is the names
+# en: added {items}
+diff.listAdded = 添加了 {items}
+
+# Save prompt, under a changed list of names: the names no longer in it
+# en: taken out {items}
+diff.listRemoved = 移除了 {items}
+
+# Save prompt: a value that was not there before, or is not any more
+# en: not set
+diff.notSet = 未设置
+
+# Save prompt: an empty list's value
+# en: nothing
+diff.nothing = 无
+
+# Save prompt: an empty text's value
+# en: empty
+diff.empty = 空
+
+# Save prompt: a switched-on value
+# en: yes
+diff.yes = 是
+
+# Save prompt: a switched-off value
+# en: no
+diff.no = 否
+
+# Save prompt: something in a list with no name, by its place in the list
+# en: item {n}
+diff.thing.item = 第 {n} 项
+
+# Save prompt: a choice line that has no words of its own
+# en: a choice with no words
+diff.thing.choice = 一个没有文字的选项
+
+# Save prompt: a line that has no words
+# en: a line with no words
+diff.thing.lineNoWords = 一句没有文字的台词
+
+# Save prompt: a record's settings, counted
+# en: {count} settings
+diff.settings.other = {count} 项设置
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Text
+diff.field.text = 文本
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Actor
+diff.field.actor = 演员
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Expression
+diff.field.expression = 表情
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Outfit
+diff.field.outfit = 服装
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Kind
+diff.field.kind = 类型
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Tag
+diff.field.tag = 标签
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Jump to
+diff.field.jump = 跳转到
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Mode
+diff.field.mode = 模式
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Timeout
+diff.field.timeout = 超时
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Duration
+diff.field.duration = 时长
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Conditions
+diff.field.conditions = 条件
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Start conditions
+diff.field.startConditions = 开始条件
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: On start
+diff.field.actionsOnStart = 开始时
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: On finish
+diff.field.actionsOnFinish = 结束时
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Actions
+diff.field.actions = 动作
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: What follows
+diff.field.children = 后续
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Opening lines
+diff.field.rootNodeIds = 开场台词
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Lines
+diff.field.nodes = 台词
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Display name
+diff.field.displayName = 显示名称
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Runtime name
+diff.field.key = 运行时名称
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Name
+diff.field.name = 名称
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Title
+diff.field.title = 标题
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Description
+diff.field.description = 描述
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Label
+diff.field.label = 文字
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Priority
+diff.field.priority = 优先级
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Queued
+diff.field.queued = 排队
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Type
+diff.field.type = 类型
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Settings
+diff.field.params = 设置
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Starting value
+diff.field.defaultValue = 初始值
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Kept in the save
+diff.field.persisted = 保存在存档中
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Sound
+diff.field.sound = 声音
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Picture
+diff.field.sceneSprite = 图片
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Frame
+diff.field.vanillaFrame = 相框
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Picture file
+diff.field.externalSpritePath = 图片文件
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Audio file
+diff.field.audioPath = 音频文件
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Default volume
+diff.field.defaultVolume = 默认音量
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Auto-trigger patterns
+diff.field.textPatterns = 自动触发词
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Loop
+diff.field.loop = 循环
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Picture
+diff.field.spritePath = 图片
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Unlock conditions
+diff.field.unlockConditions = 解锁条件
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Contents
+diff.field.items = 内容
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Folders
+diff.field.folders = 文件夹
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Dialogues
+diff.field.dialogues = 对话
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Scenes
+diff.field.scenes = 场景
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Places
+diff.field.places = 地点
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Characters
+diff.field.characters = 角色
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: SFX
+diff.field.sfx = 音效
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Music
+diff.field.music = 音乐
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Variables
+diff.field.variables = 变量
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Integration rules
+diff.field.integrationRules = 集成规则
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: NPCs
+diff.field.npcs = NPC
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Quests
+diff.field.quests = 任务
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Wallpapers
+diff.field.wallpapers = 壁纸
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: UI screens
+diff.field.uis = UI 界面
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Map buttons
+diff.field.mapButtons = 地图按钮
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Tasks
+diff.field.tasks = 目标
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Name colour
+diff.field.nameColor = 名字颜色
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Outfits
+diff.field.outfits = 服装
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Expressions
+diff.field.expressions = 表情
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Default outfit
+diff.field.defaultOutfit = 默认服装
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Pronouns
+diff.field.pronouns = 代词
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Typewriter
+diff.field.typewriter = 逐字显示
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Target
+diff.field.target = 目标
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: District
+diff.field.district = 区域
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Version
+diff.field.version = 版本
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Pack id
+diff.field.packId = 模组包 ID
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Game version
+diff.field.gameVersion = 游戏版本
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: ModForge version
+diff.field.forgeVersion = ModForge 版本
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Silenced issues
+diff.field.ignoredIssues = 已静音的问题
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: When it runs
+diff.field.triggerMode = 何时运行
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Sprite
+diff.field.sprite = 精灵图
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Mask
+diff.field.mask = 遮罩
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Sorting order
+diff.field.sortingOrder = 排序值
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Position
+diff.field.position = 位置
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Active
+diff.field.active = 激活
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Enabled
+diff.field.enabled = 启用
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Colour
+diff.field.color = 颜色
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Tint
+diff.field.tint = 着色
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: GameObjects
+# same in this language
+diff.field.gameObjects = GameObjects
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Components
+diff.field.components = 组件
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Internal name
+diff.field.internalName = 内部名称
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Navigator buttons
+diff.field.navigatorButtons = 导航按钮
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Value
+diff.field.value = 值
 
 # In the list of what a save changes: a list that was put in a new order
 # en: {count} entries
@@ -7244,8 +8408,8 @@ docs.modPack.summary = 在进入细节之前，先说整体思路。
 docs.modPack.packOneFolderEverything = 一个模组包就是一个文件夹。你创作的一切最终都会落到其中一个叫 modpack.json 的文件里，图片和音频则放在这个文件旁边。
 
 # Docs: a point in the topic
-# en: You never edit modpack.json by hand. The editor writes it, and the tabs across the top are the things it can hold.
-docs.modPack.neverEditModpackJson = 你永远不必手动编辑 modpack.json。它由编辑器写入，而顶部的各个选项卡就是它能容纳的内容。
+# en: You never edit modpack.json by hand. The editor writes it, and its tabs are the things it can hold.
+docs.modPack.neverEditModpackJson = 你永远不必手动编辑 modpack.json。它由编辑器写入，而编辑器的各个选项卡就是它能容纳的内容。
 
 # Docs: a point in the topic
 # en: Export turns the folder into one .smspack file. That is what you hand to players, and the only thing the game reads.
@@ -8103,6 +9267,14 @@ docs.editMenu.title = 编辑菜单
 # en: Acts on the selected item in the current tab's list.
 docs.editMenu.summary = 作用于当前选项卡列表中选中的条目。
 
+# Help page Edit menu: a term
+# en: Undo, Redo
+docs.editMenu.undo.term = 撤销、重做
+
+# Help page Edit menu: what Undo and Redo do
+# en: Take back the last change, or put it back - anywhere in the pack. What you type into a box counts as one change, made when you leave the box.
+docs.editMenu.undo = 撤销最近一次更改，或重做它——在模组包的任何地方都可以。在一个框里输入的内容算作一次更改，在离开该框时生效。
+
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Duplicate item
 docs.editMenu.copySelectedItemInto.term = 复制条目
@@ -8170,8 +9342,8 @@ docs.editMenu.modforgeTabHasNo = ModForge 选项卡没有条目列表，所以�
 docs.optionsMenu.title = 选项菜单
 
 # Docs: the line under the topic's title
-# en: Editor preferences. All of them are remembered between sessions.
-docs.optionsMenu.summary = 编辑器偏好设置。它们全都会在下次启动时保留。
+# en: Editor preferences, in groups under headings: Look, Writing, Saving and exporting, The game and Updates. All of them are remembered between sessions.
+docs.optionsMenu.summary = 编辑器偏好设置，按标题分组：外观、写作、保存与导出、游戏和更新。它们全都会在下次启动时保留。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Confirm changes on save
@@ -8220,24 +9392,32 @@ docs.optionsMenu.windowsDictionarySharedRest = Windows 词典与你系统的其�
 docs.themes.title = 主题
 
 # Docs: the line under the topic's title
-# en: Recolours the editor. Your choice is remembered between sessions.
-docs.themes.summary = 给编辑器换配色。你的选择会在下次启动时保留。
+# en: Options ▸ Themes recolours the editor, and EX draws it another way. Your choice is remembered between sessions.
+docs.themes.summary = “选项 ▸ 主题”给编辑器换配色，EX 则用另一种方式绘制它。你的选择会在下次启动时保留。
 
-# Docs: the bold label in front of the next text, usually a name on screen
-# en: Light themes
-docs.themes.lightSlateForestPlum.term = 浅色主题
+# Help page Themes: a term
+# en: EX
+docs.themes.ex.term = EX
 
-# Docs: a point in the topic
-# en: Light, Slate, Forest, Plum, Ocean, Sandstone and Rose.
-docs.themes.lightSlateForestPlum = 浅色、石板、森林、梅紫、海洋、砂岩和玫瑰。
+# Help page Themes: what the EX themes are
+# en: The editor drawn another way: the tabs in a rail down the left with an icon over each, the pack's name heading the page, every panel a tile. Light ones and dark ones; a first start opens in Frost.
+docs.themes.ex = 用另一种方式绘制的编辑器：标签页排在左侧的竖栏里，每个上方有图标，页面以模组包名称为标题，每个面板是一块磁贴。有浅色也有深色；首次启动时打开 Frost。
 
-# Docs: the bold label in front of the next text, usually a name on screen
-# en: Dark themes
-docs.themes.darkMidnightCarbon.term = 深色主题
+# Help page Themes: a term
+# en: Classic
+docs.themes.classic.term = 经典
 
-# Docs: a point in the topic
-# en: Dark, Midnight and Carbon.
-docs.themes.darkMidnightCarbon = 深色、午夜和碳黑。
+# Help page Themes: what the Classic themes are
+# en: The editor in the shape it had before EX, in every colour it had, light and dark.
+docs.themes.classic = EX 之前那种形态的编辑器，保留了它原有的所有配色，浅色和深色都有。
+
+# Help page Themes: a term
+# en: Your own
+docs.themes.yours.term = 我的
+
+# Help page Themes: themes the person makes
+# en: Your themes… opens a window to make themes of your own from a few colours. They are listed under Yours once there is one.
+docs.themes.yours = “我的主题…”会打开一个窗口，用几种颜色做出你自己的主题。有了至少一个后，它们会列在“我的”下面。
 
 # Docs: a point in the topic
 # en: Themes change the editor only. They have no effect on the pack, or on anything in the game.
@@ -9482,32 +10662,40 @@ docs.dialogues.heading.nodes = 节点
 docs.dialogues.dialogueTreePlayStarts = 一段对话是一棵树。播放从第一个根节点开始向下推进：先运行一个节点，再按顺序运行它的子节点，直到某处退出。
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: + Root
-docs.dialogues.addNodeTopLevel.term = + 根节点
+# en: + New Node
+docs.dialogues.addFirstNode.term = + 新节点
 
 # Docs: a point in the topic
-# en: Add a node at the top level, with no parent.
-docs.dialogues.addNodeTopLevel = 添加一个没有父节点的顶层节点。
+# en: Add a conversation's first line. Until it has one, this is the only button.
+docs.dialogues.addFirstNode = 添加对话的第一句台词。在它还没有台词时，这是唯一的按钮。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: + Child
-docs.dialogues.addChildSelectedNode.term = + 子节点
+docs.dialogues.addChildNode.term = + 子节点
 
 # Docs: a point in the topic
-# en: Add a child of the selected node. The speaker, expression, outfit, timing, jump and the whole conditions and actions lists all carry over, so writing the next line of a scene is not a matter of re-picking all of it.
-docs.dialogues.addChildSelectedNode = 为所选节点添加一个子节点。说话者、表情、服装、时长、跳转以及整份条件和动作列表都会继承，这样写一场戏的下一行就不必把所有设置重新选一遍。
+# en: Add a line inside the selected one, as its child.
+docs.dialogues.addChildNode = 在所选台词里面添加一句台词，作为它的子节点。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: + Sibling
-docs.dialogues.sameButBesideSelected.term = + 同级节点
+docs.dialogues.addSiblingNode.term = + 同级
 
 # Docs: a point in the topic
-# en: The same, but beside the selected node rather than under it. It lands directly below what you had selected, not at the end of the row.
-docs.dialogues.sameButBesideSelected = 同样的效果，但放在所选节点旁边而不是下面。它会落在你所选节点的正下方，而不是这一排的末尾。
+# en: Add a line beside the selected one, directly below it rather than at the end of the row. Beside a line at the top level, it is another at the top level - which is how a new strand starts.
+docs.dialogues.addSiblingNode = 在所选台词旁边添加一句台词，紧贴在它下方，而不是放在这一排的末尾。在最上层台词旁边添加的，也是一句最上层台词——新的分支就是这样开始的。
 
 # Docs: a point in the topic
-# en: The text and the tag never carry over. The text is the one thing that is always different, and two nodes sharing a tag would make every jump aimed at the first one ambiguous.
-docs.dialogues.textTagNeverCarry = 文本和标签从不继承。文本是唯一总是不同的东西，而两个节点共用一个标签会让指向前一个的跳转变得含糊。
+# en: A new line takes the selected one's speaker - actor, expression and outfit - and nothing else: conditions, actions and a jump written for one line are as often wrong on the next as right.
+docs.dialogues.newLineTakesSpeaker = 新台词只沿用所选台词的说话者——演员、表情和服装——别的都不沿用：为一句台词写的条件、动作和跳转，用在下一句上错的时候和对的时候一样多。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Duplicate
+docs.dialogues.duplicateNode.term = 复制
+
+# Docs: a point in the topic
+# en: Copy the selected node and everything beneath it, directly below it - the whole of each, conditions and actions too. Ctrl+D in the list. A tag the conversation already has is renamed in the copy, and the copy's own jumps follow it, so no jump becomes ambiguous.
+docs.dialogues.duplicateNode = 把所选节点及其下方的一切复制到它正下方——每一个都完整复制，条件和动作也包括在内。在列表中按 Ctrl+D。对话中已有的标签会在副本中改名，副本自己的跳转也会跟着改，因此不会有跳转变得含糊。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: − Remove
@@ -9570,12 +10758,12 @@ docs.dialogues.optionalLabelSoAnother.term = 标签
 docs.dialogues.optionalLabelSoAnother = 可选的标签，以便另一个节点跳到这里。同一个标签最多只给一个节点。
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: Jump
-docs.dialogues.wherePlayGoesAfter.term = 跳转
+# en: Then
+docs.dialogues.wherePlayGoesAfter.term = 然后
 
 # Docs: a point in the topic
-# en: Where play goes after this node. Continue, the default, moves to the next node down the list — whether that is a child of this one or something further out. Exit stops the conversation and skips everything below. Jump resumes at whichever node carries the tag you name.
-docs.dialogues.wherePlayGoesAfter = 这个节点之后播放去往哪里。继续是默认值，前往列表中的下一个节点，无论它是本节点的子节点还是更外层的内容。退出会停止对话并跳过下面的一切。跳转则在你指定的标签所在的节点继续。
+# en: Where play goes after this node. Continue, the default, moves to the next node down the list — whether that is a child of this one or something further out. Exit stops the conversation and skips everything below. Jump resumes at whichever node carries the tag you name. Once that node and the lines under it are done, the game says again any line it is under, then that line's lines - so a jump that lands under the very line that jumps goes round for ever. A node at the top level carries on cleanly, and Validate warns about the others.
+docs.dialogues.wherePlayGoesAfter = 这个节点之后播放去往哪里。继续是默认值，前往列表中的下一个节点，无论它是本节点的子节点还是更外层的内容。退出会停止对话并跳过下面的一切。跳转则在你指定的标签所在的节点继续。那个节点和它下面的台词结束后，游戏会把它上方的每句台词再说一遍，接着说那句台词下面的台词——所以落在发起跳转的那句台词下方的跳转会永远绕圈。最上层的节点会顺畅地继续，其他情况“验证”会给出警告。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Jump to
@@ -9594,8 +10782,8 @@ docs.dialogues.veryBottomDialogueContinue = 在一段对话的最末尾，继续
 docs.dialogues.untilinteractionWaitsPlayerTimeout.term = 时长
 
 # Docs: a point in the topic
-# en: UntilInteraction waits for the player; Timeout moves on by itself once the line has finished typing.
-docs.dialogues.untilinteractionWaitsPlayerTimeout = UntilInteraction 等待玩家；Timeout 在这一行打完字后自行推进。
+# en: Until interaction waits for the player; Timeout moves on by itself once the line has finished typing.
+docs.dialogues.untilinteractionWaitsPlayerTimeout = “等待交互”会等待玩家；Timeout 在这一行打完字后自行推进。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Timeout (s)
@@ -12104,12 +13292,12 @@ tutorial.firstConversation.sayWhereHappens.hint = 「开始条件」，然后是
 tutorial.firstConversation.writeLine.title = 写一行台词
 
 # Tutorials: what the step says
-# en: Add a root node, choose your character as the actor, and give them something to say. One line is a conversation.
-tutorial.firstConversation.writeLine.body = 添加一个根节点，把你的角色选为演员，再给他一句话说。一行台词就是一段对话。
+# en: Add the first line with + New Node, choose your character as the actor, and give them something to say. One line is a conversation.
+tutorial.firstConversation.writeLine.body = 用 + 新节点添加第一句台词，把你的角色选为演员，再给他一句话说。一行台词就是一段对话。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Root, then fill in Actor and Text in the Node box.
-tutorial.firstConversation.writeLine.hint = + 根节点，然后在「节点」框里填写「演员」和「文本」。
+# en: + New Node, then fill in Actor and Text in the Node box.
+tutorial.firstConversation.writeLine.hint = + 新节点，然后在「节点」框里填写「演员」和「文本」。
 
 # Tutorials: the heading of a step
 # en: The rest of the Node box
@@ -12144,12 +13332,12 @@ tutorial.firstConversation.happensAfterNode.body = 「跳转」决定播放接�
 tutorial.firstConversation.makeExitMeanSomething.title = 让「退出」真有意义
 
 # Tutorials: what the step says
-# en: At the very bottom of the list Continue and Exit are the same thing, because there is nothing left to skip either way. So give Exit something to skip: add one more root node below the choice with a closing line, then set ONE of your two options to Exit. Take that option in game and the conversation stops; take the other and it carries on into the closing line.\n\nGive the closing line an actor as well. Every node that SAYS something needs one — a line with no speaker shows no name, which reads as a fault rather than as a narrator.
-tutorial.firstConversation.makeExitMeanSomething.body = 在列表最末尾，继续和退出是一回事，因为反正已经没有什么可跳过了。所以给退出一点可跳过的内容：在选择下面再加一个根节点，写上一句收尾台词，然后把你两个选项中的「一个」设为退出。在游戏里选那一个，对话就停住；选另一个，就会继续走到收尾台词。\n\n收尾台词也要配演员。凡是「说话」的节点都需要一个——没有说话人的台词不会显示名字，这读起来像是出了故障，而不像旁白。
+# en: At the very bottom of the list Continue and Exit are the same thing, because there is nothing left to skip either way. So give Exit something to skip: select the choice and add one more line beside it with + Sibling - the closing line - then set ONE of your two options to Exit. Take that option in game and the conversation stops; take the other and it carries on into the closing line.\n\nGive the closing line an actor as well. Every node that SAYS something needs one — a line with no speaker shows no name, which reads as a fault rather than as a narrator.
+tutorial.firstConversation.makeExitMeanSomething.body = 在列表最末尾，继续和退出是一回事，因为反正已经没有什么可跳过了。所以给退出一点可跳过的内容：选中那个选择节点，用 + 同级在它旁边再加一句台词——收尾台词——然后把你两个选项中的「一个」设为退出。在游戏里选那一个，对话就停住；选另一个，就会继续走到收尾台词。\n\n收尾台词也要配演员。凡是「说话」的节点都需要一个——没有说话人的台词不会显示名字，这读起来像是出了故障，而不像旁白。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Root for the closing line, then select an option and set Jump to Exit.
-tutorial.firstConversation.makeExitMeanSomething.hint = 用 + 根节点写收尾台词，然后选中一个选项，把「跳转」设为退出。
+# en: Select the choice and press + Sibling for the closing line, then select an option and set Then to Exit.
+tutorial.firstConversation.makeExitMeanSomething.hint = 选中那个选择节点，按 + 同级写收尾台词，然后选中一个选项，把「然后」设为退出。
 
 # Tutorials: the heading of a step
 # en: Actions are how a line changes things
@@ -12242,12 +13430,12 @@ tutorial.linesThatChoose.someoneElseRoom.hint = 添加一个节点，写一句�
 tutorial.linesThatChoose.lettingOneOptionSay.title = 让其中一个选项多说几句
 
 # Tutorials: what the step says
-# en: Last tutorial you gave one option Exit and let the other fall through to your closing line. Both are still one line long. Real dialogue is lopsided — one answer earns a reaction, the other does not — and the branch that reacts still has to end up somewhere, or you write the ending twice.\n\nA TAG is a name you give a node so another node can send play to it. Two fields do it. Tag, on the node being aimed AT: a short word, yours to choose, and it is a label rather than anything the player sees. Jump, on the node doing the aiming: set it to Jump, and a Jump to box appears listing the tags in this dialogue.\n\nBuild it in that order — the tag first, so it is there to be picked. Tag your closing line, the one you added last tutorial, with something like ending. Then take the option you did NOT set to Exit, add a Child under it, and write the reaction that answer deserves. On that child set Jump to Jump, and choose ending in the Jump to box.\n\nPlay now runs the option, the reaction, and then lands on the closing line. The other option still ends where it ended. One ending, written once, reached two ways — and nothing repeats, because every jump here goes forward.
-tutorial.linesThatChoose.lettingOneOptionSay.body = 上一篇教程里，你给一个选项设了退出，让另一个自然落到收尾台词。两个都还只有一行。真实的对话是不对称的——一个回答值得一句回应，另一个不值得——而作出回应的那条分支最终也得落到某个地方，否则你就得把结尾写两遍。\n\n「标签」是你给某个节点起的名字，好让另一个节点把播放送到它那里。要用两个字段。「标签」写在被指向的那个节点上：一个短词，你自己定，它是内部的记号，玩家看不到。「跳转」写在发出指向的那个节点上：把它设为跳转，就会出现一个「跳转到」框，列出本段对话里的标签。\n\n按这个顺序来搭——先写标签，它才会在那里可供挑选。给你上一篇教程加的那句收尾台词打个标签，比如 ending。然后找到你「没有」设为退出的那个选项，给它加一个子节点，写上那个回答应得的回应。在那个子节点上把「跳转」设为跳转，并在「跳转到」框里选 ending。\n\n现在播放会走过这个选项、这句回应，然后落到收尾台词。另一个选项仍然在原来的地方结束。一个结尾，只写一遍，两条路都能到——而且什么都不会重复，因为这里的跳转都是往前走的。
+# en: Last tutorial you gave one option Exit and let the other fall through to your closing line. Both are still one line long. Real dialogue is lopsided — one answer earns a reaction, the other does not — and the branch that reacts still has to end up somewhere, or you write the ending twice.\n\nA TAG is a name you give a node so another node can send play to it. Two fields do it. Tag, on the node being aimed AT - tick it to give the node one: a short word, yours to choose, and it is a label rather than anything the player sees. Then, on the node doing the aiming: set it to Jump, and a Jump to box appears listing the tags in this dialogue.\n\nBuild it in that order — the tag first, so it is there to be picked. Tag your closing line, the one you added last tutorial, with something like ending. Then take the option you did NOT set to Exit, add a Child under it, and write the reaction that answer deserves. On that child set Then to Jump, and choose ending in the Jump to box.\n\nPlay now runs the option, the reaction, and then lands on the closing line. The other option still ends where it ended. One ending, written once, reached two ways — and nothing repeats, because every jump here goes forward.
+tutorial.linesThatChoose.lettingOneOptionSay.body = 上一篇教程里，你给一个选项设了退出，让另一个自然落到收尾台词。两个都还只有一行。真实的对话是不对称的——一个回答值得一句回应，另一个不值得——而作出回应的那条分支最终也得落到某个地方，否则你就得把结尾写两遍。\n\n「标签」是你给某个节点起的名字，好让另一个节点把播放送到它那里。要用两个字段。「标签」在被指向的那个节点上——勾选它就能给节点一个标签：一个短词，你自己定，它是内部的记号，玩家看不到。然后，在发出指向的那个节点上：把它设为跳转，就会出现一个「跳转到」框，列出本段对话里的标签。\n\n按这个顺序来搭——先写标签，它才会在那里可供挑选。给你上一篇教程加的那句收尾台词打个标签，比如 ending。然后找到你「没有」设为退出的那个选项，给它加一个子节点，写上那个回答应得的回应。在那个子节点上把「然后」设为跳转，并在「跳转到」框里选 ending。\n\n现在播放会走过这个选项、这句回应，然后落到收尾台词。另一个选项仍然在原来的地方结束。一个结尾，只写一遍，两条路都能到——而且什么都不会重复，因为这里的跳转都是往前走的。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Tag the closing line, then + Child on the non-Exit option and set its Jump to that tag.
-tutorial.linesThatChoose.lettingOneOptionSay.hint = 先给收尾台词打标签，然后在没有设为退出的那个选项上 + 子节点，并把它的「跳转」设为那个标签。
+# en: Tag the closing line, then + Child on the non-Exit option, set its Then to Jump and pick that tag.
+tutorial.linesThatChoose.lettingOneOptionSay.hint = 先给收尾台词打标签，然后在没有设为退出的那个选项上 + 子节点，把它的「然后」设为跳转，并选那个标签。
 
 # Tutorials: the heading of a step
 # en: Jumping backwards on purpose
@@ -13258,8 +14446,8 @@ validation.pack.looksLike = 这个模组包的大部分内容看起来是{langua
 validation.pack.notOwnLanguage = 这个模组包的大部分内容不是用{own}所用的文字书写的，但它声明自己是用{own}编写的。请在 ModForge 选项卡中把“编写语言”改为它实际使用的语言：译本由它翻译而来，没有译本的玩家读到的也是它。
 
 # Validation message
-# en: This node is one of a Choice's options and has {count} actions on start. When an option counts as STARTED is not something the pack can rely on — it may be when the menu is drawn rather than when the player picks it, in which case these run for options nobody chose. Move them to Actions on finish, which happens once the option has been taken.
-validation.dialogue.choiceOptionOnStart.other = 这个节点是某个「选择」的一个选项，并带有 {count} 个开始时的动作。一个选项什么时候算「已开始」，并不是模组包可以依赖的事——它可能是在菜单绘制时就算开始，而不是玩家选中时，那样这些动作就会为没人选的选项运行。请把它们移到「结束时的动作」里，那是在选项被选中之后才发生的。
+# en: This node is one of a Choice's options and has {count} actions on start, which the editor no longer shows on an option, so you cannot see or change them here. They still run: the moment the player picks this option, just before its actions on finish. Move them to Actions on finish to see them here.
+validation.dialogue.choiceOptionOnStart.other = 这个节点是某个“选择”的一个选项，有 {count} 个开始时的动作，编辑器已不再在选项上显示它们，所以你在这里看不到也改不了。它们仍会执行：在玩家选中这个选项的那一刻，紧接在它的结束时的动作之前。把它们移到“结束时的动作”，就能在这里看到。
 
 # Validation message
 # en: This node is a Choice with no children, so it is a menu offering nothing to pick. If it is meant to be a line, set Kind to Text. Older packs collect these on their own: adding a node with + Child or + Sibling used to copy the kind of the node it came from, so every option under a Choice was saved as a Choice as well.
@@ -13273,13 +14461,21 @@ validation.text.unknownPackVar = 文本里用了 [PV:{name}]，但这个模组�
 # en: Text has a [PV: that never closes with a ]. The token only counts when it ends in a square bracket, so this one is shown to the player exactly as it was typed.
 validation.text.malformedToken = 文本里有一个 [PV: 始终没有用 ] 收尾。标记只有以右方括号结束才算数，所以这一个会原样显示给玩家。
 
-# Validation message; {name} is what the action names
-# en: '{name}' is not an effect in this pack. A runtime name follows its display name, so renaming one leaves references behind.
-validation.action.unknownSfx = 「{name}」不是这个模组包里的音效。运行时名称跟随显示名称，所以改了名字就会留下失效的引用。
+# Validation message; {language} is a language's name, {codes} the tags or tokens, e.g. {PC}  </b>
+# en: The {language} translation has lost {codes}, which the default text has - players of {language} see the line without it.
+validation.translation.lostCodes = {language}译文丢失了{codes}，而默认文字里有——使用{language}的玩家看到的台词会缺少它。
+
+# Validation message; {language} is a language's name, {codes} the tags or tokens
+# en: The {language} translation has {codes}, which the default text does not.
+validation.translation.addedCodes = {language}译文里有{codes}，而默认文字里没有。
 
 # Validation message; {name} is what the action names
-# en: '{name}' is not a scene in this pack. A runtime name follows its display name, so renaming one leaves references behind.
-validation.action.unknownScene = 「{name}」不是这个模组包里的场景。运行时名称跟随显示名称，所以改了名字就会留下失效的引用。
+# en: '{name}' is not one of this pack's sound effects. Pick the sound again from the list.
+validation.action.unknownSfx = 「{name}」不是这个模组包里的任何一个音效。请从列表中重新选择声音。
+
+# Validation message; {name} is what the action names
+# en: '{name}' is not one of this pack's scenes. Pick the scene again from the list.
+validation.action.unknownScene = 「{name}」不是这个模组包里的任何一个场景。请从列表中重新选择场景。
 
 # Validation message; {art} is a file, {target} the category the action targets
 # en: '{art}' is animated, and animation is only supported for the Scenes category — this action targets '{target}'. Point it at a scene, or use a still image here.
@@ -13518,6 +14714,10 @@ validation.node.choicePromptEmpty = 「选择」节点的文本是显示在各�
 validation.node.emptyTextNode = 文本节点既没有台词也没有动作，所以它无事可做
 
 # Validation message
+# en: Nobody speaks this line, but it sets an expression or an outfit - was its actor forgotten?
+validation.node.lookWithoutActor = 这句台词没有人说，却设定了表情或服装——是不是忘了填演员？
+
+# Validation message
 # en: Actor '{actor}' isn't defined in this pack, and isn't in the conversation this extends
 validation.node.unknownActor = 演员「{actor}」未在本模组包中定义，也不在它所扩展的那段对话里
 
@@ -13532,6 +14732,14 @@ validation.node.jumpTagEmpty = 跳转模式是「跳转」，但 targetTag 为�
 # Validation message
 # en: Jump target tag '{tag}' isn't a tag on any node in this dialogue
 validation.node.jumpTagUnknown = 跳转目标标签「{tag}」不是本段对话中任何节点的标签
+
+# Validation message: a jump lands on a line that is under another line, and the game says that line again. {tag} is the jump's tag, {target} the first words of the line it lands on, {above} of the line that one is under.
+# en: Jump to '{tag}' lands on "{target}", which is under "{above}". After a jump the game goes back over the lines above where it landed: once "{target}" and its lines are done, "{above}" is said again, then its lines - "{target}" among them. To jump there and carry on from it, make "{target}" a top-level line.
+validation.node.jumpReplays = 跳转到「{tag}」会落在「{target}」上，而它位于「{above}」之下。跳转之后，游戏会把落点上方的台词重新走一遍：「{target}」和它下面的台词结束后，会再说一遍「{above}」，然后是它下面的台词——「{target}」也在其中。要跳到那里并从那里继续，请把「{target}」设为最上层的台词。
+
+# Validation message: the same, when it brings the jumping line round again, so the conversation never ends. Same placeholders.
+# en: Jump to '{tag}' lands on "{target}", which is under "{above}" - and this conversation never ends. After a jump the game goes back over the lines above where it landed, which brings this line round again, so it jumps again, for ever. To jump there and carry on from it, make "{target}" a top-level line.
+validation.node.jumpLoops = 跳转到「{tag}」会落在「{target}」上，而它位于「{above}」之下——这段对话永远不会结束。跳转之后，游戏会把落点上方的台词重新走一遍，这又会轮到这句台词，它再次跳转，没完没了。要跳到那里并从那里继续，请把「{target}」设为最上层的台词。
 
 # Validation message
 # en: Level '{level}' doesn't exist — this condition can never pass
@@ -14042,6 +15250,10 @@ common.group.gamesOwn = 游戏自有
 # Heading in a dropdown, over the pack's entries the author has not put in any folder
 # en: Not in a folder
 common.group.notInFolder = 不在文件夹中
+
+# Tooltip on the star beside an option a dropdown moved to the top (smart suggestions)
+# en: Suggested: what you are editing mentions it, or something like it
+suggestions.mark.tip = 建议：你正在编辑的内容提到了它，或类似的东西
 
 # Heading in a dropdown, over the entries that belong under none of the other headings
 # en: Other
@@ -14589,9 +15801,58 @@ common.newFolder = 新建文件夹
 # en: New name:
 rename.newName = 新名称：
 
+# Beside the box in the Rename window, when it renames by the display name
+# en: Display name:
+rename.displayName = 显示名称：
+
+# Button over a tab's list
+# en: Rename
+navigator.rename = 重命名
+
+# Tooltip on "Rename" over a tab's list
+# en: Rename the selected item, the same as typing in its Display name box. A selected folder is renamed where it stands.
+navigator.rename.tip = 重命名所选条目，与在它的“显示名称”框里输入相同。所选文件夹会在原处改名。
+
+# Button over a tab's list
+# en: Duplicate
+navigator.duplicate = 复制
+
+# Tooltip on "Duplicate" over a tab's list
+# en: Put a copy of the selected item beside it. Rename the copy and its runtime name follows.
+navigator.duplicate.tip = 在所选条目旁边放一份副本。给副本改名，它的运行时名称也会跟着变。
+
+# The key under "+ Add" over a list (the Insert key, as written on keyboards)
+# en: Ins
+# same in this language
+navigator.addKeys = Ins
+
+# First line of the tip on the keyboard sign over a list
+# en: More keys, while the list has the keyboard:
+navigator.moreKeys = 列表获得键盘焦点时的更多按键：
+
+# Line of the tip on the keyboard sign over a list
+# en: Ctrl+C / Ctrl+V: copy and paste
+navigator.moreKeys.copyPaste = Ctrl+C / Ctrl+V：复制和粘贴
+
+# Line of the tip on the keyboard sign over a list
+# en: F12: rename, the same as F2
+navigator.moreKeys.f12 = F12：重命名，与 F2 相同
+
+# Line of the tip on the keyboard sign over a list
+# en: Ctrl+Z / Ctrl+Y: undo and redo
+navigator.moreKeys.undo = Ctrl+Z / Ctrl+Y：撤销和重做
+
+# Tooltip on the pencil button beside a runtime name
+# en: Set a runtime name of your own. Everything in the pack that uses it follows, and from then on it no longer follows the display name.
+rename.editRuntimeName.tip = 自己设定一个运行时名称。模组包里用到它的一切都会跟着变，并且从此它不再跟随显示名称。
+
 # Title of the Rename window
 # en: Rename Outfit
 rename.outfit = 重命名服装
+
+# Title of the Rename window
+# en: Rename Character
+rename.character = 重命名角色
 
 # Title of the Rename window
 # en: Rename Place
@@ -14764,10 +16025,6 @@ edit.paste = 粘贴
 # en: Select all
 edit.selectAll = 全选
 
-# Tooltip on the UI tab's object tree
-# en: Ins: add object • Del: remove • Ctrl+C/V: copy/paste • Ctrl+D: duplicate
-ui.treeKeys.tip = Ins：添加对象 • Del：移除 • Ctrl+C/V：复制/粘贴 • Ctrl+D：创建副本
-
 # en: You have unsaved changes. Save before closing?
 unsaved.beforeClosing = 你有未保存的改动。关闭前先保存吗？
 
@@ -14830,10 +16087,6 @@ quests.reset.discarded = 将丢弃{changes}，包括从开始或重置它的那�
 # Title of a message box
 # en: Reset quest
 quests.reset.title = 还原任务
-
-# Tooltip on the lists in the sidebars
-# en: Del: delete • F2/F12: rename • Ctrl+C/V: copy/paste • Ctrl+D: duplicate
-sidebar.keys.tip = Del：删除 • F2/F12：重命名 • Ctrl+C/V：复制/粘贴 • Ctrl+D：创建副本
 
 # Fills 'That is {risk}.' when saving a pack
 # en: the root of a drive
@@ -15876,9 +17129,231 @@ preview.place.selectedReflection = {npc} 的倒影 — 所有摆放共用
 # en: NPC: {npc}
 preview.place.selectedNpc = NPC：{npc}
 
-# Tooltip on the grip of the hierarchy in the place preview
-# en: Drag to resize the hierarchy
-preview.place.resizeHierarchy.tip = 拖动可调整层级面板大小
+# In the panel to the right of the place preview, while nothing in the place is selected
+# en: Click an object in the picture or in the hierarchy to move, turn or scale it here.
+preview.place.selectHint = 在图片或层级中点击一个对象，即可在这里移动、旋转或缩放它。
+
+# Tooltip on the mark in a preview's bottom-right corner
+# en: Drag to make the preview bigger or smaller. Double-click for its own size.
+preview.resize.tip = 拖动可放大或缩小预览。双击恢复它本来的大小。
+
+# After a panel's help folded to its first line: a link that shows the rest
+# en: more
+help.more = 更多
+
+# After a panel's help shown whole: a link that folds it back to one line
+# en: less
+help.less = 收起
+
+# Tooltip on the "?" at the end of a panel's title band (EX themes)
+# en: Show or hide this panel's help. Remembered for the panel.
+help.toggle.tip = 显示或隐藏这个面板的帮助。按面板分别记住。
+
+# EX themes: beside the pack's name at the top of the window, while there are changes not saved
+# en: unsaved
+header.unsaved = 未保存
+
+# Tooltip on that
+# en: There are changes not saved yet.
+header.unsaved.tip = 还有尚未保存的更改。
+
+# EX themes: a button beside the pack's name at the top of the window
+# en: Save
+header.save = 保存
+
+# Tooltip on it
+# en: Save the pack (Ctrl+S).
+header.save.tip = 保存模组包（Ctrl+S）。
+
+# EX themes: a button beside the pack's name at the top of the window
+# en: Validate
+header.validate = 验证
+
+# Tooltip on it
+# en: Check the pack again and bring its issues up to date (F5).
+header.validate.tip = 重新检查模组包并更新它的问题列表（F5）。
+
+# EX themes: a button beside the pack's name at the top of the window
+# en: Export
+header.export = 导出
+
+# Tooltip on it
+# en: Save, then bundle the pack into the file the game loads (Ctrl+E).
+header.export.tip = 先保存，再把模组包打包成游戏加载的文件（Ctrl+E）。
+
+[Setup: the installer and uninstaller]
+
+# The installer's window title
+# en: ModForge setup
+setup.title = ModForge 安装
+
+# Installer, first step: heading over the choice of what to install
+# en: What would you like to install?
+setup.kind.heading = 你想安装什么？
+
+# The choice that installs the editor and the plugin
+# en: Everything - to make mods
+setup.kind.everything = 全部——用来制作模组
+
+# Under that choice: what it is for
+# en: The ModForge editor, where you make your own packs and try them out, and the plugin that plays packs in the game.
+setup.kind.everything.help = ModForge 编辑器（在这里制作并试玩你自己的模组包），以及在游戏里播放模组包的插件。
+
+# The choice that installs only the plugin, into the game
+# en: Only the plugin - to play mods
+setup.kind.plugin = 只装插件——用来玩模组
+
+# Under that choice: what it is for
+# en: Only what the game needs to play packs that other people made: ModForge's plugin, in the game's folder. Nothing else is installed. To make packs later, run this again and choose Everything.
+setup.kind.plugin.help = 只装游戏玩别人做的模组包所需要的东西：放进游戏文件夹里的 ModForge 插件。别的都不安装。以后想做模组包时，再运行一次这个程序并选择“全部”。
+
+# Installer, first step: heading
+# en: Where is Starmaker Story?
+setup.game.heading = Starmaker Story 在哪里？
+
+# Installer, first step: the line under the heading
+# en: ModForge puts its plugin in the game's folder, so the game can load mod packs. Pick the folder Starmaker Story is installed in.
+setup.game.help = ModForge 会把它的插件放进游戏文件夹，让游戏能加载模组包。请选择 Starmaker Story 的安装文件夹。
+
+# Title of the folder picker for the game's folder
+# en: Pick the Starmaker Story folder
+setup.game.pick = 选择 Starmaker Story 文件夹
+
+# Under the game folder box, when it is the game
+# en: This is Starmaker Story.
+setup.game.ok = 这是 Starmaker Story。
+
+# Under the game folder box, when no such folder exists
+# en: There is no folder there.
+setup.game.missing = 那里没有这个文件夹。
+
+# Under the game folder box, when the folder is not the game. {exe} is the game's program file name
+# en: No Starmaker Story here: the folder has no {exe}.
+setup.game.notGame = 这里没有 Starmaker Story：文件夹中没有 {exe}。
+
+# Under the game folder box, while it is empty
+# en: Pick the folder Starmaker Story is installed in.
+setup.game.empty = 请选择 Starmaker Story 的安装文件夹。
+
+# Installer, second step: heading
+# en: Where should ModForge go?
+setup.folder.heading = ModForge 要放在哪里？
+
+# Installer, second step: the line under the heading
+# en: The editor's own folder. A folder of its own outside the game is best; the one chosen already is where Windows puts a program installed for you alone.
+setup.folder.help = 编辑器自己的文件夹。最好是游戏之外单独的文件夹；已经选好的是 Windows 放置只为你一个人安装的程序的位置。
+
+# Installer, second step, when the folder chosen is inside the game's folder (every word on the page then turns yellow)
+# en: Not recommended: this is inside the game's folder. Updating or reinstalling the game can take ModForge with it, and the game's folder fills with files the game never uses.
+setup.folder.insideGame = 不推荐：这在游戏文件夹里面。更新或重装游戏可能会把 ModForge 一起带走，游戏文件夹也会塞满游戏从不使用的文件。
+
+# Title of the folder picker for where ModForge goes
+# en: Pick where ModForge goes
+setup.folder.pick = 选择 ModForge 的位置
+
+# A tick box on the installer's second step
+# en: Add ModForge to the Start menu
+setup.shortcut.start = 把 ModForge 添加到开始菜单
+
+# A tick box on the installer's second step
+# en: Put a shortcut to ModForge on the desktop
+setup.shortcut.desktop = 在桌面上放一个 ModForge 快捷方式
+
+# A button beside a folder box
+# en: Browse…
+setup.browse = 浏览…
+
+# A button: the step before
+# en: Back
+setup.back = 上一步
+
+# A button: the next step
+# en: Next
+setup.next = 下一步
+
+# A button: install
+# en: Install
+setup.install = 安装
+
+# A button: stop and close the installer
+# en: Cancel
+setup.cancel = 取消
+
+# Heading while it installs
+# en: Installing…
+setup.installing = 正在安装…
+
+# Heading when it has installed
+# en: ModForge is installed.
+setup.done.heading = ModForge 已安装。
+
+# Under that heading. {folder} is where the editor went
+# en: The plugin is in the game, and the editor in {folder}. Put mod packs in the game's Mods folder, and they are listed on the game's main menu.
+setup.done.help = 插件已放进游戏，编辑器在 {folder}。把模组包放进游戏的 Mods 文件夹，它们会出现在游戏的主菜单上。
+
+# When the game already had BepInEx before ModForge was installed
+# en: The game had BepInEx already, and it is left as it was.
+setup.bepinexKept = 游戏里原本就有 BepInEx，它保持原样。
+
+# A button: start the editor
+# en: Open ModForge
+setup.done.open = 打开 ModForge
+
+# Heading when only the plugin was installed
+# en: ModForge's plugin is installed.
+setup.done.pluginHeading = ModForge 的插件已安装。
+
+# Under that heading
+# en: It is in the game now. Put mod packs (.smspack files) in the game's Mods folder, and they are listed on the game's main menu.
+setup.done.pluginHelp = 它现在在游戏里了。把模组包（.smspack 文件）放进游戏的 Mods 文件夹，它们会出现在游戏的主菜单上。
+
+# A button: close the window
+# en: Close
+setup.close = 关闭
+
+# Heading when installing or uninstalling failed
+# en: Something went wrong
+setup.failedHeading = 出了点问题
+
+# Under that heading. {problem} is what Windows said
+# en: Nothing more was done. What happened: {problem}
+setup.failed = 没有再做其他操作。发生的情况：{problem}
+
+# When the editor is running from the folder chosen
+# en: ModForge is open from that folder. Close it, then press Install again.
+setup.closeEditor = ModForge 正从那个文件夹打开。请先关闭它，再点一次“安装”。
+
+# When the game is running
+# en: Starmaker Story is running. Close it, then press Install again.
+setup.closeGame = Starmaker Story 正在运行。请先关闭它，再点一次“安装”。
+
+# The uninstaller's window title
+# en: Uninstall ModForge
+setup.uninstall.title = 卸载 ModForge
+
+# The uninstaller's heading
+# en: Take ModForge off this computer?
+setup.uninstall.heading = 要从这台电脑上移除 ModForge 吗？
+
+# Under that heading. {folder} is where the editor is
+# en: The editor goes from {folder}, with its shortcuts. Your packs and the editor's settings stay.
+setup.uninstall.help = 编辑器会连同快捷方式从 {folder} 移除。你的模组包和编辑器的设置都会保留。
+
+# A tick box in the uninstaller
+# en: Also take ModForge's plugin out of the game (the Mods folder stays)
+setup.uninstall.plugin = 同时把 ModForge 的插件从游戏中移除（Mods 文件夹保留）
+
+# Uninstalling when only the plugin was installed: what goes
+# en: ModForge's plugin comes out of the game. Your mod packs, in the game's Mods folder, stay.
+setup.uninstall.pluginOnly = ModForge 的插件将从游戏中移除。游戏 Mods 文件夹里的模组包会保留。
+
+# A button: uninstall
+# en: Uninstall
+setup.uninstall.go = 卸载
+
+# Heading when it has uninstalled
+# en: ModForge has been uninstalled.
+setup.uninstall.done = ModForge 已卸载。
 
 # Heading of the object list in the place preview
 # en: Hierarchy
@@ -16371,6 +17846,14 @@ migration.oldGameObjectsCategory = 位于“Extra GameObjects”（GameObjects �
 # One line of the list of what was brought up to date. "SetSpriteFocus" and "CharacterFocus" are names of an action, kept in English
 # en: SetSpriteFocus actions given the action's new name, CharacterFocus
 migration.characterFocus = SetSpriteFocus 动作已改用该动作的新名称 CharacterFocus
+
+# In the list of what opening a pack changed: lines whose sound's pattern is written bigger or smaller, now playing that much louder or softer
+# en: lines whose sounds now play louder or softer to match the size their pattern is written in (the text keeps its size)
+migration.cueVolumes = 声音现在会按其触发词的字号播放得更响或更轻的台词（文字保持原来的字号）
+
+# In the list of what opening a pack changed: lines with more than one sound, their timing written down so they play as before
+# en: lines with more than one sound given their timing, so each keeps playing when it did
+migration.cueTiming = 有不止一个声音的台词，已写下它们的时间，使每个声音仍在原来的时刻播放
 
 # One line of the list of what was brought up to date
 # en: Given a version to start from ({version})
@@ -17801,6 +19284,36 @@ translatePack.damaged = 有 {count} 条保留了默认文字，因为译文弄�
 translatePack.nothingDone = 没有翻译任何内容。
 
 [Not used by this version]
+
+# en: Frame (Core SpriteRenderer)
+scenes.frameCoreSpriterenderer = 边框（Core 的 SpriteRenderer）
+
+# en: Sound (replaces prototype's Trigger)
+scenes.soundReplacesPrototypeS = 声音（替换原型的 Trigger）
+
+# en: Mode:
+scenes.mode = 模式：
+
+# en: Starmaker
+scenes.starmaker = Starmaker
+
+# en: Light themes
+docs.themes.lightSlateForestPlum.term = 浅色主题
+
+# en: Light, Slate, Forest, Plum, Ocean, Sandstone and Rose.
+docs.themes.lightSlateForestPlum = 浅色、石板、森林、梅紫、海洋、砂岩和玫瑰。
+
+# en: Dark themes
+docs.themes.darkMidnightCarbon.term = 深色主题
+
+# en: Dark, Midnight and Carbon.
+docs.themes.darkMidnightCarbon = 深色、午夜和碳黑。
+
+# en: Drag to resize the hierarchy
+preview.place.resizeHierarchy.tip = 拖动可调整层级面板大小
+
+# en: Or from a variable:
+dialogues.outfitVariable = 或来自变量：
 
 # en: Rename
 npcs.unitRenameFolder = 重命名

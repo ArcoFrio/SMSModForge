@@ -187,6 +187,12 @@ public static class PackMigration
         if (focus > 0)
             report.Note(Loc.T("migration.characterFocus"), focus);
 
+        var (louder, paced) = SoundsIntoTheirLines(pack, packRoot);
+        if (louder > 0)
+            report.Note(Loc.T("migration.cueVolumes"), louder);
+        if (paced > 0)
+            report.Note(Loc.T("migration.cueTiming"), paced);
+
         if (GiveItAVersion(pack))
             report.Note(Loc.F("migration.versionGiven", "version", pack.Version));
 
@@ -194,6 +200,107 @@ public static class PackMigration
             report.Note(Loc.T("migration.stamped"));
 
         return report;
+    }
+
+    /// <summary>The version whose lines say how each of their sounds plays.</summary>
+    private const string FirstVersionWithLineSounds = "1.8.0";
+
+    /// <summary>
+    /// A line's sounds, from what an older pack said with its text (1.8.0, the
+    /// author: "Font sizes and spacing should stay as they are already set for
+    /// the packs, but the migrations should make the appropriate changes to
+    /// their SFX entries on the dialogue nodes").
+    /// <list type="bullet">
+    ///   <item>VOLUME: a pattern written in a bigger or smaller size
+    ///   (<c>&lt;size=140%&gt;*THUD*</c>) now plays that much louder or softer.
+    ///   The size always meant that to the author, but nothing ever read it -
+    ///   so this one CHANGES what plays, as the author asked. The size stays
+    ///   in the text.</item>
+    ///   <item>TIMING: what a line played before keeps playing as it did. The
+    ///   old rule: a pattern's later matches waited 0.22 s per character since
+    ///   the one before, and different patterns all started together. A line's
+    ///   sounds now follow one another, each after the last ENDS; so each gets
+    ///   the delay - negative where they overlapped - that puts it where it
+    ///   played. A sound's length is its base file's, which a variant of
+    ///   another length can stretch or shorten.</item>
+    /// </list>
+    /// Only packs written before 1.8.0, and only lines with no sounds set yet,
+    /// so nothing is done twice.
+    /// </summary>
+    private static (int Louder, int Paced) SoundsIntoTheirLines(ModPack pack, string? packRoot)
+    {
+        if (!WrittenBefore(pack.ForgeVersion ?? "", FirstVersionWithLineSounds)) return (0, 0);
+        var patterns = new List<KeyValuePair<string, string>>();
+        foreach (var sfx in pack.Sfx ?? new List<SfxDef>())
+            foreach (var p in sfx.TextPatterns ?? new List<string>())
+                if (!string.IsNullOrEmpty(p)) patterns.Add(new KeyValuePair<string, string>(p, sfx.Key));
+        if (patterns.Count == 0) return (0, 0);
+
+        var lengths = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
+        double LengthOf(string sound)
+        {
+            if (lengths.TryGetValue(sound, out double known)) return known;
+            double seconds = 0;
+            var sfx = pack.Sfx!.FirstOrDefault(s => string.Equals(s.Key, sound, StringComparison.OrdinalIgnoreCase));
+            if (sfx != null && !string.IsNullOrEmpty(packRoot) && !string.IsNullOrEmpty(sfx.AudioPath))
+            {
+                try
+                {
+                    string file = Path.Combine(packRoot, sfx.AudioPath);
+                    if (File.Exists(file)) seconds = Services.Audio.AudioData.Load(file).Seconds;
+                }
+                catch (Exception) { /* unreadable: counted as no length */ }
+            }
+            return lengths[sound] = seconds;
+        }
+
+        int louder = 0, paced = 0;
+        foreach (var dialogue in pack.Dialogues ?? new List<DialogueDef>())
+            foreach (var node in dialogue.Nodes ?? new List<DialogueNodeDef>())
+            {
+                if (node.Cues is { Count: > 0 } || string.IsNullOrEmpty(node.Text)) continue;
+                var matches = Shared.SoundCues.Find(node.Text, patterns);
+                if (matches.Count == 0) continue;
+
+                // Where the old rule started each: a pattern's own matches
+                // spaced by the characters between them, the others at 0.
+                var old = new double[matches.Count];
+                var lastOfPattern = new Dictionary<string, (double Start, int End)>(StringComparer.OrdinalIgnoreCase);
+                for (int i = 0; i < matches.Count; i++)
+                {
+                    var m = matches[i];
+                    old[i] = lastOfPattern.TryGetValue(m.Pattern, out var before)
+                        ? before.Start + Math.Max(0, m.Index - before.End) * 0.22
+                        : 0;
+                    lastOfPattern[m.Pattern] = (old[i], m.Index + m.Length);
+                }
+
+                var cues = new List<SoundCueDef>();
+                bool madeLouder = false, madePaced = false;
+                for (int i = 0; i < matches.Count; i++)
+                {
+                    var m = matches[i];
+                    var cue = new SoundCueDef { At = m.Order, Pattern = m.Pattern };
+                    double? size = Shared.SoundCues.SizeAt(node.Text, m.Index);
+                    if (size is double scale && Math.Abs(scale - 1) > 0.0005)
+                    {
+                        cue.Volume = (float)Math.Round(scale, 3);
+                        madeLouder = true;
+                    }
+                    double delay = i == 0 ? old[0] : old[i] - (old[i - 1] + LengthOf(matches[i - 1].Sound));
+                    if (Math.Abs(delay) > 0.0005)
+                    {
+                        cue.Delay = (float)Math.Round(delay, 3);
+                        madePaced = true;
+                    }
+                    if (!cue.ToSetting().IsDefault) cues.Add(cue);
+                }
+                if (cues.Count == 0) continue;
+                node.Cues = cues;
+                if (madeLouder) louder++;
+                if (madePaced) paced++;
+            }
+        return (louder, paced);
     }
 
     /// <summary>

@@ -19,9 +19,10 @@ namespace SMSModForge.Tests;
 /// Renaming in the editor (the author, 1.7.0): a record is renamed in its own
 /// box, and everything that uses the name follows "on commit of the new name,
 /// or just moving away from it" - in every tab, not only the few that had it.
-/// The Rename buttons on the tabs' toolbars, which renamed only folders and did
-/// nothing with a record selected, are gone; folders are renamed where they
-/// stand.
+/// The Rename buttons on the tabs' toolbars renamed only folders and did
+/// nothing with a record selected; folders are renamed where they stand. The
+/// button came back in 1.8.0 renaming the record as its box does - see
+/// NavigatorBarTests and RuntimeNameFollowsTests.
 /// </summary>
 [Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class RenameThroughTheEditorTests : IDisposable
@@ -38,7 +39,7 @@ public sealed class RenameThroughTheEditorTests : IDisposable
 
     public void Dispose() { try { Directory.Delete(_dir, true); } catch (IOException) { } }
 
-    private const int TabDialogues = 5, TabScenes = 6;
+    private const int TabDialogues = MainTab.Dialogues, TabScenes = MainTab.Scenes;
 
     private static IEnumerable<T> Descendants<T>(DependencyObject root) where T : DependencyObject
     {
@@ -184,7 +185,9 @@ public sealed class RenameThroughTheEditorTests : IDisposable
         vm.SelectedTabIndex = TabDialogues;
         vm.SelectedDialogue = vm.Dialogues.Single(x => !x.IsVanillaBased);
         vm.PromptForText = (_, _, _) => to;
-        vm.RenameItemCommand.Execute(null);
+        // The pencil beside the runtime name: the dialogue's display name is
+        // empty, so the Rename button would leave its key alone.
+        vm.EditRuntimeNameCommand.Execute(null);
         WindowHarness.Pump();
     }
 
@@ -229,38 +232,6 @@ public sealed class RenameThroughTheEditorTests : IDisposable
     }
 
     // ── Folders ──────────────────────────────────────────────────────────
-
-    [Fact]
-    public void NoTabHasARenameButtonAnyMore()
-    {
-        WindowHarness.Run(window =>
-        {
-            var vm = (MainViewModel)window.DataContext;
-            var tabs = (TabControl)window.FindName("MainTabs");
-            string rename = Loc.T("folders.renameMenu");
-            string addFolder = Loc.T("scenes.unitAddFolder");
-            int folderButtons = 0;
-            var found = new List<string>();
-
-            // Only the open tab is built, so each is opened in turn.
-            for (int i = 0; i < tabs.Items.Count; i++)
-            {
-                vm.SelectedTabIndex = i;
-                WindowHarness.Pump();
-                foreach (var b in Descendants<ToolBar>(window).SelectMany(t => t.Items.OfType<Button>()))
-                {
-                    if (b.Content is not string s) continue;
-                    if (s == addFolder) folderButtons++;
-                    if (s.StartsWith(rename, StringComparison.Ordinal)) found.Add($"tab {i}: {s}");
-                }
-            }
-
-            _out.WriteLine($"{folderButtons} '+ Folder' buttons seen across {tabs.Items.Count} tabs");
-            // The control: the toolbars were really looked at.
-            Assert.True(folderButtons >= 8, "the tabs' toolbars were not found");
-            Assert.Empty(found);
-        });
-    }
 
     [Fact]
     public void F2OnASelectedFolderRenamesItWhereItStands()

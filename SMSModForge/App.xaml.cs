@@ -30,7 +30,13 @@ public partial class App : Application
 
         // Restore the persisted colour theme before the main window builds,
         // so its DynamicResource bindings resolve to the chosen palette.
-        ThemeManager.ApplySaved();
+        // Not under the test harness, whose Application runs this too, AFTER
+        // it has put the run's theme on (Light, or SMSMODFORGE_TEST_THEME):
+        // this undid it, so the -WithEx pass ran in Light from 1.8.0's EX work
+        // until 2026-10-24, when Frost becoming the default made it show
+        // (HarnessThemeTests).
+        if (!TestMode.Active)
+            ThemeManager.ApplySaved();
         // Restore the saved live-preview quality preset (frame cap + AA) so
         // the Busts tab honours it from the first frame.
         PreviewQualityManager.ApplySaved();

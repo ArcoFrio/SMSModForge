@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
@@ -6,7 +7,8 @@ using System.Windows.Threading;
 namespace SMSModForge.Tests;
 
 /// <summary>
-/// Runs the real MainWindow on a real dispatcher, off screen.
+/// Runs the real MainWindow on a real dispatcher, on the run's own desktop
+/// (<see cref="TestDesktop"/>) where nobody can see it or lose focus to it.
 /// <para/>
 /// The rest of the suite drives view models, which is enough for almost
 /// everything and costs nothing. It was not enough for the tab that switches by
@@ -21,6 +23,7 @@ namespace SMSModForge.Tests;
 internal static class WindowHarness
 {
     private static Dispatcher? _dispatcher;
+    private static Exception? _startFailure;
     private static readonly object Gate = new();
 
     /// <summary>The STA thread's dispatcher, starting the thread on first use.</summary>
@@ -31,10 +34,24 @@ internal static class WindowHarness
             lock (Gate)
             {
                 if (_dispatcher != null) return _dispatcher;
+                if (_startFailure != null)
+                    throw new InvalidOperationException(_startFailure.Message, _startFailure);
 
                 var ready = new ManualResetEventSlim();
                 var thread = new Thread(() =>
                 {
+                    // First of all: a thread belongs to the desktop of its
+                    // first window, and every window here must be on the
+                    // run's own, never on the author's. If it cannot be, no
+                    // window is made at all and every window test says why.
+                    try { TestDesktop.Enter(); }
+                    catch (Exception e)
+                    {
+                        _startFailure = e;
+                        ready.Set();
+                        return;
+                    }
+
                     // Before anything else, and before any window exists: this
                     // is what keeps the harness from writing over the pane
                     // layout, prompting about unsaved changes, and filling the
@@ -48,6 +65,15 @@ internal static class WindowHarness
                     var app = new SMSModForge.App();
                     app.InitializeComponent();
 
+                    // The theme the run is in (1.8.0): the window tests run a
+                    // second time with an EX theme on, whose templates are its
+                    // own (Tools/Testing/run-tests.ps1 -WithEx). Unset, the
+                    // App.xaml defaults - Normal, Light - as always.
+                    string? theme = Environment.GetEnvironmentVariable("SMSMODFORGE_TEST_THEME");
+                    if (!string.IsNullOrWhiteSpace(theme))
+                        SMSModForge.Services.ThemeManager.Apply(SMSModForge.Services.ThemeManager.All.First(
+                            t => string.Equals(t.Name, theme, StringComparison.OrdinalIgnoreCase)));
+
                     _dispatcher = Dispatcher.CurrentDispatcher;
                     ready.Set();
                     Dispatcher.Run();
@@ -58,6 +84,8 @@ internal static class WindowHarness
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
                 ready.Wait(TimeSpan.FromSeconds(30));
+                if (_startFailure != null)
+                    throw new InvalidOperationException(_startFailure.Message, _startFailure);
 
                 // Shut the UI thread down properly when the run ends, rather
                 // than letting the process take a background thread down with
@@ -91,11 +119,11 @@ internal static class WindowHarness
             {
                 window = new MainWindow
                 {
-                    // Off screen, but ACTIVATED. An unactivated window has no
-                    // keyboard focus at all, and focus is half of what a tab
-                    // control does with a selection - a harness that skips it
-                    // cannot see a focus-driven jump, which is the shape of the
-                    // bug being chased.
+                    // Asked to activate, as a real one is: on the run's own
+                    // desktop that can take nobody's foreground, and the
+                    // window still gets the keyboard focus a tab control's
+                    // selection logic leans on - a harness without it cannot
+                    // see a focus-driven jump.
                     WindowStartupLocation = WindowStartupLocation.Manual,
                     ShowInTaskbar = false,
                     Left = -32000,
@@ -134,6 +162,46 @@ internal static class WindowHarness
                 new Action(() => frame.Continue = false), priority);
             Dispatcher.PushFrame(frame);
         }
+    }
+
+    /// <summary>
+    /// Open or close a dropdown, and return once it has. With Windows'
+    /// animations on, a list slides open and shut, and WPF tells the box it
+    /// closed - which is what ends a search - only when the slide is over:
+    /// measured 2026-10-24, a second after the change rather than within the
+    /// <see cref="Pump"/> after it, which four tests had taken for granted.
+    /// Opening waits for the popup to be up and its slide (WPF's popups
+    /// animate for 150 ms) to be done, so what is drawn is the list at rest.
+    /// </summary>
+    public static void SetOpen(System.Windows.Controls.ComboBox box, bool open)
+    {
+        if (box.IsDropDownOpen == open) { Pump(); return; }
+        var popup = box.Template?.FindName("PART_Popup", box) as System.Windows.Controls.Primitives.Popup;
+        bool done = false;
+        EventHandler happened = (_, _) => done = true;
+        if (open) { if (popup != null) popup.Opened += happened; }
+        else box.DropDownClosed += happened;
+        try
+        {
+            box.IsDropDownOpen = open;
+            Pump();
+            Until(() => done || popup == null, TimeSpan.FromSeconds(3));
+            if (open) Wait(TimeSpan.FromMilliseconds(200));
+        }
+        finally
+        {
+            if (popup != null) popup.Opened -= happened;
+            box.DropDownClosed -= happened;
+        }
+    }
+
+    /// <summary>Keep the dispatcher turning until <paramref name="done"/>, or
+    /// <paramref name="atMost"/> has passed; whether it came true.</summary>
+    public static bool Until(Func<bool> done, TimeSpan atMost)
+    {
+        var until = DateTime.UtcNow + atMost;
+        while (!done() && DateTime.UtcNow < until) Wait(TimeSpan.FromMilliseconds(10));
+        return done();
     }
 
     /// <summary>

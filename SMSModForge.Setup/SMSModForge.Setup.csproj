@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ModForge's installer (1.8.0), as well as the two zips: asks for the
+    Starmaker Story folder and checks it is the game, asks where the editor
+    goes, puts the plugin in the game and the editor there, and leaves an
+    uninstaller in Windows' Apps list. The same program, built without what it
+    installs, is that uninstaller.
+
+    What it installs is put in at release (Tools/Release/make-setup.ps1):
+      -p:EditorZip=<editor zip> -p:PluginZip=<plugin zip> -p:Uninstaller=<the payload-free build>
+    Built without them, it looks for the two zips beside itself.
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>SMSModForge.Setup</AssemblyName>
+    <RootNamespace>SMSModForge.Setup</RootNamespace>
+    <ApplicationIcon>..\SMSModForge\Resources\SMSModForge.ico</ApplicationIcon>
+    <StartupObject>SMSModForge.Setup.Program</StartupObject>
+    <!-- ForgeVersion.cs is shared with the plugin, whose compiler has no
+         nullable annotations: its null returns are meant. -->
+    <NoWarn>$(NoWarn);CS8603</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The one version number, the editor's and the plugin's. -->
+    <Compile Include="..\Shared\ForgeVersion.cs" Link="Shared\ForgeVersion.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(EditorZip)' != ''">
+    <EmbeddedResource Include="$(EditorZip)" LogicalName="payload.editor.zip" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(PluginZip)' != ''">
+    <EmbeddedResource Include="$(PluginZip)" LogicalName="payload.plugin.zip" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Uninstaller)' != ''">
+    <EmbeddedResource Include="$(Uninstaller)" LogicalName="payload.uninstall.exe" />
+  </ItemGroup>
+
+</Project>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using SMSModForge.Tutorials;
 using SMSModForge.ViewModel;
 
@@ -38,6 +40,13 @@ public partial class TutorialOverlay : UserControl
     /// <see cref="_anchor"/> because only the primary drives the ring.</summary>
     private readonly List<FrameworkElement> _alsoAllowed = new();
 
+    /// <summary>The step showing, so what it lights can be looked for again
+    /// (<see cref="LookAgain"/>).</summary>
+    private TutorialStep? _step;
+
+    /// <summary>A quarter second, as often as the runner checks a step.</summary>
+    private readonly DispatcherTimer _lookAgain = new() { Interval = TimeSpan.FromMilliseconds(250) };
+
     private List<Rect> _lastHoles = new();
     private Size _lastWindow = Size.Empty;
     private bool _forceRefresh;
@@ -62,6 +71,7 @@ public partial class TutorialOverlay : UserControl
     public TutorialOverlay()
     {
         InitializeComponent();
+        _lookAgain.Tick += (_, _) => LookAgain();
         Loaded += (_, _) =>
         {
             _window = Window.GetWindow(this);
@@ -90,6 +100,8 @@ public partial class TutorialOverlay : UserControl
     private void OnEnded()
     {
         Visibility = Visibility.Collapsed;
+        _lookAgain.Stop();
+        _step = null;
         _anchor = null;
         _alsoAllowed.Clear();
         _lastHoles = new List<Rect>();
@@ -98,6 +110,8 @@ public partial class TutorialOverlay : UserControl
     private void OnStepChanged(TutorialStep step)
     {
         Visibility = Visibility.Visible;
+        _step = step;
+        _lookAgain.Start();
         UpdateCallout();
 
         // Get onto the right tab first, or the control the step points at has
@@ -113,8 +127,9 @@ public partial class TutorialOverlay : UserControl
                 : null;
 
             // Anything else the step needs reachable. A missing id is skipped
-            // rather than throwing: a pane that is not on screen simply
-            // contributes no hole, and the step still works through the rest.
+            // rather than throwing: a pane that is not on screen yet
+            // contributes no hole until it appears (LookAgain), and the step
+            // works through the rest meanwhile.
             _alsoAllowed.Clear();
             if (_window != null)
             {
@@ -134,6 +149,56 @@ public partial class TutorialOverlay : UserControl
             Refresh();
             if (_anchor != null) Flash?.Invoke(_anchor);
         }), System.Windows.Threading.DispatcherPriority.Background);
+    }
+
+    /// <summary>Whether a lit control is off the screen: never found, hidden,
+    /// or thrown away as its template was rebuilt.</summary>
+    private static bool Gone(FrameworkElement? el)
+        => el is not { IsVisible: true } || el.ActualWidth <= 0 || el.ActualHeight <= 0
+           || PresentationSource.FromVisual(el) == null;
+
+    /// <summary>
+    /// Look again for what the step lights and is not on screen.
+    /// <para/>
+    /// A step's controls are found as it begins, and some are not there yet:
+    /// a line's editor appears only once a line is chosen, and an author can
+    /// arrive with none chosen. Found only then, the editor stayed dimmed when
+    /// it did appear - and the dim swallows clicks, so the step could not be
+    /// done, in either look (found walking every tutorial in EX, 1.8.0).
+    /// Finding walks the whole window, so it is done only while something is
+    /// missing, at the runner's own pace.
+    /// </summary>
+    private void LookAgain()
+    {
+        if (_step == null || _window == null || _runner is not { IsRunning: true }) return;
+        bool changed = false;
+
+        if (_step.Anchor.Length > 0 && Gone(_anchor)
+            && TutorialAnchor.Find(_window, _step.Anchor) is { } found && !ReferenceEquals(found, _anchor))
+        {
+            _anchor = found;
+            changed = true;
+            // It has arrived: shown and flashed, as on a step's arrival - a
+            // control lower down a long panel is otherwise lit out of sight.
+            found.BringIntoView();
+            Flash?.Invoke(found);
+        }
+
+        var wanted = _step.AlsoAllow.Where(id => !string.IsNullOrEmpty(id)).ToList();
+        if (_alsoAllowed.Count < wanted.Count || _alsoAllowed.Any(Gone))
+        {
+            var now = wanted.Select(id => TutorialAnchor.Find(_window, id)).OfType<FrameworkElement>().ToList();
+            if (!now.SequenceEqual(_alsoAllowed))
+            {
+                _alsoAllowed.Clear();
+                _alsoAllowed.AddRange(now);
+                changed = true;
+            }
+        }
+
+        if (!changed) return;
+        _forceRefresh = true;
+        Refresh();
     }
 
     /// <summary>Re-measures and redraws, cheaply skipping when nothing moved.</summary>

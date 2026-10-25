@@ -130,6 +130,32 @@ public static class VanillaArtResolver
         return File.Exists(path) ? path : null;
     }
 
+    /// <summary>
+    /// The blink picture of <paramref name="outfit"/> - the eyes, on the
+    /// bust's canvas - wherever it comes from: a pack's picture over the
+    /// game's, the pack's own, one borrowed from a bust of the game's, or the
+    /// game's own bust's. Null when it has none.
+    /// </summary>
+    public static string? FindBlinkSpritePath(OutfitDef outfit, string? packRoot)
+    {
+        if (!string.IsNullOrEmpty(packRoot)
+            && Replacement(outfit, Shared.SpriteSlotNames.Blink, packRoot) is { } replaced)
+            return replaced;
+
+        string blink = outfit.BlinkSprite ?? "";
+        if (Shared.GameArt.IsBorrowed(blink)) return GameArtFile(blink, "Blink.PNG");
+        if (blink.Length > 0 && !string.IsNullOrEmpty(packRoot))
+        {
+            var abs = Path.Combine(packRoot, blink.Replace('/', Path.DirectorySeparatorChar));
+            if (File.Exists(abs)) return abs;
+        }
+
+        var artRoot = FindArtRoot();
+        if (artRoot == null || string.IsNullOrEmpty(outfit.GameObjectName)) return null;
+        var vp = Path.Combine(artRoot, outfit.GameObjectName, "Blink.PNG");
+        return File.Exists(vp) ? vp : null;
+    }
+
     /// <summary>The shipped <c>VanillaBustFaces</c> folder - the game's busts'
     /// blink, mouths and faces at full size - or null when it is absent.</summary>
     public static string? FindFullFacesRoot()

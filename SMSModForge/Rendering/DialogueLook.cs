@@ -205,4 +205,20 @@ public static class DialogueLook
     public static UiColor TokenColor => UiColor.Parse(TokenHex);
     public static UiColor TokenChipColor => UiColor.Parse(TokenChipHex);
     public static UiColor SpellingColor => UiColor.Parse(SpellingHex);
+
+    /// <summary>
+    /// What the game draws text in brackets in on a dialogue line: its
+    /// ParenthesesHighlighter on <c>Dialogue_Default_Speech</c>
+    /// (sharedassets1, 1.8E) is set to this. The choice buttons' one
+    /// (<c>Dialogue_Cyberpunk_Choice/Content/Text</c>) is #A2D4FF, too close to
+    /// tell apart in a row; the journal's quest titles use pink (#FD8FFF).
+    /// </summary>
+    public const string BracketHex = "#99D0FF";
+    public static UiColor BracketColor => UiColor.Parse(BracketHex);
+
+    /// <summary>The dashed line under a sound's cue on the game's dark panel:
+    /// amber, well away from the game's bracket blue so the two marks are
+    /// never mistaken for each other.</summary>
+    public const string CueHex = "#FFC857";
+    public static UiColor CueColor => UiColor.Parse(CueHex);
 }

@@ -358,13 +358,13 @@ public sealed class JigglePreview : Image
 
         Stretch = zoom == 1 ? Stretch.None : Stretch.Uniform;
 
-        // Whole multiples land every source pixel on a whole number of screen
-        // pixels, so nearest neighbour is exact and sharp. A half step does
-        // not, and nearest neighbour there doubles some rows and not others —
-        // visibly lumpy. Smooth is the honest choice at those.
-        bool whole = System.Math.Abs(zoom - System.Math.Round(zoom)) < 0.001;
+        // Made bigger, drawn pixel by pixel - at a half step too. It was
+        // smoothed there, to keep every pixel the same size, and the author
+        // found it blurry (1.8.0): the game is pixel art, and a pixel a shade
+        // wider than its neighbour reads as crisp where a smoothed one reads
+        // as out of focus. Made smaller, it is smoothed, or whole rows go.
         RenderOptions.SetBitmapScalingMode(
-            this, whole ? BitmapScalingMode.NearestNeighbor : BitmapScalingMode.HighQuality);
+            this, zoom >= 1 ? BitmapScalingMode.NearestNeighbor : BitmapScalingMode.HighQuality);
     }
 
     /// <summary>

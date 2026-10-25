@@ -11,7 +11,7 @@ namespace SMSModForge.ViewModel;
 /// (e.g. <c>*yank*,*yeet*</c> pointing at one clip) are still
 /// supported, the comma is just the wire format the editor uses.
 /// </summary>
-public sealed class SfxViewModel : ObservableObject
+public sealed class SfxViewModel : ObservableObject, IDerivesKey
 {
     public SfxDef Model { get; }
 
@@ -21,17 +21,22 @@ public sealed class SfxViewModel : ObservableObject
     //
     // See DerivedKey for the rule. In short: a NEW effect takes its key from
     // whatever is typed as the display name, editing the key stops that for
-    // good, and a effect loaded from disk never re-derives.
+    // good, and one loaded from disk follows only while its key is still
+    // its display name made into a name (or a duplicate's "_copy").
 
     private readonly DerivedKey _derivedKey = new();
 
     /// <summary>Whether the runtime name still follows the display name.</summary>
     public bool KeyIsDerived => _derivedKey.IsDerived;
 
-    /// <summary>Start deriving the key. Called for a effect the author has just
-    /// added, never for one being loaded.</summary>
+    /// <summary>Start deriving the key. Called for one the author has just
+    /// added, duplicated or pasted.</summary>
     public void DeriveKeyFromDisplayName(System.Func<System.Collections.Generic.IEnumerable<string>> siblingKeys)
         => _derivedKey.Follow(siblingKeys);
+
+
+    public void WatchDisplayName(System.Func<System.Collections.Generic.IEnumerable<string>> siblingKeys)
+        => _derivedKey.Watch(siblingKeys, Model.DisplayName);
 
     public string Key
     {
@@ -169,5 +174,5 @@ public sealed class SfxViewModel : ObservableObject
         }
     }
 
-    public string Display => string.IsNullOrWhiteSpace(DisplayName) ? Key : $"{DisplayName} ({Key})";
+    public string Display => ListNames.Of(DisplayName, Key);
 }

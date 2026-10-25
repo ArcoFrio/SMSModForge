@@ -130,13 +130,17 @@ public sealed class MaskEditorCanvasTests
     {
         // Reported on the light themes: a fixed light grey on the panel's
         // light background. Measured as drawn: the label's own colour against
-        // the colour of the panel it sits on, for every theme.
+        // the colour of the panel it sits on - in the lightest Normal theme,
+        // the darkest, and an EX one. Not every theme (1.8.0): a window per
+        // theme cost twenty seconds, and what this guards is that the label
+        // takes the theme's colours rather than a fixed grey; that every
+        // theme's words read on every surface it has is ThemeTests' job.
         WindowHarness.Run(_ =>
         {
             var was = ThemeManager.Current;
             try
             {
-                foreach (var theme in ThemeManager.All)
+                foreach (var theme in ThemeManager.All.Where(t => t.Name is "Light" or "Carbon" or "Neon"))
                 {
                     ThemeManager.Apply(theme);
                     WindowHarness.Pump();

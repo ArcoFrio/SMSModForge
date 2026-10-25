@@ -248,25 +248,30 @@ namespace SMSModForge.PackPlugin
 
         // -------------------------------------------------------------------
 
-        private static void Navigate(Binding b)
+        private static void Navigate(Binding b) => Travel(b.TargetSiblingIndex, b.TargetRoomTalk, b.Music);
+
+        /// <summary>The journey to one of <c>5_Levels</c>' children, as a
+        /// navigator button starts it - also what the test bridge's
+        /// <c>travel</c> does. False while the game is locked.</summary>
+        internal static bool Travel(int siblingIndex, GameObject roomTalk, string music)
         {
             // The base game listens for `Start-Transfer` going true and reads
             // `Upcoming-Level` to pick the destination from `5_Levels`'s
             // children. We replicate Places.ClickMapButton's flow using the
             // deep-reflection variable bridge (same approach the host mod's
             // Core.FindAndModifyVariable{Double,Bool} uses).
-            if (GameVariableBridge.GetBool("Lock-Game")) return;
-            GameVariableBridge.SetDouble("Upcoming-Level", b.TargetSiblingIndex);
+            if (GameVariableBridge.GetBool("Lock-Game")) return false;
+            GameVariableBridge.SetDouble("Upcoming-Level", siblingIndex);
             GameVariableBridge.SetBool("Start-Transfer", true);
 
-            if (!string.IsNullOrEmpty(b.Music))
+            if (!string.IsNullOrEmpty(music))
             {
                 var audioPlayer = GameObject.Find("12_AudioPlayer");
                 if (audioPlayer != null)
                 {
                     foreach (Transform child in audioPlayer.transform)
                         child.gameObject.SetActive(false);
-                    var t = audioPlayer.transform.Find(b.Music);
+                    var t = audioPlayer.transform.Find(music);
                     if (t != null) t.gameObject.SetActive(true);
                 }
             }
@@ -286,8 +291,9 @@ namespace SMSModForge.PackPlugin
             }
 
             // Schedule the destination roomtalk to come up after the transition.
-            if (b.TargetRoomTalk != null)
-                SchedulePendingRoomTalk(b.TargetRoomTalk, 1.0f);
+            if (roomTalk != null)
+                SchedulePendingRoomTalk(roomTalk, 1.0f);
+            return true;
         }
 
         /// <summary>

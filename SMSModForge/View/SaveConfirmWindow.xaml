@@ -2,14 +2,17 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:l="clr-namespace:SMSModForge.Localization"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="{l:T saveConfirm.confirmSave}" Width="900" Height="560" MinWidth="560" MinHeight="320"
-        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        Title="{l:T saveConfirm.confirmSave}" Width="760" Height="560" MinWidth="460" MinHeight="320"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource Theme.Window}"
+        Foreground="{DynamicResource Theme.Text}">
     <DockPanel Margin="12">
 
         <!-- Header: what's about to be written, and where. -->
         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,8">
             <TextBlock x:Name="HeadlineText" FontWeight="Bold" FontSize="14" TextWrapping="Wrap"/>
-            <TextBlock x:Name="TargetText" Foreground="Gray" TextWrapping="Wrap" Margin="0,2,0,0"/>
+            <TextBlock x:Name="TargetText" Foreground="{DynamicResource Theme.TextMuted}"
+                       TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
         </StackPanel>
 
         <!-- Footer: the opt-out sits on the left, away from the commit button,
@@ -25,50 +28,87 @@
             </StackPanel>
         </DockPanel>
 
-        <!-- ListView isn't covered by App.xaml's implicit ListBox style (WPF
-             implicit styles match the exact type), so the theme brushes are
-             applied here by hand. IsVirtualizingWhenGrouping matters: grouping
-             turns virtualization OFF by default, and this list can run to a
-             couple of thousand rows after a big editing session. -->
-        <ListView x:Name="ChangeList" SelectionMode="Single"
-                  Background="{DynamicResource Theme.Control}"
-                  Foreground="{DynamicResource Theme.Text}"
-                  BorderBrush="{DynamicResource Theme.Accent}"
-                  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
-            <ListView.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Margin="0,6,0,2" FontWeight="Bold">
-                                <Run Text="{Binding Name, Mode=OneWay}"/><Run Text=" ("/><Run
-                                    Text="{Binding ItemCount, Mode=OneWay}"/><Run Text=")"/>
-                            </TextBlock>
-                        </DataTemplate>
-                    </GroupStyle.HeaderTemplate>
-                </GroupStyle>
-            </ListView.GroupStyle>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="" Width="26" DisplayMemberBinding="{Binding Glyph}"/>
-                    <GridViewColumn Header="{l:T saveConfirm.what}" Width="360" DisplayMemberBinding="{Binding Path}"/>
-                    <GridViewColumn Header="{l:T saveConfirm.was}" Width="220" DisplayMemberBinding="{Binding Before}"/>
-                    <GridViewColumn Header="{l:T saveConfirm.now}" Width="220" DisplayMemberBinding="{Binding After}"/>
-                </GridView>
-            </ListView.View>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="ToolTip">
-                        <Setter.Value>
-                            <MultiBinding StringFormat="{l:T saveConfirm.change.tip}">
-                                <Binding Path="Path"/>
-                                <Binding Path="Before"/>
-                                <Binding Path="After"/>
-                            </MultiBinding>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
-        </ListView>
+        <!--
+            The changes, under the thing each belongs to (the author, 1.8.0:
+            the What / Was / Now columns cut everything off and said it in the
+            file's own words). One column that wraps to the window: what
+            changed, in the words the editor uses, and the values under it
+            only where they say something. Nothing is picked here - it is a
+            list to read - so a row has no selection to paint. Virtualizing
+            when grouped: a long session can run to a couple of thousand rows.
+        -->
+        <Border BorderBrush="{DynamicResource Theme.Border}" BorderThickness="1" CornerRadius="3"
+                Background="{DynamicResource Theme.Surface}">
+            <ListBox x:Name="ChangeList" BorderThickness="0" Background="Transparent" Padding="8,4"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.CanContentScroll="True"
+                     VirtualizingPanel.IsVirtualizing="True"
+                     VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                     VirtualizingPanel.ScrollUnit="Pixel">
+                <ListBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="0,8,0,2" TextWrapping="Wrap">
+                                    <Run Text="{Binding Name, Mode=OneWay}" FontWeight="SemiBold"/><Run
+                                        Text="  "/><Run Text="{Binding ItemCount, Mode=OneWay}"
+                                        Foreground="{DynamicResource Theme.TextMuted}"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListBox.GroupStyle>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Focusable" Value="False"/>
+                        <Setter Property="ToolTip" Value="{Binding Tip}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <ContentPresenter Margin="0,2"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="6,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <!-- The sign in the editor's icon font: edit, add, remove, order. -->
+                            <TextBlock x:Name="Sign" Text="&#xE70F;" FontFamily="Segoe MDL2 Assets" FontSize="11"
+                                       Margin="0,3,0,0" Foreground="{DynamicResource Theme.Accent}"/>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock x:Name="RowText" Text="{Binding Text}" TextWrapping="Wrap"/>
+                                <!-- Two lines at most; the tooltip has it all. -->
+                                <TextBlock x:Name="RowDetail" Text="{Binding Detail}" TextWrapping="Wrap"
+                                           TextTrimming="CharacterEllipsis" MaxHeight="34" FontSize="11.5"
+                                           Foreground="{DynamicResource Theme.TextMuted}" Margin="0,1,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding HasDetail}" Value="False">
+                                <Setter TargetName="RowDetail" Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Kind}" Value="Added">
+                                <Setter TargetName="Sign" Property="Text" Value="&#xE710;"/>
+                                <Setter TargetName="Sign" Property="Foreground" Value="{DynamicResource Theme.Success}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Kind}" Value="Removed">
+                                <Setter TargetName="Sign" Property="Text" Value="&#xE738;"/>
+                                <Setter TargetName="Sign" Property="Foreground" Value="{DynamicResource Theme.Danger}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Kind}" Value="Reordered">
+                                <Setter TargetName="Sign" Property="Text" Value="&#xE8CB;"/>
+                                <Setter TargetName="Sign" Property="Foreground" Value="{DynamicResource Theme.TextMuted}"/>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
     </DockPanel>
 </Window>

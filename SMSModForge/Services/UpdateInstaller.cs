@@ -30,9 +30,12 @@ public static class UpdateInstaller
     /// <summary>Where downloads and staged builds go: beside the editor's other
     /// settings, which is a folder the author can always write to, and never
     /// inside the install, which may not be.</summary>
-    public static string StagingRoot { get; set; } = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "SMSModForge", "updates");
+    public static string StagingRoot
+    {
+        get => _stagingRoot ?? AppDataFolder.PathOf("updates");
+        set => _stagingRoot = value;
+    }
+    private static string? _stagingRoot;
 
     /// <summary>The folder the running editor was started from — what an editor
     /// update replaces.</summary>

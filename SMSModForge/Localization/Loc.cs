@@ -68,9 +68,7 @@ public static class Loc
     /// <summary>The author's own: translations they made or were given. One
     /// here wins over a shipped one with the same code, and an update of the
     /// editor never touches it.</summary>
-    public static string UserFolder => Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "SMSModForge", "Languages");
+    public static string UserFolder => Services.AppDataFolder.PathOf("Languages");
 
     /// <summary>Switch to <paramref name="code"/>. An unknown code is English.</summary>
     public static void Use(string? code)

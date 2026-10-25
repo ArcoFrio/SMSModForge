@@ -51,18 +51,10 @@ namespace SMSModForge.PackPlugin
         private static FieldInfo _colorField;
         private static bool _resolved;
 
-        // Remembers the last hierarchy the DISPATCHER populated, so the usual
-        // case (same pack, same speech UI, same colours) costs three reference
-        // compares per line rather than a rebuild of every colorizer's list.
-        // The factory is part of the key because two packs with the same number
-        // of colours are not the same colours, and leaving it out let the
-        // second pack to speak be skipped entirely.
-        private static RuntimeActorFactory _appliedBy;
-        private static Object _appliedFor;
-        private static int _appliedCount = -1;
-
-        // ...and the same for the per-frame watch, which paints every loaded
-        // pack at once and so is keyed on the total instead.
+        // What was painted last, so the usual case (same speech UI, same
+        // colours) costs a reference compare and a count rather than a rebuild
+        // of every colorizer's list. Every loaded pack is painted at once, so
+        // the key is the total.
         private static Object _paintedFor;
         private static int _paintedColors = -1;
         private static bool _paintedOnce;
@@ -73,24 +65,19 @@ namespace SMSModForge.PackPlugin
         private static readonly Dictionary<Object, object[]> _wasThere =
             new Dictionary<Object, object[]>();
 
+        /// <summary>
+        /// For a pack's line as it starts: every loaded pack's colours, in load
+        /// order - never this pack's alone. Painted alone, an earlier pack's
+        /// colour for a character a later pack also colours went over the
+        /// later one's as soon as one of the earlier pack's lines played, and
+        /// stayed for the rest of the session, in the game's conversations
+        /// too: the opposite of the order the main menu shows and its clash
+        /// warning states (found in the game, 1.8.0).
+        /// </summary>
         public static void Apply(RuntimeActorFactory factory, ManualLogSource log)
         {
             if (factory == null) return;
-            if (!ResolveTypes(log)) return;
-
-            var speech = SpeechUI.Current;
-            int colorCount = factory.ColorCount;
-            if (colorCount == 0) return;
-            if (ReferenceEquals(_appliedBy, factory)
-                && ReferenceEquals(_appliedFor, speech)
-                && _appliedCount == colorCount) return;
-
-            foreach (var colorizer in FindColorizers())
-                ApplyTo(colorizer, factory);
-
-            _appliedBy = factory;
-            _appliedFor = speech;
-            _appliedCount = colorCount;
+            Tick(Plugin.LoadedContexts, log);
         }
 
         /// <summary>
@@ -159,9 +146,6 @@ namespace SMSModForge.PackPlugin
             }
             _wasThere.Clear();
 
-            _appliedBy = null;
-            _appliedFor = null;
-            _appliedCount = -1;
             _paintedFor = null;
             _paintedColors = -1;
             _paintedOnce = false;

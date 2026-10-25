@@ -75,7 +75,9 @@ public sealed class BustPreview : Grid
     };
     private readonly TextBlock _placeholder = new()
     {
-        Foreground = Brushes.Gray,
+        Foreground = PreviewMessage.Ink,
+        Background = PreviewMessage.Chip,
+        Padding = new Thickness(6, 3, 6, 4),
         HorizontalAlignment = HorizontalAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center,
         FontSize = 11,

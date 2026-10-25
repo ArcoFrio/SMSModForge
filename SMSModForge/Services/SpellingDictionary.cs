@@ -33,9 +33,11 @@ public static class SpellingDictionary
     /// already existed when its session started. <c>neutral</c> ships with
     /// Windows, so it is always present.
     /// </summary>
-    public static string WindowsUserDictionaryPath => Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "Microsoft", "Spelling", "neutral", "default.dic");
+    public static string WindowsUserDictionaryPath => TestMode.Active
+        // A test adding a word must not add it to the author's Windows.
+        ? AppDataFolder.PathOf("Spelling", "default.dic")
+        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                       "Microsoft", "Spelling", "neutral", "default.dic");
 
     /// <summary>
     /// How long the platform checker takes to notice the file changed. Measured

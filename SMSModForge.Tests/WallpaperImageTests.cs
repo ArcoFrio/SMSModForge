@@ -41,7 +41,7 @@ public sealed class WallpaperImageTests : IDisposable
     }
 
     private string[] Codes(ModPack pack)
-        => PackValidator.Validate(pack, _root).Where(i => i.Where.StartsWith("wallpapers.elf.spritePath")).Select(i => i.Code).ToArray();
+        => PackValidator.Validate(pack, _root).Where(i => i.Where.StartsWith("wallpapers[elf].spritePath")).Select(i => i.Code).ToArray();
 
     [Fact]
     public void AnImageInThePackNamedFromItsFolderIsFine()

@@ -72,7 +72,7 @@ namespace SMSModForge.PackPlugin
             var nodes = ui["nodes"] as JArray;
             if (nodes == null || nodes.Count == 0) return;
 
-            string id = (string)ui["id"] ?? (string)ui["name"] ?? "pack-ui";
+            string id = IdOf(ui);
             bool hides = ui["hidesWithGameplayUi"] == null
                       || (bool)ui["hidesWithGameplayUi"];
 
@@ -110,6 +110,11 @@ namespace SMSModForge.PackPlugin
             root.SetActive(ui["startsOpen"] != null && (bool)ui["startsOpen"]);
             UiRegistry.Register(id, root);
         }
+
+        /// <summary>The id a screen of the pack's own is registered under, and
+        /// so what an action - or its own open conditions - opens it by.</summary>
+        internal static string IdOf(JObject ui)
+            => (string)ui["id"] ?? (string)ui["name"] ?? "pack-ui";
 
         /// <summary>A canvas of the pack's own, matching the game's own
         /// settings so a pixel authored at 1920x1080 lands where it was put.</summary>

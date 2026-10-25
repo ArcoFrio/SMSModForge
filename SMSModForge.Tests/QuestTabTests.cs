@@ -22,14 +22,14 @@ public sealed class QuestTabTests
     private readonly ITestOutputHelper _out;
     public QuestTabTests(ITestOutputHelper o) => _out = o;
 
-    private const int TabQuests = 13;
+    private const int TabQuests = MainTab.Quests;
 
     [Fact]
-    public void TheTabIsLastAndNothingElseMoved()
+    public void TheTabIsWhereMainTabSaysAfterUi()
     {
-        // Several constants in the window and the view model address tabs by
-        // number, and the issue list jumps by them. Pinned so a new tab cannot
-        // quietly renumber the ones before it.
+        // The window and the view model address tabs by their place (MainTab),
+        // and the issue list jumps by it. Since 1.8.0 Quests follows UI, and
+        // Variables and Integration come last (see MainTabOrderTests).
         WindowHarness.Run(window =>
         {
             var tabs = (TabControl)window.FindName("MainTabs");
@@ -37,9 +37,9 @@ public sealed class QuestTabTests
             _out.WriteLine(string.Join(" | ", headers));
 
             Assert.Equal("Quests", headers[TabQuests]);
-            Assert.Equal(TabQuests, headers.Count - 1);
-            Assert.Equal("UI", headers[12]);
-            Assert.Equal("Integration", headers[11]);
+            Assert.Equal("UI", headers[MainTab.Ui]);
+            Assert.Equal(MainTab.Ui + 1, TabQuests);
+            Assert.Equal("Integration", headers[^1]);
         });
     }
 
@@ -218,7 +218,7 @@ public sealed class QuestTabTests
         // when the box loses focus, and where focus settles once a popup opens
         // is up to WPF's timing - which made a test that focused the box pass
         // or fail from one run to the next.
-        box.IsDropDownOpen = true;
+        WindowHarness.SetOpen(box, true);
         WindowHarness.Pump();
         typing.Text = text;
         typing.SelectionStart = text.Length;
@@ -259,7 +259,7 @@ public sealed class QuestTabTests
             // task again rather than the half-typed search.
             TypeAndRead(tasks, "nothing like any task");
             Assert.True(def.Params.ContainsKey(V.TaskParam), "a search that matched nothing cleared the task");
-            tasks.IsDropDownOpen = false;
+            WindowHarness.SetOpen(tasks, false);
             elsewhere.Focus();
             WindowHarness.Pump();
             Assert.False(tasks.IsKeyboardFocusWithin, "focus never left the dropdown, so this proves nothing");
@@ -303,7 +303,7 @@ public sealed class QuestTabTests
             // list this long only builds the rows near the top, so an unnarrowed
             // one shows far fewer than it holds.
             Assert.All(found, name => Assert.Contains("heal", name, System.StringComparison.OrdinalIgnoreCase));
-            countVariable.IsDropDownOpen = false;
+            WindowHarness.SetOpen(countVariable, false);
             WindowHarness.Pump();
 
             // A completion condition added as a Variable one, then switched to a quest.
@@ -370,7 +370,7 @@ public sealed class QuestTabTests
             Assert.Equal(new[] { "Astrid Quest" }, byTitle);
 
             // The control: the stored name still finds it.
-            quests.IsDropDownOpen = false;
+            WindowHarness.SetOpen(quests, false);
             WindowHarness.Pump();
             Assert.Contains("Astrid Quest", TypeAndRead(quests, "astrid q"));
         });

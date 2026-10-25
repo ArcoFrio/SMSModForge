@@ -44,10 +44,9 @@ public sealed class DialogueViewModel : ObservableObject
     /// <para/>
     /// Same arrangement as characters: a NEW dialogue derives its key from
     /// whatever gets typed as the display name, and stops the moment the
-    /// author edits the key themselves. An existing dialogue never re-derives,
-    /// because its key is what logs and other packs already refer to it by and
-    /// renaming it underneath them is not something a display-name edit should
-    /// do.
+    /// author edits the key themselves. A loaded one follows only while its key
+    /// is still its display name made into a name (see <see cref="DerivedKey"/>);
+    /// one somebody typed is what logs and other packs know it by.
     /// </summary>
     private bool _keyFollowsDisplay;
 
@@ -59,19 +58,44 @@ public sealed class DialogueViewModel : ObservableObject
     public bool KeyIsDerived => _keyFollowsDisplay;
 
     /// <summary>Start deriving the key from the display name. Called for a
-    /// dialogue the author has just added, never for one being loaded.</summary>
+    /// dialogue the author has just added, duplicated or pasted.</summary>
     public void DeriveKeyFromDisplayName(Func<IEnumerable<DialogueViewModel>> siblings)
     {
         _siblings = siblings;
         _keyFollowsDisplay = true;
     }
 
-    private void DeriveKey()
+    private bool _keyUndecided;
+
+    /// <summary>Loaded, and allowed to follow again when its display name is
+    /// rubbed out back into its key (<see cref="DerivedKey.ErasedBackInto"/>);
+    /// never once a key has been typed.</summary>
+    private bool _keyWatched;
+
+    /// <summary>A dialogue loaded from disk: its key follows from the next
+    /// rename if it is still its display name made into a name (see
+    /// <see cref="DerivedKey"/>, the same rule).</summary>
+    public void WatchDisplayName(Func<IEnumerable<DialogueViewModel>> siblings)
+    {
+        _siblings = siblings;
+        _keyFollowsDisplay = false;
+        _keyUndecided = true;
+        _keyWatched = true;
+    }
+
+    private string KeyFor(string displayName)
     {
         var others = (_siblings?.Invoke() ?? Enumerable.Empty<DialogueViewModel>())
             .Where(d => !ReferenceEquals(d, this))
             .Select(d => d.Model.Key);
-        Model.Key = CharacterDef.UniqueIdentifier(Model.DisplayName, others);
+        return CharacterDef.UniqueIdentifier(displayName, others);
+    }
+
+    private void DeriveKey()
+    {
+        string was = Model.Key;
+        Model.Key = KeyFor(Model.DisplayName);
+        FoldsFollow(was);
         OnPropertyChanged(nameof(Key));
         OnPropertyChanged(nameof(Display));
     }
@@ -545,10 +569,14 @@ public sealed class DialogueViewModel : ObservableObject
         get => Model.Key;
         set
         {
+            string was = Model.Key;
             Model.Key = value;
+            FoldsFollow(was);
             // Typing a key is a decision, and it sticks: from here the display
             // name no longer touches it.
             _keyFollowsDisplay = false;
+            _keyUndecided = false;
+            _keyWatched = false;
             OnPropertyChanged();
             OnPropertyChanged(nameof(KeyIsDerived));
             OnPropertyChanged(nameof(Display));
@@ -569,6 +597,17 @@ public sealed class DialogueViewModel : ObservableObject
         set
         {
             if (!NameIsEditable) return;
+            if (_keyUndecided)
+            {
+                _keyUndecided = false;
+                _keyFollowsDisplay = string.Equals(Model.Key, KeyFor(Model.DisplayName), StringComparison.Ordinal)
+                                     || DerivedKey.IsCopyLeftover(Model.Key);
+            }
+            if (!_keyFollowsDisplay && _keyWatched && DerivedKey.ErasedBackInto(Model.DisplayName, value, Model.Key))
+            {
+                _keyFollowsDisplay = true;
+                OnPropertyChanged(nameof(KeyIsDerived));
+            }
             Model.DisplayName = value;
             OnPropertyChanged();
             if (_keyFollowsDisplay) DeriveKey();
@@ -645,6 +684,76 @@ public sealed class DialogueViewModel : ObservableObject
 
     public string Display => string.IsNullOrWhiteSpace(DisplayName) ? Key : DisplayName;
 
+    // ── Folding Identity and Start conditions (the author, 1.8.0) ─────────
+    // Per dialogue and remembered (DialogueFolds), and folded they still say
+    // what matters: the names and priority and what is ticked; each start
+    // condition in a word or two.
+
+    public bool IdentityOpen
+    {
+        get => !Services.DialogueFolds.IsFolded(Model.Key, Services.DialogueFolds.Identity);
+        set
+        {
+            Services.DialogueFolds.Set(Model.Key, Services.DialogueFolds.Identity, !value);
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(IdentityBrief));
+            OnPropertyChanged(nameof(IdentityChips));
+        }
+    }
+
+    public bool StartOpen
+    {
+        get => !Services.DialogueFolds.IsFolded(Model.Key, Services.DialogueFolds.Start);
+        set
+        {
+            Services.DialogueFolds.Set(Model.Key, Services.DialogueFolds.Start, !value);
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(StartChips));
+        }
+    }
+
+    /// <summary>The names, as the list shows them.</summary>
+    public string IdentityBrief => ListNames.Of(DisplayName, Key);
+
+    /// <summary>The priority, and each box that is ticked, in a word or two.</summary>
+    public IReadOnlyList<string> IdentityChips
+    {
+        get
+        {
+            var chips = new List<string> { Loc.F("dialogues.fold.priority", "value", Priority) };
+            if (DisableVanillaTrigger) chips.Add(Loc.T("dialogues.fold.overGame"));
+            if (ReplayOnTalk) chips.Add(Loc.T("dialogues.fold.staysOnTalk"));
+            if (Queued) chips.Add(Loc.T("dialogues.fold.waitsForTalk"));
+            if (QueueBehind) chips.Add(Loc.T("dialogues.fold.queues"));
+            if (DebugConditions) chips.Add(Loc.T("dialogues.fold.debug"));
+            return chips;
+        }
+    }
+
+    /// <summary>Each start condition in a word or two.</summary>
+    public IReadOnlyList<string> StartChips => Model.StartConditions.Select(Brief).ToList();
+
+    /// <summary>A condition as its type spelled out, and what it is about when
+    /// it names one thing - "Level Active: Beach", "Variable Equals: gold".</summary>
+    internal static string Brief(NodeConditionDef c)
+    {
+        if (NodeConditionTypes.IsGroup(c.Type))
+            return Loc.P("dialogues.fold.group", c.Conditions?.Count ?? 0);
+        // Every comparison of a variable is "Variable": the name says the rest.
+        string type = ListNames.Spaced(c.Type.StartsWith("Variable", StringComparison.Ordinal) ? "Variable" : c.Type);
+        foreach (var key in new[] { "name", "level", "target", "quest", "list" })
+            if (c.Params.TryGetValue(key, out var about) && !string.IsNullOrWhiteSpace(about))
+                return type + ": " + about;
+        return type;
+    }
+
+    /// <summary>A rename keeps the dialogue's folds.</summary>
+    private void FoldsFollow(string from)
+    {
+        if (!string.Equals(from, Model.Key, StringComparison.Ordinal))
+            Services.DialogueFolds.Rename(from, Model.Key);
+    }
+
     /// <summary>Comma-separated root ids for the right-pane summary.</summary>
     public string RootsSummary => Model.RootNodeIds.Count == 0 ? Loc.T("dialogues.noRoot") : string.Join(", ", Model.RootNodeIds);
 
@@ -705,15 +814,14 @@ public sealed class DialogueViewModel : ObservableObject
 
     /// <summary>
     /// Adds a new node. If <paramref name="parentId"/> is null, the node becomes
-    /// a root. When <paramref name="template"/> is given, the new node inherits
-    /// every authored field from it — see <see cref="CloneForNewNode"/>.
+    /// a root. When <paramref name="speakerFrom"/> is given, the new node takes
+    /// its speaker - see <see cref="CarrySpeaker"/>.
     /// </summary>
     public DialogueNodeViewModel AddNode(int? parentId = null, DialogueNodeKind kind = DialogueNodeKind.Text,
-                                          DialogueNodeDef? template = null,
                                           DialogueNodeDef? speakerFrom = null)
     {
-        var def = template != null ? CloneForNewNode(template) : new DialogueNodeDef { Kind = kind };
-        if (template == null && speakerFrom != null) CarrySpeaker(speakerFrom, def);
+        var def = new DialogueNodeDef { Kind = kind };
+        if (speakerFrom != null) CarrySpeaker(speakerFrom, def);
         def.Id = NextNodeId();
         Model.Nodes.Add(def);
         if (parentId.HasValue)
@@ -733,56 +841,25 @@ public sealed class DialogueViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Deep-copies <paramref name="template"/> as the starting point for a new
-    /// node: kind, actor, expression, outfit, duration/timeout, jump, and the
-    /// whole conditions / start-actions / finish-actions lists all carry over,
-    /// so adding the next line of a scene doesn't mean re-picking the speaker
-    /// and their expression every time.
-    /// <para/>
-    /// Five fields deliberately don't:
-    /// <list type="bullet">
-    ///   <item><c>Id</c> — allocated by the caller.</item>
-    ///   <item><c>Kind</c> — a new node is always a plain line. Choice and
-    ///   Random are structural: a Choice's children are its options and a
-    ///   Random's are its alternatives, and neither is itself a menu. Copying
-    ///   the kind made every option a Choice, which in turn made ITS children
-    ///   read as options — so a follow-up line under an option lost its
-    ///   Actions-on-start box, and the runtime would have built it as a
-    ///   one-entry menu rather than a line. Authoring a nested menu is one
-    ///   dropdown; the cascade was silent.</item>
-    ///   <item><c>Text</c> — the one thing that's always different.</item>
-    ///   <item><c>Children</c> — a new node starts as a leaf; copying the list
-    ///   would give two parents the same children and knot the tree.</item>
-    ///   <item><c>Tag</c> — it's a jump TARGET name. Two nodes carrying the
-    ///   same tag makes <c>Content.FindByTag</c> ambiguous (it returns whichever
-    ///   it enumerates first), so every jump aimed at the original could
-    ///   silently start landing on the copy.</item>
-    /// </list>
-    /// </summary>
-    private static DialogueNodeDef CloneForNewNode(DialogueNodeDef template)
-    {
-        var def = Services.EditorClipboard.CloneOne(template);
-        def.Kind = DialogueNodeKind.Text;
-        def.Text = "";
-        def.Tag = null;
-        def.Children = new List<int>();
-        return def;
-    }
-
-    /// <summary>
     /// Who is speaking and how they look — and nothing else.
     /// <para/>
-    /// What a new ROOT takes from the line before it. A root starts a fresh
-    /// strand, so inheriting a whole node the way + Child does would carry
-    /// conditions, actions, a jump and a timeout that were written about
-    /// somewhere else entirely. The speaker is the part that does carry: a new
-    /// strand is usually the same scene, and picking the actor, the expression
-    /// and the outfit again was all a new root ever cost.
+    /// What every new line takes from the selected one (the author, 1.8.0:
+    /// "Only copy/pasting and duplicating should copy over information other
+    /// than Actor, Expression, and Outfit"). + Child and + Sibling used to copy
+    /// the whole node - conditions, actions, a jump and a timeout written
+    /// about one line, then wrong on the next as often as right. The speaker
+    /// is the part that does carry: the next line is usually the same scene.
+    /// Duplicate and copy and paste are how a whole node is copied.
     /// </summary>
     private static void CarrySpeaker(DialogueNodeDef from, DialogueNodeDef to)
     {
         to.Actor = from.Actor;
-        to.Expression = from.Expression;
+        // Neutral rather than nothing, for a line somebody speaks (the author,
+        // 1.8.0): it is the face every character has, and in game the two are
+        // the same - no expression showing. A face carried from the line before
+        // stays that face.
+        to.Expression = string.IsNullOrEmpty(from.Expression) && !string.IsNullOrEmpty(from.Actor)
+            ? VanillaFaces.Neutral : from.Expression;
         to.Outfit = from.Outfit;
     }
 
@@ -816,6 +893,13 @@ public sealed class DialogueViewModel : ObservableObject
     public void CopyNode(DialogueNodeViewModel? node)
     {
         if (node == null) return;
+        Services.EditorClipboard.SetNodes(SubtreeOf(node));
+    }
+
+    /// <summary><paramref name="node"/> and everything beneath it, the node
+    /// first.</summary>
+    private List<DialogueNodeDef> SubtreeOf(DialogueNodeViewModel node)
+    {
         var collected = new List<DialogueNodeDef>();
         var seen = new HashSet<int>();
         void Collect(int id)
@@ -827,8 +911,17 @@ public sealed class DialogueViewModel : ObservableObject
             foreach (var c in def.Children) Collect(c);
         }
         Collect(node.Id);
-        Services.EditorClipboard.SetNodes(collected);
+        return collected;
     }
+
+    /// <summary>
+    /// A copy of <paramref name="node"/> and everything beneath it, directly
+    /// below it: Duplicate on the node list (the author, 1.8.0). The whole of
+    /// each node comes along, as with copy and paste, and the clipboard is
+    /// left as it was. Returns the copy, for selecting.
+    /// </summary>
+    public DialogueNodeViewModel? DuplicateNode(DialogueNodeViewModel? node)
+        => node == null ? null : Graft(SubtreeOf(node), node, NodePastePosition.Sibling);
 
     /// <summary>Pastes the clipboard node subtree into this dialogue with fresh
     /// ids, wiring its root as a sibling/child of <paramref name="target"/> or as
@@ -838,8 +931,41 @@ public sealed class DialogueViewModel : ObservableObject
     {
         var src = Services.EditorClipboard.NodeSubtree;
         if (src == null || src.Count == 0) return null;
+        return Graft(src, target, position);
+    }
 
-        var pasted = Services.EditorClipboard.Clone(src);   // independent of clipboard
+    /// <summary>
+    /// Put a copy of <paramref name="src"/> (a subtree, its root first) into
+    /// this dialogue with fresh ids, as a sibling or child of
+    /// <paramref name="target"/> or as a new root.
+    /// <para/>
+    /// A tag this dialogue already has is renamed in the copy, and the copy's
+    /// own jumps to it follow: two nodes with one tag make every jump aimed
+    /// at it land on whichever the game finds first.
+    /// </summary>
+    private DialogueNodeViewModel? Graft(IReadOnlyList<DialogueNodeDef> src, DialogueNodeViewModel? target,
+                                         NodePastePosition position)
+    {
+        var pasted = Services.EditorClipboard.Clone(src);   // independent of the source
+        var taken = new HashSet<string>(Model.Nodes.Select(n => n.Tag).Where(t => !string.IsNullOrEmpty(t))!,
+                                        StringComparer.Ordinal);
+        var tagMap = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var def in pasted)
+        {
+            if (string.IsNullOrEmpty(def.Tag)) continue;
+            if (taken.Contains(def.Tag!))
+            {
+                string fresh = def.Tag + "_copy";
+                for (int i = 2; taken.Contains(fresh); i++) fresh = def.Tag + "_copy" + i;
+                tagMap[def.Tag!] = fresh;
+                def.Tag = fresh;
+            }
+            taken.Add(def.Tag!);
+        }
+        foreach (var def in pasted)
+            if (def.Jump?.TargetTag is { } aim && tagMap.TryGetValue(aim, out var renamed))
+                def.Jump.TargetTag = renamed;
+
         int next = NextNodeId();
         var idMap = new Dictionary<int, int>();
         foreach (var def in pasted) idMap[def.Id] = next++;
@@ -888,11 +1014,11 @@ public sealed class DialogueViewModel : ObservableObject
     /// </summary>
     public DialogueNodeViewModel? AddSibling(DialogueNodeViewModel nodeVm,
                                               DialogueNodeKind kind = DialogueNodeKind.Text,
-                                              DialogueNodeDef? template = null)
+                                              DialogueNodeDef? speakerFrom = null)
     {
         if (nodeVm == null) return null;
         int? parentId = FindParentId(nodeVm.Id);
-        var added = AddNode(parentId, kind, template);
+        var added = AddNode(parentId, kind, speakerFrom);
         // AddNode appends to the parent's children (or the root list). A sibling
         // added from a selection belongs directly BELOW that selection, not at
         // the end of the row of siblings — otherwise inserting a line into the
@@ -1073,6 +1199,7 @@ public sealed class DialogueViewModel : ObservableObject
         {
             nodeVm.Depth = depths.TryGetValue(nodeVm.Id, out var d) ? d : 0;
             nodeVm.IsChoiceChild = choiceChildren.Contains(nodeVm.Id);
+            nodeVm.TreeChanged();
         }
 
         ReorderToTreeOrder(order);

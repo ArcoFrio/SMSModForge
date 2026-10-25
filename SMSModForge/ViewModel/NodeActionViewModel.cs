@@ -1058,11 +1058,23 @@ public sealed class NodeActionViewModel : ObservableObject
         => (VarValue ?? "").Contains('$') || (VarFallback ?? "").Contains('$');
     public string VarDelta { get => GetParam("delta"); set { SetParam("delta", value); OnPropertyChanged(); } }
 
-    /// <summary>Set-Active category, stored in the canonical <c>kind</c> param.</summary>
+    /// <summary>
+    /// Set-Active category, stored in the canonical <c>kind</c> param.
+    /// <para/>
+    /// HIDDEN ROWS WRITE NOTHING. An action's row holds the boxes of every
+    /// kind of action, collapsed but alive, and two of them edit the same
+    /// params: the Set-Active Category/Target/Level here and the Fade/Move/
+    /// Spin ones (<see cref="GoCategory"/>, <see cref="GoTarget"/>,
+    /// <see cref="GoOverlayLevel"/>). A collapsed box whose list did not hold
+    /// the value wrote an empty one back, and the Level an author had chosen
+    /// was gone - found running the window tests under an EX theme (1.8.0),
+    /// whose templates settle in another order. So each of these setters takes
+    /// a value only from a row the action shows.
+    /// </summary>
     public string Category
     {
         get => Model.Params.TryGetValue("kind", out var k) && !string.IsNullOrEmpty(k) ? NormalizeCategory(k) : CatPath;
-        set { if (value != Category) SetCategory(value); }
+        set { if (IsSetActiveFamily && value != Category) SetCategory(value); }
     }
 
     /// <summary>Unified target — a scene key (Scene category) or a GameObject
@@ -1072,6 +1084,7 @@ public sealed class NodeActionViewModel : ObservableObject
         get => Model.Params.TryGetValue("target", out var t) ? t : "";
         set
         {
+            if (!IsSetActiveFamily) return;   // hidden rows write nothing: see Category
             if (string.IsNullOrEmpty(value)) Model.Params.Remove("target");
             else Model.Params["target"] = value;
             OnPropertyChanged();
@@ -1147,6 +1160,7 @@ public sealed class NodeActionViewModel : ObservableObject
         get => Model.Params.TryGetValue("overlayLevel", out var l) ? l : "";
         set
         {
+            if (!IsSetActiveFamily) return;   // hidden rows write nothing: see Category
             if (string.IsNullOrEmpty(value)) Model.Params.Remove("overlayLevel");
             else Model.Params["overlayLevel"] = value;
             OnPropertyChanged();
@@ -1278,6 +1292,7 @@ public sealed class NodeActionViewModel : ObservableObject
         get => Model.Params.TryGetValue("kind", out var k) && !string.IsNullOrEmpty(k) ? NormalizeCategory(k) : CatPath;
         set
         {
+            if (!IsGoCategoryFamily) return;   // hidden rows write nothing: see Category
             if (value == GoCategory) return;
             if (value == CatPath) Model.Params.Remove("kind"); else Model.Params["kind"] = value;
             if (!IsLevelScoped(value)) Model.Params.Remove("overlayLevel");
@@ -1303,6 +1318,7 @@ public sealed class NodeActionViewModel : ObservableObject
              : Model.Params.TryGetValue("path", out var p) ? p : "";
         set
         {
+            if (!IsGoCategoryFamily) return;   // hidden rows write nothing: see Category
             if (string.IsNullOrEmpty(value)) Model.Params.Remove("target");
             else Model.Params["target"] = value;
             Model.Params.Remove("path");   // migrate off the legacy key on first edit
@@ -1316,6 +1332,7 @@ public sealed class NodeActionViewModel : ObservableObject
         get => Model.Params.TryGetValue("overlayLevel", out var l) ? l : "";
         set
         {
+            if (!IsGoCategoryFamily) return;   // hidden rows write nothing: see Category
             if (string.IsNullOrEmpty(value)) Model.Params.Remove("overlayLevel");
             else Model.Params["overlayLevel"] = value;
             OnPropertyChanged();

@@ -202,7 +202,9 @@ public sealed class GameLookRowTests : IDisposable
             window.UpdateLayout();
             WindowHarness.Pump();
 
-            var glyphs = In<TextBlock>(window)
+            // In the node list: EX's panel help "?" (1.8.0) is a one-letter
+            // "?" too, in the panel's band, on the theme's own colours.
+            var glyphs = In<TextBlock>((ListBox)window.FindName("NodeList"))
                 .Where(t => t.IsVisible && t.Text.Length == 1 && "▸⇄?◆".Contains(t.Text))
                 .ToList();
 

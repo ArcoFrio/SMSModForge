@@ -58,6 +58,11 @@ namespace SMSModForge.PackPlugin
         private static readonly List<DialogueDispatcher> _dispatchers = new List<DialogueDispatcher>();
 
 #if DEBUG
+        /// <summary>The packs' dialogue dispatchers, for the test bridge.</summary>
+        internal static IReadOnlyList<DialogueDispatcher> Dispatchers => _dispatchers;
+#endif
+
+#if DEBUG
         /// <summary>Latched true if the legacy Input manager throws (Input System-only builds).</summary>
         private static bool _conditionDebugKeyBroken;
 #endif
@@ -691,19 +696,20 @@ namespace SMSModForge.PackPlugin
         /// <c>the host mod's save-path helper</c>: same root,
         /// same per-slot folder, different filename.
         /// </summary>
-        public static string SavesRoot
-        {
-            get
-            {
-                string appData = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
-                string localLow = Path.Combine(Path.GetDirectoryName(appData), "LocalLow");
-                return Path.Combine(localLow, "Arvus Games", "Starmaker Story", "Saves");
-            }
-        }
+        /// <remarks>Read from Unity rather than spelled out: it is the folder the
+        /// game itself saves into, which follows the game's company and product
+        /// names - the same path for the game as shipped, and the test copy's
+        /// own for the copy ModForge's in-game checks run in, renamed so that
+        /// none of its saves land among the author's (1.8.0).</remarks>
+        public static string SavesRoot => Path.Combine(Application.persistentDataPath, "Saves");
 
         private void Awake()
         {
             Instance = this;
+            // Before the first setting is bound, which writes the file: there
+            // already, ModForge has run in this game before (the main-menu
+            // notice tells such a player what is new).
+            bool ranBefore = File.Exists(Config.ConfigFilePath);
             // Before anything is read or drawn: the language decides the words
             // on the main menu and the words of every pack - and it may follow
             // XUnity.AutoTranslator's, so that is looked for first.
@@ -711,6 +717,7 @@ namespace SMSModForge.PackPlugin
             PluginLanguage.Configure(Config, Logger);
             PackSwitchSetting.Configure(Config);
             PackOrderSetting.Configure(Config);
+            MainMenuNotice.Configure(Config, ranBefore, Logger);
             // And the letters of that language, which the game's fonts lack.
             PluginFonts.AddFallbacks(PluginLanguage.Code, Logger);
             // Where it is chosen on the main menu.
@@ -732,6 +739,8 @@ namespace SMSModForge.PackPlugin
             // pack is loaded in CoreGameScene.
             gameObject.AddComponent<PackManualSaveSync>();
 #if DEBUG
+            // Only when a test started the game (-mfBridge); see DebugBridge.
+            DebugBridge.InstallIfAsked(gameObject);
             // A shipped build must never say this. It is the marker a release
             // check greps for, and the line somebody reads in a player's log
             // when a diagnostic build has escaped.
@@ -834,6 +843,7 @@ namespace SMSModForge.PackPlugin
         {
             currentScene = scene;
             loaded = false;
+            if (scene.name == "GameStart") MainMenuNotice.MenuArrived();
             _afterSleepEvents = null;
             _savedUI = null;
             _afterSleepProc = false;
@@ -1068,8 +1078,12 @@ namespace SMSModForge.PackPlugin
 
                         // A pack that could not be read has no box: there is
                         // nothing of it to load either way.
-                        AddPackLines(lines, SMSModForge.Shared.PackStatus.Rows(p.MenuLabel, status, MenuLineWidth),
-                                     colour, p.IsValid ? p.PackId : null, true);
+                        // The pack's name in white whatever its line says
+                        // about it: the colour is for what is wrong, so the
+                        // name still reads as a name.
+                        var packRows = SMSModForge.Shared.PackStatus.Rows(p.MenuLabel, status, MenuLineWidth);
+                        if (colour != Color.white && packRows.Count > 0) packRows[0] = NameInWhite(packRows[0], p.MenuLabel);
+                        AddPackLines(lines, packRows, colour, p.IsValid ? p.PackId : null, true);
 
                         // The rows are short because they sit on a menu; the
                         // log is where somebody is told what to DO about each.
@@ -1077,31 +1091,45 @@ namespace SMSModForge.PackPlugin
                     }
                 }
 
-                // How to arrange them, once there is something to arrange.
+                // How to arrange them, once there is something to arrange: one
+                // line, inside the panel (the author, 1.8.0 - it used to run to
+                // two, off the panel's edge).
                 int arrangeable = 0;
                 foreach (var p in packs) if (p.IsValid) arrangeable++;
+                int hintAt = -1;
                 if (arrangeable >= 2)
-                    foreach (string hint in SMSModForge.Shared.PackStatus.Wrap(
-                                 SMSModForge.Shared.PackStatus.Indent + SMSModForge.Shared.GameTexts.T("game.menu.orderHint"),
-                                 MenuLineWidth, SMSModForge.Shared.PackStatus.Indent))
-                        lines.Add(new MenuLine(hint, MenuSwitchedOffColour));
+                {
+                    hintAt = lines.Count;
+                    lines.Add(new MenuLine(SMSModForge.Shared.PackStatus.Indent + SMSModForge.Shared.GameTexts.T("game.menu.orderHint"),
+                                           MenuHintColour));
+                }
 
                 // Backdrop first (earlier sibling = drawn behind the text rows):
                 // a semi-transparent black panel spanning the header + all rows.
-                InjectMenuBackdrop(prototype, menuRoot, lines.Count);
+                var panel = InjectMenuBackdrop(prototype, menuRoot, lines.Count);
+                var drawn = new List<TMPro.TMP_Text>();
 
                 int row = 0;
-                InjectMenuRow(prototype, menuRoot, row++, MenuHeader(forgeForOtherGame),
-                              forgeForOtherGame ? Color.red : Color.white, MenuHeaderFontSize);
+                var heading = InjectMenuRow(prototype, menuRoot, row++, MenuHeader(forgeForOtherGame),
+                                            forgeForOtherGame ? Color.red : Color.white, MenuHeaderFontSize);
+                if (heading != null && heading.GetComponent<TMPro.TMP_Text>() is TMPro.TMP_Text headingText) drawn.Add(headingText);
 
                 PackListDrag drag = null;
                 drag = new PackListDrag(menuRoot, MenuRowStride,
                                         (id, gap) => MovePack(drag.Shown(), id, gap), Logger);
-                foreach (var line in lines)
+                _menuDrag = drag;
+                TMPro.TMP_Text hintText = null;
+                for (int i = 0; i < lines.Count; i++)
                 {
+                    var line = lines[i];
                     var made = InjectMenuRow(prototype, menuRoot, row++,
                                              line.Switch == null ? line.Text : PackSwitchBox.MakeRoom(line.Text),
                                              line.Colour, MenuPackFontSize);
+                    if (made != null && made.GetComponent<TMPro.TMP_Text>() is TMPro.TMP_Text madeText)
+                    {
+                        drawn.Add(madeText);
+                        if (i == hintAt) hintText = madeText;
+                    }
                     // Every line of a pack carries it, so it can be picked up by
                     // its name or by a warning under it. Before the box, which
                     // has to stay on top to take its own clicks.
@@ -1110,6 +1138,7 @@ namespace SMSModForge.PackPlugin
                     string id = line.Switch;
                     PackSwitchBox.Add(made, line.On, on => SwitchPack(id, on), Logger);
                 }
+                FitMenuPanel(panel, drawn, hintText, prototype, menuRoot);
 
                 Logger.LogInfo("[SMSModForge.PackPlugin] Menu banner: " + row +
                                " row(s) injected (" + packs.Count + " pack(s)"
@@ -1268,7 +1297,7 @@ namespace SMSModForge.PackPlugin
         /// nudged slightly down-right to taste. Rows AND backdrop both key off
         /// this, so adjusting it moves the whole banner as one unit.
         /// </summary>
-        private static readonly Vector2 MenuBaseOffset = new Vector2(120, -55);
+        private static readonly Vector2 MenuBaseOffset = new Vector2(150, -64);
 
         /// <summary>
         /// Clone the prototype menu text into a single labelled row at the
@@ -1356,6 +1385,19 @@ namespace SMSModForge.PackPlugin
             RedrawMenuBanner();
         }
 
+        /// <summary>The main menu's pack list as it is shown, while it is.</summary>
+        private PackListDrag _menuDrag;
+
+        /// <summary>A drop of a pack at a gap in the main menu's list, as the
+        /// test bridge makes one: what the drag does when it lets go. False
+        /// when the list is not on screen.</summary>
+        internal bool DropPack(string packId, int gap)
+        {
+            if (_menuDrag == null || !_menuDrag.Shown().Contains(packId)) return false;
+            MovePack(_menuDrag.Shown(), packId, gap);
+            return true;
+        }
+
         /// <summary>
         /// Packs switched on that change the same thing of the game's, in the
         /// log, field by field: the menu has room for whose, the log for what
@@ -1399,6 +1441,10 @@ namespace SMSModForge.PackPlugin
 
         /// <summary>A pack switched off on the menu: there, but out of play.</summary>
         private static readonly Color MenuSwitchedOffColour = new Color(0.55f, 0.55f, 0.55f, 1f);
+
+        /// <summary>The hint under the list: quieter than a pack, lighter than
+        /// a pack switched off, so it is not read as one.</summary>
+        private static readonly Color MenuHintColour = new Color(0.7f, 0.7f, 0.7f, 1f);
 
         /// <summary>
         /// The box beside a pack was clicked. Nothing is loaded or unloaded
@@ -1466,19 +1512,33 @@ namespace SMSModForge.PackPlugin
             }
         }
 
+        /// <summary>Room between the panel's edges and what is in it.</summary>
+        private const float MenuPanelPadLeft = 40f, MenuPanelPadRight = 24f;
+
+        /// <summary>The narrowest the panel gets, so a list of one short pack
+        /// still reads as a panel and not a label.</summary>
+        private const float MenuPanelMinWidth = 520f;
+
+        /// <summary>The "?" on the heading, and the room it takes.</summary>
+        private const float MenuAboutSize = 30f, MenuAboutGap = 18f;
+
+        /// <summary>ModForge's emblem before the heading, and the room it
+        /// takes; the grip at the end of a pack's line, and its room.</summary>
+        private const float MenuEmblemSize = 40f, MenuEmblemRoom = 52f, MenuGripRoom = 36f;
+
         /// <summary>
         /// Semi-transparent black panel behind the banner rows so the text
         /// reads over any menu art. Added BEFORE the rows (UI siblings draw
         /// in order, later on top). Copies the prototype's anchors/pivot so
-        /// the same anchored-position arithmetic the rows use lines up.
+        /// the same anchored-position arithmetic the rows use lines up. Sized
+        /// for its widest line once the rows exist (<see cref="FitMenuPanel"/>).
         /// </summary>
-        private void InjectMenuBackdrop(GameObject prototype, Transform menuRoot, int packRows)
+        private RectTransform InjectMenuBackdrop(GameObject prototype, Transform menuRoot, int packRows)
         {
             var protoRect = prototype.GetComponent<RectTransform>();
-            if (protoRect == null) return;
+            if (protoRect == null) return null;
 
-            var panelGo = new GameObject("SMSModForgeBanner_Backdrop",
-                                         typeof(RectTransform), typeof(UnityEngine.UI.Image));
+            var panelGo = new GameObject("SMSModForgeBanner_Backdrop", typeof(RectTransform));
             var rect = panelGo.GetComponent<RectTransform>();
             rect.SetParent(menuRoot, false);
             rect.anchorMin = protoRect.anchorMin;
@@ -1487,22 +1547,159 @@ namespace SMSModForge.PackPlugin
 
             // Panel spans from just above the header to just below the last
             // row. Row centres: header at 0, pack row i at
-            // -(MenuHeaderStride + i*MenuRowStride) — all relative to the base.
-            float top = 36f;                                                   // above header centre
-            float bottom = -(MenuHeaderStride + (packRows - 1) * MenuRowStride) - 30f; // below last row centre
+            // -(MenuHeaderStride + i*MenuRowStride) - all relative to the base.
+            float top = 40f;                                                   // above header centre
+            float bottom = -(MenuHeaderStride + (packRows - 1) * MenuRowStride) - 26f; // below last row centre
             float height = top - bottom;
             float centreY = (top + bottom) / 2f;
 
             rect.anchoredPosition = protoRect.anchoredPosition + MenuBaseOffset + new Vector2(0, centreY);
-            // Wider than the rows are indented, not as wide as the longest of
-            // them: rows are allowed to run past this edge, so sizing the panel
-            // to the worst case would put a black bar across half the menu to
-            // sit behind one line.
-            rect.sizeDelta = new Vector2(500, height);
+            rect.sizeDelta = new Vector2(MenuPanelMinWidth, height);
 
-            var img = panelGo.GetComponent<UnityEngine.UI.Image>();
-            img.color = new Color(0f, 0f, 0f, 0.55f);
-            img.raycastTarget = false; // never swallow menu clicks
+            // The game's own navy panel, lit along the top in ModForge's amber
+            // (ForgeLook) - 0.9: the game blends in linear light, where less
+            // barely dims the art behind (measured, 1.8.0). Never takes a
+            // click from the menu.
+            ForgeLook.Surface(rect, 0.9f, corners: 2.6f);
+            return rect;
+        }
+
+        /// <summary>
+        /// The panel made as wide as its widest line - the heading with its
+        /// "?", a pack with its tags, the hint - so every line is inside it (the
+        /// author, 1.8.0: the hint ran off its edge onto the menu's art). Up to
+        /// a cap: past it a line runs on rather than the panel covering half
+        /// the menu for one line. A thin line under the heading, and the "?"
+        /// that shows ModForge's notice again, at the heading's right.
+        /// </summary>
+        private void FitMenuPanel(RectTransform panel, List<TMPro.TMP_Text> rows, TMPro.TMP_Text hint, GameObject prototype,
+                                  Transform menuRoot)
+        {
+            var protoRect = prototype.GetComponent<RectTransform>();
+            if (panel == null || protoRect == null || rows.Count == 0) return;
+
+            // Every row is the same width and starts at the same x: its text
+            // starts at the row's left edge.
+            var first = rows[0].rectTransform;
+            float textLeft = first.anchoredPosition.x - first.sizeDelta.x * first.pivot.x;
+            float widest = 0f;
+            for (int i = 0; i < rows.Count; i++)
+            {
+                float width = rows[i].GetPreferredValues(rows[i].text).x;
+                if (i == 0) width += MenuEmblemRoom + MenuAboutGap + 2f * MenuAboutSize + MenuButtonGap;   // the emblem, folder and "?"
+                else if (rows[i].transform.Find("PackDrag") != null) width += MenuGripRoom;   // a pack's grip
+                widest = Mathf.Max(widest, width);
+            }
+            float left = textLeft - MenuPanelPadLeft;
+            float panelWidth = Mathf.Clamp(MenuPanelPadLeft + widest + MenuPanelPadRight, MenuPanelMinWidth, 1000f);
+            panel.sizeDelta = new Vector2(panelWidth, panel.sizeDelta.y);
+            panel.anchoredPosition = new Vector2(left + panelWidth * panel.pivot.x, panel.anchoredPosition.y);
+
+            float headerY = first.anchoredPosition.y;
+            float right = left + panelWidth;
+
+            // ModForge's emblem before the heading, which moves over for it.
+            first.anchoredPosition += new Vector2(MenuEmblemRoom, 0f);
+            var emblem = new GameObject("SMSModForgeBanner_Emblem", typeof(RectTransform));
+            var emblemRect = (RectTransform)emblem.transform;
+            emblemRect.SetParent(menuRoot, false);
+            emblemRect.anchorMin = protoRect.anchorMin;
+            emblemRect.anchorMax = protoRect.anchorMax;
+            emblemRect.pivot = new Vector2(0.5f, 0.5f);
+            emblemRect.sizeDelta = new Vector2(MenuEmblemSize, MenuEmblemSize);
+            emblemRect.anchoredPosition = new Vector2(textLeft + MenuEmblemSize / 2f, headerY - 2f);
+            ForgeEmblem.Draw(emblemRect);
+
+            // Each pack's line: lit under the pointer across the panel's width
+            // - which is what can be picked up - and, on its first line, a grip
+            // at the right saying it can be dragged.
+            foreach (var row in rows)
+            {
+                var strip = row.transform.Find("PackDrag") as RectTransform;
+                if (strip == null) continue;
+                float rowCentre = row.rectTransform.anchoredPosition.x;
+                strip.sizeDelta = new Vector2(panelWidth - 20f, MenuRowStride);
+                strip.anchoredPosition = new Vector2(left + panelWidth / 2f - rowCentre, 0f);
+                MenuRowLook.Hover(strip);
+                if (row.transform.Find("PackSwitch") != null)
+                    MenuRowLook.Grip(row.rectTransform, new Vector2(right - MenuPanelPadRight - 8f - rowCentre, 0f));
+            }
+
+            // Under the heading: what the list is set apart from what it lists.
+            MenuRule(menuRoot, protoRect, panel, left, panelWidth, headerY - MenuHeaderStride / 2f - 4f);
+
+            // And the hint, set apart from the list by a line of its own (the
+            // author, 1.8.0): moved down to make room, the panel grown with it.
+            if (hint != null)
+            {
+                const float gap = 12f;
+                int at = rows.IndexOf(hint);
+                float aboveY = at > 0 ? rows[at - 1].rectTransform.anchoredPosition.y : headerY;
+                hint.rectTransform.anchoredPosition -= new Vector2(0f, gap);
+                panel.sizeDelta += new Vector2(0f, gap);
+                panel.anchoredPosition -= new Vector2(0f, gap / 2f);
+                MenuRule(menuRoot, protoRect, panel, left, panelWidth, (aboveY + hint.rectTransform.anchoredPosition.y) / 2f);
+            }
+
+            float aboutX = right - MenuPanelPadRight - MenuAboutSize / 2f;
+            MenuAboutButton.Add(menuRoot, protoRect, new Vector2(aboutX, headerY), MenuAboutSize,
+                                _menuFont, () => MainMenuNotice.ShowAgain(_menuFont));
+            MenuAboutButton.Add(menuRoot, protoRect, new Vector2(aboutX - MenuAboutSize - MenuButtonGap, headerY), MenuAboutSize,
+                                _menuFont, OpenModsFolder, MenuAboutButton.Folder(), "SMSModForgeBanner_Folder");
+        }
+
+        /// <summary>Between the heading's round buttons.</summary>
+        private const float MenuButtonGap = 10f;
+
+        /// <summary>A thin line across the panel at <paramref name="y"/>, the
+        /// game's divider (its Game Saves heading has one).</summary>
+        private static void MenuRule(Transform menuRoot, RectTransform like, RectTransform panel, float left, float panelWidth, float y)
+        {
+            var rule = new GameObject("SMSModForgeBanner_Rule", typeof(RectTransform), typeof(UnityEngine.UI.Image));
+            var ruleRect = (RectTransform)rule.transform;
+            ruleRect.SetParent(menuRoot, false);
+            ruleRect.SetSiblingIndex(panel.GetSiblingIndex() + 1);
+            ruleRect.anchorMin = like.anchorMin;
+            ruleRect.anchorMax = like.anchorMax;
+            ruleRect.pivot = new Vector2(0f, 0.5f);
+            ruleRect.sizeDelta = new Vector2(panelWidth - MenuPanelPadLeft / 2f - MenuPanelPadRight / 2f, 2f);
+            ruleRect.anchoredPosition = new Vector2(left + MenuPanelPadLeft / 2f, y);
+            var ruleImage = rule.GetComponent<UnityEngine.UI.Image>();
+            ruleImage.color = new Color(1f, 1f, 1f, 0.16f);
+            ruleImage.raycastTarget = false;
+        }
+
+        /// <summary>A pack's first line with its name in white: the line's own
+        /// colour is left for what is said about the pack.</summary>
+        private static string NameInWhite(string line, string name)
+        {
+            int at = string.IsNullOrEmpty(name) ? -1 : line.IndexOf(name, System.StringComparison.Ordinal);
+            if (at < 0) return line;
+            return line.Substring(0, at) + "<color=#FFFFFF>" + name + "</color>" + line.Substring(at + name.Length);
+        }
+
+        /// <summary>
+        /// The folder packs go in, opened in the system's file browser (the
+        /// author, 1.8.0: the heading's folder button). Made first when it is
+        /// not there yet, which is what a player opening it to put a pack in
+        /// wants anyway.
+        /// </summary>
+        private void OpenModsFolder()
+        {
+            string folder = ModsRoot;
+            try
+            {
+                Directory.CreateDirectory(folder);
+                if (Application.platform == RuntimePlatform.WindowsPlayer)
+                    System.Diagnostics.Process.Start("explorer.exe", "\"" + folder + "\"");
+                else
+                    Application.OpenURL("file://" + folder.Replace('\\', '/'));
+                Logger.LogInfo("[SMSModForge.PackPlugin] Opened " + folder + ".");
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogWarning("[SMSModForge.PackPlugin] Could not open " + folder + ": " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -1841,7 +2038,11 @@ namespace SMSModForge.PackPlugin
             if (currentScene.name == "GameStart")
             {
                 if (!_menuBannerAdded) TryInjectMenuBanner();
-                else LanguageMenu.Update(_menuRoot, _menuFont);
+                else
+                {
+                    LanguageMenu.Update(_menuRoot, _menuFont);
+                    try { MainMenuNotice.Tick(_menuFont); } catch (System.Exception ex) { FailedThisFrame("Main-menu notice", ex); }
+                }
 #if DEBUG
                 LayoutDump.WatchMenu(Logger);
 #endif
@@ -2789,6 +2990,9 @@ namespace SMSModForge.PackPlugin
             // clips live in a registry instead of per-clip GOs —
             // PlayOneShot through a single shared AudioSource handles
             // overlap natively, no need for one GO per sound.
+            // Whether its lines say how their sounds play, or keep the old
+            // timing an older pack was made with (1.8.0, SfxRegistry).
+            ctx.Sfx.LinesSayHowSoundsPlay = SfxRegistry.SaysHowSoundsPlay(m.Root);
             try { SfxFactory.BuildAll(m, ctx.Sfx, this, Logger); }
             catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] SFX build failed in " + m.PackId + ": " + ex); }
 
@@ -2805,6 +3009,10 @@ namespace SMSModForge.PackPlugin
             // registered when its conditions first evaluate.
             try { UpdateRulesFactory.BuildAll(m, ctx.UpdateRules, Logger); }
             catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Integration rules build failed in " + m.PackId + ": " + ex); }
+            // ...and the screens that open by their own conditions, which are
+            // rules the author did not have to write.
+            try { UpdateRulesFactory.BuildUiOpeners(m, ctx.UpdateRules, Logger); }
+            catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Screen open conditions failed in " + m.PackId + ": " + ex); }
             // Arm OnSceneLoad rules so they fire on the first eligible tick.
             ctx.UpdateRules.ArmOneShots(UpdateRulesRegistry.TriggerMode.OnSceneLoad);
 

@@ -76,12 +76,12 @@ game.pack.installedTwice = Instalado duas vezes; usando o da pasta {folder}
 game.pack.notInYourLanguage = Sem tradução para o seu idioma
 
 # Beside a pack in the main menu's list: it changes the same thing of the game's (a character, an object in a level...) as {packs}, other packs in the list, so only one of the two changes shows
-# en: Changes the same as {packs}
-game.pack.clashesWith = Muda o mesmo que {packs}
+# en: Clashes with {packs}
+game.pack.clashesWith = Conflita com {packs}
 
 # Under ModForge's list of packs on the game's main menu, when there are two or more. The packs can be dragged up and down; the one lower in the list is loaded later, so its changes show
-# en: Drag a pack to move it. Lower in the list wins when two packs change the same thing.
-game.menu.orderHint = Arraste um pack para movê-lo. Quando dois packs mudam a mesma coisa, vence o que está mais abaixo.
+# en: Drag to reorder: the lower pack wins a clash.
+game.menu.orderHint = Arraste para reordenar: num conflito, vence o pack de baixo.
 
 # The name above the player's own lines in a pack's conversations
 # en: You
@@ -276,6 +276,30 @@ game.gameLines.title = As falas do próprio jogo
 game.gameLines.body.one = {packs} também mostra em {language} as falas do próprio jogo, nas conversas que muda. Se você joga com o jogo traduzido por outro mod, as duas traduções podem se misturar nessas conversas.
 # en: {packs} also show the game's own lines in {language}, in the conversations they change. If you play the game translated by another mod, the two translations may mix in those conversations.
 game.gameLines.body.other = {packs} também mostram em {language} as falas do próprio jogo, nas conversas que mudam. Se você joga com o jogo traduzido por outro mod, as duas traduções podem se misturar nessas conversas.
+
+# Heading of the small window on the main menu the first time the game starts with ModForge
+# en: ModForge is installed
+game.notice.welcome.title = O ModForge está instalado
+
+# That window, all it says. {folder} is the folder packs go in, beside the game's own files ("Mods"). The list of packs is at the top left of the main menu
+# en: Put mod packs in the game's {folder} folder. They're listed at the top left, where you can switch them on and off.
+game.notice.welcome.body = Coloque os packs de mods na pasta {folder} do jogo. Eles aparecem no canto superior esquerdo, onde você pode ligá-los e desligá-los.
+
+# Heading of a list of what a version of ModForge changes for players. {version} is the version, "1.8.0"
+# en: New in {version}:
+game.notice.newIn = Novidades da {version}:
+
+# Heading of the window on the main menu after ModForge was updated with something that changes for players. {version} is the new version
+# en: ModForge was updated to {version}
+game.notice.changes.title = O ModForge foi atualizado para a {version}
+
+# The button that closes those windows
+# en: Got it
+game.notice.close = Entendi
+
+# What ModForge 1.8.0 changes for players, one line each (\n starts the next)
+# en: Sounds in packs play with the timing and volume their authors set.
+game.notice.news.1.8.0 = Os sons dos packs tocam no momento e no volume que seus autores definiram.
 
 [Where an NPC stands]
 
@@ -2543,6 +2567,42 @@ menu.themes = _Temas
 # en: _Options
 menu.options = _Opções
 
+# A heading inside the Options menu, over how the editor looks: themes, the dialogue rows, preview quality
+# en: Look
+menu.heading.look = Aparência
+
+# A heading inside the Options menu, over spell checking and suggestions
+# en: Writing
+menu.heading.writing = Escrita
+
+# A heading inside the Options menu, over what saving and exporting a pack ask and do
+# en: Saving and exporting
+menu.heading.saving = Salvar e exportar
+
+# A heading inside the Options menu, over the game's folder
+# en: The game
+menu.heading.game = O jogo
+
+# A heading inside the Options menu, over the editor's own updates
+# en: Updates
+menu.heading.updates = Atualizações
+
+# Edit menu item: takes back the last change
+# en: _Undo
+menu.undo = _Desfazer
+
+# Keyboard shortcut shown beside "Undo"
+# en: Ctrl+Z
+menu.undo.keys = Ctrl+Z
+
+# Edit menu item: puts back a change that was taken back
+# en: _Redo
+menu.redo = _Refazer
+
+# Keyboard shortcut shown beside "Redo"
+# en: Ctrl+Y
+menu.redo.keys = Ctrl+Y
+
 # Menu item
 # en: _Confirm changes on save
 menu.confirmChangesSave = _Confirmar as mudanças ao salvar
@@ -2550,6 +2610,10 @@ menu.confirmChangesSave = _Confirmar as mudanças ao salvar
 # Menu item
 # en: _Spell-check node text
 menu.spellCheckNodeText = Verificação _ortográfica do texto dos nós
+
+# Menu item (Options): a switch
+# en: Smart _suggestions in dropdowns
+menu.smartSuggestions = _Sugestões inteligentes nas listas
 
 # Menu item
 # en: _Version the pack automatically
@@ -2660,8 +2724,8 @@ menu.pasteItem.keys = Ctrl+V
 menu.pasteItem.tip = Cola um item copiado do tipo correspondente na lista da aba atual. Ctrl+V funciona enquanto a lista está em foco.
 
 # Tooltip on "_Rename item…"
-# en: Rename the selected list item's key (F2 or F12 while the list has focus).
-menu.renameItem.tip = Renomeia a chave do item selecionado (F2 ou F12 enquanto a lista está em foco).
+# en: Rename the selected list item, the same as typing in its Display name box (F2 or F12 while the list has focus).
+menu.renameItem.tip = Renomeia o item selecionado da lista, igual a digitar na caixa Nome de exibição dele (F2 ou F12 enquanto a lista está em foco).
 
 # Keyboard shortcut shown beside it ("De_lete item")
 # en: Del
@@ -2682,6 +2746,10 @@ menu.confirmChangesSave.tip = Antes de gravar o modpack.json, lista tudo o que o
 # Tooltip on "_Spell-check node text"
 # en: Underline misspellings using Windows' own spell checker, in the language the lines are written in - the pack's own, or the one you are editing in - both in a node's Text field and down the node list, so mistakes are visible while scanning. A language Windows has no spelling dictionary for is not underlined at all; Windows' language settings can add one. Right-click a squiggle in the Text field for suggestions, to ignore it for this session, or to add the word to your Windows dictionary (the same list Edge and Office use). Turning this off also makes the node list lighter to scroll on very long dialogues. Your choice is remembered between sessions.
 menu.spellCheckNodeText.tip = Sublinha os erros usando o corretor ortográfico do próprio Windows, no idioma em que as falas estão escritas - o do pack, ou o que você está editando - tanto no campo Texto de um nó quanto ao longo da lista de nós, para que os erros apareçam de relance. Um idioma para o qual o Windows não tem dicionário não é sublinhado; as configurações de idioma do Windows podem adicionar um. Clique com o botão direito num sublinhado no campo Texto para ver sugestões, ignorá-lo nesta sessão ou adicionar a palavra ao seu dicionário do Windows (a mesma lista que o Edge e o Office usam). Desativar também deixa a lista de nós mais leve de rolar em diálogos muito longos. Sua escolha é lembrada entre as sessões.
+
+# Tooltip on "Smart _suggestions in dropdowns"
+# en: When you open an empty dropdown, the options that what you are editing makes likely move to the top, marked with a star: in a dialogue that mentions a character anywhere and happens at one place, a Set Active action lists that character's scenes at that place first. Everything in the dialogue, scene or rule you have up counts - the characters it names, its places, its variables, the folder it is in - and it follows your edits as you make them. Nothing is picked or hidden for you, and other dropdowns showing the same list keep their own order. Turn this off to have every list in its usual order.
+menu.smartSuggestions.tip = Quando você abre uma lista vazia, as opções que o que você está editando torna prováveis sobem para o topo, marcadas com uma estrela: num diálogo que menciona um personagem em qualquer parte e se passa num lugar, uma ação Set Active lista primeiro as cenas desse personagem nesse lugar. Tudo no diálogo, na cena ou na regra que você tem aberta conta - os personagens que ele cita, os lugares, as variáveis, a pasta em que está - e acompanha as suas edições enquanto você as faz. Nada é escolhido nem escondido no seu lugar, e outras listas que mostram a mesma lista mantêm a própria ordem. Desligue isto para ter cada lista na ordem de sempre.
 
 # Tooltip on "_Version the pack automatically"
 # en: Move the pack's version on every save: up a minor when the pack gains something, up a patch when something it already had changes. The major number is never moved for you — that one says "this is a new version of the pack", which is yours to decide. Off means the version only ever changes when you type it.
@@ -2799,6 +2867,251 @@ theme.midnight = Meia-noite
 # en: Carbon
 theme.carbon = Carbono
 
+# A colour theme, in the Themes menu: warm white, a red accent
+# en: Paper
+theme.paper = Papel
+
+# A colour theme, in the Themes menu: cool white, an orange accent
+# en: Daylight
+theme.daylight = Luz do dia
+
+# A colour theme, in the Themes menu: dark grey, a blue accent
+# en: Graphite
+theme.graphite = Grafite
+
+# A colour theme, in the Themes menu: dark purple-grey, a violet accent (the plant)
+# en: Nightshade
+theme.nightshade = Beladona
+
+# A colour theme, in the Themes menu: slate blue-grey, an icy accent
+# en: Fjord
+theme.fjord = Fiorde
+
+# A colour theme, in the Themes menu: near black, an orange accent
+# en: Ember
+theme.ember = Brasa
+
+# A colour theme, in the Themes menu: deep blue-green, a teal accent
+# en: Deep Sea
+theme.deepsea = Mar profundo
+
+# A colour theme, in the Themes menu: dark green, a lime accent
+# en: Moss
+theme.moss = Musgo
+
+# A colour theme, in the Themes menu: dark red-brown, a rose accent
+# en: Wine
+theme.wine = Vinho
+
+# A heading in the Themes menu, over the themes with dark text on light panels
+# en: Light
+theme.group.light = Claros
+
+# A heading in the Themes menu, over the themes with light text on dark panels
+# en: Dark
+theme.group.dark = Escuros
+
+# Themes menu: the themes in the editor's original shape, as it was drawn before EX (1.8.0)
+# en: Classic
+theme.group.normal = Clássico
+
+# Tooltip on the Themes menu's Classic
+# en: The editor as it was drawn before EX, in light and dark colours. Everything works the same in both.
+theme.group.normal.tip = O editor como era desenhado antes do EX, em cores claras e escuras. Tudo funciona igual nos dois.
+
+# Themes menu: the themes that draw the editor another way (EX, as in a game's 'extended' edition; keep EX as is unless your language says it differently)
+# en: EX
+# same in this language
+theme.group.ex = EX
+
+# Tooltip on the Themes menu's EX
+# en: The same editor drawn another way: cut corners, a glow on what you point at, lines to type on, a narrower typeface. Everything works exactly as in Classic; only the look changes.
+theme.group.ex.tip = O mesmo editor desenhado de outro jeito: cantos cortados, um brilho no que você aponta, linhas para digitar, uma fonte mais estreita. Tudo funciona exatamente como no Clássico; só o visual muda.
+
+# Themes menu: the themes the person made themselves
+# en: Yours
+theme.group.custom = Seus
+
+# Tooltip on the Themes menu's Yours
+# en: The themes you made, in Your themes…
+theme.group.custom.tip = Os temas que você fez, em Seus temas…
+
+# Themes menu item: opens the window where a person makes their own themes
+# en: Your _themes…
+menu.customThemes = Seus _temas…
+
+# Tooltip on "Your themes…"
+# en: Make themes of your own: pick a look and six colours, and the editor shows each change as you make it.
+menu.customThemes.tip = Faça temas seus: escolha um visual e seis cores, e o editor mostra cada mudança enquanto você a faz.
+
+# Title of the message shown once, at the first start that moved the person's theme to EX
+# en: A new look
+theme.moved.title = Um visual novo
+
+# The message shown once, at the first start of this version: their theme was moved to the EX theme most like it. {from} and {to} are theme names
+# en: ModForge now opens in EX, a new way of drawing the editor: the tabs down the left, every panel a tile, everything else where it was. Your theme, {from}, has become {to}, the EX theme most like it.\n\nThe look you had is under Options > Themes > Classic. Pick it there and it stays - this is the only time the editor changes your theme.
+theme.moved.body = O ModForge agora abre no EX, um novo jeito de desenhar o editor: as abas em coluna à esquerda, cada painel um bloco, e todo o resto onde estava. Seu tema, {from}, virou {to}, o tema EX mais parecido com ele.\n\nO visual que você tinha está em Opções > Temas > Clássico. Escolha-o lá e ele fica: esta é a única vez que o editor muda o seu tema.
+
+# Title of the window where a person makes their own themes
+# en: Your themes
+theme.custom.title = Seus temas
+
+# The name a new theme of one's own starts with
+# en: My theme
+theme.custom.newName = Meu tema
+
+# Button in Your themes: a new theme, starting from the one in use
+# en: + New
+theme.custom.new = + Novo
+
+# Tooltip on "+ New" in Your themes
+# en: A new theme of your own, starting from the colours and look of the theme you are using now.
+theme.custom.new.tip = Um tema novo seu, partindo das cores e do visual do tema que você está usando agora.
+
+# Tooltip on Duplicate in Your themes
+# en: A copy of the selected theme, to try a variation without losing it.
+theme.custom.duplicate.tip = Uma cópia do tema selecionado, para testar uma variação sem perdê-lo.
+
+# Button in Your themes: deletes the selected theme
+# en: − Remove
+theme.custom.remove = − Remover
+
+# Tooltip on "− Remove" in Your themes
+# en: Delete the selected theme. If you were using it, the editor goes back to its default theme.
+theme.custom.remove.tip = Apaga o tema selecionado. Se você estava usando, o editor volta ao tema padrão.
+
+# Shown in Your themes while none of the person's themes is selected (there may be none yet)
+# en: Select one of your themes to change it, or press + New to make one. A new theme starts as a copy of the theme you are using; change its look and colours here, and the editor shows each change at once.
+theme.custom.empty = Selecione um dos seus temas para mudá-lo, ou aperte + Novo para fazer um. Um tema novo começa como cópia do tema que você está usando; mude aqui o visual e as cores, e o editor mostra cada mudança na hora.
+
+# At the bottom of Your themes
+# en: The theme selected here is the one in use, and every change is kept as you make it. Light or dark follows the background, and the editor moves the words towards readable on every colour; if yours leave some hard to read, it says so here.
+theme.custom.note = O tema selecionado aqui é o que está em uso, e cada mudança fica guardada enquanto você a faz. Claro ou escuro segue o fundo, e o editor leva as palavras para o legível em cada cor; se as suas cores deixarem alguma difícil de ler mesmo assim, ele avisa aqui.
+
+# Under the colours in Your themes, when the colours chosen leave some words hard to read
+# en: Some words are hard to read with these colours: no one text colour reads on all of them. Bring Panels and Boxes closer in lightness, or move Text further from both.
+theme.custom.unreadable = Com estas cores, algumas palavras ficam difíceis de ler: nenhuma cor de texto é legível sobre todas elas. Aproxime a claridade dos Painéis e das Caixas, ou afaste o Texto de ambos.
+
+# Button: closes Your themes
+# en: Close
+theme.custom.close = Fechar
+
+# Label in Your themes: the theme's name
+# en: Name:
+theme.custom.name = Nome:
+
+# Label in Your themes: EX or Classic
+# en: Look:
+theme.custom.look = Visual:
+
+# Tooltip on the Look choice in Your themes
+# en: EX draws the editor its other way - tabs down the left, cut corners, a narrower typeface; Classic, the way it was drawn before EX. Everything works the same in both.
+theme.custom.look.tip = O EX desenha o editor do outro jeito - abas em coluna à esquerda, cantos cortados, uma fonte mais estreita; o Clássico, do jeito que era desenhado antes do EX. Tudo funciona igual nos dois.
+
+# Label in Your themes: the colour behind everything
+# en: Background:
+theme.custom.window = Fundo:
+
+# Tooltip on Background in Your themes
+# en: Behind everything: the tab pages. It also decides whether the theme is light or dark.
+theme.custom.window.tip = Atrás de tudo: as páginas das abas. Também decide se o tema é claro ou escuro.
+
+# Label in Your themes: the colour of the bars
+# en: Bars:
+theme.custom.chrome = Barras:
+
+# Tooltip on Bars in Your themes
+# en: The menu bar and the tabs' bar.
+theme.custom.chrome.tip = A barra de menus e a barra das abas.
+
+# Label in Your themes: the colour of panels
+# en: Panels:
+theme.custom.surface = Painéis:
+
+# Tooltip on Panels in Your themes
+# en: The panels things are grouped in, and the frames of the lists.
+theme.custom.surface.tip = Os painéis em que as coisas ficam agrupadas, e as molduras das listas.
+
+# Label in Your themes: the colour of boxes to type in
+# en: Boxes:
+theme.custom.control = Caixas:
+
+# Tooltip on Boxes in Your themes
+# en: Boxes to type in, lists and trees.
+theme.custom.control.tip = Caixas de digitar, listas e árvores.
+
+# Label in Your themes: the colour of words
+# en: Text:
+theme.custom.text = Texto:
+
+# Tooltip on Text in Your themes
+# en: The words. Where they would be hard to read on a colour, the editor moves them towards readable on its own.
+theme.custom.text.tip = As palavras. Onde seriam difíceis de ler sobre uma cor, o editor as leva para o legível sozinho.
+
+# Label in Your themes: the accent colour
+# en: Accent:
+theme.custom.accent = Destaque:
+
+# Tooltip on Accent in Your themes
+# en: What is selected, focused or open, the main buttons and, in EX, the status bar.
+theme.custom.accent.tip = O que está selecionado, em foco ou aberto, os botões principais e, no EX, a barra de status.
+
+# A theme's name (an EX light theme: cool white with violet)
+# en: Frost
+theme.frost = Geada
+
+# A theme's name (an EX light theme: warm white with magenta)
+# en: Volt
+# same in this language
+theme.volt = Volt
+
+# A theme's name (an EX dark theme: near-black with hot pink-red)
+# en: Neon
+# same in this language
+theme.neon = Neon
+
+# A theme's name (an EX dark theme: near-black with cyan)
+# en: Pulse
+theme.pulse = Pulso
+
+# A theme's name (an EX dark theme: near-black with lime green)
+# en: Venom
+theme.venom = Veneno
+
+# A theme's name (an EX dark theme: near-black with orange)
+# en: Blaze
+theme.blaze = Labareda
+
+# A theme's name (an EX light theme: cool white with electric blue; the metal)
+# en: Cobalt
+theme.cobalt = Cobalto
+
+# A theme's name (an EX light theme: white with green)
+# en: Mint
+theme.mint = Menta
+
+# A theme's name (an EX light theme: warm white with orange; of the sun)
+# en: Solar
+# same in this language
+theme.solar = Solar
+
+# A theme's name (an EX dark theme: near-black with violet; a ghost)
+# en: Phantom
+theme.phantom = Fantasma
+
+# A theme's name (an EX dark theme: near-black navy with bright blue; the deep sea)
+# en: Abyss
+theme.abyss = Abismo
+
+# A theme's name (an EX dark theme: near-black with gold; Latin for gold)
+# en: Aurum
+theme.aurum = Áureo
+
+# A theme's name (an EX dark theme: near-black with emerald green; the stone)
+# en: Jade
+# same in this language
+theme.jade = Jade
+
 [Status bar]
 
 # Heading
@@ -2815,6 +3128,10 @@ statusBar.modforgeFreeGetArvus.tip = O ModForge é um programa gratuito e só é
 statusBar.issues.one = {count} problema
 # en: {count} issues
 statusBar.issues.other = {count} problemas
+
+# Tooltip of that count, which can be clicked
+# en: Show them on the ModForge tab
+statusBar.openIssues.tip = Mostrar na aba ModForge
 
 [ModForge tab]
 
@@ -2887,6 +3204,34 @@ home.showIgnored.other = Mostrar {count} ignorados
 # Beside an issue that has been silenced
 # en: ignored
 home.ignoredMark = ignorado
+
+# Where an issue is, in the issues list: an issue about the pack as a whole
+# en: The pack
+issue.place.pack = O pack
+
+# Where an issue is: a dialogue line with no words of its own; {id} is its number
+# en: line {id}
+issue.place.line = fala {id}
+
+# Where an issue is: the actions a line runs as it starts, before an action's type
+# en: on start
+issue.place.onStart = ao começar
+
+# Where an issue is: the actions a line runs as it finishes, before an action's type
+# en: on finish
+issue.place.onFinish = ao terminar
+
+# Where an issue is: what a dialogue needs before it can start, before a condition's type
+# en: start condition
+issue.place.startCondition = condição de início
+
+# Where an issue is: what a line needs before it shows, before a condition's type
+# en: condition
+issue.place.condition = condição
+
+# Where an issue is: one of a rule's or a place's actions, before its type
+# en: action
+issue.place.action = ação
 
 # Menu item
 # en: Ignore this issue
@@ -3475,6 +3820,18 @@ characters.resetField.tip4 = Devolve o extremo grave da faixa de tom ao do próp
 # Tooltip on "Reset"
 # en: Put the high end of the pitch range back to this character's own.
 characters.resetField.tip5 = Devolve o extremo agudo da faixa de tom ao do próprio personagem.
+
+# Tooltip on "Reset" beside the voice's frequency, for a character the pack made. {value} is a number of characters a second
+# en: Put the frequency back to the default, {value}.
+characters.resetFrequency.packTip = Volta a frequência para o padrão, {value}.
+
+# Tooltip on "Reset" beside the low end of the voice's pitch, for a character the pack made. {value} is a pitch such as 1
+# en: Put the low end of the pitch range back to the default, {value}.
+characters.resetPitchMin.packTip = Volta a ponta baixa da faixa de tom para o padrão, {value}.
+
+# Tooltip on "Reset" beside the high end of the voice's pitch, for a character the pack made. {value} is a pitch such as 1.5
+# en: Put the high end of the pitch range back to the default, {value}.
+characters.resetPitchMax.packTip = Volta a ponta alta da faixa de tom para o padrão, {value}.
 
 # Tooltip on a text box
 # en: How often the blip fires as text types (GC2 Typewriter frequency). Preset value: 45.
@@ -4159,8 +4516,8 @@ enum.JumpMode.Exit = Sair
 enum.JumpMode.Jump = Saltar
 
 # How a line advances. Kept as the program's names in the shipped translations, because the tooltip beside the list names them that way.
-# en: UntilInteraction
-enum.NodeDurationMode.UntilInteraction = UntilInteraction
+# en: Until interaction
+enum.NodeDurationMode.UntilInteraction = Até interagir
 
 # en: Timeout
 enum.NodeDurationMode.Timeout = Timeout
@@ -4270,8 +4627,16 @@ places.runtimeName.tip = O nome pelo qual condições/ações e destinos do nave
 places.namePackItselfUses.tip = O nome que o próprio pack usa — o que o runtime escreve no log, o que as mensagens de validação citam e por onde outro pack o referenciaria. Ele é escrito para você a partir do nome de exibição, então não há nada a preencher; aparece porque esses três lugares o citam de volta. Selecione para copiar.
 
 # Tooltip on a text box
-# en: The object the level is built as in game.
-places.objectLevelBuiltGame.tip = O objeto como o qual o nível é construído no jogo.
+# en: The object the level is built as in game. This place's is named otherwise than its runtime name - from an older version, where the two were apart. Other mods may find the level by this name.
+places.objectLevelBuiltGame.tip = O objeto como o qual o nível é construído no jogo. O deste lugar tem um nome diferente do nome de execução: vem de uma versão mais antiga, em que os dois eram separados. Outros mods podem encontrar o nível por este nome.
+
+# Beside that box: name the place's game object by its runtime name, as every place made now is
+# en: Use the runtime name
+places.useRuntimeName = Usar o nome de execução
+
+# Tooltip on that button
+# en: Name the level's object by the runtime name, and keep it following the runtime name from now on, as new places do. Another mod that finds this level by its old name will not find it any more.
+places.useRuntimeName.tip = Dá ao objeto do nível o nome de execução e faz com que ele o acompanhe daqui em diante, como nos lugares novos. Um mod que encontre este nível pelo nome antigo não vai mais encontrá-lo.
 
 # Tooltip on "Back sprite (2048×1136):"
 # en: The layer drawn BEHIND — usually the room itself, or the distance seen past it. Sorting order −12 by default. Written to the pack as secondarySprite.
@@ -4588,16 +4953,16 @@ dialogues.overwriteStartConditions = Substituir
 dialogues.dialogueNodes = Nós
 
 # Text
-# en: Click a node to select it. + Child and + Sibling copy everything from the selected node except its text (and its tag), and land directly under it; + Root takes only the speaker. Naming an actor who has spoken earlier in this conversation brings back the expression and outfit they last wore. Drag a node to move it (with its children): drop on the upper or lower edge of a row to place it before or after as a sibling, drop on the middle to make it a child, or drop below the list to make it a root. Ctrl+C / Ctrl+V copy a node and its children and paste them below the selection; Del removes the selected node. Nodes play top to bottom, exactly as listed.
-dialogues.clickNodeSelectChild = Clique num nó para selecioná-lo. + Filho e + Irmão copiam tudo do nó selecionado, menos o texto (e a etiqueta), e caem logo abaixo dele. Arraste um nó para movê-lo (com os filhos): solte na borda de cima ou de baixo de uma linha para colocá-lo antes ou depois como irmão, solte no meio para torná-lo filho, ou solte abaixo da lista para torná-lo raiz. Ctrl+C / Ctrl+V copiam um nó e os filhos dele e colam abaixo da seleção; Del remove o nó selecionado. Os nós tocam de cima para baixo, exatamente como estão listados.
+# en: Click a node to select it. + Sibling adds a line directly below it and + Child one inside it; both take only its speaker (actor, expression and outfit) - Duplicate (Ctrl+D) and copy and paste carry a whole node. Naming an actor who has spoken earlier in this conversation brings back the expression and outfit they last wore. Drag a node to move it (with its children): drop on the upper or lower edge of a row to place it before or after as a sibling, drop on the middle to make it a child, or drop below the list to make it a root. Ctrl+C / Ctrl+V copy a node and its children and paste them below the selection; Del removes the selected node. Nodes play top to bottom, exactly as listed.
+dialogues.clickNodeSelectChild = Clique num nó para selecioná-lo. + Irmão adiciona uma fala logo abaixo dele e + Filho uma dentro dele; os dois pegam só quem fala (ator, expressão e roupa) - Duplicar (Ctrl+D) e copiar e colar levam um nó inteiro. Escolher um ator que já falou antes nesta conversa traz de volta a expressão e a roupa que ele usou por último. Arraste um nó para movê-lo (com os filhos): solte na borda de cima ou de baixo de uma linha para colocá-lo antes ou depois como irmão, solte no meio para torná-lo filho, ou solte abaixo da lista para torná-lo raiz. Ctrl+C / Ctrl+V copiam um nó e os filhos dele e colam abaixo da seleção; Del remove o nó selecionado. Os nós tocam de cima para baixo, exatamente como estão listados.
 
 # Text
 # en: Game look
 dialogues.gameLook = Visual do jogo
 
 # Button
-# en: + Root
-dialogues.addDialogueRootNode = + Raiz
+# en: + New Node
+dialogues.addFirstNode = + Novo nó
 
 # Button
 # en: + Child
@@ -4626,6 +4991,45 @@ dialogues.pasteNodeRoot = Colar como nova raiz
 # Box heading
 # en: Preview
 dialogues.preview = Pré-visualização
+
+# In the Preview panel, instead of the picture, when the selected line has nobody with a bust speaking it
+# en: No bust to show: nobody with a bust speaks this line.
+dialogues.preview.noBust = Nenhum busto para mostrar: ninguém com busto diz esta fala.
+
+# Tooltip on a panel's title that folds the panel (Identity, Start conditions)
+# en: Fold or unfold. Remembered for this dialogue.
+dialogues.fold.tip = Recolher ou expandir. Fica lembrado para este diálogo.
+
+# Folded Identity panel: a short tag with the dialogue's priority
+# en: Priority {value}
+dialogues.fold.priority = Prioridade {value}
+
+# Folded Identity panel: a short tag for "Prioritize this dialogue over vanilla" ticked
+# en: Over the game's
+dialogues.fold.overGame = Antes do do jogo
+
+# Folded Identity panel: a short tag for "Also leave on the Talk button (replayable)" ticked
+# en: Stays on Talk
+dialogues.fold.staysOnTalk = Fica em Conversar
+
+# Folded Identity panel: a short tag for "Wait for Talk button (no auto-play)" ticked
+# en: Waits for Talk
+dialogues.fold.waitsForTalk = Espera Conversar
+
+# Folded Identity panel: a short tag for "Queue behind active dialogue" ticked
+# en: Queues
+dialogues.fold.queues = Na fila
+
+# Folded Identity panel: a short tag for "Set for condition debugging (F12)" ticked
+# en: Debugging
+dialogues.fold.debug = Depuração
+
+# Folded Start conditions panel: a group of conditions, as a short tag. {count} is how many conditions it holds
+# one: 0, 1 · other: 2, 3, 4, 5…
+# en: Group of {count}
+dialogues.fold.group.one = Grupo de {count}
+# en: Group of {count}
+dialogues.fold.group.other = Grupo de {count}
 
 # Box heading
 # en: Node
@@ -4668,8 +5072,266 @@ dialogues.tag = Etiqueta:
 dialogues.children = Filhos:
 
 # Text
-# en: Jump:
-dialogues.jump = Salto:
+# en: Then:
+dialogues.then = Depois:
+
+# On the first button under a line's Outfit: the bust already showing stays
+# en: Keep
+dialogues.outfitKeep = Manter
+
+# Tooltip on Keep, the first button under a line's Outfit
+# en: This line doesn't change the outfit: the character stays in what they are wearing - what the last line to set an outfit put them in, or their default outfit if no line has.
+dialogues.outfitKeep.tip = Esta fala não muda a roupa: o personagem continua com o que está vestindo - o que a última fala que definiu uma roupa colocou nele, ou a roupa padrão dele se nenhuma fala fez isso.
+
+# Tick box under a line's outfit buttons: the outfit comes from a pack variable instead, picked from the list beside it
+# en: From a variable
+dialogues.outfitFromVariable = De uma variável
+
+# Tooltip on "From a variable"
+# en: Take the outfit from a pack variable: the line puts the character in whatever the variable holds when it plays. While this is ticked the buttons above stand aside; untick it to go back to them.
+dialogues.outfitFromVariable.tip = Pega a roupa de uma variável do pack: a fala veste o personagem com o que a variável tiver quando tocar. Enquanto isto estiver marcado, os botões acima ficam de lado; desmarque para voltar a eles.
+
+# Title of the window that sets a face's bust child by hand
+# en: Bust expression child
+characters.expressionChild.edit = Filho de expressão do busto
+
+# Tooltip on the pencil beside a face's bust child
+# en: Set the child name yourself. It follows the face's name until you do, and stays as you set it after.
+characters.expressionChild.edit.tip = Define você mesmo o nome do filho. Ele acompanha o nome do rosto até você fazer isso, e depois fica como você definiu.
+
+# Tooltip on a face's picture in the Speech expressions box
+# en: The picture this face shows with on a line's buttons in the Dialogues tab.
+characters.expressionIcon.tip = A imagem com que este rosto aparece nos botões de uma fala na aba Diálogos.
+
+# Tooltip on a face's picture before the face has a name
+# en: Give the face a name first: its picture is picked from the name, and can be changed after.
+characters.expressionIcon.locked.tip = Dê um nome ao rosto primeiro: a imagem dele é escolhida pelo nome, e pode ser mudada depois.
+
+# Tooltip on the picture of one of the game's faces, or the neutral one
+# en: The picture this face shows with on a line's buttons, picked from its name.
+characters.expressionIcon.fixed.tip = A imagem com que este rosto aparece nos botões de uma fala, escolhida pelo nome dele.
+
+# A face, as one of the expression pictures is called
+# en: Neutral
+expressionIcon.neutral = Neutro
+
+# A face, as one of the expression pictures is called
+# en: Happy
+expressionIcon.happy = Feliz
+
+# A face, as one of the expression pictures is called
+# en: Smile
+expressionIcon.smile = Sorriso
+
+# A face, as one of the expression pictures is called
+# en: Laugh
+expressionIcon.laugh = Risada
+
+# A face, as one of the expression pictures is called
+# en: In love
+expressionIcon.love = Apaixonado
+
+# A face, as one of the expression pictures is called
+# en: Flirty
+expressionIcon.flirty = Sedutor
+
+# A face, as one of the expression pictures is called
+# en: Smug
+expressionIcon.smug = Convencido
+
+# A face, as one of the expression pictures is called
+# en: Talking
+expressionIcon.talk = Falando
+
+# A face, as one of the expression pictures is called
+# en: Sad
+expressionIcon.sad = Triste
+
+# A face, as one of the expression pictures is called
+# en: Crying
+expressionIcon.cry = Chorando
+
+# A face, as one of the expression pictures is called
+# en: Angry
+expressionIcon.angry = Bravo
+
+# A face, as one of the expression pictures is called
+# en: Furious
+expressionIcon.furious = Furioso
+
+# A face, as one of the expression pictures is called
+# en: Pouting
+expressionIcon.pout = Emburrado
+
+# A face, as one of the expression pictures is called
+# en: Disgusted
+expressionIcon.disgusted = Com nojo
+
+# A face, as one of the expression pictures is called
+# en: Surprised
+expressionIcon.surprised = Surpreso
+
+# A face, as one of the expression pictures is called
+# en: Shocked
+expressionIcon.shocked = Chocado
+
+# A face, as one of the expression pictures is called
+# en: Scared
+expressionIcon.scared = Assustado
+
+# A face, as one of the expression pictures is called
+# en: Nervous
+expressionIcon.nervous = Nervoso
+
+# A face, as one of the expression pictures is called
+# en: Embarrassed
+expressionIcon.embarrassed = Envergonhado
+
+# A face, as one of the expression pictures is called
+# en: Shy
+expressionIcon.shy = Tímido
+
+# A face, as one of the expression pictures is called
+# en: Confused
+expressionIcon.confused = Confuso
+
+# A face, as one of the expression pictures is called
+# en: Thinking
+expressionIcon.thinking = Pensativo
+
+# A face, as one of the expression pictures is called
+# en: Determined
+expressionIcon.determined = Determinado
+
+# A face, as one of the expression pictures is called
+# en: Bored
+expressionIcon.bored = Entediado
+
+# A face, as one of the expression pictures is called
+# en: Sleepy
+expressionIcon.sleepy = Sonolento
+
+# A face, as one of the expression pictures is called
+# en: In pain
+expressionIcon.pained = Com dor
+
+# Tooltip on a file path in red: there is no file at it
+# en: There is no file at this path, so the game will have nothing to show or play. Check the name, or choose the file again.
+picker.missing.tip = Não há arquivo neste caminho, então o jogo não terá nada para mostrar ou tocar. Confira o nome, ou escolha o arquivo de novo.
+
+# Beside "(…)" in the In dialogue text panel
+# en: Shows in light blue in game: the game colours what is in brackets.
+dialogues.hintBrackets = Aparece em azul-claro no jogo: o jogo colore o que está entre parênteses.
+
+# Beside an underlined "*sfx*" in the In dialogue text panel
+# en: A sound's pattern plays that sound; the editor underlines it.
+dialogues.hintCues = O padrão de um som toca esse som; o editor o sublinha.
+
+# What the hint above stands beside: a made-up sound pattern, as a line would hold one (asterisks round a sound word)
+# en: *sfx*
+# same in this language
+dialogues.hintCues.sample = *sfx*
+
+# A label in the node editor, over the line's sounds (only while the line has an auto-trigger pattern)
+# en: Sounds:
+cues.label = Sons:
+
+# Tooltip on 'Sounds:'
+# en: Every sound whose auto-trigger pattern is in this line, in the order they come. Each plays by itself; here you set how loud it is, when it starts, whether its words show and whether it waits for the typewriter. Every setting left as it is costs nothing in the pack.
+cues.label.tip = Cada som cujo padrão de disparo automático está nesta fala, na ordem em que aparecem. Cada um toca por conta própria; aqui você define o quão alto ele toca, quando começa, se as palavras dele aparecem e se ele espera a máquina de escrever. Cada ajuste deixado como está não ocupa nada no pack.
+
+# One of a line's sounds: {n} is its place in the line, {pattern} the words that play it
+# en: {n} · {pattern}
+cues.row = {n} · {pattern}
+
+# Label before a line's sound's volume slider
+# en: Volume
+# same in this language
+cues.volume = Volume
+
+# Tooltip on a line's sound's volume
+# en: How loud this sound plays in this line, against the volume the sound itself is set to on the SFX tab: 100 % is as set, more is louder. Leaves the size of the text alone.
+cues.volume.tip = O quão alto este som toca nesta fala, em relação ao volume definido para o próprio som na aba SFX: 100 % é como está definido, mais é mais alto. Não mexe no tamanho do texto.
+
+# Tooltip on the box beside a line's sound's volume slider
+# en: The volume in percent. Type a number here to go past what the slider reaches - up to 500 %.
+cues.volumeBox.tip = O volume em porcentagem. Digite um número aqui para passar do que o controle deslizante alcança - até 500 %.
+
+# After the box with a line's sound's start in it: the unit, seconds
+# en: s
+cues.secondsUnit = s
+
+# Label before a line's sound's start slider
+# en: Starts
+cues.starts = Início
+
+# Tooltip on a line's sound's start
+# en: When this sound starts, in seconds. The sentence beside it says from what: the first sound counts from when the line appears, each one after it from when the sound before it ends - so 0 is right after it, and below 0 plays over its end. A sound set to wait for the typewriter counts from when the typewriter reaches it.
+cues.starts.tip = Quando este som começa, em segundos. A frase ao lado diz a partir de quê: o primeiro som conta a partir de quando a fala aparece, cada um dos seguintes a partir de quando o som anterior termina - então 0 é logo depois, e abaixo de 0 toca por cima do fim dele. Um som que espera a máquina de escrever conta a partir de quando a máquina de escrever chega nele.
+
+# Tooltip on the box beside a line's sound's start slider
+# en: The start in seconds; a minus sign makes it play over the end of the sound before it.
+cues.delayBox.tip = O início em segundos; um sinal de menos faz tocar por cima do fim do som anterior.
+
+# A line's first sound, starting at once
+# en: Starts as the line appears.
+cues.startsWithLine = Começa quando a fala aparece.
+
+# A line's first sound, starting later: {seconds} is a number
+# en: Starts {seconds} s after the line appears.
+cues.startsAfterLine = Começa {seconds} s depois que a fala aparece.
+
+# A line's later sound, starting right after the one before: {pattern} is that sound's words
+# en: Starts as soon as {pattern} ends.
+cues.startsWhenPreviousEnds = Começa assim que {pattern} termina.
+
+# A line's later sound, starting a while after the one before ends
+# en: Starts {seconds} s after {pattern} ends.
+cues.startsAfterPrevious = Começa {seconds} s depois que {pattern} termina.
+
+# A line's later sound, starting before the one before has ended, so both play at once for a moment
+# en: Starts {seconds} s before {pattern} ends, playing over it.
+cues.startsBeforePreviousEnds = Começa {seconds} s antes de {pattern} terminar, tocando por cima.
+
+# A line's sound that waits for the typewriter, starting the moment it is reached
+# en: Starts when the typewriter reaches it.
+cues.startsWhenTyped = Começa quando a máquina de escrever chega nele.
+
+# A line's sound that waits for the typewriter, starting a while after
+# en: Starts {seconds} s after the typewriter reaches it.
+cues.startsAfterTyped = Começa {seconds} s depois que a máquina de escrever chega nele.
+
+# Tick box: a line's sound's words are shown in the line
+# en: Show its words
+cues.showText = Mostrar as palavras
+
+# Tooltip on 'Show its words'
+# en: Off, the player hears the sound but does not read its pattern: the words are taken out of the line as it shows. The pattern stays in the text here, which is what makes the sound play.
+cues.showText.tip = Desligado, o jogador ouve o som mas não lê o padrão: as palavras são tiradas da fala quando ela aparece. O padrão continua no texto aqui, e é ele que faz o som tocar.
+
+# Tick box: a line's sound waits until the typewriter shows its words
+# en: When typed
+cues.whenTyped = Ao digitar
+
+# Tooltip on 'When typed'
+# en: Play when the typewriter reaches the pattern, as its words appear, instead of after the sound before it. Works with the words shown or hidden.
+cues.whenTyped.tip = Toca quando a máquina de escrever chega no padrão, enquanto as palavras dele aparecem, em vez de depois do som anterior. Funciona com as palavras visíveis ou escondidas.
+
+# Button: plays the selected line's sounds as the game will play them
+# en: ▶ Play the line
+cues.play = ▶ Tocar a fala
+
+# Tooltip on 'Play the line'
+# en: Plays this line's sounds with their volumes and timing, as the game will. The typewriter is timed by the speaker's typing speed. The pack has to be saved in a folder first, for its sound files to be found.
+cues.play.tip = Toca os sons desta fala com os volumes e o tempo deles, como o jogo vai tocar. A máquina de escrever segue a velocidade de digitação de quem fala. O pack precisa estar salvo numa pasta antes, para os arquivos de som serem encontrados.
+
+# Button: stops playing the line's sounds
+# en: ■ Stop
+cues.stop = ■ Parar
+
+# Under an empty Actor box in the Node panel
+# en: Nobody speaking: the line shows with no name, like a narrator's. Pick an actor to give it a speaker.
+dialogues.noSpeakerNote = Ninguém falando: a fala aparece sem nome, como a de um narrador. Escolha um ator para dar a ela quem fala.
 
 # Text
 # en: Jump to:
@@ -4696,8 +5358,8 @@ dialogues.actionsStart = Ações ao começar
 dialogues.addNodeActionOnStart = + Adicionar ação
 
 # Text
-# en: This node is one of a Choice's options, so it has no Actions on start. When an option counts as having started is not something the pack can rely on — it may be the moment the menu is drawn rather than the moment the player picks it, which would run the actions for options nobody chose. Put them on Actions on finish, which happens when the option has actually been taken.
-dialogues.nodeOneChoiceS = Este nó é uma das opções de uma Escolha, então não tem "Ações ao começar". Quando uma opção conta como iniciada não é algo em que o pack possa confiar — pode ser o momento em que o menu é desenhado, e não o momento em que o jogador a escolhe, o que rodaria as ações de opções que ninguém escolheu. Coloque-as em "Ações ao terminar", que acontece quando a opção foi de fato tomada.
+# en: This node is one of a Choice's options, so it has only Actions on finish. Picking an option goes straight on to the lines under it, and its actions run the moment the player picks it - never for the options nobody chose.
+dialogues.nodeOneChoiceS = Este nó é uma das opções de uma Escolha, então só tem "Ações ao terminar". Escolher uma opção vai direto para as falas abaixo dela, e as ações dela rodam no momento em que o jogador a escolhe — nunca para as opções que ninguém escolheu.
 
 # Box heading
 # en: Actions on finish
@@ -4799,17 +5461,21 @@ dialogues.overwriteStartConditions.tip = Substitui estas condições de início 
 # en: Draw each line in the list the way the game draws it — its own font, outline and drop shadow, the speaker's name in their colour, on a dark panel. Costs the spelling squiggles on those rows; they stay in the Text box below the list.
 dialogues.gameLookSwitch.tip = Desenha cada fala da lista do jeito que o jogo desenha — a fonte dele, contorno e sombra, o nome de quem fala na cor da pessoa, sobre um painel escuro. Custa os sublinhados de ortografia nessas linhas; eles continuam na caixa Texto abaixo da lista.
 
-# Tooltip on "+ Root"
-# en: Add a new top-level node (no parent). It takes the speaker from the line it follows - actor, expression and outfit - and nothing else, because a root starts a fresh strand.
-dialogues.addDialogueRootNode.tip = Adiciona um novo nó de primeiro nível (sem pai).
-
 # Tooltip on "+ Child"
-# en: Add a child of the currently-selected node, copying its actor, expression, outfit, conditions and actions — everything but the text and the jump tag.
-dialogues.addDialogueChildNode.tip = Adiciona um filho do nó selecionado, copiando ator, expressão, roupa, condições e ações — tudo menos o texto e a etiqueta de salto.
+# en: Add a line inside the selected one, as its child. It takes the speaker - actor, expression and outfit - and nothing else; Duplicate copies a node whole.
+dialogues.addDialogueChildNode.tip = Adiciona uma fala dentro da selecionada, como filha dela. Ela pega quem fala - ator, expressão e roupa - e nada mais; Duplicar copia um nó inteiro.
 
 # Tooltip on "+ Sibling"
-# en: Add a node directly below the selected one, sharing its parent (or another root when the selection is a root). Copies everything but the text and the jump tag.
-dialogues.addDialogueSiblingNode.tip = Adiciona um nó logo abaixo do selecionado, com o mesmo pai (ou outra raiz, quando a seleção é uma raiz). Copia tudo menos o texto e a etiqueta de salto.
+# en: Add a line directly below the selected one, sharing its parent (or at the top level when the selected line is). It takes the speaker - actor, expression and outfit - and nothing else.
+dialogues.addDialogueSiblingNode.tip = Adiciona uma fala logo abaixo da selecionada, com o mesmo pai (ou no nível superior, quando a fala selecionada está nele). Ela pega quem fala - ator, expressão e roupa - e nada mais.
+
+# Tooltip on "+ New Node", the only button under an empty conversation's nodes
+# en: Add the conversation's first line. Once it has one, + Sibling and + Child add the rest.
+dialogues.addFirstNode.tip = Adiciona a primeira fala da conversa. Depois que ela tem uma, + Irmão e + Filho adicionam o resto.
+
+# Tooltip on "Duplicate" under a conversation's nodes
+# en: Copy the selected node and everything under it, directly below it - all of it, conditions, actions and jumps too. A tag the conversation already has is renamed in the copy.
+dialogues.duplicateNode.tip = Copia o nó selecionado e tudo abaixo dele, logo abaixo dele - tudo, condições, ações e saltos também. Uma etiqueta que a conversa já tem é renomeada na cópia.
 
 # Tooltip on "− Remove"
 # en: Delete the selected node. References to it from other nodes' children + the root list are scrubbed automatically.
@@ -4911,16 +5577,16 @@ dialogues.fit.spills = Longa demais para a caixa de diálogo: mesmo no menor tam
 dialogues.optionalOtherNodesCan.tip = Opcional. Outros nós podem usar Salto → etiqueta para retomar daqui.
 
 # Tooltip on a dropdown
-# en: Where play goes after this node. Continue moves to the next node down the list, whether or not it is a child. Exit stops the conversation. Jump resumes at the node carrying the tag named below.
-dialogues.wherePlayGoesAfter.tip = Para onde a reprodução vai depois deste nó. Continuar passa ao próximo nó da lista, sendo filho ou não. Sair encerra a conversa. Saltar retoma no nó que tem a etiqueta indicada abaixo.
+# en: Where play goes after this node. Continue moves to the next node down the list, whether or not it is a child. Exit stops the conversation. Jump resumes at the node carrying the tag named below - and once that node and its lines are done, the game says again any line it is under, so a jump lands best on a top-level line.
+dialogues.wherePlayGoesAfter.tip = Para onde a reprodução vai depois deste nó. Continuar passa ao próximo nó da lista, sendo filho ou não. Sair encerra a conversa. Saltar retoma no nó que tem a etiqueta indicada abaixo - e, quando esse nó e as falas dele terminam, o jogo diz de novo qualquer fala sob a qual ele está; então um salto cai melhor numa fala do nível superior.
 
 # Tooltip on a dropdown
 # en: Which tagged node to resume at. It has to match that node's Tag exactly; a tag that does not exist fails silently at runtime, so pick from the list where you can.
 dialogues.whichTaggedNodeResume.tip = Em qual nó etiquetado retomar. Precisa bater exatamente com a Etiqueta daquele nó; uma etiqueta que não existe falha em silêncio em execução, então escolha da lista sempre que puder.
 
 # Tooltip on a dropdown
-# en: How a text line advances. UntilInteraction waits for the player; Timeout auto-advances after the typewriter finishes.
-dialogues.howTextLineAdvances.tip = Como uma fala de texto avança. UntilInteraction espera o jogador; Timeout avança sozinho quando a digitação termina.
+# en: How a text line advances. Until interaction waits for the player; Timeout auto-advances after the typewriter finishes.
+dialogues.howTextLineAdvances.tip = Como uma fala de texto avança. Até interagir espera o jogador; Timeout avança sozinho quando a máquina de escrever termina.
 
 # Tooltip on a text box
 # en: Seconds the line lingers after typing finishes. Decimals OK, e.g. 1.5.
@@ -5004,9 +5670,9 @@ scenes.loop = Repetir
 # en: Volume:
 scenes.volume = Volume:
 
-# Box heading
-# en: Frame (Core SpriteRenderer)
-scenes.frameCoreSpriterenderer = Moldura (SpriteRenderer do Core)
+# Box heading: one panel for a scene's frame, its sound and whether it counts as a Starmaker photo (Starmaker is the name of the game's photo site)
+# en: Frame, sound and Starmaker
+scenes.frameSoundStarmaker = Moldura, som e Starmaker
 
 # Text
 # en: Pick a vanilla frame (shipped with the plugin) or supply a custom PNG path. When both are set, the custom frame wins at runtime.
@@ -5020,17 +5686,9 @@ scenes.vanillaFrame = Moldura do jogo:
 # en: Custom frame:
 scenes.customFrame = Moldura própria:
 
-# Box heading
-# en: Sound (replaces prototype's Trigger)
-scenes.soundReplacesPrototypeS = Som (substitui o Trigger do protótipo)
-
-# Text
-# en: Mode:
-scenes.mode = Modo:
-
-# The heading over the Starmaker photo tick box.
-# en: Starmaker
-scenes.starmaker = Starmaker
+# Label before the dropdown of what a scene does with the sound of the scene it is built from
+# en: Sound:
+scenes.sound = Som:
 
 # A tick box. Off unless the author turns it on.
 # en: Treat as a Starmaker photo
@@ -5247,6 +5905,10 @@ sfx.stopSfx = ■ Parar
 # Text
 # en: Plays through the editor's own audio (OGG/WAV/MP3).
 sfx.playsThroughEditorS = Toca pelo áudio do próprio editor (OGG/WAV/MP3).
+
+# Beside the SFX tab's Play button, for a sound with variants: which file just played; {n} of {count}
+# en: Played {file} ({n} of {count})
+sfx.playedVariant = Tocou {file} ({n} de {count})
 
 # Box heading
 # en: Auto-trigger patterns
@@ -5757,6 +6419,49 @@ variables.optionalUpperClampInt.tip = Limite superior opcional para variáveis I
 # en: A note to yourself. Shown only in the editor, never in game.
 variables.noteYourselfShownOnly.tip = Um lembrete para você. Aparece só no editor, nunca no jogo.
 
+# Heading of the panel listing every place in the pack that uses the selected variable. {count} is how many places
+# one: 0, 1 · other: 2, 3, 4, 5…
+# en: Where it's used ({count} place)
+variables.uses.heading.one = Onde é usada ({count} lugar)
+# en: Where it's used ({count} places)
+variables.uses.heading.other = Onde é usada ({count} lugares)
+
+# The grey line at the top of that panel
+# en: What sets this variable, what reads it, and what shows it in its words. Click one to go there.
+variables.uses.help = O que define esta variável, o que a lê e o que mostra o valor dela no texto. Clique em um para ir até lá.
+
+# Shown in that panel when nothing uses the variable
+# en: Nothing in the pack uses it yet.
+variables.uses.none = Nada no pack a usa ainda.
+
+# A short tag before a place that changes the variable (an action)
+# en: Sets
+variables.uses.sets = Define
+
+# Tooltip on "Sets"
+# en: An action here changes the variable.
+variables.uses.sets.tip = Uma ação aqui muda a variável.
+
+# A short tag before a place that checks the variable (a condition, or an action that takes from it)
+# en: Reads
+variables.uses.reads = Lê
+
+# Tooltip on "Reads"
+# en: A condition here checks the variable, or an action takes from it.
+variables.uses.reads.tip = Uma condição aqui confere a variável, ou uma ação tira dela.
+
+# A short tag before a text that shows the variable's value to the player ([PV:name] in its words)
+# en: Shows
+variables.uses.shows = Mostra
+
+# Tooltip on "Shows"
+# en: Its words show the variable's value to the player.
+variables.uses.shows.tip = O texto mostra ao jogador o valor da variável.
+
+# Tooltip on one of the places listed
+# en: Go there.
+variables.uses.go.tip = Ir até lá.
+
 [Integration tab]
 
 # Tab
@@ -6037,10 +6742,6 @@ ui.copyNode = Copiar
 # en: Paste
 ui.pasteNode = Colar
 
-# Button
-# en: Duplicate
-ui.duplicateNode = Duplicar
-
 # Heading
 # en: Preview
 ui.preview = Pré-visualização
@@ -6088,6 +6789,18 @@ ui.shownWhen = Aparece quando
 # Button
 # en: + Condition
 ui.addActiveCondition = + Condição
+
+# Expandable section in a screen's settings: conditions that open the screen by themselves
+# en: Opens when
+ui.opensWhen = Abre quando
+
+# Text inside "Opens when", under its conditions
+# en: The screen opens by itself the moment all of these are met - as the game loads, if they already are - and again each time they are met anew. The player can still close it: it stays closed until they stop being met and are met again.
+ui.opensWhen.help = A tela abre sozinha no momento em que todas estas condições são atendidas — ao carregar o jogo, se já forem — e de novo cada vez que voltam a ser atendidas. O jogador ainda pode fechá-la: ela fica fechada até que deixem de ser atendidas e sejam atendidas outra vez.
+
+# Tooltip on "+ Condition" inside "Opens when"
+# en: With none, the screen opens only when an action opens it, or at the start if it is on screen from the start. With any, it opens by itself the moment they are all met.
+ui.addOpenCondition.tip = Sem nenhuma, a tela só abre quando uma ação a abre, ou no início se estiver na tela desde o início. Com alguma, ela abre sozinha no momento em que todas são atendidas.
 
 # Expandable section
 # en: When it opens
@@ -6205,10 +6918,6 @@ ui.drawOrderAgainstOther.tip = Ordem de desenho em relação a outra UI que não
 # en: Every UI the game has that can be drawn here. One entry per screen, not per canvas — the main canvas alone holds twenty-one of them.
 ui.everyUIGameHas.tip = Toda UI que o jogo tem e que pode ser desenhada aqui. Uma entrada por tela, não por canvas — só o canvas principal tem vinte e uma.
 
-# Keyboard shortcut shown beside it ("+ Object")
-# en: Ins
-ui.addChild.keys = Ins
-
 # Tooltip on "+ Object"
 # en: Add an empty object of your own, inside whatever is selected. (Insert)
 ui.addChild.tip = Adiciona um objeto vazio seu, dentro do que estiver selecionado. (Insert)
@@ -6224,10 +6933,6 @@ ui.addShapeMenu.tip = Adiciona uma forma inteira — uma janela, um diálogo, um
 # Tooltip on "+ Piece"
 # en: Add a ready-made piece - a button, a row, a label - inside whatever is selected.
 ui.addPieceMenu.tip = Adiciona uma peça pronta — um botão, uma linha, um rótulo — dentro do que estiver selecionado.
-
-# Keyboard shortcut shown beside it ("Remove")
-# en: Del
-ui.removeUi.keys = Del
 
 # Tooltip on "Remove"
 # en: Remove an object you added. Objects the game owns cannot be removed - a pack can change them, but not delete them out of the game's screen. (Delete)
@@ -6248,10 +6953,6 @@ ui.pasteNode.keys = Ctrl+V
 # Tooltip on "Paste"
 # en: Paste the copied object inside whatever is selected. Every paste is its own copy, so one Copy can be pasted as many times as you like.
 ui.pasteNode.tip = Cola o objeto copiado dentro do que estiver selecionado. Cada colagem é uma cópia própria, então um Copiar pode ser colado quantas vezes você quiser.
-
-# Keyboard shortcut shown beside it ("Duplicate")
-# en: Ctrl+D
-ui.duplicateNode.keys = Ctrl+D
 
 # Tooltip on "Duplicate"
 # en: Another one of these, beside it.
@@ -6438,10 +7139,6 @@ quests.textParenthesesDrawnPink = O texto entre parênteses é desenhado em rosa
 # Text
 # en: Runtime name:
 quests.runtimeName = Nome de execução:
-
-# Button
-# en: Rename…
-quests.renameQuest = Renomear…
 
 # Text
 # en: The game saves a player's progress on this quest under its runtime name. Renaming it after players have the pack starts the quest over for all of them.
@@ -6783,18 +7480,6 @@ saveConfirm.save = Salvar
 # en: Cancel
 saveConfirm.cancel = Cancelar
 
-# Column heading
-# en: What
-saveConfirm.what = O quê
-
-# Column heading
-# en: Was
-saveConfirm.was = Era
-
-# Column heading
-# en: Now
-saveConfirm.now = Agora
-
 # Tooltip on "Don't ask again"
 # en: Save straight away from now on. Turn this back on any time under Options → Confirm changes on save.
 saveConfirm.dontAskAgain.tip = Daqui em diante, salva direto. Você pode religar isto quando quiser em Opções → Confirmar as mudanças ao salvar.
@@ -6803,7 +7488,7 @@ saveConfirm.dontAskAgain.tip = Daqui em diante, salva direto. Você pode religar
 # en: Go back to the editor. Nothing is written; your edits stay exactly as they are.
 saveConfirm.cancel.tip = Volta ao editor. Nada é gravado; suas edições ficam exatamente como estão.
 
-# Tooltip on a change in the list: {0} is where, {1} what it was, {2} what it is now
+# Tooltip on a change in the save prompt's list: {0} is the change in words, {1} what it was, {2} what it is now
 # en: {0}\nwas: {1}\nnow: {2}
 saveConfirm.change.tip = {0}\nera: {1}\nagora: {2}
 
@@ -6814,6 +7499,505 @@ diff.wholeManifest = (manifesto inteiro)
 # In the list of what a save changes, for a pack saved for the first time
 # en: no previous saved state to compare against
 diff.nothingToCompare = não há estado salvo anterior para comparar
+
+# Heading over the save prompt's changes to the pack's own settings (its version, its id)
+# en: Pack
+# same in this language
+diff.kind.pack = Pack
+
+# What a heading in the save prompt's list is: 'Dialogue · Chat at the cave'
+# en: Dialogue
+diff.kind.dialogue = Diálogo
+
+# What a heading in the save prompt's list is
+# en: Place
+diff.kind.place = Lugar
+
+# What a heading in the save prompt's list is
+# en: Character
+diff.kind.character = Personagem
+
+# What a heading in the save prompt's list is
+# en: Scene
+diff.kind.scene = Cena
+
+# What a heading in the save prompt's list is (a sound effect, as the SFX tab holds)
+# en: SFX
+# same in this language
+diff.kind.sound = SFX
+
+# What a heading in the save prompt's list is (a music track)
+# en: Music
+diff.kind.music = Música
+
+# What a heading in the save prompt's list is
+# en: Variable
+diff.kind.variable = Variável
+
+# What a heading in the save prompt's list is (one of the Integration tab's rules)
+# en: Integration rule
+diff.kind.rule = Regra de integração
+
+# What a heading in the save prompt's list is
+# en: NPC
+# same in this language
+diff.kind.npc = NPC
+
+# What a heading in the save prompt's list is (one of the UI tab's screens)
+# en: UI screen
+diff.kind.screen = Tela de UI
+
+# What a heading in the save prompt's list is
+# en: Quest
+diff.kind.quest = Missão
+
+# What a heading in the save prompt's list is
+# en: Wallpaper
+diff.kind.wallpaper = Papel de parede
+
+# What a heading in the save prompt's list is
+# en: Map button
+diff.kind.mapButton = Botão do mapa
+
+# What a heading in the save prompt's list is (one of the game's own places the pack adds to)
+# en: Game place
+diff.kind.gamePlace = Lugar do jogo
+
+# What a heading in the save prompt's list is (lines said in a room)
+# en: Room talk
+diff.kind.roomTalk = Conversa de sala
+
+# What a heading in the save prompt's list is
+# en: Dialogue folder
+diff.kind.dialogueFolder = Pasta de diálogos
+
+# What a heading in the save prompt's list is
+# en: Scene folder
+diff.kind.sceneFolder = Pasta de cenas
+
+# What a heading in the save prompt's list is
+# en: Variable folder
+diff.kind.variableFolder = Pasta de variáveis
+
+# What a heading in the save prompt's list is (a folder on the Integration tab)
+# en: Integration folder
+diff.kind.ruleFolder = Pasta de integração
+
+# What a heading in the save prompt's list is (a folder on any other tab)
+# en: Folder
+diff.kind.folder = Pasta
+
+# Save prompt: under a heading, when the whole thing is new
+# en: Added
+diff.recordAdded = Adicionado
+
+# Save prompt: under a heading, when the whole thing is deleted
+# en: Removed
+diff.recordRemoved = Removido
+
+# Save prompt: under a heading, when the whole thing changed into something else
+# en: Changed
+diff.recordChanged = Alterado
+
+# Save prompt: something new inside a record - {thing} is a line by its words, or an action by when it runs and its type
+# en: New: {thing}
+diff.newThing = Novo: {thing}
+
+# Save prompt: something taken out of a record - {thing} as above
+# en: Removed: {thing}
+diff.removedThing = Removido: {thing}
+
+# Save prompt: a list in a different order - {what} names the list
+# en: {what}: new order
+diff.newOrder = {what}: nova ordem
+
+# Save prompt, under a changed list of names: only the order changed
+# en: new order
+diff.newOrderShort = nova ordem
+
+# Save prompt, under a changed list of names: the names now in it - {items} is the names
+# en: added {items}
+diff.listAdded = adicionado: {items}
+
+# Save prompt, under a changed list of names: the names no longer in it
+# en: taken out {items}
+diff.listRemoved = removido: {items}
+
+# Save prompt: a value that was not there before, or is not any more
+# en: not set
+diff.notSet = não definido
+
+# Save prompt: an empty list's value
+# en: nothing
+diff.nothing = nada
+
+# Save prompt: an empty text's value
+# en: empty
+diff.empty = vazio
+
+# Save prompt: a switched-on value
+# en: yes
+diff.yes = sim
+
+# Save prompt: a switched-off value
+# en: no
+diff.no = não
+
+# Save prompt: something in a list with no name, by its place in the list
+# en: item {n}
+# same in this language
+diff.thing.item = item {n}
+
+# Save prompt: a choice line that has no words of its own
+# en: a choice with no words
+diff.thing.choice = uma escolha sem palavras
+
+# Save prompt: a line that has no words
+# en: a line with no words
+diff.thing.lineNoWords = uma fala sem palavras
+
+# Save prompt: a record's settings, counted
+# one: 0, 1 · other: 2, 3, 4, 5…
+# en: {count} setting
+diff.settings.one = {count} ajuste
+# en: {count} settings
+diff.settings.other = {count} ajustes
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Text
+diff.field.text = Texto
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Actor
+diff.field.actor = Ator
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Expression
+diff.field.expression = Expressão
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Outfit
+diff.field.outfit = Roupa
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Kind
+diff.field.kind = Tipo
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Tag
+diff.field.tag = Etiqueta
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Jump to
+diff.field.jump = Saltar para
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Mode
+diff.field.mode = Modo
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Timeout
+diff.field.timeout = Tempo limite
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Duration
+diff.field.duration = Duração
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Conditions
+diff.field.conditions = Condições
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Start conditions
+diff.field.startConditions = Condições de início
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: On start
+diff.field.actionsOnStart = Ao começar
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: On finish
+diff.field.actionsOnFinish = Ao terminar
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Actions
+diff.field.actions = Ações
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: What follows
+diff.field.children = O que vem depois
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Opening lines
+diff.field.rootNodeIds = Falas de abertura
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Lines
+diff.field.nodes = Falas
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Display name
+diff.field.displayName = Nome de exibição
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Runtime name
+diff.field.key = Nome de execução
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Name
+diff.field.name = Nome
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Title
+diff.field.title = Título
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Description
+diff.field.description = Descrição
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Label
+diff.field.label = Texto
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Priority
+diff.field.priority = Prioridade
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Queued
+diff.field.queued = Na fila
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Type
+diff.field.type = Tipo
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Settings
+diff.field.params = Ajustes
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Starting value
+diff.field.defaultValue = Valor inicial
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Kept in the save
+diff.field.persisted = Guardado no save
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Sound
+diff.field.sound = Som
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Picture
+diff.field.sceneSprite = Imagem
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Frame
+diff.field.vanillaFrame = Moldura
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Picture file
+diff.field.externalSpritePath = Arquivo de imagem
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Audio file
+diff.field.audioPath = Arquivo de áudio
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Default volume
+diff.field.defaultVolume = Volume padrão
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Auto-trigger patterns
+diff.field.textPatterns = Padrões de disparo automático
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Loop
+diff.field.loop = Repetir
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Picture
+diff.field.spritePath = Imagem
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Unlock conditions
+diff.field.unlockConditions = Condições de desbloqueio
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Contents
+diff.field.items = Conteúdo
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Folders
+diff.field.folders = Pastas
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Dialogues
+diff.field.dialogues = Diálogos
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Scenes
+diff.field.scenes = Cenas
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Places
+diff.field.places = Lugares
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Characters
+diff.field.characters = Personagens
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: SFX
+# same in this language
+diff.field.sfx = SFX
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Music
+diff.field.music = Música
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Variables
+diff.field.variables = Variáveis
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Integration rules
+diff.field.integrationRules = Regras de integração
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: NPCs
+# same in this language
+diff.field.npcs = NPCs
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Quests
+diff.field.quests = Missões
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Wallpapers
+diff.field.wallpapers = Papéis de parede
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: UI screens
+diff.field.uis = Telas de UI
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Map buttons
+diff.field.mapButtons = Botões do mapa
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Tasks
+diff.field.tasks = Tarefas
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Name colour
+diff.field.nameColor = Cor do nome
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Outfits
+diff.field.outfits = Roupas
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Expressions
+diff.field.expressions = Expressões
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Default outfit
+diff.field.defaultOutfit = Roupa padrão
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Pronouns
+diff.field.pronouns = Pronomes
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Typewriter
+diff.field.typewriter = Máquina de escrever
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Target
+diff.field.target = Destino
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: District
+diff.field.district = Distrito
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Version
+diff.field.version = Versão
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Pack id
+diff.field.packId = Id do pack
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Game version
+diff.field.gameVersion = Versão do jogo
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: ModForge version
+diff.field.forgeVersion = Versão do ModForge
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Silenced issues
+diff.field.ignoredIssues = Problemas silenciados
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: When it runs
+diff.field.triggerMode = Quando roda
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Sprite
+# same in this language
+diff.field.sprite = Sprite
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Mask
+diff.field.mask = Máscara
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Sorting order
+diff.field.sortingOrder = Ordem de desenho
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Position
+diff.field.position = Posição
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Active
+diff.field.active = Ativo
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Enabled
+diff.field.enabled = Ativado
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Colour
+diff.field.color = Cor
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Tint
+diff.field.tint = Tonalidade
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: GameObjects
+# same in this language
+diff.field.gameObjects = GameObjects
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Components
+diff.field.components = Componentes
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Internal name
+diff.field.internalName = Nome interno
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Navigator buttons
+diff.field.navigatorButtons = Botões do navegador
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Value
+diff.field.value = Valor
 
 # In the list of what a save changes: a list that was put in a new order
 # one: 0, 1 · other: 2, 3, 4, 5…
@@ -7283,8 +8467,8 @@ docs.modPack.summary = A ideia inteira, antes de qualquer detalhe.
 docs.modPack.packOneFolderEverything = Um pack é uma pasta. Tudo o que você cria acaba num único arquivo dentro dela chamado modpack.json, e as imagens e os áudios ficam ao lado desse arquivo.
 
 # Docs: a point in the topic
-# en: You never edit modpack.json by hand. The editor writes it, and the tabs across the top are the things it can hold.
-docs.modPack.neverEditModpackJson = Você nunca edita o modpack.json na mão. O editor o escreve, e as abas no topo são as coisas que ele pode conter.
+# en: You never edit modpack.json by hand. The editor writes it, and its tabs are the things it can hold.
+docs.modPack.neverEditModpackJson = Você nunca edita o modpack.json na mão. O editor o escreve, e as abas dele são as coisas que ele pode conter.
 
 # Docs: a point in the topic
 # en: Export turns the folder into one .smspack file. That is what you hand to players, and the only thing the game reads.
@@ -8142,6 +9326,14 @@ docs.editMenu.title = Menu Editar
 # en: Acts on the selected item in the current tab's list.
 docs.editMenu.summary = Age sobre o item selecionado na lista da aba atual.
 
+# Help page Edit menu: a term
+# en: Undo, Redo
+docs.editMenu.undo.term = Desfazer, Refazer
+
+# Help page Edit menu: what Undo and Redo do
+# en: Take back the last change, or put it back - anywhere in the pack. What you type into a box counts as one change, made when you leave the box.
+docs.editMenu.undo = Desfaz a última mudança, ou a refaz, em qualquer lugar do pack. O que você digita numa caixa conta como uma mudança só, feita quando você sai da caixa.
+
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Duplicate item
 docs.editMenu.copySelectedItemInto.term = Duplicar item
@@ -8209,8 +9401,8 @@ docs.editMenu.modforgeTabHasNo = A aba ModForge não tem lista de itens, então 
 docs.optionsMenu.title = Menu Opções
 
 # Docs: the line under the topic's title
-# en: Editor preferences. All of them are remembered between sessions.
-docs.optionsMenu.summary = Preferências do editor. Todas são lembradas entre sessões.
+# en: Editor preferences, in groups under headings: Look, Writing, Saving and exporting, The game and Updates. All of them are remembered between sessions.
+docs.optionsMenu.summary = Preferências do editor, em grupos sob títulos: Aparência, Escrita, Salvar e exportar, O jogo e Atualizações. Todas são lembradas entre sessões.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Confirm changes on save
@@ -8259,24 +9451,32 @@ docs.optionsMenu.windowsDictionarySharedRest = O dicionário do Windows é compa
 docs.themes.title = Temas
 
 # Docs: the line under the topic's title
-# en: Recolours the editor. Your choice is remembered between sessions.
-docs.themes.summary = Muda as cores do editor. Sua escolha é lembrada entre sessões.
+# en: Options ▸ Themes recolours the editor, and EX draws it another way. Your choice is remembered between sessions.
+docs.themes.summary = Opções ▸ Temas muda as cores do editor, e o EX o desenha de outro jeito. Sua escolha é lembrada entre sessões.
 
-# Docs: the bold label in front of the next text, usually a name on screen
-# en: Light themes
-docs.themes.lightSlateForestPlum.term = Temas claros
+# Help page Themes: a term
+# en: EX
+docs.themes.ex.term = EX
 
-# Docs: a point in the topic
-# en: Light, Slate, Forest, Plum, Ocean, Sandstone and Rose.
-docs.themes.lightSlateForestPlum = Claro, Ardósia, Floresta, Ameixa, Oceano, Arenito e Rosa.
+# Help page Themes: what the EX themes are
+# en: The editor drawn another way: the tabs in a rail down the left with an icon over each, the pack's name heading the page, every panel a tile. Light ones and dark ones; a first start opens in Frost.
+docs.themes.ex = O editor desenhado de outro jeito: as abas numa barra à esquerda com um ícone sobre cada uma, o nome do pack no topo da página, cada painel um bloco. Há claros e escuros; o primeiro início abre no Frost.
 
-# Docs: the bold label in front of the next text, usually a name on screen
-# en: Dark themes
-docs.themes.darkMidnightCarbon.term = Temas escuros
+# Help page Themes: a term
+# en: Classic
+docs.themes.classic.term = Clássico
 
-# Docs: a point in the topic
-# en: Dark, Midnight and Carbon.
-docs.themes.darkMidnightCarbon = Escuro, Meia-noite e Carbono.
+# Help page Themes: what the Classic themes are
+# en: The editor in the shape it had before EX, in every colour it had, light and dark.
+docs.themes.classic = O editor no formato que tinha antes do EX, em todas as cores que tinha, claras e escuras.
+
+# Help page Themes: a term
+# en: Your own
+docs.themes.yours.term = Seus
+
+# Help page Themes: themes the person makes
+# en: Your themes… opens a window to make themes of your own from a few colours. They are listed under Yours once there is one.
+docs.themes.yours = Seus temas… abre uma janela para criar temas seus a partir de algumas cores. Eles aparecem em Seus assim que houver um.
 
 # Docs: a point in the topic
 # en: Themes change the editor only. They have no effect on the pack, or on anything in the game.
@@ -9521,32 +10721,40 @@ docs.dialogues.heading.nodes = Nós
 docs.dialogues.dialogueTreePlayStarts = Um diálogo é uma árvore. A execução começa na primeira raiz e desce: um nó roda, depois seus filhos em ordem, até algo sair.
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: + Root
-docs.dialogues.addNodeTopLevel.term = + Raiz
+# en: + New Node
+docs.dialogues.addFirstNode.term = + Novo nó
 
 # Docs: a point in the topic
-# en: Add a node at the top level, with no parent.
-docs.dialogues.addNodeTopLevel = Acrescenta um nó de primeiro nível, sem pai.
+# en: Add a conversation's first line. Until it has one, this is the only button.
+docs.dialogues.addFirstNode = Adiciona a primeira fala de uma conversa. Enquanto ela não tiver nenhuma, este é o único botão.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: + Child
-docs.dialogues.addChildSelectedNode.term = + Filho
+docs.dialogues.addChildNode.term = + Filho
 
 # Docs: a point in the topic
-# en: Add a child of the selected node. The speaker, expression, outfit, timing, jump and the whole conditions and actions lists all carry over, so writing the next line of a scene is not a matter of re-picking all of it.
-docs.dialogues.addChildSelectedNode = Acrescenta um filho do nó selecionado. O falante, a expressão, a roupa, os tempos, o salto e as listas inteiras de condições e ações são herdados, então escrever a próxima linha de uma cena não obriga a escolher tudo de novo.
+# en: Add a line inside the selected one, as its child.
+docs.dialogues.addChildNode = Adiciona uma fala dentro da selecionada, como filha dela.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: + Sibling
-docs.dialogues.sameButBesideSelected.term = + Irmão
+docs.dialogues.addSiblingNode.term = + Irmão
 
 # Docs: a point in the topic
-# en: The same, but beside the selected node rather than under it. It lands directly below what you had selected, not at the end of the row.
-docs.dialogues.sameButBesideSelected = A mesma coisa, mas ao lado do nó selecionado em vez de abaixo dele. Ele cai logo abaixo do que você tinha selecionado, não no fim da fileira.
+# en: Add a line beside the selected one, directly below it rather than at the end of the row. Beside a line at the top level, it is another at the top level - which is how a new strand starts.
+docs.dialogues.addSiblingNode = Adiciona uma fala ao lado da selecionada, logo abaixo dela em vez de no fim da fileira. Ao lado de uma fala do nível superior, é outra do nível superior - é assim que uma nova linha da conversa começa.
 
 # Docs: a point in the topic
-# en: The text and the tag never carry over. The text is the one thing that is always different, and two nodes sharing a tag would make every jump aimed at the first one ambiguous.
-docs.dialogues.textTagNeverCarry = O texto e a etiqueta nunca são herdados. O texto é a única coisa que é sempre diferente, e dois nós dividindo uma etiqueta deixariam ambíguo qualquer salto destinado ao primeiro.
+# en: A new line takes the selected one's speaker - actor, expression and outfit - and nothing else: conditions, actions and a jump written for one line are as often wrong on the next as right.
+docs.dialogues.newLineTakesSpeaker = Uma fala nova pega quem fala da selecionada - ator, expressão e roupa - e nada mais: condições, ações e um salto escritos para uma fala estão tantas vezes errados na seguinte quanto certos.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Duplicate
+docs.dialogues.duplicateNode.term = Duplicar
+
+# Docs: a point in the topic
+# en: Copy the selected node and everything beneath it, directly below it - the whole of each, conditions and actions too. Ctrl+D in the list. A tag the conversation already has is renamed in the copy, and the copy's own jumps follow it, so no jump becomes ambiguous.
+docs.dialogues.duplicateNode = Copia o nó selecionado e tudo abaixo dele, logo abaixo dele - cada um inteiro, condições e ações também. Ctrl+D na lista. Uma etiqueta que a conversa já tem é renomeada na cópia, e os saltos da própria cópia a acompanham, para que nenhum salto fique ambíguo.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: − Remove
@@ -9609,12 +10817,12 @@ docs.dialogues.optionalLabelSoAnother.term = Etiqueta
 docs.dialogues.optionalLabelSoAnother = Uma etiqueta opcional para que outro nó possa saltar até aqui. Dê uma etiqueta específica a no máximo um nó.
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: Jump
-docs.dialogues.wherePlayGoesAfter.term = Salto
+# en: Then
+docs.dialogues.wherePlayGoesAfter.term = Depois
 
 # Docs: a point in the topic
-# en: Where play goes after this node. Continue, the default, moves to the next node down the list — whether that is a child of this one or something further out. Exit stops the conversation and skips everything below. Jump resumes at whichever node carries the tag you name.
-docs.dialogues.wherePlayGoesAfter = Para onde a execução vai depois deste nó. Continuar, o padrão, segue para o próximo nó da lista, seja ele filho deste ou algo mais acima. Sair encerra a conversa e pula tudo o que está abaixo. Saltar continua no nó que carrega a etiqueta que você indicar.
+# en: Where play goes after this node. Continue, the default, moves to the next node down the list — whether that is a child of this one or something further out. Exit stops the conversation and skips everything below. Jump resumes at whichever node carries the tag you name. Once that node and the lines under it are done, the game says again any line it is under, then that line's lines - so a jump that lands under the very line that jumps goes round for ever. A node at the top level carries on cleanly, and Validate warns about the others.
+docs.dialogues.wherePlayGoesAfter = Para onde a execução vai depois deste nó. Continuar, o padrão, segue para o próximo nó da lista, seja ele filho deste ou algo mais acima. Sair encerra a conversa e pula tudo o que está abaixo. Saltar continua no nó que carrega a etiqueta que você indicar. Quando esse nó e as falas abaixo dele terminam, o jogo diz de novo qualquer fala sob a qual ele está, e depois as falas dela - então um salto que cai sob a própria fala que salta fica dando voltas para sempre. Um nó do nível superior segue sem problema, e Validar avisa sobre os outros.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Jump to
@@ -9633,8 +10841,8 @@ docs.dialogues.veryBottomDialogueContinue = Bem no fim de um diálogo, Continuar
 docs.dialogues.untilinteractionWaitsPlayerTimeout.term = Duração
 
 # Docs: a point in the topic
-# en: UntilInteraction waits for the player; Timeout moves on by itself once the line has finished typing.
-docs.dialogues.untilinteractionWaitsPlayerTimeout = UntilInteraction espera pelo jogador; Timeout avança sozinho assim que a linha termina de ser digitada.
+# en: Until interaction waits for the player; Timeout moves on by itself once the line has finished typing.
+docs.dialogues.untilinteractionWaitsPlayerTimeout = Até interagir espera pelo jogador; Timeout avança sozinho assim que a fala termina de ser digitada.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Timeout (s)
@@ -12143,12 +13351,12 @@ tutorial.firstConversation.sayWhereHappens.hint = Condições de início, depois
 tutorial.firstConversation.writeLine.title = Escreva uma fala
 
 # Tutorials: what the step says
-# en: Add a root node, choose your character as the actor, and give them something to say. One line is a conversation.
-tutorial.firstConversation.writeLine.body = Acrescente um nó raiz, escolha o seu personagem como ator, e dê a ele algo para dizer. Uma fala já é uma conversa.
+# en: Add the first line with + New Node, choose your character as the actor, and give them something to say. One line is a conversation.
+tutorial.firstConversation.writeLine.body = Acrescente a primeira fala com + Novo nó, escolha o seu personagem como ator, e dê a ele algo para dizer. Uma fala já é uma conversa.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Root, then fill in Actor and Text in the Node box.
-tutorial.firstConversation.writeLine.hint = + Raiz, depois preencha Ator e Texto na caixa Nó.
+# en: + New Node, then fill in Actor and Text in the Node box.
+tutorial.firstConversation.writeLine.hint = + Novo nó, depois preencha Ator e Texto na caixa Nó.
 
 # Tutorials: the heading of a step
 # en: The rest of the Node box
@@ -12183,12 +13391,12 @@ tutorial.firstConversation.happensAfterNode.body = Salto decide para onde a exec
 tutorial.firstConversation.makeExitMeanSomething.title = Faça o Sair significar algo
 
 # Tutorials: what the step says
-# en: At the very bottom of the list Continue and Exit are the same thing, because there is nothing left to skip either way. So give Exit something to skip: add one more root node below the choice with a closing line, then set ONE of your two options to Exit. Take that option in game and the conversation stops; take the other and it carries on into the closing line.\n\nGive the closing line an actor as well. Every node that SAYS something needs one — a line with no speaker shows no name, which reads as a fault rather than as a narrator.
-tutorial.firstConversation.makeExitMeanSomething.body = Bem no fim da lista, Continuar e Sair são a mesma coisa, porque de qualquer jeito não sobrou nada para pular. Então dê ao Sair algo para pular: acrescente mais um nó raiz abaixo da escolha com uma fala de encerramento, e então defina UMA das suas duas opções como Sair. Escolha essa opção no jogo e a conversa para; escolha a outra e ela segue até a fala de encerramento.\n\nDê um ator à fala de encerramento também. Todo nó que DIZ algo precisa de um — uma fala sem quem a diga não mostra nome, e isso se lê como um defeito, não como um narrador.
+# en: At the very bottom of the list Continue and Exit are the same thing, because there is nothing left to skip either way. So give Exit something to skip: select the choice and add one more line beside it with + Sibling - the closing line - then set ONE of your two options to Exit. Take that option in game and the conversation stops; take the other and it carries on into the closing line.\n\nGive the closing line an actor as well. Every node that SAYS something needs one — a line with no speaker shows no name, which reads as a fault rather than as a narrator.
+tutorial.firstConversation.makeExitMeanSomething.body = Bem no fim da lista, Continuar e Sair são a mesma coisa, porque de qualquer jeito não sobrou nada para pular. Então dê ao Sair algo para pular: selecione a escolha e acrescente mais uma fala ao lado dela com + Irmão - a fala de encerramento - e então defina UMA das suas duas opções como Sair. Escolha essa opção no jogo e a conversa para; escolha a outra e ela segue até a fala de encerramento.\n\nDê um ator à fala de encerramento também. Todo nó que DIZ algo precisa de um — uma fala sem quem a diga não mostra nome, e isso se lê como um defeito, não como um narrador.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Root for the closing line, then select an option and set Jump to Exit.
-tutorial.firstConversation.makeExitMeanSomething.hint = + Raiz para a fala de encerramento, depois selecione uma opção e defina Salto como Sair.
+# en: Select the choice and press + Sibling for the closing line, then select an option and set Then to Exit.
+tutorial.firstConversation.makeExitMeanSomething.hint = Selecione a escolha e aperte + Irmão para a fala de encerramento, depois selecione uma opção e defina Depois como Sair.
 
 # Tutorials: the heading of a step
 # en: Actions are how a line changes things
@@ -12281,12 +13489,12 @@ tutorial.linesThatChoose.someoneElseRoom.hint = Acrescente um nó, escreva uma f
 tutorial.linesThatChoose.lettingOneOptionSay.title = Deixando uma opção dizer mais
 
 # Tutorials: what the step says
-# en: Last tutorial you gave one option Exit and let the other fall through to your closing line. Both are still one line long. Real dialogue is lopsided — one answer earns a reaction, the other does not — and the branch that reacts still has to end up somewhere, or you write the ending twice.\n\nA TAG is a name you give a node so another node can send play to it. Two fields do it. Tag, on the node being aimed AT: a short word, yours to choose, and it is a label rather than anything the player sees. Jump, on the node doing the aiming: set it to Jump, and a Jump to box appears listing the tags in this dialogue.\n\nBuild it in that order — the tag first, so it is there to be picked. Tag your closing line, the one you added last tutorial, with something like ending. Then take the option you did NOT set to Exit, add a Child under it, and write the reaction that answer deserves. On that child set Jump to Jump, and choose ending in the Jump to box.\n\nPlay now runs the option, the reaction, and then lands on the closing line. The other option still ends where it ended. One ending, written once, reached two ways — and nothing repeats, because every jump here goes forward.
-tutorial.linesThatChoose.lettingOneOptionSay.body = No tutorial passado você deu Sair a uma opção e deixou a outra cair até a sua fala de encerramento. As duas ainda têm uma fala só. Diálogo de verdade é torto — uma resposta merece uma reação, a outra não — e o ramo que reage ainda precisa terminar em algum lugar, ou você escreve o final duas vezes.\n\nUma ETIQUETA é um nome que você dá a um nó para que outro nó possa mandar a execução até ele. Dois campos fazem isso. Etiqueta, no nó que está sendo MIRADO: uma palavra curta, escolhida por você, e é um rótulo interno, não algo que o jogador veja. Salto, no nó que mira: defina-o como Saltar, e aparece uma caixa "Saltar para" listando as etiquetas deste diálogo.\n\nMonte nessa ordem — a etiqueta primeiro, para que ela esteja lá para ser escolhida. Etiquete a sua fala de encerramento, aquela que você acrescentou no tutorial passado, com algo como final. Depois pegue a opção que você NÃO definiu como Sair, acrescente um Filho a ela, e escreva a reação que aquela resposta merece. Nesse filho defina Salto como Saltar, e escolha final na caixa "Saltar para".\n\nAgora a execução roda a opção, a reação, e então aterrissa na fala de encerramento. A outra opção continua terminando onde terminava. Um final, escrito uma vez, alcançado por dois caminhos — e nada se repete, porque todo salto aqui vai para a frente.
+# en: Last tutorial you gave one option Exit and let the other fall through to your closing line. Both are still one line long. Real dialogue is lopsided — one answer earns a reaction, the other does not — and the branch that reacts still has to end up somewhere, or you write the ending twice.\n\nA TAG is a name you give a node so another node can send play to it. Two fields do it. Tag, on the node being aimed AT - tick it to give the node one: a short word, yours to choose, and it is a label rather than anything the player sees. Then, on the node doing the aiming: set it to Jump, and a Jump to box appears listing the tags in this dialogue.\n\nBuild it in that order — the tag first, so it is there to be picked. Tag your closing line, the one you added last tutorial, with something like ending. Then take the option you did NOT set to Exit, add a Child under it, and write the reaction that answer deserves. On that child set Then to Jump, and choose ending in the Jump to box.\n\nPlay now runs the option, the reaction, and then lands on the closing line. The other option still ends where it ended. One ending, written once, reached two ways — and nothing repeats, because every jump here goes forward.
+tutorial.linesThatChoose.lettingOneOptionSay.body = No tutorial passado você deu Sair a uma opção e deixou a outra cair até a sua fala de encerramento. As duas ainda têm uma fala só. Diálogo de verdade é torto — uma resposta merece uma reação, a outra não — e o ramo que reage ainda precisa terminar em algum lugar, ou você escreve o final duas vezes.\n\nUma ETIQUETA é um nome que você dá a um nó para que outro nó possa mandar a execução até ele. Dois campos fazem isso. Etiqueta, no nó que está sendo MIRADO - marque para dar uma ao nó: uma palavra curta, escolhida por você, e é um rótulo interno, não algo que o jogador veja. Depois, no nó que mira: defina-o como Saltar, e aparece uma caixa "Saltar para" listando as etiquetas deste diálogo.\n\nMonte nessa ordem — a etiqueta primeiro, para que ela esteja lá para ser escolhida. Etiquete a sua fala de encerramento, aquela que você acrescentou no tutorial passado, com algo como final. Depois pegue a opção que você NÃO definiu como Sair, acrescente um Filho a ela, e escreva a reação que aquela resposta merece. Nesse filho defina Depois como Saltar, e escolha final na caixa "Saltar para".\n\nAgora a execução roda a opção, a reação, e então aterrissa na fala de encerramento. A outra opção continua terminando onde terminava. Um final, escrito uma vez, alcançado por dois caminhos — e nada se repete, porque todo salto aqui vai para a frente.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Tag the closing line, then + Child on the non-Exit option and set its Jump to that tag.
-tutorial.linesThatChoose.lettingOneOptionSay.hint = Etiquete a fala de encerramento, depois + Filho na opção que não sai e defina o Salto dele para aquela etiqueta.
+# en: Tag the closing line, then + Child on the non-Exit option, set its Then to Jump and pick that tag.
+tutorial.linesThatChoose.lettingOneOptionSay.hint = Etiquete a fala de encerramento, depois + Filho na opção que não sai, defina o Depois dele como Saltar e escolha aquela etiqueta.
 
 # Tutorials: the heading of a step
 # en: Jumping backwards on purpose
@@ -13298,10 +14506,10 @@ validation.pack.notOwnLanguage = A maior parte deste pack não está no alfabeto
 
 # Validation message
 # one: 0, 1 · other: 2, 3, 4, 5…
-# en: This node is one of a Choice's options and has {count} action on start. When an option counts as STARTED is not something the pack can rely on — it may be when the menu is drawn rather than when the player picks it, in which case these run for options nobody chose. Move them to Actions on finish, which happens once the option has been taken.
-validation.dialogue.choiceOptionOnStart.one = Este nó é uma das opções de uma Escolha e tem {count} ação ao começar. Quando uma opção conta como COMEÇADA não é algo em que o pack possa confiar — pode ser quando o menu é desenhado, e não quando o jogador a escolhe, caso em que estas rodam para opções que ninguém escolheu. Mova-as para "Ações ao terminar", que acontece depois que a opção foi tomada.
-# en: This node is one of a Choice's options and has {count} actions on start. When an option counts as STARTED is not something the pack can rely on — it may be when the menu is drawn rather than when the player picks it, in which case these run for options nobody chose. Move them to Actions on finish, which happens once the option has been taken.
-validation.dialogue.choiceOptionOnStart.other = Este nó é uma das opções de uma Escolha e tem {count} ações ao começar. Quando uma opção conta como COMEÇADA não é algo em que o pack possa confiar — pode ser quando o menu é desenhado, e não quando o jogador a escolhe, caso em que estas rodam para opções que ninguém escolheu. Mova-as para "Ações ao terminar", que acontece depois que a opção foi tomada.
+# en: This node is one of a Choice's options and has {count} action on start, which the editor no longer shows on an option, so you cannot see or change it here. It still runs: the moment the player picks this option, just before its actions on finish. Move it to Actions on finish to see it here.
+validation.dialogue.choiceOptionOnStart.one = Este nó é uma das opções de uma Escolha e tem {count} ação ao começar, que o editor não mostra mais numa opção, então aqui você não pode vê-la nem mudá-la. Ela ainda roda: no momento em que o jogador escolhe esta opção, logo antes das ações ao terminar. Mova-a para "Ações ao terminar" para vê-la aqui.
+# en: This node is one of a Choice's options and has {count} actions on start, which the editor no longer shows on an option, so you cannot see or change them here. They still run: the moment the player picks this option, just before its actions on finish. Move them to Actions on finish to see them here.
+validation.dialogue.choiceOptionOnStart.other = Este nó é uma das opções de uma Escolha e tem {count} ações ao começar, que o editor não mostra mais numa opção, então aqui você não pode vê-las nem mudá-las. Elas ainda rodam: no momento em que o jogador escolhe esta opção, logo antes das ações ao terminar. Mova-as para "Ações ao terminar" para vê-las aqui.
 
 # Validation message
 # en: This node is a Choice with no children, so it is a menu offering nothing to pick. If it is meant to be a line, set Kind to Text. Older packs collect these on their own: adding a node with + Child or + Sibling used to copy the kind of the node it came from, so every option under a Choice was saved as a Choice as well.
@@ -13315,13 +14523,21 @@ validation.text.unknownPackVar = O texto usa [PV:{name}], mas nenhuma variável 
 # en: Text has a [PV: that never closes with a ]. The token only counts when it ends in a square bracket, so this one is shown to the player exactly as it was typed.
 validation.text.malformedToken = O texto tem um [PV: que nunca fecha com um ]. O token só conta quando termina em colchete, então este é mostrado ao jogador exatamente como foi digitado.
 
-# Validation message; {name} is what the action names
-# en: '{name}' is not an effect in this pack. A runtime name follows its display name, so renaming one leaves references behind.
-validation.action.unknownSfx = "{name}" não é um efeito deste pack. Um nome em execução acompanha o nome de exibição, então renomear um deixa referências para trás.
+# Validation message; {language} is a language's name, {codes} the tags or tokens, e.g. {PC}  </b>
+# en: The {language} translation has lost {codes}, which the default text has - players of {language} see the line without it.
+validation.translation.lostCodes = A tradução para {language} perdeu {codes}, que o texto padrão tem - quem joga em {language} vê a fala sem isso.
+
+# Validation message; {language} is a language's name, {codes} the tags or tokens
+# en: The {language} translation has {codes}, which the default text does not.
+validation.translation.addedCodes = A tradução para {language} tem {codes}, que o texto padrão não tem.
 
 # Validation message; {name} is what the action names
-# en: '{name}' is not a scene in this pack. A runtime name follows its display name, so renaming one leaves references behind.
-validation.action.unknownScene = "{name}" não é uma cena deste pack. Um nome em execução acompanha o nome de exibição, então renomear uma deixa referências para trás.
+# en: '{name}' is not one of this pack's sound effects. Pick the sound again from the list.
+validation.action.unknownSfx = "{name}" não é um dos efeitos sonoros deste pack. Escolha o som de novo na lista.
+
+# Validation message; {name} is what the action names
+# en: '{name}' is not one of this pack's scenes. Pick the scene again from the list.
+validation.action.unknownScene = "{name}" não é uma das cenas deste pack. Escolha a cena de novo na lista.
 
 # Validation message; {art} is a file, {target} the category the action targets
 # en: '{art}' is animated, and animation is only supported for the Scenes category — this action targets '{target}'. Point it at a scene, or use a still image here.
@@ -13560,6 +14776,10 @@ validation.node.choicePromptEmpty = O texto de um nó de Escolha é a pergunta e
 validation.node.emptyTextNode = O nó de texto não tem fala nem ações, então não tem nada a fazer
 
 # Validation message
+# en: Nobody speaks this line, but it sets an expression or an outfit - was its actor forgotten?
+validation.node.lookWithoutActor = Ninguém diz esta fala, mas ela define uma expressão ou uma roupa - o ator dela foi esquecido?
+
+# Validation message
 # en: Actor '{actor}' isn't defined in this pack, and isn't in the conversation this extends
 validation.node.unknownActor = O ator "{actor}" não está definido neste pack, e não está na conversa que isto estende
 
@@ -13574,6 +14794,14 @@ validation.node.jumpTagEmpty = O modo de salto é Saltar, mas targetTag está va
 # Validation message
 # en: Jump target tag '{tag}' isn't a tag on any node in this dialogue
 validation.node.jumpTagUnknown = A etiqueta de destino do salto "{tag}" não é etiqueta de nenhum nó deste diálogo
+
+# Validation message: a jump lands on a line that is under another line, and the game says that line again. {tag} is the jump's tag, {target} the first words of the line it lands on, {above} of the line that one is under.
+# en: Jump to '{tag}' lands on "{target}", which is under "{above}". After a jump the game goes back over the lines above where it landed: once "{target}" and its lines are done, "{above}" is said again, then its lines - "{target}" among them. To jump there and carry on from it, make "{target}" a top-level line.
+validation.node.jumpReplays = O salto para "{tag}" cai em "{target}", que está sob "{above}". Depois de um salto, o jogo volta a passar pelas falas acima de onde caiu: quando "{target}" e as falas dela terminam, "{above}" é dita de novo, e depois as falas dela - "{target}" entre elas. Para saltar até lá e seguir dali, faça de "{target}" uma fala do nível superior.
+
+# Validation message: the same, when it brings the jumping line round again, so the conversation never ends. Same placeholders.
+# en: Jump to '{tag}' lands on "{target}", which is under "{above}" - and this conversation never ends. After a jump the game goes back over the lines above where it landed, which brings this line round again, so it jumps again, for ever. To jump there and carry on from it, make "{target}" a top-level line.
+validation.node.jumpLoops = O salto para "{tag}" cai em "{target}", que está sob "{above}" - e esta conversa nunca termina. Depois de um salto, o jogo volta a passar pelas falas acima de onde caiu, o que traz esta fala de volta, e ela salta de novo, para sempre. Para saltar até lá e seguir dali, faça de "{target}" uma fala do nível superior.
 
 # Validation message
 # en: Level '{level}' doesn't exist — this condition can never pass
@@ -14084,6 +15312,10 @@ common.group.gamesOwn = As do próprio jogo
 # Heading in a dropdown, over the pack's entries the author has not put in any folder
 # en: Not in a folder
 common.group.notInFolder = Fora de pastas
+
+# Tooltip on the star beside an option a dropdown moved to the top (smart suggestions)
+# en: Suggested: what you are editing mentions it, or something like it
+suggestions.mark.tip = Sugerido: o que você está editando menciona isto, ou algo parecido
 
 # Heading in a dropdown, over the entries that belong under none of the other headings
 # en: Other
@@ -14649,9 +15881,58 @@ common.newFolder = Nova pasta
 # en: New name:
 rename.newName = Novo nome:
 
+# Beside the box in the Rename window, when it renames by the display name
+# en: Display name:
+rename.displayName = Nome de exibição:
+
+# Button over a tab's list
+# en: Rename
+navigator.rename = Renomear
+
+# Tooltip on "Rename" over a tab's list
+# en: Rename the selected item, the same as typing in its Display name box. A selected folder is renamed where it stands.
+navigator.rename.tip = Renomeia o item selecionado, igual a digitar na caixa Nome de exibição dele. Uma pasta selecionada é renomeada onde está.
+
+# Button over a tab's list
+# en: Duplicate
+navigator.duplicate = Duplicar
+
+# Tooltip on "Duplicate" over a tab's list
+# en: Put a copy of the selected item beside it. Rename the copy and its runtime name follows.
+navigator.duplicate.tip = Põe uma cópia do item selecionado ao lado dele. Renomeie a cópia e o nome de execução dela acompanha.
+
+# The key under "+ Add" over a list (the Insert key, as written on keyboards)
+# en: Ins
+# same in this language
+navigator.addKeys = Ins
+
+# First line of the tip on the keyboard sign over a list
+# en: More keys, while the list has the keyboard:
+navigator.moreKeys = Mais teclas, enquanto a lista tem o teclado:
+
+# Line of the tip on the keyboard sign over a list
+# en: Ctrl+C / Ctrl+V: copy and paste
+navigator.moreKeys.copyPaste = Ctrl+C / Ctrl+V: copiar e colar
+
+# Line of the tip on the keyboard sign over a list
+# en: F12: rename, the same as F2
+navigator.moreKeys.f12 = F12: renomear, igual ao F2
+
+# Line of the tip on the keyboard sign over a list
+# en: Ctrl+Z / Ctrl+Y: undo and redo
+navigator.moreKeys.undo = Ctrl+Z / Ctrl+Y: desfazer e refazer
+
+# Tooltip on the pencil button beside a runtime name
+# en: Set a runtime name of your own. Everything in the pack that uses it follows, and from then on it no longer follows the display name.
+rename.editRuntimeName.tip = Define um nome de execução seu. Tudo no pack que o usa acompanha, e dali em diante ele não acompanha mais o nome de exibição.
+
 # Title of the Rename window
 # en: Rename Outfit
 rename.outfit = Renomear roupa
+
+# Title of the Rename window
+# en: Rename Character
+rename.character = Renomear personagem
 
 # Title of the Rename window
 # en: Rename Place
@@ -14830,10 +16111,6 @@ edit.paste = Colar
 # en: Select all
 edit.selectAll = Selecionar tudo
 
-# Tooltip on the UI tab's object tree
-# en: Ins: add object • Del: remove • Ctrl+C/V: copy/paste • Ctrl+D: duplicate
-ui.treeKeys.tip = Ins: adicionar objeto • Del: remover • Ctrl+C/V: copiar/colar • Ctrl+D: duplicar
-
 # en: You have unsaved changes. Save before closing?
 unsaved.beforeClosing = Você tem alterações não salvas. Salvar antes de fechar?
 
@@ -14899,10 +16176,6 @@ quests.reset.discarded = {changes} será descartado, inclusive qualquer condiç�
 # Title of a message box
 # en: Reset quest
 quests.reset.title = Restaurar missão
-
-# Tooltip on the lists in the sidebars
-# en: Del: delete • F2/F12: rename • Ctrl+C/V: copy/paste • Ctrl+D: duplicate
-sidebar.keys.tip = Del: apagar • F2/F12: renomear • Ctrl+C/V: copiar/colar • Ctrl+D: duplicar
 
 # Fills 'That is {risk}.' when saving a pack
 # en: the root of a drive
@@ -15969,9 +17242,231 @@ preview.place.selectedReflection = Reflexo de {npc} — compartilhado por todos 
 # en: NPC: {npc}
 preview.place.selectedNpc = NPC: {npc}
 
-# Tooltip on the grip of the hierarchy in the place preview
-# en: Drag to resize the hierarchy
-preview.place.resizeHierarchy.tip = Arraste para redimensionar a hierarquia
+# In the panel to the right of the place preview, while nothing in the place is selected
+# en: Click an object in the picture or in the hierarchy to move, turn or scale it here.
+preview.place.selectHint = Clique num objeto na imagem ou na hierarquia para movê-lo, girá-lo ou mudar o tamanho dele aqui.
+
+# Tooltip on the mark in a preview's bottom-right corner
+# en: Drag to make the preview bigger or smaller. Double-click for its own size.
+preview.resize.tip = Arraste para aumentar ou diminuir a pré-visualização. Clique duas vezes para o tamanho próprio dela.
+
+# After a panel's help folded to its first line: a link that shows the rest
+# en: more
+help.more = mais
+
+# After a panel's help shown whole: a link that folds it back to one line
+# en: less
+help.less = menos
+
+# Tooltip on the "?" at the end of a panel's title band (EX themes)
+# en: Show or hide this panel's help. Remembered for the panel.
+help.toggle.tip = Mostra ou esconde a ajuda deste painel. Fica lembrado para o painel.
+
+# EX themes: beside the pack's name at the top of the window, while there are changes not saved
+# en: unsaved
+header.unsaved = não salvo
+
+# Tooltip on that
+# en: There are changes not saved yet.
+header.unsaved.tip = Há mudanças ainda não salvas.
+
+# EX themes: a button beside the pack's name at the top of the window
+# en: Save
+header.save = Salvar
+
+# Tooltip on it
+# en: Save the pack (Ctrl+S).
+header.save.tip = Salva o pack (Ctrl+S).
+
+# EX themes: a button beside the pack's name at the top of the window
+# en: Validate
+header.validate = Validar
+
+# Tooltip on it
+# en: Check the pack again and bring its issues up to date (F5).
+header.validate.tip = Confere o pack de novo e atualiza os problemas dele (F5).
+
+# EX themes: a button beside the pack's name at the top of the window
+# en: Export
+header.export = Exportar
+
+# Tooltip on it
+# en: Save, then bundle the pack into the file the game loads (Ctrl+E).
+header.export.tip = Salva e depois empacota o pack no arquivo que o jogo carrega (Ctrl+E).
+
+[Setup: the installer and uninstaller]
+
+# The installer's window title
+# en: ModForge setup
+setup.title = Instalação do ModForge
+
+# Installer, first step: heading over the choice of what to install
+# en: What would you like to install?
+setup.kind.heading = O que você quer instalar?
+
+# The choice that installs the editor and the plugin
+# en: Everything - to make mods
+setup.kind.everything = Tudo - para fazer mods
+
+# Under that choice: what it is for
+# en: The ModForge editor, where you make your own packs and try them out, and the plugin that plays packs in the game.
+setup.kind.everything.help = O editor do ModForge, onde você faz seus próprios packs e os testa, e o plugin que roda os packs no jogo.
+
+# The choice that installs only the plugin, into the game
+# en: Only the plugin - to play mods
+setup.kind.plugin = Só o plugin - para jogar mods
+
+# Under that choice: what it is for
+# en: Only what the game needs to play packs that other people made: ModForge's plugin, in the game's folder. Nothing else is installed. To make packs later, run this again and choose Everything.
+setup.kind.plugin.help = Só o que o jogo precisa para jogar packs que outras pessoas fizeram: o plugin do ModForge, na pasta do jogo. Nada mais é instalado. Para fazer packs depois, rode isto de novo e escolha Tudo.
+
+# Installer, first step: heading
+# en: Where is Starmaker Story?
+setup.game.heading = Onde está o Starmaker Story?
+
+# Installer, first step: the line under the heading
+# en: ModForge puts its plugin in the game's folder, so the game can load mod packs. Pick the folder Starmaker Story is installed in.
+setup.game.help = O ModForge põe o plugin dele na pasta do jogo, para que o jogo possa carregar packs de mods. Escolha a pasta em que o Starmaker Story está instalado.
+
+# Title of the folder picker for the game's folder
+# en: Pick the Starmaker Story folder
+setup.game.pick = Escolha a pasta do Starmaker Story
+
+# Under the game folder box, when it is the game
+# en: This is Starmaker Story.
+setup.game.ok = Este é o Starmaker Story.
+
+# Under the game folder box, when no such folder exists
+# en: There is no folder there.
+setup.game.missing = Não existe pasta aí.
+
+# Under the game folder box, when the folder is not the game. {exe} is the game's program file name
+# en: No Starmaker Story here: the folder has no {exe}.
+setup.game.notGame = Não tem Starmaker Story aqui: a pasta não tem {exe}.
+
+# Under the game folder box, while it is empty
+# en: Pick the folder Starmaker Story is installed in.
+setup.game.empty = Escolha a pasta em que o Starmaker Story está instalado.
+
+# Installer, second step: heading
+# en: Where should ModForge go?
+setup.folder.heading = Onde o ModForge deve ficar?
+
+# Installer, second step: the line under the heading
+# en: The editor's own folder. A folder of its own outside the game is best; the one chosen already is where Windows puts a program installed for you alone.
+setup.folder.help = A pasta própria do editor. O melhor é uma pasta só dele, fora do jogo; a já escolhida é onde o Windows põe um programa instalado só para você.
+
+# Installer, second step, when the folder chosen is inside the game's folder (every word on the page then turns yellow)
+# en: Not recommended: this is inside the game's folder. Updating or reinstalling the game can take ModForge with it, and the game's folder fills with files the game never uses.
+setup.folder.insideGame = Não recomendado: isto fica dentro da pasta do jogo. Atualizar ou reinstalar o jogo pode levar o ModForge junto, e a pasta do jogo se enche de arquivos que o jogo nunca usa.
+
+# Title of the folder picker for where ModForge goes
+# en: Pick where ModForge goes
+setup.folder.pick = Escolha onde o ModForge fica
+
+# A tick box on the installer's second step
+# en: Add ModForge to the Start menu
+setup.shortcut.start = Adicionar o ModForge ao menu Iniciar
+
+# A tick box on the installer's second step
+# en: Put a shortcut to ModForge on the desktop
+setup.shortcut.desktop = Pôr um atalho para o ModForge na área de trabalho
+
+# A button beside a folder box
+# en: Browse…
+setup.browse = Procurar…
+
+# A button: the step before
+# en: Back
+setup.back = Voltar
+
+# A button: the next step
+# en: Next
+setup.next = Avançar
+
+# A button: install
+# en: Install
+setup.install = Instalar
+
+# A button: stop and close the installer
+# en: Cancel
+setup.cancel = Cancelar
+
+# Heading while it installs
+# en: Installing…
+setup.installing = Instalando…
+
+# Heading when it has installed
+# en: ModForge is installed.
+setup.done.heading = O ModForge está instalado.
+
+# Under that heading. {folder} is where the editor went
+# en: The plugin is in the game, and the editor in {folder}. Put mod packs in the game's Mods folder, and they are listed on the game's main menu.
+setup.done.help = O plugin está no jogo, e o editor em {folder}. Ponha os packs de mods na pasta Mods do jogo, e eles aparecem no menu principal do jogo.
+
+# When the game already had BepInEx before ModForge was installed
+# en: The game had BepInEx already, and it is left as it was.
+setup.bepinexKept = O jogo já tinha o BepInEx, e ele ficou como estava.
+
+# A button: start the editor
+# en: Open ModForge
+setup.done.open = Abrir o ModForge
+
+# Heading when only the plugin was installed
+# en: ModForge's plugin is installed.
+setup.done.pluginHeading = O plugin do ModForge está instalado.
+
+# Under that heading
+# en: It is in the game now. Put mod packs (.smspack files) in the game's Mods folder, and they are listed on the game's main menu.
+setup.done.pluginHelp = Ele está no jogo agora. Ponha os packs de mods (arquivos .smspack) na pasta Mods do jogo, e eles aparecem no menu principal do jogo.
+
+# A button: close the window
+# en: Close
+setup.close = Fechar
+
+# Heading when installing or uninstalling failed
+# en: Something went wrong
+setup.failedHeading = Algo deu errado
+
+# Under that heading. {problem} is what Windows said
+# en: Nothing more was done. What happened: {problem}
+setup.failed = Nada mais foi feito. O que aconteceu: {problem}
+
+# When the editor is running from the folder chosen
+# en: ModForge is open from that folder. Close it, then press Install again.
+setup.closeEditor = O ModForge está aberto a partir dessa pasta. Feche-o e clique em Instalar de novo.
+
+# When the game is running
+# en: Starmaker Story is running. Close it, then press Install again.
+setup.closeGame = O Starmaker Story está em execução. Feche-o e clique em Instalar de novo.
+
+# The uninstaller's window title
+# en: Uninstall ModForge
+setup.uninstall.title = Desinstalar o ModForge
+
+# The uninstaller's heading
+# en: Take ModForge off this computer?
+setup.uninstall.heading = Tirar o ModForge deste computador?
+
+# Under that heading. {folder} is where the editor is
+# en: The editor goes from {folder}, with its shortcuts. Your packs and the editor's settings stay.
+setup.uninstall.help = O editor sai de {folder}, com os atalhos dele. Seus packs e as configurações do editor ficam.
+
+# A tick box in the uninstaller
+# en: Also take ModForge's plugin out of the game (the Mods folder stays)
+setup.uninstall.plugin = Tirar também o plugin do ModForge do jogo (a pasta Mods fica)
+
+# Uninstalling when only the plugin was installed: what goes
+# en: ModForge's plugin comes out of the game. Your mod packs, in the game's Mods folder, stay.
+setup.uninstall.pluginOnly = O plugin do ModForge sai do jogo. Seus packs de mods, na pasta Mods do jogo, ficam.
+
+# A button: uninstall
+# en: Uninstall
+setup.uninstall.go = Desinstalar
+
+# Heading when it has uninstalled
+# en: ModForge has been uninstalled.
+setup.uninstall.done = O ModForge foi desinstalado.
 
 # Heading of the object list in the place preview
 # en: Hierarchy
@@ -16488,6 +17983,14 @@ migration.oldGameObjectsCategory = Destinos em "Extra GameObjects", o nome antig
 # One line of the list of what was brought up to date. "SetSpriteFocus" and "CharacterFocus" are names of an action, kept in English
 # en: SetSpriteFocus actions given the action's new name, CharacterFocus
 migration.characterFocus = Ações SetSpriteFocus com o novo nome da ação, CharacterFocus
+
+# In the list of what opening a pack changed: lines whose sound's pattern is written bigger or smaller, now playing that much louder or softer
+# en: lines whose sounds now play louder or softer to match the size their pattern is written in (the text keeps its size)
+migration.cueVolumes = falas cujos sons agora tocam mais alto ou mais baixo conforme o tamanho em que o padrão está escrito (o texto mantém o tamanho)
+
+# In the list of what opening a pack changed: lines with more than one sound, their timing written down so they play as before
+# en: lines with more than one sound given their timing, so each keeps playing when it did
+migration.cueTiming = falas com mais de um som que receberam o seu tempo, para que cada um continue tocando quando tocava
 
 # One line of the list of what was brought up to date
 # en: Given a version to start from ({version})
@@ -18002,6 +19505,36 @@ translatePack.damaged = {count} ficaram com o texto padrão porque a tradução 
 translatePack.nothingDone = Nada foi traduzido.
 
 [Not used by this version]
+
+# en: Frame (Core SpriteRenderer)
+scenes.frameCoreSpriterenderer = Moldura (SpriteRenderer do Core)
+
+# en: Sound (replaces prototype's Trigger)
+scenes.soundReplacesPrototypeS = Som (substitui o Trigger do protótipo)
+
+# en: Mode:
+scenes.mode = Modo:
+
+# en: Starmaker
+scenes.starmaker = Starmaker
+
+# en: Light themes
+docs.themes.lightSlateForestPlum.term = Temas claros
+
+# en: Light, Slate, Forest, Plum, Ocean, Sandstone and Rose.
+docs.themes.lightSlateForestPlum = Claro, Ardósia, Floresta, Ameixa, Oceano, Arenito e Rosa.
+
+# en: Dark themes
+docs.themes.darkMidnightCarbon.term = Temas escuros
+
+# en: Dark, Midnight and Carbon.
+docs.themes.darkMidnightCarbon = Escuro, Meia-noite e Carbono.
+
+# en: Drag to resize the hierarchy
+preview.place.resizeHierarchy.tip = Arraste para redimensionar a hierarquia
+
+# en: Or from a variable:
+dialogues.outfitVariable = Ou de uma variável:
 
 # en: Rename
 npcs.unitRenameFolder = Renomear

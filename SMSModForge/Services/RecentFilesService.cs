@@ -9,9 +9,7 @@ public static class RecentFilesService
 {
     private const int MaxEntries = 10;
 
-    private static readonly string FilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "SMSModForge", "recent.json");
+    private static string FilePath => AppDataFolder.PathOf("recent.json");
 
     public static List<string> Load()
     {

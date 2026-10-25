@@ -78,9 +78,11 @@ namespace SMSModForge.PackPlugin
             hit.color = new Color(0f, 0f, 0f, 0f);
             hit.raycastTarget = true;
 
-            var fill = Part(rect, "Fill", null, new Color(0f, 0f, 0f, 0.55f));
-            var frame = Part(rect, "Frame", Frame(), Color.white);
-            var tick = Part(rect, "Tick", Tick(), Color.white);
+            // The game's navy inside a rounded white frame, ticked in
+            // ModForge's amber (ForgeLook).
+            var fill = Part(rect, "Fill", Frame(filled: true), ForgeLook.WithAlpha(ForgeLook.Raised, 0.95f));
+            var frame = Part(rect, "Frame", Frame(filled: false), Color.white);
+            var tick = Part(rect, "Tick", Tick(), ForgeLook.Accent);
             tick.enabled = on;
 
             var button = host.AddComponent<Button>();
@@ -178,14 +180,34 @@ namespace SMSModForge.PackPlugin
         /// the screen is larger than the menu was made for.</summary>
         private const int Pixels = 72;
 
-        /// <summary>The square outline.</summary>
-        private static Sprite Frame()
+        private static Sprite _square;
+
+        /// <summary>The rounded square: its outline, or filled.</summary>
+        private static Sprite Frame(bool filled)
         {
-            if (_frame != null) return _frame;
-            float centre = Pixels / 2f, outer = centre - 2f, inner = outer - 7f;
-            return _frame = Draw("SMSModForge pack switch frame", (x, y) =>
+            if (filled ? _square != null : _frame != null) return filled ? _square : _frame;
+            const float half = 0.47f, radius = 0.16f, stroke = 0.095f;
+            var sprite = ForgeLook.Shape(filled ? "SMSModForge pack switch fill" : "SMSModForge pack switch frame", Pixels, (x, y) =>
             {
-                float d = Mathf.Max(Mathf.Abs(x - centre), Mathf.Abs(y - centre));
+                float d = ForgeLook.BoxDistance(x - 0.5f, y - 0.5f, half, radius);
+                float inside = Mathf.Clamp01(0.5f - d * Pixels);
+                return filled ? inside : inside - Mathf.Clamp01(0.5f - (d + stroke) * Pixels);
+            });
+            if (filled) _square = sprite; else _frame = sprite;
+            return sprite;
+        }
+
+        private static Sprite _ring;
+
+        /// <summary>A round outline, as thick as the box's: the "?" beside the
+        /// list's heading (<see cref="MenuAboutButton"/>) stands in one.</summary>
+        internal static Sprite Ring()
+        {
+            if (_ring != null) return _ring;
+            float centre = Pixels / 2f, outer = centre - 2f, inner = outer - 6f;
+            return _ring = Draw("SMSModForge menu ring", (x, y) =>
+            {
+                float d = Vector2.Distance(new Vector2(x, y), new Vector2(centre, centre));
                 return Mathf.Clamp01(outer - d + 0.5f) * Mathf.Clamp01(d - inner + 0.5f);
             });
         }

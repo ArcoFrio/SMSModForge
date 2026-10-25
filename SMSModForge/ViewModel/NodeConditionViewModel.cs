@@ -830,6 +830,7 @@ public sealed class NodeConditionViewModel : ObservableObject
             : NodeActionViewModel.CatPath;
         set
         {
+            if (!IsGoActiveFamily) return;   // hidden rows write nothing: see NodeActionViewModel.Category
             if (value == GoCategory) return;
             Model.Params["kind"] = value;
             // The old target belongs to the old category's list; keeping it would
@@ -859,6 +860,7 @@ public sealed class NodeConditionViewModel : ObservableObject
         get => Model.Params.TryGetValue("target", out var t) ? t : "";
         set
         {
+            if (!IsGoActiveFamily) return;   // hidden rows write nothing: see NodeActionViewModel.Category
             if (string.IsNullOrEmpty(value)) Model.Params.Remove("target");
             else Model.Params["target"] = value;
             OnPropertyChanged();
@@ -876,6 +878,7 @@ public sealed class NodeConditionViewModel : ObservableObject
         get => Model.Params.TryGetValue("overlayLevel", out var l) ? l : "";
         set
         {
+            if (!IsGoActiveFamily) return;   // hidden rows write nothing: see NodeActionViewModel.Category
             if (string.IsNullOrEmpty(value)) Model.Params.Remove("overlayLevel");
             else Model.Params["overlayLevel"] = value;
             OnPropertyChanged();

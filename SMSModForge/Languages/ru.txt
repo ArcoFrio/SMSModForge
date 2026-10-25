@@ -76,12 +76,12 @@ game.pack.installedTwice = Установлен дважды, используе
 game.pack.notInYourLanguage = Не переведён на ваш язык
 
 # Beside a pack in the main menu's list: it changes the same thing of the game's (a character, an object in a level...) as {packs}, other packs in the list, so only one of the two changes shows
-# en: Changes the same as {packs}
-game.pack.clashesWith = Меняет то же, что {packs}
+# en: Clashes with {packs}
+game.pack.clashesWith = Конфликтует с {packs}
 
 # Under ModForge's list of packs on the game's main menu, when there are two or more. The packs can be dragged up and down; the one lower in the list is loaded later, so its changes show
-# en: Drag a pack to move it. Lower in the list wins when two packs change the same thing.
-game.menu.orderHint = Перетащите пак, чтобы переместить его. Если два пака меняют одно и то же, побеждает тот, что ниже.
+# en: Drag to reorder: the lower pack wins a clash.
+game.menu.orderHint = Перетаскивайте для порядка: при конфликте побеждает нижний пак.
 
 # The name above the player's own lines in a pack's conversations
 # en: You
@@ -286,6 +286,30 @@ game.gameLines.body.one = {packs} также показывает реплики
 game.gameLines.body.few = {packs} также показывают реплики самой игры на {language} в разговорах, которые они меняют. Если вы играете в игру, переведённую другим модом, два перевода могут смешаться в этих разговорах.
 # en: {packs} also show the game's own lines in {language}, in the conversations they change. If you play the game translated by another mod, the two translations may mix in those conversations.
 game.gameLines.body.many = {packs} также показывают реплики самой игры на {language} в разговорах, которые они меняют. Если вы играете в игру, переведённую другим модом, два перевода могут смешаться в этих разговорах.
+
+# Heading of the small window on the main menu the first time the game starts with ModForge
+# en: ModForge is installed
+game.notice.welcome.title = ModForge установлен
+
+# That window, all it says. {folder} is the folder packs go in, beside the game's own files ("Mods"). The list of packs is at the top left of the main menu
+# en: Put mod packs in the game's {folder} folder. They're listed at the top left, where you can switch them on and off.
+game.notice.welcome.body = Кладите паки модов в папку {folder} игры. Они перечислены слева вверху, там их можно включать и выключать.
+
+# Heading of a list of what a version of ModForge changes for players. {version} is the version, "1.8.0"
+# en: New in {version}:
+game.notice.newIn = Новое в {version}:
+
+# Heading of the window on the main menu after ModForge was updated with something that changes for players. {version} is the new version
+# en: ModForge was updated to {version}
+game.notice.changes.title = ModForge обновлён до {version}
+
+# The button that closes those windows
+# en: Got it
+game.notice.close = Понятно
+
+# What ModForge 1.8.0 changes for players, one line each (\n starts the next)
+# en: Sounds in packs play with the timing and volume their authors set.
+game.notice.news.1.8.0 = Звуки в паках играют с той громкостью и в тот момент, что задали их авторы.
 
 [Where an NPC stands]
 
@@ -2555,6 +2579,42 @@ menu.themes = _Темы
 # en: _Options
 menu.options = Пара_метры
 
+# A heading inside the Options menu, over how the editor looks: themes, the dialogue rows, preview quality
+# en: Look
+menu.heading.look = Внешний вид
+
+# A heading inside the Options menu, over spell checking and suggestions
+# en: Writing
+menu.heading.writing = Текст
+
+# A heading inside the Options menu, over what saving and exporting a pack ask and do
+# en: Saving and exporting
+menu.heading.saving = Сохранение и экспорт
+
+# A heading inside the Options menu, over the game's folder
+# en: The game
+menu.heading.game = Игра
+
+# A heading inside the Options menu, over the editor's own updates
+# en: Updates
+menu.heading.updates = Обновления
+
+# Edit menu item: takes back the last change
+# en: _Undo
+menu.undo = _Отменить
+
+# Keyboard shortcut shown beside "Undo"
+# en: Ctrl+Z
+menu.undo.keys = Ctrl+Z
+
+# Edit menu item: puts back a change that was taken back
+# en: _Redo
+menu.redo = _Вернуть
+
+# Keyboard shortcut shown beside "Redo"
+# en: Ctrl+Y
+menu.redo.keys = Ctrl+Y
+
 # Menu item
 # en: _Confirm changes on save
 menu.confirmChangesSave = _Подтверждать изменения при сохранении
@@ -2562,6 +2622,10 @@ menu.confirmChangesSave = _Подтверждать изменения при с
 # Menu item
 # en: _Spell-check node text
 menu.spellCheckNodeText = Проверять _орфографию текста узлов
+
+# Menu item (Options): a switch
+# en: Smart _suggestions in dropdowns
+menu.smartSuggestions = Умные _подсказки в выпадающих списках
 
 # Menu item
 # en: _Version the pack automatically
@@ -2672,8 +2736,8 @@ menu.pasteItem.keys = Ctrl+V
 menu.pasteItem.tip = Вставить скопированный элемент подходящего типа в список текущей вкладки. Ctrl+V работает, пока список в фокусе.
 
 # Tooltip on "_Rename item…"
-# en: Rename the selected list item's key (F2 or F12 while the list has focus).
-menu.renameItem.tip = Переименовать ключ выбранного элемента списка (F2 или F12, пока список в фокусе).
+# en: Rename the selected list item, the same as typing in its Display name box (F2 or F12 while the list has focus).
+menu.renameItem.tip = Переименовать выбранный элемент списка – так же, как ввод в его поле «Отображаемое имя» (F2 или F12, пока список в фокусе).
 
 # Keyboard shortcut shown beside it ("De_lete item")
 # en: Del
@@ -2694,6 +2758,10 @@ menu.confirmChangesSave.tip = Перед записью modpack.json переч�
 # Tooltip on "_Spell-check node text"
 # en: Underline misspellings using Windows' own spell checker, in the language the lines are written in - the pack's own, or the one you are editing in - both in a node's Text field and down the node list, so mistakes are visible while scanning. A language Windows has no spelling dictionary for is not underlined at all; Windows' language settings can add one. Right-click a squiggle in the Text field for suggestions, to ignore it for this session, or to add the word to your Windows dictionary (the same list Edge and Office use). Turning this off also makes the node list lighter to scroll on very long dialogues. Your choice is remembered between sessions.
 menu.spellCheckNodeText.tip = Подчёркивать опечатки проверкой орфографии Windows на том языке, на котором написаны реплики, — языке пака или том, который вы правите, — и в поле Текст узла, и по списку узлов, чтобы ошибки было видно при просмотре. Язык, для которого у Windows нет словаря, не подчёркивается вовсе; словарь можно добавить в языковых параметрах Windows. Щелчок правой кнопкой по волнистой линии в поле Текст показывает варианты, позволяет пропустить слово в этом сеансе или добавить его в ваш словарь Windows (тот же список, что у Edge и Office). Отключение также облегчает прокрутку списка узлов в очень длинных диалогах. Выбор запоминается между сеансами.
+
+# Tooltip on "Smart _suggestions in dropdowns"
+# en: When you open an empty dropdown, the options that what you are editing makes likely move to the top, marked with a star: in a dialogue that mentions a character anywhere and happens at one place, a Set Active action lists that character's scenes at that place first. Everything in the dialogue, scene or rule you have up counts - the characters it names, its places, its variables, the folder it is in - and it follows your edits as you make them. Nothing is picked or hidden for you, and other dropdowns showing the same list keep their own order. Turn this off to have every list in its usual order.
+menu.smartSuggestions.tip = Когда вы открываете пустой выпадающий список, варианты, которые делает вероятными то, что вы правите, поднимаются наверх и отмечаются звёздочкой: в диалоге, который где-то упоминает персонажа и происходит в одной локации, действие Set Active сначала показывает сцены этого персонажа в этой локации. Учитывается всё в открытом диалоге, сцене или правиле – названные в нём персонажи, его локации, его переменные, папка, где он лежит, – и это следует за вашими правками по ходу дела. Ничего не выбирается и не скрывается за вас, а другие выпадающие списки с тем же списком сохраняют свой порядок. Выключите это, чтобы каждый список был в обычном порядке.
 
 # Tooltip on "_Version the pack automatically"
 # en: Move the pack's version on every save: up a minor when the pack gains something, up a patch when something it already had changes. The major number is never moved for you — that one says "this is a new version of the pack", which is yours to decide. Off means the version only ever changes when you type it.
@@ -2811,6 +2879,247 @@ theme.midnight = Полночь
 # en: Carbon
 theme.carbon = Карбон
 
+# A colour theme, in the Themes menu: warm white, a red accent
+# en: Paper
+theme.paper = Бумага
+
+# A colour theme, in the Themes menu: cool white, an orange accent
+# en: Daylight
+theme.daylight = Дневной свет
+
+# A colour theme, in the Themes menu: dark grey, a blue accent
+# en: Graphite
+theme.graphite = Графит
+
+# A colour theme, in the Themes menu: dark purple-grey, a violet accent (the plant)
+# en: Nightshade
+theme.nightshade = Паслён
+
+# A colour theme, in the Themes menu: slate blue-grey, an icy accent
+# en: Fjord
+theme.fjord = Фьорд
+
+# A colour theme, in the Themes menu: near black, an orange accent
+# en: Ember
+theme.ember = Уголь
+
+# A colour theme, in the Themes menu: deep blue-green, a teal accent
+# en: Deep Sea
+theme.deepsea = Глубина
+
+# A colour theme, in the Themes menu: dark green, a lime accent
+# en: Moss
+theme.moss = Мох
+
+# A colour theme, in the Themes menu: dark red-brown, a rose accent
+# en: Wine
+theme.wine = Вино
+
+# A heading in the Themes menu, over the themes with dark text on light panels
+# en: Light
+theme.group.light = Светлые
+
+# A heading in the Themes menu, over the themes with light text on dark panels
+# en: Dark
+theme.group.dark = Тёмные
+
+# Themes menu: the themes in the editor's original shape, as it was drawn before EX (1.8.0)
+# en: Classic
+theme.group.normal = Классические
+
+# Tooltip on the Themes menu's Classic
+# en: The editor as it was drawn before EX, in light and dark colours. Everything works the same in both.
+theme.group.normal.tip = Редактор таким, каким он рисовался до EX, в светлых и тёмных цветах. В обоих всё работает одинаково.
+
+# Themes menu: the themes that draw the editor another way (EX, as in a game's 'extended' edition; keep EX as is unless your language says it differently)
+# en: EX
+# same in this language
+theme.group.ex = EX
+
+# Tooltip on the Themes menu's EX
+# en: The same editor drawn another way: cut corners, a glow on what you point at, lines to type on, a narrower typeface. Everything works exactly as in Classic; only the look changes.
+theme.group.ex.tip = Тот же редактор, нарисованный иначе: срезанные углы, свечение у того, на что вы наводите, линии для ввода, более узкий шрифт. Всё работает точно так же, как в классических темах; меняется только вид.
+
+# Themes menu: the themes the person made themselves
+# en: Yours
+theme.group.custom = Ваши
+
+# Tooltip on the Themes menu's Yours
+# en: The themes you made, in Your themes…
+theme.group.custom.tip = Темы, которые вы сделали сами, в «Ваши темы…»
+
+# Themes menu item: opens the window where a person makes their own themes
+# en: Your _themes…
+menu.customThemes = Ваши _темы…
+
+# Tooltip on "Your themes…"
+# en: Make themes of your own: pick a look and six colours, and the editor shows each change as you make it.
+menu.customThemes.tip = Сделать свои темы: выберите вид и шесть цветов, и редактор показывает каждое изменение, пока вы его вносите.
+
+# Title of the message shown once, at the first start that moved the person's theme to EX
+# en: A new look
+theme.moved.title = Новый вид
+
+# The message shown once, at the first start of this version: their theme was moved to the EX theme most like it. {from} and {to} are theme names
+# en: ModForge now opens in EX, a new way of drawing the editor: the tabs down the left, every panel a tile, everything else where it was. Your theme, {from}, has become {to}, the EX theme most like it.\n\nThe look you had is under Options > Themes > Classic. Pick it there and it stays - this is the only time the editor changes your theme.
+theme.moved.body = Теперь ModForge открывается в EX — новом способе рисовать редактор: вкладки столбцом слева, каждый блок — плитка, всё остальное на прежних местах. Ваша тема «{from}» стала темой «{to}» — самой похожей на неё темой EX.\n\nПрежний вид находится в меню Параметры > Темы > Классические. Выберите его там, и он останется: это единственный раз, когда редактор меняет вашу тему.
+
+# Title of the window where a person makes their own themes
+# en: Your themes
+theme.custom.title = Ваши темы
+
+# The name a new theme of one's own starts with
+# en: My theme
+theme.custom.newName = Моя тема
+
+# Button in Your themes: a new theme, starting from the one in use
+# en: + New
+theme.custom.new = + Новая
+
+# Tooltip on "+ New" in Your themes
+# en: A new theme of your own, starting from the colours and look of the theme you are using now.
+theme.custom.new.tip = Новая своя тема на основе цветов и вида темы, которую вы используете сейчас.
+
+# Tooltip on Duplicate in Your themes
+# en: A copy of the selected theme, to try a variation without losing it.
+theme.custom.duplicate.tip = Копия выбранной темы, чтобы попробовать вариант, не потеряв её.
+
+# Button in Your themes: deletes the selected theme
+# en: − Remove
+theme.custom.remove = − Удалить
+
+# Tooltip on "− Remove" in Your themes
+# en: Delete the selected theme. If you were using it, the editor goes back to its default theme.
+theme.custom.remove.tip = Удалить выбранную тему. Если вы её использовали, редактор вернётся к теме по умолчанию.
+
+# Shown in Your themes while none of the person's themes is selected (there may be none yet)
+# en: Select one of your themes to change it, or press + New to make one. A new theme starts as a copy of the theme you are using; change its look and colours here, and the editor shows each change at once.
+theme.custom.empty = Выберите одну из своих тем, чтобы изменить её, или нажмите «+ Новая», чтобы сделать новую. Новая тема начинается как копия той, что используется сейчас; меняйте здесь её вид и цвета, и редактор сразу показывает каждое изменение.
+
+# At the bottom of Your themes
+# en: The theme selected here is the one in use, and every change is kept as you make it. Light or dark follows the background, and the editor moves the words towards readable on every colour; if yours leave some hard to read, it says so here.
+theme.custom.note = Выбранная здесь тема – та, что используется, и каждое изменение сохраняется сразу. Светлая или тёмная – решает фон, а редактор делает слова читаемыми на каждом цвете, насколько может; если ваши цвета всё же оставляют что-то трудночитаемым, здесь об этом будет сказано.
+
+# Under the colours in Your themes, when the colours chosen leave some words hard to read
+# en: Some words are hard to read with these colours: no one text colour reads on all of them. Bring Panels and Boxes closer in lightness, or move Text further from both.
+theme.custom.unreadable = С этими цветами часть слов читается плохо: ни один цвет текста не читается на всех них. Сблизьте яркость Блоков и Полей или отодвиньте Текст от обоих.
+
+# Button: closes Your themes
+# en: Close
+theme.custom.close = Закрыть
+
+# Label in Your themes: the theme's name
+# en: Name:
+theme.custom.name = Название:
+
+# Label in Your themes: EX or Classic
+# en: Look:
+theme.custom.look = Вид:
+
+# Tooltip on the Look choice in Your themes
+# en: EX draws the editor its other way - tabs down the left, cut corners, a narrower typeface; Classic, the way it was drawn before EX. Everything works the same in both.
+theme.custom.look.tip = EX рисует редактор по-другому – вкладки столбцом слева, срезанные углы, более узкий шрифт; классический вид – так, как он рисовался до EX. В обоих всё работает одинаково.
+
+# Label in Your themes: the colour behind everything
+# en: Background:
+theme.custom.window = Фон:
+
+# Tooltip on Background in Your themes
+# en: Behind everything: the tab pages. It also decides whether the theme is light or dark.
+theme.custom.window.tip = Позади всего: страницы вкладок. Он же решает, светлая тема или тёмная.
+
+# Label in Your themes: the colour of the bars
+# en: Bars:
+theme.custom.chrome = Панели меню:
+
+# Tooltip on Bars in Your themes
+# en: The menu bar and the tabs' bar.
+theme.custom.chrome.tip = Строка меню и полоса вкладок.
+
+# Label in Your themes: the colour of panels
+# en: Panels:
+theme.custom.surface = Блоки:
+
+# Tooltip on Panels in Your themes
+# en: The panels things are grouped in, and the frames of the lists.
+theme.custom.surface.tip = Блоки, в которых сгруппированы элементы, и рамки списков.
+
+# Label in Your themes: the colour of boxes to type in
+# en: Boxes:
+theme.custom.control = Поля:
+
+# Tooltip on Boxes in Your themes
+# en: Boxes to type in, lists and trees.
+theme.custom.control.tip = Поля для ввода, списки и деревья.
+
+# Label in Your themes: the colour of words
+# en: Text:
+theme.custom.text = Текст:
+
+# Tooltip on Text in Your themes
+# en: The words. Where they would be hard to read on a colour, the editor moves them towards readable on its own.
+theme.custom.text.tip = Слова. Там, где их было бы трудно читать на каком-то цвете, редактор сам делает их читаемыми.
+
+# Label in Your themes: the accent colour
+# en: Accent:
+theme.custom.accent = Акцент:
+
+# Tooltip on Accent in Your themes
+# en: What is selected, focused or open, the main buttons and, in EX, the status bar.
+theme.custom.accent.tip = Выбранное, активное или открытое, главные кнопки и, в EX, строка состояния.
+
+# A theme's name (an EX light theme: cool white with violet)
+# en: Frost
+theme.frost = Иней
+
+# A theme's name (an EX light theme: warm white with magenta)
+# en: Volt
+theme.volt = Вольт
+
+# A theme's name (an EX dark theme: near-black with hot pink-red)
+# en: Neon
+theme.neon = Неон
+
+# A theme's name (an EX dark theme: near-black with cyan)
+# en: Pulse
+theme.pulse = Пульс
+
+# A theme's name (an EX dark theme: near-black with lime green)
+# en: Venom
+theme.venom = Яд
+
+# A theme's name (an EX dark theme: near-black with orange)
+# en: Blaze
+theme.blaze = Пламя
+
+# A theme's name (an EX light theme: cool white with electric blue; the metal)
+# en: Cobalt
+theme.cobalt = Кобальт
+
+# A theme's name (an EX light theme: white with green)
+# en: Mint
+theme.mint = Мята
+
+# A theme's name (an EX light theme: warm white with orange; of the sun)
+# en: Solar
+theme.solar = Солнце
+
+# A theme's name (an EX dark theme: near-black with violet; a ghost)
+# en: Phantom
+theme.phantom = Фантом
+
+# A theme's name (an EX dark theme: near-black navy with bright blue; the deep sea)
+# en: Abyss
+theme.abyss = Бездна
+
+# A theme's name (an EX dark theme: near-black with gold; Latin for gold)
+# en: Aurum
+theme.aurum = Аурум
+
+# A theme's name (an EX dark theme: near-black with emerald green; the stone)
+# en: Jade
+theme.jade = Нефрит
+
 [Status bar]
 
 # Heading
@@ -2829,6 +3138,10 @@ statusBar.issues.one = {count} проблема
 statusBar.issues.few = {count} проблемы
 # en: {count} issues
 statusBar.issues.many = {count} проблем
+
+# Tooltip of that count, which can be clicked
+# en: Show them on the ModForge tab
+statusBar.openIssues.tip = Показать на вкладке ModForge
 
 [ModForge tab]
 
@@ -2903,6 +3216,34 @@ home.showIgnored.many = Показать {count} пропущенных
 # Beside an issue that has been silenced
 # en: ignored
 home.ignoredMark = пропущено
+
+# Where an issue is, in the issues list: an issue about the pack as a whole
+# en: The pack
+issue.place.pack = Пак
+
+# Where an issue is: a dialogue line with no words of its own; {id} is its number
+# en: line {id}
+issue.place.line = реплика {id}
+
+# Where an issue is: the actions a line runs as it starts, before an action's type
+# en: on start
+issue.place.onStart = в начале
+
+# Where an issue is: the actions a line runs as it finishes, before an action's type
+# en: on finish
+issue.place.onFinish = в конце
+
+# Where an issue is: what a dialogue needs before it can start, before a condition's type
+# en: start condition
+issue.place.startCondition = условие запуска
+
+# Where an issue is: what a line needs before it shows, before a condition's type
+# en: condition
+issue.place.condition = условие
+
+# Where an issue is: one of a rule's or a place's actions, before its type
+# en: action
+issue.place.action = действие
 
 # Menu item
 # en: Ignore this issue
@@ -3491,6 +3832,18 @@ characters.resetField.tip4 = Вернуть нижнюю границу диап
 # Tooltip on "Reset"
 # en: Put the high end of the pitch range back to this character's own.
 characters.resetField.tip5 = Вернуть верхнюю границу диапазона высоты этого персонажа.
+
+# Tooltip on "Reset" beside the voice's frequency, for a character the pack made. {value} is a number of characters a second
+# en: Put the frequency back to the default, {value}.
+characters.resetFrequency.packTip = Вернуть частоту по умолчанию, {value}.
+
+# Tooltip on "Reset" beside the low end of the voice's pitch, for a character the pack made. {value} is a pitch such as 1
+# en: Put the low end of the pitch range back to the default, {value}.
+characters.resetPitchMin.packTip = Вернуть нижнюю границу диапазона высоты по умолчанию, {value}.
+
+# Tooltip on "Reset" beside the high end of the voice's pitch, for a character the pack made. {value} is a pitch such as 1.5
+# en: Put the high end of the pitch range back to the default, {value}.
+characters.resetPitchMax.packTip = Вернуть верхнюю границу диапазона высоты по умолчанию, {value}.
 
 # Tooltip on a text box
 # en: How often the blip fires as text types (GC2 Typewriter frequency). Preset value: 45.
@@ -4175,8 +4528,8 @@ enum.JumpMode.Exit = Выход
 enum.JumpMode.Jump = Переход
 
 # How a line advances. Kept as the program's names in the shipped translations, because the tooltip beside the list names them that way.
-# en: UntilInteraction
-enum.NodeDurationMode.UntilInteraction = UntilInteraction
+# en: Until interaction
+enum.NodeDurationMode.UntilInteraction = До действия игрока
 
 # en: Timeout
 enum.NodeDurationMode.Timeout = Timeout
@@ -4286,8 +4639,16 @@ places.runtimeName.tip = По чему условия/действия и цел
 places.namePackItselfUses.tip = Имя, которое использует сам пак, – как среда выполнения называет её в журнале, как её называют сообщения проверки и по чему на неё сослался бы другой пак. Оно пишется за вас из отображаемого имени, так что заполнять нечего; показано потому, что эти три места цитируют его вам. Выделите, чтобы скопировать.
 
 # Tooltip on a text box
-# en: The object the level is built as in game.
-places.objectLevelBuiltGame.tip = Объект, в виде которого уровень строится в игре.
+# en: The object the level is built as in game. This place's is named otherwise than its runtime name - from an older version, where the two were apart. Other mods may find the level by this name.
+places.objectLevelBuiltGame.tip = Объект, в виде которого уровень строится в игре. У этой локации он называется иначе, чем её рабочее имя: это осталось от старой версии, где они были раздельными. Другие моды могут находить уровень по этому имени.
+
+# Beside that box: name the place's game object by its runtime name, as every place made now is
+# en: Use the runtime name
+places.useRuntimeName = Использовать рабочее имя
+
+# Tooltip on that button
+# en: Name the level's object by the runtime name, and keep it following the runtime name from now on, as new places do. Another mod that finds this level by its old name will not find it any more.
+places.useRuntimeName.tip = Назвать объект уровня рабочим именем и дальше менять его вместе с рабочим именем, как у новых локаций. Мод, который находит этот уровень по старому имени, больше его не найдёт.
 
 # Tooltip on "Back sprite (2048×1136):"
 # en: The layer drawn BEHIND — usually the room itself, or the distance seen past it. Sorting order −12 by default. Written to the pack as secondarySprite.
@@ -4608,16 +4969,16 @@ dialogues.overwriteStartConditions = Заменить
 dialogues.dialogueNodes = Узлы
 
 # Text
-# en: Click a node to select it. + Child and + Sibling copy everything from the selected node except its text (and its tag), and land directly under it; + Root takes only the speaker. Naming an actor who has spoken earlier in this conversation brings back the expression and outfit they last wore. Drag a node to move it (with its children): drop on the upper or lower edge of a row to place it before or after as a sibling, drop on the middle to make it a child, or drop below the list to make it a root. Ctrl+C / Ctrl+V copy a node and its children and paste them below the selection; Del removes the selected node. Nodes play top to bottom, exactly as listed.
-dialogues.clickNodeSelectChild = Щёлкните по узлу, чтобы выбрать его. + Дочерний и + Соседний копируют всё из выбранного узла, кроме текста (и тега), и появляются прямо под ним; + Корень берёт только говорящего. Если назвать актёра, который уже говорил в этом разговоре, к нему вернутся выражение и наряд, которые были на нём последними. Перетащите узел, чтобы переместить его (с дочерними): отпустите на верхнем или нижнем краю строки, чтобы поставить его соседним до или после, в середине – чтобы сделать дочерним, или под списком – чтобы сделать корнем. Ctrl+C / Ctrl+V копируют узел с дочерними и вставляют под выделением; Del удаляет выбранный узел. Узлы проигрываются сверху вниз, ровно в порядке списка.
+# en: Click a node to select it. + Sibling adds a line directly below it and + Child one inside it; both take only its speaker (actor, expression and outfit) - Duplicate (Ctrl+D) and copy and paste carry a whole node. Naming an actor who has spoken earlier in this conversation brings back the expression and outfit they last wore. Drag a node to move it (with its children): drop on the upper or lower edge of a row to place it before or after as a sibling, drop on the middle to make it a child, or drop below the list to make it a root. Ctrl+C / Ctrl+V copy a node and its children and paste them below the selection; Del removes the selected node. Nodes play top to bottom, exactly as listed.
+dialogues.clickNodeSelectChild = Щёлкните по узлу, чтобы выбрать его. + Соседний добавляет реплику прямо под ним, а + Дочерний – внутри него; оба берут только его говорящего (актёра, выражение и наряд) – Дублировать (Ctrl+D) и копирование со вставкой переносят узел целиком. Если назвать актёра, который уже говорил в этом разговоре, к нему вернутся выражение и наряд, которые были на нём последними. Перетащите узел, чтобы переместить его (с дочерними): отпустите на верхнем или нижнем краю строки, чтобы поставить его соседним до или после, в середине – чтобы сделать дочерним, или под списком – чтобы сделать корнем. Ctrl+C / Ctrl+V копируют узел с дочерними и вставляют под выделением; Del удаляет выбранный узел. Узлы проигрываются сверху вниз, ровно в порядке списка.
 
 # Text
 # en: Game look
 dialogues.gameLook = Вид игры
 
 # Button
-# en: + Root
-dialogues.addDialogueRootNode = + Корень
+# en: + New Node
+dialogues.addFirstNode = + Новый узел
 
 # Button
 # en: + Child
@@ -4646,6 +5007,47 @@ dialogues.pasteNodeRoot = Вставить новым корнем
 # Box heading
 # en: Preview
 dialogues.preview = Предпросмотр
+
+# In the Preview panel, instead of the picture, when the selected line has nobody with a bust speaking it
+# en: No bust to show: nobody with a bust speaks this line.
+dialogues.preview.noBust = Нечего показать: эту реплику не произносит никто с портретом.
+
+# Tooltip on a panel's title that folds the panel (Identity, Start conditions)
+# en: Fold or unfold. Remembered for this dialogue.
+dialogues.fold.tip = Свернуть или развернуть. Запоминается для этого диалога.
+
+# Folded Identity panel: a short tag with the dialogue's priority
+# en: Priority {value}
+dialogues.fold.priority = Приоритет {value}
+
+# Folded Identity panel: a short tag for "Prioritize this dialogue over vanilla" ticked
+# en: Over the game's
+dialogues.fold.overGame = Выше игрового
+
+# Folded Identity panel: a short tag for "Also leave on the Talk button (replayable)" ticked
+# en: Stays on Talk
+dialogues.fold.staysOnTalk = Остаётся на «Поговорить»
+
+# Folded Identity panel: a short tag for "Wait for Talk button (no auto-play)" ticked
+# en: Waits for Talk
+dialogues.fold.waitsForTalk = Ждёт «Поговорить»
+
+# Folded Identity panel: a short tag for "Queue behind active dialogue" ticked
+# en: Queues
+dialogues.fold.queues = В очереди
+
+# Folded Identity panel: a short tag for "Set for condition debugging (F12)" ticked
+# en: Debugging
+dialogues.fold.debug = Отладка
+
+# Folded Start conditions panel: a group of conditions, as a short tag. {count} is how many conditions it holds
+# one: 1, 21, 31, 41… · few: 2, 3, 4, 22… · many: 0, 5, 6, 7…
+# en: Group of {count}
+dialogues.fold.group.one = Группа из {count}
+# en: Group of {count}
+dialogues.fold.group.few = Группа из {count}
+# en: Group of {count}
+dialogues.fold.group.many = Группа из {count}
 
 # Box heading
 # en: Node
@@ -4688,8 +5090,265 @@ dialogues.tag = Тег:
 dialogues.children = Дочерние:
 
 # Text
-# en: Jump:
-dialogues.jump = Переход:
+# en: Then:
+dialogues.then = Затем:
+
+# On the first button under a line's Outfit: the bust already showing stays
+# en: Keep
+dialogues.outfitKeep = Оставить
+
+# Tooltip on Keep, the first button under a line's Outfit
+# en: This line doesn't change the outfit: the character stays in what they are wearing - what the last line to set an outfit put them in, or their default outfit if no line has.
+dialogues.outfitKeep.tip = Эта реплика не меняет наряд: персонаж остаётся в том, что на нём надето, – в том, что надела на него последняя реплика с нарядом, или в наряде по умолчанию, если такой реплики не было.
+
+# Tick box under a line's outfit buttons: the outfit comes from a pack variable instead, picked from the list beside it
+# en: From a variable
+dialogues.outfitFromVariable = Из переменной
+
+# Tooltip on "From a variable"
+# en: Take the outfit from a pack variable: the line puts the character in whatever the variable holds when it plays. While this is ticked the buttons above stand aside; untick it to go back to them.
+dialogues.outfitFromVariable.tip = Брать наряд из переменной пака: реплика одевает персонажа в то, что лежит в переменной, когда она проигрывается. Пока отмечено, кнопки выше отходят в сторону; снимите отметку, чтобы вернуться к ним.
+
+# Title of the window that sets a face's bust child by hand
+# en: Bust expression child
+characters.expressionChild.edit = Дочерний объект выражения бюста
+
+# Tooltip on the pencil beside a face's bust child
+# en: Set the child name yourself. It follows the face's name until you do, and stays as you set it after.
+characters.expressionChild.edit.tip = Задать имя дочернего объекта самому. Пока вы этого не сделаете, оно следует за именем выражения, а потом остаётся таким, как вы задали.
+
+# Tooltip on a face's picture in the Speech expressions box
+# en: The picture this face shows with on a line's buttons in the Dialogues tab.
+characters.expressionIcon.tip = Картинка, с которой это выражение показывается на кнопках реплики на вкладке «Диалоги».
+
+# Tooltip on a face's picture before the face has a name
+# en: Give the face a name first: its picture is picked from the name, and can be changed after.
+characters.expressionIcon.locked.tip = Сначала дайте выражению имя: его картинка выбирается по имени, и её можно сменить потом.
+
+# Tooltip on the picture of one of the game's faces, or the neutral one
+# en: The picture this face shows with on a line's buttons, picked from its name.
+characters.expressionIcon.fixed.tip = Картинка, с которой это выражение показывается на кнопках реплики, выбранная по его имени.
+
+# A face, as one of the expression pictures is called
+# en: Neutral
+expressionIcon.neutral = Нейтральное
+
+# A face, as one of the expression pictures is called
+# en: Happy
+expressionIcon.happy = Радость
+
+# A face, as one of the expression pictures is called
+# en: Smile
+expressionIcon.smile = Улыбка
+
+# A face, as one of the expression pictures is called
+# en: Laugh
+expressionIcon.laugh = Смех
+
+# A face, as one of the expression pictures is called
+# en: In love
+expressionIcon.love = Влюблённость
+
+# A face, as one of the expression pictures is called
+# en: Flirty
+expressionIcon.flirty = Флирт
+
+# A face, as one of the expression pictures is called
+# en: Smug
+expressionIcon.smug = Самодовольство
+
+# A face, as one of the expression pictures is called
+# en: Talking
+expressionIcon.talk = Речь
+
+# A face, as one of the expression pictures is called
+# en: Sad
+expressionIcon.sad = Грусть
+
+# A face, as one of the expression pictures is called
+# en: Crying
+expressionIcon.cry = Плач
+
+# A face, as one of the expression pictures is called
+# en: Angry
+expressionIcon.angry = Злость
+
+# A face, as one of the expression pictures is called
+# en: Furious
+expressionIcon.furious = Ярость
+
+# A face, as one of the expression pictures is called
+# en: Pouting
+expressionIcon.pout = Обида
+
+# A face, as one of the expression pictures is called
+# en: Disgusted
+expressionIcon.disgusted = Отвращение
+
+# A face, as one of the expression pictures is called
+# en: Surprised
+expressionIcon.surprised = Удивление
+
+# A face, as one of the expression pictures is called
+# en: Shocked
+expressionIcon.shocked = Шок
+
+# A face, as one of the expression pictures is called
+# en: Scared
+expressionIcon.scared = Страх
+
+# A face, as one of the expression pictures is called
+# en: Nervous
+expressionIcon.nervous = Нервозность
+
+# A face, as one of the expression pictures is called
+# en: Embarrassed
+expressionIcon.embarrassed = Смущение
+
+# A face, as one of the expression pictures is called
+# en: Shy
+expressionIcon.shy = Застенчивость
+
+# A face, as one of the expression pictures is called
+# en: Confused
+expressionIcon.confused = Растерянность
+
+# A face, as one of the expression pictures is called
+# en: Thinking
+expressionIcon.thinking = Задумчивость
+
+# A face, as one of the expression pictures is called
+# en: Determined
+expressionIcon.determined = Решимость
+
+# A face, as one of the expression pictures is called
+# en: Bored
+expressionIcon.bored = Скука
+
+# A face, as one of the expression pictures is called
+# en: Sleepy
+expressionIcon.sleepy = Сонливость
+
+# A face, as one of the expression pictures is called
+# en: In pain
+expressionIcon.pained = Боль
+
+# Tooltip on a file path in red: there is no file at it
+# en: There is no file at this path, so the game will have nothing to show or play. Check the name, or choose the file again.
+picker.missing.tip = По этому пути нет файла, так что игре будет нечего показать или проиграть. Проверьте имя или выберите файл заново.
+
+# Beside "(…)" in the In dialogue text panel
+# en: Shows in light blue in game: the game colours what is in brackets.
+dialogues.hintBrackets = В игре светло-голубое: игра красит то, что в скобках.
+
+# Beside an underlined "*sfx*" in the In dialogue text panel
+# en: A sound's pattern plays that sound; the editor underlines it.
+dialogues.hintCues = Шаблон звука проигрывает этот звук; редактор его подчёркивает.
+
+# What the hint above stands beside: a made-up sound pattern, as a line would hold one (asterisks round a sound word)
+# en: *sfx*
+# same in this language
+dialogues.hintCues.sample = *sfx*
+
+# A label in the node editor, over the line's sounds (only while the line has an auto-trigger pattern)
+# en: Sounds:
+cues.label = Звуки:
+
+# Tooltip on 'Sounds:'
+# en: Every sound whose auto-trigger pattern is in this line, in the order they come. Each plays by itself; here you set how loud it is, when it starts, whether its words show and whether it waits for the typewriter. Every setting left as it is costs nothing in the pack.
+cues.label.tip = Каждый звук, чей шаблон автозапуска есть в этой реплике, в том порядке, в каком они идут. Каждый звучит сам по себе; здесь вы задаёте, насколько он громкий, когда начинается, видны ли его слова и ждёт ли он печатную машинку. Каждая настройка, оставленная как есть, ничего не стоит в паке.
+
+# One of a line's sounds: {n} is its place in the line, {pattern} the words that play it
+# en: {n} · {pattern}
+cues.row = {n} · {pattern}
+
+# Label before a line's sound's volume slider
+# en: Volume
+cues.volume = Громкость
+
+# Tooltip on a line's sound's volume
+# en: How loud this sound plays in this line, against the volume the sound itself is set to on the SFX tab: 100 % is as set, more is louder. Leaves the size of the text alone.
+cues.volume.tip = Насколько громко звучит этот звук в этой реплике, относительно громкости, заданной самому звуку на вкладке SFX: 100 % – как задано, больше – громче. Размер текста не трогает.
+
+# Tooltip on the box beside a line's sound's volume slider
+# en: The volume in percent. Type a number here to go past what the slider reaches - up to 500 %.
+cues.volumeBox.tip = Громкость в процентах. Введите здесь число, чтобы выйти за то, до чего достаёт ползунок, – до 500 %.
+
+# After the box with a line's sound's start in it: the unit, seconds
+# en: s
+cues.secondsUnit = с
+
+# Label before a line's sound's start slider
+# en: Starts
+cues.starts = Начало
+
+# Tooltip on a line's sound's start
+# en: When this sound starts, in seconds. The sentence beside it says from what: the first sound counts from when the line appears, each one after it from when the sound before it ends - so 0 is right after it, and below 0 plays over its end. A sound set to wait for the typewriter counts from when the typewriter reaches it.
+cues.starts.tip = Когда начинается этот звук, в секундах. Фраза рядом говорит, от чего: первый звук отсчитывается от появления реплики, каждый следующий – от конца звука перед ним, так что 0 – сразу после него, а меньше 0 – поверх его конца. Звук, который ждёт печатную машинку, отсчитывается от момента, когда она до него доходит.
+
+# Tooltip on the box beside a line's sound's start slider
+# en: The start in seconds; a minus sign makes it play over the end of the sound before it.
+cues.delayBox.tip = Начало в секундах; знак минус заставляет звук играть поверх конца предыдущего.
+
+# A line's first sound, starting at once
+# en: Starts as the line appears.
+cues.startsWithLine = Начинается, когда появляется реплика.
+
+# A line's first sound, starting later: {seconds} is a number
+# en: Starts {seconds} s after the line appears.
+cues.startsAfterLine = Начинается через {seconds} с после появления реплики.
+
+# A line's later sound, starting right after the one before: {pattern} is that sound's words
+# en: Starts as soon as {pattern} ends.
+cues.startsWhenPreviousEnds = Начинается сразу, как закончится {pattern}.
+
+# A line's later sound, starting a while after the one before ends
+# en: Starts {seconds} s after {pattern} ends.
+cues.startsAfterPrevious = Начинается через {seconds} с после конца {pattern}.
+
+# A line's later sound, starting before the one before has ended, so both play at once for a moment
+# en: Starts {seconds} s before {pattern} ends, playing over it.
+cues.startsBeforePreviousEnds = Начинается за {seconds} с до конца {pattern}, звуча поверх.
+
+# A line's sound that waits for the typewriter, starting the moment it is reached
+# en: Starts when the typewriter reaches it.
+cues.startsWhenTyped = Начинается, когда печатная машинка до него доходит.
+
+# A line's sound that waits for the typewriter, starting a while after
+# en: Starts {seconds} s after the typewriter reaches it.
+cues.startsAfterTyped = Начинается через {seconds} с после того, как печатная машинка до него доходит.
+
+# Tick box: a line's sound's words are shown in the line
+# en: Show its words
+cues.showText = Показывать его слова
+
+# Tooltip on 'Show its words'
+# en: Off, the player hears the sound but does not read its pattern: the words are taken out of the line as it shows. The pattern stays in the text here, which is what makes the sound play.
+cues.showText.tip = Если выключено, игрок слышит звук, но не читает его шаблон: слова убираются из реплики при показе. Шаблон остаётся здесь в тексте – именно он и запускает звук.
+
+# Tick box: a line's sound waits until the typewriter shows its words
+# en: When typed
+cues.whenTyped = При печати
+
+# Tooltip on 'When typed'
+# en: Play when the typewriter reaches the pattern, as its words appear, instead of after the sound before it. Works with the words shown or hidden.
+cues.whenTyped.tip = Играть, когда печатная машинка доходит до шаблона, по мере появления его слов, а не после звука перед ним. Работает и с показанными, и со скрытыми словами.
+
+# Button: plays the selected line's sounds as the game will play them
+# en: ▶ Play the line
+cues.play = ▶ Проиграть реплику
+
+# Tooltip on 'Play the line'
+# en: Plays this line's sounds with their volumes and timing, as the game will. The typewriter is timed by the speaker's typing speed. The pack has to be saved in a folder first, for its sound files to be found.
+cues.play.tip = Проиграть звуки этой реплики с их громкостью и таймингом, как это сделает игра. Печатная машинка идёт со скоростью печати говорящего. Сначала пак нужно сохранить в папку, чтобы нашлись его звуковые файлы.
+
+# Button: stops playing the line's sounds
+# en: ■ Stop
+cues.stop = ■ Стоп
+
+# Under an empty Actor box in the Node panel
+# en: Nobody speaking: the line shows with no name, like a narrator's. Pick an actor to give it a speaker.
+dialogues.noSpeakerNote = Никто не говорит: реплика показывается без имени, как у рассказчика. Выберите актёра, чтобы у неё был говорящий.
 
 # Text
 # en: Jump to:
@@ -4716,8 +5375,8 @@ dialogues.actionsStart = Действия при начале
 dialogues.addNodeActionOnStart = + Действие
 
 # Text
-# en: This node is one of a Choice's options, so it has no Actions on start. When an option counts as having started is not something the pack can rely on — it may be the moment the menu is drawn rather than the moment the player picks it, which would run the actions for options nobody chose. Put them on Actions on finish, which happens when the option has actually been taken.
-dialogues.nodeOneChoiceS = Этот узел – один из вариантов Выбора, поэтому у него нет Действий при начале. Пак не может полагаться на то, когда вариант считается начатым, – это может быть момент отрисовки меню, а не выбора игрока, и тогда выполнились бы действия вариантов, которые никто не выбирал. Поместите их в Действия по завершении – они выполняются, когда вариант действительно выбран.
+# en: This node is one of a Choice's options, so it has only Actions on finish. Picking an option goes straight on to the lines under it, and its actions run the moment the player picks it - never for the options nobody chose.
+dialogues.nodeOneChoiceS = Этот узел – один из вариантов Выбора, поэтому у него есть только Действия по завершении. Выбор варианта сразу ведёт к строкам под ним, а его действия выполняются в тот момент, когда игрок его выбирает, – никогда для вариантов, которые никто не выбрал.
 
 # Box heading
 # en: Actions on finish
@@ -4819,17 +5478,21 @@ dialogues.overwriteStartConditions.tip = Заменить эти условия 
 # en: Draw each line in the list the way the game draws it — its own font, outline and drop shadow, the speaker's name in their colour, on a dark panel. Costs the spelling squiggles on those rows; they stay in the Text box below the list.
 dialogues.gameLookSwitch.tip = Рисовать каждую реплику в списке так, как её рисует игра, – её собственным шрифтом, с обводкой и тенью, имя говорящего его цветом, на тёмной панели. Взамен в этих строках пропадают волнистые линии проверки орфографии; они остаются в поле Текст под списком.
 
-# Tooltip on "+ Root"
-# en: Add a new top-level node (no parent). It takes the speaker from the line it follows - actor, expression and outfit - and nothing else, because a root starts a fresh strand.
-dialogues.addDialogueRootNode.tip = Добавить новый узел верхнего уровня (без родителя). Он берёт говорящего из реплики, за которой следует, – актёра, выражение и наряд – и больше ничего, потому что корень начинает новую ветку.
-
 # Tooltip on "+ Child"
-# en: Add a child of the currently-selected node, copying its actor, expression, outfit, conditions and actions — everything but the text and the jump tag.
-dialogues.addDialogueChildNode.tip = Добавить дочерний узел к выбранному, скопировав его актёра, выражение, наряд, условия и действия – всё, кроме текста и тега перехода.
+# en: Add a line inside the selected one, as its child. It takes the speaker - actor, expression and outfit - and nothing else; Duplicate copies a node whole.
+dialogues.addDialogueChildNode.tip = Добавить реплику внутрь выбранной, как её дочернюю. Она берёт говорящего – актёра, выражение и наряд – и больше ничего; Дублировать копирует узел целиком.
 
 # Tooltip on "+ Sibling"
-# en: Add a node directly below the selected one, sharing its parent (or another root when the selection is a root). Copies everything but the text and the jump tag.
-dialogues.addDialogueSiblingNode.tip = Добавить узел сразу под выбранным, с тем же родителем (или ещё один корень, если выбран корень). Копирует всё, кроме текста и тега перехода.
+# en: Add a line directly below the selected one, sharing its parent (or at the top level when the selected line is). It takes the speaker - actor, expression and outfit - and nothing else.
+dialogues.addDialogueSiblingNode.tip = Добавить реплику сразу под выбранной, с тем же родителем (или на верхнем уровне, если выбранная реплика там). Она берёт говорящего – актёра, выражение и наряд – и больше ничего.
+
+# Tooltip on "+ New Node", the only button under an empty conversation's nodes
+# en: Add the conversation's first line. Once it has one, + Sibling and + Child add the rest.
+dialogues.addFirstNode.tip = Добавить первую реплику разговора. Когда она есть, остальные добавляют + Соседний и + Дочерний.
+
+# Tooltip on "Duplicate" under a conversation's nodes
+# en: Copy the selected node and everything under it, directly below it - all of it, conditions, actions and jumps too. A tag the conversation already has is renamed in the copy.
+dialogues.duplicateNode.tip = Скопировать выбранный узел со всем, что под ним, прямо под него – целиком, с условиями, действиями и переходами. Тег, который в разговоре уже есть, в копии переименовывается.
 
 # Tooltip on "− Remove"
 # en: Delete the selected node. References to it from other nodes' children + the root list are scrubbed automatically.
@@ -4931,16 +5594,16 @@ dialogues.fit.spills = Слишком длинно для окна диалог�
 dialogues.optionalOtherNodesCan.tip = Необязательно. Другие узлы могут через Переход → тег продолжить отсюда.
 
 # Tooltip on a dropdown
-# en: Where play goes after this node. Continue moves to the next node down the list, whether or not it is a child. Exit stops the conversation. Jump resumes at the node carrying the tag named below.
-dialogues.wherePlayGoesAfter.tip = Куда идёт действие после этого узла. Продолжить переходит к следующему узлу в списке, дочерний он или нет. Выход останавливает разговор. Переход продолжает с узла, у которого указанный ниже тег.
+# en: Where play goes after this node. Continue moves to the next node down the list, whether or not it is a child. Exit stops the conversation. Jump resumes at the node carrying the tag named below - and once that node and its lines are done, the game says again any line it is under, so a jump lands best on a top-level line.
+dialogues.wherePlayGoesAfter.tip = Куда идёт действие после этого узла. Продолжить переходит к следующему узлу в списке, дочерний он или нет. Выход останавливает разговор. Переход продолжает с узла, у которого указанный ниже тег, – а когда этот узел и его реплики закончатся, игра снова скажет каждую реплику, под которой он стоит, так что переход лучше вести на реплику верхнего уровня.
 
 # Tooltip on a dropdown
 # en: Which tagged node to resume at. It has to match that node's Tag exactly; a tag that does not exist fails silently at runtime, so pick from the list where you can.
 dialogues.whichTaggedNodeResume.tip = С какого узла с тегом продолжить. Должно точно совпадать с Тегом того узла; несуществующий тег во время игры молча не срабатывает, поэтому по возможности выбирайте из списка.
 
 # Tooltip on a dropdown
-# en: How a text line advances. UntilInteraction waits for the player; Timeout auto-advances after the typewriter finishes.
-dialogues.howTextLineAdvances.tip = Как продвигается текстовая реплика. UntilInteraction ждёт игрока; Timeout продвигается сам, когда печать закончилась.
+# en: How a text line advances. Until interaction waits for the player; Timeout auto-advances after the typewriter finishes.
+dialogues.howTextLineAdvances.tip = Как продвигается текстовая реплика. До действия игрока – ждёт игрока; Timeout продвигается сам, когда печатная машинка закончила.
 
 # Tooltip on a text box
 # en: Seconds the line lingers after typing finishes. Decimals OK, e.g. 1.5.
@@ -5024,9 +5687,9 @@ scenes.loop = Повтор
 # en: Volume:
 scenes.volume = Громкость:
 
-# Box heading
-# en: Frame (Core SpriteRenderer)
-scenes.frameCoreSpriterenderer = Рамка (SpriteRenderer в Core)
+# Box heading: one panel for a scene's frame, its sound and whether it counts as a Starmaker photo (Starmaker is the name of the game's photo site)
+# en: Frame, sound and Starmaker
+scenes.frameSoundStarmaker = Рамка, звук и Starmaker
 
 # Text
 # en: Pick a vanilla frame (shipped with the plugin) or supply a custom PNG path. When both are set, the custom frame wins at runtime.
@@ -5040,17 +5703,9 @@ scenes.vanillaFrame = Рамка игры:
 # en: Custom frame:
 scenes.customFrame = Своя рамка:
 
-# Box heading
-# en: Sound (replaces prototype's Trigger)
-scenes.soundReplacesPrototypeS = Звук (заменяет Trigger прототипа)
-
-# Text
-# en: Mode:
-scenes.mode = Режим:
-
-# The heading over the Starmaker photo tick box.
-# en: Starmaker
-scenes.starmaker = Starmaker
+# Label before the dropdown of what a scene does with the sound of the scene it is built from
+# en: Sound:
+scenes.sound = Звук:
 
 # A tick box. Off unless the author turns it on.
 # en: Treat as a Starmaker photo
@@ -5267,6 +5922,10 @@ sfx.stopSfx = ■ Стоп
 # Text
 # en: Plays through the editor's own audio (OGG/WAV/MP3).
 sfx.playsThroughEditorS = Играет через собственный звук редактора (OGG/WAV/MP3).
+
+# Beside the SFX tab's Play button, for a sound with variants: which file just played; {n} of {count}
+# en: Played {file} ({n} of {count})
+sfx.playedVariant = Сыграно: {file} ({n} из {count})
 
 # Box heading
 # en: Auto-trigger patterns
@@ -5777,6 +6436,51 @@ variables.optionalUpperClampInt.tip = Необязательная верхня�
 # en: A note to yourself. Shown only in the editor, never in game.
 variables.noteYourselfShownOnly.tip = Заметка для себя. Видна только в редакторе, никогда в игре.
 
+# Heading of the panel listing every place in the pack that uses the selected variable. {count} is how many places
+# one: 1, 21, 31, 41… · few: 2, 3, 4, 22… · many: 0, 5, 6, 7…
+# en: Where it's used ({count} place)
+variables.uses.heading.one = Где используется ({count} место)
+# en: Where it's used ({count} places)
+variables.uses.heading.few = Где используется ({count} места)
+# en: Where it's used ({count} places)
+variables.uses.heading.many = Где используется ({count} мест)
+
+# The grey line at the top of that panel
+# en: What sets this variable, what reads it, and what shows it in its words. Click one to go there.
+variables.uses.help = Что задаёт эту переменную, что её читает и что показывает её значение в своём тексте. Щёлкните, чтобы перейти туда.
+
+# Shown in that panel when nothing uses the variable
+# en: Nothing in the pack uses it yet.
+variables.uses.none = В паке её пока ничто не использует.
+
+# A short tag before a place that changes the variable (an action)
+# en: Sets
+variables.uses.sets = Задаёт
+
+# Tooltip on "Sets"
+# en: An action here changes the variable.
+variables.uses.sets.tip = Действие здесь меняет переменную.
+
+# A short tag before a place that checks the variable (a condition, or an action that takes from it)
+# en: Reads
+variables.uses.reads = Читает
+
+# Tooltip on "Reads"
+# en: A condition here checks the variable, or an action takes from it.
+variables.uses.reads.tip = Условие здесь проверяет переменную, или действие берёт из неё.
+
+# A short tag before a text that shows the variable's value to the player ([PV:name] in its words)
+# en: Shows
+variables.uses.shows = Показывает
+
+# Tooltip on "Shows"
+# en: Its words show the variable's value to the player.
+variables.uses.shows.tip = Его текст показывает игроку значение переменной.
+
+# Tooltip on one of the places listed
+# en: Go there.
+variables.uses.go.tip = Перейти туда.
+
 [Integration tab]
 
 # Tab
@@ -6057,10 +6761,6 @@ ui.copyNode = Копировать
 # en: Paste
 ui.pasteNode = Вставить
 
-# Button
-# en: Duplicate
-ui.duplicateNode = Дублировать
-
 # Heading
 # en: Preview
 ui.preview = Предпросмотр
@@ -6108,6 +6808,18 @@ ui.shownWhen = Показан, когда
 # Button
 # en: + Condition
 ui.addActiveCondition = + Условие
+
+# Expandable section in a screen's settings: conditions that open the screen by themselves
+# en: Opens when
+ui.opensWhen = Открывается, когда
+
+# Text inside "Opens when", under its conditions
+# en: The screen opens by itself the moment all of these are met - as the game loads, if they already are - and again each time they are met anew. The player can still close it: it stays closed until they stop being met and are met again.
+ui.opensWhen.help = Экран открывается сам в тот момент, когда выполнены все эти условия, – при загрузке игры, если они уже выполнены, – и снова каждый раз, когда они выполняются заново. Игрок всё равно может его закрыть: он остаётся закрытым, пока условия не перестанут выполняться и не выполнятся снова.
+
+# Tooltip on "+ Condition" inside "Opens when"
+# en: With none, the screen opens only when an action opens it, or at the start if it is on screen from the start. With any, it opens by itself the moment they are all met.
+ui.addOpenCondition.tip = Без условий экран открывается, только когда его открывает действие, или в начале, если он на экране с самого начала. С условиями он открывается сам в тот момент, когда выполнены все.
 
 # Expandable section
 # en: When it opens
@@ -6225,10 +6937,6 @@ ui.drawOrderAgainstOther.tip = Порядок отрисовки относит�
 # en: Every UI the game has that can be drawn here. One entry per screen, not per canvas — the main canvas alone holds twenty-one of them.
 ui.everyUIGameHas.tip = Весь UI игры, который можно здесь нарисовать. Одна запись на экран, а не на канвас – только в главном канвасе их двадцать один.
 
-# Keyboard shortcut shown beside it ("+ Object")
-# en: Ins
-ui.addChild.keys = Ins
-
 # Tooltip on "+ Object"
 # en: Add an empty object of your own, inside whatever is selected. (Insert)
 ui.addChild.tip = Добавить свой пустой объект внутрь выбранного. (Insert)
@@ -6244,10 +6952,6 @@ ui.addShapeMenu.tip = Добавить целую форму – окно, ди�
 # Tooltip on "+ Piece"
 # en: Add a ready-made piece - a button, a row, a label - inside whatever is selected.
 ui.addPieceMenu.tip = Добавить готовую деталь – кнопку, строку, подпись – внутрь выбранного.
-
-# Keyboard shortcut shown beside it ("Remove")
-# en: Del
-ui.removeUi.keys = Del
 
 # Tooltip on "Remove"
 # en: Remove an object you added. Objects the game owns cannot be removed - a pack can change them, but not delete them out of the game's screen. (Delete)
@@ -6268,10 +6972,6 @@ ui.pasteNode.keys = Ctrl+V
 # Tooltip on "Paste"
 # en: Paste the copied object inside whatever is selected. Every paste is its own copy, so one Copy can be pasted as many times as you like.
 ui.pasteNode.tip = Вставить скопированный объект внутрь выбранного. Каждая вставка – отдельная копия, так что одно копирование можно вставлять сколько угодно раз.
-
-# Keyboard shortcut shown beside it ("Duplicate")
-# en: Ctrl+D
-ui.duplicateNode.keys = Ctrl+D
 
 # Tooltip on "Duplicate"
 # en: Another one of these, beside it.
@@ -6458,10 +7158,6 @@ quests.textParenthesesDrawnPink = Текст в скобках журнал са
 # Text
 # en: Runtime name:
 quests.runtimeName = Рабочее имя:
-
-# Button
-# en: Rename…
-quests.renameQuest = Переименовать…
 
 # Text
 # en: The game saves a player's progress on this quest under its runtime name. Renaming it after players have the pack starts the quest over for all of them.
@@ -6803,18 +7499,6 @@ saveConfirm.save = Сохранить
 # en: Cancel
 saveConfirm.cancel = Отмена
 
-# Column heading
-# en: What
-saveConfirm.what = Что
-
-# Column heading
-# en: Was
-saveConfirm.was = Было
-
-# Column heading
-# en: Now
-saveConfirm.now = Стало
-
 # Tooltip on "Don't ask again"
 # en: Save straight away from now on. Turn this back on any time under Options → Confirm changes on save.
 saveConfirm.dontAskAgain.tip = Отныне сохранять сразу. Снова включить можно в любой момент: Параметры → Подтверждать изменения при сохранении.
@@ -6823,7 +7507,7 @@ saveConfirm.dontAskAgain.tip = Отныне сохранять сразу. Сн�
 # en: Go back to the editor. Nothing is written; your edits stay exactly as they are.
 saveConfirm.cancel.tip = Вернуться в редактор. Ничего не записывается; ваши правки остаются в точности как есть.
 
-# Tooltip on a change in the list: {0} is where, {1} what it was, {2} what it is now
+# Tooltip on a change in the save prompt's list: {0} is the change in words, {1} what it was, {2} what it is now
 # en: {0}\nwas: {1}\nnow: {2}
 saveConfirm.change.tip = {0}\nбыло: {1}\nстало: {2}
 
@@ -6834,6 +7518,503 @@ diff.wholeManifest = (весь манифест)
 # In the list of what a save changes, for a pack saved for the first time
 # en: no previous saved state to compare against
 diff.nothingToCompare = нет прежнего сохранённого состояния для сравнения
+
+# Heading over the save prompt's changes to the pack's own settings (its version, its id)
+# en: Pack
+diff.kind.pack = Пак
+
+# What a heading in the save prompt's list is: 'Dialogue · Chat at the cave'
+# en: Dialogue
+diff.kind.dialogue = Диалог
+
+# What a heading in the save prompt's list is
+# en: Place
+diff.kind.place = Локация
+
+# What a heading in the save prompt's list is
+# en: Character
+diff.kind.character = Персонаж
+
+# What a heading in the save prompt's list is
+# en: Scene
+diff.kind.scene = Сцена
+
+# What a heading in the save prompt's list is (a sound effect, as the SFX tab holds)
+# en: SFX
+# same in this language
+diff.kind.sound = SFX
+
+# What a heading in the save prompt's list is (a music track)
+# en: Music
+diff.kind.music = Музыка
+
+# What a heading in the save prompt's list is
+# en: Variable
+diff.kind.variable = Переменная
+
+# What a heading in the save prompt's list is (one of the Integration tab's rules)
+# en: Integration rule
+diff.kind.rule = Правило интеграции
+
+# What a heading in the save prompt's list is
+# en: NPC
+# same in this language
+diff.kind.npc = NPC
+
+# What a heading in the save prompt's list is (one of the UI tab's screens)
+# en: UI screen
+diff.kind.screen = Экран UI
+
+# What a heading in the save prompt's list is
+# en: Quest
+diff.kind.quest = Квест
+
+# What a heading in the save prompt's list is
+# en: Wallpaper
+diff.kind.wallpaper = Обои
+
+# What a heading in the save prompt's list is
+# en: Map button
+diff.kind.mapButton = Кнопка карты
+
+# What a heading in the save prompt's list is (one of the game's own places the pack adds to)
+# en: Game place
+diff.kind.gamePlace = Локация игры
+
+# What a heading in the save prompt's list is (lines said in a room)
+# en: Room talk
+diff.kind.roomTalk = Разговор в комнате
+
+# What a heading in the save prompt's list is
+# en: Dialogue folder
+diff.kind.dialogueFolder = Папка диалогов
+
+# What a heading in the save prompt's list is
+# en: Scene folder
+diff.kind.sceneFolder = Папка сцен
+
+# What a heading in the save prompt's list is
+# en: Variable folder
+diff.kind.variableFolder = Папка переменных
+
+# What a heading in the save prompt's list is (a folder on the Integration tab)
+# en: Integration folder
+diff.kind.ruleFolder = Папка интеграции
+
+# What a heading in the save prompt's list is (a folder on any other tab)
+# en: Folder
+diff.kind.folder = Папка
+
+# Save prompt: under a heading, when the whole thing is new
+# en: Added
+diff.recordAdded = Добавлено
+
+# Save prompt: under a heading, when the whole thing is deleted
+# en: Removed
+diff.recordRemoved = Удалено
+
+# Save prompt: under a heading, when the whole thing changed into something else
+# en: Changed
+diff.recordChanged = Изменено
+
+# Save prompt: something new inside a record - {thing} is a line by its words, or an action by when it runs and its type
+# en: New: {thing}
+diff.newThing = Новое: {thing}
+
+# Save prompt: something taken out of a record - {thing} as above
+# en: Removed: {thing}
+diff.removedThing = Удалено: {thing}
+
+# Save prompt: a list in a different order - {what} names the list
+# en: {what}: new order
+diff.newOrder = {what}: новый порядок
+
+# Save prompt, under a changed list of names: only the order changed
+# en: new order
+diff.newOrderShort = новый порядок
+
+# Save prompt, under a changed list of names: the names now in it - {items} is the names
+# en: added {items}
+diff.listAdded = добавлено: {items}
+
+# Save prompt, under a changed list of names: the names no longer in it
+# en: taken out {items}
+diff.listRemoved = убрано: {items}
+
+# Save prompt: a value that was not there before, or is not any more
+# en: not set
+diff.notSet = не задано
+
+# Save prompt: an empty list's value
+# en: nothing
+diff.nothing = ничего
+
+# Save prompt: an empty text's value
+# en: empty
+diff.empty = пусто
+
+# Save prompt: a switched-on value
+# en: yes
+diff.yes = да
+
+# Save prompt: a switched-off value
+# en: no
+diff.no = нет
+
+# Save prompt: something in a list with no name, by its place in the list
+# en: item {n}
+diff.thing.item = элемент {n}
+
+# Save prompt: a choice line that has no words of its own
+# en: a choice with no words
+diff.thing.choice = выбор без слов
+
+# Save prompt: a line that has no words
+# en: a line with no words
+diff.thing.lineNoWords = реплика без слов
+
+# Save prompt: a record's settings, counted
+# one: 1, 21, 31, 41… · few: 2, 3, 4, 22… · many: 0, 5, 6, 7…
+# en: {count} setting
+diff.settings.one = {count} настройка
+# en: {count} settings
+diff.settings.few = {count} настройки
+# en: {count} settings
+diff.settings.many = {count} настроек
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Text
+diff.field.text = Текст
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Actor
+diff.field.actor = Актёр
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Expression
+diff.field.expression = Выражение
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Outfit
+diff.field.outfit = Наряд
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Kind
+diff.field.kind = Тип
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Tag
+diff.field.tag = Тег
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Jump to
+diff.field.jump = Переход к
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Mode
+diff.field.mode = Режим
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Timeout
+diff.field.timeout = Тайм-аут
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Duration
+diff.field.duration = Длительность
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Conditions
+diff.field.conditions = Условия
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Start conditions
+diff.field.startConditions = Условия запуска
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: On start
+diff.field.actionsOnStart = В начале
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: On finish
+diff.field.actionsOnFinish = В конце
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Actions
+diff.field.actions = Действия
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: What follows
+diff.field.children = Что дальше
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Opening lines
+diff.field.rootNodeIds = Начальные реплики
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Lines
+diff.field.nodes = Реплики
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Display name
+diff.field.displayName = Отображаемое имя
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Runtime name
+diff.field.key = Рабочее имя
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Name
+diff.field.name = Имя
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Title
+diff.field.title = Заголовок
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Description
+diff.field.description = Описание
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Label
+diff.field.label = Надпись
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Priority
+diff.field.priority = Приоритет
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Queued
+diff.field.queued = В очереди
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Type
+diff.field.type = Тип
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Settings
+diff.field.params = Настройки
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Starting value
+diff.field.defaultValue = Начальное значение
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Kept in the save
+diff.field.persisted = Хранится в сохранении
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Sound
+diff.field.sound = Звук
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Picture
+diff.field.sceneSprite = Картинка
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Frame
+diff.field.vanillaFrame = Рамка
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Picture file
+diff.field.externalSpritePath = Файл картинки
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Audio file
+diff.field.audioPath = Аудиофайл
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Default volume
+diff.field.defaultVolume = Громкость по умолчанию
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Auto-trigger patterns
+diff.field.textPatterns = Шаблоны автозапуска
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Loop
+diff.field.loop = Повтор
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Picture
+diff.field.spritePath = Картинка
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Unlock conditions
+diff.field.unlockConditions = Условия открытия
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Contents
+diff.field.items = Содержимое
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Folders
+diff.field.folders = Папки
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Dialogues
+diff.field.dialogues = Диалоги
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Scenes
+diff.field.scenes = Сцены
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Places
+diff.field.places = Локации
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Characters
+diff.field.characters = Персонажи
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: SFX
+# same in this language
+diff.field.sfx = SFX
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Music
+diff.field.music = Музыка
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Variables
+diff.field.variables = Переменные
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Integration rules
+diff.field.integrationRules = Правила интеграции
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: NPCs
+diff.field.npcs = NPC
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Quests
+diff.field.quests = Квесты
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Wallpapers
+diff.field.wallpapers = Обои
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: UI screens
+diff.field.uis = Экраны UI
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Map buttons
+diff.field.mapButtons = Кнопки карты
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Tasks
+diff.field.tasks = Задачи
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Name colour
+diff.field.nameColor = Цвет имени
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Outfits
+diff.field.outfits = Наряды
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Expressions
+diff.field.expressions = Выражения
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Default outfit
+diff.field.defaultOutfit = Наряд по умолчанию
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Pronouns
+diff.field.pronouns = Местоимения
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Typewriter
+diff.field.typewriter = Печатная машинка
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Target
+diff.field.target = Цель
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: District
+diff.field.district = Район
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Version
+diff.field.version = Версия
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Pack id
+diff.field.packId = Id пака
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Game version
+diff.field.gameVersion = Версия игры
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: ModForge version
+diff.field.forgeVersion = Версия ModForge
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Silenced issues
+diff.field.ignoredIssues = Заглушённые проблемы
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: When it runs
+diff.field.triggerMode = Когда срабатывает
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Sprite
+diff.field.sprite = Спрайт
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Mask
+diff.field.mask = Маска
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Sorting order
+diff.field.sortingOrder = Порядок отрисовки
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Position
+diff.field.position = Позиция
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Active
+diff.field.active = Активен
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Enabled
+diff.field.enabled = Включено
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Colour
+diff.field.color = Цвет
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Tint
+diff.field.tint = Оттенок
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: GameObjects
+# same in this language
+diff.field.gameObjects = GameObjects
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Components
+diff.field.components = Компоненты
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Internal name
+diff.field.internalName = Внутреннее имя
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Navigator buttons
+diff.field.navigatorButtons = Кнопки навигатора
+
+# Save prompt: a field of the pack's, by the name the editor gives it
+# en: Value
+diff.field.value = Значение
 
 # In the list of what a save changes: a list that was put in a new order
 # one: 1, 21, 31, 41… · few: 2, 3, 4, 22… · many: 0, 5, 6, 7…
@@ -7309,8 +8490,8 @@ docs.modPack.summary = Общая идея, прежде всех подробн
 docs.modPack.packOneFolderEverything = Пак – это одна папка. Всё, что вы создаёте, оказывается в одном файле внутри неё под названием modpack.json, а изображения и звук лежат рядом с этим файлом.
 
 # Docs: a point in the topic
-# en: You never edit modpack.json by hand. The editor writes it, and the tabs across the top are the things it can hold.
-docs.modPack.neverEditModpackJson = Вы никогда не правите modpack.json вручную. Его пишет редактор, а вкладки наверху – это то, что он может содержать.
+# en: You never edit modpack.json by hand. The editor writes it, and its tabs are the things it can hold.
+docs.modPack.neverEditModpackJson = Вы никогда не правите modpack.json вручную. Его пишет редактор, а его вкладки – это то, что он может содержать.
 
 # Docs: a point in the topic
 # en: Export turns the folder into one .smspack file. That is what you hand to players, and the only thing the game reads.
@@ -8168,6 +9349,14 @@ docs.editMenu.title = Меню Правка
 # en: Acts on the selected item in the current tab's list.
 docs.editMenu.summary = Действует на выбранный элемент в списке текущей вкладки.
 
+# Help page Edit menu: a term
+# en: Undo, Redo
+docs.editMenu.undo.term = Отменить, Вернуть
+
+# Help page Edit menu: what Undo and Redo do
+# en: Take back the last change, or put it back - anywhere in the pack. What you type into a box counts as one change, made when you leave the box.
+docs.editMenu.undo = Отменить последнее изменение или вернуть его — в любом месте пака. Всё, что вы вводите в поле, считается одним изменением, сделанным, когда вы покидаете поле.
+
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Duplicate item
 docs.editMenu.copySelectedItemInto.term = Дублировать элемент
@@ -8235,8 +9424,8 @@ docs.editMenu.modforgeTabHasNo = На вкладке ModForge нет списк�
 docs.optionsMenu.title = Меню Параметры
 
 # Docs: the line under the topic's title
-# en: Editor preferences. All of them are remembered between sessions.
-docs.optionsMenu.summary = Настройки редактора. Все запоминаются между сеансами.
+# en: Editor preferences, in groups under headings: Look, Writing, Saving and exporting, The game and Updates. All of them are remembered between sessions.
+docs.optionsMenu.summary = Настройки редактора, по группам под заголовками: Внешний вид, Текст, Сохранение и экспорт, Игра и Обновления. Все запоминаются между сеансами.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Confirm changes on save
@@ -8285,24 +9474,32 @@ docs.optionsMenu.windowsDictionarySharedRest = Словарь Windows общий
 docs.themes.title = Темы
 
 # Docs: the line under the topic's title
-# en: Recolours the editor. Your choice is remembered between sessions.
-docs.themes.summary = Перекрашивает редактор. Ваш выбор запоминается между сеансами.
+# en: Options ▸ Themes recolours the editor, and EX draws it another way. Your choice is remembered between sessions.
+docs.themes.summary = Параметры ▸ Темы перекрашивают редактор, а EX рисует его по-другому. Ваш выбор запоминается между сеансами.
 
-# Docs: the bold label in front of the next text, usually a name on screen
-# en: Light themes
-docs.themes.lightSlateForestPlum.term = Светлые темы
+# Help page Themes: a term
+# en: EX
+docs.themes.ex.term = EX
 
-# Docs: a point in the topic
-# en: Light, Slate, Forest, Plum, Ocean, Sandstone and Rose.
-docs.themes.lightSlateForestPlum = Светлая, Сланец, Лес, Слива, Океан, Песчаник и Роза.
+# Help page Themes: what the EX themes are
+# en: The editor drawn another way: the tabs in a rail down the left with an icon over each, the pack's name heading the page, every panel a tile. Light ones and dark ones; a first start opens in Frost.
+docs.themes.ex = Редактор, нарисованный по-другому: вкладки в полосе слева со значком над каждой, имя пака в заголовке страницы, каждый блок — плитка. Есть светлые и тёмные; при первом запуске открывается Frost.
 
-# Docs: the bold label in front of the next text, usually a name on screen
-# en: Dark themes
-docs.themes.darkMidnightCarbon.term = Тёмные темы
+# Help page Themes: a term
+# en: Classic
+docs.themes.classic.term = Классические
 
-# Docs: a point in the topic
-# en: Dark, Midnight and Carbon.
-docs.themes.darkMidnightCarbon = Тёмная, Полночь и Карбон.
+# Help page Themes: what the Classic themes are
+# en: The editor in the shape it had before EX, in every colour it had, light and dark.
+docs.themes.classic = Редактор в том виде, какой был до EX, во всех прежних цветах, светлых и тёмных.
+
+# Help page Themes: a term
+# en: Your own
+docs.themes.yours.term = Ваши
+
+# Help page Themes: themes the person makes
+# en: Your themes… opens a window to make themes of your own from a few colours. They are listed under Yours once there is one.
+docs.themes.yours = «Ваши темы…» открывает окно, где из нескольких цветов делаются свои темы. Они появляются в разделе «Ваши», как только есть хотя бы одна.
 
 # Docs: a point in the topic
 # en: Themes change the editor only. They have no effect on the pack, or on anything in the game.
@@ -9547,32 +10744,40 @@ docs.dialogues.heading.nodes = Узлы
 docs.dialogues.dialogueTreePlayStarts = Диалог – это дерево. Воспроизведение начинается с первого корня и идёт вниз: выполняется узел, затем его дочерние по порядку, пока что-нибудь не выйдет.
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: + Root
-docs.dialogues.addNodeTopLevel.term = + Корень
+# en: + New Node
+docs.dialogues.addFirstNode.term = + Новый узел
 
 # Docs: a point in the topic
-# en: Add a node at the top level, with no parent.
-docs.dialogues.addNodeTopLevel = Добавить узел на верхний уровень, без родителя.
+# en: Add a conversation's first line. Until it has one, this is the only button.
+docs.dialogues.addFirstNode = Добавить первую реплику разговора. Пока её нет, это единственная кнопка.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: + Child
-docs.dialogues.addChildSelectedNode.term = + Дочерний
+docs.dialogues.addChildNode.term = + Дочерний
 
 # Docs: a point in the topic
-# en: Add a child of the selected node. The speaker, expression, outfit, timing, jump and the whole conditions and actions lists all carry over, so writing the next line of a scene is not a matter of re-picking all of it.
-docs.dialogues.addChildSelectedNode = Добавить дочерний узел к выбранному. Говорящий, выражение, наряд, тайминг, переход и все списки условий и действий переносятся, так что для следующей реплики сцены не нужно выбирать всё заново.
+# en: Add a line inside the selected one, as its child.
+docs.dialogues.addChildNode = Добавить реплику внутрь выбранной, как её дочернюю.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: + Sibling
-docs.dialogues.sameButBesideSelected.term = + Соседний
+docs.dialogues.addSiblingNode.term = + Соседний
 
 # Docs: a point in the topic
-# en: The same, but beside the selected node rather than under it. It lands directly below what you had selected, not at the end of the row.
-docs.dialogues.sameButBesideSelected = То же, но рядом с выбранным узлом, а не под ним. Он встаёт сразу под тем, что было выбрано, а не в конец ряда.
+# en: Add a line beside the selected one, directly below it rather than at the end of the row. Beside a line at the top level, it is another at the top level - which is how a new strand starts.
+docs.dialogues.addSiblingNode = Добавить реплику рядом с выбранной – сразу под ней, а не в конце ряда. Рядом с репликой верхнего уровня это ещё одна реплика верхнего уровня – так начинается новая ветка.
 
 # Docs: a point in the topic
-# en: The text and the tag never carry over. The text is the one thing that is always different, and two nodes sharing a tag would make every jump aimed at the first one ambiguous.
-docs.dialogues.textTagNeverCarry = Текст и тег никогда не переносятся. Текст – единственное, что всегда разное, а два узла с одним тегом сделали бы неоднозначным каждый переход на первый из них.
+# en: A new line takes the selected one's speaker - actor, expression and outfit - and nothing else: conditions, actions and a jump written for one line are as often wrong on the next as right.
+docs.dialogues.newLineTakesSpeaker = Новая реплика берёт у выбранной говорящего – актёра, выражение и наряд – и больше ничего: условия, действия и переход, написанные для одной реплики, для следующей так же часто неверны, как и верны.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Duplicate
+docs.dialogues.duplicateNode.term = Дублировать
+
+# Docs: a point in the topic
+# en: Copy the selected node and everything beneath it, directly below it - the whole of each, conditions and actions too. Ctrl+D in the list. A tag the conversation already has is renamed in the copy, and the copy's own jumps follow it, so no jump becomes ambiguous.
+docs.dialogues.duplicateNode = Скопировать выбранный узел со всем, что под ним, прямо под него – каждый целиком, с условиями и действиями. Ctrl+D в списке. Тег, который в разговоре уже есть, в копии переименовывается, и собственные переходы копии следуют за ним, так что ни один переход не становится неоднозначным.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: − Remove
@@ -9635,12 +10840,12 @@ docs.dialogues.optionalLabelSoAnother.term = Тег
 docs.dialogues.optionalLabelSoAnother = Необязательная метка, чтобы другой узел мог перейти сюда. Любой тег давайте не больше чем одному узлу.
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: Jump
-docs.dialogues.wherePlayGoesAfter.term = Переход
+# en: Then
+docs.dialogues.wherePlayGoesAfter.term = Затем
 
 # Docs: a point in the topic
-# en: Where play goes after this node. Continue, the default, moves to the next node down the list — whether that is a child of this one or something further out. Exit stops the conversation and skips everything below. Jump resumes at whichever node carries the tag you name.
-docs.dialogues.wherePlayGoesAfter = Куда идёт действие после этого узла. Продолжить, по умолчанию, переходит к следующему узлу в списке – дочерний ли это или что-то снаружи. Выход останавливает разговор и пропускает всё, что ниже. Переход продолжает с узла, у которого указанный вами тег.
+# en: Where play goes after this node. Continue, the default, moves to the next node down the list — whether that is a child of this one or something further out. Exit stops the conversation and skips everything below. Jump resumes at whichever node carries the tag you name. Once that node and the lines under it are done, the game says again any line it is under, then that line's lines - so a jump that lands under the very line that jumps goes round for ever. A node at the top level carries on cleanly, and Validate warns about the others.
+docs.dialogues.wherePlayGoesAfter = Куда идёт действие после этого узла. Продолжить, по умолчанию, переходит к следующему узлу в списке – дочерний ли это или что-то снаружи. Выход останавливает разговор и пропускает всё, что ниже. Переход продолжает с узла, у которого указанный вами тег. Когда этот узел и реплики под ним закончатся, игра снова скажет каждую реплику, под которой он стоит, а затем её реплики – поэтому переход, который попадает под ту самую реплику, что переходит, ходит по кругу бесконечно. Узел верхнего уровня продолжается чисто, а Проверить предупреждает об остальных.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Jump to
@@ -9659,8 +10864,8 @@ docs.dialogues.veryBottomDialogueContinue = В самом низу диалог�
 docs.dialogues.untilinteractionWaitsPlayerTimeout.term = Длительность
 
 # Docs: a point in the topic
-# en: UntilInteraction waits for the player; Timeout moves on by itself once the line has finished typing.
-docs.dialogues.untilinteractionWaitsPlayerTimeout = UntilInteraction ждёт игрока; Timeout идёт дальше сам, когда реплика допечатана.
+# en: Until interaction waits for the player; Timeout moves on by itself once the line has finished typing.
+docs.dialogues.untilinteractionWaitsPlayerTimeout = До действия игрока – ждёт игрока; Timeout идёт дальше сам, когда реплика допечатана.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Timeout (s)
@@ -12169,12 +13374,12 @@ tutorial.firstConversation.sayWhereHappens.hint = Условия запуска,
 tutorial.firstConversation.writeLine.title = Написать реплику
 
 # Tutorials: what the step says
-# en: Add a root node, choose your character as the actor, and give them something to say. One line is a conversation.
-tutorial.firstConversation.writeLine.body = Добавьте корневой узел, выберите своего персонажа актёром и дайте ему что-то сказать. Одна реплика – это уже разговор.
+# en: Add the first line with + New Node, choose your character as the actor, and give them something to say. One line is a conversation.
+tutorial.firstConversation.writeLine.body = Добавьте первую реплику кнопкой + Новый узел, выберите своего персонажа актёром и дайте ему что-то сказать. Одна реплика – это уже разговор.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Root, then fill in Actor and Text in the Node box.
-tutorial.firstConversation.writeLine.hint = + Корень, затем заполните Актёр и Текст в разделе Узел.
+# en: + New Node, then fill in Actor and Text in the Node box.
+tutorial.firstConversation.writeLine.hint = + Новый узел, затем заполните Актёр и Текст в разделе Узел.
 
 # Tutorials: the heading of a step
 # en: The rest of the Node box
@@ -12209,12 +13414,12 @@ tutorial.firstConversation.happensAfterNode.body = Переход решает, 
 tutorial.firstConversation.makeExitMeanSomething.title = Пусть у Выхода будет смысл
 
 # Tutorials: what the step says
-# en: At the very bottom of the list Continue and Exit are the same thing, because there is nothing left to skip either way. So give Exit something to skip: add one more root node below the choice with a closing line, then set ONE of your two options to Exit. Take that option in game and the conversation stops; take the other and it carries on into the closing line.\n\nGive the closing line an actor as well. Every node that SAYS something needs one — a line with no speaker shows no name, which reads as a fault rather than as a narrator.
-tutorial.firstConversation.makeExitMeanSomething.body = В самом низу списка Продолжить и Выход – одно и то же, потому что пропускать всё равно нечего. Так дайте Выходу что пропустить: добавьте под выбором ещё один корневой узел с заключительной репликой, затем задайте ОДНОМУ из двух вариантов Выход. Выберите этот вариант в игре – и разговор закончится; выберите другой – и он продолжится до заключительной реплики.\n\nДайте актёра и заключительной реплике. Каждому узлу, который что-то ГОВОРИТ, он нужен: реплика без говорящего не показывает имени, и это выглядит как ошибка, а не как рассказчик.
+# en: At the very bottom of the list Continue and Exit are the same thing, because there is nothing left to skip either way. So give Exit something to skip: select the choice and add one more line beside it with + Sibling - the closing line - then set ONE of your two options to Exit. Take that option in game and the conversation stops; take the other and it carries on into the closing line.\n\nGive the closing line an actor as well. Every node that SAYS something needs one — a line with no speaker shows no name, which reads as a fault rather than as a narrator.
+tutorial.firstConversation.makeExitMeanSomething.body = В самом низу списка Продолжить и Выход – одно и то же, потому что пропускать всё равно нечего. Так дайте Выходу что пропустить: выберите выбор и добавьте рядом с ним ещё одну реплику кнопкой + Соседний – заключительную, – затем задайте ОДНОМУ из двух вариантов Выход. Выберите этот вариант в игре – и разговор закончится; выберите другой – и он продолжится до заключительной реплики.\n\nДайте актёра и заключительной реплике. Каждому узлу, который что-то ГОВОРИТ, он нужен: реплика без говорящего не показывает имени, и это выглядит как ошибка, а не как рассказчик.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Root for the closing line, then select an option and set Jump to Exit.
-tutorial.firstConversation.makeExitMeanSomething.hint = + Корень для заключительной реплики, затем выберите вариант и задайте Переходу значение Выход.
+# en: Select the choice and press + Sibling for the closing line, then select an option and set Then to Exit.
+tutorial.firstConversation.makeExitMeanSomething.hint = Выберите выбор и нажмите + Соседний для заключительной реплики, затем выберите вариант и задайте полю Затем значение Выход.
 
 # Tutorials: the heading of a step
 # en: Actions are how a line changes things
@@ -12307,12 +13512,12 @@ tutorial.linesThatChoose.someoneElseRoom.hint = Добавьте узел, на�
 tutorial.linesThatChoose.lettingOneOptionSay.title = Пусть один вариант скажет больше
 
 # Tutorials: what the step says
-# en: Last tutorial you gave one option Exit and let the other fall through to your closing line. Both are still one line long. Real dialogue is lopsided — one answer earns a reaction, the other does not — and the branch that reacts still has to end up somewhere, or you write the ending twice.\n\nA TAG is a name you give a node so another node can send play to it. Two fields do it. Tag, on the node being aimed AT: a short word, yours to choose, and it is a label rather than anything the player sees. Jump, on the node doing the aiming: set it to Jump, and a Jump to box appears listing the tags in this dialogue.\n\nBuild it in that order — the tag first, so it is there to be picked. Tag your closing line, the one you added last tutorial, with something like ending. Then take the option you did NOT set to Exit, add a Child under it, and write the reaction that answer deserves. On that child set Jump to Jump, and choose ending in the Jump to box.\n\nPlay now runs the option, the reaction, and then lands on the closing line. The other option still ends where it ended. One ending, written once, reached two ways — and nothing repeats, because every jump here goes forward.
-tutorial.linesThatChoose.lettingOneOptionSay.body = В прошлом уроке вы дали одному варианту Выход, а другому позволили провалиться к заключительной реплике. Оба всё ещё в одну реплику. Настоящий диалог неровный – один ответ заслуживает реакции, другой нет, – и ветке с реакцией всё равно нужно куда-то прийти, иначе концовку придётся писать дважды.\n\nТЕГ – это имя, которое вы даёте узлу, чтобы другой узел мог направить туда воспроизведение. Это делают два поля. Тег – у узла, НА который нацеливаются: короткое слово на ваш выбор, метка, которую игрок никогда не видит. Переход – у узла, который нацеливается: выберите режим Переход, и появится поле Перейти к со списком тегов этого диалога.\n\nСтройте в таком порядке – сначала тег, чтобы его было из чего выбрать. Дайте заключительной реплике из прошлого урока тег, например конец. Затем возьмите вариант, которому вы НЕ задали Выход, добавьте под ним Дочерний и напишите реакцию, которой заслуживает этот ответ. У этого дочернего выберите в поле Переход режим Переход, а в поле Перейти к – конец.\n\nТеперь играются вариант, реакция, а затем воспроизведение попадает на заключительную реплику. Другой вариант заканчивается там же, где и раньше. Одна концовка, написанная один раз, достижимая двумя путями, – и ничего не повторяется, потому что каждый переход здесь идёт вперёд.
+# en: Last tutorial you gave one option Exit and let the other fall through to your closing line. Both are still one line long. Real dialogue is lopsided — one answer earns a reaction, the other does not — and the branch that reacts still has to end up somewhere, or you write the ending twice.\n\nA TAG is a name you give a node so another node can send play to it. Two fields do it. Tag, on the node being aimed AT - tick it to give the node one: a short word, yours to choose, and it is a label rather than anything the player sees. Then, on the node doing the aiming: set it to Jump, and a Jump to box appears listing the tags in this dialogue.\n\nBuild it in that order — the tag first, so it is there to be picked. Tag your closing line, the one you added last tutorial, with something like ending. Then take the option you did NOT set to Exit, add a Child under it, and write the reaction that answer deserves. On that child set Then to Jump, and choose ending in the Jump to box.\n\nPlay now runs the option, the reaction, and then lands on the closing line. The other option still ends where it ended. One ending, written once, reached two ways — and nothing repeats, because every jump here goes forward.
+tutorial.linesThatChoose.lettingOneOptionSay.body = В прошлом уроке вы дали одному варианту Выход, а другому позволили провалиться к заключительной реплике. Оба всё ещё в одну реплику. Настоящий диалог неровный – один ответ заслуживает реакции, другой нет, – и ветке с реакцией всё равно нужно куда-то прийти, иначе концовку придётся писать дважды.\n\nТЕГ – это имя, которое вы даёте узлу, чтобы другой узел мог направить туда воспроизведение. Это делают два поля. Тег – у узла, НА который нацеливаются: отметьте его, чтобы дать узлу тег; короткое слово на ваш выбор, метка, которую игрок никогда не видит. Затем – у узла, который нацеливается: выберите режим Переход, и появится поле Перейти к со списком тегов этого диалога.\n\nСтройте в таком порядке – сначала тег, чтобы его было из чего выбрать. Дайте заключительной реплике из прошлого урока тег, например конец. Затем возьмите вариант, которому вы НЕ задали Выход, добавьте под ним Дочерний и напишите реакцию, которой заслуживает этот ответ. У этого дочернего выберите в поле Затем режим Переход, а в поле Перейти к – конец.\n\nТеперь играются вариант, реакция, а затем воспроизведение попадает на заключительную реплику. Другой вариант заканчивается там же, где и раньше. Одна концовка, написанная один раз, достижимая двумя путями, – и ничего не повторяется, потому что каждый переход здесь идёт вперёд.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Tag the closing line, then + Child on the non-Exit option and set its Jump to that tag.
-tutorial.linesThatChoose.lettingOneOptionSay.hint = Дайте тег заключительной реплике, затем + Дочерний у варианта без Выхода и направьте его Переход на этот тег.
+# en: Tag the closing line, then + Child on the non-Exit option, set its Then to Jump and pick that tag.
+tutorial.linesThatChoose.lettingOneOptionSay.hint = Дайте тег заключительной реплике, затем + Дочерний у варианта без Выхода, задайте его полю Затем режим Переход и выберите этот тег.
 
 # Tutorials: the heading of a step
 # en: Jumping backwards on purpose
@@ -13324,12 +14529,12 @@ validation.pack.notOwnLanguage = Бо́льшая часть этого пака
 
 # Validation message
 # one: 1, 21, 31, 41… · few: 2, 3, 4, 22… · many: 0, 5, 6, 7…
-# en: This node is one of a Choice's options and has {count} action on start. When an option counts as STARTED is not something the pack can rely on — it may be when the menu is drawn rather than when the player picks it, in which case these run for options nobody chose. Move them to Actions on finish, which happens once the option has been taken.
-validation.dialogue.choiceOptionOnStart.one = Этот узел — один из вариантов Выбора, и у него {count} действие при начале. Когда вариант считается НАЧАТЫМ — на это пак полагаться не может: возможно, когда меню рисуется, а не когда игрок его выбирает, и тогда эти действия выполняются для вариантов, которые никто не выбрал. Перенесите их в «Действия по завершении» — они выполняются, когда вариант уже выбран.
-# en: This node is one of a Choice's options and has {count} actions on start. When an option counts as STARTED is not something the pack can rely on — it may be when the menu is drawn rather than when the player picks it, in which case these run for options nobody chose. Move them to Actions on finish, which happens once the option has been taken.
-validation.dialogue.choiceOptionOnStart.few = Этот узел — один из вариантов Выбора, и у него {count} действия при начале. Когда вариант считается НАЧАТЫМ — на это пак полагаться не может: возможно, когда меню рисуется, а не когда игрок его выбирает, и тогда эти действия выполняются для вариантов, которые никто не выбрал. Перенесите их в «Действия по завершении» — они выполняются, когда вариант уже выбран.
-# en: This node is one of a Choice's options and has {count} actions on start. When an option counts as STARTED is not something the pack can rely on — it may be when the menu is drawn rather than when the player picks it, in which case these run for options nobody chose. Move them to Actions on finish, which happens once the option has been taken.
-validation.dialogue.choiceOptionOnStart.many = Этот узел — один из вариантов Выбора, и у него {count} действий при начале. Когда вариант считается НАЧАТЫМ — на это пак полагаться не может: возможно, когда меню рисуется, а не когда игрок его выбирает, и тогда эти действия выполняются для вариантов, которые никто не выбрал. Перенесите их в «Действия по завершении» — они выполняются, когда вариант уже выбран.
+# en: This node is one of a Choice's options and has {count} action on start, which the editor no longer shows on an option, so you cannot see or change it here. It still runs: the moment the player picks this option, just before its actions on finish. Move it to Actions on finish to see it here.
+validation.dialogue.choiceOptionOnStart.one = Этот узел – один из вариантов Выбора, и у него {count} действие при начале, которое редактор больше не показывает у варианта, поэтому здесь его нельзя ни увидеть, ни изменить. Оно всё равно выполняется: в момент, когда игрок выбирает этот вариант, прямо перед его действиями по завершении. Перенесите его в Действия по завершении, чтобы видеть его здесь.
+# en: This node is one of a Choice's options and has {count} actions on start, which the editor no longer shows on an option, so you cannot see or change them here. They still run: the moment the player picks this option, just before its actions on finish. Move them to Actions on finish to see them here.
+validation.dialogue.choiceOptionOnStart.few = Этот узел – один из вариантов Выбора, и у него {count} действия при начале, которые редактор больше не показывает у варианта, поэтому здесь их нельзя ни увидеть, ни изменить. Они всё равно выполняются: в момент, когда игрок выбирает этот вариант, прямо перед его действиями по завершении. Перенесите их в Действия по завершении, чтобы видеть их здесь.
+# en: This node is one of a Choice's options and has {count} actions on start, which the editor no longer shows on an option, so you cannot see or change them here. They still run: the moment the player picks this option, just before its actions on finish. Move them to Actions on finish to see them here.
+validation.dialogue.choiceOptionOnStart.many = Этот узел – один из вариантов Выбора, и у него {count} действий при начале, которые редактор больше не показывает у варианта, поэтому здесь их нельзя ни увидеть, ни изменить. Они всё равно выполняются: в момент, когда игрок выбирает этот вариант, прямо перед его действиями по завершении. Перенесите их в Действия по завершении, чтобы видеть их здесь.
 
 # Validation message
 # en: This node is a Choice with no children, so it is a menu offering nothing to pick. If it is meant to be a line, set Kind to Text. Older packs collect these on their own: adding a node with + Child or + Sibling used to copy the kind of the node it came from, so every option under a Choice was saved as a Choice as well.
@@ -13343,13 +14548,21 @@ validation.text.unknownPackVar = В тексте есть [PV:{name}], но пе
 # en: Text has a [PV: that never closes with a ]. The token only counts when it ends in a square bracket, so this one is shown to the player exactly as it was typed.
 validation.text.malformedToken = В тексте есть [PV:, который так и не закрывается ]. Токен срабатывает, только если заканчивается квадратной скобкой, поэтому этот показывается игроку ровно так, как был набран.
 
-# Validation message; {name} is what the action names
-# en: '{name}' is not an effect in this pack. A runtime name follows its display name, so renaming one leaves references behind.
-validation.action.unknownSfx = «{name}» — не эффект этого пака. Рабочее имя следует за отображаемым, так что переименование оставляет ссылки позади.
+# Validation message; {language} is a language's name, {codes} the tags or tokens, e.g. {PC}  </b>
+# en: The {language} translation has lost {codes}, which the default text has - players of {language} see the line without it.
+validation.translation.lostCodes = В переводе на {language} потеряно: {codes} – в тексте по умолчанию это есть, и игроки на {language} видят реплику без этого.
+
+# Validation message; {language} is a language's name, {codes} the tags or tokens
+# en: The {language} translation has {codes}, which the default text does not.
+validation.translation.addedCodes = В переводе на {language} есть {codes} – в тексте по умолчанию этого нет.
 
 # Validation message; {name} is what the action names
-# en: '{name}' is not a scene in this pack. A runtime name follows its display name, so renaming one leaves references behind.
-validation.action.unknownScene = «{name}» — не сцена этого пака. Рабочее имя следует за отображаемым, так что переименование оставляет ссылки позади.
+# en: '{name}' is not one of this pack's sound effects. Pick the sound again from the list.
+validation.action.unknownSfx = «{name}» — не один из звуковых эффектов этого пака. Выберите звук из списка заново.
+
+# Validation message; {name} is what the action names
+# en: '{name}' is not one of this pack's scenes. Pick the scene again from the list.
+validation.action.unknownScene = «{name}» — не одна из сцен этого пака. Выберите сцену из списка заново.
 
 # Validation message; {art} is a file, {target} the category the action targets
 # en: '{art}' is animated, and animation is only supported for the Scenes category — this action targets '{target}'. Point it at a scene, or use a still image here.
@@ -13588,6 +14801,10 @@ validation.node.choicePromptEmpty = Текст узла Выбора — это 
 validation.node.emptyTextNode = У узла Текст нет ни реплики, ни действий, так что ему нечего делать
 
 # Validation message
+# en: Nobody speaks this line, but it sets an expression or an outfit - was its actor forgotten?
+validation.node.lookWithoutActor = Эту реплику никто не говорит, но она задаёт выражение или наряд – может, забыли указать актёра?
+
+# Validation message
 # en: Actor '{actor}' isn't defined in this pack, and isn't in the conversation this extends
 validation.node.unknownActor = Актёр «{actor}» не определён ни в этом паке, ни в разговоре, который он расширяет
 
@@ -13602,6 +14819,14 @@ validation.node.jumpTagEmpty = Режим перехода — «Переход�
 # Validation message
 # en: Jump target tag '{tag}' isn't a tag on any node in this dialogue
 validation.node.jumpTagUnknown = Тега цели перехода «{tag}» нет ни у одного узла этого диалога
+
+# Validation message: a jump lands on a line that is under another line, and the game says that line again. {tag} is the jump's tag, {target} the first words of the line it lands on, {above} of the line that one is under.
+# en: Jump to '{tag}' lands on "{target}", which is under "{above}". After a jump the game goes back over the lines above where it landed: once "{target}" and its lines are done, "{above}" is said again, then its lines - "{target}" among them. To jump there and carry on from it, make "{target}" a top-level line.
+validation.node.jumpReplays = Переход к «{tag}» попадает на «{target}», а она стоит под «{above}». После перехода игра снова проходит реплики над местом, куда попала: когда «{target}» и её реплики закончатся, «{above}» прозвучит снова, а затем её реплики – и «{target}» среди них. Чтобы перейти туда и продолжить оттуда, сделайте «{target}» репликой верхнего уровня.
+
+# Validation message: the same, when it brings the jumping line round again, so the conversation never ends. Same placeholders.
+# en: Jump to '{tag}' lands on "{target}", which is under "{above}" - and this conversation never ends. After a jump the game goes back over the lines above where it landed, which brings this line round again, so it jumps again, for ever. To jump there and carry on from it, make "{target}" a top-level line.
+validation.node.jumpLoops = Переход к «{tag}» попадает на «{target}», а она стоит под «{above}», – и этот разговор никогда не закончится. После перехода игра снова проходит реплики над местом, куда попала, это снова приводит к этой реплике, она снова переходит, и так без конца. Чтобы перейти туда и продолжить оттуда, сделайте «{target}» репликой верхнего уровня.
 
 # Validation message
 # en: Level '{level}' doesn't exist — this condition can never pass
@@ -14112,6 +15337,10 @@ common.group.gamesOwn = Из самой игры
 # Heading in a dropdown, over the pack's entries the author has not put in any folder
 # en: Not in a folder
 common.group.notInFolder = Вне папок
+
+# Tooltip on the star beside an option a dropdown moved to the top (smart suggestions)
+# en: Suggested: what you are editing mentions it, or something like it
+suggestions.mark.tip = Предложено: то, что вы правите, упоминает это или что-то похожее
 
 # Heading in a dropdown, over the entries that belong under none of the other headings
 # en: Other
@@ -14689,9 +15918,58 @@ common.newFolder = Новая папка
 # en: New name:
 rename.newName = Новое имя:
 
+# Beside the box in the Rename window, when it renames by the display name
+# en: Display name:
+rename.displayName = Отображаемое имя:
+
+# Button over a tab's list
+# en: Rename
+navigator.rename = Переименовать
+
+# Tooltip on "Rename" over a tab's list
+# en: Rename the selected item, the same as typing in its Display name box. A selected folder is renamed where it stands.
+navigator.rename.tip = Переименовать выбранный элемент – так же, как ввод в его поле «Отображаемое имя». Выбранная папка переименовывается там, где стоит.
+
+# Button over a tab's list
+# en: Duplicate
+navigator.duplicate = Дублировать
+
+# Tooltip on "Duplicate" over a tab's list
+# en: Put a copy of the selected item beside it. Rename the copy and its runtime name follows.
+navigator.duplicate.tip = Положить копию выбранного элемента рядом с ним. Переименуйте копию – её рабочее имя последует.
+
+# The key under "+ Add" over a list (the Insert key, as written on keyboards)
+# en: Ins
+# same in this language
+navigator.addKeys = Ins
+
+# First line of the tip on the keyboard sign over a list
+# en: More keys, while the list has the keyboard:
+navigator.moreKeys = Ещё клавиши, пока у списка клавиатура:
+
+# Line of the tip on the keyboard sign over a list
+# en: Ctrl+C / Ctrl+V: copy and paste
+navigator.moreKeys.copyPaste = Ctrl+C / Ctrl+V: копировать и вставить
+
+# Line of the tip on the keyboard sign over a list
+# en: F12: rename, the same as F2
+navigator.moreKeys.f12 = F12: переименовать, как F2
+
+# Line of the tip on the keyboard sign over a list
+# en: Ctrl+Z / Ctrl+Y: undo and redo
+navigator.moreKeys.undo = Ctrl+Z / Ctrl+Y: отменить и повторить
+
+# Tooltip on the pencil button beside a runtime name
+# en: Set a runtime name of your own. Everything in the pack that uses it follows, and from then on it no longer follows the display name.
+rename.editRuntimeName.tip = Задать своё рабочее имя. Всё в паке, что его использует, последует за ним, и с этого момента оно больше не следует за отображаемым именем.
+
 # Title of the Rename window
 # en: Rename Outfit
 rename.outfit = Переименовать наряд
+
+# Title of the Rename window
+# en: Rename Character
+rename.character = Переименовать персонажа
 
 # Title of the Rename window
 # en: Rename Place
@@ -14874,10 +16152,6 @@ edit.paste = Вставить
 # en: Select all
 edit.selectAll = Выделить всё
 
-# Tooltip on the UI tab's object tree
-# en: Ins: add object • Del: remove • Ctrl+C/V: copy/paste • Ctrl+D: duplicate
-ui.treeKeys.tip = Ins: добавить объект • Del: удалить • Ctrl+C/V: копировать/вставить • Ctrl+D: дублировать
-
 # en: You have unsaved changes. Save before closing?
 unsaved.beforeClosing = У вас есть несохранённые изменения. Сохранить перед закрытием?
 
@@ -14945,10 +16219,6 @@ quests.reset.discarded = Будет отброшено: {changes}, включа�
 # Title of a message box
 # en: Reset quest
 quests.reset.title = Сбросить квест
-
-# Tooltip on the lists in the sidebars
-# en: Del: delete • F2/F12: rename • Ctrl+C/V: copy/paste • Ctrl+D: duplicate
-sidebar.keys.tip = Del: удалить • F2/F12: переименовать • Ctrl+C/V: копировать/вставить • Ctrl+D: дублировать
 
 # Fills 'That is {risk}.' when saving a pack
 # en: the root of a drive
@@ -16031,9 +17301,231 @@ preview.place.selectedReflection = Отражение {npc} — общее дл�
 # en: NPC: {npc}
 preview.place.selectedNpc = NPC: {npc}
 
-# Tooltip on the grip of the hierarchy in the place preview
-# en: Drag to resize the hierarchy
-preview.place.resizeHierarchy.tip = Перетащите, чтобы изменить размер иерархии
+# In the panel to the right of the place preview, while nothing in the place is selected
+# en: Click an object in the picture or in the hierarchy to move, turn or scale it here.
+preview.place.selectHint = Щёлкните объект на картинке или в иерархии, чтобы перемещать, поворачивать или масштабировать его здесь.
+
+# Tooltip on the mark in a preview's bottom-right corner
+# en: Drag to make the preview bigger or smaller. Double-click for its own size.
+preview.resize.tip = Перетащите, чтобы увеличить или уменьшить предпросмотр. Двойной щелчок — его собственный размер.
+
+# After a panel's help folded to its first line: a link that shows the rest
+# en: more
+help.more = ещё
+
+# After a panel's help shown whole: a link that folds it back to one line
+# en: less
+help.less = свернуть
+
+# Tooltip on the "?" at the end of a panel's title band (EX themes)
+# en: Show or hide this panel's help. Remembered for the panel.
+help.toggle.tip = Показать или скрыть справку этого блока. Запоминается для блока.
+
+# EX themes: beside the pack's name at the top of the window, while there are changes not saved
+# en: unsaved
+header.unsaved = не сохранено
+
+# Tooltip on that
+# en: There are changes not saved yet.
+header.unsaved.tip = Есть ещё не сохранённые изменения.
+
+# EX themes: a button beside the pack's name at the top of the window
+# en: Save
+header.save = Сохранить
+
+# Tooltip on it
+# en: Save the pack (Ctrl+S).
+header.save.tip = Сохранить пак (Ctrl+S).
+
+# EX themes: a button beside the pack's name at the top of the window
+# en: Validate
+header.validate = Проверить
+
+# Tooltip on it
+# en: Check the pack again and bring its issues up to date (F5).
+header.validate.tip = Заново проверить пак и обновить список его проблем (F5).
+
+# EX themes: a button beside the pack's name at the top of the window
+# en: Export
+header.export = Экспорт
+
+# Tooltip on it
+# en: Save, then bundle the pack into the file the game loads (Ctrl+E).
+header.export.tip = Сохранить, затем упаковать пак в файл, который загружает игра (Ctrl+E).
+
+[Setup: the installer and uninstaller]
+
+# The installer's window title
+# en: ModForge setup
+setup.title = Установка ModForge
+
+# Installer, first step: heading over the choice of what to install
+# en: What would you like to install?
+setup.kind.heading = Что установить?
+
+# The choice that installs the editor and the plugin
+# en: Everything - to make mods
+setup.kind.everything = Всё — чтобы делать моды
+
+# Under that choice: what it is for
+# en: The ModForge editor, where you make your own packs and try them out, and the plugin that plays packs in the game.
+setup.kind.everything.help = Редактор ModForge, где вы делаете свои паки и пробуете их, и плагин, который проигрывает паки в игре.
+
+# The choice that installs only the plugin, into the game
+# en: Only the plugin - to play mods
+setup.kind.plugin = Только плагин — чтобы играть в моды
+
+# Under that choice: what it is for
+# en: Only what the game needs to play packs that other people made: ModForge's plugin, in the game's folder. Nothing else is installed. To make packs later, run this again and choose Everything.
+setup.kind.plugin.help = Только то, что нужно игре, чтобы играть в паки, сделанные другими: плагин ModForge в папке игры. Больше ничего не устанавливается. Чтобы потом делать паки, запустите это снова и выберите «Всё».
+
+# Installer, first step: heading
+# en: Where is Starmaker Story?
+setup.game.heading = Где Starmaker Story?
+
+# Installer, first step: the line under the heading
+# en: ModForge puts its plugin in the game's folder, so the game can load mod packs. Pick the folder Starmaker Story is installed in.
+setup.game.help = ModForge кладёт свой плагин в папку игры, чтобы игра могла загружать паки модов. Выберите папку, в которую установлена Starmaker Story.
+
+# Title of the folder picker for the game's folder
+# en: Pick the Starmaker Story folder
+setup.game.pick = Выберите папку Starmaker Story
+
+# Under the game folder box, when it is the game
+# en: This is Starmaker Story.
+setup.game.ok = Это Starmaker Story.
+
+# Under the game folder box, when no such folder exists
+# en: There is no folder there.
+setup.game.missing = Такой папки нет.
+
+# Under the game folder box, when the folder is not the game. {exe} is the game's program file name
+# en: No Starmaker Story here: the folder has no {exe}.
+setup.game.notGame = Здесь нет Starmaker Story: в папке нет {exe}.
+
+# Under the game folder box, while it is empty
+# en: Pick the folder Starmaker Story is installed in.
+setup.game.empty = Выберите папку, в которую установлена Starmaker Story.
+
+# Installer, second step: heading
+# en: Where should ModForge go?
+setup.folder.heading = Куда поставить ModForge?
+
+# Installer, second step: the line under the heading
+# en: The editor's own folder. A folder of its own outside the game is best; the one chosen already is where Windows puts a program installed for you alone.
+setup.folder.help = Собственная папка редактора. Лучше всего отдельная папка вне игры; уже выбранная — это то место, куда Windows ставит программу, установленную только для вас.
+
+# Installer, second step, when the folder chosen is inside the game's folder (every word on the page then turns yellow)
+# en: Not recommended: this is inside the game's folder. Updating or reinstalling the game can take ModForge with it, and the game's folder fills with files the game never uses.
+setup.folder.insideGame = Не рекомендуется: это внутри папки игры. Обновление или переустановка игры может унести ModForge с собой, а папка игры заполнится файлами, которые игра никогда не использует.
+
+# Title of the folder picker for where ModForge goes
+# en: Pick where ModForge goes
+setup.folder.pick = Выберите, куда поставить ModForge
+
+# A tick box on the installer's second step
+# en: Add ModForge to the Start menu
+setup.shortcut.start = Добавить ModForge в меню «Пуск»
+
+# A tick box on the installer's second step
+# en: Put a shortcut to ModForge on the desktop
+setup.shortcut.desktop = Положить ярлык ModForge на рабочий стол
+
+# A button beside a folder box
+# en: Browse…
+setup.browse = Обзор…
+
+# A button: the step before
+# en: Back
+setup.back = Назад
+
+# A button: the next step
+# en: Next
+setup.next = Далее
+
+# A button: install
+# en: Install
+setup.install = Установить
+
+# A button: stop and close the installer
+# en: Cancel
+setup.cancel = Отмена
+
+# Heading while it installs
+# en: Installing…
+setup.installing = Установка…
+
+# Heading when it has installed
+# en: ModForge is installed.
+setup.done.heading = ModForge установлен.
+
+# Under that heading. {folder} is where the editor went
+# en: The plugin is in the game, and the editor in {folder}. Put mod packs in the game's Mods folder, and they are listed on the game's main menu.
+setup.done.help = Плагин в игре, а редактор в {folder}. Кладите паки модов в папку Mods игры — они появятся в её главном меню.
+
+# When the game already had BepInEx before ModForge was installed
+# en: The game had BepInEx already, and it is left as it was.
+setup.bepinexKept = В игре уже был BepInEx, и он остался как был.
+
+# A button: start the editor
+# en: Open ModForge
+setup.done.open = Открыть ModForge
+
+# Heading when only the plugin was installed
+# en: ModForge's plugin is installed.
+setup.done.pluginHeading = Плагин ModForge установлен.
+
+# Under that heading
+# en: It is in the game now. Put mod packs (.smspack files) in the game's Mods folder, and they are listed on the game's main menu.
+setup.done.pluginHelp = Теперь он в игре. Кладите паки модов (файлы .smspack) в папку Mods игры — они появятся в её главном меню.
+
+# A button: close the window
+# en: Close
+setup.close = Закрыть
+
+# Heading when installing or uninstalling failed
+# en: Something went wrong
+setup.failedHeading = Что-то пошло не так
+
+# Under that heading. {problem} is what Windows said
+# en: Nothing more was done. What happened: {problem}
+setup.failed = Больше ничего не сделано. Что произошло: {problem}
+
+# When the editor is running from the folder chosen
+# en: ModForge is open from that folder. Close it, then press Install again.
+setup.closeEditor = ModForge открыт из этой папки. Закройте его и снова нажмите «Установить».
+
+# When the game is running
+# en: Starmaker Story is running. Close it, then press Install again.
+setup.closeGame = Starmaker Story запущена. Закройте её и снова нажмите «Установить».
+
+# The uninstaller's window title
+# en: Uninstall ModForge
+setup.uninstall.title = Удаление ModForge
+
+# The uninstaller's heading
+# en: Take ModForge off this computer?
+setup.uninstall.heading = Удалить ModForge с этого компьютера?
+
+# Under that heading. {folder} is where the editor is
+# en: The editor goes from {folder}, with its shortcuts. Your packs and the editor's settings stay.
+setup.uninstall.help = Редактор удаляется из {folder} вместе с ярлыками. Ваши паки и настройки редактора остаются.
+
+# A tick box in the uninstaller
+# en: Also take ModForge's plugin out of the game (the Mods folder stays)
+setup.uninstall.plugin = Также убрать плагин ModForge из игры (папка Mods остаётся)
+
+# Uninstalling when only the plugin was installed: what goes
+# en: ModForge's plugin comes out of the game. Your mod packs, in the game's Mods folder, stay.
+setup.uninstall.pluginOnly = Плагин ModForge убирается из игры. Ваши паки модов в папке Mods игры остаются.
+
+# A button: uninstall
+# en: Uninstall
+setup.uninstall.go = Удалить
+
+# Heading when it has uninstalled
+# en: ModForge has been uninstalled.
+setup.uninstall.done = ModForge удалён.
 
 # Heading of the object list in the place preview
 # en: Hierarchy
@@ -16566,6 +18058,14 @@ migration.oldGameObjectsCategory = Цели в «Extra GameObjects», старо
 # One line of the list of what was brought up to date. "SetSpriteFocus" and "CharacterFocus" are names of an action, kept in English
 # en: SetSpriteFocus actions given the action's new name, CharacterFocus
 migration.characterFocus = Действия SetSpriteFocus получили новое название действия — CharacterFocus
+
+# In the list of what opening a pack changed: lines whose sound's pattern is written bigger or smaller, now playing that much louder or softer
+# en: lines whose sounds now play louder or softer to match the size their pattern is written in (the text keeps its size)
+migration.cueVolumes = реплики, чьи звуки теперь звучат громче или тише в зависимости от размера, которым написан их шаблон (текст сохраняет свой размер)
+
+# In the list of what opening a pack changed: lines with more than one sound, their timing written down so they play as before
+# en: lines with more than one sound given their timing, so each keeps playing when it did
+migration.cueTiming = реплики с несколькими звуками, которым записали их тайминг, чтобы каждый звучал тогда же, когда раньше
 
 # One line of the list of what was brought up to date
 # en: Given a version to start from ({version})
@@ -18136,6 +19636,36 @@ translatePack.damaged = Оставлено с текстом по умолчан
 translatePack.nothingDone = Ничего не переведено.
 
 [Not used by this version]
+
+# en: Frame (Core SpriteRenderer)
+scenes.frameCoreSpriterenderer = Рамка (SpriteRenderer в Core)
+
+# en: Sound (replaces prototype's Trigger)
+scenes.soundReplacesPrototypeS = Звук (заменяет Trigger прототипа)
+
+# en: Mode:
+scenes.mode = Режим:
+
+# en: Starmaker
+scenes.starmaker = Starmaker
+
+# en: Light themes
+docs.themes.lightSlateForestPlum.term = Светлые темы
+
+# en: Light, Slate, Forest, Plum, Ocean, Sandstone and Rose.
+docs.themes.lightSlateForestPlum = Светлая, Сланец, Лес, Слива, Океан, Песчаник и Роза.
+
+# en: Dark themes
+docs.themes.darkMidnightCarbon.term = Тёмные темы
+
+# en: Dark, Midnight and Carbon.
+docs.themes.darkMidnightCarbon = Тёмная, Полночь и Карбон.
+
+# en: Drag to resize the hierarchy
+preview.place.resizeHierarchy.tip = Перетащите, чтобы изменить размер иерархии
+
+# en: Or from a variable:
+dialogues.outfitVariable = Или из переменной:
 
 # en: Rename
 npcs.unitRenameFolder = Переименовать

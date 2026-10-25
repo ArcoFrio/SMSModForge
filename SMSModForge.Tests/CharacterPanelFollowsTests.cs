@@ -445,7 +445,7 @@ public sealed class CharacterPanelFollowsTests
             WindowHarness.Pump();
 
             var actor = (ComboBox)window.FindName("NodeActorPicker");
-            var expression = (ComboBox)window.FindName("NodeExpressionPicker");
+            var expression = (FrameworkElement)window.FindName("NodeExpressionPicker");
             actor.Text = CharacterDef.PlayerKey;
             WindowHarness.Pump();
             _out.WriteLine($"player's line: actor shown={actor.IsVisible}, expression shown={expression.IsVisible}");

@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 using SMSModForge.ViewModel;
 
 namespace SMSModForge.View.Controls;
@@ -18,7 +17,9 @@ namespace SMSModForge.View.Controls;
 ///   is in.</item>
 ///   <item>Each piece is a strip of its own, with a gap between, so a cut
 ///   reads as a cut; the highlighted one is tinted.</item>
-///   <item>While the sound plays, a green line follows it.</item>
+///   <item>While the sound plays, a green line follows it - every frame, from
+///   what the speakers have played, and it stays a moment where the sound
+///   ended.</item>
 /// </list>
 /// Everything it shows and changes is the editor's
 /// (<see cref="SfxEditorViewModel"/>); this only draws it and turns the mouse
@@ -40,49 +41,92 @@ public sealed class SfxStrip : FrameworkElement
     private const double HeaderHeight = 6;
     private const double Gap = 2;
 
-    private static readonly Brush Back = Frozen(new SolidColorBrush(Color.FromRgb(0xE3, 0xE3, 0xE3)));
-    private static readonly Brush RulerBack = Frozen(new SolidColorBrush(Color.FromRgb(0xF6, 0xF6, 0xF6)));
-    private static readonly Brush PieceFill = Frozen(new SolidColorBrush(Colors.White));
-    private static readonly Brush PieceFillLit = Frozen(new SolidColorBrush(Color.FromRgb(0xDC, 0xE7, 0xFA)));
-    private static readonly Brush Header = Frozen(new SolidColorBrush(Color.FromRgb(0xC2, 0xC8, 0xD2)));
-    private static readonly Brush HeaderLit = Frozen(new SolidColorBrush(Color.FromRgb(0x5E, 0x8C, 0xD8)));
-    private static readonly Pen PieceEdge = Frozen(new Pen(new SolidColorBrush(Color.FromRgb(0x9A, 0x9A, 0x9A)), 1));
-    private static readonly Pen PieceEdgeLit = Frozen(new Pen(new SolidColorBrush(Color.FromRgb(0x2F, 0x6F, 0xD6)), 1.5));
-    private static readonly Pen Wave = Frozen(new Pen(new SolidColorBrush(Color.FromRgb(0x3C, 0x55, 0xB4)), 1));
-    private static readonly Pen WaveLit = Frozen(new Pen(new SolidColorBrush(Color.FromRgb(0x24, 0x3E, 0xA0)), 1));
-    private static readonly Pen Middle = Frozen(new Pen(new SolidColorBrush(Color.FromArgb(0x40, 0x3C, 0x55, 0xB4)), 1));
-    private static readonly Pen Tick = Frozen(new Pen(new SolidColorBrush(Color.FromRgb(0x80, 0x80, 0x80)), 1));
+    // The strip's own colours come from the theme (1.8.0): it was drawn light
+    // grey and white whatever the theme, a bright box in every dark one. Read
+    // when drawing, and drawn again when the theme changes.
+    private Brush Back => Ink(Services.ThemeManager.KeySurfaceAlt);
+    private Brush RulerBack => Ink(Services.ThemeManager.KeySurface);
+    private Brush PieceFill => Ink(Services.ThemeManager.KeyControl);
+    private Brush PieceFillLit => Ink(Services.ThemeManager.KeyAccentSoft);
+    private Brush Header => Ink(Services.ThemeManager.KeyBorder);
+    private Brush HeaderLit => Ink(Services.ThemeManager.KeyAccent);
+    private Pen PieceEdge => Line(Services.ThemeManager.KeyControlBorder, 1);
+    private Pen PieceEdgeLit => Line(Services.ThemeManager.KeyAccent, 1.5);
+    private Pen Wave => Line(Services.ThemeManager.KeyLink, 1);
+    private Pen WaveLit => Line(Services.ThemeManager.KeyAccent, 1);
+    private Pen Middle => Line(Services.ThemeManager.KeyControlBorder, 1, 0.45);
+    private Pen Tick => Line(Services.ThemeManager.KeyTextMuted, 1);
+    private Brush Label => Ink(Services.ThemeManager.KeyTextMuted);
+    private Brush StatusInk => Ink(Services.ThemeManager.KeyText);
+
+    private Brush Ink(string key) => TryFindResource(key) as Brush ?? Brushes.Gray;
+
+    private Pen Line(string key, double thickness, double opacity = 1)
+    {
+        Brush brush = Ink(key);
+        if (opacity < 1)
+        {
+            brush = brush.Clone();
+            brush.Opacity = opacity;
+            brush.Freeze();
+        }
+        var pen = new Pen(brush, thickness);
+        pen.Freeze();
+        return pen;
+    }
+
     private static readonly Pen CursorLine = Frozen(new Pen(new SolidColorBrush(Color.FromRgb(0xD0, 0x20, 0x20)), 1.5));
     private static readonly Brush CursorMark = Frozen(new SolidColorBrush(Color.FromRgb(0xD0, 0x20, 0x20)));
     private static readonly Pen PlayheadLine = Frozen(new Pen(new SolidColorBrush(Color.FromRgb(0x1E, 0x9E, 0x4A)), 1.5));
-    private static readonly Brush Label = Frozen(new SolidColorBrush(Color.FromRgb(0x50, 0x50, 0x50)));
 
     private static T Frozen<T>(T f) where T : Freezable { f.Freeze(); return f; }
 
     private static readonly Typeface Face = new("Segoe UI");   // English on purpose: a font's name.
 
-    private readonly DispatcherTimer _playhead;
+    /// <summary>
+    /// The playing line, on a layer of its own over the strip.
+    /// <para/>
+    /// Moved every frame the screen draws (CompositionTarget.Rendering), where
+    /// it used to be a timer thirty times a second that redrew the whole
+    /// waveform each time to move one line - which looked snappy next to
+    /// Audacity's (the author, 2026-10-21). Only this layer is drawn again now.
+    /// </summary>
+    private readonly DrawingVisual _line = new();
+    private bool _following;
+    private double? _lineAt;
+
+    /// <summary>How long the output may take to start before "not playing"
+    /// means it has finished.</summary>
+    private static readonly TimeSpan StartGrace = TimeSpan.FromSeconds(0.5);
+
+    /// <summary>How long the line stays where the sound ended, so the end of
+    /// a short one can be seen.</summary>
+    private static readonly TimeSpan Hold = TimeSpan.FromSeconds(0.6);
 
     public SfxStrip()
     {
         Focusable = true;
         FocusVisualStyle = null;
         ClipToBounds = true;
-        _playhead = new DispatcherTimer(DispatcherPriority.Render) { Interval = TimeSpan.FromMilliseconds(33) };
-        _playhead.Tick += (_, _) =>
+        AddVisualChild(_line);
+        Unloaded += (_, _) =>
         {
-            InvalidateVisual();
-            var now = DateTime.UtcNow;
-            if (Editor?.Playhead != null) _lastSeen = now;
-            // Stopped, or played to the end: a moment's grace first, since the
-            // output takes a little while to start.
-            else if (now - _started > TimeSpan.FromSeconds(0.5) && now - _lastSeen > TimeSpan.FromSeconds(0.2))
-                _playhead.Stop();
+            Unfollow(clear: true);
+            Services.ThemeManager.Changed -= InvalidateVisual;
         };
-        Unloaded += (_, _) => _playhead.Stop();
+        Loaded += (_, _) =>
+        {
+            Services.ThemeManager.Changed -= InvalidateVisual;
+            Services.ThemeManager.Changed += InvalidateVisual;
+        };
     }
 
-    private DateTime _started, _lastSeen;
+    protected override int VisualChildrenCount => 1;
+
+    protected override Visual GetVisualChild(int index)
+        => index == 0 ? _line : throw new ArgumentOutOfRangeException(nameof(index));
+
+    private DateTime _started, _endedAt;
 
     private static void OnEditorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -103,8 +147,48 @@ public sealed class SfxStrip : FrameworkElement
     /// to play.</summary>
     public void FollowPlaying()
     {
-        _started = _lastSeen = DateTime.UtcNow;
-        _playhead.Start();
+        _started = DateTime.UtcNow;
+        _endedAt = DateTime.MinValue;
+        if (_following) return;
+        _following = true;
+        CompositionTarget.Rendering += OnFrame;
+    }
+
+    private void OnFrame(object? sender, EventArgs e) => Step(DateTime.UtcNow);
+
+    /// <summary>One frame of following: the line where the playing is, held
+    /// where it ended for a moment once it has, then gone.</summary>
+    internal void Step(DateTime now)
+    {
+        if (Editor?.Playhead is { } at)
+        {
+            _endedAt = DateTime.MinValue;
+            DrawLine(at);
+            return;
+        }
+        if (now - _started < StartGrace) return;
+        if (_endedAt == DateTime.MinValue) _endedAt = now;
+        if (now - _endedAt < Hold) return;
+        Unfollow(clear: true);
+    }
+
+    private void Unfollow(bool clear)
+    {
+        if (_following) CompositionTarget.Rendering -= OnFrame;
+        _following = false;
+        if (clear) DrawLine(null);
+    }
+
+    /// <summary>Where the line is drawn now, in seconds; null when it is not.</summary>
+    internal double? LineAt => _lineAt;
+
+    private void DrawLine(double? at)
+    {
+        _lineAt = at;
+        using var dc = _line.RenderOpen();
+        if (at is not { } t || Editor == null) return;
+        double px = XOf(t);
+        if (px >= 0 && px <= ActualWidth) dc.DrawLine(PlayheadLine, new Point(px, RulerHeight), new Point(px, ActualHeight));
     }
 
     // ── Times and places ─────────────────────────────────────────────────
@@ -231,12 +315,9 @@ public sealed class SfxStrip : FrameworkElement
             dc.DrawGeometry(CursorMark, null, mark);
         }
 
-        // Where the playing has got to.
-        if (ed.Playhead is { } at)
-        {
-            double px = XOf(at);
-            if (px >= 0 && px <= w) dc.DrawLine(PlayheadLine, new Point(px, RulerHeight), new Point(px, h));
-        }
+        // The playing line is a layer of its own (DrawLine); kept where it is
+        // when the waveform under it is drawn again - zoomed, scrolled.
+        if (_lineAt is { } at) DrawLine(at);
     }
 
     private static readonly double[] Steps =
@@ -269,7 +350,7 @@ public sealed class SfxStrip : FrameworkElement
     private void DrawCentred(DrawingContext dc, string message, double w, double h)
     {
         var text = new FormattedText(message, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
-            Face, 12, Label, VisualTreeHelper.GetDpi(this).PixelsPerDip)
+            Face, 12, StatusInk, VisualTreeHelper.GetDpi(this).PixelsPerDip)
         { MaxTextWidth = Math.Max(10, w - 20), TextAlignment = TextAlignment.Center };
         dc.DrawText(text, new Point(10, Math.Max(RulerHeight + 4, (h - text.Height) / 2)));
     }

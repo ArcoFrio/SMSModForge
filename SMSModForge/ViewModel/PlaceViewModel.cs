@@ -10,7 +10,7 @@ namespace SMSModForge.ViewModel;
 /// or removing buttons mutates both the VM list and the underlying model
 /// list so the manifest serialises correctly.
 /// </summary>
-public sealed class PlaceViewModel : ObservableObject
+public sealed class PlaceViewModel : ObservableObject, IDerivesKey
 {
     /// <summary>
     /// Hard cap on navigator buttons per place. Matches the runtime's
@@ -125,17 +125,22 @@ public sealed class PlaceViewModel : ObservableObject
     //
     // See DerivedKey for the rule. In short: a NEW place takes its key from
     // whatever is typed as the display name, editing the key stops that for
-    // good, and a place loaded from disk never re-derives.
+    // good, and one loaded from disk follows only while its key is still
+    // its display name made into a name (or a duplicate's "_copy").
 
     private readonly DerivedKey _derivedKey = new();
 
     /// <summary>Whether the runtime name still follows the display name.</summary>
     public bool KeyIsDerived => _derivedKey.IsDerived;
 
-    /// <summary>Start deriving the key. Called for a place the author has just
-    /// added, never for one being loaded.</summary>
+    /// <summary>Start deriving the key. Called for one the author has just
+    /// added, duplicated or pasted.</summary>
     public void DeriveKeyFromDisplayName(System.Func<System.Collections.Generic.IEnumerable<string>> siblingKeys)
         => _derivedKey.Follow(siblingKeys);
+
+
+    public void WatchDisplayName(System.Func<System.Collections.Generic.IEnumerable<string>> siblingKeys)
+        => _derivedKey.Watch(siblingKeys, Model.DisplayName);
 
     public string Key
     {
@@ -143,7 +148,7 @@ public sealed class PlaceViewModel : ObservableObject
         set
         {
             if (Model.Key == value) return;
-            Model.Key = value;
+            SetKey(value);
             // Typing a key is a decision, and it sticks.
             _derivedKey.Stop();
             OnPropertyChanged();
@@ -151,11 +156,43 @@ public sealed class PlaceViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// The key, and the name of the place's GameObject with it while the two
+    /// are one (the author, 1.8.0: "unify the Internal GO Name field into just
+    /// the runtime name one"). A place whose GameObject already has a name of
+    /// its own - from an older pack - keeps it: another mod may find the level
+    /// by that name, so it changes only when the author says so
+    /// (<see cref="UseRuntimeNameForObject"/>).
+    /// </summary>
+    private void SetKey(string value)
+    {
+        bool follows = !InternalNameIsOwn;
+        Model.Key = value;
+        if (follows) Model.InternalName = value;
+        OnPropertyChanged(nameof(InternalName));
+        OnPropertyChanged(nameof(InternalNameIsOwn));
+    }
+
     public string InternalName
     {
         get => Model.InternalName;
-        set { Model.InternalName = value; OnPropertyChanged(); }
+        set { Model.InternalName = value; OnPropertyChanged(); OnPropertyChanged(nameof(InternalNameIsOwn)); }
     }
+
+    /// <summary>The place's GameObject is named otherwise than its runtime
+    /// name: the only time its name is shown on its own.</summary>
+    public bool InternalNameIsOwn
+        => !string.IsNullOrEmpty(Model.InternalName) && !string.Equals(Model.InternalName, Model.Key, System.StringComparison.Ordinal);
+
+    /// <summary>Name the GameObject by the runtime name, as every place made now is.</summary>
+    public void UseRuntimeNameForObject() => InternalName = Model.Key;
+
+    private RelayCommand? _useRuntimeName;
+    public RelayCommand UseRuntimeNameCommand => _useRuntimeName ??= new RelayCommand(UseRuntimeNameForObject);
+
+    /// <summary>The key put back by the rename tracker, without it counting
+    /// as one the author typed.</summary>
+    internal void RestateKey(string key) => SetKey(key);
 
     public string DisplayName
     {
@@ -165,7 +202,7 @@ public sealed class PlaceViewModel : ObservableObject
             Model.DisplayName = value;
             if (_derivedKey.Next(value, Model.Key) is { } derived && derived != Model.Key)
             {
-                Model.Key = derived;
+                SetKey(derived);
                 OnPropertyChanged(nameof(Key));
             }
             OnPropertyChanged();
@@ -370,7 +407,10 @@ public sealed class PlaceViewModel : ObservableObject
         set { Model.WeatherType = value; OnPropertyChanged(); }
     }
 
-    public string Display => string.IsNullOrWhiteSpace(DisplayName) ? Key : $"{DisplayName} ({Key})";
+    /// <summary>The list shows a place by its runtime name, spelled out as words
+    /// (the author, 1.8.0: a display name like "Bedroom" says too little in a
+    /// list of places) - see ListNames.Spaced.</summary>
+    public string Display => ListNames.Spaced(Key);
 
     public NavigatorButtonViewModel? AddNavigatorButton()
     {

@@ -19,9 +19,7 @@ namespace SMSModForge.Services;
 /// </summary>
 public static class ExportPathService
 {
-    private static readonly string FilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "SMSModForge", "exports.json");
+    private static string FilePath => AppDataFolder.PathOf("exports.json");
 
     /// <summary>
     /// The last export target for the pack rooted at <paramref name="packRoot"/>,

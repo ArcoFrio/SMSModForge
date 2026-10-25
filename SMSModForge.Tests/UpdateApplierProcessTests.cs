@@ -77,16 +77,10 @@ public sealed class UpdateApplierProcessTests : IDisposable
         File.WriteAllText(Path.Combine(install, "SMSModForge.exe"), "not really the editor");
         File.WriteAllText(Path.Combine(install, "old-version-only.txt"), "1.2.0 was here");
 
-        var start = new ProcessStartInfo(editor)
-        {
-            WorkingDirectory = Path.GetDirectoryName(editor)!,
-            UseShellExecute = false,
-        };
-        start.ArgumentList.Add("--apply-update");
-        start.ArgumentList.Add(install);
-        start.ArgumentList.Add(AlreadyGone().ToString());
-
-        using var applier = Process.Start(start)!;
+        // On the run's own desktop: if it fails it shows a message, and that
+        // must not land on the author's screen.
+        using var applier = TestDesktop.Launch(editor, Path.GetDirectoryName(editor)!,
+                                               "--apply-update", install, AlreadyGone().ToString());
 
         // Bounded, and killed rather than waited on: when the applier fails it
         // puts a MessageBox on screen, and this runs on somebody's desktop.
@@ -131,17 +125,13 @@ public sealed class UpdateApplierProcessTests : IDisposable
         string? editor = EditorExe();
         if (editor == null) { _out.WriteLine("no built editor beside the tests - skipping"); return; }
 
-        var start = new ProcessStartInfo(editor)
-        {
-            WorkingDirectory = Path.GetDirectoryName(editor)!,
-            UseShellExecute = false,
-        };
-        using var app = Process.Start(start)!;
+        // On the run's own desktop. It opened on the author's screen for every
+        // run until a sampler caught it taking their focus (2026-10-22).
+        using var app = TestDesktop.Launch(editor, Path.GetDirectoryName(editor)!);
         try
         {
-            // Polled rather than waited out: the editor is on somebody's screen
-            // while this runs, so it is closed the moment the question is
-            // answered. A crash on startup answers it immediately.
+            // Polled rather than waited out, and closed the moment the question
+            // is answered. A crash on startup answers it immediately.
             var until = DateTime.UtcNow.AddSeconds(30);
             while (DateTime.UtcNow < until)
             {
@@ -151,13 +141,12 @@ public sealed class UpdateApplierProcessTests : IDisposable
                     Assert.Fail($"the editor exited on startup instead of opening a window: "
                                 + $"0x{app.ExitCode:X8}");
                 }
-                app.Refresh();
-                if (app.MainWindowHandle != IntPtr.Zero) break;
+                if (TestDesktop.HasWindow(app.Id)) break;
             }
 
-            _out.WriteLine("main window handle: " + app.MainWindowHandle);
-            Assert.True(app.MainWindowHandle != IntPtr.Zero,
-                        "the editor is running but never opened a window");
+            bool opened = TestDesktop.HasWindow(app.Id);
+            _out.WriteLine("window on the run's desktop: " + opened);
+            Assert.True(opened, "the editor is running but never opened a window");
         }
         finally
         {

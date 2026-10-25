@@ -4,7 +4,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{l:T translatePack.title}" Width="660" Height="640"
         MinWidth="520" MinHeight="480"
-        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource Theme.Window}"
+        Foreground="{DynamicResource Theme.Text}">
     <DockPanel Margin="12">
 
         <!-- What this is, said before anything is sent rather than after.
@@ -12,7 +14,7 @@
              service, and that is a decision an author should make knowingly. -->
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" FontWeight="Bold"
                    Text="{l:T translatePack.headline}"/>
-        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Foreground="Gray"
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Foreground="{DynamicResource Theme.TextMuted}"
                    Margin="0,6,0,0" Text="{l:T translatePack.warning}"/>
 
         <!-- Names are kept out of the translation unless this says otherwise:
@@ -20,7 +22,7 @@
         <CheckBox x:Name="TranslateNamesBox" DockPanel.Dock="Top" Margin="0,10,0,0"
                   Content="{l:T translatePack.names}"
                   Checked="TranslateNames_Changed" Unchecked="TranslateNames_Changed"/>
-        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Foreground="Gray" FontSize="11"
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Foreground="{DynamicResource Theme.TextMuted}" FontSize="11"
                    Margin="20,2,0,0" Text="{l:T translatePack.names.warning}"/>
 
         <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
@@ -81,7 +83,7 @@
                                       IsEnabled="{Binding Enabled}">
                                 <StackPanel>
                                     <TextBlock Text="{Binding Name}"/>
-                                    <TextBlock Text="{Binding Note}" Foreground="Gray" FontSize="10"/>
+                                    <TextBlock Text="{Binding Note}" Foreground="{DynamicResource Theme.TextMuted}" FontSize="10"/>
                                 </StackPanel>
                             </CheckBox>
                         </DataTemplate>
@@ -95,7 +97,7 @@
         <GroupBox x:Name="NamesBox" Grid.Row="1" Header="{l:T translatePack.spellings}"
                   Margin="0,8,0,0" Visibility="Collapsed">
             <DockPanel>
-                <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Foreground="Gray" FontSize="11"
+                <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Foreground="{DynamicResource Theme.TextMuted}" FontSize="11"
                            Margin="4,2,4,6" Text="{l:T translatePack.spellings.help}"/>
                 <ScrollViewer x:Name="SpellingScroll" VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Auto">

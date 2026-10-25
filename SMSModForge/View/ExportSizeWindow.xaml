@@ -4,7 +4,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{l:T exportSize.exportPack}" Width="560" SizeToContent="Height"
         ResizeMode="NoResize"
-        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource Theme.Window}"
+        Foreground="{DynamicResource Theme.Text}">
     <DockPanel Margin="12">
 
         <!-- The opt-out sits on the left, away from the commit button, so it
@@ -22,7 +24,7 @@
 
         <StackPanel>
             <TextBlock x:Name="HeadlineText" FontWeight="Bold" TextWrapping="Wrap"/>
-            <TextBlock x:Name="FolderText" Foreground="Gray" TextWrapping="Wrap" Margin="0,4,0,0"/>
+            <TextBlock x:Name="FolderText" Foreground="{DynamicResource Theme.TextMuted}" TextWrapping="Wrap" Margin="0,4,0,0"/>
             <TextBlock Margin="0,10,0,0" TextWrapping="Wrap"
                        Text="{l:T exportSize.everythingFolderGoesInto}"/>
         </StackPanel>

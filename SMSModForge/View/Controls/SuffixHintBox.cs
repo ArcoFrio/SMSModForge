@@ -102,7 +102,7 @@ public sealed class SuffixHintBox : Grid
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
         });
 
-        _hint.Foreground = Brushes.Gray;
+        _hint.SetResourceReference(TextBlock.ForegroundProperty, Services.ThemeManager.KeyTextMuted);
         _hint.IsHitTestVisible = false;      // clicks belong to the box underneath
         _hint.HorizontalAlignment = HorizontalAlignment.Left;
         _hint.VerticalAlignment = VerticalAlignment.Top;

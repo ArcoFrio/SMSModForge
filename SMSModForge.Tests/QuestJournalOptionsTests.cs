@@ -23,7 +23,7 @@ public sealed class QuestJournalOptionsTests
     private readonly ITestOutputHelper _out;
     public QuestJournalOptionsTests(ITestOutputHelper o) => _out = o;
 
-    private const int TabQuests = 13;
+    private const int TabQuests = MainTab.Quests;
 
     [Fact]
     public void BothAreWrittenOnlyWhenSet()

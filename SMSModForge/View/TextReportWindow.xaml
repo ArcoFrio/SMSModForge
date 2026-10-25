@@ -3,7 +3,9 @@
         xmlns:l="clr-namespace:SMSModForge.Localization"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Width="720" Height="520" MinWidth="360" MinHeight="240"
-        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource Theme.Window}"
+        Foreground="{DynamicResource Theme.Text}">
     <!-- A report somebody may want to copy out of: a read-only text box
          rather than a message box, so it scrolls and it selects. -->
     <DockPanel Margin="12">

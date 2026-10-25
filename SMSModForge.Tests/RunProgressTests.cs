@@ -174,6 +174,7 @@ public sealed class RunProgressTests
         {
             try
             {
+                TestDesktop.Enter();   // the real one is seen; this one is a test's
                 using var w = new RunProgressWindow(run);
                 w.CreateControl();
                 w.Tick();

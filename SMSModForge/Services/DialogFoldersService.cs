@@ -24,9 +24,7 @@ public static class DialogFoldersService
         public const string Export = "export";
     }
 
-    private static readonly string FilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "SMSModForge", "dialogs.json");
+    private static string FilePath => AppDataFolder.PathOf("dialogs.json");
 
     /// <summary>
     /// The last folder remembered for <paramref name="key"/>, or null when none

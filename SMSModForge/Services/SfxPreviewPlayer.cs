@@ -91,7 +91,28 @@ public sealed class SfxPreviewPlayer : IDisposable
     /// <summary>How far into the sound in memory the playing has got, in
     /// seconds from its start; null when it is not playing one.</summary>
     public double? Position
-        => _memory != null && _output?.PlaybackState == PlaybackState.Playing ? _memory.Seconds : null;
+        => _memory != null && _output?.PlaybackState == PlaybackState.Playing
+            ? Heard(_memory, _output as IWavePosition) : null;
+
+    /// <summary>
+    /// How far the speakers have got, which is not how far the output has read.
+    /// <para/>
+    /// The output reads ahead a buffer at a time - about a sixth of a second -
+    /// so a line drawn where the reading had got to jumped forward in steps,
+    /// and a sound shorter than one buffer was read whole at once: its line was
+    /// at the end before anything had been heard, and gone again before the
+    /// sound ended (the author, 2026-10-21: "for very short audios I am not
+    /// able to determine when the audio actually ends"). The device says what
+    /// it has played; that, from where the playing began, is the place. Never
+    /// past what has been read, in case a device counts ahead of itself.
+    /// </summary>
+    internal static double Heard(MemorySound memory, IWavePosition? device)
+    {
+        var format = device?.OutputWaveFormat;
+        if (device == null || format == null || format.AverageBytesPerSecond <= 0) return memory.Seconds;
+        double played = device.GetPosition() / (double)format.AverageBytesPerSecond;
+        return Math.Min(memory.StartSeconds + played, memory.Seconds);
+    }
 
     /// <summary>What the output is given to play: the sound in memory, from
     /// <paramref name="fromSeconds"/>, at <paramref name="volume"/>. Apart from
@@ -124,10 +145,12 @@ public sealed class SfxPreviewPlayer : IDisposable
 
         public WaveFormat WaveFormat { get; }
 
-        /// <summary>Where the reading has got to, from the sound's start. A
-        /// little ahead of what is heard by the output's buffer, which at a
-        /// line on a strip is not to be seen.</summary>
+        /// <summary>Where the reading has got to, from the sound's start: a
+        /// buffer ahead of what is heard (see <see cref="Heard"/>).</summary>
         public double Seconds => (_startFrame + _at / (double)_channels) / _rate;
+
+        /// <summary>Where the playing began, from the sound's start.</summary>
+        public double StartSeconds => _startFrame / (double)_rate;
 
         public int Read(float[] buffer, int offset, int count)
         {

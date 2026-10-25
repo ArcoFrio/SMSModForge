@@ -43,6 +43,13 @@ public sealed class UiViewModel : ObservableObject
             model.Nodes.Select(n => new UiNodeViewModel(n, null, HasChanges, Reset)));
         foreach (var node in Nodes) node.Changed += Bubble;
 
+        // Watched like a rule's: the screen opens on the moment they become
+        // met, so a Timer here restarts when it does and a Random is not offered.
+        OpenConditions = new ObservableCollection<NodeConditionViewModel>(
+            model.OpenConditions.Select(c =>
+                new NodeConditionViewModel(c, RemoveOpenCondition, context: ConditionContext.Rule)));
+        AddOpenConditionCommand = new RelayCommand(AddOpenCondition);
+
         SeedCommand = new RelayCommand(Seed, () => CanSeed);
 
         // An extension read back off disk holds only its delta, which is a few
@@ -296,6 +303,33 @@ public sealed class UiViewModel : ObservableObject
             Model.StartsOpen = value;
             OnPropertyChanged();
         }
+    }
+
+    /// <summary>
+    /// What opens this screen by itself: the moment all of them are met, and
+    /// again each time they are met anew. None means it opens only when an
+    /// action opens it - never that it is always open.
+    /// </summary>
+    public ObservableCollection<NodeConditionViewModel> OpenConditions { get; }
+
+    public RelayCommand AddOpenConditionCommand { get; }
+
+    /// <summary>Whether anything opens this screen by itself.</summary>
+    public bool OpensByConditions => Model.OpenConditions.Count > 0;
+
+    private void AddOpenCondition()
+    {
+        var def = new NodeConditionDef { Type = NodeConditionTypes.VariableEquals };
+        Model.OpenConditions.Add(def);
+        OpenConditions.Add(new NodeConditionViewModel(def, RemoveOpenCondition, context: ConditionContext.Rule));
+        OnPropertyChanged(nameof(OpensByConditions));
+    }
+
+    private void RemoveOpenCondition(NodeConditionViewModel row)
+    {
+        Model.OpenConditions.Remove(row.Model);
+        OpenConditions.Remove(row);
+        OnPropertyChanged(nameof(OpensByConditions));
     }
 
     /// <summary>

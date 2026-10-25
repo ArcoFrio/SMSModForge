@@ -1,5 +1,496 @@
 # Changelog
 
+## 1.8.0
+
+The EX update. A second way to draw the whole editor - EX, with the tabs in a
+rail down the left, panels as tiles and the pack's name across the top - now
+the editor's default, beside the reworked Classic themes and nine new ones,
+and themes of your own. Each sound in a line now has its own
+volume and start, can wait for the typewriter or keep its words out of the
+line, and can be played from the line as the game will play it. A line's
+outfit and face are buttons with pictures, empty dropdowns open with the likely
+picks on top, every list has the same buttons with their keys, wrong values
+show in red, and the save prompt says what changed in plain words. There is
+an installer as well - for players, only the plugin, chosen already - and
+ModForge's windows in the game now look like the game's own. Every new text is
+in all eight languages. The plugin changes too, so update both.
+
+### Before you update
+
+**The editor opens in EX.** EX is the default look now, and the first time
+you start this version, the theme you had moves to the EX theme most like it
+- light for light, dark for dark, the nearest accent colour: Light becomes
+Cobalt, Midnight Pulse, Carbon Aurum, and so on. It happens once, and a
+message says so when it does. The old look is under Themes > Classic, every
+theme as it was, and if you pick one there it stays picked.
+
+**A sound's pattern written bigger now plays louder.** A line with
+"<size=140%>*thud*" played its sound at the sound's own volume, whatever the
+size: the game never read it. When a pack opens in this version, every
+pattern written in a size other than the line's own is given that size as its
+volume - 140% for the *thud* above, 80% for one written smaller - so these
+sounds will be louder or quieter than your players heard them until now. The
+size itself stays, so the line looks as it did. Lines with several sounds keep
+their timing: a sound written twice still plays the second time when it did,
+and two different sounds that started together still do. You are told how
+many lines were changed when the pack opens, and the original is kept beside
+the manifest on the first save. A pack saved with this version needs this
+version's plugin to play its sounds this way, so update both; a pack nobody
+has re-saved plays them the old way.
+
+### New
+
+- **An installer**, as well as the two zips. It asks first what to install:
+  **Only the plugin**, to play mods other people made - chosen already, since
+  that is what most players want - which puts nothing on the computer but the
+  plugin in the game and the way to uninstall it (no editor, no shortcuts);
+  or **Everything**, to make mods - the editor and the plugin. Running it
+  again and choosing Everything adds the editor. Then it asks for the
+  Starmaker Story folder - required, and checked to really be the game, with
+  the folder found already when Steam or the editor knows it - and, for
+  Everything, where the editor goes, with a folder of its own chosen already
+  (`%LocalAppData%\Programs\SMSModForge`, where Windows puts a program
+  installed for you alone). Choosing a folder inside the game is allowed but
+  not recommended, and every word on the page turns yellow to say so. It
+  puts the plugin in the game - the whole BepInEx bundle into a game without
+  BepInEx, only ModForge's own files into one that has it - tells the editor
+  where the game is, and adds Start menu and desktop shortcuts if you want
+  them. It speaks the language Windows is set to. ModForge then appears in
+  Settings > Apps, where it can be uninstalled; that takes the editor away
+  and, if you tick it, its plugin from the game, and leaves your packs. With
+  only the plugin installed, uninstalling takes the plugin out.
+- **A screen can open by itself.** A screen of the pack's own has **Opens
+  when** in its settings on the UI tab: conditions that open it the moment
+  they are all met - as the game loads, if they already are - and again each
+  time they are met anew. The player can still close it; it stays closed
+  until they stop being met and are met again. With none, nothing changes: it
+  opens only when an action opens it. Until now this needed a rule written
+  for it.
+- **A jump that lands under another line is warned about.** In this game a
+  jump does not simply carry on from the line it lands on: once that line and
+  the lines under it are done, the game says again the line it is under, then
+  that line's lines. A jump that lands under the very line that jumps
+  therefore goes round for ever - "I should go." jumping to "Bye!" under "Oh,
+  one more thing..." plays I should go, Bye, Oh one more thing, Bye, I should
+  go, and so on. Validate now warns about every jump that lands under another
+  line, and says when the conversation would never end. A jump to a top-level
+  line carries on as you would expect; the Jump help says so too.
+- **Each sound in a line has its own volume and start.** When a line's words
+  hold a sound's pattern, a Sounds box under its Text lists each one in the
+  order it comes. Volume is a share of the sound's own, from silent to five
+  times as loud. Starts says when, and the sentence under it says what the
+  number means, so nobody has to guess what zero or a minus means: the first
+  sound starts that many seconds after the line appears; each other one that
+  many seconds after the one before it ends, or with a minus, that many
+  seconds before it ends, playing over it. **When typed** starts it as the
+  typewriter reaches it instead. **Show its words** off takes the pattern out
+  of the line the player reads - in every language - and the sound still
+  plays; the Game look shows the line without it. Play plays the line's
+  sounds as the game will. Until now a line's sounds all started together,
+  or a repeated one every 0.22 seconds per letter between them, always at the
+  sound's own volume.
+- **Players are told ModForge is there.** The first time the game starts with
+  this version, a small window on the main menu says where packs go and where
+  they are listed - in the player's language, which ModForge takes from the
+  computer until they pick one. Players of an older ModForge get it too, with
+  a line on what is new for them. After that it only comes back when an
+  update changes something for players, as a line or two. The "?" on the pack
+  list shows it again.
+
+### Changed
+
+- **ModForge in the game looks like the game.** Its windows - this notice,
+  the warning before a save, the language warning - and the pack list and
+  language flags on the main menu are drawn with the game's own rounded navy
+  panels, fonts and white buttons, with the game's blur behind a window, and
+  ModForge's amber and anvil marking what is ModForge's. Windows spring in and
+  fade out instead of appearing. The dim behind a window really dims now: in
+  the game's lighting it only ever took the menu half as dark as meant.
+- **The game's colours in the plain node list.** A speaker's name is in
+  their colour, words in brackets are in the game's blue, and a colour a line
+  asks for shows - in the plain rows as well as the Game look. Each is made to
+  read on your theme: a colour too dark for a dark theme, or too light for a
+  light one, is moved in lightness only as far as it takes, keeping its hue.
+  In a dark EX theme they glow, very slightly - and more faintly still in
+  the Game look, where the game's colours are shown as the game shows them
+  (on the game's own dark panel, so there in every theme). Before, the
+  plain rows showed brackets and
+  names in the ordinary text colour, and a line's own colours as they were,
+  which on a dark theme could all but vanish.
+- **Lists name things once.** A row shows the runtime name in brackets only
+  when it says something the name does not - "Beach Day" rather than "Beach
+  Day (BeachDay)" - so the end of a long name is no longer what gets cut off.
+- **Places are listed by their runtime name**, spelled out as words: "Harbor
+  Home Bedroom" rather than a "Bedroom" that could be any of several.
+- **A place has one name for the game.** Its level's object is named by its
+  runtime name and follows it when that changes, as the runtime name follows
+  the display name. The Internal GO name box is gone - except for a place
+  from an older pack whose object is already named otherwise, which keeps
+  that name (another mod may find the level by it) until you press "Use the
+  runtime name".
+- **The issue count in the status bar opens the issue list** on the ModForge
+  tab.
+- **Copy all, Paste and Overwrite show while you are on their list.** Under
+  every list of conditions or actions they sat greyed most of the time; they
+  now appear when the mouse comes onto the list (or the keyboard does), in
+  the room they always had, so nothing moves.
+- **A quest's Tasks start with how the quest moves along.** It was a paragraph
+  at the very end of the page, under everything; it is now the first line of
+  the Tasks help.
+- **SFX: Auto-trigger patterns are right under Audio**, before the sound's
+  editor and effects - they are what a dialogue author knows the sound by.
+- **A character's typing voice has sliders.** Frequency and the two ends of
+  the pitch range each have a slider beside the number, wide enough for every
+  voice the game has (25 to 45 characters a second, pitch 0.2 to 3) with room
+  either side; you can still type a number past either end. Each has a Reset
+  - to the character's own voice for one of the game's, and now to the
+  default for a character of your own too.
+- **Scenes: frame, sound and Starmaker share one panel.** Each was a panel of
+  its own for one or two fields.
+- **Fields stop at a sensible width** instead of running the window's width:
+  a name, a number or a pick from a list at most 440 pixels wide, a slider
+  420, a file path or a sentence a player reads 640 - in every tab and in
+  every condition and action. A variable's 20-letter name no longer sits in a
+  box 700 pixels long. A dialogue line's own text still takes the room.
+- **Long panel help folds away.** The paragraphs of instructions at the top
+  of a panel - the Nodes help, Repeat for each, Else-if branches, Level art,
+  Auto-trigger patterns, speech expressions, a quest's Tasks and more - are
+  read once and took the room of the fields under them on every visit after.
+  In Classic each is now its first line with "more" after it; in EX it sits
+  behind a "?" at the end of the panel's title band. Opened, it stays open
+  for that panel until you fold it again.
+- **EX's light themes no longer glow.** What is pointed at or typed in, the
+  open tab and the chosen picture glowed in the theme's colour in every EX
+  theme; on a light one the glow read as a blur round the words rather than
+  as light. A light EX theme now shows those by their accent borders and
+  lines alone, with the words sharp; the dark ones keep their glow.
+- **EX: the rail counts.** Under each tab's name, how many records the pack
+  has there, and on the ModForge tab's icon a badge with the number of
+  issues.
+- **EX: Save, Validate and Export beside the pack's name**, the three things
+  the File menu is opened for most, with a dot and "unsaved" while there are
+  changes not saved yet.
+- **EX: the lists down the left are closer together**, a row 18 pixels high
+  rather than 24, with a faint line in the theme's colour under each, from
+  one side of the list to the other, so one row reads from the next; a row
+  lights up the whole way across. A folder's contents hang from a line under
+  its arrow, each on a short branch of it, so what is in which folder reads
+  at a glance. They were noticeably further apart than Classic's.
+- **Dialogues: Identity and Start conditions fold.** Click a panel's title to
+  fold it, so the node list gets the room. It is remembered for each dialogue
+  - folding one does not fold the others - and folded, the panel still says
+  what it holds: the names, the priority and what is ticked, and each start
+  condition in a word or two. A fold is the editor's to remember, never the
+  pack's.
+- **Dialogues: the preview is one line when there is no bust to show** - a
+  line nobody with a bust speaks - instead of a large black square.
+- **Previews are centred, and as large as you drag them.** Each preview -
+  places, scenes, wallpapers, a line's bust, and the character and NPC busts -
+  has a mark in its bottom-right corner: drag it to make the preview bigger or
+  smaller, in proportion; double-click it for the preview's own size. The size
+  is remembered, and a preview is never shown larger than the room there is.
+  The previews sit in the middle of the page, except the character and NPC
+  busts, which stay where they were. A character's bust snaps to the sizes
+  its picker offers.
+- **Previews are crisp when enlarged.** The game is pixel art, so a preview
+  made bigger is drawn pixel by pixel; the character bust at 1.5× was
+  smoothed, and looked out of focus. Made smaller than life, a picture is
+  still smoothed, or whole rows of it would go missing.
+- **Places: the hierarchy and the selected object sit beside the picture**,
+  not over its corners. Both are as tall as the picture and scroll, the
+  hierarchy as wide as its longest name; neither is resized by hand any more.
+  A bigger picture shows more of each list rather than bigger words, and the
+  lists only give way - narrower, scrolling sideways - once the picture is
+  dragged wider than the room. With nothing selected, the panel on the right
+  says how to select something.
+- **Variables: where it's used.** Under a variable's definition, every place
+  in the pack that uses it - what sets it, what reads it, what shows it in its
+  words - each a link that takes you there. It is the question every rename
+  and delete raises, and the list is the same one a rename follows.
+- **The Themes menu stays open while you pick**, so you can try one theme
+  after another without opening it again each time - from EX to Classic and
+  back as well.
+- **The menus, tidied.** Themes is under Options now (Options ▸ Themes): it is
+  set once, and did not need a place on the menu bar. Options is in groups
+  under headings - Look, Writing, Saving and exporting, The game, Updates -
+  instead of one long list, with the theme, the dialogue rows' look and the
+  preview quality together under Look, and the three update settings
+  together. Edit has Undo and Redo at the top: Ctrl+Z and Ctrl+Y always
+  worked, but nothing on screen said so.
+- **The main menu's language in use reads better.** Its row is no longer
+  orange with dark words on it: it is the game's navy, framed in amber, with
+  its name and its flag's outline in amber.
+- **The pack list on the main menu is clearer.** It is a panel as wide as its
+  widest line, so nothing runs off its edge; the hint under it is one short
+  line ("Drag to reorder: the lower pack wins a clash"), and a pack that
+  clashes says "Clashes with" the other. A pack's name stays white whatever is
+  said about it, its line lights up under the pointer, and a grip at its end
+  shows it can be dragged. A folder button beside the "?" opens the Mods
+  folder.
+
+- **Variables and Integration are the last tabs**, after UI and Quests. They
+  affect everything else in a pack, so they now come after it, in both
+  looks.
+- **EX themes: the same editor, laid out another way - and the default.**
+  The Themes menu now has two lists: EX, which a first start opens in
+  (Frost), and Classic, with every theme so far. An EX theme
+  is a different take on the window you can tell from across the room: the
+  tabs stand in a rail down the left with an icon over each name, the pack's
+  name heads the page in large type, every panel is a tile with its title on
+  a band of the theme's colour, and the status bar is the theme's colour too.
+  Corners are cut at an angle, what you point at or type in glows, boxes to
+  type in are lines, choices are diamonds, and the typeface is narrower. The
+  tabs, their order and how you move between them are the same as in
+  Classic, and everything works exactly as it does there. Thirteen of them:
+  Frost, Volt, Cobalt, Mint and Solar (light); Neon, Pulse, Venom, Blaze,
+  Phantom, Abyss, Aurum and Jade (dark). Switching takes effect at once.
+- **Themes of your own.** Themes > Your themes… makes them: start from the
+  theme you are using, pick EX or Classic, and set the six colours every
+  theme is made of - background, bars, panels, boxes, text and accent - by
+  typing them or with the colour picker. The editor shows each change as you
+  make it and keeps it as you go; light or dark follows the background, the
+  words are moved towards readable on every colour, and if your colours
+  leave some hard to read anyway, the window says so. They are listed under
+  Themes > Yours.
+- **Dark themes have a dark title bar.** Every dark theme had Windows' white
+  title bar over it. On Windows 11 an EX theme also gives the title bar its
+  own colour and draws its accent round the window's edge.
+- **Themes, reworked - and nine new ones.** Every theme is now a base and one
+  accent, the way code editors' themes are made: the accent marks what is
+  selected, focused or open, and everything else follows from the base.
+  Themes > Classic lists them under Light and Dark: Light, Slate, Forest, Plum,
+  Ocean, Sandstone, Rose and the new Paper and Daylight; Dark, Midnight,
+  Carbon (now with gold), and the new Graphite, Nightshade, Fjord, Ember, Deep
+  Sea, Moss and Wine. Buttons have a colour
+  of their own instead of the panel's, every box you type in looks the same,
+  check boxes, scroll bars, sliders and groups follow the theme, and the open
+  tab sits under a bar in the accent's colour.
+- **Every issue says where it is, and double-clicking it goes there.** The
+  issues list showed the editor's own address for a problem, cut off after
+  twenty letters - "dialogues[NagaDialogueSe..." - and double-clicking a
+  problem in a line's actions only opened the dialogue, leaving you to hunt
+  for the line. Now it reads like "Naga at the beach > "Huff! One more time"
+  > on start: Set Active", and double-clicking selects that line. Issues on
+  scenes, NPCs, wallpapers, rules, UI screens and the game's quests can be
+  gone to as well; before, double-clicking them did nothing.
+- **Problems in a translation are in the issues list, and open that
+  translation.** A translated line that lost a {PC} or a tag the default text
+  has - so its players read it without the name, or in the wrong colour to
+  the end - is listed whatever language the editor is showing, and
+  double-clicking it shows the line in that language. So does a line that is
+  too long in one of the translations.
+
+- **Play goes through a sound's variants in turn.** A sound with variants
+  (Plap.ogg, Plap_1.ogg, Plap_2.ogg) plays the next one each time you press
+  Play, and says which it played - in the SFX tab and from a dialogue line's
+  sound menu alike. It only ever played the first, so the others could not
+  be heard from the editor at all. In the game, Play SFX and the sound cues
+  in a line already pick one at random each time.
+- **The line that follows a playing sound moves smoothly, and shows where it
+  ends.** It used to jump along in steps and, on a short sound, reach the end
+  before the sound had played - then vanish before it finished. It now follows
+  what you hear, every frame, and stays a moment where the sound ended.
+- **The same buttons over every list, each with its key.** Every tab's list
+  has Add, Folder, Rename, Duplicate and Remove, in that order, then what only
+  that tab has; the key for each is written small under it - Ins, F2, Ctrl+D,
+  Del - and the keyboard sign at the end lists the keys that have no button.
+  Rename is back, and renames the selected item exactly as typing in its
+  Display name box does. Buttons that don't fit go onto a second row rather
+  than behind an arrow, where they could not be found. Ins is new: it adds to
+  the list you are in. The NPCs list now answers the same keys as the others
+  (it answered none), and so do the lists of the game's places, conversations
+  and quests.
+- **Wrong values show in red.** A name that is none of the things its box
+  lists - an actor, a tag to jump to, a scene, a sound, a variable, a place,
+  a bust or a face in an action or condition - a number box holding something
+  that is not a number, and a file path with no file at it are drawn in red
+  as you type, so they are caught before the game meets them. Only what is
+  certainly wrong: an empty box, a {placeholder} a rule fills in and a
+  $variable read in game are left alone. Actions and conditions that name a
+  speaker show each one's face too.
+- **A sound's pattern is marked in the line.** Where a line's words hold a
+  sound's auto-trigger pattern (*plap*), it is underlined - in the Text box,
+  in the Nodes list, and in the Game look.
+- **The Game look colours text in brackets the way the game does**: light
+  blue, read from the game's own setting, counting nested brackets and
+  letting a colour of yours inside them win as it does in game. The "In
+  dialogue text" panel says so, and that patterns play their sound.
+- **The save prompt says what changed in plain words.** It used to list the
+  file's own insides in three cut-off columns: a line's number
+  ("2137553408"), lists of numbers twice over, "actionsOnStart › #1",
+  "{ id: …, kind: Text, +4 nested }", field names like "defaultValue", and
+  a "different order" row that was not true. Now each change sits under the
+  thing it belongs to - "Dialogue · Chat at the cave" - and reads like the
+  issues list does: "“Hi there” › Expression" with "Happy → Sad" under it,
+  "New: “One more thing before you go.”", "Removed: “Maybe later.”", a
+  sound's "Default volume" with "0.667 → 0.65". The values show only where
+  they say something, a long line shows the part that changed, everything
+  wraps to the window instead of running off it, and a translation's
+  changes name the line instead of its key.
+- **Smart suggestions: an empty dropdown opens with the likely picks on
+  top.** What you are editing decides what is likely - everything in the
+  dialogue, scene or rule you have up: the characters it names anywhere, the
+  place it happens at, its variables, the folder it is in. In a dialogue
+  where a character talks at one place, a Set Active action's scene list
+  opens with that character's scenes there first; a Play Sound list, with the
+  sounds the dialogue already plays; a variable list, with the variables
+  about that character and that place. The ones moved up carry a small star
+  and a line sets them apart; nothing is picked or hidden, other dropdowns
+  showing the same list keep their own order, and a box that already holds a
+  choice or a search opens as before. It follows your edits as you commit
+  them, and the reading behind it happens in the background, so opening a
+  list costs nothing you can feel even on packs many times the size of a
+  big one. Options > Smart suggestions in dropdowns turns it off.
+- **Outfit and Expression are buttons with pictures.** A line's outfit is
+  picked from the speaker's outfits, each with a picture of the bust, or Keep
+  to leave the character in what they are wearing (pointing at Keep says
+  so); its expression from the speaker's faces, each with a small drawing of
+  the face. Only what the speaker has can be picked, so a name that does not
+  exist can no longer be typed in by accident - and a line that already holds
+  one is shown it, in red, to be replaced. An outfit can still come from a
+  variable: tick "From a variable" and pick it, and the outfit buttons fade
+  and step aside while it is ticked. Which one the line has is plain in
+  every theme. Outfit now comes before Expression.
+- **Faces have pictures on the Characters tab.** Each of a character's faces
+  has one of 26 drawings covering the common expressions, picked from its name
+  when you name it and yours to change after; the game's faces get theirs from
+  their names. The name suggests common ones as you type and is set when you
+  leave the box, so a suggestion opening never decides it. The bust child is
+  read-only and follows the name; the ✎ beside it sets one of your own.
+- **New lines start on neutral** when somebody speaks them - the face every
+  character has, which looks the same in game as no face.
+- **Names in the node editor start with a capital letter** - in the Actor
+  box, its list, the line rows and the face buttons ("anis" reads "Anis").
+  Only how they are shown: the pack keeps every name exactly as it is, and
+  the Actor box shows what is really there once you click into it.
+- **The Actor picker shows each character's face** beside their name, cut
+  from their bust, and is as wide as the longest name rather than the whole
+  panel. A line nobody speaks says so and hides Expression and Outfit, the way
+  the player's lines do; if it still sets a face or an outfit, the issues
+  list asks whether its actor was forgotten - the game ignores both on a line
+  nobody speaks. Neutral doesn't count: it is no face.
+- **A line's other fields, tidied.** Its ID and children show when you hover
+  over the line in the Nodes list, in either look, instead of taking two
+  rows; Kind, Then and Duration are rows of radio buttons; Tag is behind a
+  tick box, with its field beside it. "Then" was called "Jump" - one of its
+  own choices is Jump too. Duration's "UntilInteraction" reads "Until
+  interaction".
+- **Boxes that do not need the whole width no longer take it.** Numbers,
+  names and tags stop at a sensible width, and a preview's box is as wide as
+  the preview rather than the window; the Places preview grows with the
+  window up to its normal size.
+- **The buttons under a conversation's lines.** "+ Root" is gone and
+  "+ Sibling" comes before "+ Child"; a conversation with no lines yet shows
+  "+ New Node" alone. Each + now moves the selection and the keyboard to the
+  line it made, instead of leaving them on the one it came from. + Sibling and
+  + Child take only the speaker - actor, expression and outfit - where they
+  copied the whole line, conditions, actions and jump included, which then had
+  to be cleared out by hand. To copy a whole line there is the new
+  **Duplicate** (Ctrl+D), which copies it with everything under it, and copy
+  and paste.
+- **Keys go to what you clicked last.** In Dialogues, Ctrl+D copies the line
+  when you were last in the lines - even typing in its Text - and the
+  dialogue when you were last in the dialogue list; the key caps of the side
+  the keys go to are drawn in the heading colour. The objects of a
+  UI screen and a quest's tasks have the same bar over them, with their keys
+  under the buttons.
+- **A runtime name follows its display name.** Rename a duplicated scene
+  and its runtime name loses the "_copy" instead of keeping it for good. The
+  same goes for places, NPCs, dialogues, music, sounds, wallpapers and rules
+  whose runtime name is just their display name run together, and everything
+  in the pack that used the old name follows, as renames have since 1.7.0. A
+  runtime name you typed yourself stays as it is, and so does a Starmaker
+  photo's scene, since players' saves remember those by name. The runtime
+  name is still read-only; the ✎ beside it sets one of your own, which from
+  then on stays. Rename (F2) now renames the display name, exactly as typing
+  in the box does.
+- **Scenes you duplicated before this version** still say "_copy": select
+  one, press F2 and Enter, and its runtime name catches up with its name.
+- **A runtime name left behind by an older rename catches up too.** A
+  conversation renamed from ...Story05 to ...Story06 before this version kept
+  the runtime name ...Story05. Rub its name back into the part the two share -
+  delete the 6 - or type over that part, and the runtime name follows the name
+  again from there. A runtime name you typed with the ✎ is never taken back
+  this way.
+- **A new scene starts with the "sexy" frame and the kiss sound**, the way
+  the game's own scenes beside it are made, instead of the photo frame and no
+  sound. Scenes you already have are not changed.
+
+### Fixed
+
+- **An action's Level could be wiped when its row was drawn again.** A Set
+  Active (or Fade, Move, Spin) action set to a level could lose that level
+  when you came back to its line: the Level box, being built, picked the
+  saved level and for a moment had no text, and that empty moment was
+  written over your choice. The boxes of the other kinds of action, hidden
+  in the same row, could do the same. Typed text in those boxes now counts
+  when you leave the box (picking from the list counts at once, as before),
+  and a hidden box changes nothing.
+- **Two packs colouring the same character: the wrong one could win.** When
+  two packs both give one of the game's characters a name colour, the pack
+  lower in the main menu's list is meant to win, and the menu says so. It did
+  until one of the other pack's own lines played; from then on that pack's
+  colour showed for the rest of the session, in the game's conversations too.
+  The pack lower in the list now always wins. Found by playing it in the game.
+- **The actions on a choice's options never ran.** In this game, picking an
+  option goes straight on to the lines under it - the option itself is never
+  played as a line - so its actions, on finish (which the editor suggests) or
+  on start (in older packs), did nothing, with no message anywhere. They now
+  run the moment the player picks that option, and the note on an option and
+  the warning about an option's actions on start say so. Found by ModForge's
+  new in-game checks, which pick choices in a real game.
+- **A pack variable in a line, written [PV:name], showed the value it had when
+  the game was loaded**, not the one it has when the line is said - so "You
+  have [PV:Coins] coins" kept showing the number from when the save was
+  loaded, however many were won since. The line now reads the variable as it
+  is said, as the editor's help always described.
+- **A tutorial could stop you at a step whose control was not on screen
+  yet.** A step lights the control it is about and dims the rest, and the
+  dim takes no clicks. The controls were looked for only as the step began,
+  so one that appears during it - a line's editor, once you choose the line -
+  stayed dimmed, and the step could not be done. They are looked for until
+  they appear now, and scrolled to when they do. "Put the same person in
+  twice" also lights the place list, so you can choose the room. Every
+  tutorial was followed through in the real window, in Classic and in EX:
+  both light the same controls at every step.
+- **A misspelled variable in a condition went unnoticed.** Since 1.2.0, when
+  the variable checks became one Variable condition, Validate had not looked
+  at them at all: a variable the pack does not have, one of the game's that
+  does not exist, a comparison the game does not know, or "greater than"
+  nothing passed without a word, and in the game the condition quietly read
+  the default. Validate checks them again - a `$name` in the value too.
+- **Pasting or duplicating a line that has a tag** gave the conversation two
+  lines with that tag, so a jump aimed at it could land on either. The copy's
+  tag is renamed now, and the copy's own jumps follow it.
+
+- **Unreadable text in the dark themes.** A selected dialogue in Midnight was
+  white on white; the dropdowns you can type in - Actor, Expression, Outfit, a
+  condition's Level - were white boxes with pale text, so they looked greyed
+  out; the windows that open from the editor (the save prompt, translations,
+  the colour picker) stayed white whatever the theme; hints in grey fell short
+  on dark panels. Every theme now passes a readability check on every tab, run
+  by the tests on each change.
+- **Dropdowns with words already in them opened onto every option.** A box
+  that still held something typed earlier - half a name, a path - showed the
+  whole list when opened, as though it were empty. It now shows what those
+  words find. A box holding a choice still opens onto the whole list, since
+  that is how you pick another, and words that find nothing do too.
+- **A warning about a scene an action doesn't use.** Changing an action's
+  type keeps what you had typed for the old one, in case the change was a
+  slip - and the check went on reading it. A Character Focus that used to be
+  a Set Active was warned that its "scene" did not exist, about a value the
+  action never uses and the editor never shows. Only what an action's type
+  actually reads is checked now. The two warnings about a missing scene or
+  sound also no longer claim that renaming leaves references behind: since
+  1.7.0 they follow the rename.
+
+- **A new record could jump out of its folder.** Make a folder, add a scene
+  (or a place, NPC, wallpaper, track, sound, dialogue or rule) inside it, give
+  it a name - and the next undo, or anything else that rebuilt the list, put
+  it back at the top level, outside the folder. Naming a new record also
+  renames it behind the scenes, and the folder went on looking for it by the
+  old name. Folders now keep up with the name as it changes.
+
 ## 1.7.0
 
 A release mostly about sound and about finding your way round the editor.

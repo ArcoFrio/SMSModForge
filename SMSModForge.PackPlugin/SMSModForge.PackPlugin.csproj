@@ -14,9 +14,9 @@
          reports comes from Shared/ForgeVersion.cs. Kept in step, and listed
          here only so the next person to look for a version finds the note
          rather than believing these. -->
-    <Version>1.7.0</Version>
-    <AssemblyVersion>1.7.0.0</AssemblyVersion>
-    <FileVersion>1.7.0.0</FileVersion>
+    <Version>1.8.0</Version>
+    <AssemblyVersion>1.8.0.0</AssemblyVersion>
+    <FileVersion>1.8.0.0</FileVersion>
     <AssemblyName>SMSModForge.PackPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -71,6 +71,8 @@
     <Compile Include="QuestJournalDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="PhotoSystemDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="LayoutDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="DebugBridge.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="DebugBridgeWorld.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="QuestRegistry.cs" />
     <Compile Include="QuestRuntime.cs" />
     <Compile Include="QuestTicker.cs" />
@@ -81,6 +83,11 @@
     <Compile Include="StarmakerGallery.cs" />
     <Compile Include="VanillaQuestEdits.cs" />
     <Compile Include="SaveLoadWarning.cs" />
+    <Compile Include="MainMenuNotice.cs" />
+    <Compile Include="MenuAboutButton.cs" />
+    <Compile Include="ForgeLook.cs" />
+    <Compile Include="ForgeEmblem.cs" />
+    <Compile Include="MenuRowLook.cs" />
     <Compile Include="GameGateRuntime.cs" />
     <Compile Include="QuestPlaceRules.cs" />
     <Compile Include="VanillaDialogueInjector.cs" />
@@ -296,6 +303,7 @@
     <Compile Include="..\Shared\PackConflicts.cs" Link="Shared\PackConflicts.cs" />
     <Compile Include="..\Shared\Transitions.cs" Link="Shared\Transitions.cs" />
     <Compile Include="..\Shared\RichText.cs" Link="Shared\RichText.cs" />
+    <Compile Include="..\Shared\SoundCues.cs" Link="Shared\SoundCues.cs" />
     <Compile Include="..\Shared\TextTemplates.cs" Link="Shared\TextTemplates.cs" />
     <Compile Include="..\Shared\XUnityLanguage.cs" Link="Shared\XUnityLanguage.cs" />
     <Compile Include="..\Shared\GameConditionEdits.cs" Link="Shared\GameConditionEdits.cs" />
@@ -324,6 +332,7 @@
     <Compile Include="..\Shared\GameArt.cs" Link="Shared\GameArt.cs" />
     <Compile Include="..\Shared\LanguageChoice.cs" Link="Shared\LanguageChoice.cs" />
     <Compile Include="..\Shared\GameLineNotice.cs" Link="Shared\GameLineNotice.cs" />
+    <Compile Include="..\Shared\ForgeNotice.cs" Link="Shared\ForgeNotice.cs" />
   </ItemGroup>
 
   <ItemGroup>

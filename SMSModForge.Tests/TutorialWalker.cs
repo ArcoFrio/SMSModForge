@@ -23,14 +23,22 @@ namespace SMSModForge.Tests;
 /// </summary>
 internal sealed class TutorialWalker : IDisposable
 {
-    public MainViewModel Vm { get; } = new();
+    public MainViewModel Vm { get; }
 
     /// <summary>A pack folder of its own, thrown away afterwards. Several steps
     /// only make sense against a pack that exists on disk.</summary>
     public string Root { get; } = Path.Combine(
         Path.GetTempPath(), "SMSModForgeTutorialTest", Guid.NewGuid().ToString("N"));
 
-    public TutorialWalker() => Directory.CreateDirectory(Root);
+    public TutorialWalker() : this(new MainViewModel()) { }
+
+    /// <summary>Walk with the view model of a real window, so what the steps do
+    /// is drawn - see <see cref="TutorialsOnScreenTests"/>.</summary>
+    public TutorialWalker(MainViewModel vm)
+    {
+        Vm = vm;
+        Directory.CreateDirectory(Root);
+    }
 
     public void Dispose()
     {
@@ -50,21 +58,19 @@ internal sealed class TutorialWalker : IDisposable
 
     /// <summary>
     /// Write a file the pack can point at, for a step that needs art present
-    /// without caring what it looks like. Real PNG header, so the dimension
-    /// checks read it as the size asked for.
+    /// without caring what it looks like: a real PNG of the size asked for,
+    /// clear all over - the dimension checks read its size, and a real window
+    /// (<see cref="TutorialsOnScreenTests"/>) has to be able to draw it.
     /// </summary>
     public string WritePng(string rel, int w = 256, int h = 256)
     {
         string abs = Path.Combine(Root, rel.Replace('/', Path.DirectorySeparatorChar));
         Directory.CreateDirectory(Path.GetDirectoryName(abs)!);
-        var b = new byte[24];
-        byte[] sig = { 0x89, (byte)'P', (byte)'N', (byte)'G', 13, 10, 26, 10 };
-        sig.CopyTo(b, 0);
-        b[11] = 13;
-        b[12] = (byte)'I'; b[13] = (byte)'H'; b[14] = (byte)'D'; b[15] = (byte)'R';
-        b[16] = (byte)(w >> 24); b[17] = (byte)(w >> 16); b[18] = (byte)(w >> 8); b[19] = (byte)w;
-        b[20] = (byte)(h >> 24); b[21] = (byte)(h >> 16); b[22] = (byte)(h >> 8); b[23] = (byte)h;
-        File.WriteAllBytes(abs, b);
+        var clear = System.Windows.Media.Imaging.BitmapSource.Create(
+            w, h, 96, 96, System.Windows.Media.PixelFormats.Bgra32, null, new byte[w * h * 4], w * 4);
+        var png = new System.Windows.Media.Imaging.PngBitmapEncoder();
+        png.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(clear));
+        using (var file = File.Create(abs)) png.Save(file);
         return rel;
     }
 }
@@ -161,7 +167,7 @@ internal static class TutorialSolutions
         ["a-face-that-moves / Open the character you made"] = w =>
         {
             GiveACharacter(w);
-            w.Vm.SelectedOutfit = w.Vm.Characters.First(c => !c.IsPlayer).Outfits[0];
+            w.Vm.SelectedOutfit = AuthorsOwn(w).Outfits[0];
         },
         ["a-face-that-moves / Give it a blink"] = w =>
         {
@@ -353,7 +359,7 @@ internal static class TutorialSolutions
             var n = w.Vm.SelectedNode!;
             n.Text = "Hello there.";
             // Somebody has to say it. A line with no actor shows no name.
-            n.Actor = w.Vm.Characters.First(c => !c.IsPlayer).Key;
+            n.Actor = AuthorsOwn(w).Key;
         },
         ["first-conversation / Give the player a say"] = w =>
         {
@@ -389,7 +395,7 @@ internal static class TutorialSolutions
         ["making-it-move / Open the character you made"] = w =>
         {
             GiveACharacter(w);
-            w.Vm.SelectedOutfit = w.Vm.Characters.First(c => !c.IsPlayer).Outfits[0];
+            w.Vm.SelectedOutfit = AuthorsOwn(w).Outfits[0];
         },
         ["making-it-move / Pick a bust with something to move"] = w =>
             // The check is baselined against whatever was already there, so it
@@ -421,6 +427,8 @@ internal static class TutorialSolutions
         ["npcs-that-belong / Put the same person in twice"] = w =>
         {
             GiveAPlacedNpc(w);
+            // Choosing the room in the place list, as the step lets an author.
+            w.Vm.SelectedPlace = w.Vm.Places[0];
             var placed = w.Vm.SelectedPlace!.NpcsNode.AddNpc();
             placed.Npc = w.Vm.Npcs[0].Key;
         },
@@ -469,8 +477,10 @@ internal static class TutorialSolutions
         ["sound-in-a-room / Say it in a line"] = w =>
         {
             // The pattern goes into the text as written -- asterisks included,
-            // which is what the runtime looks for.
+            // which is what the runtime looks for. The line chosen first, as an
+            // author has to before its editor is there to type in.
             var d = w.Vm.SelectedDialogue!;
+            w.Vm.SelectedNode = d.Nodes[0];
             d.Nodes[0].Text = "*door* Oh — you are back.";
         },
         ["sound-in-a-room / The other way to fire one"] = w =>
@@ -561,6 +571,9 @@ internal static class TutorialSolutions
         {
             w.Vm.AddIntegrationActionCommand.Execute(null);
             var a = w.Vm.SelectedIntegrationRule!.Actions.Last();
+            // As an author does it: the type first - the Category row only
+            // shows for a Set Active action, and only it can set one (1.8.0).
+            a.DisplayType = SMSModForge.Model.NodeActionTypes.SetGameObjectActive;
             a.Category = SMSModForge.ViewModel.NodeActionViewModel.CatScene;
             a.Target = w.Vm.Scenes[0].Key;
             a.Active = true;
@@ -576,12 +589,18 @@ internal static class TutorialSolutions
     // starts at tutorial 5 has to be handed the same ground. These do that
     // through the view model, exactly as the earlier tutorial would have.
 
+    /// <summary>A character the author made - not the player, and not one of
+    /// the game's cast, which a real window lists beside the pack's own.</summary>
+    private static bool IsAuthorsOwn(CharacterViewModel c) => !c.IsPlayer && !c.Model.IsVanillaCharacter;
+
+    private static CharacterViewModel AuthorsOwn(TutorialWalker w) => w.Vm.Characters.First(IsAuthorsOwn);
+
     private static void GiveACharacter(TutorialWalker w)
     {
         // The built-in player is in every pack from the moment it exists, so
         // "are there any characters" is always true and would skip this.
         // What these walks need is a character the AUTHOR made.
-        if (w.Vm.Characters.Any(c => !c.IsPlayer)) return;
+        if (w.Vm.Characters.Any(IsAuthorsOwn)) return;
         w.SaveToRoot();
         w.CopyAssets();
         w.Vm.AddCharacterCommand.Execute(null);

@@ -204,10 +204,39 @@ internal static class Timings
         return times;
     }
 
-    public static void Write(RunProgress run, string? path = null)
+    /// <param name="keepOthers">Keep the times of tests this run did not
+    /// run. A tester of a parallel run leaves only its own, for tester 1 to
+    /// <see cref="Merge"/>.</param>
+    public static void Write(RunProgress run, string? path = null, bool keepOthers = true)
+    {
+        var file = path ?? DefaultPath;
+        var times = keepOthers ? Read(file) : new Dictionary<string, double>();
+        var names = keepOthers ? NamesIn(file) : new Dictionary<string, string>();
+        foreach (var (id, seconds) in run.Measured)
+        {
+            times[id] = seconds;
+            names[id] = run.NameOf(id);
+        }
+        Save(file, times, names);
+    }
+
+    /// <summary>The testers' times, each over the last ones, into the
+    /// shared file.</summary>
+    public static void Merge(IEnumerable<string> testerFiles, string? path = null)
     {
         var file = path ?? DefaultPath;
         var times = Read(file);
+        var names = NamesIn(file);
+        foreach (var tester in testerFiles)
+        {
+            foreach (var (id, seconds) in Read(tester)) times[id] = seconds;
+            foreach (var (id, name) in NamesIn(tester)) names[id] = name;
+        }
+        Save(file, times, names);
+    }
+
+    private static Dictionary<string, string> NamesIn(string file)
+    {
         var names = new Dictionary<string, string>();
         try
         {
@@ -218,13 +247,12 @@ internal static class Timings
             }
         }
         catch (IOException) { }
+        catch (UnauthorizedAccessException) { }
+        return names;
+    }
 
-        foreach (var (id, seconds) in run.Measured)
-        {
-            times[id] = seconds;
-            names[id] = run.NameOf(id);
-        }
-
+    private static void Save(string file, Dictionary<string, double> times, Dictionary<string, string> names)
+    {
         var lines = times.OrderBy(t => names.TryGetValue(t.Key, out var n) ? n : t.Key, StringComparer.Ordinal)
                          .Select(t => t.Key + "\t" + t.Value.ToString("0.###", CultureInfo.InvariantCulture)
                                       + "\t" + (names.TryGetValue(t.Key, out var n) ? n : ""));

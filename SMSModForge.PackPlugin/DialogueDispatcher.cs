@@ -10,6 +10,7 @@ using GameCreator.Runtime.Dialogue.UnityUI;
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace SMSModForge.PackPlugin
@@ -77,6 +78,7 @@ namespace SMSModForge.PackPlugin
             built.Dialogue.EventStartNext  += id => OnStartNext(built, id);
             built.Dialogue.EventFinishNext += id => OnFinishNext(built, id);
             built.Dialogue.EventFinish     += () => OnDialogueFinished(built);
+            HookChoices(built);
 
             if (built.DisableVanillaTrigger && built.VanillaRoomTalk != null)
             {
@@ -88,6 +90,57 @@ namespace SMSModForge.PackPlugin
                 if (built.SuppressedTrigger != null)
                     built.SuppressedWasEnabled = built.SuppressedTrigger.enabled;
             }
+        }
+
+        // ── The option a player picks ───────────────────────────────────
+        //
+        // The game's skin skips the chosen option (Game Creator's
+        // NodeTypeChoice.GetNext, SkipChoice): what comes next is the option's
+        // children, and the option itself is never played - so neither of its
+        // action lists ever ran, the ones the editor offers on an option
+        // included (seen in the game by the in-game suite, 1.8.0). They run
+        // here instead, the moment it is taken. Where a skin or a node does
+        // play the option, it starts like any line and its own hooks run it.
+
+        private static readonly FieldInfo _fldChosenId =
+            typeof(NodeTypeChoice).GetField("m_ChosenId", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo _fldSkipChoice =
+            typeof(NodeTypeChoice).GetField("m_SkipChoice", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo _fldOptions =
+            typeof(TNodeType).GetField("m_Options", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        private void HookChoices(DialogueBuilder.BuiltDialogue built)
+        {
+            var content = built.Dialogue.Story != null ? built.Dialogue.Story.Content : null;
+            if (content == null || _fldChosenId == null) return;
+            foreach (int id in built.NodeByGc2Id.Keys)
+            {
+                var node = content.Get(id);
+                var choice = node != null ? node.NodeType as NodeTypeChoice : null;
+                if (choice == null) continue;
+                node.EventFinishChoice += _ => OnOptionTaken(built, choice);
+            }
+        }
+
+        private void OnOptionTaken(DialogueBuilder.BuiltDialogue built, NodeTypeChoice choice)
+        {
+            int chosen = (int)_fldChosenId.GetValue(choice);
+            if (chosen == -1 || !SkipsTheOption(built, choice)) return;
+            if (!built.NodeByGc2Id.TryGetValue(chosen, out var nj)) return;
+            ActionRuntime.ExecuteList(nj["actionsOnStart"] as JArray, _ctx);
+            ActionRuntime.ExecuteList(nj["actionsOnFinish"] as JArray, _ctx);
+        }
+
+        /// <summary>Whether the chosen option is passed over rather than played -
+        /// Game Creator's own rule, from the node or from the skin.</summary>
+        private static bool SkipsTheOption(DialogueBuilder.BuiltDialogue built, NodeTypeChoice choice)
+        {
+            object options = _fldOptions != null ? _fldOptions.GetValue(choice) : null;
+            if (options != null && options.ToString() == "FromNode")
+                return _fldSkipChoice != null && (bool)_fldSkipChoice.GetValue(choice);
+            var skin = built.Dialogue.Story != null && built.Dialogue.Story.Content != null
+                ? built.Dialogue.Story.Content.DialogueSkin : null;
+            return skin != null && skin.ValuesChoices.SkipChoice;
         }
 
         private static Behaviour FindBehaviourByTypeName(GameObject go, string typeName)
@@ -279,6 +332,21 @@ namespace SMSModForge.PackPlugin
             }
             return winner;
         }
+
+#if DEBUG
+        /// <summary>The test bridge's way in: start one of this pack's
+        /// dialogues by key, as its conditions passing would.</summary>
+        internal bool StartForBridge(string key)
+        {
+            foreach (var built in _built)
+            {
+                if (!string.Equals(built.Key, key, System.StringComparison.OrdinalIgnoreCase)) continue;
+                StartDialogue(built);
+                return true;
+            }
+            return false;
+        }
+#endif
 
         /// <summary>Fire a candidate returned by <see cref="PeekEligible"/> —
         /// either arming it behind the Talk button (queued) or starting it.</summary>
@@ -794,7 +862,7 @@ namespace SMSModForge.PackPlugin
             // has none of its own for (see CueText).
             string text = SMSModForge.Shared.PackTexts.CueText(nj);
             if (!string.IsNullOrEmpty(text) && _ctx.Sfx != null && _ctx.Plugin != null)
-                _ctx.Sfx.FireMatchingPatterns(text, _ctx.Plugin, _ctx.Log);
+                _ctx.Sfx.PlayLine(text, nj["cues"], _ctx.Plugin, _ctx.Log, built.Dialogue.Story?.Content?.Get(nodeId));
         }
 
         private void OnFinishNext(DialogueBuilder.BuiltDialogue built, int nodeId)

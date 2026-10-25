@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Windows.Controls;
 using SMSModForge.Model;
+using SMSModForge.View.Controls;
 using SMSModForge.ViewModel;
 using Xunit;
 using Xunit.Abstractions;
@@ -18,7 +19,7 @@ public sealed class QuestSidebarTests
     private readonly ITestOutputHelper _out;
     public QuestSidebarTests(ITestOutputHelper o) => _out = o;
 
-    private const int TabQuests = 13;
+    private const int TabQuests = MainTab.Quests;
 
     private static VanillaQuests.VanillaQuest Game => VanillaQuests.All.First(q => q.Tasks.Count >= 2);
 
@@ -179,9 +180,10 @@ public sealed class QuestSidebarTests
 
             var list = (ListBox)window.FindName("VanillaQuestList");
             Assert.Single(list.Items);
-            Assert.True(((Button)window.FindName("AddVanillaQuestButton")).IsVisible);
-            Assert.True(((Button)window.FindName("RemoveVanillaQuestButton")).IsEnabled);
-            Assert.False(((Button)window.FindName("RemoveQuestButton")).IsEnabled,
+            var vanillaBar = (NavigatorBar)window.FindName("VanillaQuestNavigator");
+            Assert.True(vanillaBar.Role("add")!.IsVisible);
+            Assert.True(vanillaBar.Role("delete")!.IsEnabled);
+            Assert.False(((NavigatorBar)window.FindName("QuestNavigator")).Role("delete")!.IsEnabled,
                          "the tree's Remove is live while one of the game's quests is selected");
 
             var row = vm.QuestTree.FindLeaf(mine)!;

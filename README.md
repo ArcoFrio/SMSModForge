@@ -1,4 +1,4 @@
-﻿# SMSModForge 1.7.0
+﻿# SMSModForge 1.8.0
 
 A toolkit for making mod content for **Starmaker Story 1.8E**, in two parts:
 
@@ -26,7 +26,17 @@ into the game.
 
 ### Installing
 
-**The plugin**, into your game folder:
+**With the installer** (from 1.8.0): run `Starmaker - ModForge Setup
+<version>.exe`. It asks for your Starmaker Story folder and checks it really
+is the game, puts the plugin there (with BepInEx, if the game has none yet),
+and puts the editor in the folder you choose - by default
+`%LocalAppData%\Programs\SMSModForge`, where Windows keeps programs installed
+for you alone; inside the game folder works but is not recommended. It adds a
+Start menu shortcut, and an entry in Settings > Apps to uninstall it from.
+Uninstalling leaves your packs, the Mods folder, BepInEx and the editor's
+settings.
+
+**By hand**, from the two zips - the plugin into your game folder:
 
 ```
 <game>/BepInEx/plugins/

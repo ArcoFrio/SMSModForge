@@ -53,9 +53,7 @@ public class TutorialShapeTests
     public void An_anchor_is_declared_once()
     {
         var seen = new Dictionary<string, int>(StringComparer.Ordinal);
-        foreach (System.Text.RegularExpressions.Match m in
-                 System.Text.RegularExpressions.Regex.Matches(
-                     Xaml.Text, @"TutorialAnchor\.Id\s*=\s*""([^""]+)"""))
+        foreach (System.Text.RegularExpressions.Match m in Xaml.AnchorRe.Matches(Xaml.Text))
         {
             string id = m.Groups[1].Value;
             seen[id] = seen.TryGetValue(id, out int c) ? c + 1 : 1;

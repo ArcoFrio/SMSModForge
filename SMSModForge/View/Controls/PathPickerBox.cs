@@ -94,6 +94,8 @@ public sealed class PathPickerBox : DockPanel
         _browse.Click += (_, __) => Browse();
         // Its words are worked out as it draws: again when the language changes.
         LocText.Follow(this, ShowBorrowed);
+        // And again on the way in: the file may have been put there since.
+        _box.GotKeyboardFocus += (_, _) => ShowBorrowed();
     }
 
     private void ForwardToolTip()
@@ -104,8 +106,41 @@ public sealed class PathPickerBox : DockPanel
     private void ShowBorrowed()
     {
         bool outside = OutsideLook.Apply(_box, PathText, PackRoot);
-        if (BorrowedLook.Apply(_box, PathText)) _box.ToolTip = BorrowedLook.Tip(PathText);
+        bool borrowed = BorrowedLook.Apply(_box, PathText);
+        if (borrowed) _box.ToolTip = BorrowedLook.Tip(PathText);
         else if (!outside) ForwardToolTip();
+
+        // A path that names no file is irrefutably wrong (the author, 1.8.0:
+        // red text for those): the art will be missing in game. Not for a
+        // borrowed bust, which names the game's art rather than a file, and
+        // not before there is a pack to look in. Nor for a path leading out of
+        // the pack: its own tip says why the game will not find it, and how to
+        // bring the file in, which "no file here" would only cover up.
+        string path = (PathText ?? "").Trim();
+        IsMissing = !borrowed && !outside && path.Length > 0 && !string.IsNullOrEmpty(PackRoot)
+                    && !path.Contains('{') && !path.StartsWith('$') && !Exists(path);
+        if (IsMissing)
+        {
+            _box.SetResourceReference(Control.ForegroundProperty, "Theme.Danger");
+            _box.ToolTip = Loc.T("picker.missing.tip");
+        }
+        else if (!borrowed) _box.ClearValue(Control.ForegroundProperty);
+    }
+
+    /// <summary>The path names no file. For tests.</summary>
+    internal bool IsMissing { get; private set; }
+
+    private bool Exists(string path)
+    {
+        try
+        {
+            string full = System.IO.Path.IsPathRooted(path)
+                ? path
+                : System.IO.Path.Combine(PackRoot!, path.Replace('/', System.IO.Path.DirectorySeparatorChar));
+            return File.Exists(full) || Directory.Exists(full);
+        }
+        catch (ArgumentException) { return false; }
+        catch (NotSupportedException) { return false; }
     }
 
     private void Browse()

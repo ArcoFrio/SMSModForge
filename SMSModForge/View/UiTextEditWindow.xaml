@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:SMSModForge.Localization"
         Title="{l:T uiEdit.title}" Width="720" Height="520" MinWidth="520" MinHeight="380"
-        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource Theme.Window}"
+        Foreground="{DynamicResource Theme.Text}">
     <DockPanel Margin="12">
         <!-- Every text of the editor, by its words in English or in this language:
              the ones in menus, messages and tooltips have no pencil of their own. -->
@@ -34,7 +36,7 @@
                     <DataTemplate>
                         <StackPanel Margin="0,2">
                             <TextBlock Text="{Binding Shown}" TextWrapping="Wrap" MaxHeight="48" TextTrimming="CharacterEllipsis"/>
-                            <TextBlock Text="{Binding Detail}" FontSize="10" Foreground="Gray" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{Binding Detail}" FontSize="10" Foreground="{DynamicResource Theme.TextMuted}" TextTrimming="CharacterEllipsis"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -42,18 +44,18 @@
 
             <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <TextBlock x:Name="NothingText" Text="{l:T uiEdit.pick}" Foreground="Gray" TextWrapping="Wrap"/>
-                    <TextBlock x:Name="KeyText" FontSize="10" Foreground="Gray" Margin="0,0,0,6" TextWrapping="Wrap"/>
-                    <TextBlock x:Name="FormGuideText" FontSize="10" Foreground="Gray" Margin="0,0,0,6" TextWrapping="Wrap"/>
+                    <TextBlock x:Name="NothingText" Text="{l:T uiEdit.pick}" Foreground="{DynamicResource Theme.TextMuted}" TextWrapping="Wrap"/>
+                    <TextBlock x:Name="KeyText" FontSize="10" Foreground="{DynamicResource Theme.TextMuted}" Margin="0,0,0,6" TextWrapping="Wrap"/>
+                    <TextBlock x:Name="FormGuideText" FontSize="10" Foreground="{DynamicResource Theme.TextMuted}" Margin="0,0,0,6" TextWrapping="Wrap"/>
                     <ItemsControl x:Name="FormList">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Margin="0,0,0,10">
                                     <TextBlock Text="{Binding Label}" FontWeight="SemiBold" Margin="0,0,0,2"/>
-                                    <TextBlock Text="{l:T uiEdit.english}" FontSize="11" Foreground="Gray"/>
+                                    <TextBlock Text="{l:T uiEdit.english}" FontSize="11" Foreground="{DynamicResource Theme.TextMuted}"/>
                                     <TextBox Text="{Binding English, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap"
                                              BorderThickness="0" Background="Transparent" Margin="0,0,0,4"/>
-                                    <TextBlock Text="{Binding LanguageLabel}" FontSize="11" Foreground="Gray"/>
+                                    <TextBlock Text="{Binding LanguageLabel}" FontSize="11" Foreground="{DynamicResource Theme.TextMuted}"/>
                                     <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
                                              AcceptsReturn="True" MinHeight="44"/>
                                 </StackPanel>

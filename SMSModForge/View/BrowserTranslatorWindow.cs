@@ -32,9 +32,7 @@ public sealed class BrowserTranslatorWindow : Window
     /// kept beside the editor's other settings so a question answered once is
     /// not asked every run.
     /// </summary>
-    internal static readonly string DataFolder = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "SMSModForge", "WebView2");
+    internal static string DataFolder => Services.AppDataFolder.PathOf("WebView2");
 
     private readonly WebView2 _web = new();
 

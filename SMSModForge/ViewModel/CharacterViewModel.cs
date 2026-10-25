@@ -191,9 +191,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
                 _frequencyText = _pitchMinText = _pitchMaxText = null;
                 OnPropertyChanged(nameof(VoiceTemplate));
                 OnPropertyChanged(nameof(TypewriterEnabled));
-                OnPropertyChanged(nameof(TypewriterFrequencyText));
-                OnPropertyChanged(nameof(TypewriterPitchMinText));
-                OnPropertyChanged(nameof(TypewriterPitchMaxText));
+                RaiseVoiceNumbers();
                 break;
         }
     }
@@ -303,9 +301,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         OnPropertyChanged(nameof(NameColorValue));
         OnPropertyChanged(nameof(VoiceTemplate));
         OnPropertyChanged(nameof(TypewriterEnabled));
-        OnPropertyChanged(nameof(TypewriterFrequencyText));
-        OnPropertyChanged(nameof(TypewriterPitchMinText));
-        OnPropertyChanged(nameof(TypewriterPitchMaxText));
+        RaiseVoiceNumbers();
         RefreshModified();
         RefreshResets();
         BustSourceChanged?.Invoke(this, EventArgs.Empty);
@@ -421,6 +417,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         // Derived from a property already handled. Answering these too would
         // run the whole comparison four times for one edit rather than once.
         nameof(NameColorBrush), nameof(NameColorValue),
+        nameof(TypewriterFrequency), nameof(TypewriterPitchMin), nameof(TypewriterPitchMax),
     };
 
     /// <summary>
@@ -1036,9 +1033,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
             DropVoiceIfItSaysNothing();
             _frequencyText = _pitchMinText = _pitchMaxText = null;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(TypewriterFrequencyText));
-            OnPropertyChanged(nameof(TypewriterPitchMinText));
-            OnPropertyChanged(nameof(TypewriterPitchMaxText));
+            RaiseVoiceNumbers();
         }
     }
 
@@ -1068,6 +1063,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
                              System.Globalization.CultureInfo.InvariantCulture, out var n))
             { TwEdit.Frequency = n; MarkCustom(); DropVoiceIfItSaysNothing(); }
             OnPropertyChanged();
+            OnPropertyChanged(nameof(TypewriterFrequency));
         }
     }
 
@@ -1083,6 +1079,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
                                System.Globalization.CultureInfo.InvariantCulture, out var f))
             { TwEdit.PitchMin = f; MarkCustom(); DropVoiceIfItSaysNothing(); }
             OnPropertyChanged();
+            OnPropertyChanged(nameof(TypewriterPitchMin));
         }
     }
 
@@ -1098,7 +1095,82 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
                                System.Globalization.CultureInfo.InvariantCulture, out var f))
             { TwEdit.PitchMax = f; MarkCustom(); DropVoiceIfItSaysNothing(); }
             OnPropertyChanged();
+            OnPropertyChanged(nameof(TypewriterPitchMax));
         }
+    }
+
+    // ── The same numbers, as sliders move them (the author, 1.8.0) ──────────
+    // Each goes through its box's text, so a slider and a typed number are one
+    // edit with one set of rules. The ranges hold every voice the game has -
+    // 25 to 45 characters a second, pitch 0.2 to 3 - with room either side.
+
+    public const double FrequencyLow = 5, FrequencyHigh = 100;
+    public const double PitchLow = 0.1, PitchHigh = 3;
+
+    public double TypewriterFrequency
+    {
+        get => Model.Typewriter?.Frequency ?? DefaultFrequency;
+        set
+        {
+            if (IsTheSliderCoercing(value, TypewriterFrequency, FrequencyLow, FrequencyHigh)) return;
+            TypewriterFrequencyText = ((int)Math.Round(value)).ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+    }
+
+    public double TypewriterPitchMin
+    {
+        get => Model.Typewriter?.PitchMin ?? DefaultPitchMin;
+        set
+        {
+            if (IsTheSliderCoercing(value, TypewriterPitchMin, PitchLow, PitchHigh)) return;
+            TypewriterPitchMinText = Math.Round(value, 2).ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+    }
+
+    public double TypewriterPitchMax
+    {
+        get => Model.Typewriter?.PitchMax ?? DefaultPitchMax;
+        set
+        {
+            if (IsTheSliderCoercing(value, TypewriterPitchMax, PitchLow, PitchHigh)) return;
+            TypewriterPitchMaxText = Math.Round(value, 2).ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+    }
+
+    /// <summary>
+    /// A number typed past the slider's end is the author's, and stays: the
+    /// slider pulls its own value into its range and hands that back, which
+    /// is not anybody moving it. Without this, typing 120 set it to 100.
+    /// </summary>
+    private static bool IsTheSliderCoercing(double value, double now, double low, double high)
+        => (now < low || now > high) && Math.Abs(value - Math.Clamp(now, low, high)) < 1e-9;
+
+    /// <summary>What each number's Reset puts back: one of the game's
+    /// characters' own voice, or the default a new character speaks with -
+    /// there is something to go back to either way, unlike the other fields of
+    /// a pack's own character.</summary>
+    public string FrequencyResetTip => Speaker != null
+        ? Loc.T("characters.resetField.tip3")
+        : Loc.F("characters.resetFrequency.packTip", "value", DefaultFrequency);
+
+    public string PitchMinResetTip => Speaker != null
+        ? Loc.T("characters.resetField.tip4")
+        : Loc.F("characters.resetPitchMin.packTip", "value", DefaultPitchMin.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture));
+
+    public string PitchMaxResetTip => Speaker != null
+        ? Loc.T("characters.resetField.tip5")
+        : Loc.F("characters.resetPitchMax.packTip", "value", DefaultPitchMax.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture));
+
+    /// <summary>Every voice number, typed and slid, after the voice changed
+    /// as a whole.</summary>
+    private void RaiseVoiceNumbers()
+    {
+        OnPropertyChanged(nameof(TypewriterFrequencyText));
+        OnPropertyChanged(nameof(TypewriterPitchMinText));
+        OnPropertyChanged(nameof(TypewriterPitchMaxText));
+        OnPropertyChanged(nameof(TypewriterFrequency));
+        OnPropertyChanged(nameof(TypewriterPitchMin));
+        OnPropertyChanged(nameof(TypewriterPitchMax));
     }
 
     /// <summary>
@@ -1199,7 +1271,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         // Hooked like the rest. A face added in this session is exactly the one
         // an author renames — it arrives called "Expression1" — so a row built
         // here and not wired up is the case that matters most.
-        var vm = Hooked(new ActorExpressionViewModel(def, RemoveExpression));
+        var vm = Hooked(new ActorExpressionViewModel(def, RemoveExpression, fresh: true));
         Expressions.Add(vm);
         ExpressionsChanged?.Invoke(this, EventArgs.Empty);
         return vm;

@@ -4,7 +4,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{l:T colorPicker.chooseColour}" Width="470" SizeToContent="Height"
         ResizeMode="NoResize"
-        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource Theme.Window}"
+        Foreground="{DynamicResource Theme.Text}">
     <DockPanel Margin="12">
 
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
@@ -39,7 +41,7 @@
              current colour is how a "small adjustment" turns out to be a big
              one; both are drawn over a chequerboard so alpha is visible. -->
         <Border DockPanel.Dock="Bottom" Height="46" Margin="0,12,0,0"
-                BorderBrush="#888" BorderThickness="1">
+                BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1">
             <Grid>
                 <Rectangle x:Name="Chequer"/>
                 <Grid>
@@ -67,7 +69,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Border BorderBrush="#888" BorderThickness="1">
+            <Border BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1">
                 <Canvas x:Name="Field" ClipToBounds="True" Background="Transparent"
                         MouseLeftButtonDown="Field_Down" MouseMove="Field_Move"
                         MouseLeftButtonUp="Field_Up">
@@ -105,7 +107,7 @@
             </Border>
 
             <Border Grid.Column="1" Width="22" Margin="10,0,0,0"
-                    BorderBrush="#888" BorderThickness="1">
+                    BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1">
                 <Canvas x:Name="HueBar" ClipToBounds="True" Background="Transparent"
                         MouseLeftButtonDown="Hue_Down" MouseMove="Hue_Move"
                         MouseLeftButtonUp="Hue_Up">
@@ -131,7 +133,7 @@
             </Border>
 
             <Border Grid.Column="2" Width="22" Margin="10,0,0,0"
-                    BorderBrush="#888" BorderThickness="1">
+                    BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1">
                 <Canvas x:Name="AlphaBar" ClipToBounds="True" Background="Transparent"
                         MouseLeftButtonDown="Alpha_Down" MouseMove="Alpha_Move"
                         MouseLeftButtonUp="Alpha_Up">

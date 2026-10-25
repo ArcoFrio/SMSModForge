@@ -366,6 +366,30 @@ public class UiBindingTests
         });
     }
 
+    /// <summary>
+    /// Builds a top-level menu's items the way opening it does.
+    /// <para/>
+    /// Opening one puts the menu bar in menu mode, which takes the mouse - and
+    /// the tests' windows live on a desktop of the run's own (see
+    /// <see cref="TestDesktop"/>), which has no mouse, so the menu shuts again
+    /// before its items exist. Laying out the submenu's content makes the same
+    /// containers with the same bindings, which is all this looks at.
+    /// </summary>
+    private static void OpenSubmenu(MenuItem menu)
+    {
+        menu.IsSubmenuOpen = true;
+        WindowHarness.Pump();
+        if (menu.Items.Count == 0 || menu.ItemContainerGenerator.ContainerFromIndex(0) != null) return;
+
+        menu.ApplyTemplate();
+        if (menu.Template.FindName("PART_Popup", menu) is System.Windows.Controls.Primitives.Popup { Child: System.Windows.FrameworkElement content })
+        {
+            content.Measure(new System.Windows.Size(1000, 1000));
+            content.Arrange(new System.Windows.Rect(content.DesiredSize));
+            WindowHarness.Pump();
+        }
+    }
+
     [Fact]
     public void The_template_menus_offer_something_that_works()
     {
@@ -394,8 +418,7 @@ public class UiBindingTests
                 var menu = (MenuItem)window.FindName(name);
                 Assert.NotNull(menu);
 
-                menu.IsSubmenuOpen = true;
-                WindowHarness.Pump();
+                OpenSubmenu(menu);
 
                 var items = menu.Items.Cast<object>()
                     .Select(i => menu.ItemContainerGenerator.ContainerFromItem(i))

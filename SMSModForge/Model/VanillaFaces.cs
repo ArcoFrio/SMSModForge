@@ -62,6 +62,15 @@ public static class VanillaFaces
     /// for by name seven hundred times.</summary>
     public const string Neutral = "neutral";
 
+    /// <summary>
+    /// A line's expression that shows no face: none, or <see cref="Neutral"/>
+    /// - in game the two are the same, and the editor offers them as one
+    /// button. Such a line says nothing about who speaks it.
+    /// </summary>
+    public static bool IsNoFace(string? expression)
+        => string.IsNullOrWhiteSpace(expression)
+           || string.Equals(expression.Trim(), Neutral, StringComparison.OrdinalIgnoreCase);
+
     /// <summary>Which of the game's characters this entry stands for, keyed the
     /// way the shared datasets are.</summary>
     public static string KeyOf(CharacterDef character)

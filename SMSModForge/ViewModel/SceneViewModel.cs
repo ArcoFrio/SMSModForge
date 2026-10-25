@@ -10,7 +10,7 @@ namespace SMSModForge.ViewModel;
 /// other slot — the runtime picks <see cref="CustomFrameSprite"/> when set,
 /// otherwise falls back to <see cref="VanillaFrame"/>.
 /// </summary>
-public sealed class SceneViewModel : ObservableObject
+public sealed class SceneViewModel : ObservableObject, IDerivesKey
 {
     public SceneDef Model { get; }
 
@@ -20,17 +20,24 @@ public sealed class SceneViewModel : ObservableObject
     //
     // See DerivedKey for the rule. In short: a NEW scene takes its key from
     // whatever is typed as the display name, editing the key stops that for
-    // good, and a scene loaded from disk never re-derives.
+    // good, and one loaded from disk follows only while its key is still
+    // its display name made into a name (or a duplicate's "_copy").
 
     private readonly DerivedKey _derivedKey = new();
 
     /// <summary>Whether the runtime name still follows the display name.</summary>
     public bool KeyIsDerived => _derivedKey.IsDerived;
 
-    /// <summary>Start deriving the key. Called for a scene the author has just
-    /// added, never for one being loaded.</summary>
+    /// <summary>Start deriving the key. Called for one the author has just
+    /// added, duplicated or pasted.</summary>
     public void DeriveKeyFromDisplayName(System.Func<System.Collections.Generic.IEnumerable<string>> siblingKeys)
         => _derivedKey.Follow(siblingKeys);
+
+
+    /// <summary>Players' saves remember a Starmaker photo's scene by its key
+    /// (the gallery), so one never follows its display name once saved.</summary>
+    public void WatchDisplayName(System.Func<System.Collections.Generic.IEnumerable<string>> siblingKeys)
+        => _derivedKey.Watch(siblingKeys, Model.DisplayName, () => Model.StarmakerPhoto);
 
     public string Key
     {
@@ -219,5 +226,5 @@ public sealed class SceneViewModel : ObservableObject
         set { if (Model.StarmakerPhoto == value) return; Model.StarmakerPhoto = value; OnPropertyChanged(); }
     }
 
-    public string Display => string.IsNullOrWhiteSpace(DisplayName) ? Key : $"{DisplayName} ({Key})";
+    public string Display => ListNames.Of(DisplayName, Key);
 }

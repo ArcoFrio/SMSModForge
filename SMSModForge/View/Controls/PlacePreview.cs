@@ -297,7 +297,9 @@ public sealed class PlacePreview : Grid
     private double _panStartX, _panStartY;
     private readonly TextBlock _placeholder = new()
     {
-        Foreground = Brushes.Gray,
+        Foreground = PreviewMessage.Ink,
+        Background = PreviewMessage.Chip,
+        Padding = new Thickness(6, 3, 6, 4),
         HorizontalAlignment = HorizontalAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center,
         FontSize = 13,
@@ -324,16 +326,21 @@ public sealed class PlacePreview : Grid
         // Fill the width the container gives us; the height follows the native
         // aspect (see MeasureOverride) and the on-screen scale is recomputed on
         // resize (SizeChanged), so the preview tracks the window + splitter.
-        HorizontalAlignment = HorizontalAlignment.Stretch;
+        HorizontalAlignment = HorizontalAlignment.Center;
         VerticalAlignment = VerticalAlignment.Top;
-        Background = new SolidColorBrush(Color.FromRgb(0x22, 0x22, 0x22));
+        // The hierarchy, the picture and what is selected, side by side
+        // (the author, 1.8.0: the panels covered the picture's corners).
+        ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0) });
+        ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(FixedWidth) });
+        ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0) });
+        _viewport.Background = new SolidColorBrush(Color.FromRgb(0x22, 0x22, 0x22));
         // Scale then translate: screen = pan + scale x local, which is the form
         // the focal-zoom maths below inverts.
         var view = new TransformGroup();
         view.Children.Add(_extentScale);
         view.Children.Add(_viewPan);
         _extentHost.RenderTransform = view;
-        SizeChanged += (_, e) => UpdateDisplayScale(e.NewSize.Width);
+        _viewport.SizeChanged += (_, e) => UpdateDisplayScale(e.NewSize.Width);
         // Focusable so grabbing a gizmo handle can pull keyboard focus off any
         // text field being edited — otherwise that field's native Ctrl+Z would
         // swallow the app's undo shortcut after a drag.
@@ -365,19 +372,24 @@ public sealed class PlacePreview : Grid
         _gizmoLayer.MouseLeftButtonUp += OnGizmoMouseUp;
 
         // Wheel zooms, middle-drag pans, double-click resets. Bound on the
-        // control rather than the canvas so they work over empty room area too.
-        MouseWheel += OnViewWheel;
-        MouseDown += OnViewMouseDown;
-        MouseMove += OnViewMouseMove;
-        MouseLeave += OnViewMouseLeave;
-        MouseUp += OnViewMouseUp;
+        // picture rather than the canvas so they work over empty room area too,
+        // and not on the control: the lists beside it scroll with the wheel.
+        _viewport.MouseWheel += OnViewWheel;
+        _viewport.MouseDown += OnViewMouseDown;
+        _viewport.MouseMove += OnViewMouseMove;
+        _viewport.MouseLeave += OnViewMouseLeave;
+        _viewport.MouseUp += OnViewMouseUp;
 
+        SetColumn(_viewport, 1);
+        SetColumn(_placeholder, 1);
         Children.Add(_viewport);
         Children.Add(_placeholder);
         BuildObjectMenu();
         Children.Add(_objectMenu);
         BuildGizmoToolbar();
+        SetColumn(_gizmoToolbar, 2);
         Children.Add(_gizmoToolbar);
+        BuildSizeGrip();
 
         // The Wet droplet markers animate only while the control is actually
         // visible (not on a hidden/unselected tab).
@@ -393,20 +405,128 @@ public sealed class PlacePreview : Grid
     /// so a taller preview at a wider window just scrolls.</summary>
     protected override Size MeasureOverride(Size availableSize)
     {
-        double w = availableSize.Width;
-        if (double.IsInfinity(w) || double.IsNaN(w) || w <= 0)
-            w = FixedWidth;
-        double h = w / Aspect;
-        base.MeasureOverride(new Size(w, h));
-        return new Size(w, h);
+        // The picture as large as its corner was dragged to, the hierarchy and
+        // the selection beside it as wide as their longest name - and when
+        // that is more than the room, the lists give way first, down to
+        // ListMin each, and only then the picture (the author, 1.8.0).
+        double room = availableSize.Width;
+        bool lists = _objectMenu.Visibility == Visibility.Visible;
+        double left = lists ? NaturalWidth(_objectMenu) : 0;
+        double right = lists ? Math.Max(SelectionMinWidth, NaturalSelectionWidth()) : 0;
+        bool roomKnown = !double.IsInfinity(room) && !double.IsNaN(room) && room > 0;
+        // Not dragged: as large as fits beside the lists at their full width,
+        // up to its own size. Dragged: that size, the lists giving way.
+        double picture = !double.IsNaN(_pictureScale) ? FixedWidth * _pictureScale
+                       : roomKnown ? Math.Max(PictureMin, Math.Min(FixedWidth, room - left - right))
+                       : FixedWidth;
+        if (roomKnown && picture + left + right > room)
+        {
+            double listsNow = left + right;
+            double listsCan = Math.Max(Math.Min(listsNow, lists ? 2 * ListMin : 0), room - picture);
+            if (listsNow > 0 && listsCan < listsNow)
+            {
+                left *= listsCan / listsNow;
+                right *= listsCan / listsNow;
+            }
+            picture = Math.Max(PictureMin, room - left - right);
+        }
+        double height = picture / Aspect;
+        SetWidth(0, left);
+        SetWidth(1, picture);
+        SetWidth(2, right);
+        base.MeasureOverride(new Size(left + picture + right, height));
+        return new Size(left + picture + right, height);
+    }
+
+    /// <summary>The narrowest a list beside the picture is squeezed to, and the
+    /// narrowest the picture itself goes.</summary>
+    private const double ListMin = 90, PictureMin = 240;
+
+    /// <summary>The selection panel's width when there is little in it.</summary>
+    private const double SelectionMinWidth = 170;
+
+    private void SetWidth(int column, double width)
+    {
+        var def = ColumnDefinitions[column];
+        if (Math.Abs(def.Width.Value - width) > 0.5 || !def.Width.IsAbsolute) def.Width = new GridLength(width);
+    }
+
+    /// <summary>What a panel would take with all the room it wants: its
+    /// longest row, unwrapped.</summary>
+    private static double NaturalWidth(FrameworkElement panel)
+    {
+        panel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        return panel.DesiredSize.Width;
+    }
+
+    /// <summary>The selection panel's rows of buttons, whatever is shown in it
+    /// now - so it does not change width as objects are picked.</summary>
+    private double NaturalSelectionWidth()
+    {
+        // Worked out from the words rather than measured: a chip that is
+        // hidden measures nothing, and every chip counts.
+        double dip = VisualTreeHelper.GetDpi(this).PixelsPerDip;
+        double Chip(Button b)
+        {
+            string words = (b.Content as TextBlock)?.Text ?? "";
+            var text = new FormattedText(words, System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight,
+                                         new Typeface(b.FontFamily, b.FontStyle, b.FontWeight, b.FontStretch), b.FontSize, Brushes.White, dip);
+            return text.WidthIncludingTrailingWhitespace + b.Padding.Left + b.Padding.Right + b.Margin.Left + b.Margin.Right + 2;
+        }
+        // Its rows wrap: as wide as its widest button, or as the three ways
+        // of moving side by side, which read best on one line.
+        double widest = Math.Max(_partRow.Children.OfType<Button>().Select(Chip).DefaultIfEmpty().Max(),
+                                 _modeRow.Children.OfType<Button>().Sum(Chip));
+        // The panel's padding, border and margin, and a scrollbar's room.
+        return widest + 12 + 2 + 6 + SystemParameters.VerticalScrollBarWidth;
+    }
+
+    // ── The picture's size, from its corner (the author, 1.8.0) ─────────────
+
+    /// <summary>How large the picture is drawn, 1 being <see cref="FixedWidth"/>;
+    /// not a number until it is dragged, when it fits beside its lists.
+    /// Remembered between sessions, for both kinds of place.</summary>
+    private double _pictureScale = Services.EditorPrefs.GetPreviewScale(SizeKey, double.NaN);
+
+    private const string SizeKey = "place";
+
+    private void BuildSizeGrip()
+    {
+        var grip = new System.Windows.Controls.Primitives.Thumb
+        {
+            Width = PreviewFrame.GripSize, Height = PreviewFrame.GripSize,
+            HorizontalAlignment = HorizontalAlignment.Right,
+            VerticalAlignment = VerticalAlignment.Bottom,
+            Cursor = Cursors.SizeNWSE,
+            Template = PreviewFrame.GripTemplate(),
+            Focusable = false,
+        };
+        LocText.Bind(grip, ToolTipProperty, "preview.resize.tip");
+        SetColumn(grip, 1);
+        SetZIndex(grip, 20);
+        grip.DragDelta += (_, e) =>
+        {
+            double w = Math.Max(1, _viewport.ActualWidth), h = Math.Max(1, _viewport.ActualHeight);
+            double along = (e.HorizontalChange * w + e.VerticalChange * h) / (w * w + h * h);
+            double shown = w / FixedWidth;
+            _pictureScale = Math.Round(Math.Clamp(shown * (1 + along), 0.4, 3), 3);
+            InvalidateMeasure();
+        };
+        grip.DragCompleted += (_, _) => Services.EditorPrefs.SetPreviewScale(SizeKey, _pictureScale);
+        grip.MouseDoubleClick += (_, e) =>
+        {
+            _pictureScale = double.NaN;
+            Services.EditorPrefs.SetPreviewScale(SizeKey, double.NaN);
+            InvalidateMeasure();
+            e.Handled = true;
+        };
+        Children.Add(grip);
     }
 
     /// <summary>Recompute the canvas→display scale from the live width so the
     /// whole scene (level art, NPCs, gizmo, water) tracks the window + splitter.</summary>
     private void UpdateDisplayScale(double controlWidth)
     {
-        // Cap the object menu's height to the current preview height (it scrolls).
-        _objectMenu.MaxHeight = Math.Max(60, ActualHeight - 12);
         if (controlWidth <= 0) return;
         double fit = controlWidth / CanvasWidth;
         if (Math.Abs(fit - _fitScale) < 1e-4) return;
@@ -438,7 +558,7 @@ public sealed class PlacePreview : Grid
         double sOld = _fitScale * _zoom;
         if (sOld <= 0) return;
 
-        var p = e.GetPosition(this);
+        var p = e.GetPosition(_viewport);
         double localX = (p.X - _viewPan.X) / sOld;
         double localY = (p.Y - _viewPan.Y) / sOld;
 
@@ -465,10 +585,10 @@ public sealed class PlacePreview : Grid
         if (e.ClickCount == 2) { ResetView(); e.Handled = true; return; }
 
         _panning = true;
-        _panStart = e.GetPosition(this);
+        _panStart = e.GetPosition(_viewport);
         _panStartX = _viewPan.X;
         _panStartY = _viewPan.Y;
-        CaptureMouse();
+        _viewport.CaptureMouse();
         Cursor = Cursors.SizeAll;
         e.Handled = true;
     }
@@ -482,7 +602,7 @@ public sealed class PlacePreview : Grid
 
         if (!_panning) return;
         if (e.MiddleButton != MouseButtonState.Pressed) { EndPan(); return; }
-        var now = e.GetPosition(this);
+        var now = e.GetPosition(_viewport);
         _viewPan.X = _panStartX + (now.X - _panStart.X);
         _viewPan.Y = _panStartY + (now.Y - _panStart.Y);
     }
@@ -502,7 +622,7 @@ public sealed class PlacePreview : Grid
     private void EndPan()
     {
         _panning = false;
-        ReleaseMouseCapture();
+        _viewport.ReleaseMouseCapture();
         Cursor = Cursors.Arrow;
     }
 
@@ -2502,7 +2622,9 @@ public sealed class PlacePreview : Grid
 
     private Border _gizmoToolbar = new();
     private TextBlock _gizmoTitle = new();
-    private StackPanel _partRow = new();
+    private WrapPanel _partRow = new(), _modeRow = new();
+    private StackPanel _gizmoBody = new();
+    private TextBlock _gizmoHint = new();
     private Button _btnBody = new(), _btnShadow = new(), _btnBlink = new(), _btnWet = new();
     /// <summary>Only shown when the selected placement's NPC has its
     /// reflection switched on — there is nothing to drag otherwise.</summary>
@@ -2936,36 +3058,51 @@ public sealed class PlacePreview : Grid
         _btnBlink = MakeChip(Chip("preview.gizmo.blink"), () => SetPart(GizmoPart.Blink));
         _btnWet = MakeChip(Chip("preview.gizmo.wet"), () => SetPart(GizmoPart.Wet));
         _btnReflection = MakeChip(Chip("preview.gizmo.reflection"), () => SetPart(GizmoPart.Reflection));
-        _partRow = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 4) };
+        // Rows that wrap, so the panel beside the picture can be narrow.
+        _partRow = new WrapPanel { Margin = new Thickness(0, 0, 0, 4) };
         foreach (var b in new[] { _btnBody, _btnShadow, _btnBlink, _btnWet, _btnReflection })
             _partRow.Children.Add(b);
 
         _btnMove = MakeChip(Chip("preview.gizmo.move"), () => SetMode(GizmoMode.Move));
         _btnRotate = MakeChip(Chip("preview.gizmo.rotate"), () => SetMode(GizmoMode.Rotate));
         _btnScale = MakeChip(Chip("preview.gizmo.scale"), () => SetMode(GizmoMode.Scale));
-        var modeRow = new StackPanel { Orientation = Orientation.Horizontal };
-        foreach (var b in new[] { _btnMove, _btnRotate, _btnScale }) modeRow.Children.Add(b);
+        _modeRow = new WrapPanel { Margin = new Thickness(0, 0, 0, 4) };
+        foreach (var b in new[] { _btnMove, _btnRotate, _btnScale }) _modeRow.Children.Add(b);
 
         var close = MakeChip(new TextBlock { Text = "✕" }, Deselect);
 
+        _gizmoBody = new StackPanel();
+        _gizmoBody.Children.Add(_gizmoTitle);
+        _gizmoBody.Children.Add(_partRow);
+        _gizmoBody.Children.Add(_modeRow);
+        _gizmoBody.Children.Add(close);
+
+        // Said while nothing is picked, so the panel beside the picture is
+        // never an empty box (it stays, so the picture does not move).
+        _gizmoHint = new TextBlock { Foreground = ChipText, FontSize = 11, TextWrapping = TextWrapping.Wrap, Opacity = 0.9 };
+        LocText.Bind(_gizmoHint, TextBlock.TextProperty, "preview.place.selectHint");
+
         var stack = new StackPanel();
-        stack.Children.Add(_gizmoTitle);
-        stack.Children.Add(_partRow);
-        stack.Children.Add(modeRow);
-        stack.Children.Add(close);
+        stack.Children.Add(_gizmoHint);
+        stack.Children.Add(_gizmoBody);
 
         _gizmoToolbar = new Border
         {
-            Background = new SolidColorBrush(Color.FromArgb(0xDD, 0x22, 0x24, 0x28)),
+            Background = new SolidColorBrush(Color.FromArgb(0xF2, 0x22, 0x24, 0x28)),
             BorderBrush = new SolidColorBrush(Color.FromRgb(0x55, 0x5A, 0x60)),
             BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(4),
             Padding = new Thickness(6),
-            Margin = new Thickness(6),
-            HorizontalAlignment = HorizontalAlignment.Right,   // left is the object menu
-            VerticalAlignment = VerticalAlignment.Top,
+            // Docked to the right of the picture, as tall as it, scrolling.
+            Margin = new Thickness(6, 0, 0, 0),
+            VerticalAlignment = VerticalAlignment.Stretch,
             Visibility = Visibility.Collapsed,
-            Child = stack,
+            Child = new ScrollViewer
+            {
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
+                Content = stack,
+            },
         };
         UpdateGizmoToolbar();
     }
@@ -2988,7 +3125,7 @@ public sealed class PlacePreview : Grid
         var b = new Button
         {
             Content = label,
-            Margin = new Thickness(0, 0, 4, 0),
+            Margin = new Thickness(0, 0, 4, 4),
             Padding = new Thickness(8, 2, 8, 2),
             FontSize = 11,
             MinWidth = 0,
@@ -3022,12 +3159,12 @@ public sealed class PlacePreview : Grid
 
     private void UpdateGizmoToolbar()
     {
-        if (_selPlacement == null && _selNode == null)
-        {
-            _gizmoToolbar.Visibility = Visibility.Collapsed;
-            return;
-        }
-        _gizmoToolbar.Visibility = Visibility.Visible;
+        // Beside the picture whenever the hierarchy is, picked or not.
+        _gizmoToolbar.Visibility = _objectMenu.Visibility;
+        bool picked = _selPlacement != null || _selNode != null;
+        _gizmoHint.Visibility = picked ? Visibility.Collapsed : Visibility.Visible;
+        _gizmoBody.Visibility = picked ? Visibility.Visible : Visibility.Collapsed;
+        if (!picked) return;
 
         bool isNpc = _selPlacement != null;
         _partRow.Visibility = isNpc ? Visibility.Visible : Visibility.Collapsed;
@@ -3072,85 +3209,35 @@ public sealed class PlacePreview : Grid
 
     // ── Object menu (left-side GO list) ─────────────────────────────────
 
-    // Resize limits for the hierarchy panel. Deep trees and long object names
-    // both overflow the default, so the panel is draggable rather than fixed.
-    private const double MenuMinWidth = 120, MenuMaxWidth = 640;
-    private const double MenuMinHeight = 90, MenuMaxHeight = 900;
-
+    /// <summary>
+    /// The hierarchy, docked to the left of the picture (the author, 1.8.0: it
+    /// covered the picture's top-left). Not resized by hand any more: as tall
+    /// as the picture, scrolling, and as wide as its longest name - children
+    /// included - unless the picture is made wider than the room, when it
+    /// gives way (see MeasureOverride). A bigger picture shows more of it.
+    /// </summary>
     private void BuildObjectMenu()
     {
         _objectMenuList = new StackPanel();
 
-        // Grip in the bottom-right corner, over the scroll view rather than
-        // beside it, so resizing costs no layout space when unused.
-        var grip = new System.Windows.Controls.Primitives.Thumb
-        {
-            Width = 14,
-            Height = 14,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            VerticalAlignment = VerticalAlignment.Bottom,
-            Cursor = Cursors.SizeNWSE,
-            Opacity = 0.75,
-            Template = GripTemplate(),
-        };
-        LocText.Bind(grip, ToolTipProperty, "preview.place.resizeHierarchy.tip");
-        grip.DragDelta += (_, e) =>
-        {
-            _objectMenu.Width = Math.Min(MenuMaxWidth,
-                Math.Max(MenuMinWidth, _objectMenu.Width + e.HorizontalChange));
-            _objectMenu.Height = Math.Min(MenuMaxHeight,
-                Math.Max(MenuMinHeight, _objectMenu.Height + e.VerticalChange));
-        };
-
-        var scroller = new ScrollViewer
-        {
-            VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-            Content = _objectMenuList,
-        };
-
-        var content = new Grid();
-        content.Children.Add(scroller);
-        content.Children.Add(grip);
-
         _objectMenu = new Border
         {
-            Background = new SolidColorBrush(Color.FromArgb(0xDD, 0x22, 0x24, 0x28)),
+            Background = new SolidColorBrush(Color.FromArgb(0xF2, 0x22, 0x24, 0x28)),
             BorderBrush = new SolidColorBrush(Color.FromRgb(0x55, 0x5A, 0x60)),
             BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(4),
             Padding = new Thickness(4),
-            Margin = new Thickness(6),
-            Width = 178,
-            // An explicit height is what makes the panel scrollable AND
-            // vertically resizable; sized-to-content it would just grow.
-            Height = 260,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(0, 0, 6, 0),
+            VerticalAlignment = VerticalAlignment.Stretch,
             Visibility = Visibility.Collapsed,
-            Child = content,
+            Child = new ScrollViewer
+            {
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+                Content = _objectMenuList,
+            },
         };
         RefreshObjectMenu();
-    }
-
-    /// <summary>Three diagonal ticks, the conventional resize-corner mark.</summary>
-    private static ControlTemplate GripTemplate()
-    {
-        var canvas = new FrameworkElementFactory(typeof(Canvas));
-        canvas.SetValue(Canvas.BackgroundProperty, Brushes.Transparent);
-        for (int i = 0; i < 3; i++)
-        {
-            double o = 4 + i * 4;
-            var line = new FrameworkElementFactory(typeof(System.Windows.Shapes.Line));
-            line.SetValue(System.Windows.Shapes.Line.X1Property, 14.0);
-            line.SetValue(System.Windows.Shapes.Line.Y1Property, o);
-            line.SetValue(System.Windows.Shapes.Line.X2Property, o);
-            line.SetValue(System.Windows.Shapes.Line.Y2Property, 14.0);
-            line.SetValue(System.Windows.Shapes.Shape.StrokeProperty, ChipText);
-            line.SetValue(System.Windows.Shapes.Shape.StrokeThicknessProperty, 1.0);
-            canvas.AppendChild(line);
-        }
-        return new ControlTemplate(typeof(System.Windows.Controls.Primitives.Thumb)) { VisualTree = canvas };
     }
 
     /// <summary>Rebuild the left-side hierarchy: every GameObject and NPC in the
@@ -3163,6 +3250,7 @@ public sealed class PlacePreview : Grid
         var scene = _scene.Count > 0 ? _scene : BuildScene();
         _objectMenu.Visibility = scene.Count > 0 && _placeholder.Visibility != Visibility.Visible
             ? Visibility.Visible : Visibility.Collapsed;
+        _gizmoToolbar.Visibility = _objectMenu.Visibility;
         if (scene.Count == 0) return;
 
         _objectMenuList.Children.Add(new TextBlock
@@ -3267,8 +3355,9 @@ public sealed class PlacePreview : Grid
                 Text = guides.ToString(),
                 FontFamily = new FontFamily("Consolas, Courier New, monospace"),
                 // Dimmer than the labels: structure should be readable without
-                // competing with the names for attention.
-                Foreground = new SolidColorBrush(Color.FromArgb(0x99, 0xB0, 0xB6, 0xBE)),
+                // competing with the names for attention. 90%, not the 60% it
+                // was: on the panel's dark grey that measured 2.97:1 (1.8.0).
+                Foreground = new SolidColorBrush(Color.FromArgb(0xE6, 0xB0, 0xB6, 0xBE)),
                 VerticalAlignment = VerticalAlignment.Center,
             });
         }
@@ -3304,7 +3393,7 @@ public sealed class PlacePreview : Grid
                 FontFamily = new FontFamily("Consolas, Courier New, monospace"),
                 Foreground = entry.HiddenBySelf ? ChipText
                            : entry.Hidden ? new SolidColorBrush(Color.FromArgb(0x66, 0xB0, 0xB6, 0xBE))
-                           : new SolidColorBrush(Color.FromArgb(0xAA, 0xB0, 0xB6, 0xBE)),
+                           : new SolidColorBrush(Color.FromArgb(0xE6, 0xB0, 0xB6, 0xBE)),   // shown: readable (was 3.31:1)
                 VerticalAlignment = VerticalAlignment.Center,
                 Cursor = Cursors.Hand,
                 ToolTip = entry.HiddenBySelf ? Loc.T("preview.place.hidden.tip")

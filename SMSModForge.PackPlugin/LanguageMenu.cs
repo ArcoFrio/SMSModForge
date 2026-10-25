@@ -46,17 +46,20 @@ namespace SMSModForge.PackPlugin
         /// <summary>Between the Exit button and the lowest flag.</summary>
         private const float FlagsGap = 12f;
 
-        /// <summary>What marks the language in use: the warning window's orange,
-        /// behind the whole row, with the flag outlined in white and the name
-        /// in bold white - seen at a glance, not just on a second look.</summary>
-        private static readonly Color InUseBack = new Color(0.85f, 0.55f, 0.15f, 0.6f);
-        private static readonly Color InUseHover = new Color(0.9f, 0.6f, 0.2f, 0.85f);
-        private static readonly Color NameColour = new Color(0.82f, 0.82f, 0.82f, 1f);
+        /// <summary>What marks the language in use: the row raised and framed in
+        /// ModForge's amber, its name in amber and bold, the flag outlined in
+        /// amber - seen at a glance, not just on a second look. It was the whole
+        /// row amber with the name in navy-black, and the author did not like
+        /// dark words on orange (1.8.0).</summary>
+        private static readonly Color InUseBack = ForgeLook.WithAlpha(ForgeLook.Raised, 0.97f);
+        private static readonly Color InUseHover = ForgeLook.WithAlpha(ForgeLook.RaisedHover, 1f);
+        private static readonly Color NameColour = ForgeLook.TextMuted;
 
-        /// <summary>Every other row: dark, lighter under the mouse.</summary>
-        private static readonly Color RowBack = new Color(0f, 0f, 0f, 0.45f);
-        private static readonly Color RowHover = new Color(0.22f, 0.22f, 0.22f, 0.8f);
-        private static readonly Color RowPressed = new Color(0.35f, 0.35f, 0.35f, 0.9f);
+        /// <summary>Every other row: the game's navy, lighter under the mouse
+        /// (ForgeLook) - 0.82 to read as a panel in the game's linear light.</summary>
+        private static readonly Color RowBack = ForgeLook.WithAlpha(ForgeLook.Panel, 0.82f);
+        private static readonly Color RowHover = ForgeLook.WithAlpha(ForgeLook.RaisedHover, 0.95f);
+        private static readonly Color RowPressed = ForgeLook.WithAlpha(ForgeLook.Raised, 1f);
 
         /// <summary>The line over the flags saying what they choose: a little
         /// smaller than the languages' names, and on nothing, so it names the
@@ -82,6 +85,7 @@ namespace SMSModForge.PackPlugin
             public TextMeshProUGUI Name;
             public Outline Mark;
             public Button Button;
+            public Image Frame;
         }
 
         private static TextMeshProUGUI _heading;
@@ -264,11 +268,19 @@ namespace SMSModForge.PackPlugin
         private static void AddFlag(RectTransform column, string code)
         {
             var row = Child(column, "Flag " + code);
-            var back = row.gameObject.AddComponent<Image>();
-            back.color = Color.white;   // the button's colours below are what shows
+            // The game's rounded panel, white: the button's colours below are
+            // what shows.
+            var back = ForgeLook.Image(row, ForgeLook.Rounded, Color.white, 3.2f, raycast: true);
+
+            // The amber frame of the language in use, over the row's edge and
+            // out of its layout; shown by Refresh.
+            var frameRect = ForgeLook.Fill("Frame", row);
+            frameRect.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            var frame = ForgeLook.Image(frameRect, ForgeLook.RoundedStroke, ForgeLook.Accent, 3.2f);
+            frame.enabled = false;
 
             var layout = row.gameObject.AddComponent<HorizontalLayoutGroup>();
-            layout.padding = new RectOffset(10, 4, 3, 3);
+            layout.padding = new RectOffset(14, 6, 3, 3);
             layout.spacing = 8;
             layout.childAlignment = TextAnchor.MiddleRight;
             layout.childControlWidth = true;
@@ -319,7 +331,7 @@ namespace SMSModForge.PackPlugin
             string chosen = code;
             button.onClick.AddListener(() => Choose(chosen));
 
-            _flagRows.Add(new FlagRow { Code = code, Name = name, Mark = mark, Button = button });
+            _flagRows.Add(new FlagRow { Code = code, Name = name, Mark = mark, Button = button, Frame = frame });
         }
 
         /// <summary>A flag built into the plugin, or null when there is none
@@ -388,7 +400,9 @@ namespace SMSModForge.PackPlugin
                 if (row.Name == null) continue;
                 bool on = string.Equals(row.Code, inUse, StringComparison.OrdinalIgnoreCase);
                 row.Mark.enabled = on;
-                row.Name.color = on ? Color.white : NameColour;
+                row.Mark.effectColor = ForgeLook.Accent;
+                if (row.Frame != null) row.Frame.enabled = on;
+                row.Name.color = on ? ForgeLook.Accent : NameColour;
                 row.Name.fontStyle = on ? FontStyles.Bold : FontStyles.Normal;
                 if (row.Button != null)
                 {

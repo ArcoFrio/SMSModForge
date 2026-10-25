@@ -20,12 +20,13 @@ public class UiTabTests
     private readonly ITestOutputHelper _out;
     public UiTabTests(ITestOutputHelper o) => _out = o;
 
-    /// <summary>The UI tab went in LAST rather than beside Places, so that
-    /// every existing tab kept its index. Several tests address tabs by number
-    /// and a silent renumbering would leave them asserting about the wrong
-    /// screen while still passing, so the order is pinned here.</summary>
+    /// <summary>The UI tab stands where MainTab says - after Wallpapers, with
+    /// Quests after it and Variables and Integration last (1.8.0). Tests and
+    /// code address tabs by their place, all through MainTab, and a silent
+    /// renumbering would leave them asserting about the wrong screen while
+    /// still passing; MainTabOrderTests holds the whole order.</summary>
     [Fact]
-    public void The_tab_is_last_and_nothing_else_moved()
+    public void The_tab_is_where_MainTab_says()
     {
         WindowHarness.Run(window =>
         {
@@ -34,13 +35,13 @@ public class UiTabTests
                               .Select(t => t.Header?.ToString() ?? "").ToList();
 
             _out.WriteLine(string.Join(" | ", headers));
-            // Quests went in after it, on the same terms - see QuestTabTests.
-            Assert.Equal("UI", headers[12]);
+            Assert.Equal("UI", headers[MainTab.Ui]);
+            Assert.Equal("Wallpapers", headers[MainTab.Ui - 1]);
 
-            // The indices the focus sweep and the layout memory rely on.
-            Assert.Equal("Characters", headers[1]);
-            Assert.Equal("Places", headers[3]);
-            Assert.Equal("Integration", headers[11]);
+            // The places the focus sweep relies on.
+            Assert.Equal("Characters", headers[MainTab.Characters]);
+            Assert.Equal("Places", headers[MainTab.Places]);
+            Assert.Equal("Integration", headers[MainTab.Integration]);
         });
     }
 

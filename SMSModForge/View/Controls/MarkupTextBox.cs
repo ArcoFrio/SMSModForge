@@ -149,6 +149,41 @@ public sealed class MarkupTextBox : RichTextBox
         box.Render(box.Text);
     }
 
+    public static readonly DependencyProperty ReadableColoursProperty =
+        DependencyProperty.Register(nameof(ReadableColours), typeof(bool), typeof(MarkupTextBox),
+            new FrameworkPropertyMetadata(false, (d, _) =>
+            {
+                var box = (MarkupTextBox)d;
+                if (box.ReadableColours) ReadableInk.Watch(box, box.Redraw);
+                box.Redraw();
+            }));
+
+    /// <summary>
+    /// With <see cref="HidesTags"/>: the line's colours as the game shows them -
+    /// what a <c>&lt;color&gt;</c> asks for, and the game's own blue on words in
+    /// brackets - each moved in lightness only as far as it takes to read on
+    /// what is behind this box (the author, 1.8.0: in a dark theme's plain rows
+    /// they did not read, or were missing). See <see cref="ReadableInk"/>.
+    /// </summary>
+    public bool ReadableColours
+    {
+        get => (bool)GetValue(ReadableColoursProperty);
+        set => SetValue(ReadableColoursProperty, value);
+    }
+
+    private void Redraw()
+    {
+        _rendered = null;
+        Render(Text);
+    }
+
+    /// <summary>What marks a run whose colour is the game's, for
+    /// <see cref="TextGlow"/> to light.</summary>
+    internal static readonly object Glows = new object();
+
+    /// <summary>The line has been drawn anew.</summary>
+    public event Action? Rendered;
+
     /// <summary>Where the caret is, counted in characters of <see cref="Text"/>.</summary>
     public int CaretIndex
     {
@@ -660,16 +695,27 @@ public sealed class MarkupTextBox : RichTextBox
             {
                 var body = Body;
                 body.Inlines.Clear();
-                foreach (var span in DialogueMarkup.Parse(text))
+                if (HidesTags && ReadableColours)
                 {
-                    if (span.IsTag && HidesTags) continue;
-                    foreach (var inline in Build(text, span))
-                        body.Inlines.Add(inline);
+                    // The pieces the game-look row draws from: the tags gone,
+                    // the words in brackets marked as the game marks them.
+                    var behind = ReadableInk.Behind(this);
+                    foreach (var piece in DialogueLinePreview.Pieces(text))
+                        foreach (var inline in BuildReadable(piece, behind))
+                            body.Inlines.Add(inline);
                 }
+                else
+                    foreach (var span in DialogueMarkup.Parse(text))
+                    {
+                        if (span.IsTag && HidesTags) continue;
+                        foreach (var inline in Build(text, span))
+                            body.Inlines.Add(inline);
+                    }
             }
             finally { EndChange(); }
 
             _rendered = text;
+            Rendered?.Invoke();
 
             if (hadSelection)
             {
@@ -736,8 +782,67 @@ public sealed class MarkupTextBox : RichTextBox
             }
             else Apply(run, span.Style);
 
+            // A sound's cue: underlined in the accent, dashed, so it reads as
+            // "this plays something" without looking like a link or a tag.
+            if (span.Style.Cue) run.TextDecorations = CueUnderline();
+
             yield return run;
         }
+    }
+
+    /// <summary>
+    /// One piece of the line for <see cref="ReadableColours"/>: a name
+    /// stand-in on its chip as ever; words in brackets in the game's bracket
+    /// blue, unless the line colours them itself; every colour made to read on
+    /// <paramref name="behind"/>.
+    /// </summary>
+    private IEnumerable<Inline> BuildReadable(DialogueLinePreview.Piece piece, Color behind)
+    {
+        string[] lines = piece.Text.Split('\n');
+        for (int i = 0; i < lines.Length; i++)
+        {
+            if (i > 0) yield return new LineBreak();
+            if (lines[i].Length == 0) continue;
+            var run = new Run(lines[i]);
+            if (piece.Token)
+            {
+                Apply(run, piece.Style);
+                var person = DialogueMarkup.TokenColor?.Invoke(lines[i]);
+                var chip = (Color)ColorConverter.ConvertFromString(DialogueLook.TokenChipHex)!;
+                run.Background = new SolidColorBrush(chip);
+                run.Foreground = new SolidColorBrush(person is { } c
+                    ? ReadableInk.On(Color.FromRgb(c.R, c.G, c.B), chip)
+                    : ReadableInk.On((Color)ColorConverter.ConvertFromString(DialogueLook.TokenHex)!, chip));
+            }
+            else
+            {
+                Apply(run, piece.Style);
+                if (piece.Bracketed)
+                {
+                    run.Foreground = new SolidColorBrush(ReadableInk.On((Color)ColorConverter.ConvertFromString(DialogueLook.BracketHex)!, behind));
+                    run.Tag = Glows;
+                }
+                else if (run.Foreground is SolidColorBrush asked && piece.Style.Color != null)
+                {
+                    run.Foreground = new SolidColorBrush(ReadableInk.On(asked.Color, behind));
+                    run.Tag = Glows;
+                }
+            }
+            if (piece.Style.Cue) run.TextDecorations = CueUnderline();
+            yield return run;
+        }
+    }
+
+    private TextDecorationCollection CueUnderline()
+    {
+        var ink = TryFindResource(Services.ThemeManager.KeyAccent) as Brush ?? Brushes.SteelBlue;
+        var pen = new Pen(ink, 1.5) { DashStyle = new DashStyle(new double[] { 2, 1.5 }, 0) };
+        pen.Freeze();
+        return new TextDecorationCollection
+        {
+            new TextDecoration(TextDecorationLocation.Underline, pen, 1,
+                               TextDecorationUnit.FontRecommended, TextDecorationUnit.FontRecommended),
+        };
     }
 
     private void TokenColorsChanged()

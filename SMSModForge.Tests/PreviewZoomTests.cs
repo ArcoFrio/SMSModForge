@@ -101,13 +101,13 @@ public sealed class PreviewZoomTests : IDisposable
     }
 
     [Fact]
-    public void AWholeStepStaysPixelExact_AndAHalfStepSaysItIsNot()
+    public void EnlargedTheBustIsDrawnPixelByPixel_AndShrunkItIsSmoothed()
     {
-        // The reason the size was fixed in the first place: one bitmap pixel on
-        // one screen pixel. A whole multiple keeps that and can be drawn with
-        // nearest neighbour; a half cannot, and drawing it that way doubles
-        // some rows and not others. This is the control for the zoom being a
-        // real resize rather than a stretch of whatever was there.
+        // Pixel by pixel whenever it is made bigger - at a half step too. A
+        // half step was smoothed until 1.8.0, to keep every pixel the same
+        // size, and the author found it blurry: in a pixel game a pixel a
+        // shade wider than its neighbour reads crisp, a smoothed one soft.
+        // Made smaller, nearest neighbour would drop whole rows: smoothed.
         WindowHarness.Run(window =>
         {
             var vm = (MainViewModel)window.DataContext;
@@ -115,14 +115,17 @@ public sealed class PreviewZoomTests : IDisposable
             ShowTab(window, "Characters");
             var preview = Descendants<JigglePreview>(window).First();
 
-            vm.BustPreviewZoom = 2;
-            WindowHarness.Pump();
-            _out.WriteLine("2×: " + RenderOptions.GetBitmapScalingMode(preview) + ", " + preview.Stretch);
-            Assert.Equal(BitmapScalingMode.NearestNeighbor, RenderOptions.GetBitmapScalingMode(preview));
+            foreach (double zoom in new[] { 2, 1.5 })
+            {
+                vm.BustPreviewZoom = zoom;
+                WindowHarness.Pump();
+                _out.WriteLine($"{zoom}×: " + RenderOptions.GetBitmapScalingMode(preview) + ", " + preview.Stretch);
+                Assert.Equal(BitmapScalingMode.NearestNeighbor, RenderOptions.GetBitmapScalingMode(preview));
+            }
 
-            vm.BustPreviewZoom = 1.5;
+            // The control: below life size it is not.
+            vm.BustPreviewZoom = 0.5;
             WindowHarness.Pump();
-            _out.WriteLine("1.5×: " + RenderOptions.GetBitmapScalingMode(preview) + ", " + preview.Stretch);
             Assert.Equal(BitmapScalingMode.HighQuality, RenderOptions.GetBitmapScalingMode(preview));
         });
     }

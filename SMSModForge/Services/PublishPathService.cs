@@ -22,9 +22,7 @@ namespace SMSModForge.Services;
 /// </summary>
 public static class PublishPathService
 {
-    private static readonly string FilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "SMSModForge", "publishes.json");
+    private static string FilePath => AppDataFolder.PathOf("publishes.json");
 
     /// <summary>
     /// The last published archive for the pack rooted at

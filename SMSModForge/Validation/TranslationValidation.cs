@@ -49,6 +49,45 @@ public static class TranslationValidation
         CheckLanguage(issues, pack, sites, gameQuests);
         CheckOnlyInATranslation(issues, pack, packRoot, sites, gameQuests);
         CheckFit(issues, pack, packRoot, sites, gameQuests);
+        CheckCodes(issues, pack, packRoot, sites, gameQuests);
+    }
+
+    public const string TranslationCodes = "translation.codes";
+
+    /// <summary>
+    /// A translated text that lost, or gained, a tag or a token the default
+    /// text has - a {PC} the translator dropped, a &lt;color&gt; never
+    /// closed. The game shows the translation as written, so a player of
+    /// that language reads the line without the name, or in the wrong colour
+    /// to its end.
+    /// <para/>
+    /// The Translations window has always said so, but only to whoever opened
+    /// it; the issues list is what an author reads before publishing, and
+    /// shows it whatever language the editor is showing (the author,
+    /// 2026-10-21). Going to one opens that translation.
+    /// </summary>
+    private static void CheckCodes(List<ValidationIssue> issues, ModPack pack, string? packRoot,
+                                   List<PackTexts.Site> sites, HashSet<string> gameQuests)
+    {
+        if (string.IsNullOrEmpty(packRoot)) return;
+        var byKey = new Dictionary<string, PackTexts.Site>(StringComparer.OrdinalIgnoreCase);
+        foreach (var site in sites) byKey.TryAdd(site.Key, site);
+
+        foreach (var translation in PackTranslations.CheckAll(pack, packRoot))
+        {
+            string language = TranslationFiles.NativeName(translation.Code) ?? translation.Code;
+            foreach (var found in translation.Result.Findings)
+            {
+                if (found.Kind != TextCheck.Kind.Codes || !byKey.TryGetValue(found.Key, out var site)) continue;
+                var said = new List<string>();
+                if (found.Lost.Count > 0)
+                    said.Add(Loc.F("validation.translation.lostCodes", "language", language, "codes", string.Join("  ", found.Lost)));
+                if (found.Added.Count > 0)
+                    said.Add(Loc.F("validation.translation.addedCodes", "language", language, "codes", string.Join("  ", found.Added)));
+                issues.Add(new ValidationIssue(Severity.Warning, Where(site, pack, gameQuests), string.Join(" ", said),
+                                               TranslationCodes) { Language = translation.Code });
+            }
+        }
     }
 
     public const string LineTooLong = "dialogue.lineTooLong";
@@ -91,7 +130,8 @@ public static class TranslationValidation
                 if (Rendering.DialogueFit.Of(font, words).Verdict != Rendering.DialogueFit.Verdict.Spills) return;
                 issues.Add(new ValidationIssue(Severity.Warning, Where(site, pack, gameQuests),
                     Loc.F("validation.dialogue.lineTooLong", "language", TranslationFiles.NativeName(code) ?? code),
-                    LineTooLong));
+                    LineTooLong)
+                    { Language = string.Equals(code, pack.OwnLanguage, StringComparison.OrdinalIgnoreCase) ? "" : code });
             }
 
             Measure(site.Text, pack.OwnLanguage);
@@ -187,6 +227,24 @@ public static class TranslationValidation
 
     /// <summary>Where the text is, in the form double-clicking an issue
     /// understands - see <c>MainWindow.NavigateToIssue</c>.</summary>
+    /// <summary>
+    /// Where each of the pack's texts is, in words, by its translation key:
+    /// for the save prompt, which lists a translation's changes by key
+    /// otherwise - "dialogue.Chat.-70972" is nothing a person can find.
+    /// </summary>
+    public static Func<string, string?> PlacesOfTexts(ModPack pack)
+    {
+        var json = JObject.Parse(PackRepository.SerializeAsSaved(pack));
+        var gameQuests = new HashSet<string>(
+            (json["quests"] as JArray ?? new JArray()).OfType<JObject>()
+                .Where(q => !string.IsNullOrEmpty((string?)q["source"]))
+                .Select(q => (string?)q["key"] ?? ""),
+            StringComparer.OrdinalIgnoreCase);
+        var byKey = new Dictionary<string, PackTexts.Site>(StringComparer.OrdinalIgnoreCase);
+        foreach (var site in PackTexts.Of(json, withEmpty: true)) byKey.TryAdd(site.Key, site);
+        return key => byKey.TryGetValue(key, out var site) ? IssuePlace.Describe(Where(site, pack, gameQuests), pack) : null;
+    }
+
     private static string Where(PackTexts.Site site, ModPack pack, HashSet<string> gameQuests)
     {
         switch (site.Kind)

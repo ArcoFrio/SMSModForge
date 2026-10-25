@@ -29,6 +29,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SMSModForge\SMSModForge.csproj" />
+    <!-- The installer, under an alias: it compiles the shared version
+         constant too, and the editor's would clash with it. -->
+    <ProjectReference Include="..\SMSModForge.Setup\SMSModForge.Setup.csproj" Aliases="setup" />
   </ItemGroup>
 
   <ItemGroup>

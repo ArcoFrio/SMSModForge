@@ -18,7 +18,10 @@ namespace SMSModForge.Model;
 /// </summary>
 public static class TranslationDiff
 {
-    public static List<PackChange> Compute(string code, TextFile? before, TextFile after)
+    /// <param name="placeOf">Where a key's text is, in words ("Chat › “Hi”"),
+    /// or null for a key the pack no longer has; without it, the key.</param>
+    public static List<PackChange> Compute(string code, TextFile? before, TextFile after,
+                                           Func<string, string?>? placeOf = null)
     {
         var changes = new List<PackChange>();
         if (after == null) return changes;
@@ -33,16 +36,29 @@ public static class TranslationDiff
             string now = Words(after.Find(key));
             if (string.Equals(PackTexts.Normal(was), PackTexts.Normal(now), StringComparison.Ordinal)) continue;
 
+            var kind = was.Length == 0 ? PackChangeKind.Added : now.Length == 0 ? PackChangeKind.Removed : PackChangeKind.Changed;
             changes.Add(new PackChange
             {
-                Kind = was.Length == 0 ? PackChangeKind.Added : now.Length == 0 ? PackChangeKind.Removed : PackChangeKind.Changed,
+                Kind = kind,
                 Section = section,
                 Path = key,
                 Before = PackDiff.Truncate(was),
                 After = PackDiff.Truncate(now),
+                Group = section,
+                Text = placeOf?.Invoke(key) is { Length: > 0 } place ? place : key,
+                // A text newly translated, or no longer, says so by its sign;
+                // the words are what is worth reading.
+                Was = kind == PackChangeKind.Added ? "" : Short(was),
+                Now = kind == PackChangeKind.Removed ? "" : Short(now),
             });
         }
         return changes;
+    }
+
+    private static string Short(string words)
+    {
+        words = System.Text.RegularExpressions.Regex.Replace(words, @"\s+", " ").Trim();
+        return words.Length <= 70 ? words : words[..69].TrimEnd() + "…";
     }
 
     /// <summary>

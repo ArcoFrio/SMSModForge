@@ -12,7 +12,7 @@ namespace SMSModForge.ViewModel;
 /// without losing the other slot. Unlock conditions use the standard
 /// condition rows (same editor as dialogues / rules / hooks).
 /// </summary>
-public sealed class WallpaperViewModel : ObservableObject
+public sealed class WallpaperViewModel : ObservableObject, IDerivesKey
 {
     public WallpaperDef Model { get; }
 
@@ -77,17 +77,22 @@ public sealed class WallpaperViewModel : ObservableObject
     //
     // See DerivedKey for the rule. In short: a NEW wallpaper takes its key from
     // whatever is typed as the display name, editing the key stops that for
-    // good, and a wallpaper loaded from disk never re-derives.
+    // good, and one loaded from disk follows only while its key is still
+    // its display name made into a name (or a duplicate's "_copy").
 
     private readonly DerivedKey _derivedKey = new();
 
     /// <summary>Whether the runtime name still follows the display name.</summary>
     public bool KeyIsDerived => _derivedKey.IsDerived;
 
-    /// <summary>Start deriving the key. Called for a wallpaper the author has just
-    /// added, never for one being loaded.</summary>
+    /// <summary>Start deriving the key. Called for one the author has just
+    /// added, duplicated or pasted.</summary>
     public void DeriveKeyFromDisplayName(System.Func<System.Collections.Generic.IEnumerable<string>> siblingKeys)
         => _derivedKey.Follow(siblingKeys);
+
+
+    public void WatchDisplayName(System.Func<System.Collections.Generic.IEnumerable<string>> siblingKeys)
+        => _derivedKey.Watch(siblingKeys, Model.DisplayName);
 
     public string Key
     {
@@ -152,5 +157,5 @@ public sealed class WallpaperViewModel : ObservableObject
         }
     }
 
-    public string Display => string.IsNullOrWhiteSpace(DisplayName) ? Key : $"{DisplayName} ({Key})";
+    public string Display => ListNames.Of(DisplayName, Key);
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using SMSModForge.ViewModel;
 
 namespace SMSModForge.Tutorials;
 
@@ -17,17 +18,17 @@ namespace SMSModForge.Tutorials;
 /// </summary>
 internal static class TutorialsPart2
 {
-    private const int TabCharacters = 1;
-    private const int TabNpcs = 2;
-    private const int TabPlaces = 3;
-    private const int TabDialogues = 5;
-    private const int TabScenes = 6;
-    private const int TabMusic = 7;
-    private const int TabSfx = 8;
-    private const int TabWallpapers = 9;
-    private const int TabVariables = 10;
-    private const int TabIntegration = 11;
-    private const int TabModForge = 0;
+    private const int TabCharacters = MainTab.Characters;
+    private const int TabNpcs = MainTab.Npcs;
+    private const int TabPlaces = MainTab.Places;
+    private const int TabDialogues = MainTab.Dialogues;
+    private const int TabScenes = MainTab.Scenes;
+    private const int TabMusic = MainTab.Music;
+    private const int TabSfx = MainTab.Sfx;
+    private const int TabWallpapers = MainTab.Wallpapers;
+    private const int TabVariables = MainTab.Variables;
+    private const int TabIntegration = MainTab.Integration;
+    private const int TabModForge = MainTab.ModForge;
 
     internal static IReadOnlyList<TutorialDef> All { get; } = new[]
     {
@@ -83,7 +84,7 @@ internal static class TutorialsPart2
                     Body = "tutorial.firstConversation.writeLine.body",
                     Kind = StepKind.Do,
                     Tab = TabDialogues,
-                    Anchor = "btn:addRootNode",
+                    Anchor = "btn:addNode",
                     AlsoAllow = new[] { "panel:nodeEditor" },
                     OnEnter = (vm, s) => s.Set("nodes", vm.SelectedDialogue?.Nodes.Count ?? 0),
                     // The actor is checked as well as the text. The step always
@@ -602,7 +603,11 @@ internal static class TutorialsPart2
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "btn:addNpcToPlace",
-                    AlsoAllow = new[] { "panel:placeGameObjects" },
+                    // The place list too, as in "Put them in the room": the +
+                    // is drawn only once a place is chosen, and nothing keeps
+                    // that choice from one session to the next - without the
+                    // list lit, an author arriving with none could not choose.
+                    AlsoAllow = new[] { "panel:placeGameObjects", "panel:placeList" },
                     OnEnter = (vm, s) => s.Set("placed", vm.SelectedPlace?.NpcsNode.Npcs.Count ?? 0),
                     IsDone = (vm, s) => s.GrewSince("placed", vm.SelectedPlace?.NpcsNode.Npcs.Count ?? 0),
                     Hint = "tutorial.npcsThatBelong.putSamePersonTwice.hint",

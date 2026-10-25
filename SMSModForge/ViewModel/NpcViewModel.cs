@@ -52,7 +52,7 @@ public readonly record struct MaskSource(string Label, string MaskPath);
 /// jiggle / blink / shadow / wet sub-objects as flat properties so the view
 /// can bind sliders and boxes directly, mirroring <c>OutfitViewModel</c>.
 /// </summary>
-public sealed class NpcViewModel : ObservableObject, IMaskEditorHost
+public sealed class NpcViewModel : ObservableObject, IDerivesKey, IMaskEditorHost
 {
     public NpcDef Model { get; }
 
@@ -88,17 +88,22 @@ public sealed class NpcViewModel : ObservableObject, IMaskEditorHost
     //
     // See DerivedKey for the rule. In short: a NEW NPC takes its key from
     // whatever is typed as the display name, editing the key stops that for
-    // good, and a NPC loaded from disk never re-derives.
+    // good, and one loaded from disk follows only while its key is still
+    // its display name made into a name (or a duplicate's "_copy").
 
     private readonly DerivedKey _derivedKey = new();
 
     /// <summary>Whether the runtime name still follows the display name.</summary>
     public bool KeyIsDerived => _derivedKey.IsDerived;
 
-    /// <summary>Start deriving the key. Called for a NPC the author has just
-    /// added, never for one being loaded.</summary>
+    /// <summary>Start deriving the key. Called for one the author has just
+    /// added, duplicated or pasted.</summary>
     public void DeriveKeyFromDisplayName(System.Func<System.Collections.Generic.IEnumerable<string>> siblingKeys)
         => _derivedKey.Follow(siblingKeys);
+
+
+    public void WatchDisplayName(System.Func<System.Collections.Generic.IEnumerable<string>> siblingKeys)
+        => _derivedKey.Watch(siblingKeys, Model.DisplayName);
 
     public string Key
     {
@@ -181,7 +186,7 @@ public sealed class NpcViewModel : ObservableObject, IMaskEditorHost
     public bool WetEnabled     { get => Model.Wet.Enabled;     set { Model.Wet.Enabled = value; OnPropertyChanged(); } }
     public bool WetStartActive { get => Model.Wet.StartActive; set { Model.Wet.StartActive = value; OnPropertyChanged(); } }
 
-    public string Display => string.IsNullOrWhiteSpace(DisplayName) ? Key : $"{DisplayName} ({Key})";
+    public string Display => ListNames.Of(DisplayName, Key);
 
     // ── IMaskEditorHost ──────────────────────────────────────────────────
 

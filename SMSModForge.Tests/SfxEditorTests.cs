@@ -28,7 +28,7 @@ public sealed class SfxEditorTests : IDisposable
 {
     private readonly ITestOutputHelper _out;
     private readonly string _dir;
-    private const int TabSfx = 8;
+    private const int TabSfx = MainTab.Sfx;
     private const int Rate = 22050;
 
     public SfxEditorTests(ITestOutputHelper o)
@@ -84,6 +84,45 @@ public sealed class SfxEditorTests : IDisposable
     }
 
     private JObject Saved() => JObject.Parse(File.ReadAllText(Path.Combine(_dir, "modpack.json")));
+
+    [Fact]
+    public void PlayGoesThroughTheVariantsInTurn()
+    {
+        // The author, 2026-10-21: Play only ever played Plap.ogg, so the
+        // variants beside it could not be heard from the tab at all.
+        Prepare(withVariant: true);
+        Recording(600, 800).WriteWav(Path.Combine(_dir, "Audio", "Plap_2.wav"));
+
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            var editor = Open(vm, _dir);
+            string Said(int n) => SMSModForge.Localization.Loc.F("sfx.playedVariant", "file", n == 0 ? "Plap.wav" : $"Plap_{n}.wav", "n", n + 1, "count", 3);
+
+            var heard = new System.Collections.Generic.List<string>();
+            for (int i = 0; i < 4; i++)
+            {
+                vm.PlaySfxCommand.Execute(null);
+                WindowHarness.Pump();
+                heard.Add(vm.LastSfxVariant);
+            }
+            _out.WriteLine(string.Join(" | ", heard));
+            Assert.Equal(new[] { Said(0), Said(1), Said(2), Said(0) }, heard);
+
+            // Edited, it is heard as edited - and the strip shows the variant
+            // being played, so the line along it is the one heard.
+            editor.Pitch = 2;
+            vm.PlaySfxCommand.Execute(null);
+            WindowHarness.Pump();
+            _out.WriteLine($"{vm.LastSfxVariant} on the strip: {editor.Current?.Name}");
+            Assert.Equal(Said(1), vm.LastSfxVariant);
+            Assert.Equal("Plap_1.wav", editor.Current?.Name);
+
+            // Another sound selected: nothing is said about this one's variants.
+            vm.SelectedSfx = null;
+            Assert.Equal("", vm.LastSfxVariant);
+        });
+    }
 
     [Fact]
     public void CutPitchAndSave_TheEditIsWrittenOverTheFile_AndTheRecordingIsKeptAside()

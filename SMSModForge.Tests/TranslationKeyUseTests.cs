@@ -186,7 +186,9 @@ public class TranslationKeyUseTests
         var inLayout = new Regex(@"(?:\{l:T |ConverterParameter=)([\w.\-]+)");
         foreach (string path in Directory.EnumerateFiles(TranslationCoverageTests.EditorDir, "*.*", SearchOption.AllDirectories)
                                          .Concat(Directory.EnumerateFiles(Path.Combine(TranslationCoverageTests.EditorDir, "..", "Shared"), "*.cs"))
-                                         .Concat(Directory.EnumerateFiles(Path.Combine(TranslationCoverageTests.EditorDir, "..", "SMSModForge.PackPlugin"), "*.cs")))
+                                         .Concat(Directory.EnumerateFiles(Path.Combine(TranslationCoverageTests.EditorDir, "..", "SMSModForge.PackPlugin"), "*.cs"))
+                                         // The installer reads its setup.* texts from the same files (1.8.0).
+                                         .Concat(Directory.EnumerateFiles(Path.Combine(TranslationCoverageTests.EditorDir, "..", "SMSModForge.Setup"), "*.cs")))
         {
             if (path.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar)
                 || path.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar)) continue;
@@ -200,10 +202,13 @@ public class TranslationKeyUseTests
 
         // Built from something the editor lists.
         foreach (var t in ThemeManager.All) used.Add(t.NameKey);
+        foreach (string icon in ExpressionIcons.All) used.Add(ExpressionIcons.NameKey(icon));
+        foreach (string field in SMSModForge.Model.ChangeWords.NamedFields) used.Add(SMSModForge.Model.ChangeWords.FieldKey(field));
         foreach (string part in ChangeParts)
             foreach (string where in new[] { "first", "then", "listed" })
                 used.Add("game.change." + part + "." + where);
         foreach (var q in PreviewQualityManager.All) { used.Add(q.NameKey); used.Add(q.NameKey + ".tip"); }
+        foreach (string version in ForgeNotice.VersionsWithNews) used.Add(ForgeNotice.NewsKey(version));
         foreach (var k in InputKeys.All) { used.Add(k.Name); used.Add(k.GroupKey); }
         foreach (var (field, option, _) in ChoicesShown()) used.Add(ParamSchema.ChoiceKey(field, option));
         foreach (var type in typeof(MainViewModel).Assembly.GetTypes().Where(t => t.IsEnum))

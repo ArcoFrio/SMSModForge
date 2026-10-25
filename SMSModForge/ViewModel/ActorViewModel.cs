@@ -231,7 +231,7 @@ public sealed class ActorViewModel : ObservableObject
     /// </summary>
     public event System.EventHandler? DefaultBustKeyChanged;
 
-    public string Display => string.IsNullOrWhiteSpace(DisplayName) ? Key : $"{DisplayName} ({Key})";
+    public string Display => ListNames.Of(DisplayName, Key);
 
     public ActorExpressionViewModel AddExpression()
     {
@@ -319,11 +319,13 @@ public sealed class ActorExpressionViewModel : ObservableObject
     public ActorExpressionViewModel(ActorExpressionDef model,
                                     System.Action<ActorExpressionViewModel>? remove = null,
                                     bool fromTheGame = false,
-                                    bool locked = false)
+                                    bool locked = false,
+                                    bool fresh = false)
     {
         Model = model;
         FromTheGame = fromTheGame;
         IsLocked = locked;
+        _iconWaitsForName = fresh;
         // Per-row, like ActorOutfitViewModel's: the row knows how to delete
         // itself, so the template needs no CommandParameter plumbing back up to
         // a list it cannot see.
@@ -385,10 +387,49 @@ public sealed class ActorExpressionViewModel : ObservableObject
                                             System.StringComparison.OrdinalIgnoreCase);
             Model.Key = value;
             if (tracked && !string.IsNullOrWhiteSpace(value)) Model.ExpressionGoName = value;
+
+            // A face just added gets its picture when its name is first set,
+            // guessed from the name (the author, 1.8.0) - and only then can a
+            // different one be picked: before it has a name there is nothing
+            // to guess from.
+            if (_iconWaitsForName && !string.IsNullOrWhiteSpace(value))
+            {
+                _iconWaitsForName = false;
+                Model.Icon = ExpressionIcons.Guess(value);
+            }
             OnPropertyChanged();
             OnPropertyChanged(nameof(ExpressionGoName));
+            OnPropertyChanged(nameof(Icon));
+            OnPropertyChanged(nameof(IconUnlocked));
         }
     }
+
+    private bool _iconWaitsForName;
+
+    /// <summary>
+    /// The picture this face shows with in the editor: the one its author
+    /// picked, else one guessed from its name - which is all the game's own
+    /// faces ever have.
+    /// </summary>
+    public string Icon
+    {
+        get => ExpressionIcons.IsKnown(Model.Icon) ? Model.Icon! : ExpressionIcons.Guess(Model.Key);
+        set
+        {
+            if (!IconUnlocked || !ExpressionIcons.IsKnown(value) || value == Icon && Model.Icon != null) return;
+            Model.Icon = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>Whether a picture can be picked: a face of the pack's own,
+    /// with a name.</summary>
+    public bool IconUnlocked => CanEdit && !_iconWaitsForName && !string.IsNullOrWhiteSpace(Model.Key);
+
+    /// <summary>What the picture is called, for its tooltip.</summary>
+    public string IconTip => IconUnlocked ? Loc.T("characters.expressionIcon.tip")
+                           : CanEdit ? Loc.T("characters.expressionIcon.locked.tip")
+                           : Loc.T("characters.expressionIcon.fixed.tip");
 
     public string ExpressionGoName
     {

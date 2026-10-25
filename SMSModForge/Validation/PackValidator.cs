@@ -59,6 +59,16 @@ public sealed record ValidationIssue(Severity Severity, string Where, string Mes
     /// visible target.
     /// </summary>
     public bool Ignored { get; init; }
+
+    /// <summary>Where it is, in words an author recognises (see
+    /// <see cref="IssuePlace"/>). Filled in by whoever lists the issues, from
+    /// the pack as it is then; empty until it is.</summary>
+    public string Place { get; init; } = "";
+
+    /// <summary>The translation the problem is in, by its code - so going to
+    /// the issue shows that language rather than the pack's own words. Empty
+    /// for a problem in the pack's own words.</summary>
+    public string Language { get; init; } = "";
 }
 
 /// <summary>
@@ -68,6 +78,26 @@ public sealed record ValidationIssue(Severity Severity, string Where, string Mes
 /// </summary>
 public static class PackValidator
 {
+    /// <summary>
+    /// The line played just before <paramref name="n"/> - the one above it at
+    /// its own level, or else its parent - and whether <paramref name="n"/>'s
+    /// outfit and face are only that line's again (no face counting as the
+    /// same as any): a line that changes nothing anybody could see.
+    /// </summary>
+    private static bool RepeatsLineBefore(DialogueDef d, DialogueNodeDef n)
+    {
+        var parent = d.Nodes.FirstOrDefault(p => p.Children.Contains(n.Id));
+        var level = d.RootNodeIds.Contains(n.Id) ? d.RootNodeIds : parent?.Children;
+        int at = level?.IndexOf(n.Id) ?? -1;
+        var before = at > 0 ? d.Nodes.FirstOrDefault(x => x.Id == level![at - 1]) : parent;
+        if (before == null) return false;
+        bool sameOutfit = string.IsNullOrWhiteSpace(n.Outfit)
+                          || string.Equals(n.Outfit.Trim(), (before.Outfit ?? "").Trim(), StringComparison.OrdinalIgnoreCase);
+        bool sameFace = VanillaFaces.IsNoFace(n.Expression)
+                        || string.Equals(n.Expression.Trim(), (before.Expression ?? "").Trim(), StringComparison.OrdinalIgnoreCase);
+        return sameOutfit && sameFace;
+    }
+
     /// <summary>
     /// Every problem in the pack, minus whatever the author has chosen not to
     /// hear about. Pass <paramref name="includeIgnored"/> to get the lot, which
@@ -80,8 +110,16 @@ public static class PackValidator
         if (pack.IgnoredIssues.Count == 0) return all;
 
         var ignored = new HashSet<string>(pack.IgnoredIssues, System.StringComparer.Ordinal);
+        // Entries saved before every node was named by its id and every
+        // dialogue in brackets (1.8.0): "dialogues.X.nodes.text" then is
+        // "dialogues[X].nodes[id=5].text" now. Compared in one form so they
+        // go on silencing what they silenced; an entry that names an id is
+        // new, and only ever matches exactly.
+        var legacy = new HashSet<string>(pack.IgnoredIssues.Where(e => !e.Contains("[id=")).Select(Canonical),
+                                         System.StringComparer.Ordinal);
         bool IsSilenced(ValidationIssue i) =>
-            ignored.Contains(i.Key) || (i.Code.Length > 0 && ignored.Contains(i.Code));
+            ignored.Contains(i.Key) || (i.Code.Length > 0 && ignored.Contains(i.Code))
+            || (legacy.Count > 0 && legacy.Contains(Canonical(i.Key)));
 
         if (!includeIgnored) return all.FindAll(i => !IsSilenced(i));
 
@@ -89,6 +127,9 @@ public static class PackValidator
         // rows it is listing are the silenced ones.
         return all.ConvertAll(i => IsSilenced(i) ? i with { Ignored = true } : i);
     }
+
+    private static string Canonical(string key)
+        => Regex.Replace(Regex.Replace(key, @"\[id=-?\d+\]", ""), @"\[([^\]]*)\]", ".$1");
 
     /// <summary>Whether this issue is currently silenced, and by which entry —
     /// the whole code, or just this one occurrence.</summary>
@@ -175,7 +216,7 @@ public static class PackValidator
                 {
                     if (!ContainsWord(text, word)) continue;
                     issues.Add(new(Severity.Warning,
-                        $"dialogues[{d.Key}].nodes[{n.Id}].text",
+                        $"dialogues[{d.Key}].nodes[id={n.Id}].text",
                         Loc.F("validation.dialogue.kinWord", "word", word, "token", token),
                         "dialogue.kinWord"));
                     break;   // one note per line is enough to make the point
@@ -231,17 +272,12 @@ public static class PackValidator
     /// On-start actions on a Choice's options, which the editor no longer
     /// offers and older packs may still carry.
     /// <para/>
-    /// The reason they went is that nobody can currently say WHEN one of those
-    /// nodes counts as having started. If it is when the menu is drawn rather
-    /// than when the player picks an option, then every option's on-start
-    /// actions run every time the choice appears — including the ones nobody
-    /// took. A pack built on that assumption looks correct while it is being
-    /// written and behaves strangely in play, which is the worst shape a bug
-    /// can have.
-    /// <para/>
-    /// A warning rather than an error: the actions are still in the manifest
-    /// and the runtime will still run them, so nothing is silently dropped.
-    /// It is a decision the author needs to make, not one to make for them.
+    /// They run - the plugin runs an option's actions the moment the player
+    /// picks it, on start then on finish, since the game never plays a chosen
+    /// option as a line (measured in the game, 1.8.0) - but the editor does not
+    /// show them on an option, so an author cannot see or change them. A
+    /// warning, so they are found; moving them to on finish changes nothing in
+    /// play and puts them back in view.
     /// </summary>
     private static void CheckChoiceOptionActions(List<ValidationIssue> issues, ModPack pack)
     {
@@ -262,7 +298,7 @@ public static class PackValidator
                 if (n.ActionsOnStart == null || n.ActionsOnStart.Count == 0) continue;
 
                 issues.Add(new(Severity.Warning,
-                    $"dialogues[{d.Key}].nodes[{n.Id}].actionsOnStart",
+                    $"dialogues[{d.Key}].nodes[id={n.Id}].actionsOnStart",
                     Loc.P("validation.dialogue.choiceOptionOnStart", n.ActionsOnStart.Count),
                     "dialogue.choiceOptionOnStart"));
             }
@@ -294,7 +330,7 @@ public static class PackValidator
                 if (n.Children != null && n.Children.Count > 0) continue;
 
                 issues.Add(new(Severity.Warning,
-                    $"dialogues[{d.Key}].nodes[{n.Id}].kind",
+                    $"dialogues[{d.Key}].nodes[id={n.Id}].kind",
                     Loc.T("validation.dialogue.choiceWithoutOptions"),
                     "dialogue.choiceWithoutOptions"));
             }
@@ -352,7 +388,7 @@ public static class PackValidator
         {
             var mine = AuthorsOwn(d);
             foreach (var n in d.Nodes)
-                if (mine(n)) Sweep(n.Text, $"dialogues[{d.Key}].nodes[{n.Id}].text");
+                if (mine(n)) Sweep(n.Text, $"dialogues[{d.Key}].nodes[id={n.Id}].text");
         }
 
         // Button labels resolve the same syntax, live, every tick.
@@ -399,6 +435,13 @@ public static class PackValidator
     /// to a real key at runtime, and the music fields also accept the names of
     /// the game's own tracks, which this pack knows nothing about.
     /// </summary>
+    /// <summary>The actions whose targeting row offers the Scene category.</summary>
+    private static readonly HashSet<string> TargetsScenes = new(System.StringComparer.Ordinal)
+    {
+        NodeActionTypes.SetGameObjectActive, NodeActionTypes.ActivateScene,
+        NodeActionTypes.SetSprite, NodeActionTypes.SetComponentProperty,
+    };
+
     private static void CheckUnitReferences(List<ValidationIssue> issues, ModPack pack)
     {
 
@@ -434,8 +477,14 @@ public static class PackValidator
                 Ref(clip, sfx, "validation.action.unknownSfx", "action.unknownSfx", aw);
 
             // Scene is a category on the targeting row rather than a type of
-            // its own, so the kind decides whether target names a scene.
-            if (a.Params.TryGetValue("kind", out var kind) &&
+            // its own, so the kind decides whether target names a scene - on
+            // the actions that HAVE that row. Changing an action's type keeps
+            // the old type's values (so a slip on the Type box loses nothing),
+            // and a CharacterFocus that used to be a Set-Active was warned
+            // about a scene it never reads and the editor never shows (the
+            // author, 2026-10-21: "'Hmph!' is not a scene").
+            if (TargetsScenes.Contains(a.Type) &&
+                a.Params.TryGetValue("kind", out var kind) &&
                 string.Equals(kind, "Scene", System.StringComparison.OrdinalIgnoreCase) &&
                 a.Params.TryGetValue("target", out var scene))
                 Ref(scene, scenes, "validation.action.unknownScene", "action.unknownScene", aw);
@@ -472,7 +521,7 @@ public static class PackValidator
             foreach (var n in d.Nodes)
             {
                 if (!mine(n)) continue;
-                string nw = $"dialogues[{d.Key}].nodes[{n.Id}]";
+                string nw = $"dialogues[{d.Key}].nodes[id={n.Id}]";
                 for (int i = 0; i < n.ActionsOnStart.Count; i++)
                     Action(n.ActionsOnStart[i], $"{nw}.actionsOnStart[{i}]");
                 for (int i = 0; i < n.ActionsOnFinish.Count; i++)
@@ -482,7 +531,7 @@ public static class PackValidator
 
         foreach (var r in pack.IntegrationRules)
         {
-            string rw = $"integrationRules.{r.Key}";
+            string rw = $"integrationRules[{r.Key}]";
             for (int i = 0; i < r.Actions.Count; i++) Action(r.Actions[i], $"{rw}.actions[{i}]");
             for (int b = 0; b < r.Branches.Count; b++)
                 for (int i = 0; i < r.Branches[b].Actions.Count; i++)
@@ -980,6 +1029,19 @@ public static class PackValidator
                 if (n.Kind == DialogueNodeKind.Choice)
                     foreach (var cid in n.Children) choiceChildren.Add(cid);
 
+            // Who each line is under, and which line a tag names, for what a
+            // jump does once it lands (below).
+            var parentOf = new Dictionary<int, int>();
+            foreach (var p in d.Nodes)
+                foreach (var cid in p.Children) parentOf.TryAdd(cid, p.Id);
+            var byId = new Dictionary<int, DialogueNodeDef>();
+            var byTag = new Dictionary<string, DialogueNodeDef>();
+            foreach (var n in d.Nodes)
+            {
+                byId.TryAdd(n.Id, n);
+                if (!string.IsNullOrEmpty(n.Tag)) byTag.TryAdd(n.Tag, n);
+            }
+
             foreach (var n in d.Nodes)
             {
                 if (!mine(n)) continue;
@@ -1018,6 +1080,24 @@ public static class PackValidator
                     issues.Add(new(Severity.Warning, $"{nWhere}.actor",
                         Loc.F("validation.node.unknownActor", "actor", n.Actor), "node.unknownActor"));
 
+                // Nobody speaking is a line with no name - a narrator's, and
+                // fine. With an expression or an outfit as well, it is more
+                // likely a speaker somebody forgot (the author, 1.8.0). An
+                // option on a Choice has no speaker of its own to forget.
+                // Neutral is no face: it is what every line falls back to, and
+                // the editor offers it and "none" as one button, so a narrator's
+                // line holding it could not be told apart, let alone cleared -
+                // 98 such lines in one pack were all this warning said.
+                // And a look that only repeats the line played just before it
+                // changes nothing: lines nobody speaks are the norm in some packs
+                // ("*splash*" between two lines of the same speaker, wearing
+                // what the line before put on), and asking about them is noise.
+                if (string.IsNullOrWhiteSpace(n.Actor) && !choiceChildren.Contains(n.Id)
+                    && (!VanillaFaces.IsNoFace(n.Expression) || !string.IsNullOrWhiteSpace(n.Outfit))
+                    && !RepeatsLineBefore(d, n))
+                    issues.Add(new(Severity.Warning, $"{nWhere}.actor",
+                        Loc.T("validation.node.lookWithoutActor"), "node.lookWithoutActor"));
+
                 // Children must exist.
                 foreach (var cid in n.Children)
                     if (!nodeIds.Contains(cid))
@@ -1033,6 +1113,8 @@ public static class PackValidator
                     else if (!tags.Contains(n.Jump.TargetTag))
                         issues.Add(new(Severity.Error, $"{nWhere}.jump",
                             Loc.F("validation.node.jumpTagUnknown", "tag", n.Jump.TargetTag), "node.jumpTagUnknown"));
+                    else if (byTag.TryGetValue(n.Jump.TargetTag, out var target))
+                        CheckWhereJumpLands(n, target, d.RootNodeIds, parentOf, byId, $"{nWhere}.jump", issues);
                 }
 
                 // A node's own conditions are evaluated once, when GC2 reaches
@@ -1060,11 +1142,11 @@ public static class PackValidator
         {
             string image = !string.IsNullOrWhiteSpace(w.SpritePath) ? w.SpritePath! : w.ExternalSpritePath ?? "";
             if (string.IsNullOrWhiteSpace(image))
-                issues.Add(new(Severity.Warning, $"wallpapers.{w.Key}.spritePath",
+                issues.Add(new(Severity.Warning, $"wallpapers[{w.Key}].spritePath",
                                Loc.F("validation.wallpaper.noImage", "name", string.IsNullOrWhiteSpace(w.DisplayName) ? w.Key : w.DisplayName),
                                "wallpaper.noImage"));
             else
-                CheckFile(packRoot, image, $"wallpapers.{w.Key}.spritePath", issues);
+                CheckFile(packRoot, image, $"wallpapers[{w.Key}].spritePath", issues);
         }
 
         // Wallpaper unlock conditions — the standard condition list, polled
@@ -1072,7 +1154,7 @@ public static class PackValidator
         foreach (var w in pack.Wallpapers)
             for (int ui = 0; ui < w.UnlockConditions.Count; ui++)
                 ValidateNodeCondition(w.UnlockConditions[ui],
-                                      $"wallpapers.{w.Key}.unlockConditions[{ui}]",
+                                      $"wallpapers[{w.Key}].unlockConditions[{ui}]",
                                       packVarNames, issues);
 
         // Integration rules — the IF conditions plus every else-if branch.
@@ -1080,7 +1162,7 @@ public static class PackValidator
         // actually restarts.
         foreach (var r in pack.IntegrationRules)
         {
-            var rWhere = $"integrationRules.{r.Key}";
+            var rWhere = $"integrationRules[{r.Key}]";
             for (int ci = 0; ci < r.Conditions.Count; ci++)
                 ValidateNodeCondition(r.Conditions[ci], $"{rWhere}.conditions[{ci}]",
                                       packVarNames, issues, ConditionContext.Rule);
@@ -1090,6 +1172,13 @@ public static class PackValidator
                                           $"{rWhere}.branches[{i}].conditions[{ci}]", packVarNames,
                                           issues, ConditionContext.Rule);
         }
+
+        // A screen's "Opens when" list - which the game runs as a rule of its
+        // own, so it is checked as one.
+        foreach (var ui in pack.Uis)
+            for (int ci = 0; ci < ui.OpenConditions.Count; ci++)
+                ValidateNodeCondition(ui.OpenConditions[ci], $"uis[{ui.Id}].openConditions[{ci}]",
+                                      packVarNames, issues, ConditionContext.Rule);
 
         // Quest start and completion lists get the same checks as every other
         // condition and action list: they are polled like dialogue start
@@ -1246,14 +1335,14 @@ public static class PackValidator
 
         foreach (var d in pack.Dialogues)
         {
-            var dw = $"dialogues.{d.Key}";
+            var dw = $"dialogues[{d.Key}]";
             for (int i = 0; i < d.StartConditions.Count; i++)
                 WalkCondition(d.StartConditions[i], $"{dw}.startConditions[{i}]");
             var mine = AuthorsOwn(d);
             foreach (var n in d.Nodes)
             {
                 if (!mine(n)) continue;
-                var nw = $"{dw}.nodes[{n.Id}]";
+                var nw = $"{dw}.nodes[id={n.Id}]";
                 for (int i = 0; i < n.Conditions.Count; i++)
                     WalkCondition(n.Conditions[i], $"{nw}.conditions[{i}]");
                 for (int i = 0; i < n.ActionsOnStart.Count; i++)
@@ -1265,7 +1354,7 @@ public static class PackValidator
 
         foreach (var r in pack.IntegrationRules)
         {
-            var rw = $"integrationRules.{r.Key}";
+            var rw = $"integrationRules[{r.Key}]";
             for (int i = 0; i < r.Conditions.Count; i++)
                 WalkCondition(r.Conditions[i], $"{rw}.conditions[{i}]");
             for (int i = 0; i < r.Actions.Count; i++)
@@ -1281,7 +1370,92 @@ public static class PackValidator
 
         foreach (var w in pack.Wallpapers)
             for (int wi = 0; wi < w.UnlockConditions.Count; wi++)
-                WalkCondition(w.UnlockConditions[wi], $"wallpapers.{w.Key}.unlockConditions[{wi}]");
+                WalkCondition(w.UnlockConditions[wi], $"wallpapers[{w.Key}].unlockConditions[{wi}]");
+    }
+
+    /// <summary>
+    /// What a jump does once it lands, which is not "carry on from there".
+    /// <para/>
+    /// Game Creator rebuilds what is left to play as if the conversation had
+    /// walked down to the target (Story.StackFromJump), and that puts every
+    /// line ABOVE the target back on the list too: once the target and its
+    /// lines are done, the plain line above it is said again, then that line's
+    /// lines - the target among them. When the jumping line comes round with
+    /// them, nothing breaks the circle and the conversation never ends; 1.8.0's
+    /// in-game checks looped on exactly that ("One." jumping to "End." under
+    /// "Skipped." under "One."). A target at the top level, or straight under
+    /// a Choice or a Random, has no plain line above it and carries on as
+    /// written.
+    /// <para/>
+    /// "Never ends" comes from playing the rebuilt list the way the game does:
+    /// said only when this jump comes round with nothing on the way that could
+    /// stop it - no Choice or Random (the player or the dice may go elsewhere)
+    /// and no line with conditions.
+    /// </summary>
+    private static void CheckWhereJumpLands(DialogueNodeDef jumping, DialogueNodeDef target,
+        IReadOnlyList<int> roots, Dictionary<int, int> parentOf, Dictionary<int, DialogueNodeDef> byId,
+        string where, List<ValidationIssue> issues)
+    {
+        // The nearest plain line above the target; none, nothing comes back.
+        DialogueNodeDef? above = null;
+        var seen = new HashSet<int> { target.Id };
+        for (int at = target.Id; above == null && parentOf.TryGetValue(at, out var up) && seen.Add(up) && byId.TryGetValue(up, out var line); at = up)
+            if (line.Kind == DialogueNodeKind.Text) above = line;
+        if (above == null) return;
+
+        // The list the game makes on landing, as Story.StackFromJump makes it:
+        // each line above, then whatever follows it, down to the target.
+        var stack = new List<int>();
+        var guard = new HashSet<int>();
+        void Push(int id)
+        {
+            if (!guard.Add(id)) return;          // a broken tree must not recurse for ever
+            IReadOnlyList<int> siblings = roots;
+            if (parentOf.TryGetValue(id, out var p) && byId.TryGetValue(p, out var parent))
+            {
+                Push(p);
+                if (parent.Kind != DialogueNodeKind.Text) { stack.Add(id); return; }
+                siblings = parent.Children;
+            }
+            for (int i = siblings.Count - 1; i >= 0; i--)
+            {
+                stack.Add(siblings[i]);
+                if (siblings[i] == id) break;
+            }
+        }
+        Push(target.Id);
+
+        // ...and played from the top: a line, then every line under it in
+        // order, except where a choice, a dice or a condition decides.
+        bool loops = false;
+        var said = new HashSet<int>();
+        for (int s = stack.Count - 1; s >= 0 && !loops; s--)
+        {
+            var next = new Stack<int>();
+            next.Push(stack[s]);
+            while (next.Count > 0 && !loops)
+            {
+                int id = next.Pop();
+                if (!byId.TryGetValue(id, out var node) || node.Conditions.Count > 0) continue;
+                if (ReferenceEquals(node, jumping)) { loops = true; break; }
+                if (node.Kind != DialogueNodeKind.Text || !said.Add(id)) continue;
+                for (int c = node.Children.Count - 1; c >= 0; c--) next.Push(node.Children[c]);
+            }
+        }
+
+        string Name(DialogueNodeDef line) => Clip(string.IsNullOrWhiteSpace(line.Text) ? "#" + line.Id : line.Text);
+        var nearest = above;
+        issues.Add(new(Severity.Warning, where,
+            Loc.F(loops ? "validation.node.jumpLoops" : "validation.node.jumpReplays",
+                  "tag", target.Tag ?? "", "target", Name(target), "above", Name(nearest)),
+            loops ? "node.jumpLoops" : "node.jumpReplays"));
+    }
+
+    /// <summary>A line as a warning quotes it: its first words.</summary>
+    private static string Clip(string text)
+    {
+        string one = text.Replace('\r', ' ').Replace('\n', ' ').Trim();
+        return one.Length <= 40 ? one : one.Substring(0, 39).TrimEnd() + "…";
     }
 
     /// <summary>
@@ -1324,8 +1498,56 @@ public static class PackValidator
             return;
         }
 
+        // A variable the condition reads, in the pack's store or the game's.
+        void Known(string n, bool vanilla)
+        {
+            if (vanilla)
+            {
+                if (!VanillaGameVariables.Contains(n))
+                    issues.Add(new(Severity.Warning, cWhere,
+                        Loc.F("validation.unknownVanillaVariable", "name", n), "condition.unknownVanillaVariable"));
+            }
+            else if (!IsTemplated(n) && !packVarNames.Contains(n))
+                issues.Add(new(Severity.Warning, cWhere,
+                    Loc.F("validation.condition.undeclaredVariable", "name", n), "condition.undeclaredVariable"));
+        }
+        bool IsVanilla(string key) => c.Params.TryGetValue(key, out var s) &&
+                                      string.Equals(s, "vanilla", System.StringComparison.OrdinalIgnoreCase);
+
         switch (c.Type)
         {
+            // The one variable check since 1.2.0, folded from the ten types
+            // below. It had no case here until 1.8.0, so every variable
+            // condition in every pack escaped these checks: a misspelled name
+            // read the default without a word.
+            case NodeConditionTypes.VariableCompare:
+            {
+                if (!c.Params.TryGetValue("name", out var n) || string.IsNullOrWhiteSpace(n))
+                    issues.Add(new(Severity.Error, cWhere, Loc.T("validation.param.nameMissing"), "condition.paramNameMissing"));
+                else
+                    Known(n, IsVanilla("source"));
+
+                // The runtime treats a comparison it does not know as not met.
+                string how = c.Params.TryGetValue("comparison", out var cmp) && !string.IsNullOrEmpty(cmp) ? cmp : "equals";
+                c.Params.TryGetValue("value", out var value);
+                if (System.Array.IndexOf(ListComparisons, how) < 0)
+                    issues.Add(new(Severity.Error, cWhere,
+                        Loc.F("validation.condition.unknownComparison", "comparison", how, "options", string.Join(", ", ListComparisons)),
+                        "condition.unknownComparison"));
+                // Equal to nothing is a fair question of a text; more or less
+                // than nothing is not.
+                else if (how != "equals" && string.IsNullOrWhiteSpace(value))
+                    issues.Add(new(Severity.Warning, cWhere, Loc.T("validation.condition.valueMissing"), "condition.paramValueMissing"));
+
+                // A $name in the value reads a variable as well, from the store
+                // valueSource names - through the runtime's own parser.
+                if (!string.IsNullOrEmpty(value) && !IsTemplated(value))
+                {
+                    bool valueVanilla = IsVanilla("valueSource");
+                    SMSModForge.Shared.VarText.Resolve(value, read => { Known(read, valueVanilla); return ""; });
+                }
+                break;
+            }
             case NodeConditionTypes.VariableEquals:
             case NodeConditionTypes.VariableGreaterThan:
             case NodeConditionTypes.VariableLessThan:
@@ -1333,19 +1555,10 @@ public static class PackValidator
             case NodeConditionTypes.VariableLessOrEqual:
             case NodeConditionTypes.VariableExists:
             {
-                bool vanilla = c.Params.TryGetValue("source", out var src) &&
-                               string.Equals(src, "vanilla", System.StringComparison.OrdinalIgnoreCase);
                 if (!c.Params.TryGetValue("name", out var n) || string.IsNullOrWhiteSpace(n))
                     issues.Add(new(Severity.Error, cWhere, Loc.T("validation.param.nameMissing"), "condition.paramNameMissing"));
-                else if (vanilla)
-                {
-                    if (!VanillaGameVariables.Contains(n))
-                        issues.Add(new(Severity.Warning, cWhere,
-                            Loc.F("validation.unknownVanillaVariable", "name", n), "condition.unknownVanillaVariable"));
-                }
-                else if (!IsTemplated(n) && !packVarNames.Contains(n))
-                    issues.Add(new(Severity.Warning, cWhere,
-                        Loc.F("validation.condition.undeclaredVariable", "name", n), "condition.undeclaredVariable"));
+                else
+                    Known(n, IsVanilla("source"));
                 if (c.Type != NodeConditionTypes.VariableExists &&
                     (!c.Params.ContainsKey("value") || string.IsNullOrWhiteSpace(c.Params["value"])))
                     issues.Add(new(Severity.Warning, cWhere, Loc.T("validation.condition.valueMissing"), "condition.paramValueMissing"));

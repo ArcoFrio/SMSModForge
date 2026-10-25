@@ -53,6 +53,10 @@ public sealed class DialogueLinePreview : Control
         // So does a character's name colour, which a token is drawn in.
         Loaded += (_, _) => { DialogueMarkup.TokenColorsChanged -= SpellingChanged; DialogueMarkup.TokenColorsChanged += SpellingChanged; };
         Unloaded += (_, _) => DialogueMarkup.TokenColorsChanged -= SpellingChanged;
+
+        // And the theme: EX lays a glow under the coloured words (Glow).
+        Loaded += (_, _) => { Services.ThemeManager.Changed -= SpellingChanged; Services.ThemeManager.Changed += SpellingChanged; };
+        Unloaded += (_, _) => Services.ThemeManager.Changed -= SpellingChanged;
     }
 
     private void SpellingChanged()
@@ -301,6 +305,14 @@ public sealed class DialogueLinePreview : Control
         if (pixels <= 0 || height <= 0) return null;
 
         var target = UiCompositor.NewLayer(pixels, height);
+        var placed = Scaled(Shift(body, inset, 0), scale);
+
+        // In EX, a glow under the coloured words - lighter still than the plain
+        // rows' (the author, 1.8.0: "an even lighter glow than on the non game
+        // look"). Under the words, so they stay as crisp as the game's.
+        if (Services.ThemeManager.Current.IsEx)
+            Glow(target, pixels, height, name == null ? null : Scaled(Shift(name, inset, 0), scale), NameColor(),
+                 placed, set, pieces, scale);
 
         if (name != null)
         {
@@ -308,7 +320,6 @@ public sealed class DialogueLinePreview : Control
                                   set.Font, set.Alpha, set.Width, set.Height, NameColor());
         }
 
-        var placed = Scaled(Shift(body, inset, 0), scale);
         DrawStyled(target, pixels, height, placed, set, pieces);
 
         // After the words, so a mark sits over the line rather than under it.
@@ -326,7 +337,11 @@ public sealed class DialogueLinePreview : Control
     // ── The line, in pieces ────────────────────────────────────
 
     /// <summary>One stretch of the line and how it is to be drawn.</summary>
-    private readonly record struct Piece(string Text, DialogueMarkup.Style Style, bool Token);
+    /// <summary>The game's bracket colour as a brush, for the hint beside
+    /// the token list.</summary>
+    public static readonly Brush BracketBrush = Frozen(DialogueLook.BracketHex);
+
+    internal readonly record struct Piece(string Text, DialogueMarkup.Style Style, bool Token, bool Bracketed = false);
 
     /// <summary>
     /// The words the player reads, split where the styling changes.
@@ -337,16 +352,61 @@ public sealed class DialogueLinePreview : Control
     /// something behind, and a row that showed it as ordinary words would not
     /// say that a name goes there.
     /// </summary>
-    private static List<Piece> Pieces(string line)
+    internal static List<Piece> Pieces(string line)
     {
         var pieces = new List<Piece>();
+        // The game's ParenthesesHighlighter (1.8E): from an opening bracket to
+        // its partner - brackets included, nesting counted, an unclosed one to
+        // the end - the line is wrapped in a colour tag of its own. An
+        // author's colour opened INSIDE that stretch is inside the game's tag,
+        // so it still wins; one opened before it does not.
+        int depth = 0, colours = 0, coloursAtOpen = 0;
         foreach (var span in DialogueMarkup.Parse(line))
         {
-            if (span.IsTag) continue;
-            pieces.Add(new Piece(span.Of(line), span.Style, span.IsToken));
+            string text = span.Of(line);
+            if (span.IsTag)
+            {
+                if (text.StartsWith("<color", StringComparison.OrdinalIgnoreCase)) colours++;
+                else if (text.StartsWith("</color", StringComparison.OrdinalIgnoreCase) && colours > 0) colours--;
+                continue;
+            }
+            if (span.IsToken)
+            {
+                pieces.Add(new Piece(text, span.Style, true, Bracketed(depth, colours, coloursAtOpen)));
+                continue;
+            }
+
+            int from = 0;
+            for (int i = 0; i < text.Length; i++)
+            {
+                char c = text[i];
+                if (c == '(' && depth == 0)
+                {
+                    if (i > from) pieces.Add(new Piece(text[from..i], span.Style, false, false));
+                    from = i;
+                    coloursAtOpen = colours;
+                    depth = 1;
+                }
+                else if (c == '(') depth++;
+                else if (c == ')' && depth > 0)
+                {
+                    depth--;
+                    if (depth == 0)
+                    {
+                        pieces.Add(new Piece(text[from..(i + 1)], span.Style, false, Bracketed(1, colours, coloursAtOpen)));
+                        from = i + 1;
+                    }
+                }
+            }
+            if (from < text.Length)
+                pieces.Add(new Piece(text[from..], span.Style, false, Bracketed(depth, colours, coloursAtOpen)));
         }
         return pieces;
     }
+
+    /// <summary>Whether a stretch takes the game's bracket colour: inside
+    /// brackets, and no colour of the author's opened since they did.</summary>
+    private static bool Bracketed(int depth, int colours, int coloursAtOpen) => depth > 0 && colours <= coloursAtOpen;
 
     /// <summary>The pieces as the layout wants them: text, the size it asks
     /// for, and an index back to the piece it came from.</summary>
@@ -383,6 +443,7 @@ public sealed class DialogueLinePreview : Control
 
             // The chip goes down first, so the glyphs land on top of it.
             if (piece.Token) Chip(target, width, height, slice);
+            if (piece.Style.Cue) CueLine(target, width, height, slice);
 
             UiTextRaster.DrawInto(
                 target, width, height, slice, set.Font,
@@ -395,12 +456,97 @@ public sealed class DialogueLinePreview : Control
         }
     }
 
+    /// <summary>How strong the Game look's glow is: lighter than the plain
+    /// rows' 0.55 (TextGlow), as asked.</summary>
+    private const double GlowStrength = 0.35;
+
+    /// <summary>
+    /// The glow under the coloured words: the name, words in brackets and the
+    /// colours a line asks for, each drawn again in its own colour as a solid
+    /// shape - the game's outline would glow dark - blurred, and laid faintly
+    /// under where the words will go.
+    /// </summary>
+    private static void Glow(byte[] target, int width, int height, TextLayout? name, UiColor nameInk,
+                             TextLayout body, UiFontSet set, List<Piece> pieces, double scale)
+    {
+        var glow = UiCompositor.NewLayer(width, height);
+        void Lit(TextLayout words, UiColor ink, DialogueMarkup.Style style)
+        {
+            var drawn = UiCompositor.NewLayer(width, height);
+            UiTextRaster.DrawInto(drawn, width, height, words, set.Font, set.Alpha, set.Width, set.Height, ink,
+                                  faceShift: style.Bold ? set.Font.BoldShift : -1,
+                                  slant: style.Italic ? DialogueLook.ItalicSlant : 0);
+            UiCompositor.Blend(glow, width, height, UiCompositor.Silhouette(drawn, ink), width, height, 0, 0);
+        }
+
+        bool any = false;
+        if (name != null && !nameInk.Equals(DialogueLook.NameFallbackColor)) { Lit(name, nameInk, default); any = true; }
+        int at = 0;
+        while (at < body.Glyphs.Count)
+        {
+            int run = body.Glyphs[at].Run;
+            int end = at;
+            while (end < body.Glyphs.Count && body.Glyphs[end].Run == run) end++;
+            var piece = run >= 0 && run < pieces.Count ? pieces[run] : default;
+            bool coloured = !piece.Token && (piece.Bracketed || (TmpColor.TryParse(piece.Style.Color, out var asked) && asked.A > 0));
+            if (coloured)
+            {
+                var slice = new TextLayout();
+                for (int i = at; i < end; i++) slice.Glyphs.Add(body.Glyphs[i]);
+                Lit(slice, InkFor(piece), piece.Style);
+                any = true;
+            }
+            at = end;
+        }
+        if (!any) return;
+        Blur(glow, width, height, Math.Max(1, (int)Math.Round(3 * scale)));
+        UiCompositor.Blend(target, width, height, glow, width, height, 0, 0, GlowStrength);
+    }
+
+    /// <summary>A soft blur: three box passes each way, near enough a
+    /// gaussian, on premultiplied pixels.</summary>
+    private static void Blur(byte[] px, int width, int height, int radius)
+    {
+        var scratch = new byte[px.Length];
+        for (int pass = 0; pass < 3; pass++)
+        {
+            BoxPass(px, scratch, width, height, radius, horizontal: true);
+            BoxPass(scratch, px, width, height, radius, horizontal: false);
+        }
+    }
+
+    private static void BoxPass(byte[] from, byte[] to, int width, int height, int radius, bool horizontal)
+    {
+        int lines = horizontal ? height : width, length = horizontal ? width : height;
+        int span = radius * 2 + 1;
+        var sum = new int[4];
+        for (int l = 0; l < lines; l++)
+        {
+            int Index(int i) => (horizontal ? l * width + i : i * width + l) * 4;
+            Array.Clear(sum, 0, 4);
+            for (int i = -radius; i <= radius; i++)
+            {
+                int j = Math.Clamp(i, 0, length - 1);
+                for (int ch = 0; ch < 4; ch++) sum[ch] += from[Index(j) + ch];
+            }
+            for (int i = 0; i < length; i++)
+            {
+                int o = Index(i);
+                for (int ch = 0; ch < 4; ch++) to[o + ch] = (byte)(sum[ch] / span);
+                int leaving = Index(Math.Clamp(i - radius, 0, length - 1));
+                int coming = Index(Math.Clamp(i + radius + 1, 0, length - 1));
+                for (int ch = 0; ch < 4; ch++) sum[ch] += from[coming + ch] - from[leaving + ch];
+            }
+        }
+    }
+
     /// <summary>What one piece is written in: a token in the name colour of
     /// whoever it stands in for, or the token mark; otherwise the colour its
     /// markup asked for, or the ordinary white.</summary>
     private static UiColor InkFor(Piece piece)
     {
         if (piece.Token) return DialogueMarkup.TokenColor?.Invoke(piece.Text) ?? DialogueLook.TokenColor;
+        if (piece.Bracketed) return DialogueLook.BracketColor;
 
         // The game's reading of the value, shared with the Text box so the two
         // cannot disagree - see TmpColor. A fully transparent colour is drawn
@@ -444,6 +590,36 @@ public sealed class DialogueLinePreview : Control
             left = Math.Min(left, glyph.X);
             right = Math.Max(right, glyph.Right);
             top = Math.Min(top, glyph.Y);
+            bottom = Math.Max(bottom, glyph.Bottom);
+        }
+        Flush();
+    }
+
+    /// <summary>
+    /// A dashed line under a sound's cue, as the Text box draws one: the
+    /// editor's mark, not the game's - the game shows the words as words.
+    /// </summary>
+    private static void CueLine(byte[] target, int width, int height, TextLayout slice)
+    {
+        if (slice.Glyphs.Count == 0) return;
+        var colour = DialogueLook.CueColor;
+        int line = slice.Glyphs[0].Line;
+        double left = double.MaxValue, right = double.MinValue, bottom = double.MinValue;
+
+        void Flush()
+        {
+            if (right <= left) return;
+            for (double x = left; x < right; x += 6)
+                FillRect(target, width, height, x, bottom + 1, Math.Min(x + 3.5, right), bottom + 2.6, colour);
+            left = double.MaxValue;
+            right = bottom = double.MinValue;
+        }
+
+        foreach (var glyph in slice.Glyphs)
+        {
+            if (glyph.Line != line) { Flush(); line = glyph.Line; }
+            left = Math.Min(left, glyph.X);
+            right = Math.Max(right, glyph.Right);
             bottom = Math.Max(bottom, glyph.Bottom);
         }
         Flush();

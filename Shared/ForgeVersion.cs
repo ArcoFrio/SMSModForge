@@ -22,7 +22,7 @@
         /// Keep in step with the two csproj <c>Version</c> elements; a test
         /// fails if they part company.
         /// </summary>
-        public const string Current = "1.7.0";
+        public const string Current = "1.8.0";
 
         /// <summary>
         /// The build of the game this ModForge is made for - what the editor

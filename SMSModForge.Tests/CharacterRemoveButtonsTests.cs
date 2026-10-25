@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using SMSModForge.Localization;
 using SMSModForge.Model;
+using SMSModForge.View.Controls;
 using SMSModForge.ViewModel;
 using Xunit;
 using Xunit.Abstractions;
@@ -22,8 +23,8 @@ public sealed class CharacterRemoveButtonsTests
 
     private static Button ButtonSaying(MainWindow window, string key)
     {
-        var bar = (ToolBar)window.FindName("CharacterToolBar");
-        return bar.Items.OfType<Button>().Single(b => (b.Content as string) == Loc.T(key));
+        var bar = (NavigatorBar)window.FindName("CharacterToolBar");
+        return bar.Buttons.Single(b => (b.Content as string) == Loc.T(key));
     }
 
     [Fact]

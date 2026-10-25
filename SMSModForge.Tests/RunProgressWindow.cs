@@ -20,18 +20,20 @@ namespace SMSModForge.Tests;
 /// harness's thread; what that throws would end the run. A WinForms window
 /// shares nothing with it.
 /// <para/>
-/// It comes up on its own only for a run that is going to take a while - at
-/// once when the last times say a minute or more, otherwise once a run has
-/// gone half a minute - and never unattended. SMSMODFORGE_TEST_PROGRESS=0
-/// keeps it away; =1 shows it for every run.
+/// It comes up for every run, from the first test, on the author's leftmost
+/// monitor and on top of it, and never takes focus (the author, 2026-10-21:
+/// the tests run while they work on the other monitors, and the window had
+/// stopped appearing at all - every run in the 1.7.0 work had it switched off,
+/// and short runs never reached the half minute it used to wait). It stays
+/// away only where nobody could see it (no interactive session), and the old
+/// SMSMODFORGE_TEST_PROGRESS switch no longer turns it off.
 /// </summary>
 internal sealed class RunProgressWindow : Form
 {
-    private static readonly TimeSpan LongRun = TimeSpan.FromMinutes(1);
-    private static readonly TimeSpan Patience = TimeSpan.FromSeconds(30);
     private static readonly TimeSpan Stuck = TimeSpan.FromMinutes(1);
 
-    private readonly RunProgress _run;
+    private readonly Func<RunProgress.Snapshot> _snapshot;
+    private readonly int _testers;
     private readonly Label _count = new();
     private readonly ProgressBar _bar = new();
     private readonly Label _time = new();
@@ -43,19 +45,19 @@ internal sealed class RunProgressWindow : Form
     private ITaskbarList3? _taskbar;
     private bool _red;
 
-    public static void OfferFor(RunProgress run)
+    /// <param name="now">The run as it stands: one process's, or every
+    /// tester's of a parallel run added up.</param>
+    /// <param name="testers">How many test processes the run is split over.</param>
+    public static void OfferFor(Func<RunProgress.Snapshot> now, int testers)
     {
-        var wanted = Environment.GetEnvironmentVariable("SMSMODFORGE_TEST_PROGRESS");
-        if (wanted == "0" || !Environment.UserInteractive) return;
-        bool atOnce = wanted == "1" || run.ExpectedSeconds >= LongRun.TotalSeconds;
+        if (!Environment.UserInteractive) return;
 
         var thread = new Thread(() =>
         {
             try
             {
-                if (!atOnce && run.Ended.Wait(Patience)) return;
                 Application.EnableVisualStyles();
-                Application.Run(new RunProgressWindow(run));
+                Application.Run(new RunProgressWindow(now, testers));
             }
             catch
             {
@@ -70,9 +72,12 @@ internal sealed class RunProgressWindow : Form
         thread.Start();
     }
 
-    internal RunProgressWindow(RunProgress run)
+    internal RunProgressWindow(RunProgress run) : this(run.Now, 1) { }
+
+    internal RunProgressWindow(Func<RunProgress.Snapshot> now, int testers)
     {
-        _run = run;
+        _snapshot = now;
+        _testers = testers;
         SuspendLayout();
 
         Text = "SMSModForge tests";
@@ -109,7 +114,8 @@ internal sealed class RunProgressWindow : Form
         _onTop.Dock = DockStyle.Bottom;
         _onTop.Height = 26;
         _onTop.Text = "Keep on top";
-        _onTop.CheckedChanged += (_, _) => TopMost = _onTop.Checked;
+        _onTop.Checked = true;
+        _onTop.CheckedChanged += (_, _) => KeepOnTop(_onTop.Checked);
 
         // Docking goes from the last added outwards: the list fills what the
         // rest leave, and the count ends up at the very top.
@@ -136,10 +142,35 @@ internal sealed class RunProgressWindow : Form
     // Up beside whatever the author is doing, not in front of it.
     protected override bool ShowWithoutActivation => true;
 
+    // On top from the moment it exists. Form.TopMost would get there through
+    // a SetWindowPos that also activates the window, and on the author's
+    // machine an activation takes the foreground from whatever they are in.
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+            var p = base.CreateParams;
+            if (_onTop.Checked) p.ExStyle |= WS_EX_TOPMOST;
+            return p;
+        }
+    }
+
+    private void KeepOnTop(bool onTop)
+    {
+        if (IsHandleCreated)
+            SetWindowPos(Handle, onTop ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0,
+                         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+    }
+
+    /// <summary>The author's leftmost monitor: the one they keep for things
+    /// like this, away from the two they work on.</summary>
+    internal static Screen Leftmost()
+        => Screen.AllScreens.OrderBy(s => s.Bounds.Left).ThenBy(s => s.Bounds.Top).First();
+
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        var area = Screen.FromPoint(Cursor.Position).WorkingArea;
+        var area = Leftmost().WorkingArea;
         Location = new Point(area.Right - Width - 16, area.Bottom - Height - 16);
     }
 
@@ -167,10 +198,11 @@ internal sealed class RunProgressWindow : Form
 
     internal void Tick()
     {
-        var s = _run.Now();
+        var s = _snapshot();
         int percent = (int)Math.Floor(s.Fraction * 100);
 
-        _count.Text = $"{s.Done:N0} of {s.Total:N0} tests" + (s.Skipped > 0 ? $"  ({s.Skipped:N0} skipped)" : "");
+        _count.Text = $"{s.Done:N0} of {s.Total:N0} tests" + (s.Skipped > 0 ? $"  ({s.Skipped:N0} skipped)" : "")
+                      + (_testers > 1 ? $"  ·  {_testers} testers" : "");
         _bar.Value = Math.Clamp((int)Math.Round(s.Fraction * 1000), 0, 1000);
         _time.Text = Clock(s.Elapsed) + " elapsed"
                      + (!s.Finished && s.Left is { } left ? "  ·  " + Remaining(left) : "");
@@ -225,6 +257,14 @@ internal sealed class RunProgressWindow : Form
     }
 
     // ── The taskbar button's own bar, and the red one ─────────────────────
+
+    private const int WS_EX_TOPMOST = 0x00000008;
+    private static readonly IntPtr HWND_TOPMOST = new(-1);
+    private static readonly IntPtr HWND_NOTOPMOST = new(-2);
+    private const uint SWP_NOSIZE = 0x0001, SWP_NOMOVE = 0x0002, SWP_NOACTIVATE = 0x0010;
+
+    [DllImport("user32.dll")]
+    private static extern bool SetWindowPos(IntPtr hWnd, IntPtr after, int x, int y, int cx, int cy, uint flags);
 
     private const int PBM_SETSTATE = 0x0410;
     private const int PBST_ERROR = 2;
