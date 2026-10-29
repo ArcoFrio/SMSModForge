@@ -65,8 +65,22 @@ public partial class ColorPickerWindow : Window
         Chequer.Fill = Chequerboard();
         AlphaChequer.Fill = Chequerboard();
         WasSwatch.Fill = new SolidColorBrush(Color.FromArgb(a, r, g, b));
+        WasLabel.Foreground = InkOn(Color.FromArgb(a, r, g, b));
 
         Loaded += (_, _) => Redraw();
+    }
+
+    /// <summary>
+    /// Black or white, whichever reads better on a swatch of
+    /// <paramref name="colour"/> - seen through to the chequer under it as far
+    /// as it is see-through (the chequer's white and #CCC, met in the middle).
+    /// </summary>
+    internal static Brush InkOn(Color colour)
+    {
+        var chequer = Color.FromRgb(0xE6, 0xE6, 0xE6);
+        var seen = Services.ThemeManager.Blend(chequer, Color.FromRgb(colour.R, colour.G, colour.B), colour.A / 255.0);
+        return Services.ThemeManager.Contrast(Colors.White, seen) >= Services.ThemeManager.Contrast(Colors.Black, seen)
+            ? Brushes.White : Brushes.Black;
     }
 
     /// <summary>What the wheel says right now, as the pack would store it.</summary>
@@ -92,6 +106,7 @@ public partial class ColorPickerWindow : Window
 
         FieldHue.Fill = new SolidColorBrush(Color.FromRgb(pr, pg, pb));
         NowSwatch.Fill = new SolidColorBrush(Color.FromArgb(_a, r, g, b));
+        NowLabel.Foreground = InkOn(Color.FromArgb(_a, r, g, b));
 
         AlphaRamp.Fill = new LinearGradientBrush(
             Color.FromArgb(0, r, g, b), Color.FromArgb(255, r, g, b),

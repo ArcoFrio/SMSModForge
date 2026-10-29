@@ -142,6 +142,67 @@ public sealed class VariableDefaultRadioTests
         });
     }
 
+    /// <summary>
+    /// Going from one variable to another leaves both as they were (an
+    /// author's report after 1.8.0: "the default value in variables editor
+    /// keep on switching off to true on its own"). The pair moves to the next
+    /// variable's value, and the radio group lets go of the other button as it
+    /// does - which a two-way binding wrote back as a value of its own.
+    /// </summary>
+    [Fact]
+    public void GoingFromOneVariableToAnotherChangesNeither()
+    {
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            ShowTab(window, "Variables");
+            var off = ABoolVariable(vm);
+            var on = ABoolVariable(vm);
+            on.DefaultBool = true;
+
+            foreach (var next in new[] { off, on, off, on, off })
+            {
+                vm.SelectedVariable = next;
+                WindowHarness.Pump();
+                var (yes, no) = Pair(window);
+                _out.WriteLine($"on {(next == off ? "off" : "on")}: off '{off.Model.DefaultValue}', on '{on.Model.DefaultValue}'; buttons true={yes.IsChecked} false={no.IsChecked}");
+                Assert.Equal("false", off.Model.DefaultValue);
+                Assert.Equal("true", on.Model.DefaultValue);
+                Assert.True((next == on ? yes : no).IsChecked == true, "the buttons do not show the variable now open");
+            }
+        });
+    }
+
+    /// <summary>
+    /// The same report's other half ("even the default value on int keep on
+    /// switching from 0 to true"): the pair is bound for every variable and
+    /// only hidden for the rest, so the group's write reached an Int.
+    /// </summary>
+    [Fact]
+    public void GoingFromABoolToAnIntLeavesTheIntAlone()
+    {
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            ShowTab(window, "Variables");
+            var flag = ABoolVariable(vm);
+            flag.DefaultBool = true;
+            vm.AddVariableCommand.Execute(null);
+            var count = vm.Variables.Last();
+            count.Type = PackVariableType.Int;
+            count.DefaultValue = "0";
+
+            foreach (var next in new[] { flag, count, flag, count })
+            {
+                vm.SelectedVariable = next;
+                WindowHarness.Pump();
+                _out.WriteLine($"on {(next == flag ? "the Bool" : "the Int")}: Int '{count.Model.DefaultValue}', Bool '{flag.Model.DefaultValue}'");
+                Assert.Equal("0", count.Model.DefaultValue);
+                Assert.Equal("true", flag.Model.DefaultValue);
+            }
+        });
+    }
+
     [Fact]
     public void OnlyABoolIsAskedThisWay()
     {

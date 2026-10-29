@@ -11,6 +11,39 @@
         KeyDown="Window_KeyDown"
         Background="{DynamicResource Theme.Window}"
         Foreground="{DynamicResource Theme.Text}">
+    <Window.Resources>
+        <!-- A layer's eye: its channel's dot in a ring, on the row's own dark
+             fill - bright while the layer shows, faint while it is hidden.
+             These were bare toggle buttons, so they got Windows' light grey,
+             light blue when on, sitting in the dark rows of every theme. -->
+        <Style x:Key="LayerEye" TargetType="ToggleButton">
+            <Setter Property="Width" Value="22"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="ring" Background="Transparent" BorderBrush="#77FFFFFF"
+                                BorderThickness="1" CornerRadius="11" SnapsToDevicePixels="True">
+                            <ContentPresenter x:Name="dot" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="dot" Property="Opacity" Value="0.3"/>
+                                <Setter TargetName="ring" Property="BorderBrush" Value="#33FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ring" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="ring" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Undo" Executed="Undo_Executed" CanExecute="UndoRedo_CanExecute"/>
         <CommandBinding Command="ApplicationCommands.Redo" Executed="Redo_Executed" CanExecute="UndoRedo_CanExecute"/>
@@ -32,10 +65,10 @@
             <StackPanel DockPanel.Dock="Top">
                 <Border BorderBrush="{DynamicResource Theme.Border}" BorderThickness="1" Margin="0,0,0,4" Padding="4" Background="#222">
                     <StackPanel Orientation="Horizontal">
-                        <ToggleButton x:Name="ShowDiffuseToggle" IsChecked="True"
-                                      Width="22" Height="22" Click="ShowDiffuse_Click"
+                        <ToggleButton x:Name="ShowDiffuseToggle" IsChecked="True" Style="{StaticResource LayerEye}"
+                                      Click="ShowDiffuse_Click"
                                       ToolTip="{l:T maskEditor.showDiffuseToggle.tip}">
-                            <TextBlock Text="●" FontSize="14"/>
+                            <TextBlock Text="●" FontSize="14" Foreground="LightGray"/>
                         </ToggleButton>
                         <TextBlock Text="{l:T maskEditor.referenceLocked}" Margin="6,0,0,0"
                                    VerticalAlignment="Center" Foreground="LightGray"/>
@@ -44,8 +77,8 @@
                 <Border BorderBrush="#A33" BorderThickness="1" Margin="0,0,0,4" Padding="4"
                         x:Name="LayerR" Background="#331100">
                     <StackPanel Orientation="Horizontal">
-                        <ToggleButton x:Name="ShowRToggle" IsChecked="True"
-                                      Width="22" Height="22" Click="ShowR_Click"
+                        <ToggleButton x:Name="ShowRToggle" IsChecked="True" Style="{StaticResource LayerEye}"
+                                      Click="ShowR_Click"
                                       ToolTip="{l:T maskEditor.showRToggle.tip}">
                             <TextBlock x:Name="ShowRDot" Text="●" FontSize="14" Foreground="#F66"/>
                         </ToggleButton>
@@ -59,8 +92,8 @@
                 <Border BorderBrush="#3A3" BorderThickness="1" Margin="0,0,0,4" Padding="4"
                         x:Name="LayerG" Background="#113300">
                     <StackPanel Orientation="Horizontal">
-                        <ToggleButton x:Name="ShowGToggle" IsChecked="True"
-                                      Width="22" Height="22" Click="ShowG_Click"
+                        <ToggleButton x:Name="ShowGToggle" IsChecked="True" Style="{StaticResource LayerEye}"
+                                      Click="ShowG_Click"
                                       ToolTip="{l:T maskEditor.showGToggle.tip}">
                             <TextBlock Text="●" FontSize="14" Foreground="#6F6"/>
                         </ToggleButton>
@@ -74,8 +107,8 @@
                 <Border BorderBrush="#36A" BorderThickness="1" Margin="0,0,0,4" Padding="4"
                         x:Name="LayerB" Background="#110033">
                     <StackPanel Orientation="Horizontal">
-                        <ToggleButton x:Name="ShowBToggle" IsChecked="True"
-                                      Width="22" Height="22" Click="ShowB_Click"
+                        <ToggleButton x:Name="ShowBToggle" IsChecked="True" Style="{StaticResource LayerEye}"
+                                      Click="ShowB_Click"
                                       ToolTip="{l:T maskEditor.showBToggle.tip}">
                             <TextBlock Text="●" FontSize="14" Foreground="#69F"/>
                         </ToggleButton>

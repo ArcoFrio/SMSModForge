@@ -8,7 +8,7 @@ lands in `coverage_report.md` for review in the editor.
 ## Inputs (regenerate `_input/` from git if needed)
 ```
 # raw GC2 extract (run the Unity editor script Tools/UnityEditor/SMSModForgeDialogueExtractor.cs)
-SMSBustForge/SMSAndroidsDialogues.json
+SMSModForge/SMSAndroidsDialogues.json
 
 # pre-ModForge dispatcher + siblings (semantic source for what each marker does)
 git -C SMSAndroids show d42d17d:SMSAndroids/MainStory.cs   > _input/MainStory_pre_modforge.cs
@@ -16,7 +16,7 @@ git -C SMSAndroids show d42d17d:SMSAndroids/Dialogues.cs   > _input/Dialogues_pr
 # (Characters/Core/Scenes/Schedule too — see commit d42d17d)
 
 # format truth
-SMSBustForge/SMSAndroidsPack/modpack.json
+SMSModForge/SMSAndroidsPack/modpack.json
 ```
 
 ## Run order

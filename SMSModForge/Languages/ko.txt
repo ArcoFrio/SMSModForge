@@ -2493,6 +2493,10 @@ menu.openPack = 팩 열기(_O)…
 # en: Recent _files
 menu.recentFiles = 최근 파일(_F)
 
+# Tooltip on the small cross beside each pack in File > Recent files
+# en: Take this pack off the list. The pack itself is not touched.
+menu.recentFiles.remove.tip = 이 팩을 목록에서 뺍니다. 팩 자체는 건드리지 않습니다.
+
 # Menu item
 # en: _Save
 menu.savePack = 저장(_S)
@@ -9196,8 +9200,8 @@ docs.fileMenu.openPackFolderHave = 이미 저장한 팩 폴더를 엽니다.
 docs.fileMenu.reopenOnePacksWorked.term = 최근 파일
 
 # Docs: a point in the topic
-# en: Reopen one of the packs you worked on most recently.
-docs.fileMenu.reopenOnePacksWorked = 가장 최근에 작업한 팩 중 하나를 다시 엽니다.
+# en: Reopen one of the packs you worked on most recently. The cross beside one takes it off the list; the pack itself is not touched.
+docs.fileMenu.reopenOnePacksWorked = 가장 최근에 작업한 팩 중 하나를 다시 엽니다. 옆의 × 를 누르면 목록에서 빠지며, 팩 자체는 건드리지 않습니다.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Save
@@ -14626,6 +14630,10 @@ validation.variable.intDefault = Int 기본값 '{value}'을(를) 정수로 읽�
 # Validation message
 # en: Float default '{value}' does not parse as a number; runtime will treat as 0
 validation.variable.floatDefault = Float 기본값 '{value}'을(를) 숫자로 읽을 수 없습니다. 실행 중에는 0으로 취급됩니다
+
+# Validation message
+# en: List default '{value}' is not a list of values; the list will start empty. Add its initial values again.
+validation.variable.listDefault = List 기본값 '{value}'은(는) 값 목록이 아닙니다. 목록이 빈 채로 시작됩니다. 초깃값을 다시 넣으세요.
 
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.

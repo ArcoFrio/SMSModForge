@@ -2523,6 +2523,10 @@ menu.openPack = _Открыть пак…
 # en: Recent _files
 menu.recentFiles = _Недавние файлы
 
+# Tooltip on the small cross beside each pack in File > Recent files
+# en: Take this pack off the list. The pack itself is not touched.
+menu.recentFiles.remove.tip = Убрать этот пак из списка. Сам пак не затрагивается.
+
 # Menu item
 # en: _Save
 menu.savePack = _Сохранить
@@ -9276,8 +9280,8 @@ docs.fileMenu.openPackFolderHave = Открыть папку пака, кото�
 docs.fileMenu.reopenOnePacksWorked.term = Недавние файлы
 
 # Docs: a point in the topic
-# en: Reopen one of the packs you worked on most recently.
-docs.fileMenu.reopenOnePacksWorked = Снова открыть один из паков, с которыми вы работали последними.
+# en: Reopen one of the packs you worked on most recently. The cross beside one takes it off the list; the pack itself is not touched.
+docs.fileMenu.reopenOnePacksWorked = Снова открыть один из паков, с которыми вы работали последними. Крестик рядом убирает пак из списка; сам пак не затрагивается.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Save
@@ -14711,6 +14715,10 @@ validation.variable.intDefault = Значение Int по умолчанию «
 # Validation message
 # en: Float default '{value}' does not parse as a number; runtime will treat as 0
 validation.variable.floatDefault = Значение Float по умолчанию «{value}» не читается как число; во время игры будет считаться 0
+
+# Validation message
+# en: List default '{value}' is not a list of values; the list will start empty. Add its initial values again.
+validation.variable.listDefault = Значение List по умолчанию «{value}» не является списком значений; список начнётся пустым. Заново добавьте его начальные значения.
 
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.

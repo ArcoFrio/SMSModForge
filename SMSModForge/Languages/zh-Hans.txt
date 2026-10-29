@@ -2493,6 +2493,10 @@ menu.openPack = 打开模组包(_O)…
 # en: Recent _files
 menu.recentFiles = 最近的模组包(_R)
 
+# Tooltip on the small cross beside each pack in File > Recent files
+# en: Take this pack off the list. The pack itself is not touched.
+menu.recentFiles.remove.tip = 把这个模组包从列表中移除。模组包本身不受影响。
+
 # Menu item
 # en: _Save
 menu.savePack = 保存(_S)
@@ -9194,8 +9198,8 @@ docs.fileMenu.openPackFolderHave = 打开你已经保存过的模组包文件夹
 docs.fileMenu.reopenOnePacksWorked.term = 最近的模组包
 
 # Docs: a point in the topic
-# en: Reopen one of the packs you worked on most recently.
-docs.fileMenu.reopenOnePacksWorked = 重新打开你最近做过的模组包之一。
+# en: Reopen one of the packs you worked on most recently. The cross beside one takes it off the list; the pack itself is not touched.
+docs.fileMenu.reopenOnePacksWorked = 重新打开你最近做过的模组包之一。旁边的 × 会把它从列表中移除；模组包本身不受影响。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Save
@@ -14624,6 +14628,10 @@ validation.variable.intDefault = Int 的默认值「{value}」无法解析为整
 # Validation message
 # en: Float default '{value}' does not parse as a number; runtime will treat as 0
 validation.variable.floatDefault = Float 的默认值「{value}」无法解析为数字；运行时会当作 0 处理
+
+# Validation message
+# en: List default '{value}' is not a list of values; the list will start empty. Add its initial values again.
+validation.variable.listDefault = List 的默认值「{value}」不是一组值；列表会从空开始。请重新添加它的初始值。
 
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.

@@ -2511,6 +2511,10 @@ menu.openPack = _Abrir pack…
 # en: Recent _files
 menu.recentFiles = Packs _recentes
 
+# Tooltip on the small cross beside each pack in File > Recent files
+# en: Take this pack off the list. The pack itself is not touched.
+menu.recentFiles.remove.tip = Tira este pack da lista. O pack em si não é mexido.
+
 # Menu item
 # en: _Save
 menu.savePack = _Salvar
@@ -9253,8 +9257,8 @@ docs.fileMenu.openPackFolderHave = Abre uma pasta de pack que você já salvou.
 docs.fileMenu.reopenOnePacksWorked.term = Packs recentes
 
 # Docs: a point in the topic
-# en: Reopen one of the packs you worked on most recently.
-docs.fileMenu.reopenOnePacksWorked = Reabre um dos packs em que você trabalhou mais recentemente.
+# en: Reopen one of the packs you worked on most recently. The cross beside one takes it off the list; the pack itself is not touched.
+docs.fileMenu.reopenOnePacksWorked = Reabre um dos packs em que você trabalhou mais recentemente. O X ao lado de um o tira da lista; o pack em si não é mexido.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Save
@@ -14686,6 +14690,10 @@ validation.variable.intDefault = O padrão de Int "{value}" não se lê como um 
 # Validation message
 # en: Float default '{value}' does not parse as a number; runtime will treat as 0
 validation.variable.floatDefault = O padrão de Float "{value}" não se lê como um número; o runtime vai tratar como 0
+
+# Validation message
+# en: List default '{value}' is not a list of values; the list will start empty. Add its initial values again.
+validation.variable.listDefault = O padrão de List "{value}" não é uma lista de valores; a lista vai começar vazia. Adicione os valores iniciais de novo.
 
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.

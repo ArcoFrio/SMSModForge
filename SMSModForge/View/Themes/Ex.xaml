@@ -82,6 +82,57 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <!-- A button that stays in: Normal's, cut at the corners, and the one
+         that is in glows in the accent. -->
+    <ControlTemplate x:Key="Theme.ToggleButtonTemplate" TargetType="ToggleButton">
+        <Grid x:Name="frame">
+            <ctl:ChamferBorder x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                               Cut="5" Corners="TopLeft, BottomRight" Padding="{TemplateBinding Padding}"
+                               SnapsToDevicePixels="True">
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  RecognizesAccessKey="True">
+                    <ContentPresenter.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"/>
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
+            </ctl:ChamferBorder>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.ButtonHover}"/>
+                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                <Setter TargetName="frame" Property="Effect" Value="{DynamicResource Ex.GlowSoft}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.ButtonPressed}"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.Accent}"/>
+                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                <Setter TargetName="frame" Property="Effect" Value="{DynamicResource Ex.GlowSoft}"/>
+                <Setter Property="Foreground" Value="{DynamicResource Theme.OnAccent}"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsChecked" Value="True"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.AccentHover}"/>
+                <Setter TargetName="frame" Property="Effect" Value="{DynamicResource Ex.Glow}"/>
+            </MultiTrigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Theme.Text}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.45"/>
+                <Setter TargetName="frame" Property="Effect" Value="{x:Null}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
     <!-- A picture to pick: cut corners, and the chosen one glows. -->
     <ControlTemplate x:Key="Theme.TileTemplate" TargetType="Button">
         <Grid x:Name="frame">

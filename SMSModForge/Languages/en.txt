@@ -1842,6 +1842,9 @@ menu.openPack = _Open pack…
 # Menu item
 menu.recentFiles = Recent _files
 
+# Tooltip on the small cross beside each pack in File > Recent files
+menu.recentFiles.remove.tip = Take this pack off the list. The pack itself is not touched.
+
 # Menu item
 menu.savePack = _Save
 
@@ -6879,7 +6882,7 @@ docs.fileMenu.openPackFolderHave = Open a pack folder you have already saved.
 docs.fileMenu.reopenOnePacksWorked.term = Recent files
 
 # Docs: a point in the topic
-docs.fileMenu.reopenOnePacksWorked = Reopen one of the packs you worked on most recently.
+docs.fileMenu.reopenOnePacksWorked = Reopen one of the packs you worked on most recently. The cross beside one takes it off the list; the pack itself is not touched.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 docs.fileMenu.writePackFolderDisk.term = Save
@@ -10972,6 +10975,9 @@ validation.variable.intDefault = Int default '{value}' does not parse as an inte
 
 # Validation message
 validation.variable.floatDefault = Float default '{value}' does not parse as a number; runtime will treat as 0
+
+# Validation message
+validation.variable.listDefault = List default '{value}' is not a list of values; the list will start empty. Add its initial values again.
 
 # Validation message. {name} is the character's name
 validation.character.pronounsMissing = {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.

@@ -25,6 +25,10 @@ namespace SMSModForge.Tests;
 /// is behind the picture - black labels on a place's white button art read as
 /// black on the dark canvas around it. Such text is drawn twice, with and
 /// without it, and its letters are measured against what is really under them.
+/// A filled shape drawn under text is measured the same way, and EX's
+/// cut-corner fill (ChamferBorder) counts as what is behind its words - both
+/// unread until after 1.8.0, when the audit first reached windows other than
+/// the main one.
 /// </summary>
 internal static class ContrastAudit
 {
@@ -137,7 +141,8 @@ internal static class ContrastAudit
                 if (ReferenceEquals(under, child)) break;   // what comes after is drawn over, not under
                 if (HasPicture(under, bounds.Value)) return true;
             }
-            if (up is Panel { Background: SolidColorBrush { Color.A: 255 } } or Border { Background: SolidColorBrush { Color.A: 255 } }) return false;
+            if (up is Panel { Background: SolidColorBrush { Color.A: 255 } } or Border { Background: SolidColorBrush { Color.A: 255 } }
+                   or SMSModForge.View.Controls.ChamferBorder { Background: SolidColorBrush { Color.A: 255 } }) return false;
         }
         return false;
     }
@@ -149,6 +154,10 @@ internal static class ContrastAudit
         {
             Image => true,
             System.Windows.Shapes.Shape { Fill: ImageBrush or VisualBrush or DrawingBrush } => true,
+            // A filled shape drawn under text beside it - a colour picker's
+            // swatch under its "was" and "now": walking up never meets it, so
+            // the words were measured against the panel round the swatch.
+            System.Windows.Shapes.Shape { Fill: SolidColorBrush { Color.A: > 0 } or GradientBrush } => true,
             System.Windows.Shapes.Shape { OpacityMask: ImageBrush } => true,
             Border { Background: ImageBrush or VisualBrush } => true,
             Panel { Background: ImageBrush or VisualBrush } => true,
@@ -260,6 +269,10 @@ internal static class ContrastAudit
                 TextBlock t => t.Background,
                 Border b => b.Background,
                 Panel p => p.Background,
+                // EX's cut-corner fill. Unread until after 1.8.0, so every
+                // word on an EX button was measured against the panel round
+                // it - right only while the two were alike.
+                SMSModForge.View.Controls.ChamferBorder c => c.Background,
                 Control c when up is Window => c.Background,
                 _ => null,
             };

@@ -71,3 +71,27 @@ public sealed class InverseBoolConverter : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         => value is bool b ? !b : Binding.DoNothing;
 }
+
+/// <summary>
+/// A radio button's answer, for a pair (or more) bound to one bool: only the
+/// button being picked writes. <see cref="Invert"/> for the button that
+/// stands for false.
+/// <para/>
+/// Two-way, the button the group lets go of wrote too - WPF unchecks the
+/// other one, and its "false" went back into the value as an answer of its
+/// own. When the pair moved to another item it landed on whichever item the
+/// binding still held: an author's Bool default flipped to true on opening
+/// another variable, and an Int's 0 became "true" from the hidden pair
+/// (reported after 1.8.0). The value reaches the other button through its
+/// own binding, so letting go needs to say nothing.
+/// </summary>
+public sealed class PickedConverter : IValueConverter
+{
+    public bool Invert { get; set; }
+
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        => value is bool b && (Invert ? !b : b);
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        => value is true ? !Invert : Binding.DoNothing;
+}

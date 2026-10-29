@@ -2493,6 +2493,10 @@ menu.openPack = パックを開く(_O)…
 # en: Recent _files
 menu.recentFiles = 最近使ったファイル(_F)
 
+# Tooltip on the small cross beside each pack in File > Recent files
+# en: Take this pack off the list. The pack itself is not touched.
+menu.recentFiles.remove.tip = このパックを一覧から外します。パックそのものには手を付けません。
+
 # Menu item
 # en: _Save
 menu.savePack = 保存(_S)
@@ -9196,8 +9200,8 @@ docs.fileMenu.openPackFolderHave = 保存済みのパックのフォルダーを
 docs.fileMenu.reopenOnePacksWorked.term = 最近使ったファイル
 
 # Docs: a point in the topic
-# en: Reopen one of the packs you worked on most recently.
-docs.fileMenu.reopenOnePacksWorked = 最近作業したパックの1つをもう一度開きます。
+# en: Reopen one of the packs you worked on most recently. The cross beside one takes it off the list; the pack itself is not touched.
+docs.fileMenu.reopenOnePacksWorked = 最近作業したパックの1つをもう一度開きます。横の × で一覧から外せます。パックそのものには手を付けません。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Save
@@ -14626,6 +14630,10 @@ validation.variable.intDefault = Int の既定値「{value}」を整数として
 # Validation message
 # en: Float default '{value}' does not parse as a number; runtime will treat as 0
 validation.variable.floatDefault = Float の既定値「{value}」を数値として読めません。実行時には 0 として扱われます
+
+# Validation message
+# en: List default '{value}' is not a list of values; the list will start empty. Add its initial values again.
+validation.variable.listDefault = List の既定値「{value}」は値の一覧ではありません。リストは空で始まります。初期値をもう一度入れてください。
 
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.

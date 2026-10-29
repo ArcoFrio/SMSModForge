@@ -36,6 +36,15 @@ public static class RecentFilesService
         Save(list);
     }
 
+    /// <summary>Take a pack off the list - the ✕ beside it in File > Recent
+    /// files. Only the list changes; the pack's folder is not touched.</summary>
+    public static void Remove(string path)
+    {
+        if (TestMode.Active) return;
+        var list = Load();
+        if (list.RemoveAll(p => string.Equals(p, path, StringComparison.OrdinalIgnoreCase)) > 0) Save(list);
+    }
+
     private static void Save(List<string> list)
     {
         try

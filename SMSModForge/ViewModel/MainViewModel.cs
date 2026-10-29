@@ -3655,6 +3655,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     public RelayCommand ValidateCommand { get; }
     public RelayCommand OpenRecentCommand { get; }
 
+    /// <summary>The ✕ beside a pack in File ▸ Recent files: takes it off the
+    /// list, and only the list.</summary>
+    public RelayCommand RemoveRecentCommand { get; }
+
     /// <summary>Bound by Options ▸ Check for updates on start. Two-way, and
     /// written straight through to the stored preference — there is no in-memory
     /// copy to fall out of step with it.</summary>
@@ -4240,6 +4244,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
         ValidateCommand               = new RelayCommand(Validate);
         OpenRecentCommand             = new RelayCommand(p => OpenRecentPack((string)p!));
+        RemoveRecentCommand           = new RelayCommand(p => RemoveRecentPack((string)p!));
         ApplyThemeCommand             = new RelayCommand(p =>
         {
             if (p is Services.ThemeDef theme) Services.ThemeManager.Apply(theme);
@@ -4664,6 +4669,19 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             return;
         }
         OpenPackFromPath(path);
+    }
+
+    /// <summary>
+    /// Take one pack off File ▸ Recent files (the author, after 1.8.0: "a
+    /// small x to recent opened packs so we can remove them from the list").
+    /// The row goes at once and the menu stays open, so several can go in a
+    /// row; the pack's folder is left exactly as it was.
+    /// </summary>
+    private void RemoveRecentPack(string path)
+    {
+        RecentFilesService.Remove(path);
+        var shown = RecentFiles.FirstOrDefault(p => string.Equals(p, path, StringComparison.OrdinalIgnoreCase));
+        if (shown != null) RecentFiles.Remove(shown);
     }
 
     private void LoadRecentFiles()

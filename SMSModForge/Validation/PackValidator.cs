@@ -881,6 +881,15 @@ public static class PackValidator
                 case PackVariableType.String:
                     // Anything is a valid string.
                     break;
+                case PackVariableType.List:
+                    // A List starts empty when its default is not a list, and
+                    // said nothing until after 1.8.0 - when an editor bug was
+                    // found writing "true" over other variables' defaults, a
+                    // List's starting values with them.
+                    if (!string.IsNullOrWhiteSpace(v.DefaultValue) && !IsList(v.DefaultValue))
+                        issues.Add(new(Severity.Warning, $"{vWhere}.defaultValue",
+                            Loc.F("validation.variable.listDefault", "value", v.DefaultValue), "variable.listDefault"));
+                    break;
             }
         }
 
@@ -1449,6 +1458,14 @@ public static class PackValidator
             Loc.F(loops ? "validation.node.jumpLoops" : "validation.node.jumpReplays",
                   "tag", target.Tag ?? "", "target", Name(target), "above", Name(nearest)),
             loops ? "node.jumpLoops" : "node.jumpReplays"));
+    }
+
+    /// <summary>Whether a List variable's default reads as the list of values
+    /// the editor writes - a JSON array.</summary>
+    private static bool IsList(string value)
+    {
+        try { Newtonsoft.Json.Linq.JArray.Parse(value); return true; }
+        catch (Newtonsoft.Json.JsonException) { return false; }
     }
 
     /// <summary>A line as a warning quotes it: its first words.</summary>

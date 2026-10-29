@@ -930,6 +930,65 @@
             <Setter Property="Template" Value="{DynamicResource Theme.ButtonTemplate}"/>
         </Style>
 
+        <!-- A button that stays in. Off, it is a button; on, it takes the
+             accent and the accent's own text colour, so the one in use reads
+             at a glance. Toggles had no look of their own until after 1.8.0:
+             they got Windows' light grey and light blue with the theme's text
+             on top - the mask editor's Brush and Eraser, light on light in
+             every dark theme. The words follow the button's colour: the app's
+             own text colour would win over it otherwise. -->
+        <ControlTemplate x:Key="Theme.ToggleButtonTemplate" TargetType="ToggleButton">
+            <Border x:Name="bd" Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"
+                    CornerRadius="3" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  RecognizesAccessKey="True">
+                    <ContentPresenter.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"/>
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.ButtonHover}"/>
+                    <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.ButtonPressed}"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.Accent}"/>
+                    <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.OnAccent}"/>
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsChecked" Value="True"/>
+                        <Condition Property="IsMouseOver" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.AccentHover}"/>
+                </MultiTrigger>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Theme.Text}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.45"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <Style TargetType="ToggleButton">
+            <Setter Property="Padding" Value="8,3"/>
+            <Setter Property="Background" Value="{DynamicResource Theme.Button}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.ButtonText}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Theme.ButtonBorder}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template" Value="{DynamicResource Theme.ToggleButtonTemplate}"/>
+        </Style>
+
         <!-- A picture to pick - a line's outfit or face (MainWindow's
              PictureTile): a thick border the accent marks the chosen one with. -->
         <ControlTemplate x:Key="Theme.TileTemplate" TargetType="Button">

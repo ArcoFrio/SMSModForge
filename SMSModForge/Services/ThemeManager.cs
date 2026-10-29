@@ -438,6 +438,15 @@ public static class ThemeManager
               control = Hex(t.Control), text = Hex(t.Text), accent = Hex(t.Accent);
         var p = new Dictionary<string, Color>();
 
+        // Words sit on the accent - a Save button, a toggle that is in - in
+        // white or near-black, whichever reads better; and the accent is moved
+        // in lightness only as far as they need. Sandstone's #B5651D sat in the
+        // middle, where both read at 4.3 (found when the contrast checks
+        // reached the mask editor's tool buttons, after 1.8.0).
+        var onAccent = Contrast(Colors.White, accent) >= Contrast(Color.FromRgb(0x11, 0x11, 0x11), accent)
+            ? Colors.White : Color.FromRgb(0x11, 0x11, 0x11);
+        accent = Readable(accent, onAccent);
+
         p[KeyWindow] = window;
         p[KeyChrome] = chrome;
         p[KeySurface] = surface;
@@ -459,8 +468,7 @@ public static class ThemeManager
         // like a dialogue's pinned "Required" level row.
         var heading = t.Heading is { } h ? Hex(h) : Blend(text, accent, dark ? 0.45 : 0.55);
         p[KeyHeading] = p[KeyAccentText] = Readable(heading, surface, p[KeyAccentSoft]);
-        p[KeyOnAccent] = Contrast(Colors.White, accent) >= Contrast(Color.FromRgb(0x11, 0x11, 0x11), accent)
-            ? Colors.White : Color.FromRgb(0x11, 0x11, 0x11);
+        p[KeyOnAccent] = onAccent;
         // On the bars too: the EX rail draws the open tab's icon with it.
         p[KeyLink] = Readable(accent, surface, control, chrome);
 

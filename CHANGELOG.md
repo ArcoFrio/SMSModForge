@@ -1,5 +1,53 @@
 # Changelog
 
+## 1.8.1
+
+A fix for anyone with variables: clicking from one variable to another could
+change their default values without a word, and a pack saved that way keeps
+the wrong ones - the first entry under Fixed says how to find them.
+Also: a pack can be taken off File > Recent files, and the mask editor and
+colour picker read properly in dark themes. Nothing changes in the game: the
+plugin is the same apart from its version number.
+
+### New
+
+- **A pack can be taken off File > Recent files.** Each pack on the list has
+  a small cross at its right; it takes that pack off the list, and nothing
+  else - the pack's folder is not touched. The menu stays open, so several
+  can go one after another. Until now the list only ever grew until older
+  packs fell off the end, and a pack moved or deleted stayed on it.
+
+### Fixed
+
+- **A variable's default could change on its own.** On the Variables tab,
+  clicking from one variable to another could switch a Bool's default from
+  "Starts false" to "Starts true", and could write "true" over the default of
+  an Int, Float, String or List variable - an Int's 0 became "true". Nothing
+  showed it happening; the pack was saved with the wrong values. Moving
+  between variables now leaves every one as it was. The true/false buttons on
+  Variable conditions and Set variable actions are built the same way and
+  have the same fix.
+
+  **Check your variables after updating.** Validate names an Int or Float
+  whose default is not a number (it starts at 0 in the game), and now a List
+  whose default is not a list (it starts empty) - set those again. A Bool
+  that should start false and a String default reading "true" cannot be told
+  apart from one you meant, so look over those by eye.
+- **The mask editor's Brush and Eraser were hard to read.** They, and the
+  switches beside its layers, were drawn in Windows' own light grey and light
+  blue whatever the theme, with the theme's text on top - light on light in
+  every dark theme. The tools now look like the editor's other buttons, the
+  one in use in the theme's accent; a layer's switch is its colour's dot in a
+  ring, bright while the layer shows and faint while it is hidden.
+- **The colour picker's "was" and "now"** were faint black over the colours
+  being compared, and vanished on a dark one. Each is now black or white,
+  whichever reads on its colour.
+- **Sandstone's accent is a touch lighter**, so the words on its Save buttons
+  and on a tool in use read properly - they fell just short.
+- **A recent pack whose folder name has an underscore** showed without it -
+  "Beach_Day" read "BeachDay" - because the menu took the underscore as a
+  keyboard shortcut. The list shows the folder exactly as it is.
+
 ## 1.8.0
 
 The EX update. A second way to draw the whole editor - EX, with the tabs in a

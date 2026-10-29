@@ -100,12 +100,18 @@ public sealed class PackVariableViewModel : ObservableObject
 
     /// <summary>Checkbox editor surface for Bool variables — the only two
     /// values a bool default can hold. Writes normalize the stored string
-    /// to lowercase "true"/"false".</summary>
+    /// to lowercase "true"/"false".
+    /// <para/>
+    /// Only ever into a Bool. The buttons are bound for every variable, just
+    /// hidden for the rest, and a write that reached an Int turned its 0 into
+    /// "true" (reported after 1.8.0; see PickedConverter).
+    /// </summary>
     public bool DefaultBool
     {
         get => string.Equals(Model.DefaultValue?.Trim(), "true", StringComparison.OrdinalIgnoreCase);
         set
         {
+            if (Type != PackVariableType.Bool) return;
             Model.DefaultValue = value ? "true" : "false";
             OnPropertyChanged();
             OnPropertyChanged(nameof(DefaultValue));

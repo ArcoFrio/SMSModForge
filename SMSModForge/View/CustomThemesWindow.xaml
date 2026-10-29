@@ -11,6 +11,8 @@
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
         <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
         <conv:InverseBoolConverter x:Key="InverseBool"/>
+        <conv:PickedConverter x:Key="Picked"/>
+        <conv:PickedConverter x:Key="PickedFalse" Invert="True"/>
         <!-- One colour of the theme: what it paints, a swatch that opens the
              picker, and its value to type over. -->
         <Style x:Key="Swatch" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
@@ -87,8 +89,8 @@
                 <TextBlock Grid.Row="1" Text="{l:T theme.custom.look}"/>
                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center"
                             ToolTip="{l:T theme.custom.look.tip}">
-                    <RadioButton x:Name="LookEx" Content="{l:T theme.group.ex}" IsChecked="{Binding IsEx}" Margin="0,0,16,0"/>
-                    <RadioButton x:Name="LookClassic" Content="{l:T theme.group.normal}" IsChecked="{Binding IsEx, Converter={StaticResource InverseBool}}"/>
+                    <RadioButton x:Name="LookEx" Content="{l:T theme.group.ex}" IsChecked="{Binding IsEx, Converter={StaticResource Picked}}" Margin="0,0,16,0"/>
+                    <RadioButton x:Name="LookClassic" Content="{l:T theme.group.normal}" IsChecked="{Binding IsEx, Converter={StaticResource PickedFalse}}"/>
                 </StackPanel>
 
                 <TextBlock Grid.Row="3" Text="{l:T theme.custom.window}" ToolTip="{l:T theme.custom.window.tip}"/>

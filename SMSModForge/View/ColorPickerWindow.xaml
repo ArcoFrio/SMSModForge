@@ -51,10 +51,13 @@
                     </Grid.ColumnDefinitions>
                     <Rectangle x:Name="WasSwatch"/>
                     <Rectangle x:Name="NowSwatch" Grid.Column="1"/>
-                    <TextBlock Text="{l:T colorPicker.was}" Margin="6,2" Opacity="0.75" FontSize="10"
-                               VerticalAlignment="Bottom" Foreground="#000"/>
-                    <TextBlock Text="{l:T colorPicker.now}" Grid.Column="1" Margin="6,2" Opacity="0.75" FontSize="10"
-                               VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#000"/>
+                    <!-- Black or white, whichever reads on the colour under it
+                         (ColorPickerWindow.InkOn): a fixed faded black vanished
+                         on every dark colour picked. -->
+                    <TextBlock x:Name="WasLabel" Text="{l:T colorPicker.was}" Margin="6,2" FontSize="10"
+                               VerticalAlignment="Bottom"/>
+                    <TextBlock x:Name="NowLabel" Text="{l:T colorPicker.now}" Grid.Column="1" Margin="6,2" FontSize="10"
+                               VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
                 </Grid>
             </Grid>
         </Border>

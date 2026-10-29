@@ -281,6 +281,10 @@
         <conv:BoolToVisibilityConverter        x:Key="BoolToVisibility"/>
         <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
         <conv:InverseBoolConverter             x:Key="InverseBoolConverter"/>
+        <!-- For radio buttons bound to one bool: only the one picked writes
+             (PickedConverter says why). -->
+        <conv:PickedConverter                  x:Key="Picked"/>
+        <conv:PickedConverter                  x:Key="PickedFalse" Invert="True"/>
 
         <!-- A speaker in a list of speakers: their face, then their name
              (ActorFaces). The line's Actor and every action's or condition's. -->
@@ -938,10 +942,10 @@
                      the PackVarRef dropdown. The radio panel is collapsed when the variable is not boolean. -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center"
                             Visibility="{Binding IsBooleanVariable, Converter={StaticResource BoolToVisibility}}">
-                    <RadioButton Content="{l:T params.true}" IsChecked="{Binding BoolValue, Mode=TwoWay}"
+                    <RadioButton Content="{l:T params.true}" IsChecked="{Binding BoolValue, Mode=TwoWay, Converter={StaticResource Picked}}"
                                  Margin="0,0,12,0" VerticalAlignment="Center"
                                  ToolTip="{l:T params.true.tip}"/>
-                    <RadioButton Content="{l:T params.false}" IsChecked="{Binding BoolValue, Mode=TwoWay, Converter={StaticResource InverseBoolConverter}}"
+                    <RadioButton Content="{l:T params.false}" IsChecked="{Binding BoolValue, Mode=TwoWay, Converter={StaticResource PickedFalse}}"
                                  VerticalAlignment="Center"
                                  ToolTip="{l:T params.false.tip}"/>
                 </StackPanel>
@@ -1889,11 +1893,11 @@
                                 </Style>
                             </StackPanel.Style>
                             <RadioButton Content="{l:T condition.true}" Margin="0,0,12,0" VerticalAlignment="Center"
-                                         IsChecked="{Binding VarValueBool, Mode=TwoWay}"
+                                         IsChecked="{Binding VarValueBool, Mode=TwoWay, Converter={StaticResource Picked}}"
                                          ToolTip="{l:T condition.true.tip}"/>
                             <RadioButton Content="{l:T condition.false}" VerticalAlignment="Center"
                                          IsChecked="{Binding VarValueBool, Mode=TwoWay,
-                                                     Converter={StaticResource InverseBoolConverter}}"
+                                                     Converter={StaticResource PickedFalse}}"
                                          ToolTip="{l:T condition.false.tip}"/>
                         </StackPanel>
 
@@ -2521,11 +2525,11 @@
                                 </Style>
                             </StackPanel.Style>
                             <RadioButton Content="{l:T params.true}" Margin="0,0,12,0" VerticalAlignment="Center"
-                                         IsChecked="{Binding VarValueBool, Mode=TwoWay}"
+                                         IsChecked="{Binding VarValueBool, Mode=TwoWay, Converter={StaticResource Picked}}"
                                          ToolTip="{l:T params.true.tip}"/>
                             <RadioButton Content="{l:T params.false}" VerticalAlignment="Center"
                                          IsChecked="{Binding VarValueBool, Mode=TwoWay,
-                                                     Converter={StaticResource InverseBoolConverter}}"
+                                                     Converter={StaticResource PickedFalse}}"
                                          ToolTip="{l:T params.false.tip}"/>
                         </StackPanel>
                         <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,2"
@@ -3789,6 +3793,26 @@
                             <Setter Property="Command" Value="{Binding DataContext.OpenRecentCommand,
                                                                        RelativeSource={RelativeSource AncestorType=Window}}"/>
                             <Setter Property="CommandParameter" Value="{Binding}"/>
+                            <!-- The ✕ takes a pack off the list, not off the
+                                 disk. A button inside the row takes the click
+                                 itself, so the row does not open the pack, and
+                                 the menu stays open for the next one. Not a tab
+                                 stop: the arrow keys still walk the packs. -->
+                            <Setter Property="HeaderTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <DockPanel>
+                                            <Button DockPanel.Dock="Right" Content="✕" Margin="16,0,0,0" Padding="4,0" MinWidth="0"
+                                                    Focusable="False"
+                                                    Command="{Binding DataContext.RemoveRecentCommand,
+                                                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip="{l:T menu.recentFiles.remove.tip}"/>
+                                            <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
@@ -9909,11 +9933,11 @@
                                                 Visibility="{Binding IsBool, Converter={StaticResource BoolToVisibility}, FallbackValue=Collapsed}">
                                         <RadioButton Content="{l:T variables.startsTrue}" Margin="0,0,12,0"
                                                      VerticalAlignment="Center"
-                                                     IsChecked="{Binding DefaultBool, Mode=TwoWay}"
+                                                     IsChecked="{Binding DefaultBool, Mode=TwoWay, Converter={StaticResource Picked}}"
                                                      ToolTip="{l:T variables.startsTrue.tip}"/>
                                         <RadioButton Content="{l:T variables.startsFalse}" VerticalAlignment="Center"
                                                      IsChecked="{Binding DefaultBool, Mode=TwoWay,
-                                                                 Converter={StaticResource InverseBoolConverter}}"
+                                                                 Converter={StaticResource PickedFalse}}"
                                                      ToolTip="{l:T variables.startsFalse.tip}"/>
                                     </StackPanel>
                                     <!-- List initial values (add as many as needed) -->
