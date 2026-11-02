@@ -111,30 +111,13 @@ namespace SMSModForge.PackPlugin
 
                 case "LeaveBust":
                     {
-                        // Trigger the bust's vanilla fade-out animation by
-                        // activating the base child's Leave branch (which
-                        // carries a FadeInSprite + Trigger that handle the
-                        // staged exit + eventual parent deactivation). The base
-                        // child is MBase1 on most busts but e.g. D1Base on
-                        // others, so we resolve it the same way sprite-focus
-                        // does (FindMBase: MBase1, else first child) rather than
-                        // hardcoding the name. If the bust has no Leave branch
-                        // (e.g. a pack-built bust without that prefab), fall
-                        // back to an immediate SetActive(false) so the author
-                        // still gets the bust off-stage.
-                        var bust = ctx.Actors.GetCurrentBustGo((string)p["actor"] ?? "");
-                        if (bust == null)
+                        if (ctx.Actors.GetCurrentBustGo((string)p["actor"] ?? "") == null)
                         {
                             ctx.Log?.LogWarning("[SMSModForge.PackPlugin] LeaveBust: no current bust for actor '" +
                                                 (string)p["actor"] + "'");
                             return false;
                         }
-                        var mbase = ActorRegistry.FindMBase(bust);
-                        var leave = mbase != null ? mbase.Find("Leave") : null;
-                        if (leave != null)
-                            leave.gameObject.SetActive(true);
-                        else
-                            bust.SetActive(false);
+                        LeaveBustOf((string)p["actor"] ?? "", ctx);
                         return false;
                     }
 
@@ -562,6 +545,58 @@ namespace SMSModForge.PackPlugin
                             ? new Vector3(cur.x + mx, cur.y + my, cur.z)
                             : new Vector3(mx, my, cur.z);
                         mover.MoveTo(dest, mSecs);
+                        return false;
+                    }
+
+                case "TransformGameObject":
+                    {
+                        // Local position and scale, eased or at once, and left
+                        // there: how the game frames a picture (zoom onto part
+                        // of a slide, then back). Empty leaves that one alone.
+                        var go = ResolveByKind(p, ctx);
+                        if (go == null)
+                        {
+                            ctx.Log?.LogWarning("[SMSModForge.PackPlugin] TransformGameObject: target '" +
+                                (string)p["target"] + "' not found.");
+                            return false;
+                        }
+                        var t = go.transform;
+                        float? tx = OptionalFloat(p, "x"), ty = OptionalFloat(p, "y"), ts = OptionalFloat(p, "scale");
+                        float.TryParse((string)p["seconds"] ?? "0", NumberStyles.Float, CultureInfo.InvariantCulture, out var tSecs);
+                        Vector3 toPosition = new Vector3(tx ?? t.localPosition.x, ty ?? t.localPosition.y, t.localPosition.z);
+                        Vector3 toScale = ts.HasValue ? new Vector3(ts.Value, ts.Value, t.localScale.z) : t.localScale;
+                        // A MoveGameObject holding it would pull it straight back.
+                        if (tx.HasValue || ty.HasValue) go.GetComponent<PackMover>()?.Release();
+                        int run = ++_transformRuns;
+                        _transformRun[t] = run;
+                        if (tSecs <= 0f || ctx.Plugin == null)
+                        {
+                            t.localPosition = toPosition;
+                            t.localScale = toScale;
+                        }
+                        else ctx.Plugin.StartCoroutine(TransformCoroutine(t, toPosition, toScale, tSecs, run));
+                        return false;
+                    }
+
+                case "PlayDialogue":
+                    {
+                        // Asked for now, played once nothing is on screen and the
+                        // game is not busy: on a line, after its dialogue ends.
+                        bool game = string.Equals((string)p["source"], "vanilla", System.StringComparison.OrdinalIgnoreCase);
+                        string which = Deref((string)p[game ? "conversation" : "dialogue"] ?? "", ctx).Trim();
+                        if (which.Length == 0)
+                        {
+                            ctx.Log?.LogWarning("[SMSModForge.PackPlugin] PlayDialogue: no " + (game ? "conversation" : "dialogue") + " named.");
+                            return false;
+                        }
+                        var dispatcher = Plugin.DispatcherOf(ctx.PackId);
+                        if (dispatcher == null)
+                        {
+                            ctx.Log?.LogWarning("[SMSModForge.PackPlugin] PlayDialogue: pack " + ctx.PackId + " has no dialogues to play from.");
+                            return false;
+                        }
+                        dispatcher.RequestPlay(game, which, Deref((string)p["afterName"] ?? "", ctx).Trim(),
+                                               Deref((string)p["afterValue"] ?? "", ctx));
                         return false;
                     }
 
@@ -1150,6 +1185,67 @@ namespace SMSModForge.PackPlugin
             {
                 var c = sr.color; c.a = to; sr.color = c;
             }
+        }
+
+        /// <summary>
+        /// An actor's bust leaves the stage: the bust's own fade-out, by
+        /// activating its base child's Leave branch (a FadeInSprite + Trigger
+        /// that stage the exit and switch the bust off at the end). The base
+        /// child is MBase1 on most busts but e.g. D1Base on others, so it is
+        /// found the way sprite-focus finds it (FindMBase: MBase1, else first
+        /// child). A bust with no Leave branch (a pack-built one) is switched
+        /// off at once. False when the actor has no bust up.
+        /// </summary>
+        internal static bool LeaveBustOf(string actor, PackContext ctx)
+        {
+            var bust = ctx.Actors?.GetCurrentBustGo(actor ?? "");
+            if (bust == null || !bust.activeInHierarchy) return false;
+            var mbase = ActorRegistry.FindMBase(bust);
+            var leave = mbase != null ? mbase.Find("Leave") : null;
+            if (leave != null)
+                leave.gameObject.SetActive(true);
+            else
+                bust.SetActive(false);
+            return true;
+        }
+
+        /// <summary>Which <c>TransformGameObject</c> owns each object now: a
+        /// later one takes it over rather than fighting the first.</summary>
+        private static readonly Dictionary<Transform, int> _transformRun = new Dictionary<Transform, int>();
+        private static int _transformRuns;
+
+        /// <summary>Eases local position and scale from where they are to
+        /// <paramref name="position"/> / <paramref name="scale"/> - in and out, as
+        /// MoveGameObject does - and leaves them there.</summary>
+        private static IEnumerator TransformCoroutine(Transform t, Vector3 position, Vector3 scale, float seconds, int run)
+        {
+            if (t == null) yield break;
+            Vector3 fromPosition = t.localPosition, fromScale = t.localScale;
+            float elapsed = 0f;
+            float dur = Mathf.Max(0.0001f, seconds);
+            while (elapsed < dur)
+            {
+                if (t == null || !_transformRun.TryGetValue(t, out var owner) || owner != run) yield break;
+                elapsed += Time.deltaTime;
+                float k = Mathf.Clamp01(elapsed / dur);
+                float e = k * k * (3f - 2f * k);
+                t.localPosition = Vector3.Lerp(fromPosition, position, e);
+                t.localScale = Vector3.Lerp(fromScale, scale, e);
+                yield return null;
+            }
+            if (t == null || !_transformRun.TryGetValue(t, out var last) || last != run) yield break;
+            t.localPosition = position;
+            t.localScale = scale;
+            _transformRun.Remove(t);
+        }
+
+        /// <summary>A number param, or null when it is empty or not a number:
+        /// "leave this one as it is".</summary>
+        private static float? OptionalFloat(JObject p, string key)
+        {
+            string raw = ((string)p[key] ?? "").Trim();
+            return raw.Length > 0 && float.TryParse(raw, NumberStyles.Float, CultureInfo.InvariantCulture, out var v)
+                ? v : (float?)null;
         }
 
         /// <summary>

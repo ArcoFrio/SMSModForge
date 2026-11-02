@@ -134,7 +134,8 @@ namespace SMSModForge.PackPlugin
             if (!LinesSayHowSoundsPlay || string.IsNullOrEmpty(shown) || cues == null) return shown;
             var settings = SoundCues.Read(cues);
             if (settings.Count == 0) return shown;
-            return SoundCues.Hide(shown, SoundCues.Find(ownWords ?? shown, Patterns()), settings);
+            var patterns = Patterns();
+            return SoundCues.Hide(shown, SoundCues.Find(ownWords ?? shown, patterns), settings, patterns);
         }
 
         /// <summary>

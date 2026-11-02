@@ -286,6 +286,10 @@ game.notice.close = 知道了
 # en: Sounds in packs play with the timing and volume their authors set.
 game.notice.news.1.8.0 = 模组包里的音效会按作者设定的时机和音量播放。
 
+# What ModForge 1.8.2 changes for players, one line each (\n starts the next)
+# en: A pack's conversation no longer starts over the game's own when you arrive somewhere.
+game.notice.news.1.8.2 = 到达某处时，模组包的对话不会再压在游戏自带的对话上开始。
+
 [Where an NPC stands]
 
 # Text
@@ -653,6 +657,58 @@ param.label.spinning = 旋转中
 # Tooltip on the 'Spinning' field of the SpinGameObject action
 # en: True to start/keep spinning, false to stop.
 action.spinGameObject.enable.tip = 真表示开始或继续旋转，假表示停止。
+
+# Label beside a field of an action or condition
+# en: Scale
+param.label.scale = 缩放
+
+# Tooltip on the 'X' field of the TransformGameObject action
+# en: Local X: where it sits under its parent, in the parent's units - what the game's own pictures are framed in. Empty leaves it as it is.
+action.transformGameObject.x.tip = 局部 X：它在父对象下的位置，以父对象的单位计——游戏自己的画面就是这样取景的。留空则保持不变。
+
+# Tooltip on the 'Y' field of the TransformGameObject action
+# en: Local Y, the same way. Empty leaves it as it is.
+action.transformGameObject.y.tip = 局部 Y，同上。留空则保持不变。
+
+# Tooltip on the 'Scale' field of the TransformGameObject action
+# en: Size, one number for both directions: 1 is as drawn, 2 twice as big. Empty leaves it as it is.
+action.transformGameObject.scale.tip = 大小，两个方向共用一个数：1 为原样，2 为两倍。留空则保持不变。
+
+# Tooltip on the 'Duration (s)' field of the TransformGameObject action
+# en: How long the change takes, eased in and out. 0 = at once. Nothing holds it there afterwards, and an object a MoveGameObject was holding is let go.
+action.transformGameObject.seconds.tip = 变化所需时间，首尾平滑。0 = 立即。之后不会固定它，MoveGameObject 正在固定的对象也会被放开。
+
+# Label beside a field of an action or condition
+# en: Dialogue
+param.label.dialogue = 对话
+
+# Label beside a field of an action or condition
+# en: Conversation
+param.label.conversation = 游戏对话
+
+# Label beside a field of an action or condition
+# en: When it ends, set
+param.label.whenItEndsSet = 结束时设置
+
+# Tooltip on the 'Source' field of the PlayDialogue action
+# en: pack: one of this pack's dialogues. vanilla: one of the game's own conversations.
+action.playDialogue.source.tip = pack：此包的对话。vanilla：游戏自己的对话。
+
+# Tooltip on the 'Dialogue' field of the PlayDialogue action
+# en: The dialogue to play. It plays as soon as nothing is on screen and the game is not busy - on a line, right after the dialogue that line is in. Its own start conditions are not asked.
+action.playDialogue.dialogue.tip = 要播放的对话。只要屏幕上没有内容且游戏不忙就会播放——用在台词上时，就在该台词所在的对话结束后。不检查它自己的开始条件。
+
+# Tooltip on the 'Conversation' field of the PlayDialogue action
+# en: One of the game's conversations, by its place in the scene. Only the conversation plays, not the room's script around it - switch its character's bust on yourself if the room would. Its lines' own instructions run, the game's story steps included.
+action.playDialogue.conversation.tip = 游戏的某段对话，按其在场景中的位置指定。只播放对话本身，不运行围绕它的房间脚本——若房间本会显示角色胸像，请自行打开。其台词自带的指令会运行，包括游戏的剧情步骤。
+
+# Tooltip on the 'When it ends, set' field of the PlayDialogue action
+# en: Optional: one of the pack's variables, set once it has ended - what a start condition or a rule can follow it by.
+action.playDialogue.afterName.tip = 可选：结束后要设置的此包变量——开始条件或规则可以借此接在它后面。
+
+# Tooltip on the 'Value' field of the PlayDialogue action
+# en: The value that variable is set to.
+action.playDialogue.afterValue.tip = 该变量要设置成的值。
 
 # Label beside a field of an action or condition
 # en: Music key
@@ -5398,6 +5454,14 @@ dialogues.waitTalkButtonNo.tip = 进入时不会开始：对话停在游戏的�
 # Tooltip on "Queue behind active dialogue"
 # en: If another dialogue is playing when this one's conditions pass, wait and start right after it ends. Unchecked (original behavior): it misses that window and only fires when its conditions trigger again while nothing is playing.
 dialogues.queueBehindActiveDialogue.tip = 如果这段对话的条件成立时另有对话正在播放，就先等着，等它结束后立刻开始。不勾选（原本的行为）：它会错过那个时机，只有当它的条件在没有任何对话播放时再次成立才会触发。
+
+# Tick box
+# en: Leave the busts at the end
+dialogues.leaveBustsAtEnd = 结束时让胸像退场
+
+# Tooltip on "Leave the busts at the end"
+# en: When the dialogue ends, everyone who spoke in it leaves, as a LeaveBust on each ending would do - so no bust is left standing over the level. Untick it where staying is the point, like a room where the bust is how the character stands. On for a new dialogue.
+dialogues.leaveBustsAtEnd.tip = 对话结束时，所有在其中说过话的人都会退场（如同在每个结尾放了 LeaveBust），关卡上不会留下胸像。若留下正是目的（例如胸像就是角色在房间里的站姿），请取消勾选。新对话默认开启。
 
 # Tooltip on "Set for condition debugging (F12)"
 # en: In-game, pressing F12 logs a pass/fail breakdown of this dialogue's start conditions (with current variable values) to the BepInEx console. Diagnostic only — no gameplay effect.
@@ -10630,6 +10694,14 @@ docs.dialogues.ifSomethingElsePlaying.term = 排在当前对话之后
 docs.dialogues.ifSomethingElsePlaying = 如果它符合条件时正好有别的内容在播放，它会等待并紧接着开始。不勾选时，这段对话会错过那个时机，等下一次。
 
 # Docs: the bold label in front of the next text, usually a name on screen
+# en: Leave the busts at the end
+docs.dialogues.leaveBustsAtEnd.term = 结束时让胸像退场
+
+# Docs: a point in the topic
+# en: When it ends, everyone who spoke in it leaves the stage, so an ending that forgot its LeaveBust leaves no bust behind. Untick it where a bust is meant to stay.
+docs.dialogues.leaveBustsAtEnd = 结束时，所有在其中说过话的人都会退场，因此忘了 LeaveBust 的结尾也不会留下胸像。需要保留胸像的地方请取消勾选。
+
+# Docs: the bold label in front of the next text, usually a name on screen
 # en: Set for condition debugging (F12)
 docs.dialogues.gameF12LogsWhich.term = 勾选以调试条件（F12）
 
@@ -12194,6 +12266,22 @@ docs.actions.startStopObjectRotating.term = SpinGameObject
 # Docs: a point in the topic
 # en: Start or stop an object rotating at a steady rate.
 docs.actions.startStopObjectRotating = 让对象以恒定速率开始或停止旋转。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: TransformGameObject
+docs.actions.setObjectPlaceAndSize.term = TransformGameObject
+
+# Docs: a point in the topic
+# en: Set an object's position under its parent and its size - zoom in on part of a picture and back again - eased or at once, without holding it there.
+docs.actions.setObjectPlaceAndSize = 设置对象在父对象下的位置和大小——放大画面的一部分再还原——可平滑或立即完成，且不会把它固定在那里。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: PlayDialogue
+docs.actions.playDialogue.term = PlayDialogue
+
+# Docs: a point in the topic
+# en: Play one of the pack's dialogues or one of the game's conversations as soon as nothing else is on screen - on a line, right after its dialogue - and, if you like, set a variable when it ends.
+docs.actions.playDialogue = 一旦屏幕上没有其他内容，就播放此包的对话或游戏的对话（用在台词上时，紧接其对话之后），也可以在结束时设置一个变量。
 
 # Docs: a heading inside the topic
 # en: Places and scenes
@@ -14633,6 +14721,34 @@ validation.variable.floatDefault = Float 的默认值「{value}」无法解析�
 # en: List default '{value}' is not a list of values; the list will start empty. Add its initial values again.
 validation.variable.listDefault = List 的默认值「{value}」不是一组值；列表会从空开始。请重新添加它的初始值。
 
+# Validation message
+# en: {name} is compared to '{value}', but nothing in this pack ever sets it to that - only to {values} - so the comparison never matches unless another mod sets it.
+validation.variable.neverSetTo = {name} 与「{value}」进行比较，但此包中没有任何地方会把它设为该值（只会设为 {values}），因此除非其他模组设置它，否则该比较永远不会成立。
+
+# Validation message
+# en: List {name} is checked for '{value}', but nothing in this pack ever puts that in it - only {values} - so the check never matches unless another mod does.
+validation.list.neverHolds = 检查 List {name} 是否包含「{value}」，但此包中没有任何地方会把它放进去（只会放入 {values}），因此除非其他模组这样做，否则该检查永远不会成立。
+
+# Validation message
+# en: List {name} is checked for '{value}', but nothing in this pack ever puts anything in it, so the check never matches unless another mod does.
+validation.list.neverFilled = 检查 List {name} 是否包含「{value}」，但此包中没有任何地方会往里放任何东西，因此除非其他模组这样做，否则该检查永远不会成立。
+
+# Validation message
+# en: Lines here take their outfit from {variable}, which can hold {values} - none of {actor}'s outfits. While it does, the bust does not appear on those lines.
+validation.node.outfitVariableNotOutfit = 这里的台词从 {variable} 取得服装，而它可能是 {values}——都不是 {actor} 的服装。在此期间，这些台词不会显示胸像。
+
+# Validation message
+# en: Play dialogue names no dialogue - nothing will play.
+validation.action.playDialogue.none = Play dialogue 没有指定对话——不会播放任何内容。
+
+# Validation message
+# en: Play dialogue names '{name}', which is none of this pack's dialogues - nothing will play.
+validation.action.playDialogue.unknownDialogue = Play dialogue 指定了「{name}」，但它不是此包的任何对话——不会播放任何内容。
+
+# Validation message
+# en: Play dialogue names '{name}', which is none of the game's conversations - nothing will play.
+validation.action.playDialogue.unknownConversation = Play dialogue 指定了「{name}」，但它不是游戏的任何对话——不会播放任何内容。
+
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.
 validation.character.pronounsMissing = {name} 没有代词。请在“角色”标签页中选择男性、女性或中性——翻译需要它，没有它时会猜测为男性。
@@ -15271,6 +15387,10 @@ common.group.misc = 其他
 # en: Characters
 typeGroup.characters = 角色
 
+# A heading in the action type dropdown
+# en: Conversations
+typeGroup.conversations = 对话
+
 # Heading in the list of action types, over the ones that act on objects and scenes
 # en: Objects and scenes
 typeGroup.objects = 对象和场景
@@ -15342,6 +15462,14 @@ note.action.move = 把某物滑到另一个位置
 # A note beside an action type in its dropdown, saying what it does
 # en: Start or stop something spinning
 note.action.spin = 让某物开始或停止旋转
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Set something's position and size where it is
+note.action.transform = 在原处设置某物的位置和大小
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Play one of the pack's dialogues or one of the game's conversations
+note.action.playDialogue = 播放此包的对话或游戏的对话
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Change a setting the other actions don't reach
@@ -15767,6 +15895,11 @@ publish.failed.title = 发布失败
 # {source} and {packed} are sizes in megabytes
 # en: Exported {pack} v{version} - {count} files, {source} MB source, {packed} MB packed:\n{path}
 export.done.other = 已导出 {pack} v{version} - {count} 个文件，源文件 {source} MB，打包后 {packed} MB：\n{path}
+
+# Added to the export message: the author's backups left out of the pack. {size} is in
+# megabytes; {names} lists the first few of their paths in the pack
+# en: Left out {count} backup files ({size} MB), which players do not need: {names}
+export.backupsLeftOut.other = 已排除 {count} 个玩家不需要的备份文件（{size} MB）：{names}
 
 # Title of a message box
 # en: Export complete
@@ -17854,6 +17987,10 @@ migration.oldGameObjectsCategory = 位于“Extra GameObjects”（GameObjects �
 # One line of the list of what was brought up to date. "SetSpriteFocus" and "CharacterFocus" are names of an action, kept in English
 # en: SetSpriteFocus actions given the action's new name, CharacterFocus
 migration.characterFocus = SetSpriteFocus 动作已改用该动作的新名称 CharacterFocus
+
+# One line of the list of what was brought up to date
+# en: Settings that actions and conditions kept from a type they used to be taken off - none of them did anything
+migration.leftOverSettings = 已移除动作和条件从先前类型保留下来的设置——它们都没有任何作用
 
 # In the list of what opening a pack changed: lines whose sound's pattern is written bigger or smaller, now playing that much louder or softer
 # en: lines whose sounds now play louder or softer to match the size their pattern is written in (the text keeps its size)

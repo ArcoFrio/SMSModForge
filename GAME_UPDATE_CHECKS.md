@@ -110,6 +110,27 @@ Each is a snapshot; a new game version needs each one re-made and diffed.
       its character's number under `Expressions` whenever any GNV changes. If
       1.9 changes this, `ActionRuntime`'s expression handling must follow.
 - [ ] **Speaker labels**: the player's Actor is named the constant "You".
+- [ ] **PlayDialogue on one of the game's conversations** (`DialogueDispatcher.PlayGameConversation`)
+      finds it by its scene path - the catalog's ids (`Resources/VanillaDialogues`) - and
+      calls `Dialogue.Play` on it with its own GameObject, inactive under its room talk as it
+      normally is; the room's script does not run. In-game suite J6 plays
+      `8_Room_Talk/Kitchen/Annanotthere` that way. A renamed or moved conversation needs
+      the catalog re-extracted.
+- [ ] **When the game is about to speak on arrival** (`GameRoomTalks`,
+      `DialogueDispatcher.IsStartBlocked`): a pack dialogue that starts by itself
+      waits while `Start-Transfer` is true (a journey), while any child of
+      `8_Room_Talk` has its own Trigger running (`Trigger.IsRunning` - the room's
+      arrival script deciding, leading in, playing its conversation), and while
+      one of ModForge's journeys has a room talk still to switch on. Measured with
+      the bridge's `timeline` (1.8E, gas station, car-wash day): the level and
+      its room talk come up in the same frame, the room raises Lock-Game, the
+      journey script (`10_Gameplay/Trigger_Change_Level`) clears it again 0.8 s
+      later, mid lead-in, and the conversation starts 2 s in - so Lock-Game is
+      not enough. It is safe to wait on because every room talk ends by itself:
+      all 93 start on enable and use only fixed waits, their own conversations
+      and scripts they run (no wait-until, no loop). After an update, re-run the
+      scan of the room talks' instruction types on a fresh F10 dump, and the
+      in-game suite's J5.
 - [ ] **Saves**: GC2 save layout (SAVE.GZ: GNVs, lists, one local set, quest
       journal); the sleep autosave writes slot 1 (+ slot 2 on Mondays);
       `Shared/SaveLoadChecks.cs`, `SaveRecord.cs`, `VanillaSaveSlot.cs`.

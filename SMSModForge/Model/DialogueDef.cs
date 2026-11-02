@@ -70,7 +70,7 @@ public sealed class DialogueDef
     [JsonProperty("roomTalk", Order = 3)]
     public string RoomTalk
     {
-        get => VanillaPlaces.RoomTalkTokenForLevel(LevelToken);
+        get => LevelNegated ? "" : VanillaPlaces.RoomTalkTokenForLevel(LevelToken);
         set => LegacyRoomTalk = value ?? "";
     }
 
@@ -102,10 +102,21 @@ public sealed class DialogueDef
         }
     }
 
-    /// <summary>True when this dialogue's level has a vanilla roomtalk, i.e.
-    /// when <see cref="DisableVanillaTrigger"/> has something to suppress.</summary>
+    /// <summary>
+    /// The pinned <c>LevelActive</c> condition is negated: the dialogue plays
+    /// anywhere BUT that level (the author, 2026-11-01: used in their pack,
+    /// and the editor offers it again). Its level is then nowhere it plays, so
+    /// it has no room talk to take priority over.
+    /// </summary>
     [JsonIgnore]
-    public bool VanillaRoomTalkAvailable => VanillaPlaces.HasRoomTalk(LevelToken);
+    public bool LevelNegated => StartConditions?.FirstOrDefault(x => x.Type == NodeConditionTypes.LevelActive)?.Negate == true;
+
+    /// <summary>True when this dialogue's level has a vanilla roomtalk, i.e.
+    /// when <see cref="DisableVanillaTrigger"/> has something to suppress -
+    /// never for a negated level: suppressed while the dialogue's conditions
+    /// hold, that room's arrival script would be off as the player arrives.</summary>
+    [JsonIgnore]
+    public bool VanillaRoomTalkAvailable => !LevelNegated && VanillaPlaces.HasRoomTalk(LevelToken);
 
     /// <summary>
     /// "Prioritize this dialogue over vanilla" — while every start condition
@@ -185,6 +196,18 @@ public sealed class DialogueDef
     /// the highest priority starts first; equal priorities fall back to
     /// manifest order. Default 0.
     /// </summary>
+    /// <summary>
+    /// When the dialogue ends, everyone who spoke in it leaves - their bust's
+    /// own exit, as a <c>LeaveBust</c> on each ending would do (found testing
+    /// a pack, 2026-11-01: endings that only unfocused a speaker left her bust
+    /// standing over the level, easy to miss among endings that did leave).
+    /// A dialogue made in the editor starts with it on; one without it (every
+    /// dialogue made before) keeps doing what it did. Off where a bust staying
+    /// up is the point - a room where it is how the character stands.
+    /// </summary>
+    [JsonProperty("leaveBustsAtEnd", Order = 13, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public bool LeaveBustsAtEnd { get; set; } = false;
+
     [JsonProperty("priority", Order = 12, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     [System.ComponentModel.DefaultValue(0)]
     public int Priority { get; set; } = 0;

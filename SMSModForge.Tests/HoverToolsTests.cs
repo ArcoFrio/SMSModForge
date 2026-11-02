@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Xml.Linq;
 using SMSModForge.View;
 using Xunit;
@@ -61,6 +62,95 @@ public sealed class HoverToolsTests
             Assert.Equal(0, tools.Opacity, 2);
             window.Close();
         });
+    }
+
+    [Fact]
+    public void TheGapsBetweenTheButtonsAreStillOverTheList()
+    {
+        // The author: they showed on "+ Add condition" and went the moment the
+        // mouse moved across to them - the gap between the buttons had no
+        // background, so it was over nothing and the list said the mouse had
+        // left. Hit-tested at the gap, as the mouse would be.
+        WindowHarness.Run(_ =>
+        {
+            var add = new Button { Content = "+ Add condition", Margin = new Thickness(0, 0, 8, 0) };
+            var tools = new StackPanel { Orientation = Orientation.Horizontal };
+            tools.Children.Add(new Button { Content = "Copy all" });
+            HoverTools.SetReveal(tools, true);
+            var row = new StackPanel { Orientation = Orientation.Horizontal };
+            row.Children.Add(add);
+            row.Children.Add(tools);
+            var list = new StackPanel();
+            list.Children.Add(new TextBox { Text = "a condition" });
+            list.Children.Add(row);
+            var page = new StackPanel();
+            page.Children.Add(list);
+            var window = new Window { Width = 400, Height = 200, Left = -10000, Top = -10000, ShowInTaskbar = false, Content = page };
+            window.Show();
+            window.UpdateLayout();
+            WindowHarness.Pump();
+
+            // In the margin right of "+ Add condition", and in the empty room
+            // right of the row.
+            var addCorner = add.TranslatePoint(new Point(add.ActualWidth, add.ActualHeight / 2), page);
+            var gap = new Point(addCorner.X + 4, addCorner.Y);
+            var beside = new Point(page.ActualWidth - 5, addCorner.Y);
+            foreach (var point in new[] { gap, beside })
+            {
+                var hit = VisualTreeHelper.HitTest(page, point)?.VisualHit;
+                Assert.True(hit != null && IsWithin(hit, list), $"at {point} the mouse is over {hit?.GetType().Name ?? "nothing"}, not the list");
+            }
+            // Control: the button itself is still what is hit on the button.
+            var onAdd = add.TranslatePoint(new Point(add.ActualWidth / 2, add.ActualHeight / 2), page);
+            Assert.True(IsWithin(VisualTreeHelper.HitTest(page, onAdd)!.VisualHit, add));
+            window.Close();
+        });
+    }
+
+    [Fact]
+    public void InTheEditorTheGapBeforeEachListsToolsIsOverItsList()
+    {
+        // The same, measured in the window as it is drawn - a new dialogue's
+        // start conditions on the Dialogues tab, in each look the suite runs.
+        WindowHarness.Run(window =>
+        {
+            var vm = (SMSModForge.ViewModel.MainViewModel)window.DataContext;
+            ((TabControl)window.FindName("MainTabs")).SelectedIndex = SMSModForge.ViewModel.MainTab.Dialogues;
+            vm.AddDialogueCommand.Execute(null);
+            vm.SelectedNode = vm.SelectedDialogue?.Nodes.FirstOrDefault();
+            window.UpdateLayout();
+            WindowHarness.Pump();
+
+            var toolbars = Descendants(window).OfType<StackPanel>()
+                .Where(p => HoverTools.GetReveal(p) && p.IsVisible && p.ActualWidth > 0).ToList();
+            Assert.True(toolbars.Count >= 1, "no list with copy buttons on screen to measure");
+            foreach (var tools in toolbars)
+            {
+                var area = VisualTreeHelper.GetParent(VisualTreeHelper.GetParent(tools));
+                // Before the divider each toolbar starts with: the space the mouse
+                // crosses on its way from "+ Add" to the buttons, where nothing is drawn.
+                var gap = tools.TranslatePoint(new Point(4, tools.ActualHeight / 2), window);
+                var hit = VisualTreeHelper.HitTest(window, gap)?.VisualHit;
+                Assert.True(hit != null && IsWithin(hit, area), $"at {gap} the mouse is over {hit?.GetType().Name ?? "nothing"}, not the list");
+            }
+        });
+    }
+
+    private static System.Collections.Generic.IEnumerable<DependencyObject> Descendants(DependencyObject root)
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+        {
+            var child = VisualTreeHelper.GetChild(root, i);
+            yield return child;
+            foreach (var d in Descendants(child)) yield return d;
+        }
+    }
+
+    private static bool IsWithin(DependencyObject hit, DependencyObject ancestor)
+    {
+        for (var d = hit; d != null; d = VisualTreeHelper.GetParent(d))
+            if (ReferenceEquals(d, ancestor)) return true;
+        return false;
     }
 
     private static void Settle()

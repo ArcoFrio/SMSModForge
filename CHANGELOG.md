@@ -1,5 +1,129 @@
 # Changelog
 
+## 1.8.2
+
+Two new actions - PlayDialogue, to play another of your dialogues or one of
+the game's own conversations, and TransformGameObject, to set where something
+is and how big - and a box that has everyone who spoke leave the stage when a
+dialogue ends. Validate now names a comparison nothing in your pack can make
+true, and an outfit variable that can name no outfit. In the game, a pack
+dialogue no longer starts on top of the game's own conversation when you
+arrive somewhere; players are told so once, on the main menu. The copy buttons
+under a list stay put as you reach for them, and Export leaves your backups
+out. Opening a pack takes off settings that did nothing - see below. The
+plugin changes too, so update both: a pack that uses the new actions or the
+new box needs this version's plugin.
+
+### Before you update
+
+- **Opening a pack takes off settings that did nothing.** When an action or
+  condition's type is changed, the settings of the type it was stayed in the
+  pack - a Character focus still holding a Set active's target, an Increment
+  variable still holding a Set variable's value, hundreds of focus actions
+  still naming the one actor they used to focus. None of them did anything in
+  the game, but they read like real settings to anyone looking at the pack,
+  and a later version giving one of those names a meaning would have acted on
+  it. They are taken off when the pack is opened; the list of what was brought
+  up to date says how many, nothing is written until you save, and the first
+  save keeps a copy of the original. Only a setting another type uses and this
+  one does not is taken: anything ModForge does not recognise stays.
+
+### New
+
+- **Validate names a comparison nothing in your pack can make true.** When a
+  condition compares a variable to a value that no action in the pack ever
+  gives it - the variable's default and every Set variable, Random from list
+  and Add to list counted, wherever they are - the issues list says so, with
+  the values it can have. It is how a value renamed in one place and not the
+  other shows up: placements still asking for `Swim` after every action was
+  changed to set `AnisSwim`, or a flag that a screen's buttons were meant to
+  set and never do. A variable the pack counts, rolls or copies from another
+  is left alone, and if another mod sets the variable you can ignore it.
+- **Validate names lines whose outfit follows a variable that can name no
+  outfit.** A line can take its outfit from a variable (`$Name`); when that
+  variable can hold a value that is none of the speaker's outfits - a default
+  left as `Default`, say - the bust does not appear on those lines, and until
+  now nothing said why. It is said once per conversation.
+- **A new action, TransformGameObject: set something's position and size
+  where it is.** The game frames its own pictures this way - a slide zoomed to
+  2x onto one part, then back to 1x for the next - and until now a pack could
+  only move things in the world and hold them there, never change their size.
+  It sets an object's position under its parent (X, Y) and its scale, eased
+  over the seconds you give or at once; leave a field empty to keep that one as
+  it is. Nothing holds the object afterwards, and one a MoveGameObject was
+  holding is let go.
+- **A new action, PlayDialogue: play another dialogue, or one of the game's
+  conversations.** Pick one of your pack's dialogues, or (Source: vanilla) one
+  of the game's own conversations from the list. It plays as soon as nothing
+  else is on screen and the game is not busy - put it on a line and it plays
+  right after the dialogue that line is in. Its own start conditions are not
+  asked. "When it ends, set" sets one of your variables once it has finished,
+  so a start condition or a rule can follow it. A game conversation plays on
+  its own, without the room's script around it, so switch its character's
+  bust on yourself if the room would; its lines' own instructions still run,
+  the game's story steps included. Renaming a dialogue updates the actions
+  that play it, and Validate names one that plays something that does not
+  exist.
+- **"Leave the busts at the end", a new box on a dialogue.** When the
+  dialogue ends, everyone who spoke in it leaves the stage, as a LeaveBust on
+  each ending would have done - so an ending that forgot its LeaveBust no
+  longer leaves a character standing over the level. On for every dialogue you
+  make from now on; your existing dialogues are left as they were. Untick it
+  where staying is the point, like a room where the bust is how the character
+  stands there.
+- **Changing an action's or a condition's type no longer leaves the old
+  type's settings behind in the pack.** They are put aside while the editor is
+  open, so switching back by mistake still brings them back.
+- **A dialogue's level can be negated again.** The required level row at the
+  top of a dialogue's start conditions has its Negate box back, so a
+  dialogue can start anywhere *but* that level. The game always read it - packs
+  that set it by hand worked - but the editor hid the box. With the level
+  negated, "Prioritize this dialogue over vanilla" is unavailable: there is no
+  room of that level to take priority over, and switched on it would act on
+  the one room the dialogue never plays in.
+
+### Fixed
+
+- **The Copy all / Paste / Overwrite buttons under a list of conditions or
+  actions vanished as you reached for them.** They show while the mouse is
+  over the list, but the small gaps between the buttons did not count as over
+  it: moving from "+ Add condition" towards them crossed a gap, they hid, and
+  they could not be brought back without leaving the list and coming in again.
+  Anywhere over the list - its rows, its buttons and the space between and
+  beside them - now keeps them showing.
+- **A pack dialogue could start on top of one of the game's own on
+  arrival.** At a place where the game starts a conversation as you arrive
+  (the gas station on a car-wash day, for one), a pack dialogue set to start
+  there could begin first: its character came on screen, the game's
+  conversation then played over it with the pack's character still standing,
+  and the pack dialogue was lost until the next visit. ModForge used to wait a
+  fixed moment after arriving and for the game's lock; the game lets its lock
+  go while it is still leading in to its conversation, and the moment ran out
+  before the conversation came. It now waits for the game itself to finish
+  deciding: while the place's own arrival script runs, nothing of a pack's
+  starts by itself. A dialogue with no box checked on the Dialogues tab then
+  plays only if the game started nothing, as it always should have; one
+  queued behind the game's follows it, never comes before it. Talk-button
+  dialogues are unchanged.
+- **Hiding a sound's words cut the wrong ones when one pattern is inside
+  another.** With two sounds such as `*ding*` and `*ding**ding*`, a line with
+  both played the right sounds, but hiding the lone `*ding*` took half of the
+  `*ding**ding*` before it instead, and hiding both left stray characters. The
+  editor's Game look showed the same. Each sound now hides exactly its own
+  words, in translations too.
+- **Export no longer ships your backups.** Copies of the manifest kept in the
+  pack folder - `modpack.json.bak`, `modpack - Copy.json` and the like - went
+  into the exported pack and to every player: in one pack they were over a
+  third of the download. Export now leaves out files named as backups
+  (ending in `.bak`, `.bak2`, `.bak-something`) and any `.json` beside the
+  manifest that is a copy of it, and the "Export complete" message lists what
+  it left out. The game reads only `modpack.json`, so nothing changes there.
+- **A pack's places no longer carry a copy of one of the game's beach
+  conversations.** Each pack's places shared a hidden copy of the beach's
+  arrival script, emptied of its conversations - all but the first, by
+  mistake. Nothing ever played it, but mods that read the game's scene (the
+  Gallery) found it and counted it as one of the game's conversations.
+
 ## 1.8.1
 
 A fix for anyone with variables: clicking from one variable to another could

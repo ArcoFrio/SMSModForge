@@ -5,8 +5,10 @@
 #           dialogue <packId> <key> | vanilla-dialogue <path> | wait-dialogue-end [s] | playing |
 #           click <button's words> | speaker | menu | screen <name> | shot <name> |
 #           inspect <root>/<path> | materials <word> | volumes |
-#           watch <s> <packId> <var,var> | listen <s> <name> | mute on|off | log <text> | quit
-# watch and listen answer when their time is up, and the commands after them run meanwhile. listen measures
+#           watch <s> <packId> <var,var> | listen <s> <name> | timeline <s> <name> | mute on|off | log <text> | quit
+# watch, listen and timeline answer when their time is up, and the commands after them run meanwhile. timeline
+# writes timeline-<name>.txt beside the results: frame by frame, each change in the maps up, the game's scripts
+# running, its room talks, Lock-Game, Start-Transfer and the conversation on screen. listen measures
 # each sound inside the game, before its mixer - but the game's own volume at 0 (-mfMute) gives it only
 # silence (1.8E, measured), so it needs "mute off"; Windows' mute of the game stays on unless -Sound.
 param(

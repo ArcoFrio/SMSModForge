@@ -187,6 +187,12 @@ public static class PackMigration
         if (focus > 0)
             report.Note(Loc.T("migration.characterFocus"), focus);
 
+        // After the merges and renames above, so each type is the one it
+        // stays.
+        int leftOver = DropLeftOverSettings(pack);
+        if (leftOver > 0)
+            report.Note(Loc.T("migration.leftOverSettings"), leftOver);
+
         var (louder, paced) = SoundsIntoTheirLines(pack, packRoot);
         if (louder > 0)
             report.Note(Loc.T("migration.cueVolumes"), louder);
@@ -940,6 +946,34 @@ public static class PackMigration
                 renamed++;
             }
         return renamed;
+    }
+
+    /// <summary>
+    /// Take off the settings an action or condition kept from a type it used
+    /// to be (found testing a pack, 2026-11-01; the author chose this over
+    /// leaving them): a CharacterFocus holding a Set-active's <c>kind</c> and
+    /// <c>target</c>, an IncrementVariable a SetVariable's <c>value</c>. None did
+    /// anything, but each read like a real setting, and a later version that
+    /// gave its name a meaning for that type would have acted on it. Only what
+    /// <see cref="ParamsRead"/> knows belongs to another type and not to this
+    /// one; a key nobody knows stays. Counted per action or condition.
+    /// </summary>
+    private static int DropLeftOverSettings(ModPack pack)
+    {
+        int cleaned = 0;
+        foreach (var a in SavedObjects.All<NodeActionDef>(pack))
+        {
+            var gone = ParamsRead.LeftOverOnAction(a.Type, a.Params);
+            foreach (var key in gone) a.Params.Remove(key);
+            if (gone.Count > 0) cleaned++;
+        }
+        foreach (var c in SavedObjects.All<NodeConditionDef>(pack))
+        {
+            var gone = ParamsRead.LeftOverOnCondition(c.Type, c.Params);
+            foreach (var key in gone) c.Params.Remove(key);
+            if (gone.Count > 0) cleaned++;
+        }
+        return cleaned;
     }
 
     /// <summary>

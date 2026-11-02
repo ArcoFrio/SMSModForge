@@ -3512,9 +3512,30 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             if (e.PropertyName == nameof(DialogueViewModel.DebugConditions) ||
                 string.IsNullOrEmpty(e.PropertyName))
                 RefreshDebuggedDialogues();
+            if (e.PropertyName == nameof(DialogueViewModel.Key) || string.IsNullOrEmpty(e.PropertyName))
+                RebuildDialogueKeyOptions();
         };
         return d;
     }
+
+    /// <summary>The pack's own dialogues' keys - what a Play dialogue action
+    /// offers. Kept in step with the Dialogues list and every key's changes.</summary>
+    public ObservableCollection<string> DialogueKeyOptions { get; } = new();
+
+    private void RebuildDialogueKeyOptions()
+        => SyncOptions(DialogueKeyOptions, Dialogues
+            .Where(d => !d.IsVanillaBased && !string.IsNullOrEmpty(d.Key))
+            .Select(d => d.Key)
+            .OrderBy(k => k, StringComparer.OrdinalIgnoreCase)
+            .ToList());
+
+    /// <summary>The game's own conversations, by their path in the scene - what
+    /// a Play dialogue action offers for one of the game's. The catalog does
+    /// not change while the editor runs, so it is read once.</summary>
+    public IReadOnlyList<string> GameConversationOptions
+        => _gameConversationOptions ??= VanillaDialogueCatalog.All.Select(e => e.Id)
+            .OrderBy(id => id, StringComparer.OrdinalIgnoreCase).ToList();
+    private IReadOnlyList<string>? _gameConversationOptions;
 
     /// <summary>Clear the debug flag on one dialogue, from the tracking list.</summary>
     public void UntrackDebugDialogue(DialogueViewModel? d)
@@ -3943,6 +3964,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         // A name token is drawn in the colour of whoever it stands in for.
         Rendering.DialogueMarkup.TokenColor = TokenColorFor;
         // And a sound's auto-trigger pattern is marked wherever a line shows.
+        // A Play dialogue action offers the pack's dialogues as they are now.
+        Dialogues.CollectionChanged += (_, __) => RebuildDialogueKeyOptions();
         Rendering.DialogueMarkup.CuePatterns = () => _cuePatterns ??= Pack.Sfx
             .SelectMany(s => s.TextPatterns ?? new System.Collections.Generic.List<string>())
             .Where(p => !string.IsNullOrWhiteSpace(p))
@@ -5588,15 +5611,29 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             var result = PackExporter.Export(PackRoot!, outputFile);
             double srcMb = result.SourceBytes / 1024.0 / 1024.0;
             double outMb = result.CompressedBytes / 1024.0 / 1024.0;
-            Tell(
-                Loc.P("export.done", result.FileCount, "pack", Pack.PackId, "version", Pack.Version,
-                      "source", srcMb.ToString("N1"), "packed", outMb.ToString("N1"), "path", result.OutputPath),
-                Loc.T("export.done.title"), MessageBoxImage.Information);
+            string said = Loc.P("export.done", result.FileCount, "pack", Pack.PackId, "version", Pack.Version,
+                                "source", srcMb.ToString("N1"), "packed", outMb.ToString("N1"), "path", result.OutputPath);
+            // The author's own backups were left out: say which, so a file they
+            // meant to ship is not missing without a word.
+            if (result.BackupsLeftOut.Count > 0)
+                said += "\n\n" + Loc.P("export.backupsLeftOut", result.BackupsLeftOut.Count,
+                                       "size", (result.BackupBytes / 1024.0 / 1024.0).ToString("N1"),
+                                       "names", BackupNames(result.BackupsLeftOut));
+            Tell(said, Loc.T("export.done.title"), MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
             Tell(ex.Message, Loc.T("export.failed.title"), MessageBoxImage.Error);
         }
+    }
+
+    /// <summary>The first few backups' paths, for the export message; a long
+    /// list ends in an ellipsis.</summary>
+    internal static string BackupNames(IReadOnlyList<string> paths)
+    {
+        const int shown = 5;
+        string names = string.Join(", ", paths.Take(shown));
+        return paths.Count > shown ? names + ", …" : names;
     }
 
     private void AddCharacter() => AddCharacter(BustSource.Pack);
@@ -7259,6 +7296,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             Key = $"dialogue{Pack.Dialogues.Count + 1}",
             DisplayName = NewName("dialogues.newName"),
             RoomTalk = "vanilla:Beach",
+            // On for a new one: the busts it brings out go when it ends.
+            LeaveBustsAtEnd = true,
         };
         Pack.Dialogues.Add(def);
         var vm = HookDebugTracking(new DialogueViewModel(def));

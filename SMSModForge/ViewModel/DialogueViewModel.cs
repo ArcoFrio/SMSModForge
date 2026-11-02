@@ -676,6 +676,12 @@ public sealed class DialogueViewModel : ObservableObject
         set { Model.QueueBehind = value; OnPropertyChanged(); }
     }
 
+    public bool LeaveBustsAtEnd
+    {
+        get => Model.LeaveBustsAtEnd;
+        set { Model.LeaveBustsAtEnd = value; OnPropertyChanged(); }
+    }
+
     public int Priority
     {
         get => Model.Priority;
@@ -806,8 +812,9 @@ public sealed class DialogueViewModel : ObservableObject
         }
         if (!string.IsNullOrEmpty(level)) return level;
 
+        // Negated, it is the one level the dialogue does NOT play in.
         var lvlCond = Model.StartConditions.FirstOrDefault(c => c.Type == NodeConditionTypes.LevelActive);
-        if (lvlCond?.Params != null && lvlCond.Params.TryGetValue("level", out var lv))
+        if (lvlCond?.Params != null && !lvlCond.Negate && lvlCond.Params.TryGetValue("level", out var lv))
             return lv ?? "";
         return "";
     }

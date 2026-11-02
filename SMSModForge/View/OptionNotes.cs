@@ -52,6 +52,8 @@ public static class OptionNotes
         [NodeActionTypes.FadeSprite] = "note.action.fadeSprite",
         [NodeActionTypes.MoveGameObject] = "note.action.move",
         [NodeActionTypes.SpinGameObject] = "note.action.spin",
+        [NodeActionTypes.TransformGameObject] = "note.action.transform",
+        [NodeActionTypes.PlayDialogue] = "note.action.playDialogue",
         [NodeActionTypes.SetComponentProperty] = "note.action.component",
         [NodeActionTypes.DeactivateAllScenes] = "note.action.deactivateAllScenes",
         [NodeActionTypes.TransitionLevels] = "note.action.transitionLevels",

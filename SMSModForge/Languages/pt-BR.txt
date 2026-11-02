@@ -301,6 +301,10 @@ game.notice.close = Entendi
 # en: Sounds in packs play with the timing and volume their authors set.
 game.notice.news.1.8.0 = Os sons dos packs tocam no momento e no volume que seus autores definiram.
 
+# What ModForge 1.8.2 changes for players, one line each (\n starts the next)
+# en: A pack's conversation no longer starts over the game's own when you arrive somewhere.
+game.notice.news.1.8.2 = A conversa de um pack não começa mais por cima da do próprio jogo quando você chega a algum lugar.
+
 [Where an NPC stands]
 
 # Text
@@ -668,6 +672,58 @@ param.label.spinning = Girando
 # Tooltip on the 'Spinning' field of the SpinGameObject action
 # en: True to start/keep spinning, false to stop.
 action.spinGameObject.enable.tip = Verdadeiro para começar ou continuar girando, falso para parar.
+
+# Label beside a field of an action or condition
+# en: Scale
+param.label.scale = Escala
+
+# Tooltip on the 'X' field of the TransformGameObject action
+# en: Local X: where it sits under its parent, in the parent's units - what the game's own pictures are framed in. Empty leaves it as it is.
+action.transformGameObject.x.tip = X local: onde ele fica sob o pai, nas unidades do pai - é assim que o jogo enquadra as próprias imagens. Vazio deixa como está.
+
+# Tooltip on the 'Y' field of the TransformGameObject action
+# en: Local Y, the same way. Empty leaves it as it is.
+action.transformGameObject.y.tip = Y local, do mesmo jeito. Vazio deixa como está.
+
+# Tooltip on the 'Scale' field of the TransformGameObject action
+# en: Size, one number for both directions: 1 is as drawn, 2 twice as big. Empty leaves it as it is.
+action.transformGameObject.scale.tip = Tamanho, um número para as duas direções: 1 é como está desenhado, 2 o dobro. Vazio deixa como está.
+
+# Tooltip on the 'Duration (s)' field of the TransformGameObject action
+# en: How long the change takes, eased in and out. 0 = at once. Nothing holds it there afterwards, and an object a MoveGameObject was holding is let go.
+action.transformGameObject.seconds.tip = Quanto tempo a mudança leva, suavizada no início e no fim. 0 = na hora. Depois nada o prende ali, e um objeto que um MoveGameObject segurava é solto.
+
+# Label beside a field of an action or condition
+# en: Dialogue
+param.label.dialogue = Diálogo
+
+# Label beside a field of an action or condition
+# en: Conversation
+param.label.conversation = Conversa
+
+# Label beside a field of an action or condition
+# en: When it ends, set
+param.label.whenItEndsSet = Ao terminar, definir
+
+# Tooltip on the 'Source' field of the PlayDialogue action
+# en: pack: one of this pack's dialogues. vanilla: one of the game's own conversations.
+action.playDialogue.source.tip = pack: um dos diálogos deste pack. vanilla: uma das conversas do próprio jogo.
+
+# Tooltip on the 'Dialogue' field of the PlayDialogue action
+# en: The dialogue to play. It plays as soon as nothing is on screen and the game is not busy - on a line, right after the dialogue that line is in. Its own start conditions are not asked.
+action.playDialogue.dialogue.tip = O diálogo a tocar. Ele começa assim que não há nada na tela e o jogo não está ocupado - numa fala, logo depois do diálogo em que ela está. As condições de início dele não são consultadas.
+
+# Tooltip on the 'Conversation' field of the PlayDialogue action
+# en: One of the game's conversations, by its place in the scene. Only the conversation plays, not the room's script around it - switch its character's bust on yourself if the room would. Its lines' own instructions run, the game's story steps included.
+action.playDialogue.conversation.tip = Uma das conversas do jogo, pelo lugar dela na cena. Só a conversa toca, não o script da sala em volta dela - ligue você mesmo o busto do personagem se a sala ligaria. As instruções das falas dela rodam, inclusive os passos da história do jogo.
+
+# Tooltip on the 'When it ends, set' field of the PlayDialogue action
+# en: Optional: one of the pack's variables, set once it has ended - what a start condition or a rule can follow it by.
+action.playDialogue.afterName.tip = Opcional: uma variável do pack, definida quando ele termina - é por ela que uma condição de início ou uma regra podem segui-lo.
+
+# Tooltip on the 'Value' field of the PlayDialogue action
+# en: The value that variable is set to.
+action.playDialogue.afterValue.tip = O valor dado a essa variável.
 
 # Label beside a field of an action or condition
 # en: Music key
@@ -5436,6 +5492,14 @@ dialogues.waitTalkButtonNo.tip = Não começa na chegada: o diálogo fica parado
 # Tooltip on "Queue behind active dialogue"
 # en: If another dialogue is playing when this one's conditions pass, wait and start right after it ends. Unchecked (original behavior): it misses that window and only fires when its conditions trigger again while nothing is playing.
 dialogues.queueBehindActiveDialogue.tip = Se outro diálogo estiver tocando quando as condições deste valerem, espera e começa logo depois que ele acabar. Desmarcado (comportamento original): ele perde essa janela e só dispara quando as condições dele voltarem a valer sem nada tocando.
+
+# Tick box
+# en: Leave the busts at the end
+dialogues.leaveBustsAtEnd = Retirar os bustos no final
+
+# Tooltip on "Leave the busts at the end"
+# en: When the dialogue ends, everyone who spoke in it leaves, as a LeaveBust on each ending would do - so no bust is left standing over the level. Untick it where staying is the point, like a room where the bust is how the character stands. On for a new dialogue.
+dialogues.leaveBustsAtEnd.tip = Quando o diálogo termina, todos que falaram nele saem, como faria um LeaveBust em cada final, e nenhum busto fica parado sobre o nível. Desmarque onde ficar é a intenção, como uma sala onde o busto é o jeito de o personagem estar ali. Ligado em um diálogo novo.
 
 # Tooltip on "Set for condition debugging (F12)"
 # en: In-game, pressing F12 logs a pass/fail breakdown of this dialogue's start conditions (with current variable values) to the BepInEx console. Diagnostic only — no gameplay effect.
@@ -10689,6 +10753,14 @@ docs.dialogues.ifSomethingElsePlaying.term = Colocar na fila depois do diálogo 
 docs.dialogues.ifSomethingElsePlaying = Se houver outra coisa tocando quando este ficar elegível, ele espera e começa logo em seguida. Sem isso, o diálogo perde aquele momento e espera o próximo.
 
 # Docs: the bold label in front of the next text, usually a name on screen
+# en: Leave the busts at the end
+docs.dialogues.leaveBustsAtEnd.term = Retirar os bustos no final
+
+# Docs: a point in the topic
+# en: When it ends, everyone who spoke in it leaves the stage, so an ending that forgot its LeaveBust leaves no bust behind. Untick it where a bust is meant to stay.
+docs.dialogues.leaveBustsAtEnd = No final, todos que falaram nele saem de cena, então um final que esqueceu o LeaveBust não deixa busto para trás. Desmarque onde um busto deve ficar.
+
+# Docs: the bold label in front of the next text, usually a name on screen
 # en: Set for condition debugging (F12)
 docs.dialogues.gameF12LogsWhich.term = Marcar para depurar condições (F12)
 
@@ -12253,6 +12325,22 @@ docs.actions.startStopObjectRotating.term = SpinGameObject
 # Docs: a point in the topic
 # en: Start or stop an object rotating at a steady rate.
 docs.actions.startStopObjectRotating = Começa ou para a rotação de um objeto a uma velocidade constante.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: TransformGameObject
+docs.actions.setObjectPlaceAndSize.term = TransformGameObject
+
+# Docs: a point in the topic
+# en: Set an object's position under its parent and its size - zoom in on part of a picture and back again - eased or at once, without holding it there.
+docs.actions.setObjectPlaceAndSize = Definir a posição de um objeto sob o pai e o tamanho dele - aproximar parte de uma imagem e voltar -, suavemente ou na hora, sem prendê-lo ali.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: PlayDialogue
+docs.actions.playDialogue.term = PlayDialogue
+
+# Docs: a point in the topic
+# en: Play one of the pack's dialogues or one of the game's conversations as soon as nothing else is on screen - on a line, right after its dialogue - and, if you like, set a variable when it ends.
+docs.actions.playDialogue = Tocar um diálogo do pack ou uma conversa do jogo assim que não houver mais nada na tela - numa fala, logo depois do diálogo dela - e, se quiser, definir uma variável ao terminar.
 
 # Docs: a heading inside the topic
 # en: Places and scenes
@@ -14695,6 +14783,34 @@ validation.variable.floatDefault = O padrão de Float "{value}" não se lê como
 # en: List default '{value}' is not a list of values; the list will start empty. Add its initial values again.
 validation.variable.listDefault = O padrão de List "{value}" não é uma lista de valores; a lista vai começar vazia. Adicione os valores iniciais de novo.
 
+# Validation message
+# en: {name} is compared to '{value}', but nothing in this pack ever sets it to that - only to {values} - so the comparison never matches unless another mod sets it.
+validation.variable.neverSetTo = {name} é comparado a "{value}", mas nada neste pack o define com esse valor (apenas com {values}), então a comparação nunca é verdadeira, a menos que outro mod o defina.
+
+# Validation message
+# en: List {name} is checked for '{value}', but nothing in this pack ever puts that in it - only {values} - so the check never matches unless another mod does.
+validation.list.neverHolds = A List {name} é verificada quanto a "{value}", mas nada neste pack coloca esse valor nela (apenas {values}), então a verificação nunca é verdadeira, a menos que outro mod o faça.
+
+# Validation message
+# en: List {name} is checked for '{value}', but nothing in this pack ever puts anything in it, so the check never matches unless another mod does.
+validation.list.neverFilled = A List {name} é verificada quanto a "{value}", mas nada neste pack coloca qualquer coisa nela, então a verificação nunca é verdadeira, a menos que outro mod o faça.
+
+# Validation message
+# en: Lines here take their outfit from {variable}, which can hold {values} - none of {actor}'s outfits. While it does, the bust does not appear on those lines.
+validation.node.outfitVariableNotOutfit = As falas daqui pegam o traje de {variable}, que pode conter {values} - nenhum dos trajes de {actor}. Enquanto for assim, o busto não aparece nessas falas.
+
+# Validation message
+# en: Play dialogue names no dialogue - nothing will play.
+validation.action.playDialogue.none = Play dialogue não indica nenhum diálogo - nada vai tocar.
+
+# Validation message
+# en: Play dialogue names '{name}', which is none of this pack's dialogues - nothing will play.
+validation.action.playDialogue.unknownDialogue = Play dialogue indica "{name}", que não é nenhum dos diálogos deste pack - nada vai tocar.
+
+# Validation message
+# en: Play dialogue names '{name}', which is none of the game's conversations - nothing will play.
+validation.action.playDialogue.unknownConversation = Play dialogue indica "{name}", que não é nenhuma das conversas do jogo - nada vai tocar.
+
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.
 validation.character.pronounsMissing = {name} não tem pronomes. Escolha Masculino, Feminino ou Neutro na aba Personagens - a tradução precisa deles e, sem eles, supõe masculino.
@@ -15333,6 +15449,10 @@ common.group.misc = Outros
 # en: Characters
 typeGroup.characters = Personagens
 
+# A heading in the action type dropdown
+# en: Conversations
+typeGroup.conversations = Conversas
+
 # Heading in the list of action types, over the ones that act on objects and scenes
 # en: Objects and scenes
 typeGroup.objects = Objetos e cenas
@@ -15404,6 +15524,14 @@ note.action.move = Deslizar algo para outra posição
 # A note beside an action type in its dropdown, saying what it does
 # en: Start or stop something spinning
 note.action.spin = Fazer algo girar, ou parar
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Set something's position and size where it is
+note.action.transform = Definir a posição e o tamanho de algo onde está
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Play one of the pack's dialogues or one of the game's conversations
+note.action.playDialogue = Tocar um diálogo do pack ou uma conversa do jogo
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Change a setting the other actions don't reach
@@ -15844,6 +15972,14 @@ publish.failed.title = Falha ao publicar
 export.done.one = Exportado {pack} v{version} - {count} arquivo, {source} MB de origem, {packed} MB empacotados:\n{path}
 # en: Exported {pack} v{version} - {count} files, {source} MB source, {packed} MB packed:\n{path}
 export.done.other = Exportado {pack} v{version} - {count} arquivos, {source} MB de origem, {packed} MB empacotados:\n{path}
+
+# Added to the export message: the author's backups left out of the pack. {size} is in
+# megabytes; {names} lists the first few of their paths in the pack
+# one: 0, 1 · other: 2, 3, 4, 5…
+# en: Left out {count} backup file ({size} MB), which players do not need: {names}
+export.backupsLeftOut.one = {count} arquivo de backup deixado de fora ({size} MB), que os jogadores não precisam: {names}
+# en: Left out {count} backup files ({size} MB), which players do not need: {names}
+export.backupsLeftOut.other = {count} arquivos de backup deixados de fora ({size} MB), que os jogadores não precisam: {names}
 
 # Title of a message box
 # en: Export complete
@@ -17991,6 +18127,10 @@ migration.oldGameObjectsCategory = Destinos em "Extra GameObjects", o nome antig
 # One line of the list of what was brought up to date. "SetSpriteFocus" and "CharacterFocus" are names of an action, kept in English
 # en: SetSpriteFocus actions given the action's new name, CharacterFocus
 migration.characterFocus = Ações SetSpriteFocus com o novo nome da ação, CharacterFocus
+
+# One line of the list of what was brought up to date
+# en: Settings that actions and conditions kept from a type they used to be taken off - none of them did anything
+migration.leftOverSettings = Removidas as configurações que ações e condições mantinham de um tipo anterior - nenhuma fazia nada
 
 # In the list of what opening a pack changed: lines whose sound's pattern is written bigger or smaller, now playing that much louder or softer
 # en: lines whose sounds now play louder or softer to match the size their pattern is written in (the text keeps its size)

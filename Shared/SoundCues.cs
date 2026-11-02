@@ -241,17 +241,31 @@ namespace SMSModForge.Shared
         /// which of their pattern's matches they are in the pack's own words
         /// (<paramref name="matches"/>) - so a translated line loses the same
         /// "*clink*", and one whose translator changed the pattern keeps it.
+        /// <para/>
+        /// The shown line is read with the same matcher, with
+        /// <paramref name="patterns"/> (every sound's; the matches' own when not
+        /// given): a pattern inside a longer one - <c>*ding*</c> in
+        /// <c>*ding**ding*</c> - is not one of its matches there either. Searched
+        /// for as plain text, hiding a lone <c>*ding*</c> cut half of the double
+        /// one before it instead.
         /// </summary>
-        public static string Hide(string shown, IList<Match> matches, IList<Setting> settings)
+        public static string Hide(string shown, IList<Match> matches, IList<Setting> settings,
+                                  IList<KeyValuePair<string, string>> patterns = null)
         {
             if (string.IsNullOrEmpty(shown) || matches == null || settings == null || settings.Count == 0) return shown;
+            if (patterns == null)
+            {
+                patterns = new List<KeyValuePair<string, string>>();
+                foreach (var m in matches) patterns.Add(new KeyValuePair<string, string>(m.Pattern, m.Sound));
+            }
+            var inShown = Find(shown, patterns);
             var cut = new List<KeyValuePair<int, int>>();
             foreach (var m in matches)
             {
                 var s = For(m, settings);
                 if (s == null || !s.Hidden) continue;
-                int at = NthIndexOf(shown, m.Pattern, m.OfItsPattern);
-                if (at >= 0) cut.Add(new KeyValuePair<int, int>(at, m.Pattern.Length));
+                var there = NthOf(inShown, m.Pattern, m.OfItsPattern);
+                if (there != null) cut.Add(new KeyValuePair<int, int>(there.Index, there.Length));
             }
             if (cut.Count == 0) return shown;
             cut.Sort((a, b) => b.Key.CompareTo(a.Key));
@@ -266,15 +280,12 @@ namespace SMSModForge.Shared
             return result.Trim();
         }
 
-        private static int NthIndexOf(string text, string pattern, int nth)
+        private static Match NthOf(IList<Match> matches, string pattern, int nth)
         {
-            int at = -1;
-            for (int i = 0; i < nth; i++)
-            {
-                at = text.IndexOf(pattern, at + 1, StringComparison.OrdinalIgnoreCase);
-                if (at < 0) return -1;
-            }
-            return at;
+            foreach (var m in matches)
+                if (m.OfItsPattern == nth && string.Equals(m.Pattern, pattern, StringComparison.OrdinalIgnoreCase))
+                    return m;
+            return null;
         }
     }
 }

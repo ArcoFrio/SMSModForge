@@ -584,7 +584,8 @@ public sealed class DialogueNodeViewModel : ObservableObject
             string preview = TextPreview;
             if (Model.Cues == null || Model.Cues.Count == 0 || SoundPatterns == null || string.IsNullOrEmpty(Text)) return preview;
             var settings = Model.Cues.Select(c => c.ToSetting()).ToList();
-            return Shared.SoundCues.Hide(preview, Shared.SoundCues.Find(Text, SoundPatterns()), settings);
+            var patterns = SoundPatterns();
+            return Shared.SoundCues.Hide(preview, Shared.SoundCues.Find(Text, patterns), settings, patterns);
         }
     }
 

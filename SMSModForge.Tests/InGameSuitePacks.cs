@@ -230,6 +230,16 @@ internal static class InGameSuitePacks
             pack.Dialogues.Add(Script("back", "Things go back.",
                 On(NodeActionTypes.MoveGameObject, "Lamp", ("home", "true"), ("seconds", "0.2")),
                 On(NodeActionTypes.SpinGameObject, "Holder", ("enable", "false"))));
+            // A picture framed as the game frames one: Inner to x 0.5 at twice
+            // its size over 1.5 s, its y left as it is; the Lamp moved (held)
+            // and then placed, which lets it go.
+            pack.Dialogues.Add(Script("frame", "Zoom in.",
+                On(NodeActionTypes.TransformGameObject, "Inner", ("x", "0.5"), ("y", ""), ("scale", "2"), ("seconds", "1.5")),
+                On(NodeActionTypes.MoveGameObject, "Lamp", ("x", "3"), ("y", "-1"), ("seconds", "0")),
+                On(NodeActionTypes.TransformGameObject, "Lamp", ("x", "7"))));
+            pack.Dialogues.Add(Script("unframe", "Zoom out.",
+                On(NodeActionTypes.TransformGameObject, "Inner", ("x", "4"), ("scale", "1")),
+                On(NodeActionTypes.TransformGameObject, "Lamp", ("x", "1.5"), ("y", "-2"))));
 
             // On the World Map, in the Seaside district, once mapOk is true.
             pack.MapButtons.Add(new MapButtonDef { Target = "self:" + Room, District = "Seaside", Label = "Map Room",
@@ -556,6 +566,9 @@ internal static class InGameSuitePacks
     ///   <item><c>dress</c>: Bea, a bust of the pack's own, says a line in her
     ///   first outfit (<c>SuiteBeaDay</c>, #3366FF), then one wearing whatever
     ///   <c>beaOutfit</c> names (<c>SuiteBeaNight</c>, #112244).</item>
+    ///   <item><c>arrive</c>: starts by itself on arriving at the gas station
+    ///   while <c>arriveGo</c> is true, adding 1 to <c>arrived</c> - no box
+    ///   checked, so never while a conversation of the game's plays.</item>
     /// </list>
     /// </summary>
     public static class Talk
@@ -667,11 +680,44 @@ internal static class InGameSuitePacks
             dress.Nodes.AddRange(new[] { day, night });
             dress.RootNodeIds.Add(1);
             pack.Dialogues.Add(dress);
+            // The same speaker in a dialogue that leaves its busts at the end.
+            var bow = new DialogueDef { Key = "bow", DisplayName = "bow", LeaveBustsAtEnd = true, StartConditions = { Is("never", "true") } };
+            bow.Nodes.Add(new DialogueNodeDef { Id = 1, Actor = "bea", Outfit = BeaDay, Text = "Goodbye.", Duration = NodeDurationMode.Timeout, Timeout = 0.5f });
+            bow.RootNodeIds.Add(1);
+            pack.Dialogues.Add(bow);
 
             var auto = Script("auto", "By itself.", Set("autoRan", "true"), Set("autoGo", "false"));
             auto.StartConditions.Clear();
             auto.StartConditions.Add(Is("autoGo", "true"));
             pack.Dialogues.Add(auto);
+
+            // On arriving at one of the game's places where the game may start
+            // a conversation of its own, every box on the Dialogues tab left
+            // unchecked: it plays only while none of the game's is playing.
+            pack.Variables.Add(Var("arriveGo", PackVariableType.Bool, "false"));
+            pack.Variables.Add(Var("arrived", PackVariableType.Int, "0"));
+            var arrive = Script("arrive", "Here already.", Add("arrived"));
+            arrive.StartConditions.Clear();
+            arrive.StartConditions.Add(new NodeConditionDef
+            {
+                Type = NodeConditionTypes.LevelActive,
+                Params = { ["level"] = "vanilla:" + ArrivalLevel },
+            });
+            arrive.StartConditions.Add(Is("arriveGo", "true"));
+            pack.Dialogues.Add(arrive);
+
+            // Play dialogue: "caller" asks for "target" on its line, "callgame"
+            // for one of the game's conversations; each says when it ended.
+            pack.Variables.Add(Var("playedTarget", PackVariableType.Int, "0"));
+            pack.Variables.Add(Var("afterTarget", PackVariableType.String, ""));
+            pack.Variables.Add(Var("afterGame", PackVariableType.String, ""));
+            pack.Dialogues.Add(Script("target", "Played for.", Add("playedTarget")));
+            pack.Dialogues.Add(Script("caller", "Calling.",
+                Act(NodeActionTypes.PlayDialogue, ("source", "pack"), ("dialogue", "target"),
+                    ("afterName", "afterTarget"), ("afterValue", "done"))));
+            pack.Dialogues.Add(Script("callgame", "Calling the game.",
+                Act(NodeActionTypes.PlayDialogue, ("source", "vanilla"), ("conversation", GameConversation),
+                    ("afterName", "afterGame"), ("afterValue", "done"))));
             return pack;
         }
 
@@ -681,6 +727,15 @@ internal static class InGameSuitePacks
 
         /// <summary>Bea's two outfits' bust objects.</summary>
         public const string BeaDay = "SuiteBeaDay", BeaNight = "SuiteBeaNight";
+
+        /// <summary>Where <c>arrive</c> waits: the gas station, whose room talk
+        /// starts a car-wash conversation of the game's on arrival when the car
+        /// wash is unlocked and not cooling down, on a Monday (1.8E).</summary>
+        public const string ArrivalLevel = "59_Gasstation";
+
+        /// <summary>The game's conversation "callgame" plays: one the suite
+        /// already plays (K3), Anna not being in the kitchen.</summary>
+        public const string GameConversation = "8_Room_Talk/Kitchen/Annanotthere";
 
         /// <summary>The pack's translation, made the way the editor makes the
         /// file - every text of the pack listed - with one line filled in.</summary>

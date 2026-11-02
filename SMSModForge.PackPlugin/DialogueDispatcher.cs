@@ -239,6 +239,8 @@ namespace SMSModForge.PackPlugin
             // UI would hide the button.
             if (HasPendingAutoStart()) BeginUiHoldForPending();
 
+            TickPlayRequests();
+
             // NOTE: the vanilla-commitment hold lives in PeekEligible, per
             // candidate — deliberately NOT here. Holding in Tick would be
             // indiscriminate, and doing it alongside the MissedWindow pass
@@ -284,7 +286,7 @@ namespace SMSModForge.PackPlugin
             // vanilla roomtalk (e.g. Kitchen), whose parent Trigger fades on
             // click and starts the dialogue after the fade — so the fade LEADS
             // the dialogue instead of firing glued to it.
-            StartDialogue(chosen);
+            StartDialogue(chosen, fromTalkButton: true);
             return true;
         }
 
@@ -324,13 +326,124 @@ namespace SMSModForge.PackPlugin
                 if (built.MissedWindow) continue;
                 if (!built.LastConditionsPassed) continue;
                 // Same rule PlayAfterFade re-checks with, so what gets nominated
-                // and what is allowed to start cannot disagree. Talk-button and
-                // queueBehind dialogues wait only for the screen to clear;
-                // everything else waits for the full gate.
-                if ((built.Queued || built.QueueBehind) ? playing : blocked) continue;
+                // and what is allowed to start cannot disagree.
+                if (MustWait(built, playing, blocked)) continue;
                 if (winner == null || built.Priority > winner.Priority) winner = built;
             }
             return winner;
+        }
+
+        // ── The Play dialogue action ─────────────────────────────────────
+        //
+        // Asked for by an action, played once nothing is on screen and the game
+        // is not busy (IsStartBlocked): an action on a line is asked while that
+        // line's dialogue is still up, so it plays after it - the "then" a
+        // player expects. The dialogue's own start conditions are not asked:
+        // being asked for is the reason it plays.
+
+        /// <summary>One Play dialogue action waiting to play.</summary>
+        internal sealed class PlayRequest
+        {
+            public bool Game;
+            public string Which;
+            public string AfterName;
+            public string AfterValue;
+        }
+
+        private readonly List<PlayRequest> _requests = new List<PlayRequest>();
+
+        /// <summary>Ask for one of this pack's dialogues, or one of the game's
+        /// conversations (<paramref name="game"/>), to play when it can.</summary>
+        internal void RequestPlay(bool game, string which, string afterName, string afterValue)
+        {
+            _requests.Add(new PlayRequest { Game = game, Which = which, AfterName = afterName, AfterValue = afterValue });
+            _ctx.Log?.LogInfo("[SMSModForge.PackPlugin] Play dialogue asked for: " + (game ? "the game's " : _ctx.PackId + ".") + which);
+        }
+
+        private void TickPlayRequests()
+        {
+            if (_requests.Count == 0 || _ctx.Plugin == null || IsStartBlocked()) return;
+            var request = _requests[0];
+            _requests.RemoveAt(0);
+            if (request.Game) { PlayGameConversation(request); return; }
+
+            DialogueBuilder.BuiltDialogue built = null;
+            foreach (var b in _built)
+                if (string.Equals(b.Key, request.Which, System.StringComparison.OrdinalIgnoreCase)) { built = b; break; }
+            if (built == null)
+            {
+                _ctx.Log?.LogWarning("[SMSModForge.PackPlugin] Play dialogue: " + _ctx.PackId + " has no dialogue '" + request.Which + "'.");
+                return;
+            }
+            built.PlayedFor = request;
+            StartDialogue(built);
+        }
+
+        /// <summary>One of the game's conversations, played the way one of
+        /// ours is: the interface down first, back once it has ended. Its room
+        /// script does not run - only the conversation, its lines' own
+        /// instructions included.</summary>
+        private void PlayGameConversation(PlayRequest request)
+        {
+            var conversation = VanillaDialogueInjector.Find(request.Which);
+            if (conversation == null)
+            {
+                _ctx.Log?.LogWarning("[SMSModForge.PackPlugin] Play dialogue: the game has no conversation '" + request.Which + "'.");
+                return;
+            }
+            bool chained = UiIsHidden();
+            if (!chained) BeginUiHoldForPending();
+            _uiRestoreGeneration++;
+            _pendingStarts++;
+            _ctx.Plugin.StartCoroutine(PlayGameAfterFade(conversation, chained ? 0f : FadeLeadSeconds, request));
+        }
+
+        private IEnumerator PlayGameAfterFade(Dialogue conversation, float delay, PlayRequest request)
+        {
+            yield return new WaitForSeconds(delay);
+            _pendingStarts--;
+            if (IsStartBlocked())
+            {
+                // Something began during the fade: ask again, first in line.
+                _requests.Insert(0, request);
+                if (!IsAnyDialoguePlaying()) ShowUiIfWeHidIt();
+                yield break;
+            }
+            System.Action finished = null;
+            finished = () =>
+            {
+                conversation.EventFinish -= finished;
+                // Nothing of the room's runs after it to bring the interface
+                // back, whoever took it down before it - so we do.
+                _weHidTheUi = true;
+                _ctx.Plugin.StartCoroutine(RestoreUiWhenIdle(++_uiRestoreGeneration));
+                SetAfter(request);
+            };
+            conversation.EventFinish += finished;
+            _ = conversation.Play(new Args(conversation.gameObject));
+            _ctx.Log?.LogInfo("[SMSModForge.PackPlugin] Play dialogue: the game's " + request.Which + " started.");
+        }
+
+        /// <summary>The variable a Play dialogue action sets once what it
+        /// asked for has ended.</summary>
+        private void SetAfter(PlayRequest request)
+        {
+            if (request == null || string.IsNullOrEmpty(request.AfterName) || _ctx.Vars == null) return;
+            _ctx.Vars.Set(request.AfterName, request.AfterValue ?? "");
+        }
+
+        /// <summary>
+        /// Whether <paramref name="built"/> must not start this tick. Talk-button
+        /// dialogues wait only for the screen to clear. Queue-behind ones too,
+        /// and for a room of the game's leading in to its conversation: they
+        /// follow the game's, so they take the stretch after it, never the one
+        /// before. Everything else waits for the full gate.
+        /// </summary>
+        private static bool MustWait(DialogueBuilder.BuiltDialogue built, bool playing, bool blocked)
+        {
+            if (built.Queued) return playing;
+            if (built.QueueBehind) return playing || GameRoomTalks.BeforeItsConversation;
+            return blocked;
         }
 
 #if DEBUG
@@ -426,7 +539,10 @@ namespace SMSModForge.PackPlugin
         /// they play identically.</summary>
         private const float FadeLeadSeconds = 1.0f;
 
-        private void StartDialogue(DialogueBuilder.BuiltDialogue built)
+        /// <param name="fromTalkButton">The player clicked the Talk button for it:
+        /// the game's own handler switches the stored room talk back on, and
+        /// that room leading in is not one to wait for (PlayAfterFade).</param>
+        private void StartDialogue(DialogueBuilder.BuiltDialogue built, bool fromTalkButton = false)
         {
             // Latch + fade first — mirrors the vanilla roomtalk Trigger:
             // emit FadeUI (gameplay UI fades out), then start the actual
@@ -456,7 +572,7 @@ namespace SMSModForge.PackPlugin
             if (_ctx.Plugin != null)
             {
                 _pendingStarts++;
-                _ctx.Plugin.StartCoroutine(PlayAfterFade(built, chained ? 0f : FadeLeadSeconds));
+                _ctx.Plugin.StartCoroutine(PlayAfterFade(built, chained ? 0f : FadeLeadSeconds, fromTalkButton));
             }
             else
             {
@@ -490,7 +606,7 @@ namespace SMSModForge.PackPlugin
         /// while a vanilla one lives under its roomtalk. That decides who owns
         /// the hidden UI when a start stands down.
         /// </summary>
-        private static bool IsPackDialogueOnScreen()
+        internal static bool IsPackDialogueOnScreen()
         {
             var cur = Dialogue.Current;
             var parent = cur != null ? cur.transform.parent : null;
@@ -722,7 +838,7 @@ namespace SMSModForge.PackPlugin
             ShowUiIfWeHidIt();
         }
 
-        private IEnumerator PlayAfterFade(DialogueBuilder.BuiltDialogue built, float delay)
+        private IEnumerator PlayAfterFade(DialogueBuilder.BuiltDialogue built, float delay, bool fromTalkButton)
         {
             yield return new WaitForSeconds(delay);
             _pendingStarts--;
@@ -746,13 +862,21 @@ namespace SMSModForge.PackPlugin
             //    allowed to run while Lock-Game is up, and for the Talk button
             //    that is not optional: the vanilla button's own handler does
             //    SetActive(Core[stored-talk]), which starts the roomtalk whose
-            //    first instruction RAISES Lock-Game. Applying the full gate here
-            //    made every Talk-button dialogue stand down one second after the
-            //    click, re-arm, and never play — while the player watched a
-            //    faded screen. TryConsumeTalkButton has always run ahead of the
-            //    gate for this reason; this check has to agree with it.
-            bool playerRequested = built.Queued || built.QueueBehind;
-            if (playerRequested ? IsAnyDialoguePlaying() : IsStartBlocked())
+            //    first instruction RAISES Lock-Game (and whose script then runs,
+            //    GameRoomTalks). Applying the full gate here made every
+            //    Talk-button dialogue stand down one second after the click,
+            //    re-arm, and never play — while the player watched a faded
+            //    screen. TryConsumeTalkButton has always run ahead of the gate
+            //    for this reason; this check has to agree with it.
+            //
+            //  · queueBehind started by itself — also not while a room of the
+            //    game's leads in to its conversation (MustWait, as PeekEligible
+            //    nominated it). From the Talk button the room leading in is the
+            //    one the click itself switched back on, so not there.
+            bool mustWait = fromTalkButton
+                ? ((built.Queued || built.QueueBehind) ? IsAnyDialoguePlaying() : IsStartBlocked())
+                : MustWait(built, IsAnyDialoguePlaying(), IsStartBlocked());
+            if (mustWait)
             {
                 // Un-commit so a later tick can try again — the conditions that
                 // qualified it are probably still true. Whether it actually gets
@@ -760,6 +884,12 @@ namespace SMSModForge.PackPlugin
                 built.HasPlayed = false;
                 _ctx.Log?.LogInfo("[SMSModForge.PackPlugin] Stood down " + _ctx.PackId + "." +
                                   built.Key + " — another dialogue started during its fade.");
+                // Asked for by a Play dialogue action: asked again, first in line.
+                if (built.PlayedFor != null)
+                {
+                    _requests.Insert(0, built.PlayedFor);
+                    built.PlayedFor = null;
+                }
 
                 // The UI is down for a dialogue that never appeared. Who owns it
                 // now depends on what actually took over:
@@ -803,6 +933,7 @@ namespace SMSModForge.PackPlugin
                 // Activate the dialogue GO itself.
                 if (built.GameObject != null && !built.GameObject.activeSelf)
                     built.GameObject.SetActive(true);
+                built.SpokeThisRun.Clear();
 
                 // Step 3: kick off GC2's async Play. We fire-and-forget
                 // (the dispatcher's per-node hooks pick up the lifecycle
@@ -839,7 +970,10 @@ namespace SMSModForge.PackPlugin
             string expression = (string)nj["expression"];
             string outfit = ActionRuntime.Deref((string)nj["outfit"] ?? "", _ctx);
             if (!string.IsNullOrEmpty(actor))
+            {
                 _ctx.Actors.ApplyNodeVisuals(actor, expression, outfit);
+                built.SpokeThisRun.Add(actor);
+            }
 
             // Pack-authored OnStart actions. Variable writes stay in memory
             // only — they are NOT flushed to disk here. The vanilla game
@@ -905,6 +1039,17 @@ namespace SMSModForge.PackPlugin
             // resting sorting orders. Covers both natural completion and
             // an external Stop (Dialogue.Stop also raises EventFinish).
             _ctx.Actors?.SetSpriteFocusAll(false);
+
+            // "Leave the busts at the end": everyone who spoke in it goes, as
+            // a LeaveBust on each exit would have done.
+            if (built.LeaveBustsAtEnd)
+                foreach (var speaker in built.SpokeThisRun)
+                    ActionRuntime.LeaveBustOf(speaker, _ctx);
+            built.SpokeThisRun.Clear();
+
+            // Played by a Play dialogue action: what it sets once this has ended.
+            SetAfter(built.PlayedFor);
+            built.PlayedFor = null;
 
             // Deactivate the dialogue GO so its visual-listener wiring
             // stops; re-activated next time StartDialogue runs. We leave
@@ -979,8 +1124,23 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         private bool IsStartBlocked()
         {
+            // First, whatever holds below: the hold after arrival counts from
+            // when the level came up, and a poll skipped while a journey or a
+            // lock held noticed the level only after them (measured: a second
+            // late on the gas station).
+            PollActiveLevel();
             if (IsAnyDialoguePlaying()) return true;
             if (GameVariableBridge.GetBool("Lock-Game")) return true;
+
+            // The game is deciding whether to speak, or about to: a journey is
+            // underway, a room's arrival script is running (GameRoomTalks), or
+            // one of our journeys has yet to switch its room talk on. Read from
+            // the game, not timed - Lock-Game alone was not enough: the journey
+            // script clears it while a room is still leading in to its
+            // conversation (1.8E's gas station on a car-wash day).
+            if (GameVariableBridge.GetBool("Start-Transfer")) return true;
+            if (GameRoomTalks.Running) return true;
+            if (NavigatorRuntime.RoomTalkPending) return true;
 
             // Hold briefly after a level becomes active.
             //
@@ -997,7 +1157,6 @@ namespace SMSModForge.PackPlugin
             // toggle, so the vanilla room's own fade landed on top of ours and
             // showed the UI during a dialogue that should have hidden it. Not
             // committing means not emitting, so there is nothing to flicker.
-            PollActiveLevel();
             return _activeLevel != null &&
                    Time.unscaledTime - _levelActivatedAt < LevelEntryGraceSeconds;
         }

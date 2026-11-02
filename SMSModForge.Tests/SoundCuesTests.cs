@@ -64,6 +64,31 @@ public class SoundCuesTests
     }
 
     [Fact]
+    public void APatternInsideALongerOneHidesItsOwnWordsNotTheLongerOnes()
+    {
+        // *ding* and *ding**ding*, two sounds: the double is one match, and
+        // hiding the lone *ding* after it took half of the double instead.
+        var patterns = new List<KeyValuePair<string, string>> { new("*ding*", "Ding"), new("*ding**ding*", "DingDing") };
+        var own = "*ding**ding* then *ding*";
+        var matches = SoundCues.Find(own, patterns);
+        Assert.Equal(new[] { "*ding**ding*", "*ding*" }, matches.Select(m => m.Pattern));
+
+        var hideSingle = new List<SoundCues.Setting> { new() { At = 2, Pattern = "*ding*", Hidden = true } };
+        Assert.Equal("*ding**ding* then", SoundCues.Hide(own, matches, hideSingle, patterns));
+        var hideDouble = new List<SoundCues.Setting> { new() { At = 1, Pattern = "*ding**ding*", Hidden = true } };
+        Assert.Equal("then *ding*", SoundCues.Hide(own, matches, hideDouble, patterns));
+        var hideBoth = new List<SoundCues.Setting>
+        {
+            new() { At = 1, Pattern = "*ding**ding*", Hidden = true }, new() { At = 2, Pattern = "*ding*", Hidden = true },
+        };
+        Assert.Equal("then", SoundCues.Hide(own, matches, hideBoth, patterns));
+        // Without the patterns given, the matches' own are used: the same.
+        Assert.Equal("*ding**ding* then", SoundCues.Hide(own, matches, hideSingle));
+        // In a translation, the same sound by its place among its pattern's.
+        Assert.Equal("*ding**ding* puis", SoundCues.Hide("*ding**ding* puis *ding*", matches, hideSingle, patterns));
+    }
+
+    [Fact]
     public void ASettingLeftByAnotherPatternIsNotTaken()
     {
         var matches = SoundCues.Find("*buzz* *clink*", Patterns);

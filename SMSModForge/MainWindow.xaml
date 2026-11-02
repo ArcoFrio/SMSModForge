@@ -1187,6 +1187,47 @@
             </Grid>
         </DataTemplate>
 
+        <!-- One of the pack's dialogues, by key (Play dialogue). -->
+        <DataTemplate x:Key="DialogueRefParamTemplate" DataType="{x:Type vm:ParamRowViewModel}">
+            <Grid Style="{StaticResource ParamRowGrid}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="*" MaxWidth="440"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                <ComboBox view:KnownValue.Check="True" Grid.Column="1"
+                          IsSynchronizedWithCurrentItem="False"
+                          ItemsSource="{Binding DataContext.DialogueKeyOptions,
+                                        RelativeSource={RelativeSource AncestorType=Window}}"
+                          IsEditable="True"
+                          Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding Tooltip}"/>
+            </Grid>
+        </DataTemplate>
+
+        <!-- One of the game's own conversations, by path (Play dialogue): 700-odd,
+             so typed into as much as picked from, and its list drawn as it scrolls. -->
+        <DataTemplate x:Key="GameConversationRefParamTemplate" DataType="{x:Type vm:ParamRowViewModel}">
+            <Grid Style="{StaticResource ParamRowGrid}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="*" MaxWidth="440"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                <ComboBox view:KnownValue.Check="True" Grid.Column="1"
+                          IsSynchronizedWithCurrentItem="False"
+                          ItemsSource="{Binding DataContext.GameConversationOptions,
+                                        RelativeSource={RelativeSource AncestorType=Window}}"
+                          IsEditable="True"
+                          Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding Tooltip}">
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate><VirtualizingStackPanel/></ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                </ComboBox>
+            </Grid>
+        </DataTemplate>
+
         <DataTemplate x:Key="SfxRefParamTemplate" DataType="{x:Type vm:ParamRowViewModel}">
             <Grid Style="{StaticResource ParamRowGrid}">
                 <Grid.ColumnDefinitions>
@@ -1272,7 +1313,9 @@
                                         SfxRefTemplate="{StaticResource SfxRefParamTemplate}"
                                         GameObjectPathTemplate="{StaticResource GameObjectPathParamTemplate}"
                                           SpriteRefTemplate="{StaticResource SpriteRefParamTemplate}"
-                                        ChoiceTemplate="{StaticResource ChoiceParamTemplate}"/>
+                                        ChoiceTemplate="{StaticResource ChoiceParamTemplate}"
+                                        DialogueRefTemplate="{StaticResource DialogueRefParamTemplate}"
+                                        GameConversationRefTemplate="{StaticResource GameConversationRefParamTemplate}"/>
 
         <!--
             Which quest, and which task: the part the Quest action and both quest
@@ -1469,9 +1512,9 @@
                                     ToolTip="{l:T condition.remove.tip}"/>
                         </StackPanel>
                     </Grid>
-                    <!-- Negate is meaningless on the pinned row: "not in this
-                         level" would leave the dialogue with no level at all,
-                         and the runtime resolves its roomtalk from this token. -->
+                    <!-- On the pinned level row too: "anywhere but this level"
+                         is a gate packs use (the author, 2026-11-01). Not on the
+                         game's own rows shown locked: NodeConditionViewModel.ShowsNegate. -->
                     <CheckBox Content="{l:T condition.negate}" IsChecked="{Binding Negate}" Margin="110,2,0,2"
                               ToolTip="{l:T condition.negate.tip}">
                         <CheckBox.Style>
@@ -1485,7 +1528,7 @@
                                     <DataTrigger Binding="{Binding VarValueIsBool}" Value="True">
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsLocked}" Value="True">
+                                    <DataTrigger Binding="{Binding ShowsNegate}" Value="False">
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -6703,6 +6746,7 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="{l:T dialogues.displayName}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                     <!-- Read-only for a change to one of the game's own
@@ -6768,13 +6812,21 @@
                                               IsChecked="{Binding QueueBehind}"
                                               Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,4,0,0"
                                               ToolTip="{l:T dialogues.queueBehindActiveDialogue.tip}"/>
+                                    <!-- Not on a change to one of the game's conversations:
+                                         the room that plays it sees to its busts. -->
+                                    <CheckBox x:Name="DialogueLeaveBustsAtEnd"
+                                              Content="{l:T dialogues.leaveBustsAtEnd}"
+                                              IsChecked="{Binding LeaveBustsAtEnd}"
+                                              Visibility="{Binding IsVanillaBased, Converter={StaticResource InverseBoolToVisibility}}"
+                                              Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,4,0,0"
+                                              ToolTip="{l:T dialogues.leaveBustsAtEnd.tip}"/>
                                     <CheckBox Content="{l:T dialogues.setConditionDebuggingF12}"
                                               IsChecked="{Binding DebugConditions}"
-                                              Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,4,0,0"
+                                              Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,4,0,0"
                                               ToolTip="{l:T dialogues.setConditionDebuggingF12.tip}"/>
-                                    <TextBlock Text="{l:T dialogues.priority}" Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Margin="0,4,0,0"/>
+                                    <TextBlock Text="{l:T dialogues.priority}" Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" Margin="0,4,0,0"/>
                                     <TextBox  Text="{Binding Priority, UpdateSourceTrigger=PropertyChanged}"
-                                              Grid.Row="8" Grid.Column="1" Margin="0,4,0,0" Width="60" HorizontalAlignment="Left"
+                                              Grid.Row="9" Grid.Column="1" Margin="0,4,0,0" Width="60" HorizontalAlignment="Left"
                                               ToolTip="{l:T dialogues.whenSeveralDialoguesBecome.tip}"/>
                                 </Grid>
                                 </StackPanel>

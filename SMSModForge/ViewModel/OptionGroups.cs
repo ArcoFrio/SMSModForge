@@ -182,10 +182,12 @@ public static class OptionGroups
     private static readonly (string Heading, string[] Types)[] ActionTopics =
     {
         ("typeGroup.characters", new[] { NodeActionTypes.CharacterFocus, NodeActionTypes.LeaveBust }),
+        ("typeGroup.conversations", new[] { NodeActionTypes.PlayDialogue }),
         ("typeGroup.objects", new[]
         {
             NodeActionTypes.SetGameObjectActive, NodeActionTypes.SetSprite, NodeActionTypes.FadeSprite,
-            NodeActionTypes.MoveGameObject, NodeActionTypes.SpinGameObject, NodeActionTypes.SetComponentProperty,
+            NodeActionTypes.MoveGameObject, NodeActionTypes.SpinGameObject, NodeActionTypes.TransformGameObject,
+            NodeActionTypes.SetComponentProperty,
             NodeActionTypes.DeactivateAllScenes,
         }),
         ("typeGroup.screen", new[]

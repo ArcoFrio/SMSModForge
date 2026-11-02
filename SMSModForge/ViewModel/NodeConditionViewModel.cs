@@ -39,6 +39,20 @@ public sealed class NodeConditionViewModel : ObservableObject
 
     public bool HasLockedHeader => LockedHeader.Length > 0;
 
+    /// <summary>A dialogue's pinned level row: locked in place and in its
+    /// type, but its own to change - the level, and whether it is negated.</summary>
+    public bool IsPinnedLevel { get; }
+
+    /// <summary>
+    /// The Negate box is offered: on every row the author owns, the pinned
+    /// level row included - "anywhere but this level" is a real gate, packs
+    /// use it, and the plugin has always read it (the author, 2026-11-01; it
+    /// was hidden there on the reasoning that a negated level leaves the
+    /// dialogue with no level, which is the point). Not on the game's own rows
+    /// shown locked, which are not the author's to change.
+    /// </summary>
+    public bool ShowsNegate => !IsLocked || IsPinnedLevel;
+
     public NodeConditionDef Model { get; }
 
     /// <summary>
@@ -67,6 +81,7 @@ public sealed class NodeConditionViewModel : ObservableObject
         Model = model;
         _removeCallback = removeCallback;
         IsLocked = isLocked;
+        IsPinnedLevel = isLocked && lockedHeader == null;
         LockedHeader = isLocked ? lockedHeader ?? PinnedLevelHeader : "";
         Context = context;
         RemoveCommand = new RelayCommand(
@@ -211,6 +226,7 @@ public sealed class NodeConditionViewModel : ObservableObject
         {
             if (Model.Type == value) return;
             Model.Type = value;
+            SetAsideLeftOver();
             OnPropertyChanged();
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(DisplayType));
@@ -970,6 +986,31 @@ public sealed class NodeConditionViewModel : ObservableObject
         OnPropertyChanged(nameof(ShowsScenePreview));
         OnPropertyChanged(nameof(ShowsArtPreview));
         OnPropertyChanged(nameof(ShowsAnyPreview));
+    }
+
+    /// <summary>What the condition's earlier types had that its type now does
+    /// not read, while the editor is open.</summary>
+    private readonly Dictionary<string, string> _setAside = new(StringComparer.Ordinal);
+
+    /// <summary>After a change of type: settings only the earlier type read are
+    /// put aside rather than saved, and ones the new type reads come back - as
+    /// for an action (<see cref="NodeActionViewModel"/>; 2026-11-01: a
+    /// DailyChance kept a variable check's name and value).</summary>
+    private void SetAsideLeftOver()
+    {
+        var reads = ParamsRead.ConditionKeys(Model.Type);
+        if (reads != null)
+            foreach (var key in _setAside.Keys.ToList())
+                if (reads.Contains(key) && !Model.Params.ContainsKey(key))
+                {
+                    Model.Params[key] = _setAside[key];
+                    _setAside.Remove(key);
+                }
+        foreach (var key in ParamsRead.LeftOverOnCondition(Model.Type, Model.Params))
+        {
+            _setAside[key] = Model.Params[key];
+            Model.Params.Remove(key);
+        }
     }
 
     /// <summary>

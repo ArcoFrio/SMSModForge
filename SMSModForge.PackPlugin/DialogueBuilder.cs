@@ -60,6 +60,20 @@ namespace SMSModForge.PackPlugin
             /// the same tick; ties fall back to build (manifest) order.</summary>
             public int Priority;
 
+            /// <summary>When it ends, everyone who spoke in it leaves, as a
+            /// <c>LeaveBust</c> does (2026-11-01: exits that only unfocused a
+            /// speaker left her bust standing over the level).</summary>
+            public bool LeaveBustsAtEnd;
+
+            /// <summary>Runtime-only: the speakers of the run playing now, for
+            /// <see cref="LeaveBustsAtEnd"/>.</summary>
+            public readonly HashSet<string> SpokeThisRun = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+
+            /// <summary>Runtime-only: the Play dialogue action this run was
+            /// started by, if any - asked again if its start stands down, and
+            /// its variable set when the run ends.</summary>
+            internal DialogueDispatcher.PlayRequest PlayedFor;
+
             /// <summary>
             /// Runtime-only: the conditions passed while another dialogue was
             /// playing and this one doesn't <see cref="QueueBehind"/> — the
@@ -184,6 +198,7 @@ namespace SMSModForge.PackPlugin
                 Priority = (int?)manifest["priority"] ?? 0,
                 DebugConditions = (bool?)manifest["debugConditions"] ?? false,
                 DisableVanillaTrigger = (bool?)manifest["disableVanillaTrigger"] ?? false,
+                LeaveBustsAtEnd = (bool?)manifest["leaveBustsAtEnd"] ?? false,
                 Dialogue = dlg,
                 GameObject = go,
                 StartConditions = manifest["startConditions"] as JArray,

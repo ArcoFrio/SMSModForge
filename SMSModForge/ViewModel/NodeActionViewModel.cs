@@ -249,6 +249,7 @@ public sealed class NodeActionViewModel : ObservableObject
         {
             if (Model.Type == value) return;
             Model.Type = value;
+            SetAsideLeftOver();
             // Entering the dice family with no branches yet: seed a 50/50
             // pair so the row is immediately usable (and already sums to 100).
             if (value == NodeActionTypes.DiceRoll && DiceBranches.Count == 0)
@@ -260,10 +261,37 @@ public sealed class NodeActionViewModel : ObservableObject
             OnPropertyChanged();
             OnPropertyChanged(nameof(Display));
             NotifySetActiveFamily();
-            // Rebuild typed-param rows for the new schema. Params dict
-            // is intentionally left intact so a user fixing a typo on
-            // the Type combo doesn't lose every value they entered.
+            // Rebuild typed-param rows for the new schema.
             RebuildParamRows();
+        }
+    }
+
+    /// <summary>What the action's earlier types had that its type now does
+    /// not read, while the editor is open.</summary>
+    private readonly Dictionary<string, string> _setAside = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// After a change of type: the settings only the earlier type read are put
+    /// aside, so they are not saved with an action that does not read them
+    /// (2026-11-01: a CharacterFocus kept a Set-active's kind and target, an
+    /// IncrementVariable a SetVariable's value - packs carried them for good),
+    /// and ones the new type reads come back - so slipping on the type box and
+    /// back loses nothing, as keeping everything used to promise.
+    /// </summary>
+    private void SetAsideLeftOver()
+    {
+        var reads = ParamsRead.ActionKeys(Model.Type);
+        if (reads != null)
+            foreach (var key in _setAside.Keys.ToList())
+                if (reads.Contains(key) && !Model.Params.ContainsKey(key))
+                {
+                    Model.Params[key] = _setAside[key];
+                    _setAside.Remove(key);
+                }
+        foreach (var key in ParamsRead.LeftOverOnAction(Model.Type, Model.Params))
+        {
+            _setAside[key] = Model.Params[key];
+            Model.Params.Remove(key);
         }
     }
 
@@ -1281,6 +1309,7 @@ public sealed class NodeActionViewModel : ObservableObject
     private static readonly HashSet<string> _goCategoryTypes = new()
     {
         NodeActionTypes.FadeSprite, NodeActionTypes.MoveGameObject, NodeActionTypes.SpinGameObject,
+        NodeActionTypes.TransformGameObject,
     };
     public bool IsGoCategoryFamily => _goCategoryTypes.Contains(Model.Type);
 

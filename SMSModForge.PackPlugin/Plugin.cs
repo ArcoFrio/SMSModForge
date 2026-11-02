@@ -57,6 +57,15 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         private static readonly List<DialogueDispatcher> _dispatchers = new List<DialogueDispatcher>();
 
+        /// <summary>A pack's dialogue dispatcher, or null for a pack with no
+        /// dialogues - what the PlayDialogue action asks to play through.</summary>
+        internal static DialogueDispatcher DispatcherOf(string packId)
+        {
+            foreach (var d in _dispatchers)
+                if (string.Equals(d.PackId, packId, System.StringComparison.OrdinalIgnoreCase)) return d;
+            return null;
+        }
+
 #if DEBUG
         /// <summary>The packs' dialogue dispatchers, for the test bridge.</summary>
         internal static IReadOnlyList<DialogueDispatcher> Dispatchers => _dispatchers;
@@ -3241,7 +3250,13 @@ namespace SMSModForge.PackPlugin
                 // ask for it never touches a roomtalk at all, and an
                 // unresolvable one is no longer fatal — it just means there is
                 // no vanilla dialogue in that room to take priority over.
-                if ((bool?)dj["disableVanillaTrigger"] ?? false)
+                // Not where the level is negated ("anywhere but this level"):
+                // the room would be suppressed everywhere else and still be so
+                // on arriving there, its Trigger off as the room comes up.
+                if (((bool?)dj["disableVanillaTrigger"] ?? false) && LevelNegated(dj))
+                    Logger.LogWarning("[SMSModForge.PackPlugin] Dialogue " + ctx.PackId + "." + (string)dj["key"] +
+                                      " asks to take priority over vanilla, but its level is negated - nothing to suppress.");
+                else if ((bool?)dj["disableVanillaTrigger"] ?? false)
                 {
                     b.VanillaRoomTalk = ResolveRoomTalk((string)dj["roomTalk"]);
                     if (b.VanillaRoomTalk == null)
@@ -3310,6 +3325,16 @@ namespace SMSModForge.PackPlugin
             return go.transform;
         }
 
+        /// <summary>Whether a dialogue's level start condition is negated: it
+        /// plays anywhere but that level.</summary>
+        private static bool LevelNegated(Newtonsoft.Json.Linq.JObject dj)
+        {
+            if (!(dj["startConditions"] is Newtonsoft.Json.Linq.JArray conditions)) return false;
+            foreach (var c in conditions)
+                if ((string)c["type"] == "LevelActive") return (bool?)c["negate"] ?? false;
+            return false;
+        }
+
         /// <summary>
         /// Resolves a <c>vanilla:&lt;name&gt;</c> or <c>place:&lt;key&gt;</c>
         /// roomtalk token into the actual transform under <c>8_Room_Talk</c>.
@@ -3361,9 +3386,10 @@ namespace SMSModForge.PackPlugin
         /// Create a fresh roomtalk node under <c>8_Room_Talk</c> for a
         /// vanilla level that ships without one. Clones an existing
         /// roomtalk as a template, renames it, strips the inherited
-        /// dialogue children (keeping child 0) and the <c>Conditions</c>
-        /// component so it starts empty — a faithful port of the host mod's
-        /// <c>Places.CreateNewRoomTalk</c>.
+        /// dialogue children and the <c>Conditions</c> component so it starts
+        /// empty — a port of the host mod's <c>Places.CreateNewRoomTalk</c>,
+        /// which kept child 0: a copy of the beach's first talk that nothing
+        /// could start (as <c>PlaceFactory.CloneRoomTalk</c> did until 1.8.1).
         /// </summary>
         private Transform CreateRoomTalkNode(Transform roomTalkRoot, string name)
         {
@@ -3379,7 +3405,7 @@ namespace SMSModForge.PackPlugin
 
             var clone = UnityEngine.Object.Instantiate(template.gameObject, roomTalkRoot);
             clone.name = name;
-            for (int i = clone.transform.childCount - 1; i > 0; i--)
+            for (int i = clone.transform.childCount - 1; i >= 0; i--)
                 UnityEngine.Object.Destroy(clone.transform.GetChild(i).gameObject);
 
             // Drop the cloned Conditions component (looked up by type name

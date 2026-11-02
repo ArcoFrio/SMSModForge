@@ -74,7 +74,7 @@ public static class ReferenceRenamer
         [RefKind.Music] = new[] { ParamType.MusicRef },
         [RefKind.Sfx] = new[] { ParamType.SfxRef },
         [RefKind.Place] = Array.Empty<ParamType>(),
-        [RefKind.Dialogue] = Array.Empty<ParamType>(),
+        [RefKind.Dialogue] = new[] { ParamType.DialogueRef },
         [RefKind.Npc] = Array.Empty<ParamType>(),
         [RefKind.Quest] = Array.Empty<ParamType>(),
     };

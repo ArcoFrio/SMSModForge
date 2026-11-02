@@ -286,6 +286,10 @@ game.notice.close = 확인
 # en: Sounds in packs play with the timing and volume their authors set.
 game.notice.news.1.8.0 = 팩의 효과음이 제작자가 정한 타이밍과 음량으로 재생됩니다.
 
+# What ModForge 1.8.2 changes for players, one line each (\n starts the next)
+# en: A pack's conversation no longer starts over the game's own when you arrive somewhere.
+game.notice.news.1.8.2 = 어딘가에 도착했을 때, 팩의 대화가 게임 기본 대화 위에 겹쳐 시작되지 않습니다.
+
 [Where an NPC stands]
 
 # Text
@@ -653,6 +657,58 @@ param.label.spinning = 회전 중
 # Tooltip on the 'Spinning' field of the SpinGameObject action
 # en: True to start/keep spinning, false to stop.
 action.spinGameObject.enable.tip = 참이면 회전을 시작하거나 계속하고, 거짓이면 멈춥니다.
+
+# Label beside a field of an action or condition
+# en: Scale
+param.label.scale = 배율
+
+# Tooltip on the 'X' field of the TransformGameObject action
+# en: Local X: where it sits under its parent, in the parent's units - what the game's own pictures are framed in. Empty leaves it as it is.
+action.transformGameObject.x.tip = 로컬 X: 부모 안에서의 위치(부모의 단위). 게임 자체 그림도 이것으로 구도를 잡습니다. 비워 두면 그대로 둡니다.
+
+# Tooltip on the 'Y' field of the TransformGameObject action
+# en: Local Y, the same way. Empty leaves it as it is.
+action.transformGameObject.y.tip = 로컬 Y, 같은 방식. 비워 두면 그대로 둡니다.
+
+# Tooltip on the 'Scale' field of the TransformGameObject action
+# en: Size, one number for both directions: 1 is as drawn, 2 twice as big. Empty leaves it as it is.
+action.transformGameObject.scale.tip = 크기, 가로세로 공통 숫자 하나: 1은 그려진 그대로, 2는 두 배. 비워 두면 그대로 둡니다.
+
+# Tooltip on the 'Duration (s)' field of the TransformGameObject action
+# en: How long the change takes, eased in and out. 0 = at once. Nothing holds it there afterwards, and an object a MoveGameObject was holding is let go.
+action.transformGameObject.seconds.tip = 변화에 걸리는 시간(시작과 끝을 부드럽게). 0은 즉시. 이후에는 아무것도 붙잡지 않으며, MoveGameObject가 붙잡던 오브젝트도 풀려납니다.
+
+# Label beside a field of an action or condition
+# en: Dialogue
+param.label.dialogue = 대화
+
+# Label beside a field of an action or condition
+# en: Conversation
+param.label.conversation = 게임 대화
+
+# Label beside a field of an action or condition
+# en: When it ends, set
+param.label.whenItEndsSet = 끝나면 설정
+
+# Tooltip on the 'Source' field of the PlayDialogue action
+# en: pack: one of this pack's dialogues. vanilla: one of the game's own conversations.
+action.playDialogue.source.tip = pack: 이 팩의 대화. vanilla: 게임 자체의 대화.
+
+# Tooltip on the 'Dialogue' field of the PlayDialogue action
+# en: The dialogue to play. It plays as soon as nothing is on screen and the game is not busy - on a line, right after the dialogue that line is in. Its own start conditions are not asked.
+action.playDialogue.dialogue.tip = 재생할 대화. 화면에 아무것도 없고 게임이 바쁘지 않으면 바로 재생됩니다(대사에서 쓰면 그 대사가 있는 대화가 끝난 직후). 그 대화 자체의 시작 조건은 묻지 않습니다.
+
+# Tooltip on the 'Conversation' field of the PlayDialogue action
+# en: One of the game's conversations, by its place in the scene. Only the conversation plays, not the room's script around it - switch its character's bust on yourself if the room would. Its lines' own instructions run, the game's story steps included.
+action.playDialogue.conversation.tip = 게임의 대화(장면 속 위치로 지정). 대화만 재생되고 그 주변의 방 스크립트는 실행되지 않습니다 - 방이 할 일이라면 캐릭터의 흉상은 직접 켜세요. 대사 자체의 명령은 실행되며, 게임의 스토리 진행도 포함됩니다.
+
+# Tooltip on the 'When it ends, set' field of the PlayDialogue action
+# en: Optional: one of the pack's variables, set once it has ended - what a start condition or a rule can follow it by.
+action.playDialogue.afterName.tip = 선택: 끝났을 때 설정할 팩 변수. 시작 조건이나 규칙이 이것으로 뒤를 이을 수 있습니다.
+
+# Tooltip on the 'Value' field of the PlayDialogue action
+# en: The value that variable is set to.
+action.playDialogue.afterValue.tip = 그 변수에 설정할 값.
 
 # Label beside a field of an action or condition
 # en: Music key
@@ -5398,6 +5454,14 @@ dialogues.waitTalkButtonNo.tip = 도착했을 때 시작하지 않습니다. 대
 # Tooltip on "Queue behind active dialogue"
 # en: If another dialogue is playing when this one's conditions pass, wait and start right after it ends. Unchecked (original behavior): it misses that window and only fires when its conditions trigger again while nothing is playing.
 dialogues.queueBehindActiveDialogue.tip = 이 대화의 조건이 충족될 때 다른 대화가 재생 중이면, 기다렸다가 그 대화가 끝나자마자 시작합니다. 해제하면(원래 동작) 그 기회를 놓치고, 아무것도 재생되지 않을 때 조건이 다시 발동해야만 시작합니다.
+
+# Tick box
+# en: Leave the busts at the end
+dialogues.leaveBustsAtEnd = 끝날 때 흉상 퇴장
+
+# Tooltip on "Leave the busts at the end"
+# en: When the dialogue ends, everyone who spoke in it leaves, as a LeaveBust on each ending would do - so no bust is left standing over the level. Untick it where staying is the point, like a room where the bust is how the character stands. On for a new dialogue.
+dialogues.leaveBustsAtEnd.tip = 대화가 끝나면 그 안에서 말한 모두가 퇴장합니다(각 끝에 LeaveBust를 둔 것과 같음). 레벨 위에 흉상이 남지 않습니다. 남아 있는 것이 목적인 곳(흉상이 그 캐릭터가 서 있는 모습인 방 등)에서는 해제하세요. 새 대화에서는 켜져 있습니다.
 
 # Tooltip on "Set for condition debugging (F12)"
 # en: In-game, pressing F12 logs a pass/fail breakdown of this dialogue's start conditions (with current variable values) to the BepInEx console. Diagnostic only — no gameplay effect.
@@ -10632,6 +10696,14 @@ docs.dialogues.ifSomethingElsePlaying.term = 진행 중인 대화 뒤에 줄 서
 docs.dialogues.ifSomethingElsePlaying = 이것이 시작 가능해질 때 다른 것이 재생 중이면, 기다렸다가 바로 뒤에 시작합니다. 이것이 없으면 이 대화는 그 순간을 놓치고 다음 순간을 기다립니다.
 
 # Docs: the bold label in front of the next text, usually a name on screen
+# en: Leave the busts at the end
+docs.dialogues.leaveBustsAtEnd.term = 끝날 때 흉상 퇴장
+
+# Docs: a point in the topic
+# en: When it ends, everyone who spoke in it leaves the stage, so an ending that forgot its LeaveBust leaves no bust behind. Untick it where a bust is meant to stay.
+docs.dialogues.leaveBustsAtEnd = 끝나면 그 안에서 말한 모두가 퇴장하므로, LeaveBust를 빠뜨린 끝에서도 흉상이 남지 않습니다. 흉상이 남아야 하는 곳에서는 해제하세요.
+
+# Docs: the bold label in front of the next text, usually a name on screen
 # en: Set for condition debugging (F12)
 docs.dialogues.gameF12LogsWhich.term = 조건 디버깅 대상으로 지정(F12)
 
@@ -12196,6 +12268,22 @@ docs.actions.startStopObjectRotating.term = SpinGameObject
 # Docs: a point in the topic
 # en: Start or stop an object rotating at a steady rate.
 docs.actions.startStopObjectRotating = 오브젝트가 일정한 속도로 돌기 시작하거나 멈추게 합니다.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: TransformGameObject
+docs.actions.setObjectPlaceAndSize.term = TransformGameObject
+
+# Docs: a point in the topic
+# en: Set an object's position under its parent and its size - zoom in on part of a picture and back again - eased or at once, without holding it there.
+docs.actions.setObjectPlaceAndSize = 부모 안에서 오브젝트의 위치와 크기를 정합니다(그림 일부를 확대했다가 되돌리기 등). 부드럽게 또는 즉시, 그 자리에 붙잡지 않습니다.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: PlayDialogue
+docs.actions.playDialogue.term = PlayDialogue
+
+# Docs: a point in the topic
+# en: Play one of the pack's dialogues or one of the game's conversations as soon as nothing else is on screen - on a line, right after its dialogue - and, if you like, set a variable when it ends.
+docs.actions.playDialogue = 화면에 다른 것이 없어지는 대로 팩의 대화나 게임의 대화를 재생하고(대사에서 쓰면 그 대화 직후), 원하면 끝날 때 변수를 설정합니다.
 
 # Docs: a heading inside the topic
 # en: Places and scenes
@@ -14635,6 +14723,34 @@ validation.variable.floatDefault = Float 기본값 '{value}'을(를) 숫자로 �
 # en: List default '{value}' is not a list of values; the list will start empty. Add its initial values again.
 validation.variable.listDefault = List 기본값 '{value}'은(는) 값 목록이 아닙니다. 목록이 빈 채로 시작됩니다. 초깃값을 다시 넣으세요.
 
+# Validation message
+# en: {name} is compared to '{value}', but nothing in this pack ever sets it to that - only to {values} - so the comparison never matches unless another mod sets it.
+validation.variable.neverSetTo = {name}을(를) '{value}'와(과) 비교하지만, 이 팩에는 그 값으로 설정하는 곳이 없습니다({values}만 설정됨). 다른 모드가 설정하지 않는 한 이 비교는 맞지 않습니다.
+
+# Validation message
+# en: List {name} is checked for '{value}', but nothing in this pack ever puts that in it - only {values} - so the check never matches unless another mod does.
+validation.list.neverHolds = List {name}에 '{value}'이(가) 있는지 확인하지만, 이 팩에는 그 값을 넣는 곳이 없습니다({values}만 들어감). 다른 모드가 넣지 않는 한 이 확인은 맞지 않습니다.
+
+# Validation message
+# en: List {name} is checked for '{value}', but nothing in this pack ever puts anything in it, so the check never matches unless another mod does.
+validation.list.neverFilled = List {name}에 '{value}'이(가) 있는지 확인하지만, 이 팩에는 무엇이든 넣는 곳이 없습니다. 다른 모드가 넣지 않는 한 이 확인은 맞지 않습니다.
+
+# Validation message
+# en: Lines here take their outfit from {variable}, which can hold {values} - none of {actor}'s outfits. While it does, the bust does not appear on those lines.
+validation.node.outfitVariableNotOutfit = 여기 대사는 {variable}에서 의상을 가져오는데, {variable}에는 {values}이(가) 들어갈 수 있고 이는 {actor}의 의상이 아닙니다. 그동안 이 대사들에서는 흉상이 나타나지 않습니다.
+
+# Validation message
+# en: Play dialogue names no dialogue - nothing will play.
+validation.action.playDialogue.none = Play dialogue에 대화가 지정되지 않았습니다 - 아무것도 재생되지 않습니다.
+
+# Validation message
+# en: Play dialogue names '{name}', which is none of this pack's dialogues - nothing will play.
+validation.action.playDialogue.unknownDialogue = Play dialogue가 '{name}'을(를) 지정했지만 이 팩의 대화가 아닙니다 - 아무것도 재생되지 않습니다.
+
+# Validation message
+# en: Play dialogue names '{name}', which is none of the game's conversations - nothing will play.
+validation.action.playDialogue.unknownConversation = Play dialogue가 '{name}'을(를) 지정했지만 게임의 대화가 아닙니다 - 아무것도 재생되지 않습니다.
+
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.
 validation.character.pronounsMissing = {name}의 대명사가 없습니다. 캐릭터 탭에서 남성, 여성, 중립 중 하나를 고르세요. 번역에 필요하며, 없으면 남성으로 추측합니다.
@@ -15273,6 +15389,10 @@ common.group.misc = 기타
 # en: Characters
 typeGroup.characters = 캐릭터
 
+# A heading in the action type dropdown
+# en: Conversations
+typeGroup.conversations = 대화
+
 # Heading in the list of action types, over the ones that act on objects and scenes
 # en: Objects and scenes
 typeGroup.objects = 오브젝트와 장면
@@ -15344,6 +15464,14 @@ note.action.move = 무언가를 다른 위치로 미끄러뜨리기
 # A note beside an action type in its dropdown, saying what it does
 # en: Start or stop something spinning
 note.action.spin = 무언가를 회전시키거나 멈추기
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Set something's position and size where it is
+note.action.transform = 제자리에서 무언가의 위치와 크기를 정합니다
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Play one of the pack's dialogues or one of the game's conversations
+note.action.playDialogue = 팩의 대화나 게임의 대화를 재생합니다
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Change a setting the other actions don't reach
@@ -15769,6 +15897,11 @@ publish.failed.title = 게시 실패
 # {source} and {packed} are sizes in megabytes
 # en: Exported {pack} v{version} - {count} files, {source} MB source, {packed} MB packed:\n{path}
 export.done.other = {pack} v{version}을(를) 내보냈습니다 - 파일 {count}개, 원본 {source} MB, 압축 {packed} MB:\n{path}
+
+# Added to the export message: the author's backups left out of the pack. {size} is in
+# megabytes; {names} lists the first few of their paths in the pack
+# en: Left out {count} backup files ({size} MB), which players do not need: {names}
+export.backupsLeftOut.other = 플레이어에게 필요 없는 백업 파일 {count}개({size} MB)를 제외했습니다: {names}
 
 # Title of a message box
 # en: Export complete
@@ -17856,6 +17989,10 @@ migration.oldGameObjectsCategory = GameObjects 카테고리의 옛 이름인 'Ex
 # One line of the list of what was brought up to date. "SetSpriteFocus" and "CharacterFocus" are names of an action, kept in English
 # en: SetSpriteFocus actions given the action's new name, CharacterFocus
 migration.characterFocus = SetSpriteFocus 액션에 새 이름 CharacterFocus를 붙였습니다
+
+# One line of the list of what was brought up to date
+# en: Settings that actions and conditions kept from a type they used to be taken off - none of them did anything
+migration.leftOverSettings = 액션과 조건이 예전 타입에서 남겨 두었던 설정을 제거했습니다 - 어느 것도 아무 역할을 하지 않았습니다
 
 # In the list of what opening a pack changed: lines whose sound's pattern is written bigger or smaller, now playing that much louder or softer
 # en: lines whose sounds now play louder or softer to match the size their pattern is written in (the text keeps its size)

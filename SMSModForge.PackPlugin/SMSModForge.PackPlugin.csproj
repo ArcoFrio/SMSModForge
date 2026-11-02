@@ -14,9 +14,9 @@
          reports comes from Shared/ForgeVersion.cs. Kept in step, and listed
          here only so the next person to look for a version finds the note
          rather than believing these. -->
-    <Version>1.8.1</Version>
-    <AssemblyVersion>1.8.1.0</AssemblyVersion>
-    <FileVersion>1.8.1.0</FileVersion>
+    <Version>1.8.2</Version>
+    <AssemblyVersion>1.8.2.0</AssemblyVersion>
+    <FileVersion>1.8.2.0</FileVersion>
     <AssemblyName>SMSModForge.PackPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -73,6 +73,8 @@
     <Compile Include="LayoutDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="DebugBridge.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="DebugBridgeWorld.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="DebugBridgeTimeline.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="GameRoomTalks.cs" />
     <Compile Include="QuestRegistry.cs" />
     <Compile Include="QuestRuntime.cs" />
     <Compile Include="QuestTicker.cs" />

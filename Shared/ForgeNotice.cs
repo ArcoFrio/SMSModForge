@@ -43,7 +43,7 @@ namespace SMSModForge.Shared
         /// menu, saves - and not otherwise: a notice after every update would
         /// teach players to close it unread.
         /// </summary>
-        public static readonly string[] VersionsWithNews = { "1.8.0" };
+        public static readonly string[] VersionsWithNews = { "1.8.0", "1.8.2" };
 
         /// <summary>What a version's news is kept under.</summary>
         public static string NewsKey(string version) => "game.notice.news." + version;

@@ -68,6 +68,19 @@ namespace SMSModForge.PackPlugin
             enabled = true;
         }
 
+        /// <summary>
+        /// Stop holding, where the object is now - something else is placing it
+        /// (<c>TransformGameObject</c>, which leaves an object where it puts it).
+        /// The next move starts from where the object then is, and its home
+        /// becomes that place too.
+        /// </summary>
+        public void Release()
+        {
+            _running = false;
+            _initialized = false;
+            enabled = false;
+        }
+
         private void LateUpdate()
         {
             if (!_running) return;

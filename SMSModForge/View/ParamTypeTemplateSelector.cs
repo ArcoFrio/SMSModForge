@@ -41,6 +41,8 @@ public sealed class ParamTypeTemplateSelector : DataTemplateSelector
     public DataTemplate? GameObjectPathTemplate { get; set; }
     public DataTemplate? SpriteRefTemplate { get; set; }
     public DataTemplate? ChoiceTemplate { get; set; }
+    public DataTemplate? DialogueRefTemplate { get; set; }
+    public DataTemplate? GameConversationRefTemplate { get; set; }
 
     public override DataTemplate? SelectTemplate(object item, DependencyObject container)
     {
@@ -68,6 +70,8 @@ public sealed class ParamTypeTemplateSelector : DataTemplateSelector
             ParamType.GameObjectPath => GameObjectPathTemplate ?? StringTemplate,
             ParamType.SpriteRef => SpriteRefTemplate ?? StringTemplate,
             ParamType.Choice => ChoiceTemplate ?? StringTemplate,
+            ParamType.DialogueRef => DialogueRefTemplate ?? StringTemplate,
+            ParamType.GameConversationRef => GameConversationRefTemplate ?? StringTemplate,
             _ => StringTemplate,
         };
     }

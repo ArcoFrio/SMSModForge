@@ -101,13 +101,16 @@ public sealed class InGameSuiteTests : IClassFixture<InGameSuiteTests.Session>
         public string Warning { get; private set; } = "";
 
         /// <summary>The game closed and started again on the main menu - the
-        /// test save put back clean, ModForge's settings as the run left them.</summary>
-        internal GameRun Restart()
+        /// test save put back clean, ModForge's settings as the run left them,
+        /// or as <paramref name="whileClosed"/> changes them: it runs with the
+        /// game closed, so nothing the game holds writes over the change.</summary>
+        internal GameRun Restart(Action? whileClosed = null)
         {
             var game = Game!;
             game.Stop();
             _inGame = false;
             Warning = "";
+            whileClosed?.Invoke();
             game.Start(0);
             return game;
         }
@@ -368,6 +371,40 @@ public sealed class InGameSuiteTests : IClassFixture<InGameSuiteTests.Session>
             Arrived(game, "_" + InGameSuitePacks.World.RoomObject, "pressing Map Room");
         }
         finally { game.Ask($"set-active {map} false"); }
+    }
+
+    [Fact]
+    public void B7_A_places_room_talk_is_empty_and_still_does_the_arrival_housekeeping_and_the_Talk_button()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        string roomTalk = "8_Room_Talk/SMSModForge_" + InGameSuitePacks.World.Id + "_RoomTalk";
+        // A copy of the game's beach room talk with nothing in it - the beach's
+        // first talk too (kept by mistake until 1.8.1). Control: the game's own.
+        Assert.Equal("0", Field(Find(game, roomTalk), "children"));
+        Assert.StartsWith("Defaultdialogue", Field(Find(game, "8_Room_Talk/Beach"), "children").Split('[')[1]);
+        Assert.Throws<BridgeError>(() => Find(game, roomTalk + "/Defaultdialogue"));
+        Find(game, "8_Room_Talk/Beach/Defaultdialogue");
+
+        // Arriving: it runs its housekeeping - takes the lock, gives it back,
+        // offers the Talk button - and switches itself off.
+        Travel(game, "vanilla:" + InGameSuitePacks.World.Store, InGameSuitePacks.World.Store);
+        string arrival = Timeline(game, "placetalk", "travel pack:" + InGameSuitePacks.World.Id + "." + InGameSuitePacks.World.Room, 6);
+        string own = Regex.Escape(roomTalk.Substring(roomTalk.LastIndexOf('/') + 1));
+        string running = @"talks: .*" + own + @" \(running", finished = @"talks: (?!.*" + own + ")";
+        double ran = At(arrival, running);
+        At(arrival, finished, after: ran);
+        Assert.Equal("False", game.Ask("get Lock-Game").Split(" = ")[1]);
+        Assert.Equal("True", game.Ask("get talk-button").Split(" = ")[1]);
+        Assert.False(Active(game, roomTalk), "The place's room talk is still on after arriving.");
+
+        // The Talk button switches the stored room talk - this one - back on,
+        // and it does the same again.
+        string talk = Timeline(game, "placetalk-button", "press 9_MainCanvas/TalkButton/Button", 6);
+        double again = At(talk, running);
+        At(talk, finished, after: again);
+        Assert.Equal("False", game.Ask("get Lock-Game").Split(" = ")[1]);
+        SeeConversationsThrough(game);
     }
 
     // ── C: NPCs ──────────────────────────────────────────────────────────
@@ -785,6 +822,108 @@ public sealed class InGameSuiteTests : IClassFixture<InGameSuiteTests.Session>
         SeeConversationsThrough(game);
     }
 
+    [Fact]
+    public void J5_A_conversation_waiting_on_arrival_never_runs_over_one_the_game_starts_there()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        const string id = InGameSuitePacks.Talk.Id;
+        string gas = "vanilla:" + InGameSuitePacks.Talk.ArrivalLevel;
+        string away = "vanilla:" + InGameSuitePacks.World.Store;
+
+        // The car wash's day: unlocked, not cooling down, a Monday, and the
+        // one branch before it that would take the arrival instead closed.
+        // Put back as found afterwards: later areas play the same save.
+        var carWash = new[] { ("specialcarwashunlocked", "true"), ("special-carwashcd", "false"), ("Day", "1"), ("Astrid-photoqueststart", "true") };
+        var before = carWash.Select(v => (v.Item1, Value: game.Ask("get " + v.Item1).Split(" = ")[1])).ToList();
+        try
+        {
+            Travel(game, away, InGameSuitePacks.World.Store);
+            foreach (var (name, value) in carWash) game.Ask($"set {name} {value}");
+            game.Ask($"pset {id} arriveGo true");
+
+            string timeline = Timeline(game, "carwash", "travel " + gas);
+            Assert.Matches(@"on screen: 8_Room_Talk/Gasstation/Carwash_event_", timeline);   // control: the game's own did start
+            Assert.DoesNotMatch(@"on screen: \S*suitetalk_arrive", timeline);
+            SeeConversationsThrough(game);
+            game.Ask("wait 4", 10);
+            // It lost its turn to the game's - no box checked - until the next arrival.
+            Assert.Equal("0", game.PackVar(id, "arrived"));
+
+            // Control: an arrival the game starts nothing on (the car wash
+            // now cooling down) is where it plays.
+            Travel(game, away, InGameSuitePacks.World.Store);
+            string plain = Timeline(game, "plain", "travel " + gas);
+            Assert.DoesNotMatch(@"on screen: 8_Room_Talk/", plain);
+            Assert.Equal("1", VarSoon(game, id, "arrived", "1", 5));
+            // And no later for the waiting: the hold after arrival counts from
+            // the level coming up (1.8E: 1.42 s from it to the pack's line; a
+            // hold counted from the journey's end made it 2.43 s).
+            double up = At(plain, "levels: " + InGameSuitePacks.Talk.ArrivalLevel);
+            double on = At(plain, Regex.Escape("on screen: SMSModForge_suitetalk_Dialogues/suitetalk_arrive"));
+            Assert.True(on - up <= 1.8, $"The pack's line came {on - up:0.00} s after the gas station did.");
+            SeeConversationsThrough(game);
+        }
+        finally
+        {
+            game.Ask($"pset {id} arriveGo false");
+            foreach (var (name, value) in before.Where(b => b.Value != "(none)")) game.Ask($"set {name} {value}");
+        }
+    }
+
+    /// <summary>When a timeline first says <paramref name="what"/> (a pattern)
+    /// later than <paramref name="after"/>, in seconds from its start.</summary>
+    private static double At(string timeline, string what, double after = -1)
+    {
+        foreach (Match m in Regex.Matches(timeline, @"^\+(\d+\.\d+) f\d+ " + what, RegexOptions.Multiline))
+        {
+            double at = double.Parse(m.Groups[1].Value, CultureInfo.InvariantCulture);
+            if (at > after) return at;
+        }
+        throw new XunitException($"The timeline never says '{what}' after {after} s:\n{timeline}");
+    }
+
+    [Fact]
+    public void J6_A_line_plays_another_dialogue_after_its_own_and_one_of_the_games_and_says_when_each_ended()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        const string id = InGameSuitePacks.Talk.Id;
+        string gameConversation = InGameSuitePacks.Talk.GameConversation;
+        SeeConversationsThrough(game);
+        Assert.Equal("0", game.PackVar(id, "playedTarget"));
+
+        // "caller"'s line asks for "target": not while "caller" is up...
+        Begin(game, id, "caller");
+        Assert.Equal("0", game.PackVar(id, "playedTarget"));
+        Assert.Equal("", game.PackVar(id, "afterTarget"));
+        // ...but once it has ended - and then says so when "target" has.
+        Assert.Equal("1", VarSoon(game, id, "playedTarget", "1", 10));
+        Assert.Equal("done", VarSoon(game, id, "afterTarget", "done", 10));
+
+        // One of the game's own conversations, the same way.
+        Begin(game, id, "callgame");
+        string line = game.AskUntil("line", l => l.StartsWith(gameConversation + " ", StringComparison.Ordinal), 12);
+        _out.WriteLine(line);
+        Assert.StartsWith(gameConversation + " ", line);
+        Assert.Equal("", game.PackVar(id, "afterGame"));   // not while it is on
+        SeeConversationsThrough(game);
+        Assert.Equal("done", VarSoon(game, id, "afterGame", "done", 10));
+    }
+
+    /// <summary>What <c>timeline</c> recorded while <paramref name="command"/>
+    /// ran, read back from its file and written to the test's output.</summary>
+    private string Timeline(GameRun game, string name, string command, int seconds = 12)
+    {
+        var said = game.Send(seconds + 30, $"timeline {seconds} {name}", command);
+        string answer = said.Last(l => l.Contains(" ok timeline ", StringComparison.Ordinal));
+        string file = answer.Substring(answer.IndexOf("-> ", StringComparison.Ordinal) + 3).Trim();
+        string text = File.ReadAllText(file);
+        _out.WriteLine("── timeline " + name + " (" + command + ")");
+        _out.WriteLine(text);
+        return text;
+    }
+
     // ── K: characters, and the game's own conversations ──────────────────
 
     [Fact]
@@ -870,6 +1009,29 @@ public sealed class InGameSuiteTests : IClassFixture<InGameSuiteTests.Session>
         Assert.Equal("#AA33AAFF", Field(Find(game, BustSprite(game, over)), "texel"));
         // Control: her other outfit keeps the game's own picture.
         Assert.NotEqual("#AA33AAFF", Field(Find(game, BustSprite(game, left)), "texel"));
+    }
+
+    [Fact]
+    public void K6_A_dialogue_that_leaves_its_busts_at_the_end_takes_its_speakers_off_and_one_that_does_not_leaves_them()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        const string id = InGameSuitePacks.Talk.Id;
+        string day = "2_Bust_Manager/" + InGameSuitePacks.Talk.BeaDay, night = "2_Bust_Manager/" + InGameSuitePacks.Talk.BeaNight;
+        SeeConversationsThrough(game);
+
+        // Control: "dress" does not leave its busts - Bea's last outfit stays up.
+        Begin(game, id, "dress");
+        SeeConversationsThrough(game);
+        game.Ask("wait 1", 10);
+        Assert.True(ActiveSoon(game, night, true), "Bea's bust went, though 'dress' does not leave its busts.");
+
+        // "bow" does: once it has ended, nobody who spoke in it is still up.
+        Begin(game, id, "bow");
+        Assert.True(ActiveSoon(game, day, true), "Bea is not out on her line.");
+        game.Ask("wait-dialogue-end 20", 30);
+        Assert.False(ActiveSoon(game, day, false), "Bea's bust stayed up after a dialogue that leaves its busts.");
+        Assert.StartsWith("False/", Field(Find(game, night), "active"));
     }
 
     /// <summary>The object a bust draws its body on - MBase1 on most of the
@@ -1073,6 +1235,45 @@ public sealed class InGameSuiteTests : IClassFixture<InGameSuiteTests.Session>
         Near(still1, float.Parse(Field(Find(game, RoomLevel + "/Holder"), "rotz"), CultureInfo.InvariantCulture), "the stopped spin", 0.5f);
     }
 
+    [Fact]
+    public void N2_A_line_sets_an_objects_own_position_and_size_eased_and_lets_go_of_a_held_one()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        const string id = InGameSuitePacks.World.Id;
+        TravelToRoom(game);
+        string inner = RoomLevel + "/Holder/Inner";
+        // Control: as built - its own size, and somewhere other than where
+        // the line puts it (a place converts its objects' positions as it is
+        // built, so where that is is read, not assumed).
+        var (x0, y0) = XY(Field(Find(game, inner), "local"));
+        Assert.True(Math.Abs(x0 - 0.5f) > 0.5f, $"Inner already stands at x {x0}.");
+        Assert.Equal("1,1", Field(Find(game, inner), "scale"));
+
+        // On its way: eased over 1.5 s, so part-way after a moment.
+        Begin(game, id, "frame");
+        game.Ask("wait 0.3", 10);
+        var (midScale, _) = XY(Field(Find(game, inner), "scale") + ",0");
+        Assert.True(midScale > 1.05f && midScale < 1.95f, $"Part-way through, Inner's scale was {midScale}.");
+        game.Ask("wait-dialogue-end 20", 30);
+        game.Ask("wait 1.5", 10);
+
+        var (x1, y1) = XY(Field(Find(game, inner), "local"));
+        Near(0.5f, x1, "Inner's x framed");
+        Near(y0, y1, "Inner's y, left as it was");
+        Assert.Equal("2,2", Field(Find(game, inner), "scale"));
+        // The Lamp, held by the move before, is let go where it was placed:
+        // held, the move's world position would have taken it back.
+        game.Ask("wait 0.5", 10);
+        Near(7f, XY(Field(Find(game, RoomLevel + "/Lamp"), "local")).X, "Lamp's own x after the hold let go");
+
+        // At once, with no seconds given.
+        Play(game, "unframe", id);
+        var (x2, _) = XY(Field(Find(game, inner), "local"));
+        Near(4f, x2, "Inner's x set again");
+        Assert.Equal("1,1", Field(Find(game, inner), "scale"));
+    }
+
     // ── W: what a save keeps (last: it loads the save again) ─────────────
 
     [Fact]
@@ -1148,6 +1349,42 @@ public sealed class InGameSuiteTests : IClassFixture<InGameSuiteTests.Session>
     }
 
     // ── Z: a restart - the main menu's settings carried into the next game ─
+
+    [Fact]
+    public void Z0_After_an_update_with_news_the_notice_says_what_is_new()
+    {
+        // The short notice after an update (ForgeNotice.Changes) - first sent
+        // to players by 1.8.2, where A2 sees only the first start's. The
+        // settings of a player who last closed the notice in an older version.
+        if (Off) return;
+        const string updatedFrom = "1.7.0";
+        string current = SMSModForge.Shared.ForgeVersion.Current;
+        var news = SMSModForge.Shared.ForgeNotice.NewsSince(updatedFrom, current, SMSModForge.Shared.ForgeNotice.VersionsWithNews);
+        Assert.NotEmpty(news);
+        var game = _s.Restart(() => File.WriteAllText(Settings,
+            Regex.Replace(File.ReadAllText(Settings), @"(?m)^Last shown = [^\r\n]*", "Last shown = " + updatedFrom)));
+
+        string notice = game.AskUntil("notice", n => n.StartsWith("open", StringComparison.Ordinal), 20);
+        _out.WriteLine(notice);
+        Assert.StartsWith("open", notice);
+        Assert.Contains("ModForge was updated to " + current, notice);
+        // Every version since, newest first, each with its lines.
+        int previous = -1;
+        foreach (var version in Enumerable.Reverse(news))
+        {
+            int at = notice.IndexOf("New in " + version + ":", StringComparison.Ordinal);
+            Assert.True(at > previous, $"'New in {version}:' is missing or out of order");
+            previous = at;
+            foreach (var line in SMSModForge.Shared.ForgeNotice.News(version))
+                Assert.Contains(line, notice);
+        }
+        // Control: not the whole notice of a first start.
+        Assert.DoesNotContain("ModForge is installed", notice);
+
+        game.Ask("click Got it");
+        Assert.StartsWith("(none)", game.AskUntil("notice", n => n.StartsWith("(none)", StringComparison.Ordinal), 5));
+        Assert.Contains("Last shown = " + current, File.ReadAllText(Settings));
+    }
 
     [Fact]
     public void Z1_The_main_menu_notice_does_not_come_back_once_closed()

@@ -223,6 +223,40 @@ public static class NodeActionTypes
     /// </summary>
     public const string SpinGameObject = "SpinGameObject";
 
+    /// <summary>
+    /// Set a GameObject's local position and/or its scale, eased over seconds
+    /// or at once, and leave it there - nothing holds it afterwards. The game's
+    /// own content frames its pictures this way (Game Creator's Change Position
+    /// and Change Scale on a slide: 2x onto part of the picture, then back to 1x
+    /// at the origin for the next). Unlike <see cref="MoveGameObject"/> it is
+    /// the LOCAL position, under the object's parent, which is what a picture's
+    /// framing is written in; and an object a MoveGameObject is holding is let
+    /// go when this moves it, or the hold would pull it straight back.
+    /// Params: <c>x</c>, <c>y</c> (empty leaves that one as it is), <c>scale</c>
+    /// (one number for both directions; empty leaves it), <c>seconds</c>
+    /// (0 = at once), plus the shared <c>kind</c> / <c>target</c> /
+    /// <c>overlayLevel</c> row. (Found missing testing a pack, 2026-11-01.)
+    /// </summary>
+    public const string TransformGameObject = "TransformGameObject";
+
+    /// <summary>
+    /// Play a dialogue: one of the pack's, or one of the game's own
+    /// conversations (asked for testing a pack, 2026-11-01: a port needed "watch
+    /// a movie" - the game's TV conversation, then the pack's own scene - and
+    /// the author wanted the pack's own dialogues too). It plays as soon as
+    /// nothing is on screen and the game is not busy - on a line, after the
+    /// dialogue that line is in ends; its own start conditions are not asked.
+    /// The game's conversation plays without the room script that normally
+    /// surrounds it (no fade of its own, no bust switched on), but its own
+    /// lines' instructions run, the game's story steps included. Params:
+    /// <c>source</c> (<c>pack</c> / <c>vanilla</c>), <c>dialogue</c> (a pack
+    /// dialogue's key), <c>conversation</c> (a game conversation's path,
+    /// <c>8_Room_Talk/Kitchen/...</c>), and <c>afterName</c> / <c>afterValue</c>
+    /// - a pack variable set to that value once it has ended, which is what a
+    /// start condition or a rule can follow it by.
+    /// </summary>
+    public const string PlayDialogue = "PlayDialogue";
+
     /// <summary>Switch active music under <c>12_AudioPlayer</c>. Params: <c>music</c>.</summary>
     public const string SwitchMusic = "SwitchMusic";
 
@@ -374,9 +408,9 @@ public static class NodeActionTypes
         // was a choice. Packs naming it still load and still run - see
         // PackMigration.MergeSupersededActions.
         SetGameObjectActive, SetSprite, EmitSignal, LeaveUiFaded,
-        TransitionLevels, FadeSprite, SetComponentProperty, MoveGameObject, SpinGameObject,
+        TransitionLevels, FadeSprite, SetComponentProperty, MoveGameObject, SpinGameObject, TransformGameObject,
         SwitchMusic, PlaySFX,
-        Wait, Transitions,
+        Wait, Transitions, PlayDialogue,
         PickRandomFromList, AddToList, RemoveFromList, ClearList, CountList,
         DiceRoll, SetWeather,
         Quest,

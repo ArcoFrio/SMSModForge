@@ -13,8 +13,9 @@ namespace SMSModForge.View;
 /// nothing under the list moves when the mouse comes in.
 /// <para/>
 /// What they work on is the panel holding their row: the list above it and
-/// the row itself. They show too while the keyboard is anywhere in it, so a
-/// person who tabs through the list reaches them.
+/// the row itself - all of it, the gaps between its buttons and the room
+/// beside them included. They show too while the keyboard is anywhere in it,
+/// so a person who tabs through the list reaches them.
 /// </summary>
 public static class HoverTools
 {
@@ -46,6 +47,14 @@ public static class HoverTools
         {
             area = AreaOf(tools);
             if (area == null) return;
+            // The whole area is over it - the gaps between its buttons and
+            // the room beside them too. A panel with no background is hit only
+            // where something is drawn, so the mouse crossing from "+ Add
+            // condition" to Copy all left the area in the gap, the tools hid
+            // and stopped being hit, and could not be hovered back (the
+            // author: "they disappear when I try to click").
+            if (area is System.Windows.Controls.Panel panel && panel.Background == null)
+                panel.Background = Brushes.Transparent;
             area.MouseEnter += OnMouse;
             area.MouseLeave += OnMouse;
             area.IsKeyboardFocusWithinChanged += OnFocus;

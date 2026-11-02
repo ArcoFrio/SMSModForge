@@ -1232,6 +1232,7 @@ public static class PackValidator
 
         CheckLevelTokens(pack, issues);
         QuestValidation.Check(pack, issues);
+        VariableChecks.Check(pack, issues);
 
         return issues;
     }

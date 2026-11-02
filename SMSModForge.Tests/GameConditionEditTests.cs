@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -702,6 +702,64 @@ public sealed class GameConditionEditTests
             Settle(window);
             Assert.Empty(vm.Pack.VanillaGates);
             Assert.False(row.IsRemoved);
+        });
+    }
+
+    [Fact]
+    public void ADialoguesPinnedLevelCanBeNegatedAndTheGamesRowsCannot()
+    {
+        // The author, 2026-11-01: "anywhere but this level" is a gate their
+        // pack uses, and the box was hidden on the pinned row.
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            var tabs = (TabControl)window.FindName("MainTabs");
+            tabs.SelectedIndex = TabDialogues;
+            vm.AddDialogueCommand.Execute(null);
+            var dialogue = vm.SelectedDialogue!;
+            var pinned = dialogue.StartConditions[0];
+            pinned.Level = "vanilla:59_Gasstation";   // a room with an arrival script of the game's
+            Settle(window);
+
+            var pinnedBox = FindAll<FrameworkElement>(window).First(e => ReferenceEquals(e.DataContext, pinned) && e is Border);
+            var negate = FindAll<CheckBox>(pinnedBox).Single(c => ReferenceEquals(c.DataContext, pinned)
+                                                                  && (string)c.Content == SMSModForge.Localization.Loc.T("condition.negate"));
+            Assert.True(negate.IsVisible && negate.IsEnabled, "the pinned level row offers no Negate");
+            var prioritize = FindAll<CheckBox>(window).Single(c => c.IsVisible
+                                                                   && (string)c.Content == SMSModForge.Localization.Loc.T("dialogues.prioritizeDialogueOverVanilla"));
+            Assert.True(prioritize.IsEnabled);   // control: there is a room to take priority over
+
+            negate.IsChecked = true;
+            Settle(window);
+            Assert.True(dialogue.Model.StartConditions[0].Negate);
+            Assert.Equal(NodeConditionTypes.LevelActive, dialogue.Model.StartConditions[0].Type);
+            // Anywhere but there: no room of that level to take priority over.
+            Assert.False(prioritize.IsEnabled);
+            Assert.Equal("", dialogue.Model.RoomTalk);
+            negate.IsChecked = false;
+            Settle(window);
+            Assert.True(prioritize.IsEnabled);
+
+            // The game's conditions on a quest's place stay as they are.
+            tabs.SelectedIndex = TabQuests;
+            vm.AddVanillaQuestCommand.Execute(null);
+            var quest = vm.SelectedQuest!;
+            quest.Source = Himari;
+            Settle(window);
+            var site = StartSite(quest, s => s.Site.Dialogue == HimariTalk);
+            var groups = (ItemsControl)window.FindName("GameQuestSiteGroups");
+            var gameRows = RoomGroup(site).Rows.Where(r => r.Condition != null).ToList();
+            Assert.NotEmpty(gameRows);
+            int drawn = 0;
+            foreach (var row in gameRows)
+            {
+                Assert.False(row.Condition!.ShowsNegate);
+                var boxes = FindAll<CheckBox>(groups).Where(c => ReferenceEquals(c.DataContext, row.Condition)
+                                                                 && (string)c.Content == SMSModForge.Localization.Loc.T("condition.negate")).ToList();
+                drawn += boxes.Count;
+                Assert.DoesNotContain(boxes, c => c.IsVisible);
+            }
+            _out.WriteLine(gameRows.Count + " row(s) of the game's, " + drawn + " Negate box(es) drawn, none showing");
         });
     }
 

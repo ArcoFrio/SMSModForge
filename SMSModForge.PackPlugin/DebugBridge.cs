@@ -99,6 +99,7 @@ namespace SMSModForge.PackPlugin
             ApplyVarsOnce();
             ListenTick();
             WatchTick();
+            TimelineTick();
             if (_waitingFor != null && !Waiting()) _waitingFor = null;
             if (_waitingFor != null) return;
 
@@ -281,6 +282,10 @@ namespace SMSModForge.PackPlugin
                 case "watch":
                     // watch <seconds> <packId> <variable,variable>: answers when the time is up
                     StartWatching(Seconds(a, 5f), rest);
+                    break;
+                case "timeline":
+                    // timeline <seconds> <name>: answers when the time is up
+                    StartTimeline(Seconds(a, 10f), rest.Length > 0 ? rest.Trim() : DateTime.Now.ToString("HHmmss"));
                     break;
                 case "screen":
                     StartCoroutine(MeasureScreen(a.Length > 0 ? a : DateTime.Now.ToString("HHmmss")));

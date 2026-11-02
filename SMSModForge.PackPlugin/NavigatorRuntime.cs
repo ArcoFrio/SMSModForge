@@ -303,6 +303,10 @@ namespace SMSModForge.PackPlugin
         /// the vanilla <c>TransferScene</c> fade-out before bringing the
         /// destination dialogue infrastructure up.
         /// </summary>
+        /// <summary>A journey of ours has yet to switch its room talk on: the
+        /// room's arrival script is still to come.</summary>
+        internal static bool RoomTalkPending => _pendingRoomTalk != null;
+
         public static void SchedulePendingRoomTalk(GameObject roomTalk, float delaySeconds)
         {
             if (roomTalk == null) return;

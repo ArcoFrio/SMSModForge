@@ -286,6 +286,10 @@ game.notice.close = OK
 # en: Sounds in packs play with the timing and volume their authors set.
 game.notice.news.1.8.0 = パックの効果音が、作者の設定したタイミングと音量で鳴るようになりました。
 
+# What ModForge 1.8.2 changes for players, one line each (\n starts the next)
+# en: A pack's conversation no longer starts over the game's own when you arrive somewhere.
+game.notice.news.1.8.2 = どこかに着いたとき、パックの会話がゲーム本来の会話に重なって始まらなくなりました。
+
 [Where an NPC stands]
 
 # Text
@@ -653,6 +657,58 @@ param.label.spinning = 回転中
 # Tooltip on the 'Spinning' field of the SpinGameObject action
 # en: True to start/keep spinning, false to stop.
 action.spinGameObject.enable.tip = 真で回転を開始・継続、偽で停止します。
+
+# Label beside a field of an action or condition
+# en: Scale
+param.label.scale = 拡大率
+
+# Tooltip on the 'X' field of the TransformGameObject action
+# en: Local X: where it sits under its parent, in the parent's units - what the game's own pictures are framed in. Empty leaves it as it is.
+action.transformGameObject.x.tip = ローカル X：親の中での位置（親の単位）。ゲーム自身の絵はこれで構図を決めています。空欄ならそのままです。
+
+# Tooltip on the 'Y' field of the TransformGameObject action
+# en: Local Y, the same way. Empty leaves it as it is.
+action.transformGameObject.y.tip = ローカル Y、同じく。空欄ならそのままです。
+
+# Tooltip on the 'Scale' field of the TransformGameObject action
+# en: Size, one number for both directions: 1 is as drawn, 2 twice as big. Empty leaves it as it is.
+action.transformGameObject.scale.tip = 大きさ。縦横共通の 1 つの数値：1 で描かれたまま、2 で 2 倍。空欄ならそのままです。
+
+# Tooltip on the 'Duration (s)' field of the TransformGameObject action
+# en: How long the change takes, eased in and out. 0 = at once. Nothing holds it there afterwards, and an object a MoveGameObject was holding is let go.
+action.transformGameObject.seconds.tip = 変化にかかる時間（始めと終わりをなめらかに）。0 なら即座に。その後は固定されず、MoveGameObject が固定していたオブジェクトも解放されます。
+
+# Label beside a field of an action or condition
+# en: Dialogue
+param.label.dialogue = ダイアログ
+
+# Label beside a field of an action or condition
+# en: Conversation
+param.label.conversation = 会話
+
+# Label beside a field of an action or condition
+# en: When it ends, set
+param.label.whenItEndsSet = 終了時に設定
+
+# Tooltip on the 'Source' field of the PlayDialogue action
+# en: pack: one of this pack's dialogues. vanilla: one of the game's own conversations.
+action.playDialogue.source.tip = pack：このパックのダイアログ。vanilla：ゲーム自身の会話。
+
+# Tooltip on the 'Dialogue' field of the PlayDialogue action
+# en: The dialogue to play. It plays as soon as nothing is on screen and the game is not busy - on a line, right after the dialogue that line is in. Its own start conditions are not asked.
+action.playDialogue.dialogue.tip = 再生するダイアログ。画面に何もなく、ゲームが何もしていなくなりしだい再生されます（台詞で使えば、その台詞のダイアログが終わった直後）。それ自身の開始条件は確認されません。
+
+# Tooltip on the 'Conversation' field of the PlayDialogue action
+# en: One of the game's conversations, by its place in the scene. Only the conversation plays, not the room's script around it - switch its character's bust on yourself if the room would. Its lines' own instructions run, the game's story steps included.
+action.playDialogue.conversation.tip = ゲームの会話（シーン内の場所で指定）。再生されるのは会話だけで、それを囲む部屋のスクリプトは動きません。部屋がするはずならキャラクターの胸像は自分で表示してください。台詞自身の命令は実行され、ゲームのストーリー進行も含まれます。
+
+# Tooltip on the 'When it ends, set' field of the PlayDialogue action
+# en: Optional: one of the pack's variables, set once it has ended - what a start condition or a rule can follow it by.
+action.playDialogue.afterName.tip = 任意：終了したときに設定するパックの変数。開始条件やルールはこれで後に続けられます。
+
+# Tooltip on the 'Value' field of the PlayDialogue action
+# en: The value that variable is set to.
+action.playDialogue.afterValue.tip = その変数に設定する値。
 
 # Label beside a field of an action or condition
 # en: Music key
@@ -5398,6 +5454,14 @@ dialogues.waitTalkButtonNo.tip = 到着時には始めません。会話はゲ�
 # Tooltip on "Queue behind active dialogue"
 # en: If another dialogue is playing when this one's conditions pass, wait and start right after it ends. Unchecked (original behavior): it misses that window and only fires when its conditions trigger again while nothing is playing.
 dialogues.queueBehindActiveDialogue.tip = この会話の条件を満たしたときにほかの会話が再生中なら、待ってその終了直後に始めます。オフ（元の動作）では、その機会を逃し、何も再生していないときに条件がもう一度成立するまで始まりません。
+
+# Tick box
+# en: Leave the busts at the end
+dialogues.leaveBustsAtEnd = 終了時に胸像を退場させる
+
+# Tooltip on "Leave the busts at the end"
+# en: When the dialogue ends, everyone who spoke in it leaves, as a LeaveBust on each ending would do - so no bust is left standing over the level. Untick it where staying is the point, like a room where the bust is how the character stands. On for a new dialogue.
+dialogues.leaveBustsAtEnd.tip = ダイアログが終わると、その中で話した全員が退場します（各エンディングに LeaveBust を置いたのと同じ）。レベルの上に胸像が残りません。胸像が残ること自体が目的の場所（胸像がそのキャラクターの立ち姿になる部屋など）ではオフにしてください。新しいダイアログではオン。
 
 # Tooltip on "Set for condition debugging (F12)"
 # en: In-game, pressing F12 logs a pass/fail breakdown of this dialogue's start conditions (with current variable values) to the BepInEx console. Diagnostic only — no gameplay effect.
@@ -10632,6 +10696,14 @@ docs.dialogues.ifSomethingElsePlaying.term = 再生中の会話の後に並ぶ
 docs.dialogues.ifSomethingElsePlaying = これが始められる状態になったときにほかの会話が再生中なら、待ってその直後に始めます。これがないと、この会話はその機会を逃し、次の機会を待ちます。
 
 # Docs: the bold label in front of the next text, usually a name on screen
+# en: Leave the busts at the end
+docs.dialogues.leaveBustsAtEnd.term = 終了時に胸像を退場させる
+
+# Docs: a point in the topic
+# en: When it ends, everyone who spoke in it leaves the stage, so an ending that forgot its LeaveBust leaves no bust behind. Untick it where a bust is meant to stay.
+docs.dialogues.leaveBustsAtEnd = 終了時、その中で話した全員が退場するため、LeaveBust を忘れたエンディングでも胸像が残りません。胸像を残したい場所ではオフにしてください。
+
+# Docs: the bold label in front of the next text, usually a name on screen
 # en: Set for condition debugging (F12)
 docs.dialogues.gameF12LogsWhich.term = 条件デバッグの対象にする（F12）
 
@@ -12196,6 +12268,22 @@ docs.actions.startStopObjectRotating.term = SpinGameObject
 # Docs: a point in the topic
 # en: Start or stop an object rotating at a steady rate.
 docs.actions.startStopObjectRotating = オブジェクトを一定の速さで回し始める、または止めます。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: TransformGameObject
+docs.actions.setObjectPlaceAndSize.term = TransformGameObject
+
+# Docs: a point in the topic
+# en: Set an object's position under its parent and its size - zoom in on part of a picture and back again - eased or at once, without holding it there.
+docs.actions.setObjectPlaceAndSize = 親の中でのオブジェクトの位置と大きさを設定します（絵の一部を拡大して戻すなど）。なめらかにも即座にもでき、その場に固定はしません。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: PlayDialogue
+docs.actions.playDialogue.term = PlayDialogue
+
+# Docs: a point in the topic
+# en: Play one of the pack's dialogues or one of the game's conversations as soon as nothing else is on screen - on a line, right after its dialogue - and, if you like, set a variable when it ends.
+docs.actions.playDialogue = 画面にほかに何もなくなりしだい、パックのダイアログかゲームの会話を再生します（台詞で使えば、そのダイアログの直後）。終了時に変数を設定することもできます。
 
 # Docs: a heading inside the topic
 # en: Places and scenes
@@ -14635,6 +14723,34 @@ validation.variable.floatDefault = Float の既定値「{value}」を数値と�
 # en: List default '{value}' is not a list of values; the list will start empty. Add its initial values again.
 validation.variable.listDefault = List の既定値「{value}」は値の一覧ではありません。リストは空で始まります。初期値をもう一度入れてください。
 
+# Validation message
+# en: {name} is compared to '{value}', but nothing in this pack ever sets it to that - only to {values} - so the comparison never matches unless another mod sets it.
+validation.variable.neverSetTo = {name} は「{value}」と比較されていますが、このパックにはその値に設定するものがありません（設定されるのは {values} のみ）。他の MOD が設定しない限り、この比較は一致しません。
+
+# Validation message
+# en: List {name} is checked for '{value}', but nothing in this pack ever puts that in it - only {values} - so the check never matches unless another mod does.
+validation.list.neverHolds = List {name} に「{value}」が含まれるか確認していますが、このパックにはそれを入れるものがありません（入るのは {values} のみ）。他の MOD が入れない限り、この確認は一致しません。
+
+# Validation message
+# en: List {name} is checked for '{value}', but nothing in this pack ever puts anything in it, so the check never matches unless another mod does.
+validation.list.neverFilled = List {name} に「{value}」が含まれるか確認していますが、このパックには何かを入れるものが一つもありません。他の MOD が入れない限り、この確認は一致しません。
+
+# Validation message
+# en: Lines here take their outfit from {variable}, which can hold {values} - none of {actor}'s outfits. While it does, the bust does not appear on those lines.
+validation.node.outfitVariableNotOutfit = ここの台詞は {variable} から衣装を取りますが、{variable} は {values} になることがあり、どれも {actor} の衣装ではありません。そのあいだ、これらの台詞では胸像が表示されません。
+
+# Validation message
+# en: Play dialogue names no dialogue - nothing will play.
+validation.action.playDialogue.none = Play dialogue にダイアログが指定されていません。何も再生されません。
+
+# Validation message
+# en: Play dialogue names '{name}', which is none of this pack's dialogues - nothing will play.
+validation.action.playDialogue.unknownDialogue = Play dialogue が「{name}」を指定していますが、このパックのどのダイアログでもありません。何も再生されません。
+
+# Validation message
+# en: Play dialogue names '{name}', which is none of the game's conversations - nothing will play.
+validation.action.playDialogue.unknownConversation = Play dialogue が「{name}」を指定していますが、ゲームのどの会話でもありません。何も再生されません。
+
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.
 validation.character.pronounsMissing = {name} の代名詞が選ばれていません。キャラクタータブで「男性」「女性」「中立」のいずれかを選んでください。翻訳に必要で、ないと男性として扱われます。
@@ -15273,6 +15389,10 @@ common.group.misc = その他
 # en: Characters
 typeGroup.characters = キャラクター
 
+# A heading in the action type dropdown
+# en: Conversations
+typeGroup.conversations = 会話
+
 # Heading in the list of action types, over the ones that act on objects and scenes
 # en: Objects and scenes
 typeGroup.objects = オブジェクトとシーン
@@ -15344,6 +15464,14 @@ note.action.move = 何かを別の位置へ滑らせる
 # A note beside an action type in its dropdown, saying what it does
 # en: Start or stop something spinning
 note.action.spin = 何かを回転させる、または止める
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Set something's position and size where it is
+note.action.transform = その場で何かの位置と大きさを決める
+
+# A note beside an action type in its dropdown, saying what it does
+# en: Play one of the pack's dialogues or one of the game's conversations
+note.action.playDialogue = パックのダイアログか、ゲームの会話を再生する
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Change a setting the other actions don't reach
@@ -15769,6 +15897,11 @@ publish.failed.title = 公開できませんでした
 # {source} and {packed} are sizes in megabytes
 # en: Exported {pack} v{version} - {count} files, {source} MB source, {packed} MB packed:\n{path}
 export.done.other = {pack} v{version} をエクスポートしました - {count} 個のファイル、元 {source} MB、圧縮後 {packed} MB：\n{path}
+
+# Added to the export message: the author's backups left out of the pack. {size} is in
+# megabytes; {names} lists the first few of their paths in the pack
+# en: Left out {count} backup files ({size} MB), which players do not need: {names}
+export.backupsLeftOut.other = プレイヤーに不要なバックアップファイル {count} 個（{size} MB）を除外しました：{names}
 
 # Title of a message box
 # en: Export complete
@@ -17856,6 +17989,10 @@ migration.oldGameObjectsCategory = GameObjects カテゴリーの旧名「Extra 
 # One line of the list of what was brought up to date. "SetSpriteFocus" and "CharacterFocus" are names of an action, kept in English
 # en: SetSpriteFocus actions given the action's new name, CharacterFocus
 migration.characterFocus = SetSpriteFocus アクションをアクションの新しい名前 CharacterFocus にしました
+
+# One line of the list of what was brought up to date
+# en: Settings that actions and conditions kept from a type they used to be taken off - none of them did anything
+migration.leftOverSettings = アクションや条件が以前のタイプから持ち越していた設定を削除しました（どれも何の働きもしていませんでした）
 
 # In the list of what opening a pack changed: lines whose sound's pattern is written bigger or smaller, now playing that much louder or softer
 # en: lines whose sounds now play louder or softer to match the size their pattern is written in (the text keeps its size)

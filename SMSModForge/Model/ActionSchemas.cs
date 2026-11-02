@@ -132,6 +132,29 @@ public static class ActionSchemas
             new ParamSchema("enable", "param.label.spinning", ParamType.Bool, "true",
                 "action.spinGameObject.enable.tip"),
         },
+        [NodeActionTypes.PlayDialogue] = new[]
+        {
+            new ParamSchema("source", "param.label.source", ParamType.Choice, "pack",
+                "action.playDialogue.source.tip", fixedOptions: new[] { "pack", "vanilla" }),
+            new ParamSchema("dialogue", "param.label.dialogue", ParamType.DialogueRef, "",
+                "action.playDialogue.dialogue.tip", shownWhen: "source", shownWhenValues: new[] { "pack" }),
+            new ParamSchema("conversation", "param.label.conversation", ParamType.GameConversationRef, "",
+                "action.playDialogue.conversation.tip", shownWhen: "source", shownWhenValues: new[] { "vanilla" }),
+            new ParamSchema("afterName", "param.label.whenItEndsSet", ParamType.PackVarRef, "",
+                "action.playDialogue.afterName.tip"),
+            new ParamSchema("afterValue", "param.label.value", ParamType.String, "",
+                "action.playDialogue.afterValue.tip", emptyIsAValue: true),
+        },
+        // Text, not Float: empty is "leave this one as it is", which a number
+        // field would turn into 0.
+        [NodeActionTypes.TransformGameObject] = new[]
+        {
+            new ParamSchema("x", "param.label.x", ParamType.String, "", "action.transformGameObject.x.tip", emptyIsAValue: true),
+            new ParamSchema("y", "param.label.y", ParamType.String, "", "action.transformGameObject.y.tip", emptyIsAValue: true),
+            new ParamSchema("scale", "param.label.scale", ParamType.String, "", "action.transformGameObject.scale.tip", emptyIsAValue: true),
+            new ParamSchema("seconds", "param.label.durationS", ParamType.Float, "0",
+                "action.transformGameObject.seconds.tip"),
+        },
 
         // ── Audio ──────────────────────────────────────────────────────
         [NodeActionTypes.SwitchMusic] = new[]

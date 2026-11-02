@@ -27,6 +27,8 @@ namespace SMSModForge.Model;
 ///   export sitting alongside the loose files)</item>
 ///   <item>Ad-hoc scripts the build process drops (the <c>_assemble*.py</c>
 ///   files left behind by content-rewrite tooling)</item>
+///   <item>The author's backups (<see cref="IsBackup"/>), named in the
+///   result</item>
 /// </list>
 /// Authors who need to ship something not covered by the filter can keep
 /// it in a subfolder the manifest doesn't reference; the exporter still
@@ -111,6 +113,8 @@ public static class PackExporter
 
         int fileCount = 0;
         long sourceBytes = 0;
+        var backups = new List<string>();
+        long backupBytes = 0;
 
         // Optimal compression keeps file size down at the cost of a
         // longer export — fine for a one-off operation. Switching to
@@ -118,7 +122,7 @@ public static class PackExporter
         // hot path during iteration.
         using (var zip = ZipFile.Open(outputSmspackPath, ZipArchiveMode.Create))
         {
-            foreach (var (fullPath, relPath) in EnumerateExportable(packRoot))
+            foreach (var (fullPath, relPath) in EnumerateExportable(packRoot, (rel, bytes) => { backups.Add(rel); backupBytes += bytes; }))
             {
                 // ZIP entries use forward slashes regardless of platform —
                 // the runtime archive reader normalises both ways but the
@@ -140,7 +144,7 @@ public static class PackExporter
         // Now that the archive is closed, the OS exposes the file's
         // packed size. Read it for the success toast.
         long compressedBytes = new FileInfo(outputSmspackPath).Length;
-        return new ExportResult(fileCount, sourceBytes, compressedBytes, outputSmspackPath);
+        return new ExportResult(fileCount, sourceBytes, compressedBytes, outputSmspackPath, backups, backupBytes);
     }
 
     /// <summary>
@@ -148,8 +152,10 @@ public static class PackExporter
     /// land in the archive, returned as <c>(absolutePath, relativePath)</c>
     /// pairs. Yields <see cref="ManifestEntryName"/> first so it always
     /// sits at the archive root, then the rest in directory-walk order.
+    /// The author's own backups are left out and told to
+    /// <paramref name="leftOut"/> with their size.
     /// </summary>
-    private static IEnumerable<(string FullPath, string RelPath)> EnumerateExportable(string packRoot)
+    private static IEnumerable<(string FullPath, string RelPath)> EnumerateExportable(string packRoot, Action<string, long> leftOut)
     {
         // modpack.json first — the runtime requires this entry to exist
         // and putting it at index 0 means it lives at the start of the
@@ -170,9 +176,57 @@ public static class PackExporter
                 continue;
 
             if (ShouldSkip(rel)) continue;
+            if (IsBackup(fullPath, rel))
+            {
+                leftOut(rel, new FileInfo(fullPath).Length);
+                continue;
+            }
 
             yield return (fullPath, rel);
         }
+    }
+
+    /// <summary>A backup's name: <c>.bak</c> at the end, perhaps numbered or
+    /// labelled (<c>modpack.json.bak</c>, <c>.bak2</c>, <c>.bak-npcs</c>).
+    /// Not <c>door.bak.wav</c>: that one is a sound.</summary>
+    private static readonly System.Text.RegularExpressions.Regex BackupName =
+        new(@"\.bak(\d+|-[^.]*)?$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+    /// <summary>
+    /// A backup the author keeps in the pack folder - a file named as one, or
+    /// a copy of the manifest beside it (<c>modpack - Copy.json</c>: a
+    /// <c>.json</c> at the root with a <c>packId</c> of its own). Shipped, they
+    /// went to every player: one pack's 22 copies were 36 MB of a 96 MB
+    /// download (found testing a pack in the game, 2026-11-01). The plugin
+    /// reads only <c>modpack.json</c>, so leaving them out changes nothing in
+    /// the game.
+    /// </summary>
+    internal static bool IsBackup(string fullPath, string relPath)
+    {
+        string leaf = Path.GetFileName(relPath);
+        if (BackupName.IsMatch(leaf)) return true;
+        bool atRoot = relPath.IndexOfAny(new[] { '/', '\\' }) < 0;
+        return atRoot && leaf.EndsWith(".json", StringComparison.OrdinalIgnoreCase) && HasPackId(fullPath);
+    }
+
+    /// <summary>Whether a JSON file's top level names a <c>packId</c>, read
+    /// as far as needed and no further.</summary>
+    private static bool HasPackId(string path)
+    {
+        try
+        {
+            using var reader = new Newtonsoft.Json.JsonTextReader(new StreamReader(path));
+            if (!reader.Read() || reader.TokenType != Newtonsoft.Json.JsonToken.StartObject) return false;
+            while (reader.Read() && reader.TokenType == Newtonsoft.Json.JsonToken.PropertyName)
+            {
+                if (string.Equals((string?)reader.Value, "packId", StringComparison.Ordinal)) return true;
+                reader.Read();
+                reader.Skip();
+            }
+        }
+        catch (Newtonsoft.Json.JsonException) { }
+        catch (IOException) { }
+        return false;
     }
 
     /// <summary>
@@ -246,12 +300,19 @@ public static class PackExporter
         /// directory + per-entry overhead).</summary>
         public long CompressedBytes { get; }
         public string OutputPath { get; }
-        public ExportResult(int fileCount, long sourceBytes, long compressedBytes, string outputPath)
+        /// <summary>The author's backups left out (<see cref="IsBackup"/>),
+        /// as paths in the pack, and their size.</summary>
+        public IReadOnlyList<string> BackupsLeftOut { get; }
+        public long BackupBytes { get; }
+        public ExportResult(int fileCount, long sourceBytes, long compressedBytes, string outputPath,
+                            IReadOnlyList<string>? backupsLeftOut = null, long backupBytes = 0)
         {
             FileCount = fileCount;
             SourceBytes = sourceBytes;
             CompressedBytes = compressedBytes;
             OutputPath = outputPath;
+            BackupsLeftOut = backupsLeftOut ?? Array.Empty<string>();
+            BackupBytes = backupBytes;
         }
     }
 }

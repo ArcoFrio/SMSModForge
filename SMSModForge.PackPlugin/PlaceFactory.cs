@@ -608,10 +608,12 @@ namespace SMSModForge.PackPlugin
             GameObject roomTalk = Object.Instantiate(beachRoomTalk, roomTalkRoot);
             roomTalk.name = internalName;
             // The Beach roomtalk carries scene-specific dialogue children; strip
-            // them so the new roomtalk is empty (the pack author can wire their
-            // own dialogues later — and the current dialogue editor isn't
-            // shipping yet anyway).
-            for (int i = roomTalk.transform.childCount - 1; i > 0; i--)
+            // every one, the first too, so the new roomtalk is empty. Its
+            // Trigger names only itself and objects outside it. Kept until
+            // 1.8.1 by a loop that stopped at child 1, the beach's first talk
+            // stood in every pack's room talk with nothing to start it - read as
+            // one of the game's conversations by anything that reads the scene.
+            for (int i = roomTalk.transform.childCount - 1; i >= 0; i--)
                 Object.Destroy(roomTalk.transform.GetChild(i).gameObject);
             DestroyComponentByName(roomTalk, "Conditions");
             return roomTalk;

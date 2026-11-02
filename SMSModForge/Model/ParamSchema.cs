@@ -116,6 +116,16 @@ public enum ParamType
     /// (<see cref="ParamSchema.FixedOptions"/>). Rendered as a
     /// non-editable ComboBox — the value is always one of the options.</summary>
     Choice,
+
+    /// <summary>One of the pack's own dialogues, by key. Combobox bound to
+    /// <c>MainViewModel.DialogueKeyOptions</c>; renaming the dialogue follows
+    /// it (<c>ReferenceRenamer</c>).</summary>
+    DialogueRef,
+
+    /// <summary>One of the game's own conversations, by its path in the scene
+    /// (<c>8_Room_Talk/Kitchen/Annanotthere</c>). Combobox bound to
+    /// <c>MainViewModel.GameConversationOptions</c>.</summary>
+    GameConversationRef,
 }
 
 /// <summary>
