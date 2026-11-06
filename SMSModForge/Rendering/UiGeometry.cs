@@ -153,8 +153,11 @@ public static class UiGeometry
                   UiRect? placed = null)
         {
             // Hidden objects are not hit, exactly as in the game - a closed
-            // panel does not swallow clicks meant for what is behind it.
+            // panel does not swallow clicks meant for what is behind it. Nor is
+            // one the author has hidden here: reaching what is behind it is what
+            // hiding it was for.
             if (!node.StartActive && !forced) return;
+            if (node.HiddenInPreview) return;
 
             var (layout, drawn, inner) = Place(node, parent, inherited, placed);
             found.Add((node, UiLayout.ToScreen(drawn, canvasWidth, canvasHeight)));
@@ -227,8 +230,9 @@ public static class UiGeometry
 /// All that is needed to carry Unity's localScale down a UI tree. Rotation is
 /// deliberately absent: a rotated rectangle is no longer a rectangle, and every
 /// other thing here - hit testing, clipping, the slice grid - is built on the
-/// assumption that it is. A pack that rotates a UI object will see it drawn
-/// unrotated rather than drawn wrongly.
+/// assumption that it is. The renderers draw a turned object level into a layer
+/// and turn the layer (<see cref="UiCompositor.BlendTurned"/>), so what is drawn
+/// is right; picking it with the mouse goes by the level rectangle.
 /// </summary>
 public readonly record struct UiXform(double ScaleX, double ScaleY, double OffsetX, double OffsetY)
 {

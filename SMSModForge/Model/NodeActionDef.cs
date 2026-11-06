@@ -257,6 +257,18 @@ public static class NodeActionTypes
     /// </summary>
     public const string PlayDialogue = "PlayDialogue";
 
+    /// <summary>
+    /// Take the player to a place as its map or navigator button does: the
+    /// game's own journey (<c>Upcoming-Level</c>, <c>Start-Transfer</c>, its
+    /// TransferScene script and the fade in it), the place's arrival
+    /// conversation, and music if one is named. Where the button refuses while
+    /// the game is locked, this waits until it lets go - on a line, the
+    /// journey starts once the dialogue has ended. Params: <c>target</c> (a
+    /// level token, as LevelActive takes), <c>music</c> (a track under
+    /// <c>12_AudioPlayer</c>).
+    /// </summary>
+    public const string Travel = "Travel";
+
     /// <summary>Switch active music under <c>12_AudioPlayer</c>. Params: <c>music</c>.</summary>
     public const string SwitchMusic = "SwitchMusic";
 
@@ -408,7 +420,7 @@ public static class NodeActionTypes
         // was a choice. Packs naming it still load and still run - see
         // PackMigration.MergeSupersededActions.
         SetGameObjectActive, SetSprite, EmitSignal, LeaveUiFaded,
-        TransitionLevels, FadeSprite, SetComponentProperty, MoveGameObject, SpinGameObject, TransformGameObject,
+        Travel, TransitionLevels, FadeSprite, SetComponentProperty, MoveGameObject, SpinGameObject, TransformGameObject,
         SwitchMusic, PlaySFX,
         Wait, Transitions, PlayDialogue,
         PickRandomFromList, AddToList, RemoveFromList, ClearList, CountList,

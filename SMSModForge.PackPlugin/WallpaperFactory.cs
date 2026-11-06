@@ -213,6 +213,7 @@ namespace SMSModForge.PackPlugin
                 var bytes = pack.ReadBytes(rel);
                 if (bytes == null) return null;
                 var tex = new Texture2D(1920, 1080);
+                tex.wrapMode = TextureWrapMode.Clamp;   // an edge never takes in the opposite one
                 ImageConversion.LoadImage(tex, bytes);
                 return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height),
                                      new Vector2(0.5f, 0.5f));

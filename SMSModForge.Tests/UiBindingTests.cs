@@ -208,10 +208,10 @@ public class UiBindingTests
     }
 
     [Fact]
-    public void The_hint_gives_way_to_the_property_panel_when_a_row_is_chosen()
+    public void The_settings_give_way_to_the_object_when_a_row_is_chosen()
     {
-        // Reported as overlapping text: the "select an object" hint and the
-        // property fields share a Grid cell on purpose, so exactly one of them
+        // Reported as overlapping text, when it was a hint: the UI's settings and
+        // the object's fields share a Grid cell on purpose, so exactly one of them
         // must ever be visible.
         WindowHarness.Run(window =>
         {
@@ -219,8 +219,8 @@ public class UiBindingTests
 
             var vm = (MainViewModel)window.DataContext;
             var tabs = (TabControl)window.FindName("MainTabs");
-            var hint = (System.Windows.Controls.TextBlock)window.FindName("UiNoSelectionHint");
-            Assert.NotNull(hint);
+            var settings = (System.Windows.FrameworkElement)window.FindName("UiSettingsFields");
+            Assert.NotNull(settings);
 
             tabs.SelectedIndex = tabs.Items.OfType<TabItem>().ToList().FindIndex(t => t.Header as string == "UI");
             WindowHarness.Pump();
@@ -228,7 +228,7 @@ public class UiBindingTests
             vm.AddVanillaUiCommand.Execute(null);
             vm.Uis[0].Source = "vanillaui:9_MainCanvas/Quitagme";
             WindowHarness.Pump();
-            Assert.Equal(System.Windows.Visibility.Visible, hint.Visibility);
+            Assert.Equal(System.Windows.Visibility.Visible, settings.Visibility);
 
             // And the fields are NOT showing at the same time, which is the
             // overlap that was reported: two things in one Grid cell.
@@ -238,13 +238,13 @@ public class UiBindingTests
 
             vm.Uis[0].SelectedNode = vm.Uis[0].Nodes[0];
             WindowHarness.Pump();
-            _out.WriteLine("hint after selecting: " + hint.Visibility);
-            Assert.Equal(System.Windows.Visibility.Collapsed, hint.Visibility);
+            _out.WriteLine("settings after selecting: " + settings.Visibility);
+            Assert.Equal(System.Windows.Visibility.Collapsed, settings.Visibility);
         });
     }
 
     [Fact]
-    public void The_hint_and_the_fields_are_never_both_visible()
+    public void The_settings_and_the_fields_are_never_both_visible()
     {
         // They share a Grid cell, so two visible at once is overlapping text.
         // Swept across states rather than checked in one, because the reported
@@ -253,7 +253,7 @@ public class UiBindingTests
         {
             var vm = (MainViewModel)window.DataContext;
             var tabs = (TabControl)window.FindName("MainTabs");
-            var hint = (System.Windows.FrameworkElement)window.FindName("UiNoSelectionHint");
+            var settings = (System.Windows.FrameworkElement)window.FindName("UiSettingsFields");
             var fields = (System.Windows.FrameworkElement)window.FindName("UiNodeFields");
 
             tabs.SelectedIndex = tabs.Items.OfType<TabItem>().ToList().FindIndex(t => t.Header as string == "UI");
@@ -262,9 +262,9 @@ public class UiBindingTests
             void Check(string state)
             {
                 WindowHarness.Pump();
-                bool both = hint.Visibility == System.Windows.Visibility.Visible
+                bool both = settings.Visibility == System.Windows.Visibility.Visible
                          && fields.Visibility == System.Windows.Visibility.Visible;
-                _out.WriteLine($"{state,-34} hint={hint.Visibility,-9} fields={fields.Visibility}");
+                _out.WriteLine($"{state,-34} settings={settings.Visibility,-9} fields={fields.Visibility}");
                 Assert.False(both, $"both visible with {state}");
             }
 

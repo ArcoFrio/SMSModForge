@@ -315,6 +315,10 @@ game.notice.news.1.8.0 = Звуки в паках играют с той гро�
 # en: A pack's conversation no longer starts over the game's own when you arrive somewhere.
 game.notice.news.1.8.2 = Разговор из пака больше не начинается поверх разговора самой игры, когда вы куда-то приходите.
 
+# What ModForge 1.8.3 changes for players, one line each (\n starts the next)
+# en: Screens from packs now sit where their authors put them, and their changes to the game's own screens all show up.\nA pack's place no longer plays its arrival in the room you are still in when the game refuses the trip.
+game.notice.news.1.8.3 = Экраны из паков теперь стоят там, где их поставили авторы, а изменения в экранах самой игры видны полностью.\nМесто из пака больше не проигрывает прибытие в комнате, где вы ещё находитесь, если игра отказала в переходе.
+
 [Where an NPC stands]
 
 # Text
@@ -590,6 +594,14 @@ param.label.totalTimeS = Общее время (с)
 # Tooltip on the 'Total time (s)' field of the TransitionLevels action
 # en: Total transition length; cross-fade and signal share this budget.
 action.transitionLevels.seconds.tip = Общая длительность перехода; перекрёстное затухание и сигнал делят это время.
+
+# Tooltip on the 'To level' field of the Travel action
+# en: The place to go to - one of your places or one of the game's. The player travels there as its map or navigator button would take them.
+action.travel.target.tip = Куда отправиться — в одну из ваших локаций или в локацию игры. Игрок попадёт туда так же, как по её кнопке на карте или в навигаторе.
+
+# Tooltip on the 'Music key' field of the Travel action
+# en: Music to switch to on the way, as a navigator button's music does. Leave it empty to keep what is playing.
+action.travel.music.tip = Музыка, на которую переключиться по пути, как у кнопки навигатора. Оставьте пустым, чтобы играла прежняя.
 
 # Label beside a field of an action or condition
 # en: Target alpha
@@ -1934,6 +1946,22 @@ gameObject.levelSBuiltNpcs = Встроенный объект NPCs уровня
 # en: This GameObject already exists (bind, don't create)
 gameObject.gameobjectAlreadyExistsBind = Этот GameObject уже существует (привязать, а не создавать)
 
+# Text
+# en: Copy of
+gameObject.copyOf = Копия
+
+# Tooltip on a text box
+# en: Make this object a copy of one of the game's: its path in the game's scene, like 5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas or 6_Effects/CFXR2 Expression Loving (Timed). The copy is made each time the game loads and stays as the original was, unless the overrides below say otherwise. Its children with Bind reach the copy's own parts by name; new children are added to it. Leave it empty for an object of the pack's own.
+gameObject.copyOf.tip = Делает этот объект копией объекта игры: укажите его путь в сцене игры, например 5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas или 6_Effects/CFXR2 Expression Loving (Timed). Копия создаётся при каждой загрузке игры и остаётся такой, каким был оригинал, если переопределения ниже не говорят иного. Его дочерние объекты с Bind находят части копии по имени; новые дочерние объекты добавляются к ней. Оставьте пустым для собственного объекта пака.
+
+# Text
+# en: Beside the original
+gameObject.copyBeside = Рядом с оригиналом
+
+# Tooltip on a tick box
+# en: Put the copy under the same parent as the original, instead of in this place - for something that is not the place's, like an effect your dialogues switch on by its path.
+gameObject.copyBeside.tip = Поместить копию под тот же родительский объект, что и оригинал, а не в эту локацию — для того, что локации не принадлежит, например эффекта, который ваши диалоги включают по пути.
+
 # Tick box
 # en: Override its transform
 gameObject.overrideTransform = Заменить его трансформ
@@ -2073,6 +2101,22 @@ gameObject.overrideTransform.tip = Выкл. (по умолчанию) оста�
 # Tooltip on "Override active"
 # en: Off (default) leaves the object's own active state alone. On applies the Start-active checkbox. Not needed when you're gating it with Active-when conditions.
 gameObject.overrideActive.tip = Выкл. (по умолчанию) не трогает собственную активность объекта. Вкл. применяет флажок «Активен в начале». Не нужно, если вы управляете им через условия «Активен, когда».
+
+# Text
+# en: Override parallax
+gameObject.overrideParallax = Заменить параллакс
+
+# Tooltip on a tick box and the number beside it
+# en: Off (default) leaves how the object drifts with the mouse as the game made it. On sets how far it drifts to the number beside it - lower is softer, 0 holds it still. An object that does not drift is left alone.
+gameObject.overrideParallax.tip = Выключено (по умолчанию) — объект смещается за мышью так, как задумала игра. Включено — величина смещения берётся из числа рядом: меньше — мягче, 0 — неподвижно. Объект, который не смещается, не трогается.
+
+# Text
+# en: Particle colour
+gameObject.particleColor = Цвет частиц
+
+# Tooltip on a text box
+# en: The colour this object's particles start in, as #RRGGBB or #RRGGBBAA - for one of the game's effects, copied or as it is. Only this object's own particles: a part with particles of its own takes a child of its own. Empty leaves them as they are.
+gameObject.particleColor.tip = Цвет, с которого начинаются частицы этого объекта, в виде #RRGGBB или #RRGGBBAA — для эффекта игры, скопированного или как есть. Только собственные частицы этого объекта: части со своими частицами нужен свой дочерний объект. Пусто — оставить как есть.
 
 # Tooltip on a part of the window
 # en: Pack-relative PNG path. Leave blank for a pure container GameObject (an empty transform that just groups children).
@@ -6833,29 +6877,17 @@ ui.pasteNode = Вставить
 # en: Preview
 ui.preview = Предпросмотр
 
-# Text
-# en: Select an object in the tree to change it.
-ui.selectObjectTreeChange = Выберите объект в дереве, чтобы изменить его.
-
 # Button
 # en: Reset
 ui.reset = Сбросить
 
-# Text
-# en: Position
-ui.position = Позиция
-
-# Text
-# en: from its anchors, in canvas pixels
-ui.anchorsCanvasPixels = от его якорей, в пикселях канваса
-
-# Text
-# en: Size
-ui.size = Размер
-
 # Tick box
 # en: Visible at start
 ui.visibleStart = Видим в начале
+
+# Tick box
+# en: Stays upright
+ui.upright = Всегда прямо
 
 # Text
 # en: Sprite
@@ -6868,10 +6900,6 @@ ui.text = Текст
 # Text
 # en: Colour
 ui.colour = Цвет
-
-# Expandable section
-# en: Shown when
-ui.shownWhen = Показан, когда
 
 # Button
 # en: + Condition
@@ -6890,16 +6918,60 @@ ui.opensWhen.help = Экран открывается сам в тот моме�
 ui.addOpenCondition.tip = Без условий экран открывается, только когда его открывает действие, или в начале, если он на экране с самого начала. С условиями он открывается сам в тот момент, когда выполнены все.
 
 # Expandable section
-# en: When it opens
-ui.whenOpens = При открытии
+# en: Keeps moving
+ui.loop = Постоянное движение
 
-# Expandable section
-# en: When it closes
-ui.whenCloses = При закрытии
+# Tick box
+# en: Pulse fade
+ui.loop.fade = Пульс прозрачности
 
-# Expandable section
-# en: Arrange children
-ui.arrangeChildren = Расположение дочерних
+# Tooltip on a tick box and its numbers
+# en: Its fade goes from the first number to the second and back once a pass, as fractions of its own - 0.4 to 1 breathes a glow. Everything on it fades with it.
+ui.loop.fade.tip = Непрозрачность за один проход идёт от первого числа ко второму и обратно, в долях собственной — от 0,4 до 1 заставляет свечение «дышать». Всё, что на нём, меняется вместе с ним.
+
+# Tick box
+# en: Pulse size
+ui.loop.size = Пульс размера
+
+# Tooltip on a tick box and its numbers
+# en: Its size goes from the first number to the second and back once a pass, as fractions of its own.
+ui.loop.size.tip = Размер за один проход идёт от первого числа ко второму и обратно, в долях собственного.
+
+# Tick box
+# en: Sweep
+ui.loop.sweep = Проход
+
+# Tooltip on a tick box and its numbers
+# en: It moves from the first place to the second - x and y from where it is - and starts again. A highlight under a parent that clips its children becomes a shine running along it: put both ends outside the parent.
+ui.loop.sweep.tip = Объект движется из первой точки во вторую — x и y от его места — и начинает снова. Блик под родителем, который обрезает своих детей, становится отблеском, бегущим по нему: вынесите оба конца за пределы родителя.
+
+# Text
+# en: Seconds
+ui.loop.seconds = Секунды
+
+# Tooltip on a text box
+# en: How long one pass takes. It plays in the game while the object is shown; the preview shows it still.
+ui.loop.seconds.tip = Сколько длится один проход. В игре движение идёт, пока объект показан; в предпросмотре он неподвижен.
+
+# Text
+# en: Pause
+ui.loop.pause = Пауза
+
+# Tooltip on a text box
+# en: Seconds it rests at the start between passes.
+ui.loop.pause.tip = Сколько секунд он стоит в начальном положении между проходами.
+
+# Text
+# en: Delay
+ui.loop.delay = Задержка
+
+# Tooltip on a text box
+# en: Seconds before the first pass, from when it is shown - give copies of one object different delays so they do not all move together.
+ui.loop.delay.tip = Секунды до первого прохода с момента показа — дайте копиям одного объекта разные задержки, чтобы они не двигались все разом.
+
+# Tooltip on a dropdown
+# en: The sweep's curve. A pulse always eases back and forth.
+ui.loop.easing.tip = Кривая прохода. Пульс всегда плавно идёт туда и обратно.
 
 # Text
 # en: Arrange
@@ -6941,13 +7013,17 @@ ui.cell = Ячейка
 # en: Centre a last row that is not full
 ui.centreLastRowNot = Центрировать неполный последний ряд
 
-# Expandable section
-# en: When clicked
-ui.whenClicked = При щелчке
+# Text
+# en: Only as big as what it holds
+ui.fitToContent = Только по размеру содержимого
 
 # Text
 # en: Hover
 ui.hover = Наведение
+
+# Text
+# en: Pressed
+ui.pressScale = Нажатие
 
 # Text
 # en: Sound
@@ -6972,6 +7048,481 @@ ui.overwriteActions = Заменить
 # Text
 # en: Font
 ui.font = Шрифт
+
+# The UI tab's start page: heading
+# en: What do you want to do?
+ui.start.title = Что вы хотите сделать?
+
+# The UI tab's start page: what a UI is
+# en: A UI is anything drawn over the game: a window, a menu, a button, a badge.
+ui.start.subtitle = UI — это всё, что рисуется поверх игры: окно, меню, кнопка, значок.
+
+# The UI tab's start page, when the pack already has UIs
+# en: Or pick one of this pack's UIs from the list on the left.
+ui.start.pickExisting = Или выберите один из UI этого пака в списке слева.
+
+# Start page card
+# en: Change one of the game's UIs
+ui.start.change.title = Изменить UI игры
+
+# Start page card
+# en: Move, restyle or add to a screen the game already has. Only what you change is saved.
+ui.start.change.body = Переместите, измените вид или дополните экран, который уже есть в игре. Сохраняется только то, что вы меняете.
+
+# Start page card
+# en: Add something that stays on screen
+ui.start.staying.title = Добавить что-то, что остаётся на экране
+
+# Start page card
+# en: A badge, a counter, a bar in the corner. It is there as soon as the game is.
+ui.start.staying.body = Значок, счётчик, полоса в углу. Появляется сразу вместе с игрой.
+
+# Start page card
+# en: Make a window that opens
+ui.start.window.title = Создать открывающееся окно
+
+# Start page card
+# en: A panel with a title and a close button. A dialogue, a rule or a button opens it.
+ui.start.window.body = Панель с заголовком и кнопкой закрытия. Её открывает диалог, правило или кнопка.
+
+# Start page button
+# en: Show me step by step
+ui.start.tutorial = Покажите пошагово
+
+# UI tab: heading over a UI's object tree
+# en: Objects
+ui.objects = Объекты
+
+# UI tab: the row and heading for the settings of a whole UI
+# en: UI settings
+ui.settingsRow = Настройки UI
+
+# Tooltip
+# en: The UI as a whole: its name, how it opens, where it lives and how it moves.
+ui.settingsRow.tip = UI в целом: имя, как открывается, где находится и как движется.
+
+# UI tab: under the preview
+# en: Click an object to select it. Drag it to move it, or drag its handles to resize it.
+ui.preview.hint = Щёлкните объект, чтобы выбрать его. Перетащите, чтобы переместить, или потяните за маркеры, чтобы изменить размер.
+
+# Tooltip on the eye beside an object in the UI tab's tree
+# en: Hide this and everything inside it in the preview, to reach what is behind it. Only here: the pack and the game are not changed.
+ui.eye.hide.tip = Скрыть это и всё внутри в предпросмотре, чтобы добраться до того, что позади. Только здесь: пак и игра не меняются.
+
+# Tooltip on the eye of an object hidden in the preview
+# en: Hidden in the preview only. Click to show it again. In the game it is unaffected.
+ui.eye.show.tip = Скрыто только в предпросмотре. Щёлкните, чтобы показать снова. В игре ничего не меняется.
+
+# Tooltip on the eye of an object inside one hidden in the preview
+# en: Hidden in the preview because something it sits inside is. In the game it is unaffected.
+ui.eye.parent.tip = Скрыто в предпросмотре, потому что скрыто то, внутри чего оно находится. В игре ничего не меняется.
+
+# Tooltip on the eye of an object that starts switched off
+# en: Not visible at start, so the preview does not draw it either way. Tick Visible at start to work on it here.
+ui.eye.startsOff.tip = Не видим в начале, поэтому предпросмотр его всё равно не рисует. Отметьте «Видим в начале», чтобы работать с ним здесь.
+
+# Above the UI preview: how many objects the author has hidden there
+# one: 1, 21, 31, 41… · few: 2, 3, 4, 22… · many: 0, 5, 6, 7…
+# en: {count} object hidden here, not in the game
+ui.preview.hidden.one = {count} объект скрыт здесь, но не в игре
+# en: {count} objects hidden here, not in the game
+ui.preview.hidden.few = {count} объекта скрыто здесь, но не в игре
+# en: {count} objects hidden here, not in the game
+ui.preview.hidden.many = {count} объектов скрыто здесь, но не в игре
+
+# Button above the UI preview
+# en: Show all
+ui.preview.showAll = Показать всё
+
+# Tooltip
+# en: Show everything you hid in this preview again.
+ui.preview.showAll.tip = Снова показать всё, что вы скрыли в этом предпросмотре.
+
+# UI tab: settings of a change to one of the game's screens
+# en: This is one of the game's own screens. Pick an object in the tree or the preview to change it: only what you change is saved.
+ui.gameUi.note = Это один из собственных экранов игры. Выберите объект в дереве или предпросмотре, чтобы изменить его: сохраняется только то, что вы меняете.
+
+# UI tab: how else a UI opens
+# en: Anything that can run an action can also open it: Set Active, with its category set to UI.
+ui.opensByAction.help = Всё, что может выполнить действие, может и открыть его: Set Active с категорией UI.
+
+# UI tab section title
+# en: How it opens
+ui.section.opens = Как открывается
+
+# UI tab section title
+# en: Where it lives
+ui.section.lives = Где находится
+
+# UI tab section title
+# en: How it moves
+ui.section.moves = Как движется
+
+# UI tab section title
+# en: Button sound
+ui.section.sound = Звук кнопок
+
+# UI tab section title
+# en: Where it sits
+ui.section.where = Где стоит
+
+# UI tab section title
+# en: How it looks
+ui.section.looks = Как выглядит
+
+# UI tab section title
+# en: When it shows
+ui.section.shows = Когда показывается
+
+# UI tab section title
+# en: What clicking does
+ui.section.clicks = Что делает щелчок
+
+# UI tab section title
+# en: What's inside
+ui.section.inside = Что внутри
+
+# UI tab section title
+# en: Extra components
+ui.section.components = Дополнительные компоненты
+
+# Section summary: a UI is up from the start
+# en: from the start
+ui.summary.startsOpen = с самого начала
+
+# Section summary: only an action opens this UI
+# en: by an action
+ui.summary.byAction = действием
+
+# Section summary
+# one: 1, 21, 31, 41… · few: 2, 3, 4, 22… · many: 0, 5, 6, 7…
+# en: {count} condition
+ui.summary.conditions.one = {count} условие
+# en: {count} conditions
+ui.summary.conditions.few = {count} условия
+# en: {count} conditions
+ui.summary.conditions.many = {count} условий
+
+# Section summary
+# one: 1, 21, 31, 41… · few: 2, 3, 4, 22… · many: 0, 5, 6, 7…
+# en: {count} action
+ui.summary.actions.one = {count} действие
+# en: {count} actions
+ui.summary.actions.few = {count} действия
+# en: {count} actions
+ui.summary.actions.many = {count} действий
+
+# Section summary: it animates on arrival
+# en: arrives
+ui.summary.arrives = появляется с анимацией
+
+# Section summary: it animates on leaving
+# en: leaves
+ui.summary.leaves = исчезает с анимацией
+
+# Section summary: it loops while shown
+# en: keeps moving
+ui.summary.keepsMoving = постоянно движется
+
+# Section summary: nothing set here
+# en: nothing
+ui.summary.nothing = ничего
+
+# Section summary: always shown
+# en: always
+ui.summary.always = всегда
+
+# Section summary
+# en: starts hidden
+ui.summary.startsHidden = начинает скрытым
+
+# Section summary: it clips what is inside it
+# en: clips
+ui.summary.clips = обрезает
+
+# Section summary: buttons make no sound
+# en: silent
+ui.summary.silent = без звука
+
+# Section summary: buttons use the game's click
+# en: the game's click
+ui.summary.gameClick = щелчок игры
+
+# Section summary: its parent decides where it goes
+# en: arranged by its parent
+ui.summary.arranged = располагает родитель
+
+# Section summary: fills its parent
+# en: fills its parent
+ui.summary.fills = заполняет родителя
+
+# What a UI object is, in a word
+# en: Button
+ui.kind.button = Кнопка
+
+# What a UI object is, in a word
+# en: Picture
+ui.kind.picture = Картинка
+
+# What a UI object is, in a word
+# en: Text
+ui.kind.text = Текст
+
+# What a UI object is, in a word
+# en: Group
+ui.kind.group = Группа
+
+# What a UI object is, in a word
+# en: Empty
+ui.kind.empty = Пустой
+
+# Label over the 3x3 grid of places an object sticks to
+# en: Stick to
+ui.stick = Прикреплён к
+
+# Tooltip
+# en: Which part of its parent this object stays with. Picking one puts it flush against that place.
+ui.stick.tip = К какой части родителя прикреплён этот объект. Выбор ставит его вплотную к этому месту.
+
+# UI object placement
+# en: Fill the width
+ui.fillWidth = Заполнять ширину
+
+# Tooltip
+# en: As wide as its parent, however wide that is. Left and Right say how far in each side stays.
+ui.fillWidth.tip = Шириной с родителя, какой бы ни была его ширина. Слева и Справа задают, насколько внутрь отстоит каждая сторона.
+
+# UI object placement
+# en: Fill the height
+ui.fillHeight = Заполнять высоту
+
+# Tooltip
+# en: As tall as its parent, however tall that is. Top and Bottom say how far in each side stays.
+ui.fillHeight.tip = Высотой с родителя, какой бы ни была его высота. Сверху и Снизу задают, насколько внутрь отстоит каждая сторона.
+
+# UI object placement
+# en: X
+ui.place.x = X
+
+# UI object placement
+# en: Y
+ui.place.y = Y
+
+# Tooltip
+# en: How far from where it sticks, in canvas pixels. Up and right are positive.
+ui.place.x.tip = Как далеко от места прикрепления, в пикселях канваса. Вверх и вправо — положительно.
+
+# UI object placement
+# en: Width
+ui.place.width = Ширина
+
+# UI object placement
+# en: Height
+ui.place.height = Высота
+
+# UI object placement: margin
+# en: Left
+ui.place.left = Слева
+
+# UI object placement: margin
+# en: Right
+ui.place.right = Справа
+
+# UI object placement: margin
+# en: Top
+ui.place.top = Сверху
+
+# UI object placement: margin
+# en: Bottom
+ui.place.bottom = Снизу
+
+# Tooltip
+# en: How far in from that side of its parent, in canvas pixels.
+ui.place.margin.tip = Насколько внутрь от этой стороны родителя, в пикселях канваса.
+
+# UI object placement note
+# en: This object stretches across part of its parent. Width and Height here are how much bigger than that part it is, not its size.
+ui.stretchedPartly = Этот объект растянут на часть родителя. Ширина и Высота здесь показывают, насколько он больше этой части, а не его размер.
+
+# UI object placement note
+# en: Its parent arranges what is inside it, so the parent decides where this goes.
+ui.arrangedByParent = Родитель располагает то, что внутри него, поэтому он и решает, где это будет.
+
+# UI object: rotation
+# en: Turn
+ui.turn = Поворот
+
+# Tooltip
+# en: Rotation in degrees, anticlockwise, around its pivot. The handles in the preview stay level.
+ui.turn.tip = Поворот в градусах, против часовой стрелки, вокруг опорной точки. Маркеры в предпросмотре остаются ровными.
+
+# UI object: scale across
+# en: Scale X
+ui.scaleX = Масштаб X
+
+# UI object: scale down
+# en: Scale Y
+ui.scaleY = Масштаб Y
+
+# Tooltip
+# en: Multiplies its size and everything inside it, around its pivot. 1 is its own size.
+ui.scale.tip = Умножает его размер и всё внутри, вокруг опорной точки. 1 — его собственный размер.
+
+# UI object placement: collapsed part
+# en: Exact anchors and pivot
+ui.exactAnchors = Точные якоря и опорная точка
+
+# UI object placement
+# en: Anchor min
+ui.anchorMin = Якорь мин.
+
+# UI object placement
+# en: Anchor max
+ui.anchorMax = Якорь макс.
+
+# UI object placement
+# en: Pivot
+ui.pivot = Опорная точка
+
+# Tooltip
+# en: The point of the object its position is measured from and that it turns and scales around. 0 is its left or bottom, 1 its right or top.
+ui.pivot.tip = Точка объекта, от которой отсчитывается его позиция и вокруг которой он поворачивается и масштабируется. 0 — его левый или нижний край, 1 — правый или верхний.
+
+# UI object: picture colour
+# en: Tint
+ui.tint = Оттенок
+
+# UI object: picture type
+# en: Drawn as
+ui.drawnAs = Рисуется как
+
+# Tooltip
+# en: Simple stretches the picture. Sliced keeps its corners and stretches the middle. Tiled repeats it. Filled draws it whole here, as nothing sets how full it is.
+ui.drawnAs.tip = Simple растягивает картинку. Sliced сохраняет углы и растягивает середину. Tiled повторяет её. Filled рисует её целиком здесь, так как ничто не задаёт степень заполнения.
+
+# UI object: sliced picture
+# en: Corner scale
+ui.borderScale = Масштаб углов
+
+# Tooltip
+# en: How the corners are sized: 2 makes them half as big, 0.5 twice as big.
+ui.borderScale.tip = Размер углов: 2 делает их вдвое меньше, 0.5 — вдвое больше.
+
+# UI object: picture
+# en: Keep its shape
+ui.keepAspect = Сохранять форму
+
+# Tooltip
+# en: Draws the picture as large as fits without stretching it.
+ui.keepAspect.tip = Рисует картинку настолько большой, насколько она помещается, не растягивая её.
+
+# UI object: sliced picture
+# en: Fill the middle
+ui.fillMiddle = Заполнять середину
+
+# Tooltip
+# en: Unticked, only the frame of a sliced picture is drawn.
+ui.fillMiddle.tip = Если снято, у картинки Sliced рисуется только рамка.
+
+# UI object: picture
+# en: Catches the mouse
+ui.catchesMouse = Ловит мышь
+
+# Tooltip
+# en: Unticked, the pointer goes straight through this picture to whatever is behind it.
+ui.catchesMouse.tip = Если снято, указатель проходит сквозь эту картинку к тому, что позади.
+
+# UI object: text
+# en: Size
+ui.fontSize = Размер
+
+# UI object: text
+# en: Alignment
+ui.alignment = Выравнивание
+
+# Tooltip
+# en: Where the words sit inside the object: TextMeshPro's own names.
+ui.alignment.tip = Где слова находятся внутри объекта: собственные названия TextMeshPro.
+
+# UI object: text
+# en: Wrap lines
+ui.wrap = Переносить строки
+
+# Tooltip
+# en: Unticked, the words stay on one line and run past the edge.
+ui.wrap.tip = Если снято, слова остаются в одной строке и выходят за край.
+
+# UI object: text
+# en: Shrink to fit
+ui.shrinkToFit = Уменьшать по размеру
+
+# Tooltip
+# en: Picks the largest size between the two given that fits the object, instead of the Size above.
+ui.shrinkToFit.tip = Выбирает наибольший размер из указанного диапазона, который помещается в объект, вместо Размера выше.
+
+# UI object: text, smallest size
+# en: From
+ui.shrinkMin = От
+
+# UI object: text, largest size
+# en: To
+ui.shrinkMax = До
+
+# UI object: text
+# en: Line gap
+ui.lineSpacing = Интервал строк
+
+# UI object: text
+# en: Letter gap
+ui.letterSpacing = Интервал букв
+
+# Tooltip
+# en: Extra space on top of what the font gives. 0 is the font's own.
+ui.lineSpacing.tip = Дополнительный промежуток к тому, что задаёт шрифт. 0 — как в самом шрифте.
+
+# UI object
+# en: Opacity
+ui.opacity = Непрозрачность
+
+# Tooltip
+# en: From 0 to 1, for this object and everything inside it. Empty leaves it as it is.
+ui.opacity.tip = От 0 до 1, для этого объекта и всего внутри. Пусто — оставляет как есть.
+
+# UI object
+# en: Shadow
+ui.shadow = Тень
+
+# Tooltip
+# en: A copy of this object in one colour, offset behind it. The two numbers are how far across and up.
+ui.shadow.tip = Копия этого объекта одного цвета, смещённая позади него. Два числа — насколько вбок и вверх.
+
+# UI object
+# en: Outline
+ui.outline = Контур
+
+# Tooltip
+# en: Copies of this object in one colour, offset to each corner behind it. The two numbers are how far across and up.
+ui.outline.tip = Копии этого объекта одного цвета, смещённые к каждому углу позади него. Два числа — насколько вбок и вверх.
+
+# UI object: note when a shadow or outline is on an object with only words on it
+# en: The game draws no shadow or outline on words. A font that has them built in does: try Alata-Regular-Outline.
+ui.effects.textNote = Игра не рисует тень и контур на словах. Шрифт, где они встроены, рисует: попробуйте Alata-Regular-Outline.
+
+# Tooltip
+# en: Offset in canvas pixels: across, then up.
+ui.effectOffset.tip = Смещение в пикселях канваса: вбок, затем вверх.
+
+# UI object
+# en: Clip what's inside to this object
+ui.clip = Обрезать содержимое по этому объекту
+
+# Tooltip
+# en: Anything inside it that reaches past its edges is cut off there.
+ui.clip.tip = Всё внутри, что выходит за его края, там обрезается.
+
+# UI object: note on a game object that clips
+# en: The game clips this one, and a pack cannot take that off.
+ui.clip.gameOwn = Этот объект обрезает игра, и пак не может это убрать.
 
 # Tooltip on "+ UI"
 # en: A screen of your own: a window, a panel, a HUD element.
@@ -7065,6 +7616,10 @@ ui.objectsGameOwnsKeep.tip = Объекты, принадлежащие игре
 # en: Most of a vanilla screen starts hidden and is switched on by the game when its moment arrives.
 ui.visibleStart.tip = Большая часть экрана игры поначалу скрыта и включается игрой, когда приходит её момент.
 
+# Tooltip on "Stays upright"
+# en: Stays level while what it hangs on turns: it moves and grows with its parent but never turns with it. For something on one of the game's buttons that swing round - a district's buttons on the world map turn as it opens.
+ui.upright.tip = Остаётся ровным, пока поворачивается то, на чём он висит: движется и растёт вместе с родителем, но никогда не поворачивается с ним. Для того, что висит на поворачивающихся кнопках игры — кнопки района на карте мира поворачиваются при открытии.
+
 # Tooltip on a button
 # en: Choose the colour on a wheel instead of typing hex.
 ui.pickUiTint.tip = Выбрать цвет на круге вместо ввода hex.
@@ -7137,9 +7692,17 @@ ui.flexibleFitsManyAcross.tip = Гибко – помещает в ряд сто
 # en: Nineteen things in rows of seven leave a last row of five, and it is normally packed against the start corner - so a grid that is even everywhere else ends lopsided. This centres that row, and only that row. Unity has no such setting, so the preview and the game both do it here.
 ui.nineteenThingsRowsSeven.tip = Девятнадцать элементов в рядах по семь оставляют последний ряд из пяти, и обычно он прижат к начальному углу, – так сетка, ровная везде, кончается криво. Это центрирует тот ряд, и только его. В Unity такой настройки нет, поэтому и предпросмотр, и игра делают это здесь.
 
+# Tooltip on a tick box
+# en: With a set number of columns, the grid is only as wide as the columns its objects fill - two objects in a grid of eight columns make it two cells wide - so something sized to the grid, like a Content Size Fitter, grows and shrinks with what it holds. With a set number of rows, the same for its height. Unity's own grid is always as wide as all its columns. Only in the game: the preview draws the grid at its own size.
+ui.fitToContent.tip = При заданном числе столбцов сетка шириной только в те столбцы, которые заполняют её объекты: два объекта в сетке из восьми столбцов дают ширину в две ячейки. Поэтому то, что подстраивается под сетку, например Content Size Fitter, растёт и сжимается вместе с содержимым. При заданном числе рядов то же самое для высоты. Собственная сетка Unity всегда шириной во все свои столбцы. Только в игре: в предпросмотре сетка рисуется в своём размере.
+
 # Tooltip on a text box
 # en: Tint while the pointer is over this object, as #RRGGBB or #RRGGBBAA. Leave blank for no hover feedback. The game's own hover is per-button artwork rather than a rule, so there is nothing general to copy - this is the part a pack can state.
 ui.tintWhilePointerOver.tip = Оттенок, пока указатель над этим объектом, в виде #RRGGBB или #RRGGBBAA. Оставьте пустым, чтобы не было отклика на наведение. Наведение в самой игре – это отдельная графика для каждой кнопки, а не правило, так что копировать нечего; это та часть, которую может задать пак.
+
+# Tooltip on a text box
+# en: Its size while held down, as a fraction of its own - 0.95 shrinks it a little while the pointer is down and lets it back on release, everything on it too. Empty for none: then the game's own press plays as it is clicked, once let go. Set, it stands in for that press - useful when the click closes the screen before that press could be seen.
+ui.pressScale.tip = Размер, пока его удерживают нажатым, в долях собственного — 0,95 немного уменьшает его, пока указатель нажат, и возвращает при отпускании, вместе со всем, что на нём. Пусто — ничего: тогда при щелчке, после отпускания, играет нажатие самой игры. Если задано, заменяет это нажатие — полезно, когда щелчок закрывает экран раньше, чем нажатие успевает стать видно.
 
 # Tooltip on a dropdown
 # en: What THIS object sounds like when clicked. Blank follows the screen, which is usually what you want - set this only where one button should differ. A sound named here plays even on a screen whose buttons are otherwise silent.
@@ -10564,6 +11127,14 @@ docs.places.addObjectRoomArt.term = + GameObject
 docs.places.addObjectRoomArt = Добавить в комнату объект – графику, реквизит, контейнер для других объектов.
 
 # Docs: the bold label in front of the next text, usually a name on screen
+# en: Copy of
+docs.places.copyOfGameObject.term = Копия
+
+# Docs: a point in the topic
+# en: Make an object a copy of one of the game's, by its path in the game's scene - a room's buttons for a room of your own, an effect recoloured. The copy is made each time the game loads, in your place or beside the original, and keeps how the original was unless you override it; children with Bind change its parts, and a particle colour recolours the game's effects.
+docs.places.copyOfGameObject = Делает объект копией объекта игры по его пути в сцене игры — кнопки комнаты для вашей собственной комнаты, эффект другого цвета. Копия создаётся при каждой загрузке игры, в вашей локации или рядом с оригиналом, и остаётся такой, каким был оригинал, пока вы её не переопределите; дочерние объекты с Bind меняют её части, а цвет частиц перекрашивает эффекты игры.
+
+# Docs: the bold label in front of the next text, usually a name on screen
 # en: + Add NPC
 docs.places.placeOneNpcsInto.term = + NPC
 
@@ -12364,6 +12935,14 @@ docs.actions.playDialogue.term = PlayDialogue
 # Docs: a point in the topic
 # en: Play one of the pack's dialogues or one of the game's conversations as soon as nothing else is on screen - on a line, right after its dialogue - and, if you like, set a variable when it ends.
 docs.actions.playDialogue = Проиграть диалог пака или разговор игры, как только на экране ничего нет, — на реплике сразу после её диалога — и, если нужно, задать переменную в конце.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Travel
+docs.actions.travel.term = Travel
+
+# Docs: a point in the topic
+# en: Take the player to a place - one of yours or one of the game's - as its map or navigator button would: the game's own journey with its fade, the place's arrival conversation, and music if you name one. While the game is busy - a conversation on screen, another journey, a locked moment - it waits, so on a line the player goes once the dialogue ends. Nothing happens if they are already there.
+docs.actions.travel = Переносит игрока в локацию — вашу или игры — так же, как её кнопка на карте или в навигаторе: собственный переход игры с затемнением, разговор по прибытии и музыка, если вы её укажете. Пока игра занята — разговор на экране, другой переход, заблокированный момент, — действие ждёт, так что на реплике игрок отправится, когда диалог закончится. Если игрок уже там, ничего не происходит.
 
 # Docs: a heading inside the topic
 # en: Places and scenes
@@ -14516,8 +15095,8 @@ tutorial.aScreenOfYourOwn.summary = Собрать панель, положит�
 tutorial.aScreenOfYourOwn.screensPackOwns.title = Экраны, которые принадлежат паку
 
 # Tutorials: what the step says
-# en: This tab is for anything drawn on top of the game rather than in it — a window, a panel, a bar in the corner. Two kinds live here together, and deliberately so: screens you invent, and screens the game already has that your pack changes.\n\nThey share a tab because from your side they are the same job. A tree of objects on the left, what the selected one is underneath, and a picture of the result on the right.
-tutorial.aScreenOfYourOwn.screensPackOwns.body = Эта вкладка – для всего, что рисуется поверх игры, а не в ней: окно, панель, полоса в углу. Здесь вместе живут два вида, и это нарочно: экраны, которые вы придумываете, и экраны, которые уже есть в игре и которые ваш пак меняет.\n\nОни делят вкладку, потому что с вашей стороны это одна и та же работа. Дерево объектов слева, что такое выбранный объект – под ним, и картинка результата справа.
+# en: This tab is for anything drawn on top of the game rather than in it — a window, a panel, a bar in the corner. Two kinds live here together, and deliberately so: screens you invent, and screens the game already has that your pack changes.\n\nThey share a tab because from your side they are the same job. Pick on the left, see the result in the middle, and change what is selected on the right.
+tutorial.aScreenOfYourOwn.screensPackOwns.body = Эта вкладка – для всего, что рисуется поверх игры, а не в ней: окно, панель, полоса в углу. Здесь вместе живут два вида, и это нарочно: экраны, которые вы придумываете, и экраны, которые уже есть в игре и которые ваш пак меняет.\n\nОни делят вкладку, потому что с вашей стороны это одна и та же работа. Выбирайте слева, смотрите результат в середине и меняйте выбранное справа.
 
 # Tutorials: the heading of a step
 # en: Start one
@@ -14540,16 +15119,16 @@ tutorial.aScreenOfYourOwn.callSomething.title = Назовите его
 tutorial.aScreenOfYourOwn.callSomething.body = Смените Имя на то, что узнаете через месяц, – «Заметка квеста», а не «Пустая панель 2». Это имя вы будете выбирать из списка каждый раз, когда что-то должно открыть экран.\n\nId под ним вместе с именем не меняется, и не должен: переименование экрана никогда не должно тихо отцеплять то, что его открывало.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: The Name box, top of the middle column.
-tutorial.aScreenOfYourOwn.callSomething.hint = Поле Имя, вверху средней колонки.
+# en: The Name box, at the top of the right column.
+tutorial.aScreenOfYourOwn.callSomething.hint = Поле Имя, вверху правой колонки.
 
 # Tutorials: the heading of a step
 # en: Put something on it
 tutorial.aScreenOfYourOwn.putSomething.title = Положите что-нибудь на него
 
 # Tutorials: what the step says
-# en: The tree is what the screen is made of. Select the panel and press + Object to put an empty object inside it; the arrow beside that button offers ready-made pieces instead — a button, a row, a line of text.\n\nEverything is inside something else, and that is what decides where it sits: an object is positioned against its parent, so moving the panel takes everything on it along.
-tutorial.aScreenOfYourOwn.putSomething.body = Дерево – то, из чего состоит экран. Выберите панель и нажмите + Объект, чтобы положить внутрь пустой объект; стрелка рядом с этой кнопкой предлагает вместо этого готовые детали – кнопку, строку, строку текста.\n\nВсё находится внутри чего-то другого, и это решает, где оно стоит: объект позиционируется относительно родителя, так что перемещение панели уносит с собой всё, что на ней.
+# en: The tree is what the screen is made of. Select the panel and press + Object to put an empty object inside it; + Shape and + Piece beside it offer ready-made ones — a button, a row, a line of text.\n\nEverything is inside something else, and that is what decides where it sits: an object is positioned against its parent, so moving the panel takes everything on it along.
+tutorial.aScreenOfYourOwn.putSomething.body = Дерево – то, из чего состоит экран. Выберите панель и нажмите + Объект, чтобы положить внутрь пустой объект; + Форма и + Деталь рядом предлагают готовые – кнопку, строку, строку текста.\n\nВсё находится внутри чего-то другого, и это решает, где оно стоит: объект позиционируется относительно родителя, так что перемещение панели уносит с собой всё, что на ней.
 
 # Tutorials: the nudge shown when a step has been waiting a while
 # en: Select the panel in the tree first — + Object adds INSIDE whatever is selected.
@@ -14560,8 +15139,8 @@ tutorial.aScreenOfYourOwn.putSomething.hint = Сначала выберите п
 tutorial.aScreenOfYourOwn.say.title = Скажите, что это
 
 # Tutorials: what the step says
-# en: With the new object selected, the box underneath is everything about it: its name, where it sits, how big it is, and what it draws.\n\nPosition is measured from the object's anchors, in canvas pixels, and the canvas is the whole screen. Give it a name and a size you can see — a few hundred pixels each way is a good start, since anything smaller is hard to find in the preview.
-tutorial.aScreenOfYourOwn.say.body = Когда новый объект выбран, раздел под деревом – это всё о нём: имя, где он стоит, какого размера и что рисует.\n\nПозиция отсчитывается от якорей объекта, в пикселях канваса, а канвас – весь экран. Дайте ему имя и заметный размер – несколько сотен пикселей в каждую сторону для начала, потому что что-то меньшее трудно найти в предпросмотре.
+# en: With the new object selected, the right column is everything about it, in sections: where it sits, how it looks, when it shows, what clicking does and how it moves. A closed section says what is in it.\n\nStick to says which part of its parent it stays with, and X and Y measure from there in canvas pixels. Give it a name and a size you can see — a few hundred pixels each way is a good start, since anything smaller is hard to find in the preview.
+tutorial.aScreenOfYourOwn.say.body = Когда новый объект выбран, правая колонка – это всё о нём, по разделам: где стоит, как выглядит, когда показывается, что делает щелчок и как движется. Закрытый раздел говорит, что в нём.\n\nПрикреплён к говорит, к какой части родителя он прикреплён, а X и Y отсчитываются оттуда в пикселях канваса. Дайте ему имя и заметный размер – несколько сотен пикселей в каждую сторону для начала, потому что что-то меньшее трудно найти в предпросмотре.
 
 # Tutorials: the nudge shown when a step has been waiting a while
 # en: Select the object you just added, then fill in Name and Size.
@@ -14835,6 +15414,14 @@ validation.action.playDialogue.unknownDialogue = Play dialogue указывае�
 # Validation message
 # en: Play dialogue names '{name}', which is none of the game's conversations - nothing will play.
 validation.action.playDialogue.unknownConversation = Play dialogue указывает «{name}», но такого разговора в игре нет — ничего не проиграется.
+
+# Validation message
+# en: Travel names no place - the player will not go anywhere.
+validation.action.travel.none = Travel не указывает локацию — игрок никуда не отправится.
+
+# Validation message
+# en: '{name}': the particle colour '{colour}' is not one the game reads - write it as #RRGGBB or #RRGGBBAA.
+validation.gameObject.particleColor = «{name}»: игра не прочтёт цвет частиц «{colour}» — запишите его как #RRGGBB или #RRGGBBAA.
 
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.
@@ -15559,6 +16146,10 @@ note.action.transform = Задать положение и размер чего
 note.action.playDialogue = Проиграть диалог пака или разговор игры
 
 # A note beside an action type in its dropdown, saying what it does
+# en: Take the player to a place, as its map or navigator button does
+note.action.travel = Перенести игрока в локацию, как это делает её кнопка на карте или в навигаторе
+
+# A note beside an action type in its dropdown, saying what it does
 # en: Change a setting the other actions don't reach
 note.action.component = Изменить настройку, до которой не достают другие действия
 
@@ -15567,8 +16158,8 @@ note.action.component = Изменить настройку, до которой
 note.action.deactivateAllScenes = Скрыть все сцены, показанные этим паком
 
 # A note beside an action type in its dropdown, saying what it does
-# en: Take the player to another place
-note.action.transitionLevels = Перенести игрока в другое место
+# en: Cross-fade one place into another, without the game's journey
+note.action.transitionLevels = Плавно сменить одну локацию другой, без игрового перехода
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Cover the screen while things change

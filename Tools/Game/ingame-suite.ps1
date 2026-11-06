@@ -2,6 +2,7 @@
 #
 #   powershell -File Tools\Game\ingame-suite.ps1                      # every area
 #   powershell -File Tools\Game\ingame-suite.ps1 -Filter "FullyQualifiedName~.B"   # one area (B: places)
+#   ... -Detailed                                                     # and what each check printed, passed or not
 #
 # Builds the plugin's Debug build - the one with the test bridge - into the TEST COPY (never the author's
 # game), brings the test copy's plugin languages up to date, and runs InGameSuiteTests with
@@ -12,7 +13,8 @@
 # %TEMP%\SMSModForge-ingame\<time>\.
 param(
     [string]$Test = 'D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E - ModForge test',
-    [string]$Filter = ''
+    [string]$Filter = '',
+    [switch]$Detailed
 )
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path (Split-Path $PSScriptRoot)
@@ -33,7 +35,8 @@ Get-ChildItem "$repo\SMSModForge\Languages\*.txt" | Where-Object { $_.Name -ne '
 $env:SMSMODFORGE_INGAME = $Test
 $which = 'FullyQualifiedName~InGameSuiteTests'
 if ($Filter) { $which = "$which&$Filter" }
-dotnet test "$repo\SMSModForge.Tests\SMSModForge.Tests.csproj" --filter $which --logger "console;verbosity=normal"
+$verbosity = if ($Detailed) { 'detailed' } else { 'normal' }
+dotnet test "$repo\SMSModForge.Tests\SMSModForge.Tests.csproj" --filter $which --logger "console;verbosity=$verbosity"
 $code = $LASTEXITCODE
 Remove-Item Env:\SMSMODFORGE_INGAME
 exit $code

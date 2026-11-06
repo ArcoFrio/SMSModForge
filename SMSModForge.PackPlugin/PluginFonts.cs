@@ -191,6 +191,18 @@ namespace SMSModForge.PackPlugin
                 return;
             }
 
+            // The game's own last resort stays first. Text Mesh Pro turns to its
+            // default font only after this list, so with a Windows font on the
+            // list, anything the game's fonts lack - a curly apostrophe in most of
+            // them - came from that instead: a Chinese font's wide one, in the
+            // game's own English sentences.
+            try
+            {
+                var theirs = TMP_Settings.defaultFontAsset;
+                if (theirs != null && !fallbacks.Contains(theirs)) fallbacks.Add(theirs);
+            }
+            catch (Exception) { /* no default font: nothing to keep in front */ }
+
             foreach (string family in families)
             {
                 if (fallbacks.Any(a => a != null && a.name == Name(family))) continue;

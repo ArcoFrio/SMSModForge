@@ -241,6 +241,54 @@ public sealed class GameObjectDef
     public bool OverrideActive { get; set; } = false;
 
     /// <summary>
+    /// Make this object a copy of one of the game's: the path of the original
+    /// in the game's scene, as <c>5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas</c>
+    /// or <c>6_Effects/CFXR2 Expression Loving (Timed)</c>, switched on or not.
+    /// The copy is made each time the game loads, as places are, under this
+    /// node's parent - or beside the original, with <see cref="CopyBeside"/>.
+    /// <para/>
+    /// From there it is treated like a <see cref="Bind">bound</see> object: it
+    /// keeps the place, size and on/off it was copied with unless
+    /// <see cref="OverrideTransform"/> / <see cref="OverrideActive"/> say
+    /// otherwise, its children with Bind reach the copy's own children by name
+    /// (to move a button, soften a parallax), and new children are added to it.
+    /// Until 1.8.3 a pack could create objects or change the game's, never copy
+    /// one - a host mod copied them in code, and a pack without it lost them.
+    /// </summary>
+    [JsonProperty("copyOf", Order = 26)]
+    public string CopyOf { get; set; } = "";
+
+    /// <summary>Put the copy beside its original, under the original's parent,
+    /// instead of in this place - for something that is not the place's, like
+    /// an effect the pack's dialogues switch on by its path.</summary>
+    [JsonProperty("copyBeside", Order = 27)]
+    public bool CopyBeside { get; set; }
+
+    /// <summary>The colour this object's particles start in, as hex RGB or
+    /// RGBA - on a copy or a bound object that has particles (the game's
+    /// effects). Its own particle system only: a part of it with particles of
+    /// its own takes a child node of its own.</summary>
+    [JsonProperty("particleColor", Order = 28)]
+    public string ParticleColor { get; set; } = "";
+
+    /// <summary>Apply <see cref="ParallaxStrength"/> to the parallax the
+    /// object already has - a bound or copied one that drifts with the mouse,
+    /// softened or strengthened. Off (the default) leaves it as the game made
+    /// it; an object with no parallax is left alone either way.</summary>
+    [JsonProperty("overrideParallax", Order = 29)]
+    public bool OverrideParallax { get; set; }
+
+    /// <summary>A copy of one of the game's objects (and not bound, which
+    /// takes precedence: a bound object is the original itself).</summary>
+    [JsonIgnore]
+    public bool IsCopy => !Bind && !string.IsNullOrWhiteSpace(CopyOf);
+
+    /// <summary>Keeps what it finds: an object already there, or one copied -
+    /// either way the pack applies only what it changes.</summary>
+    [JsonIgnore]
+    public bool KeepsWhatItFinds => Bind || IsCopy;
+
+    /// <summary>
     /// Absolute path to this object's EXTRACTED vanilla art, filled in when a
     /// vanilla extension is seeded from the catalog. Preview-only and never
     /// serialized — it's a machine-local path, and the sprite belongs to the
@@ -312,15 +360,15 @@ public sealed class GameObjectDef
     private static bool MayOmit(bool isDelta) => !_pruningForSave || isDelta;
 
     /// <summary>True when this node applies its own transform — always for a
-    /// created object, opt-in for a bound one.</summary>
+    /// created object, opt-in for a bound or copied one.</summary>
     [JsonIgnore]
-    public bool AppliesTransform => !Bind || OverrideTransform;
+    public bool AppliesTransform => !KeepsWhatItFinds || OverrideTransform;
 
     /// <summary>True when this node owns renderer-ish properties (sprite,
-    /// sorting, alpha, mask, parallax). A bound node never does — those belong
-    /// to the object that's already there.</summary>
+    /// sorting, alpha, mask, parallax). A bound or copied node never does —
+    /// those belong to the object that's already there, or was copied.</summary>
     [JsonIgnore]
-    public bool AppliesOwnVisuals => !Bind;
+    public bool AppliesOwnVisuals => !KeepsWhatItFinds;
 
     // Bind-gated: omitted only when writing the manifest. See MayOmit.
     public bool ShouldSerializeSprite() => MayOmit(AppliesOwnVisuals);
@@ -334,10 +382,11 @@ public sealed class GameObjectDef
     // The settings only mean anything while the effect runs, so a node that
     // switched it off writes the switch alone rather than three dead values.
     // An unset strength is absence, not a number — see ParallaxStrength.
-    public bool ShouldSerializeParallaxStrength() => MayOmit(AppliesOwnVisuals) && !ParallaxDisabled && ParallaxStrength.HasValue;
+    public bool ShouldSerializeParallaxStrength() => ParallaxStrength.HasValue
+        && (MayOmit(AppliesOwnVisuals) && !ParallaxDisabled || KeepsWhatItFinds && OverrideParallax);
     public bool ShouldSerializeParallaxReversed() => MayOmit(AppliesOwnVisuals) && !ParallaxDisabled && ParallaxReversed;
     public bool ShouldSerializeParallaxIsUI() => MayOmit(AppliesOwnVisuals) && !ParallaxDisabled && ParallaxIsUI;
-    public bool ShouldSerializeStartActive() => MayOmit(!Bind || OverrideActive);
+    public bool ShouldSerializeStartActive() => MayOmit(!KeepsWhatItFinds || OverrideActive);
     public bool ShouldSerializeStartAlpha() => MayOmit(AppliesOwnVisuals);
     public bool ShouldSerializeMask() => MayOmit(AppliesOwnVisuals) && !string.IsNullOrEmpty(Mask);
     // Value-defaulted: an omitted empty list or empty string reads back as
@@ -351,8 +400,12 @@ public sealed class GameObjectDef
     // Gated too: it defaults to TRUE, so dropping it would flip an unticked box.
     public bool ShouldSerializeDeactivateWhenUnmet() => MayOmit(ActiveConditions.Count > 0);
     public bool ShouldSerializeBind() => Bind;
-    // The override flags mean nothing without Bind, so they stay out of the
-    // manifest for the ordinary create-a-GameObject case.
-    public bool ShouldSerializeOverrideTransform() => MayOmit(Bind);
-    public bool ShouldSerializeOverrideActive() => MayOmit(Bind);
+    // The override flags mean nothing without Bind or a copy, so they stay out
+    // of the manifest for the ordinary create-a-GameObject case.
+    public bool ShouldSerializeOverrideTransform() => MayOmit(KeepsWhatItFinds);
+    public bool ShouldSerializeOverrideActive() => MayOmit(KeepsWhatItFinds);
+    public bool ShouldSerializeCopyOf() => IsCopy;
+    public bool ShouldSerializeCopyBeside() => IsCopy && CopyBeside;
+    public bool ShouldSerializeParticleColor() => !string.IsNullOrWhiteSpace(ParticleColor);
+    public bool ShouldSerializeOverrideParallax() => KeepsWhatItFinds && OverrideParallax;
 }

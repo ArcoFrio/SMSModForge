@@ -51,10 +51,14 @@ public static class UiTextRaster
     /// <param name="slant">How far the top of a glyph leans right of its
     /// baseline, as a share of its height. 0 is upright; this is how
     /// <c>&lt;i&gt;</c> is drawn, since there is no italic atlas either.</param>
+    /// <param name="atlasColour">Straight BGRA for a font whose letters are a
+    /// coloured picture (<see cref="TmpFont.IsColourAtlas"/>): those colours are
+    /// multiplied by the text's, as its shader does.</param>
     public static void DrawInto(byte[] target, int width, int height,
                                 TextLayout layout, TmpFont font,
                                 byte[] atlasAlpha, int atlasWidth, int atlasHeight,
-                                UiColor color, double faceShift = -1, double slant = 0)
+                                UiColor color, double faceShift = -1, double slant = 0,
+                                byte[]? atlasColour = null)
     {
         if (target == null || layout == null || font == null || atlasAlpha == null) return;
         if (width <= 0 || height <= 0 || atlasWidth <= 0 || atlasHeight <= 0) return;
@@ -147,6 +151,33 @@ public static class UiTextRaster
                     if (lean != 0 && (u < 0 || u > 1)) continue;
                     double fx = sx + u * sw - 0.5;
 
+                    if (atlasColour != null)
+                    {
+                        // Drawn smaller than it was baked, the game reads a smaller
+                        // copy of the atlas (its mipmaps); several readings across
+                        // the pixel come to the same.
+                        double step = pixelsPerTexel < 0.75 ? 0.25 / pixelsPerTexel : 0;
+                        double sumA = 0, sumB = 0, sumG = 0, sumR = 0;
+                        int readings = 0;
+                        for (int oy = step > 0 ? -1 : 1; oy <= 1; oy += 2)
+                            for (int ox = step > 0 ? -1 : 1; ox <= 1; ox += 2)
+                            {
+                                var (bb, gg, rr, aa) = SampleColour(atlasColour, atlasWidth, atlasHeight,
+                                                                    fx + ox * step, fy + oy * step);
+                                sumB += bb * aa; sumG += gg * aa; sumR += rr * aa; sumA += aa;
+                                readings++;
+                            }
+                        double covered = sumA / readings * ca;
+                        if (covered <= 0) continue;
+                        double keep = 1.0 - covered;
+                        int at = (y * width + x) * 4;
+                        target[at] = Round(sumB / readings * cb * ca * 255 + target[at] * keep);
+                        target[at + 1] = Round(sumG / readings * cg * ca * 255 + target[at + 1] * keep);
+                        target[at + 2] = Round(sumR / readings * cr * ca * 255 + target[at + 2] * keep);
+                        target[at + 3] = Round(covered * 255 + target[at + 3] * keep);
+                        continue;
+                    }
+
                     double alpha = Sample(atlasAlpha, atlasWidth, atlasHeight, fx, fy);
 
                     // The silhouette, and how much of it is face rather than
@@ -219,6 +250,23 @@ public static class UiTextRaster
         double top = a + (b - a) * wx;
         double bottom = c + (d - c) * wx;
         return (top + (bottom - top) * wy) / 255.0;
+    }
+
+    /// <summary>Bilinear sample of a straight BGRA atlas, 0..1 each.</summary>
+    private static (double B, double G, double R, double A) SampleColour(byte[] atlas, int width, int height, double x, double y)
+    {
+        int x0 = (int)Math.Floor(x), y0 = (int)Math.Floor(y);
+        double wx = x - x0, wy = y - y0;
+        int a = (Clamp(y0, height) * width + Clamp(x0, width)) * 4, b = (Clamp(y0, height) * width + Clamp(x0 + 1, width)) * 4;
+        int c = (Clamp(y0 + 1, height) * width + Clamp(x0, width)) * 4, d = (Clamp(y0 + 1, height) * width + Clamp(x0 + 1, width)) * 4;
+
+        double Mix(int channel)
+        {
+            double top = atlas[a + channel] + (atlas[b + channel] - atlas[a + channel]) * wx;
+            double bottom = atlas[c + channel] + (atlas[d + channel] - atlas[c + channel]) * wx;
+            return (top + (bottom - top) * wy) / 255.0;
+        }
+        return (Mix(0), Mix(1), Mix(2), Mix(3));
     }
 
     private static int Clamp(int v, int limit) => v < 0 ? 0 : v >= limit ? limit - 1 : v;

@@ -45,6 +45,235 @@ public sealed class TextLayout
 public enum TextAlign { Left, Center, Right }
 
 /// <summary>
+/// The font style on one of the game's text objects, as Unity writes it:
+/// "Bold, UpperCase". Nearly half of the game's labels have one, and leaving it
+/// out showed "Quit" where the game says "QUIT". An object keeps its style when a
+/// pack changes its words.
+/// </summary>
+public readonly record struct UiTextStyle(bool Bold, bool Italic, bool Underline, bool Strikethrough,
+                                          bool UpperCase, bool LowerCase, bool SmallCaps, bool Legacy = false)
+{
+    /// <summary>Said of old-style text (UI.Text), whose bold is another thing.</summary>
+    public const string LegacyMark = "Legacy, ";
+
+    public static UiTextStyle Parse(string? unity)
+    {
+        bool Has(string flag) => unity != null && unity.Contains(flag, StringComparison.OrdinalIgnoreCase);
+        return new UiTextStyle(Has("Bold"), Has("Italic"), Has("Underline"), Has("Strikethrough"),
+                               Has("UpperCase"), Has("LowerCase"), Has("SmallCaps"), Has("Legacy"));
+    }
+
+    /// <summary>TextMeshPro's small capitals: small letters drawn as capitals
+    /// at 80% of the size.</summary>
+    private const double SmallCapsScale = 0.8;
+
+    /// <summary>What it says once its case is applied.</summary>
+    public string Cased(string text)
+        => UpperCase ? text.ToUpperInvariant() : LowerCase ? text.ToLowerInvariant() : text;
+
+    /// <summary>Small capitals as runs of two sizes.</summary>
+    public IReadOnlyList<StyledRun> SmallCapRuns(string text)
+    {
+        var runs = new List<StyledRun>();
+        var piece = new System.Text.StringBuilder();
+        bool small = false;
+        foreach (char c in text)
+        {
+            bool isSmall = char.IsLower(c);
+            if (isSmall != small && piece.Length > 0)
+            {
+                runs.Add(new StyledRun(piece.ToString(), small ? SmallCapsScale : 1));
+                piece.Clear();
+            }
+            small = isSmall;
+            piece.Append(isSmall ? char.ToUpperInvariant(c) : c);
+        }
+        if (piece.Length > 0) runs.Add(new StyledRun(piece.ToString(), small ? SmallCapsScale : 1));
+        return runs;
+    }
+}
+
+/// <summary>
+/// A laid-out string put into its rectangle, ready to draw: the one place the
+/// renderers work out where text goes, so the two cannot disagree.
+/// </summary>
+public static class UiTextBlock
+{
+    /// <summary>A laid-out string at another scale, each way: what a scaled parent
+    /// does to it. The lines have already been broken.</summary>
+    public static TextLayout Scaled(TextLayout layout, double kx, double ky)
+    {
+        if (Math.Abs(kx - 1) < 0.0001 && Math.Abs(ky - 1) < 0.0001) return layout;
+        var made = new TextLayout { Height = layout.Height * ky };
+        foreach (var g in layout.Glyphs)
+            made.Glyphs.Add(g with { X = g.X * kx, Y = g.Y * ky, Width = g.Width * kx, Height = g.Height * ky });
+        foreach (double width in layout.LineWidths) made.LineWidths.Add(width * kx);
+        made.Missing.AddRange(layout.Missing);
+        return made;
+    }
+
+    /// <summary>Lay out a string in the style its object has.</summary>
+    public static TextLayout Measure(TmpFont font, string text, UiTextStyle style, double size, double wrapWidth,
+                                     TextAlign align, double lineSpacing, double characterSpacing,
+                                     IReadOnlyList<TmpFont>? fallbacks)
+    {
+        // Bold letters stand further apart as well as being heavier, by what the
+        // font says. Old-style text is bold by another route, with no such gap.
+        if (style.Bold && !style.Legacy) characterSpacing += font.BoldSpacing;
+        return style.SmallCaps
+            ? TmpTextLayout.MeasureRuns(font, style.SmallCapRuns(text), size, wrapWidth, align, lineSpacing, characterSpacing, fallbacks)
+            : TmpTextLayout.Measure(font, style.Cased(text), size, wrapWidth, align, lineSpacing, characterSpacing, fallbacks);
+    }
+
+    /// <summary>
+    /// The font TextMeshPro turns to when neither a font nor its own fallbacks
+    /// have a letter: the game's settings name this one, and a curly apostrophe
+    /// in a font without one comes from it.
+    /// </summary>
+    public const string LastResortFont = "LiberationSans SDF";   // English on purpose: the game's font name.
+
+    /// <summary>A font's fallback chain as the game walks it.</summary>
+    public static List<TmpFont> Fallbacks(UiFontSet set, IUiAssets assets)
+    {
+        var found = new List<TmpFont>();
+        foreach (string name in set.Font.Fallbacks.Append(LastResortFont))
+        {
+            var also = assets.Font(name);
+            if (also != null && !ReferenceEquals(also.Font, set.Font) && !found.Contains(also.Font)) found.Add(also.Font);
+        }
+        return found;
+    }
+
+    /// <summary>Draw what <see cref="Fit"/> made, into a new buffer. Letters from
+    /// a fallback font are drawn from that font's atlas, and with its look.</summary>
+    public static byte[] Draw(TextLayout laid, UiFontSet set, IUiAssets assets, int width, int height,
+                              UiColor colour, UiTextStyle style)
+    {
+        var target = UiCompositor.NewLayer(width, height);
+        foreach (var owned in laid.Glyphs.GroupBy(g => g.Glyph.Owner ?? set.Font))
+        {
+            var from = ReferenceEquals(owned.Key, set.Font) ? set : assets.Font(owned.Key.Name);
+            if (from == null) continue;
+            var part = new TextLayout { Height = laid.Height };
+            part.Glyphs.AddRange(owned);
+            UiTextRaster.DrawInto(target, width, height, part, from.Font, from.Alpha, from.Width, from.Height, colour,
+                                  faceShift: style.Bold ? from.Font.BoldShift : -1,
+                                  slant: style.Italic ? DialogueLook.ItalicSlant : 0,
+                                  atlasColour: from.Colour);
+        }
+        if (style.Underline) Line(target, width, height, laid, set.Font, colour, set.Font.Face.UnderlineOffset, set.Font.Face.UnderlineThickness);
+        if (style.Strikethrough) Line(target, width, height, laid, set.Font, colour, set.Font.Face.StrikethroughOffset, set.Font.Face.StrikethroughThickness);
+        return target;
+    }
+
+    /// <summary>A rule along each line, at the height the font says, measured up
+    /// from the baseline.</summary>
+    private static void Line(byte[] target, int width, int height, TextLayout laid, TmpFont font, UiColor colour,
+                             double offset, double thickness)
+    {
+        foreach (var line in laid.Glyphs.GroupBy(g => g.Line))
+        {
+            var first = line.FirstOrDefault(g => g.Glyph.Metrics.Width > 0 && g.Width > 0);
+            if (first.Glyph == null) continue;
+            double scale = first.Width / first.Glyph.Metrics.Width;
+            double baseline = first.Y + first.Glyph.Metrics.BearingY * scale;
+            double fontScale = scale / Math.Max(0.0001, first.Glyph.Scale);
+
+            int x0 = Math.Max(0, (int)Math.Floor(line.Min(g => g.X)));
+            int x1 = Math.Min(width, (int)Math.Ceiling(line.Max(g => g.Right)));
+            int y0 = Math.Max(0, (int)Math.Round(baseline - offset * fontScale));
+            int y1 = Math.Min(height, y0 + Math.Max(1, (int)Math.Round(thickness * fontScale)));
+            double a = colour.A / 255.0;
+            for (int y = y0; y < y1; y++)
+                for (int x = x0; x < x1; x++)
+                {
+                    int t = (y * width + x) * 4;
+                    double keep = 1 - a;
+                    target[t] = (byte)(colour.B * a + target[t] * keep + 0.5);
+                    target[t + 1] = (byte)(colour.G * a + target[t + 1] * keep + 0.5);
+                    target[t + 2] = (byte)(colour.R * a + target[t + 2] * keep + 0.5);
+                    target[t + 3] = (byte)(255 * a + target[t + 3] * keep + 0.5);
+                }
+        }
+    }
+
+    /// <summary>
+    /// The size text set to shrink to fit ends up at: the largest between the
+    /// two limits that fits, in steps of 0.05, which is where TextMeshPro's own
+    /// search settles.
+    /// </summary>
+    public static double FitSize(TmpFont font, string text, UiTextStyle style, double width, double height, bool wrap,
+                                 double min, double max, double lineSpacing, double characterSpacing,
+                                 IReadOnlyList<TmpFont>? fallbacks)
+    {
+        if (max < min) max = min;
+        if (Fits(max)) return max;
+
+        double low = min, high = max;
+        while (high - low > 0.05)
+        {
+            double middle = Math.Round((low + high) / 2 * 20) / 20;
+            if (middle <= low || middle >= high) break;
+            if (Fits(middle)) low = middle; else high = middle;
+        }
+        return low;
+
+        bool Fits(double size)
+        {
+            var laid = Measure(font, text, style, size, wrap ? width : 0, TextAlign.Left,
+                               lineSpacing, characterSpacing, fallbacks);
+            return laid.Height - GapUnderLastLine(font, size) <= height && (wrap || laid.Width <= width);
+        }
+    }
+
+    /// <summary>What a line's height allows below its descenders. The game's
+    /// test stops at the descender of the last line.</summary>
+    private static double GapUnderLastLine(TmpFont font, double size)
+        => Math.Max(0, font.Face.LineHeight - (font.Face.AscentLine - font.Face.DescentLine)) * font.ScaleFor(size);
+
+    /// <summary>
+    /// Lines up a measured string in a box of the given size. Text is allowed
+    /// to run past its box, as the game's does, so the buffer it is drawn into
+    /// grows to hold it; <paramref name="Left"/> and <paramref name="Above"/> say
+    /// how far that buffer reaches beyond the box.
+    /// </summary>
+    public static (TextLayout Laid, int Left, int Above, int Width, int Height) Fit(
+        TextLayout layout, TmpFont font, double boxWidth, double boxHeight, bool wrapped, string? alignment)
+    {
+        string a = (alignment ?? "").ToLowerInvariant();
+
+        // Unwrapped, the layout had no width to line up in, so it did it about
+        // nought: left where it started, centred or right about the box's edge.
+        double across = wrapped ? 0
+                      : a.Contains("left") ? 0
+                      : a.Contains("right") ? boxWidth
+                      : boxWidth / 2.0;
+        double down = a.Contains("top") ? 0
+                    : a.Contains("bottom") ? boxHeight - layout.Height
+                    : (boxHeight - layout.Height) / 2.0;
+
+        double pad = font.Atlas.Padding * (layout.Glyphs.Count > 0 && layout.Glyphs[0].Glyph.Metrics.Width > 0
+                                               ? layout.Glyphs[0].Width / layout.Glyphs[0].Glyph.Metrics.Width : 1) + 2;
+        double lowest = 0, highest = boxWidth, upper = Math.Min(0, down), lower = Math.Max(boxHeight, down + layout.Height);
+        foreach (var g in layout.Glyphs)
+        {
+            lowest = Math.Min(lowest, g.X + across - pad);
+            highest = Math.Max(highest, g.Right + across + pad);
+            upper = Math.Min(upper, g.Y + down - pad);
+            lower = Math.Max(lower, g.Bottom + down + pad);
+        }
+
+        int left = (int)Math.Ceiling(Math.Max(0, -lowest)), above = (int)Math.Ceiling(Math.Max(0, -upper));
+        int width = left + (int)Math.Ceiling(highest), height = above + (int)Math.Ceiling(lower);
+
+        var laid = new TextLayout { Height = layout.Height };
+        foreach (var g in layout.Glyphs) laid.Glyphs.Add(g with { X = g.X + across + left, Y = g.Y + down + above });
+        laid.LineWidths.AddRange(layout.LineWidths);
+        return (laid, left, above, width, height);
+    }
+}
+
+/// <summary>
 /// One stretch of a string laid out at its own size.
 /// <para/>
 /// <paramref name="SizeScale"/> is a multiple of the size passed to
@@ -234,7 +463,10 @@ public static class TmpTextLayout
         {
             string text = run.Text ?? "";
             double scale = baseScale * (run.SizeScale > 0 ? run.SizeScale : 1);
-            double extraPerGlyph = characterSpacing / 100.0 * font.Face.PointSize * scale;
+
+            // By the size of the text, not of this run: small capitals are closer
+            // to one another only because they are smaller.
+            double extraPerGlyph = (characterSpacing + font.NormalSpacing) / 100.0 * font.Face.PointSize * baseScale;
 
             for (int i = 0; i < text.Length; i++)
             {
@@ -330,6 +562,11 @@ public static class TmpTextLayout
                 l.Glyphs.RemoveAt(l.Glyphs.Count - 1);
                 l.Remeasure();
             }
+
+            // Spacing goes between letters: none after the last, or a centred
+            // line sits half a gap to the left of where the game puts it.
+            if (characterSpacing + font.NormalSpacing != 0 && l.Glyphs.Count > 0)
+                l.Width -= (characterSpacing + font.NormalSpacing) / 100.0 * font.Face.PointSize * baseScale;
         }
         return lines;
     }

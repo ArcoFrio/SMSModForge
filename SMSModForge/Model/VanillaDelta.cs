@@ -180,7 +180,7 @@ public static class VanillaDelta
     /// where it goes, even though the object itself is untouched.
     /// </summary>
     public static bool HasOwnAdditions(GameObjectDef n)
-        => n.Components.Count > 0 || n.ActiveConditions.Count > 0 || n.Npcs.Count > 0;
+        => AltersItsTarget(n) || n.Npcs.Count > 0;
 
     /// <summary>
     /// Whether the pack ALTERS the vanilla object, as opposed to merely hanging
@@ -194,7 +194,8 @@ public static class VanillaDelta
     /// was placed in it, which is the one thing that container is for.
     /// </summary>
     public static bool AltersItsTarget(GameObjectDef n)
-        => n.Components.Count > 0 || n.ActiveConditions.Count > 0;
+        => n.Components.Count > 0 || n.ActiveConditions.Count > 0
+           || !string.IsNullOrWhiteSpace(n.ParticleColor) || n.OverrideParallax;
 
     /// <summary>
     /// LIVE test of whether a bound node currently changes its vanilla target —
@@ -256,10 +257,11 @@ public static class VanillaDelta
         // the game does. Preview-only like everything above: the runtime never
         // touches a bound object's effect, and these fields are gated out of the
         // saved manifest for bound nodes.
+        // A node that overrides the strength keeps its own (1.8.3).
         var px = baseline.ComponentValues
                          ?.FirstOrDefault(c => c.Type == "ParallaxMouseEffect")?.Params;
         node.ParallaxDisabled = px == null;
-        if (px != null)
+        if (px != null && !node.OverrideParallax)
         {
             node.ParallaxStrength = ParamFloat(px, "parallaxStrength") ?? 0.75f;
             node.ParallaxReversed = ParamBool(px, "reversed");
@@ -414,5 +416,9 @@ public static class VanillaDelta
         Bind = n.Bind,
         OverrideTransform = n.OverrideTransform,
         OverrideActive = n.OverrideActive,
+        OverrideParallax = n.OverrideParallax,
+        ParticleColor = n.ParticleColor,
+        CopyOf = n.CopyOf,
+        CopyBeside = n.CopyBeside,
     };
 }

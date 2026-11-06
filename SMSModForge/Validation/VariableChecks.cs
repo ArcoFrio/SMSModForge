@@ -23,6 +23,17 @@ internal static class VariableChecks
         Comparisons(pack, values, issues);
         OutfitBindings(pack, values, issues);
         PlayDialogues(pack, issues);
+        Travels(pack, issues);
+    }
+
+    /// <summary>A Travel action naming no place: it goes nowhere, and the game
+    /// says so only in its log. A place it names that does not exist is
+    /// Validate's level check's, as for every level setting.</summary>
+    private static void Travels(ModPack pack, List<ValidationIssue> issues)
+    {
+        foreach (var (a, at) in PackWalk.ActionsAt(pack))
+            if (a.Type == NodeActionTypes.Travel && Get(a.Params ?? new(), "target", "").Trim().Length == 0)
+                issues.Add(new(Severity.Warning, at.Path, Loc.T("validation.action.travel.none"), "action.travelNone"));
     }
 
     /// <summary>

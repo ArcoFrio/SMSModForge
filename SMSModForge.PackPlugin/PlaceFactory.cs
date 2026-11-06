@@ -333,6 +333,10 @@ namespace SMSModForge.PackPlugin
             bool isNpcRoot = (string)ov["role"] == "npcRoot";
             if (isNpcRoot) localPos = true;   // the NPCs subtree composes locally
             bool bind = (bool?)ov["bind"] ?? false;
+            string copyOf = bind || isNpcRoot ? null : (string)ov["copyOf"];
+            // A copy keeps what it was copied with, as a bound object keeps
+            // what it is: from here on the two are built alike.
+            bool asFound = bind || !string.IsNullOrEmpty(copyOf);
 
             try
             {
@@ -341,7 +345,26 @@ namespace SMSModForge.PackPlugin
                 string spriteRel = (string)ov["sprite"];
                 bool hasSprite = !string.IsNullOrEmpty(spriteRel) && pack.Has(spriteRel);
 
-                if (isNpcRoot)
+                if (asFound && !bind)
+                {
+                    // A copy of one of the game's objects, found by its path in
+                    // the scene whether it is switched on or not, made here - or
+                    // beside the original, for one that is not the place's (an
+                    // effect a dialogue switches on by its path). Made at each
+                    // load, as the place is. A miss skips it, as a bind does:
+                    // the original was moved or renamed.
+                    var original = TransformExtensions.ResolveGameObject(copyOf);
+                    if (original == null)
+                    {
+                        logger.LogWarning("[SMSModForge.PackPlugin] '" + placeKey +
+                            "': '" + copyOf + "' to copy as '" + name + "' is not in the game's scene - skipping it and its children.");
+                        return;
+                    }
+                    var under = ((bool?)ov["copyBeside"] ?? false) ? original.transform.parent : parent;
+                    go = Object.Instantiate(original, under, false);
+                    go.name = name;
+                }
+                else if (isNpcRoot)
                 {
                     // The level already owns its NPCs container — adopt it rather
                     // than adding a second one.
@@ -383,7 +406,7 @@ namespace SMSModForge.PackPlugin
                 // explicitly opted into overriding it — otherwise merely listing
                 // an existing object in order to hang a child off it would snap
                 // it to the origin at native scale.
-                bool applyTransform = !bind || ((bool?)ov["overrideTransform"] ?? false);
+                bool applyTransform = !asFound || ((bool?)ov["overrideTransform"] ?? false);
 
                 if (applyTransform)
                 {
@@ -394,7 +417,7 @@ namespace SMSModForge.PackPlugin
                     // used, and what MoveGameObject works in).
                     float x = (float?)ov["x"] ?? 0f;
                     float y = (float?)ov["y"] ?? 0f;
-                    if (localPos || bind) go.transform.localPosition = new Vector3(x, y, 0f);
+                    if (localPos || asFound) go.transform.localPosition = new Vector3(x, y, 0f);
                     else go.transform.position = new Vector3(x, y, go.transform.position.z);
 
                     // Full transforms — apply rotation / scale (defaults leave it
@@ -413,7 +436,7 @@ namespace SMSModForge.PackPlugin
 
                 // Renderer properties belong to the existing object too, so a
                 // bound node never touches them (it has no sprite of its own).
-                var sr = bind ? null : go.GetComponent<SpriteRenderer>();
+                var sr = asFound ? null : go.GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
                     sr.sprite = LoadOverlaySprite(pack, spriteRel);
@@ -440,7 +463,11 @@ namespace SMSModForge.PackPlugin
                 // effect. A created node clones the prototype's component, so
                 // enabling is a matter of leaving it on and dressing it; there is
                 // nothing to add.
-                if (!bind)
+                // ...unless it asks: a copy's or a bound object's own drift,
+                // softened or strengthened (overrideParallax, 1.8.3).
+                if (asFound && ((bool?)ov["overrideParallax"] ?? false))
+                    SetParallax(go, (float?)ov["parallaxStrength"], null, null);
+                if (!asFound)
                 {
                     bool parallaxDisabled = (bool?)ov["parallaxDisabled"] ?? true;
                     var pe = go.GetComponent("ParallaxMouseEffect");
@@ -456,10 +483,29 @@ namespace SMSModForge.PackPlugin
 
                 // Same opt-in rule as the transform: listing an existing object
                 // must not switch it on/off unless that was the point.
-                if (!bind || ((bool?)ov["overrideActive"] ?? false))
+                if (!asFound || ((bool?)ov["overrideActive"] ?? false))
                 {
                     bool startActive = (bool?)ov["startActive"] ?? true;
                     go.SetActive(startActive);
+                }
+
+                // The colour its particles start in - the game's effects, on a
+                // copy or on the original. Its own particle system only.
+                string particles = (string)ov["particleColor"];
+                if (!string.IsNullOrEmpty(particles))
+                {
+                    var ps = go.GetComponent<ParticleSystem>();
+                    if (ps == null)
+                        logger.LogWarning("[SMSModForge.PackPlugin] '" + placeKey + "': '" + name +
+                            "' has a particle colour but no particles of its own.");
+                    else if (BustFactory.TryParseHexColor(particles, out var colour))
+                    {
+                        var main = ps.main;
+                        main.startColor = colour;
+                    }
+                    else
+                        logger.LogWarning("[SMSModForge.PackPlugin] '" + placeKey + "': '" + name +
+                            "' has a particle colour '" + particles + "' that is not #RRGGBB or #RRGGBBAA.");
                 }
 
                 // Authored activation conditions: the object's active state is

@@ -41,6 +41,7 @@ public static class ParamsRead
         [NodeActionTypes.EmitSignalDelayed] = new[] { "seconds", "signal" },
         [NodeActionTypes.LeaveUiFaded] = Array.Empty<string>(),
         [NodeActionTypes.TransitionLevels] = new[] { "fromLevel", "seconds", "signal", "toLevel" },
+        [NodeActionTypes.Travel] = new[] { "music", "target" },
         [NodeActionTypes.FadeSprite] = new[] { "kind", "layer", "overlayLevel", "path", "seconds", "target", "to" },
         [NodeActionTypes.SetComponentProperty] = new[] { "component", "kind", "layer", "overlayLevel", "path", "property", "seconds", "target", "value" },
         [NodeActionTypes.MoveGameObject] = new[] { "home", "kind", "layer", "overlayLevel", "path", "relative", "seconds", "target", "x", "y" },

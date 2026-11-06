@@ -26,6 +26,11 @@ public sealed class VanillaUiAssets : IUiAssets
         [JsonProperty("pixelsPerUnit")] public float PixelsPerUnit { get; set; } = 100f;
         [JsonProperty("texture")] public string Texture { get; set; } = "";
         [JsonProperty("textureRect")] public float[] TextureRect { get; set; } = new float[4];
+
+        /// <summary>The sprite's whole size and what was trimmed from each edge
+        /// of it (left, bottom, right, top) - see <see cref="UiSlice.DrawnArea"/>.</summary>
+        [JsonProperty("rect")] public float[]? Rect { get; set; }
+        [JsonProperty("padding")] public float[]? Padding { get; set; }
     }
 
     private readonly string _root;
@@ -35,6 +40,7 @@ public sealed class VanillaUiAssets : IUiAssets
     private readonly Dictionary<string, float> _ppuByName = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, string> _nameByKey = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, UiSprite?> _sprites = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, (float Width, float Height, double[] Padding)> _spriteWhole = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, UiFontSet?> _fonts = new(StringComparer.OrdinalIgnoreCase);
     private readonly List<string> _fontFileFolders = new();
 
@@ -89,6 +95,8 @@ public sealed class VanillaUiAssets : IUiAssets
                 int w = (int)System.Math.Round(At(e.TextureRect, 2));
                 int h = (int)System.Math.Round(At(e.TextureRect, 3));
                 if (w > 0 && h > 0) _spriteSizes[e.Key] = (w, h);
+                if (e.Rect is { Length: > 1 } && e.Padding is { Length: > 3 })
+                    _spriteWhole[e.Key] = (e.Rect[0], e.Rect[1], Array.ConvertAll(e.Padding, v => (double)v));
                 if (!byName.TryGetValue(e.Sprite, out var sharing))
                     byName[e.Sprite] = sharing = new List<SpriteEntry>();
                 sharing.Add(e);
@@ -282,6 +290,9 @@ public sealed class VanillaUiAssets : IUiAssets
                     was.Width, was.Height);
         }
 
+        if (made != null && _spriteWhole.TryGetValue(key, out var whole))
+            made = made with { RectWidth = whole.Width, RectHeight = whole.Height, Padding = whole.Padding };
+
         // Cached even when it failed. A missing sprite is reported once per
         // render rather than retried for every one of the hundreds of objects
         // that might use it.
@@ -295,7 +306,15 @@ public sealed class VanillaUiAssets : IUiAssets
         if (_fonts.TryGetValue(name, out var cached)) return cached;
 
         UiFontSet? made = null;
-        var font = TmpFont.Load(Path.Combine(_root, "Fonts", Safe(name) + ".json"));
+        var font = TmpFont.Load(Path.Combine(_root, "Fonts", Safe(name) + ".json"))
+                   // Old-style text names a font file rather than a TextMeshPro
+                   // asset, and has no atlas of its own to draw from. The asset
+                   // made from that same file has the same letters; drawn from it
+                   // the label is close, and left out it is simply missing.
+                   ?? TmpFont.Load(Path.Combine(_root, "Fonts", Safe(name) + " SDF.json"))
+                   ?? (string.Equals(name, LegacyDefaultFont, StringComparison.OrdinalIgnoreCase)
+                       ? TmpFont.Load(Path.Combine(_root, "Fonts", Safe(UiTextBlock.LastResortFont) + ".json"))
+                       : null);
         if (font != null && font.Atlas.Pages.Count > 0 && !string.IsNullOrEmpty(font.Atlas.Pages[0]))
         {
             var alpha = DecodeAlpha(Path.Combine(_root, "Fonts", font.Atlas.Pages[0]));
@@ -314,7 +333,8 @@ public sealed class VanillaUiAssets : IUiAssets
                     if (TmpGlyphBaker.Attach(font, source, grown, w, h, h * 2))
                         (pixels, h) = (grown, h * 2);
                 }
-                made = new UiFontSet(font, pixels, w, h);
+                made = new UiFontSet(font, pixels, w, h,
+                                     font.IsColourAtlas ? DecodeColour(Path.Combine(_root, "Fonts", font.Atlas.Pages[0])) : null);
             }
         }
         _fonts[name] = made;
@@ -355,6 +375,24 @@ public sealed class VanillaUiAssets : IUiAssets
             var alpha = new byte[w * h];
             for (int i = 0; i < alpha.Length; i++) alpha[i] = full[i * 4 + 3];
             return (alpha, w, h);
+        }
+        catch { return null; }
+    }
+
+    /// <summary>What Unity calls the font old-style text uses when it names none.</summary>
+    private const string LegacyDefaultFont = "LegacyRuntime";
+
+    /// <summary>A font atlas whose letters are a coloured picture, as straight
+    /// BGRA - see <see cref="TmpFont.IsColourAtlas"/>.</summary>
+    private static byte[]? DecodeColour(string path)
+    {
+        try
+        {
+            if (!File.Exists(path)) return null;
+            var converted = new FormatConvertedBitmap(Read(path), PixelFormats.Bgra32, null, 0);
+            var full = new byte[converted.PixelWidth * converted.PixelHeight * 4];
+            converted.CopyPixels(full, converted.PixelWidth * 4, 0);
+            return full;
         }
         catch { return null; }
     }

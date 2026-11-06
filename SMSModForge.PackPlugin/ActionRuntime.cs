@@ -600,6 +600,22 @@ namespace SMSModForge.PackPlugin
                         return false;
                     }
 
+                case "Travel":
+                    {
+                        // The journey the place's navigator button makes, once
+                        // the game is free to make it: on a line, after its
+                        // dialogue (NavigatorRuntime.RequestTravel).
+                        string token = Deref((string)p["target"] ?? "", ctx).Trim();
+                        var place = Plugin.ResolvePlace(token, ctx.PackId, GameObject.Find("5_Levels")?.transform);
+                        if (place == null)
+                        {
+                            ctx.Log?.LogWarning("[SMSModForge.PackPlugin] Travel: no place '" + token + "'.");
+                            return false;
+                        }
+                        NavigatorRuntime.RequestTravel(place, Deref((string)p["music"] ?? "", ctx).Trim(), ctx.Log);
+                        return false;
+                    }
+
                 case "SpinGameObject":
                     {
                         // Start/stop a constant Z-spin via a PackSpin component.

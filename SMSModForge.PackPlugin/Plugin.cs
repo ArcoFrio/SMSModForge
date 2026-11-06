@@ -2706,17 +2706,27 @@ namespace SMSModForge.PackPlugin
             if (string.IsNullOrEmpty(token) || level5 == null) return null;
             int colon = token.IndexOf(':');
             if (colon > 0 && colon < token.Length - 1)
-            {
-                string resolve = token.StartsWith("place:")
-                    ? "self:" + token.Substring("place:".Length)
-                    : token;
-                var entry = PlaceRegistry.Resolve(resolve, thisPackId, level5);
-                if (entry?.Level != null) return entry.Level;
-                return null;
-            }
+                return ResolvePlace(token, thisPackId, level5)?.Level;
             // Bare GO name under 5_Levels (back-compat).
             var t = level5.Find(token);
             return t != null ? t.gameObject : null;
+        }
+
+        /// <summary>The place a level token names - its level, where it sits
+        /// under <c>5_Levels</c>, its arrival conversation - for what needs more
+        /// than the level: a journey. The tokens <see cref="ResolveLevelTarget"/>
+        /// takes, a bare level name included.</summary>
+        internal static PlaceRegistry.Entry ResolvePlace(string token, string thisPackId, Transform level5)
+        {
+            if (string.IsNullOrEmpty(token) || level5 == null) return null;
+            int colon = token.IndexOf(':');
+            if (colon <= 0 || colon == token.Length - 1)
+                return PlaceRegistry.Resolve("vanilla:" + token, thisPackId, level5);
+            string resolve = token.StartsWith("place:")
+                ? "self:" + token.Substring("place:".Length)
+                : token;
+            var entry = PlaceRegistry.Resolve(resolve, thisPackId, level5);
+            return entry?.Level != null ? entry : null;
         }
 
         private void LoadAllPacks(Transform bustManager, GameObject baseBust)

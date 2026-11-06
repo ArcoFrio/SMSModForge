@@ -290,6 +290,10 @@ game.notice.news.1.8.0 = 模组包里的音效会按作者设定的时机和音�
 # en: A pack's conversation no longer starts over the game's own when you arrive somewhere.
 game.notice.news.1.8.2 = 到达某处时，模组包的对话不会再压在游戏自带的对话上开始。
 
+# What ModForge 1.8.3 changes for players, one line each (\n starts the next)
+# en: Screens from packs now sit where their authors put them, and their changes to the game's own screens all show up.\nA pack's place no longer plays its arrival in the room you are still in when the game refuses the trip.
+game.notice.news.1.8.3 = 模组包的界面现在会出现在作者放置的位置，它们对游戏自身界面的改动也会完整显示。\n当游戏拒绝这次移动时，模组包地点的抵达内容不再在你仍然所在的房间里播放。
+
 [Where an NPC stands]
 
 # Text
@@ -565,6 +569,14 @@ param.label.totalTimeS = 总时长（秒）
 # Tooltip on the 'Total time (s)' field of the TransitionLevels action
 # en: Total transition length; cross-fade and signal share this budget.
 action.transitionLevels.seconds.tip = 过渡的总长度；交叉淡化和信号共用这段时间。
+
+# Tooltip on the 'To level' field of the Travel action
+# en: The place to go to - one of your places or one of the game's. The player travels there as its map or navigator button would take them.
+action.travel.target.tip = 要去的地点——你自己的地点或游戏的地点。玩家会像按下它的地图或导航按钮那样前往。
+
+# Tooltip on the 'Music key' field of the Travel action
+# en: Music to switch to on the way, as a navigator button's music does. Leave it empty to keep what is playing.
+action.travel.music.tip = 途中切换到的音乐，和导航按钮的音乐一样。留空则保持当前播放的音乐。
 
 # Label beside a field of an action or condition
 # en: Target alpha
@@ -1909,6 +1921,22 @@ gameObject.levelSBuiltNpcs = 关卡自带的 NPC 对象——它的 transform �
 # en: This GameObject already exists (bind, don't create)
 gameObject.gameobjectAlreadyExistsBind = 这个 GameObject 已存在（绑定，而不是新建）
 
+# Text
+# en: Copy of
+gameObject.copyOf = 复制自
+
+# Tooltip on a text box
+# en: Make this object a copy of one of the game's: its path in the game's scene, like 5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas or 6_Effects/CFXR2 Expression Loving (Timed). The copy is made each time the game loads and stays as the original was, unless the overrides below say otherwise. Its children with Bind reach the copy's own parts by name; new children are added to it. Leave it empty for an object of the pack's own.
+gameObject.copyOf.tip = 把这个对象做成游戏中某个对象的副本：填写它在游戏场景里的路径，例如 5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas 或 6_Effects/CFXR2 Expression Loving (Timed)。副本在每次游戏载入时生成，除非下面的覆盖设置另有说明，否则保持原对象的样子。勾选了 Bind 的子对象按名字找到副本的各个部分；新的子对象会加到副本上。如果是模组包自己的对象，请留空。
+
+# Text
+# en: Beside the original
+gameObject.copyBeside = 放在原对象旁边
+
+# Tooltip on a tick box
+# en: Put the copy under the same parent as the original, instead of in this place - for something that is not the place's, like an effect your dialogues switch on by its path.
+gameObject.copyBeside.tip = 把副本放在与原对象相同的父对象下，而不是这个地点里——适用于不属于该地点的东西，比如你的对话按路径打开的特效。
+
 # Tick box
 # en: Override its transform
 gameObject.overrideTransform = 覆盖它的 transform
@@ -2048,6 +2076,22 @@ gameObject.overrideTransform.tip = 关闭（默认）会让已有对象保持原
 # Tooltip on "Override active"
 # en: Off (default) leaves the object's own active state alone. On applies the Start-active checkbox. Not needed when you're gating it with Active-when conditions.
 gameObject.overrideActive.tip = 关闭（默认）不会动对象自身的激活状态。开启则应用“初始激活”复选框。当你用“激活条件”来控制它时，不需要开启。
+
+# Text
+# en: Override parallax
+gameObject.overrideParallax = 覆盖视差
+
+# Tooltip on a tick box and the number beside it
+# en: Off (default) leaves how the object drifts with the mouse as the game made it. On sets how far it drifts to the number beside it - lower is softer, 0 holds it still. An object that does not drift is left alone.
+gameObject.overrideParallax.tip = 关闭（默认）时，对象随鼠标漂移的方式保持游戏原样。开启后，漂移幅度取旁边的数值——越小越柔和，0 表示不动。本身不漂移的对象不受影响。
+
+# Text
+# en: Particle colour
+gameObject.particleColor = 粒子颜色
+
+# Tooltip on a text box
+# en: The colour this object's particles start in, as #RRGGBB or #RRGGBBAA - for one of the game's effects, copied or as it is. Only this object's own particles: a part with particles of its own takes a child of its own. Empty leaves them as they are.
+gameObject.particleColor.tip = 这个对象的粒子起始颜色，写成 #RRGGBB 或 #RRGGBBAA——用于游戏的特效，复制的或原样的都可以。只改这个对象自己的粒子：自带粒子的部分要单独用一个子对象。留空则保持原样。
 
 # Tooltip on a part of the window
 # en: Pack-relative PNG path. Leave blank for a pure container GameObject (an empty transform that just groups children).
@@ -6773,29 +6817,17 @@ ui.pasteNode = 粘贴
 # en: Preview
 ui.preview = 预览
 
-# Text
-# en: Select an object in the tree to change it.
-ui.selectObjectTreeChange = 在树中选择一个对象来修改它。
-
 # Button
 # en: Reset
 ui.reset = 重置
 
-# Text
-# en: Position
-ui.position = 位置
-
-# Text
-# en: from its anchors, in canvas pixels
-ui.anchorsCanvasPixels = 相对于它的锚点，单位为画布像素
-
-# Text
-# en: Size
-ui.size = 尺寸
-
 # Tick box
 # en: Visible at start
 ui.visibleStart = 一开始可见
+
+# Tick box
+# en: Stays upright
+ui.upright = 保持正立
 
 # Text
 # en: Sprite
@@ -6808,10 +6840,6 @@ ui.text = 文本
 # Text
 # en: Colour
 ui.colour = 颜色
-
-# Expandable section
-# en: Shown when
-ui.shownWhen = 显示条件
 
 # Button
 # en: + Condition
@@ -6830,16 +6858,60 @@ ui.opensWhen.help = 这些条件全部满足的那一刻，界面会自己打开
 ui.addOpenCondition.tip = 一条都没有时，界面只在有动作打开它时才打开（如果它一开始就在屏幕上，开始时也会打开）。只要有条件，就会在全部满足的那一刻自己打开。
 
 # Expandable section
-# en: When it opens
-ui.whenOpens = 打开时
+# en: Keeps moving
+ui.loop = 持续运动
 
-# Expandable section
-# en: When it closes
-ui.whenCloses = 关闭时
+# Tick box
+# en: Pulse fade
+ui.loop.fade = 透明度脉动
 
-# Expandable section
-# en: Arrange children
-ui.arrangeChildren = 排列子对象
+# Tooltip on a tick box and its numbers
+# en: Its fade goes from the first number to the second and back once a pass, as fractions of its own - 0.4 to 1 breathes a glow. Everything on it fades with it.
+ui.loop.fade.tip = 每一轮，它的不透明度从第一个数到第二个数再回来，按自身的比例——0.4 到 1 会让光晕像呼吸一样。上面的东西一起变化。
+
+# Tick box
+# en: Pulse size
+ui.loop.size = 大小脉动
+
+# Tooltip on a tick box and its numbers
+# en: Its size goes from the first number to the second and back once a pass, as fractions of its own.
+ui.loop.size.tip = 每一轮，它的大小从第一个数到第二个数再回来，按自身的比例。
+
+# Tick box
+# en: Sweep
+ui.loop.sweep = 扫过
+
+# Tooltip on a tick box and its numbers
+# en: It moves from the first place to the second - x and y from where it is - and starts again. A highlight under a parent that clips its children becomes a shine running along it: put both ends outside the parent.
+ui.loop.sweep.tip = 它从第一个位置移到第二个位置（相对自己所在处的 x 和 y），然后重新开始。放在会裁剪子对象的父对象下的高光，会变成一道扫过它的光泽：把两端都放在父对象外面。
+
+# Text
+# en: Seconds
+ui.loop.seconds = 秒数
+
+# Tooltip on a text box
+# en: How long one pass takes. It plays in the game while the object is shown; the preview shows it still.
+ui.loop.seconds.tip = 一轮持续多久。游戏里对象显示期间一直播放；预览里显示为静止。
+
+# Text
+# en: Pause
+ui.loop.pause = 停顿
+
+# Tooltip on a text box
+# en: Seconds it rests at the start between passes.
+ui.loop.pause.tip = 两轮之间在起点停留的秒数。
+
+# Text
+# en: Delay
+ui.loop.delay = 延迟
+
+# Tooltip on a text box
+# en: Seconds before the first pass, from when it is shown - give copies of one object different delays so they do not all move together.
+ui.loop.delay.tip = 从显示开始到第一轮前的秒数——给同一对象的各个副本设置不同的延迟，它们就不会一起动。
+
+# Tooltip on a dropdown
+# en: The sweep's curve. A pulse always eases back and forth.
+ui.loop.easing.tip = 扫过的曲线。脉动总是平滑地来回。
 
 # Text
 # en: Arrange
@@ -6881,13 +6953,17 @@ ui.cell = 单元格
 # en: Centre a last row that is not full
 ui.centreLastRowNot = 最后一行不满时居中
 
-# Expandable section
-# en: When clicked
-ui.whenClicked = 点击时
+# Text
+# en: Only as big as what it holds
+ui.fitToContent = 只按内容大小
 
 # Text
 # en: Hover
 ui.hover = 悬停
+
+# Text
+# en: Pressed
+ui.pressScale = 按下时
 
 # Text
 # en: Sound
@@ -6912,6 +6988,466 @@ ui.overwriteActions = 覆盖
 # Text
 # en: Font
 ui.font = 字体
+
+# The UI tab's start page: heading
+# en: What do you want to do?
+ui.start.title = 你想做什么？
+
+# The UI tab's start page: what a UI is
+# en: A UI is anything drawn over the game: a window, a menu, a button, a badge.
+ui.start.subtitle = UI 就是画在游戏之上的一切：窗口、菜单、按钮、徽章。
+
+# The UI tab's start page, when the pack already has UIs
+# en: Or pick one of this pack's UIs from the list on the left.
+ui.start.pickExisting = 或者从左边的列表里选一个这个模组包的 UI。
+
+# Start page card
+# en: Change one of the game's UIs
+ui.start.change.title = 修改游戏的某个 UI
+
+# Start page card
+# en: Move, restyle or add to a screen the game already has. Only what you change is saved.
+ui.start.change.body = 移动、改变样式或扩充游戏已有的界面。只保存你改动的部分。
+
+# Start page card
+# en: Add something that stays on screen
+ui.start.staying.title = 添加一直留在屏幕上的东西
+
+# Start page card
+# en: A badge, a counter, a bar in the corner. It is there as soon as the game is.
+ui.start.staying.body = 徽章、计数器、角落里的一条栏。游戏一开始它就在。
+
+# Start page card
+# en: Make a window that opens
+ui.start.window.title = 做一个会打开的窗口
+
+# Start page card
+# en: A panel with a title and a close button. A dialogue, a rule or a button opens it.
+ui.start.window.body = 带标题和关闭按钮的面板。由对话、规则或按钮打开。
+
+# Start page button
+# en: Show me step by step
+ui.start.tutorial = 一步步教我
+
+# UI tab: heading over a UI's object tree
+# en: Objects
+ui.objects = 对象
+
+# UI tab: the row and heading for the settings of a whole UI
+# en: UI settings
+ui.settingsRow = UI 设置
+
+# Tooltip
+# en: The UI as a whole: its name, how it opens, where it lives and how it moves.
+ui.settingsRow.tip = 整个 UI 的设置：名称、如何打开、放在哪里、如何运动。
+
+# UI tab: under the preview
+# en: Click an object to select it. Drag it to move it, or drag its handles to resize it.
+ui.preview.hint = 点击对象来选中它。拖动来移动它，拖动手柄来改变大小。
+
+# Tooltip on the eye beside an object in the UI tab's tree
+# en: Hide this and everything inside it in the preview, to reach what is behind it. Only here: the pack and the game are not changed.
+ui.eye.hide.tip = 在预览中隐藏它和它里面的一切，好够到后面的东西。只在这里生效：模组包和游戏都不会改变。
+
+# Tooltip on the eye of an object hidden in the preview
+# en: Hidden in the preview only. Click to show it again. In the game it is unaffected.
+ui.eye.show.tip = 只在预览中隐藏。点击可重新显示。游戏中不受影响。
+
+# Tooltip on the eye of an object inside one hidden in the preview
+# en: Hidden in the preview because something it sits inside is. In the game it is unaffected.
+ui.eye.parent.tip = 因为包含它的对象被隐藏了，所以在预览中隐藏。游戏中不受影响。
+
+# Tooltip on the eye of an object that starts switched off
+# en: Not visible at start, so the preview does not draw it either way. Tick Visible at start to work on it here.
+ui.eye.startsOff.tip = 一开始不可见，所以预览无论如何都不画它。要在这里编辑它，请勾选「一开始可见」。
+
+# Above the UI preview: how many objects the author has hidden there
+# en: {count} objects hidden here, not in the game
+ui.preview.hidden.other = {count} 个对象只在这里隐藏，游戏中不受影响
+
+# Button above the UI preview
+# en: Show all
+ui.preview.showAll = 全部显示
+
+# Tooltip
+# en: Show everything you hid in this preview again.
+ui.preview.showAll.tip = 重新显示你在这个预览中隐藏的一切。
+
+# UI tab: settings of a change to one of the game's screens
+# en: This is one of the game's own screens. Pick an object in the tree or the preview to change it: only what you change is saved.
+ui.gameUi.note = 这是游戏自身的界面之一。在树或预览中选一个对象来修改：只保存你改动的部分。
+
+# UI tab: how else a UI opens
+# en: Anything that can run an action can also open it: Set Active, with its category set to UI.
+ui.opensByAction.help = 凡是能执行动作的东西都能打开它：设为激活，类别设为 UI。
+
+# UI tab section title
+# en: How it opens
+ui.section.opens = 如何打开
+
+# UI tab section title
+# en: Where it lives
+ui.section.lives = 放在哪里
+
+# UI tab section title
+# en: How it moves
+ui.section.moves = 如何运动
+
+# UI tab section title
+# en: Button sound
+ui.section.sound = 按钮声音
+
+# UI tab section title
+# en: Where it sits
+ui.section.where = 位置
+
+# UI tab section title
+# en: How it looks
+ui.section.looks = 外观
+
+# UI tab section title
+# en: When it shows
+ui.section.shows = 何时显示
+
+# UI tab section title
+# en: What clicking does
+ui.section.clicks = 点击后做什么
+
+# UI tab section title
+# en: What's inside
+ui.section.inside = 里面有什么
+
+# UI tab section title
+# en: Extra components
+ui.section.components = 额外组件
+
+# Section summary: a UI is up from the start
+# en: from the start
+ui.summary.startsOpen = 一开始就有
+
+# Section summary: only an action opens this UI
+# en: by an action
+ui.summary.byAction = 由动作打开
+
+# Section summary
+# en: {count} conditions
+ui.summary.conditions.other = {count} 个条件
+
+# Section summary
+# en: {count} actions
+ui.summary.actions.other = {count} 个动作
+
+# Section summary: it animates on arrival
+# en: arrives
+ui.summary.arrives = 入场动画
+
+# Section summary: it animates on leaving
+# en: leaves
+ui.summary.leaves = 退场动画
+
+# Section summary: it loops while shown
+# en: keeps moving
+ui.summary.keepsMoving = 持续运动
+
+# Section summary: nothing set here
+# en: nothing
+ui.summary.nothing = 无
+
+# Section summary: always shown
+# en: always
+ui.summary.always = 总是
+
+# Section summary
+# en: starts hidden
+ui.summary.startsHidden = 初始隐藏
+
+# Section summary: it clips what is inside it
+# en: clips
+ui.summary.clips = 裁剪
+
+# Section summary: buttons make no sound
+# en: silent
+ui.summary.silent = 静音
+
+# Section summary: buttons use the game's click
+# en: the game's click
+ui.summary.gameClick = 游戏的点击声
+
+# Section summary: its parent decides where it goes
+# en: arranged by its parent
+ui.summary.arranged = 由父级排列
+
+# Section summary: fills its parent
+# en: fills its parent
+ui.summary.fills = 填满父级
+
+# What a UI object is, in a word
+# en: Button
+ui.kind.button = 按钮
+
+# What a UI object is, in a word
+# en: Picture
+ui.kind.picture = 图片
+
+# What a UI object is, in a word
+# en: Text
+ui.kind.text = 文字
+
+# What a UI object is, in a word
+# en: Group
+ui.kind.group = 组
+
+# What a UI object is, in a word
+# en: Empty
+ui.kind.empty = 空
+
+# Label over the 3x3 grid of places an object sticks to
+# en: Stick to
+ui.stick = 贴靠
+
+# Tooltip
+# en: Which part of its parent this object stays with. Picking one puts it flush against that place.
+ui.stick.tip = 这个对象贴着父级的哪一部分。选中后它会紧贴那个位置。
+
+# UI object placement
+# en: Fill the width
+ui.fillWidth = 填满宽度
+
+# Tooltip
+# en: As wide as its parent, however wide that is. Left and Right say how far in each side stays.
+ui.fillWidth.tip = 和父级一样宽，无论父级多宽。左和右决定每条边向内留多少。
+
+# UI object placement
+# en: Fill the height
+ui.fillHeight = 填满高度
+
+# Tooltip
+# en: As tall as its parent, however tall that is. Top and Bottom say how far in each side stays.
+ui.fillHeight.tip = 和父级一样高，无论父级多高。上和下决定每条边向内留多少。
+
+# UI object placement
+# en: X
+ui.place.x = X
+
+# UI object placement
+# en: Y
+ui.place.y = Y
+
+# Tooltip
+# en: How far from where it sticks, in canvas pixels. Up and right are positive.
+ui.place.x.tip = 离贴靠位置多远，单位是画布像素。向上和向右为正。
+
+# UI object placement
+# en: Width
+ui.place.width = 宽度
+
+# UI object placement
+# en: Height
+ui.place.height = 高度
+
+# UI object placement: margin
+# en: Left
+ui.place.left = 左
+
+# UI object placement: margin
+# en: Right
+ui.place.right = 右
+
+# UI object placement: margin
+# en: Top
+ui.place.top = 上
+
+# UI object placement: margin
+# en: Bottom
+ui.place.bottom = 下
+
+# Tooltip
+# en: How far in from that side of its parent, in canvas pixels.
+ui.place.margin.tip = 从父级的这条边向内多少，单位是画布像素。
+
+# UI object placement note
+# en: This object stretches across part of its parent. Width and Height here are how much bigger than that part it is, not its size.
+ui.stretchedPartly = 这个对象横跨父级的一部分。这里的宽度和高度表示它比那一部分大多少，而不是它的尺寸。
+
+# UI object placement note
+# en: Its parent arranges what is inside it, so the parent decides where this goes.
+ui.arrangedByParent = 它的父级排列里面的东西，所以由父级决定它的位置。
+
+# UI object: rotation
+# en: Turn
+ui.turn = 旋转
+
+# Tooltip
+# en: Rotation in degrees, anticlockwise, around its pivot. The handles in the preview stay level.
+ui.turn.tip = 绕轴心逆时针旋转的角度。预览中的手柄保持水平。
+
+# UI object: scale across
+# en: Scale X
+ui.scaleX = 缩放 X
+
+# UI object: scale down
+# en: Scale Y
+ui.scaleY = 缩放 Y
+
+# Tooltip
+# en: Multiplies its size and everything inside it, around its pivot. 1 is its own size.
+ui.scale.tip = 绕轴心放大或缩小它和它里面的一切。1 是原本的大小。
+
+# UI object placement: collapsed part
+# en: Exact anchors and pivot
+ui.exactAnchors = 精确的锚点和轴心
+
+# UI object placement
+# en: Anchor min
+ui.anchorMin = 锚点最小值
+
+# UI object placement
+# en: Anchor max
+ui.anchorMax = 锚点最大值
+
+# UI object placement
+# en: Pivot
+ui.pivot = 轴心
+
+# Tooltip
+# en: The point of the object its position is measured from and that it turns and scales around. 0 is its left or bottom, 1 its right or top.
+ui.pivot.tip = 对象上用来量位置、并作为旋转和缩放中心的那个点。0 是左边或下边，1 是右边或上边。
+
+# UI object: picture colour
+# en: Tint
+ui.tint = 着色
+
+# UI object: picture type
+# en: Drawn as
+ui.drawnAs = 绘制方式
+
+# Tooltip
+# en: Simple stretches the picture. Sliced keeps its corners and stretches the middle. Tiled repeats it. Filled draws it whole here, as nothing sets how full it is.
+ui.drawnAs.tip = Simple 拉伸图片。Sliced 保留四角并拉伸中间。Tiled 重复平铺。Filled 在这里画出完整的图，因为没有东西设定填充多少。
+
+# UI object: sliced picture
+# en: Corner scale
+ui.borderScale = 四角缩放
+
+# Tooltip
+# en: How the corners are sized: 2 makes them half as big, 0.5 twice as big.
+ui.borderScale.tip = 四角的大小：2 让它们缩小一半，0.5 让它们放大一倍。
+
+# UI object: picture
+# en: Keep its shape
+ui.keepAspect = 保持形状
+
+# Tooltip
+# en: Draws the picture as large as fits without stretching it.
+ui.keepAspect.tip = 不拉伸图片，在放得下的范围内画到最大。
+
+# UI object: sliced picture
+# en: Fill the middle
+ui.fillMiddle = 填充中间
+
+# Tooltip
+# en: Unticked, only the frame of a sliced picture is drawn.
+ui.fillMiddle.tip = 不勾选时，Sliced 图片只画边框。
+
+# UI object: picture
+# en: Catches the mouse
+ui.catchesMouse = 接收鼠标
+
+# Tooltip
+# en: Unticked, the pointer goes straight through this picture to whatever is behind it.
+ui.catchesMouse.tip = 不勾选时，指针会穿过这张图片，落到后面的东西上。
+
+# UI object: text
+# en: Size
+ui.fontSize = 大小
+
+# UI object: text
+# en: Alignment
+ui.alignment = 对齐
+
+# Tooltip
+# en: Where the words sit inside the object: TextMeshPro's own names.
+ui.alignment.tip = 文字在对象里的位置：TextMeshPro 自己的名称。
+
+# UI object: text
+# en: Wrap lines
+ui.wrap = 自动换行
+
+# Tooltip
+# en: Unticked, the words stay on one line and run past the edge.
+ui.wrap.tip = 不勾选时，文字保持一行并超出边缘。
+
+# UI object: text
+# en: Shrink to fit
+ui.shrinkToFit = 缩小以适应
+
+# Tooltip
+# en: Picks the largest size between the two given that fits the object, instead of the Size above.
+ui.shrinkToFit.tip = 代替上面的大小，在给定的两个值之间选出能放进对象的最大字号。
+
+# UI object: text, smallest size
+# en: From
+ui.shrinkMin = 从
+
+# UI object: text, largest size
+# en: To
+ui.shrinkMax = 到
+
+# UI object: text
+# en: Line gap
+ui.lineSpacing = 行距
+
+# UI object: text
+# en: Letter gap
+ui.letterSpacing = 字距
+
+# Tooltip
+# en: Extra space on top of what the font gives. 0 is the font's own.
+ui.lineSpacing.tip = 在字体自身间距之外增加的距离。0 表示字体本身的间距。
+
+# UI object
+# en: Opacity
+ui.opacity = 不透明度
+
+# Tooltip
+# en: From 0 to 1, for this object and everything inside it. Empty leaves it as it is.
+ui.opacity.tip = 从 0 到 1，作用于这个对象和它里面的一切。留空则保持原样。
+
+# UI object
+# en: Shadow
+ui.shadow = 阴影
+
+# Tooltip
+# en: A copy of this object in one colour, offset behind it. The two numbers are how far across and up.
+ui.shadow.tip = 这个对象的单色副本，错开放在它后面。两个数字表示横向和向上错开多少。
+
+# UI object
+# en: Outline
+ui.outline = 轮廓
+
+# Tooltip
+# en: Copies of this object in one colour, offset to each corner behind it. The two numbers are how far across and up.
+ui.outline.tip = 这个对象的单色副本，向四角错开放在它后面。两个数字表示横向和向上错开多少。
+
+# UI object: note when a shadow or outline is on an object with only words on it
+# en: The game draws no shadow or outline on words. A font that has them built in does: try Alata-Regular-Outline.
+ui.effects.textNote = 游戏不会在文字上画阴影或轮廓。内置这些效果的字体才有：试试 Alata-Regular-Outline。
+
+# Tooltip
+# en: Offset in canvas pixels: across, then up.
+ui.effectOffset.tip = 错开的距离，单位是画布像素：先横向，再向上。
+
+# UI object
+# en: Clip what's inside to this object
+ui.clip = 按这个对象裁剪里面的内容
+
+# Tooltip
+# en: Anything inside it that reaches past its edges is cut off there.
+ui.clip.tip = 里面超出它边缘的部分会在那里被切掉。
+
+# UI object: note on a game object that clips
+# en: The game clips this one, and a pack cannot take that off.
+ui.clip.gameOwn = 这个裁剪来自游戏本身，模组包无法去掉。
 
 # Tooltip on "+ UI"
 # en: A screen of your own: a window, a panel, a HUD element.
@@ -7005,6 +7541,10 @@ ui.objectsGameOwnsKeep.tip = 属于游戏的对象保留它们自己的名称—
 # en: Most of a vanilla screen starts hidden and is switched on by the game when its moment arrives.
 ui.visibleStart.tip = 原版界面大多一开始是隐藏的，等时机到了由游戏打开。
 
+# Tooltip on "Stays upright"
+# en: Stays level while what it hangs on turns: it moves and grows with its parent but never turns with it. For something on one of the game's buttons that swing round - a district's buttons on the world map turn as it opens.
+ui.upright.tip = 它所挂的对象转动时，它保持水平：随父对象移动和缩放，但从不跟着转。适用于挂在会转动的游戏按钮上的东西——世界地图上某个街区的按钮在打开时会转动。
+
 # Tooltip on a button
 # en: Choose the colour on a wheel instead of typing hex.
 ui.pickUiTint.tip = 在色轮上选颜色，而不是手动输入十六进制。
@@ -7077,9 +7617,17 @@ ui.flexibleFitsManyAcross.tip = “弹性”会按宽度允许的数量横向排
 # en: Nineteen things in rows of seven leave a last row of five, and it is normally packed against the start corner - so a grid that is even everywhere else ends lopsided. This centres that row, and only that row. Unity has no such setting, so the preview and the game both do it here.
 ui.nineteenThingsRowsSeven.tip = 十九个东西按每行七个排，最后一行剩五个，通常会挤在起始的那一角——于是别处都很整齐的网格，结尾却歪了。这个选项会把那一行居中，而且只居中那一行。Unity 没有这样的设置，所以预览和游戏都在这里自己处理。
 
+# Tooltip on a tick box
+# en: With a set number of columns, the grid is only as wide as the columns its objects fill - two objects in a grid of eight columns make it two cells wide - so something sized to the grid, like a Content Size Fitter, grows and shrinks with what it holds. With a set number of rows, the same for its height. Unity's own grid is always as wide as all its columns. Only in the game: the preview draws the grid at its own size.
+ui.fitToContent.tip = 列数固定时，网格只有被对象填满的那些列那么宽——八列的网格里有两个对象，就只有两格宽——所以像 Content Size Fitter 这样按网格定大小的东西会随内容伸缩。行数固定时，高度也一样。Unity 自带的网格总是所有列那么宽。只在游戏中生效：预览里网格按它自己的大小绘制。
+
 # Tooltip on a text box
 # en: Tint while the pointer is over this object, as #RRGGBB or #RRGGBBAA. Leave blank for no hover feedback. The game's own hover is per-button artwork rather than a rule, so there is nothing general to copy - this is the part a pack can state.
 ui.tintWhilePointerOver.tip = 指针悬停在这个对象上时的着色，格式为 #RRGGBB 或 #RRGGBBAA。留空则没有悬停反馈。游戏自己的悬停效果是逐按钮的美术资源，而不是一条规则，所以没有通用做法可抄——这正是模组包可以自己声明的部分。
+
+# Tooltip on a text box
+# en: Its size while held down, as a fraction of its own - 0.95 shrinks it a little while the pointer is down and lets it back on release, everything on it too. Empty for none: then the game's own press plays as it is clicked, once let go. Set, it stands in for that press - useful when the click closes the screen before that press could be seen.
+ui.pressScale.tip = 按住时的大小，按自身大小的比例填写——0.95 表示指针按下时稍微缩小，松开时恢复，上面的东西也一起。留空表示不做：这时会在点击（松开）时播放游戏自带的按下效果。填写后会代替那个按下效果——当点击会在按下效果显示前关闭界面时很有用。
 
 # Tooltip on a dropdown
 # en: What THIS object sounds like when clicked. Blank follows the screen, which is usually what you want - set this only where one button should differ. A sound named here plays even on a screen whose buttons are otherwise silent.
@@ -10482,6 +11030,14 @@ docs.places.addObjectRoomArt.term = + 添加 GameObject
 docs.places.addObjectRoomArt = 往房间里添加一个对象——美术图、道具，或用来装其他对象的容器。
 
 # Docs: the bold label in front of the next text, usually a name on screen
+# en: Copy of
+docs.places.copyOfGameObject.term = 复制自
+
+# Docs: a point in the topic
+# en: Make an object a copy of one of the game's, by its path in the game's scene - a room's buttons for a room of your own, an effect recoloured. The copy is made each time the game loads, in your place or beside the original, and keeps how the original was unless you override it; children with Bind change its parts, and a particle colour recolours the game's effects.
+docs.places.copyOfGameObject = 按游戏场景里的路径，把一个对象做成游戏中某个对象的副本——把某个房间的按钮用到你自己的房间，或者给特效换个颜色。副本在每次游戏载入时生成，放在你的地点里或原对象旁边，除非你覆盖，否则保持原对象的样子；勾选 Bind 的子对象可以改它的部件，粒子颜色可以给游戏的特效换色。
+
+# Docs: the bold label in front of the next text, usually a name on screen
 # en: + Add NPC
 docs.places.placeOneNpcsInto.term = + 添加 NPC
 
@@ -12282,6 +12838,14 @@ docs.actions.playDialogue.term = PlayDialogue
 # Docs: a point in the topic
 # en: Play one of the pack's dialogues or one of the game's conversations as soon as nothing else is on screen - on a line, right after its dialogue - and, if you like, set a variable when it ends.
 docs.actions.playDialogue = 一旦屏幕上没有其他内容，就播放此包的对话或游戏的对话（用在台词上时，紧接其对话之后），也可以在结束时设置一个变量。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Travel
+docs.actions.travel.term = Travel
+
+# Docs: a point in the topic
+# en: Take the player to a place - one of yours or one of the game's - as its map or navigator button would: the game's own journey with its fade, the place's arrival conversation, and music if you name one. While the game is busy - a conversation on screen, another journey, a locked moment - it waits, so on a line the player goes once the dialogue ends. Nothing happens if they are already there.
+docs.actions.travel = 像地图或导航按钮那样，把玩家带到一个地点（你自己的或游戏的）：游戏自己的移动和淡入淡出、该地点的到达对话，以及你指定的音乐。游戏忙碌时——屏幕上有对话、正在进行另一次移动、处于锁定状态——它会等待，所以放在一句台词上时，玩家会在对话结束后出发。如果玩家已经在那里，则什么也不会发生。
 
 # Docs: a heading inside the topic
 # en: Places and scenes
@@ -14434,8 +14998,8 @@ tutorial.aScreenOfYourOwn.summary = 搭一个面板，往上放点东西，并�
 tutorial.aScreenOfYourOwn.screensPackOwns.title = 归模组包所有的界面
 
 # Tutorials: what the step says
-# en: This tab is for anything drawn on top of the game rather than in it — a window, a panel, a bar in the corner. Two kinds live here together, and deliberately so: screens you invent, and screens the game already has that your pack changes.\n\nThey share a tab because from your side they are the same job. A tree of objects on the left, what the selected one is underneath, and a picture of the result on the right.
-tutorial.aScreenOfYourOwn.screensPackOwns.body = 这个页签管的是画在游戏「之上」而不是画在游戏「之中」的一切——一扇窗、一块面板、角落里的一条栏。这里有意地并存着两类：你发明的界面，以及游戏本来就有、而你的模组包去改动的界面。\n\n它们共用一个页签，是因为从你这边看它们是同一件活。左边是对象树，下面是选中对象的具体内容，右边是结果的图。
+# en: This tab is for anything drawn on top of the game rather than in it — a window, a panel, a bar in the corner. Two kinds live here together, and deliberately so: screens you invent, and screens the game already has that your pack changes.\n\nThey share a tab because from your side they are the same job. Pick on the left, see the result in the middle, and change what is selected on the right.
+tutorial.aScreenOfYourOwn.screensPackOwns.body = 这个页签管的是画在游戏「之上」而不是画在游戏「之中」的一切——一扇窗、一块面板、角落里的一条栏。这里有意地并存着两类：你发明的界面，以及游戏本来就有、而你的模组包去改动的界面。\n\n它们共用一个页签，是因为从你这边看它们是同一件活。在左边选择，在中间看结果，在右边修改选中的内容。
 
 # Tutorials: the heading of a step
 # en: Start one
@@ -14458,16 +15022,16 @@ tutorial.aScreenOfYourOwn.callSomething.title = 给它起个名字
 tutorial.aScreenOfYourOwn.callSomething.body = 把「名称」改成一个月后你还认得出来的东西——用「任务便条」，而不是「空白面板 2」。每当有什么东西需要打开它时，你都要从列表里挑这个名字。\n\n下面的 id 不会跟着变，也不应该变：给界面改名，绝不能悄无声息地把原本打开它的那些东西脱钩。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: The Name box, top of the middle column.
-tutorial.aScreenOfYourOwn.callSomething.hint = 中间那一栏顶部的「名称」框。
+# en: The Name box, at the top of the right column.
+tutorial.aScreenOfYourOwn.callSomething.hint = 右边那一栏顶部的「名称」框。
 
 # Tutorials: the heading of a step
 # en: Put something on it
 tutorial.aScreenOfYourOwn.putSomething.title = 往上放点东西
 
 # Tutorials: what the step says
-# en: The tree is what the screen is made of. Select the panel and press + Object to put an empty object inside it; the arrow beside that button offers ready-made pieces instead — a button, a row, a line of text.\n\nEverything is inside something else, and that is what decides where it sits: an object is positioned against its parent, so moving the panel takes everything on it along.
-tutorial.aScreenOfYourOwn.putSomething.body = 这棵树就是界面的构成。选中面板，按 + 对象，就能在它里面放一个空对象；那个按钮旁边的箭头则提供现成的部件——一个按钮、一行、一行文字。\n\n一切都装在别的东西里面，而这决定了它的位置：对象是相对于它的父级来定位的，所以挪动面板会把它上面的一切一起带走。
+# en: The tree is what the screen is made of. Select the panel and press + Object to put an empty object inside it; + Shape and + Piece beside it offer ready-made ones — a button, a row, a line of text.\n\nEverything is inside something else, and that is what decides where it sits: an object is positioned against its parent, so moving the panel takes everything on it along.
+tutorial.aScreenOfYourOwn.putSomething.body = 这棵树就是界面的构成。选中面板，按 + 对象，就能在它里面放一个空对象；旁边的 + 形状和 + 部件提供现成的——一个按钮、一行、一行文字。\n\n一切都装在别的东西里面，而这决定了它的位置：对象是相对于它的父级来定位的，所以挪动面板会把它上面的一切一起带走。
 
 # Tutorials: the nudge shown when a step has been waiting a while
 # en: Select the panel in the tree first — + Object adds INSIDE whatever is selected.
@@ -14478,8 +15042,8 @@ tutorial.aScreenOfYourOwn.putSomething.hint = 先在树里选中面板——+ �
 tutorial.aScreenOfYourOwn.say.title = 说明它是什么
 
 # Tutorials: what the step says
-# en: With the new object selected, the box underneath is everything about it: its name, where it sits, how big it is, and what it draws.\n\nPosition is measured from the object's anchors, in canvas pixels, and the canvas is the whole screen. Give it a name and a size you can see — a few hundred pixels each way is a good start, since anything smaller is hard to find in the preview.
-tutorial.aScreenOfYourOwn.say.body = 选中新对象后，下面那个框就是关于它的一切：名称、位置、大小，以及它画什么。\n\n位置是从对象的锚点量起的，单位是画布像素，而画布就是整个屏幕。给它起个名字，并给一个看得见的尺寸——每边几百像素是个不错的开始，因为再小就很难在预览里找到了。
+# en: With the new object selected, the right column is everything about it, in sections: where it sits, how it looks, when it shows, what clicking does and how it moves. A closed section says what is in it.\n\nStick to says which part of its parent it stays with, and X and Y measure from there in canvas pixels. Give it a name and a size you can see — a few hundred pixels each way is a good start, since anything smaller is hard to find in the preview.
+tutorial.aScreenOfYourOwn.say.body = 选中新对象后，右边那一栏就是关于它的一切，分成几节：位置、外观、何时显示、点击后做什么、如何运动。收起的一节会说明里面有什么。\n\n「贴靠」表示它贴着父级的哪一部分，X 和 Y 从那里量起，单位是画布像素。给它起个名字，并给一个看得见的尺寸——每边几百像素是个不错的开始，因为再小就很难在预览里找到了。
 
 # Tutorials: the nudge shown when a step has been waiting a while
 # en: Select the object you just added, then fill in Name and Size.
@@ -14748,6 +15312,14 @@ validation.action.playDialogue.unknownDialogue = Play dialogue 指定了「{name
 # Validation message
 # en: Play dialogue names '{name}', which is none of the game's conversations - nothing will play.
 validation.action.playDialogue.unknownConversation = Play dialogue 指定了「{name}」，但它不是游戏的任何对话——不会播放任何内容。
+
+# Validation message
+# en: Travel names no place - the player will not go anywhere.
+validation.action.travel.none = Travel 没有指定地点——玩家哪儿也不会去。
+
+# Validation message
+# en: '{name}': the particle colour '{colour}' is not one the game reads - write it as #RRGGBB or #RRGGBBAA.
+validation.gameObject.particleColor = “{name}”：游戏读不了粒子颜色“{colour}”——请写成 #RRGGBB 或 #RRGGBBAA。
 
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.
@@ -15472,6 +16044,10 @@ note.action.transform = 在原处设置某物的位置和大小
 note.action.playDialogue = 播放此包的对话或游戏的对话
 
 # A note beside an action type in its dropdown, saying what it does
+# en: Take the player to a place, as its map or navigator button does
+note.action.travel = 像地图或导航按钮那样，把玩家带到一个地点
+
+# A note beside an action type in its dropdown, saying what it does
 # en: Change a setting the other actions don't reach
 note.action.component = 修改其他动作改不到的设置
 
@@ -15480,8 +16056,8 @@ note.action.component = 修改其他动作改不到的设置
 note.action.deactivateAllScenes = 隐藏本模组包显示过的所有场景
 
 # A note beside an action type in its dropdown, saying what it does
-# en: Take the player to another place
-note.action.transitionLevels = 把玩家带到另一个地点
+# en: Cross-fade one place into another, without the game's journey
+note.action.transitionLevels = 从一个地点淡入淡出切到另一个，不经过游戏自己的移动流程
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Cover the screen while things change

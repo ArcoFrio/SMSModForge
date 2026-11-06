@@ -104,8 +104,13 @@ namespace SMSModForge.PackPlugin
             // back to full size.
             if (_pressing) return;
 
-            _resting = transform.localScale;
-            StartCoroutine(Press());
+            // A button that shrinks while held has shown its press already
+            // (UiPress); the game's on top of it would press it twice.
+            if (GetComponent<UiPress>() == null)
+            {
+                _resting = transform.localScale;
+                StartCoroutine(Press());
+            }
 
             // Before the actions, not after: one of them may switch this screen
             // off, and a sound started from an object that is about to go away

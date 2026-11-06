@@ -96,6 +96,18 @@ namespace SMSModForge.PackPlugin
 
             var root = new GameObject("Pack_" + id, typeof(RectTransform));
             root.transform.SetParent(parent, worldPositionStays: false);
+            // Over the whole canvas, as the editor lays the screen out. Left at
+            // Unity's default it was a 100x100 box in the middle, and every
+            // anchor in the pack's tree a fraction of that box: a corner came
+            // out near the middle and a stretched object 100 wide (until 1.8.3).
+            // The middle is the same either way, so an object placed from it
+            // has not moved.
+            var rect = (RectTransform)root.transform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
 
             foreach (var node in nodes)
                 if (node is JObject n) Create(pack, ctx, n, root.transform, log, ButtonSoundFor(ui));
@@ -149,7 +161,7 @@ namespace SMSModForge.PackPlugin
 
             foreach (var token in ui["nodes"] as JArray ?? new JArray())
                 if (token is JObject node)
-                    ApplyNode(pack, ctx, node, baseObject.transform, log, ButtonSoundFor(ui));
+                    ApplyNode(pack, ctx, node, baseObject.transform, baseObject.transform, log, ButtonSoundFor(ui));
         }
 
         /// <summary>
@@ -183,15 +195,23 @@ namespace SMSModForge.PackPlugin
         }
 
         /// <summary>Apply one node, and hand back the object it applied to so
-        /// its parent can put it in the right place among its siblings.</summary>
+        /// its parent can put it in the right place among its siblings.
+        /// <para/>
+        /// A bound node's path is from the screen's base (<paramref name="screen"/>),
+        /// at every depth - the editor seeds, previews and saves it that way.
+        /// Until 1.8.3 it was walked from the parent, which is the same thing
+        /// only one level down: every object deeper than that was skipped. A
+        /// path that is only found from the parent is still taken, for a pack
+        /// written by hand to that reading.</summary>
         private static Transform ApplyNode(PackManifest pack, PackContext ctx, JObject node,
-                                           Transform under, ManualLogSource log,
+                                           Transform under, Transform screen, ManualLogSource log,
                                            string buttonSound = null)
         {
             string bind = (string)node["bind"] ?? "";
             if (bind.Length == 0) return Create(pack, ctx, node, under, log, buttonSound);
 
-            var target = bind == "." ? under.gameObject : Walk(under, bind);
+            var target = bind == "." ? screen.gameObject
+                       : Walk(screen, bind) ?? (under != screen ? Walk(under, bind) : null);
             if (target == null)
             {
                 log?.LogWarning($"[UI] '{bind}' is not on this screen any more; skipped.");
@@ -215,7 +235,7 @@ namespace SMSModForge.PackPlugin
             {
                 var child = token as JObject;
                 if (child == null) continue;
-                Remember(placed, child, ApplyNode(pack, ctx, child, target.transform, log, buttonSound));
+                Remember(placed, child, ApplyNode(pack, ctx, child, target.transform, screen, log, buttonSound));
             }
             Reorder(placed);
 
@@ -419,10 +439,18 @@ namespace SMSModForge.PackPlugin
                 // asked for on screens that never needed it.
                 bool centreLast = layout["centerLastLine"] != null
                                && (bool)layout["centerLastLine"];
+                bool fit = layout["fitToContent"] != null
+                        && (bool)layout["fitToContent"];
 
-                var grid = centreLast
-                    ? go.AddComponent<UiCenteredGrid>()
-                    : go.AddComponent<GridLayoutGroup>();
+                GridLayoutGroup grid;
+                if (centreLast || fit)
+                {
+                    var ours = go.AddComponent<UiCenteredGrid>();
+                    ours.CentreLastLine = centreLast;
+                    ours.FitToContent = fit;
+                    grid = ours;
+                }
+                else grid = go.AddComponent<GridLayoutGroup>();
                 grid.padding = padding;
                 grid.childAlignment = anchor;
                 grid.cellSize = Vec2(layout["cellSize"], new Vector2(100, 100));
@@ -496,6 +524,11 @@ namespace SMSModForge.PackPlugin
             if (sprite != null) img.sprite = sprite;
 
             img.type = ParseImageType((string)image["type"]);
+            // A Tiled picture with no border is one quad whose texture repeats
+            // across it, so the pack's own goes back to wrapping (they load
+            // clamped - see UiAssets.FromPack). The game's are left as they are.
+            if (img.type == Image.Type.Tiled && UiAssets.IsPackSprite(img.sprite) && img.sprite.border == Vector4.zero)
+                img.sprite.texture.wrapMode = TextureWrapMode.Repeat;
             img.color = ParseColor((string)image["tint"], Color.white);
             img.fillCenter = image["fillCenter"] == null || (bool)image["fillCenter"];
             img.preserveAspect = image["preserveAspect"] != null && (bool)image["preserveAspect"];
@@ -584,6 +617,31 @@ namespace SMSModForge.PackPlugin
             play.Easing = (string)open["easing"] ?? "QuadInOut";
         }
 
+        /// <summary>A loop, if it moves anything: a pulse of fade or size, a
+        /// sweep, or both (UiLoop).</summary>
+        private static void ApplyLoop(GameObject go, JObject loop)
+        {
+            float[] Pair(JToken t) => t is JArray a && a.Count >= 2
+                ? new[] { ReadFloat(a[0], 1f), ReadFloat(a[1], 1f) } : null;
+            Vector2? Point(JToken t) => t is JArray a && a.Count >= 2
+                ? new Vector2(ReadFloat(a[0], 0f), ReadFloat(a[1], 0f)) : (Vector2?)null;
+
+            float[] alpha = Pair(loop["alpha"]), scale = Pair(loop["scale"]);
+            Vector2? from = Point(loop["moveFrom"]), to = Point(loop["moveTo"]);
+            if (alpha == null && scale == null && !(from.HasValue && to.HasValue)) return;   // nothing moves
+
+            var play = go.GetComponent<UiLoop>() ?? go.AddComponent<UiLoop>();
+            play.Alpha = alpha;
+            play.Scale = scale;
+            play.MoveFrom = from;
+            play.MoveTo = to;
+            play.Seconds = ReadFloat(loop["seconds"], 2f);
+            play.Pause = ReadFloat(loop["pause"], 0f);
+            play.Delay = ReadFloat(loop["delay"], 0f);
+            play.Easing = (string)loop["easing"] ?? "Linear";
+            UiOverlay.On(go);
+        }
+
         /// <summary>
         /// Attach the leaving animation, if there is one. The same four settings
         /// as an arrival, read the other way round: the scale is where it ends
@@ -614,6 +672,21 @@ namespace SMSModForge.PackPlugin
         {
             ApplyOpenAnimation(go, node["open"] as JObject);
             ApplyCloseAnimation(go, node["close"] as JObject);
+
+            // Level while what it hangs on turns (UiUpright).
+            if (node["upright"] != null && (bool)node["upright"] && go.GetComponent<UiUpright>() == null)
+                go.AddComponent<UiUpright>();
+
+            // Shrinks while held (UiPress), and keeps moving (UiLoop) - both
+            // drawn over what the object is (UiOverlay).
+            if (node["pressScale"] != null && node["pressScale"].Type != JTokenType.Null)
+            {
+                var press = go.GetComponent<UiPress>() ?? go.AddComponent<UiPress>();
+                press.Scale = Mathf.Clamp(ReadFloat(node["pressScale"], 0.95f), 0.1f, 2f);
+                UiOverlay.On(go);
+            }
+            if (node["loop"] is JObject loop)
+                ApplyLoop(go, loop);
 
             if (node["alpha"] != null)
             {

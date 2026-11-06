@@ -64,4 +64,30 @@ public sealed class MapButtonDef
     public List<NodeConditionDef> Conditions { get; set; } = new();
 
     public bool ShouldSerializeConditions() => Conditions.Count > 0;
+
+    /// <summary>The world map's screen, as a UI tab source.</summary>
+    public const string WorldMapScreen = "vanillaui:World_Map/Canvas/Core";
+
+    /// <summary>
+    /// Where this button sits on <see cref="WorldMapScreen"/> once the game is
+    /// running. The runtime names the button after the bare place key, so a UI
+    /// on that screen can hang things on it by this path, though the game's own
+    /// files have no such object.
+    /// </summary>
+    [JsonIgnore]
+    public string ScreenPath
+    {
+        get
+        {
+            string key = Target ?? "";
+            if (key.StartsWith("self:", System.StringComparison.Ordinal)) key = key["self:".Length..];
+            else if (key.StartsWith("vanilla:", System.StringComparison.Ordinal)) key = key["vanilla:".Length..];
+            else if (key.StartsWith("pack:", System.StringComparison.Ordinal))
+            {
+                int dot = key.IndexOf('.');
+                if (dot >= 0 && dot < key.Length - 1) key = key[(dot + 1)..];
+            }
+            return "Radial_Buttons/" + District + "/" + key;
+        }
+    }
 }

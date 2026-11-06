@@ -200,6 +200,16 @@ namespace SMSModForge.EditorTools
             if (atlasHeight <= 0) atlasHeight = textureHeight;
             int flipHeight = textureHeight > 0 ? textureHeight : atlasHeight;
 
+            // A custom atlas draws from its material's texture, not the font's
+            // own. They share a name, but the material's is RGBA with the outline
+            // and shadow baked in, where the font's holds only the plain letters
+            // (every Alata-Regular-Outline, measured in 1.8E). The glyph rects are
+            // the font's, in the size worked out above.
+            if (Prop(font, type, "material") is Material drawnBy && drawnBy.shader != null
+                && drawnBy.shader.name.IndexOf("Custom Atlas", StringComparison.OrdinalIgnoreCase) >= 0
+                && drawnBy.HasProperty("_MainTex") && drawnBy.GetTexture("_MainTex") is Texture2D coloured)
+                pages = new List<Texture2D> { coloured };
+
             json.Key("atlas").Object();
             json.Key("width").Value(atlasWidth);
             json.Key("height").Value(atlasHeight);

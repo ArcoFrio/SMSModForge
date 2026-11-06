@@ -36,13 +36,10 @@ public partial class MainWindow : Window
             var row = FindUiRow(vm.SelectedUi.Nodes, node);
             if (row == null) return;
 
-            vm.SelectedUi.SelectedNode = row;
-
-            // Open the branch down to it and put the tree's own highlight
+            // Opens the branch down to it and puts the tree's own highlight
             // there, or the tree and the picture disagree about what is
             // selected.
-            for (var up = row.Parent; up != null; up = up.Parent) up.IsExpanded = true;
-            row.IsSelected = true;
+            vm.SelectedUi.SelectedNode = row;
         };
 
         // The colour button and Ctrl+Shift+C ask with the same wheel every other
@@ -1711,7 +1708,10 @@ public partial class MainWindow : Window
     private void UiTree_MouseDown(object sender, MouseButtonEventArgs e)
     {
         _uiDragFrom = e.GetPosition(null);
-        _uiDragging = RowAt(e.OriginalSource as DependencyObject);
+
+        // A press on a row's eye is a click on the eye. Moving a little while
+        // pressing it should not pick the row up.
+        _uiDragging = OnAButton(e.OriginalSource as DependencyObject) ? null : RowAt(e.OriginalSource as DependencyObject);
     }
 
     private void UiTree_MouseMove(object sender, MouseEventArgs e)
@@ -1769,6 +1769,17 @@ public partial class MainWindow : Window
 
     /// <summary>The row under a point in the tree, found by walking up from
     /// whatever bit of the template was actually hit.</summary>
+    private static bool OnAButton(DependencyObject? from)
+    {
+        while (from != null && from is not TreeViewItem)
+        {
+            if (from is System.Windows.Controls.Primitives.ButtonBase) return true;
+            from = from is System.Windows.Media.Visual or System.Windows.Media.Media3D.Visual3D
+                 ? System.Windows.Media.VisualTreeHelper.GetParent(from) : null;
+        }
+        return false;
+    }
+
     private static UiNodeViewModel? RowAt(DependencyObject? from)
     {
         while (from != null && from is not TreeViewItem)
@@ -2191,6 +2202,18 @@ public partial class MainWindow : Window
     {
         if (sender is not System.Windows.Controls.Button { DataContext: UiNodeViewModel node }) return;
         if (PickHex(node.TextColor) is { } picked) WithUndo(() => node.TextColor = picked);
+    }
+
+    private void PickUiShadowColor_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { DataContext: UiNodeViewModel node }) return;
+        if (PickHex(node.ShadowColor) is { } picked) WithUndo(() => node.ShadowColor = picked);
+    }
+
+    private void PickUiOutlineColor_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { DataContext: UiNodeViewModel node }) return;
+        if (PickHex(node.OutlineColor) is { } picked) WithUndo(() => node.OutlineColor = picked);
     }
 
     /// <summary>Win32 RGB picker seeded with <paramref name="current"/>; null on cancel.</summary>

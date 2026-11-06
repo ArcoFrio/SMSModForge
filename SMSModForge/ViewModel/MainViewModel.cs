@@ -1700,6 +1700,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private UiViewModel? _selectedUi;
 
+    /// <summary>The row being left, for the moment of a switch - see
+    /// <see cref="SelectedUi"/>.</summary>
+    private UiViewModel? _uiLeaving;
+
     /// <summary>Which UI screen is open in the UI tab.</summary>
     public UiViewModel? SelectedUi
     {
@@ -1715,18 +1719,43 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             // tell.
             if (_selectedUi != null)
                 _selectedUi.PropertyChanged -= UiExtensionChanged;
+            _uiLeaving = _selectedUi;
             _selectedUi = value;
             if (_selectedUi != null)
                 _selectedUi.PropertyChanged += UiExtensionChanged;
 
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(SelectedUiPreviewToken));
-            // The offered list depends on which row is asking - its own choice
-            // has to stay in its own dropdown.
+            // The offered list depends on which row is asking - its own choice has
+            // to stay in its own dropdown - and the dropdown needs its list before
+            // its row. Given the row first, it looks for a screen the old list did
+            // not have, finds nothing and never looks again, so it read as blank
+            // for any screen another row had been keeping out of the list. Rebuilt
+            // first with only the new row's, it would lose the old row's choice
+            // while still bound to it, and write that back. So for the moment of
+            // the switch the list holds both.
             OnPropertyChanged(nameof(AvailableUiScreens)); OnPropertyChanged(nameof(AvailableUiScreensGrouped));
+            OnPropertyChanged();
+            _uiLeaving = null;
+            OnPropertyChanged(nameof(AvailableUiScreens)); OnPropertyChanged(nameof(AvailableUiScreensGrouped));
+            OnPropertyChanged(nameof(ShowsUiStart));
+            OnPropertyChanged(nameof(SelectedUiPreviewToken));
             RemoveUiCommand?.Raise();
         }
     }
+
+    /// <summary>Whether the UI tab shows its start page rather than a UI. Asked
+    /// of nothing selected, not of an empty list: a pack with UIs opens here too,
+    /// and the list beside it is one more way to begin.</summary>
+    public bool ShowsUiStart => SelectedUi == null;
+
+    /// <summary>Whether the start page should mention the list.</summary>
+    public bool HasUis => Uis.Count > 0;
+
+    /// <summary>Where the pack's own objects will be on a game's screen once it
+    /// is running, so something hung on one is not reported as missing.</summary>
+    private ISet<string>? PackMadeOn(string source)
+        => string.Equals(source, MapButtonDef.WorldMapScreen, StringComparison.OrdinalIgnoreCase)
+            ? Pack.MapButtons.Select(b => b.ScreenPath).ToHashSet(StringComparer.Ordinal)
+            : null;
 
     /// <summary>A screen's name is half of what its entry in the action
     /// dropdown reads as, so the list follows it.</summary>
@@ -1752,6 +1781,15 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     public RelayCommand AddOwnUiCommand { get; private set; } = null!;
     public RelayCommand RemoveUiCommand { get; private set; } = null!;
 
+    /// <summary>The start page's "something that stays on screen".</summary>
+    public RelayCommand StartStayingUiCommand { get; private set; } = null!;
+
+    /// <summary>The start page's "a window that opens".</summary>
+    public RelayCommand StartWindowUiCommand { get; private set; } = null!;
+
+    /// <summary>The start page's way into the tutorial for this tab.</summary>
+    public RelayCommand StartUiTutorialCommand { get; private set; } = null!;
+
     /// <summary>
     /// The vanilla UI screens still on offer: everything this pack does not
     /// already have a row for, plus whichever the current row is using so its
@@ -1764,10 +1802,17 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     {
         get
         {
-            var taken = Uis.Where(u => u != SelectedUi && u.IsVanillaBased)
+            var taken = Uis.Where(u => u != SelectedUi && u != _uiLeaving && u.IsVanillaBased)
                            .Select(u => u.Source)
                            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-            return VanillaUiCatalog.UsableBases.Where(b => !taken.Contains(b.Token));
+            var offered = VanillaUiCatalog.UsableBases.Where(b => !taken.Contains(b.Token));
+
+            // Its own choice stays in its own dropdown even when the catalog
+            // would not offer it as a new one, or the box reads as blank and
+            // looks as though no screen was chosen: the world map's did.
+            return SelectedUi?.Catalog is { } own && !offered.Any(b => b.Token == own.Token)
+                ? offered.Append(own)
+                : offered;
         }
     }
 
@@ -1802,7 +1847,12 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
         // Its texts are words a player reads, so they are in the language
         // being edited, like anything else typed there.
-        if (template != null) def.Nodes.Add(template.Build(key => NewName(key, translated: true)));
+        if (template != null)
+        {
+            var root = template.Build(key => NewName(key, translated: true));
+            CloseButtonsClose(root, def.Id);
+            def.Nodes.Add(root);
+        }
 
         // Animated on arrival unless the author says otherwise. Set when the
         // screen is MADE rather than defaulted in the format: an absent "open"
@@ -1811,6 +1861,33 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         def.Open = UiOpenDef.LikeTheGame();
 
         AddUi(def);
+    }
+
+    /// <summary>A template's close button closes its window. It is drawn as one,
+    /// and one that did nothing was the first thing anyone found testing it.</summary>
+    private static void CloseButtonsClose(UiNodeDef root, string uiId)
+    {
+        var close = root.Children.FirstOrDefault(c => c.Name == UiTemplate.CloseButtonName);
+        if (close == null || close.OnClick.Count > 0) return;
+
+        var action = new NodeActionDef { Type = NodeActionTypes.SetGameObjectActive };
+        action.Params["kind"] = "UI";
+        action.Params["target"] = uiId;
+        action.Params["active"] = "false";
+        close.OnClick.Add(action);
+    }
+
+    /// <summary>A UI that is simply there, from the first frame: a badge, a bar
+    /// in the corner. Starts open and arrives without a flourish, because
+    /// nothing "arrives" that was there all along.</summary>
+    private void StartStayingUi()
+    {
+        AddOwnUi(UiTemplate.Find("panel"));
+        if (SelectedUi is { } ui)
+        {
+            ui.StartsOpen = true;
+            ui.Open.Animates = false;
+        }
     }
 
     /// <summary>Every screen that can be copied. Unfiltered, unlike the
@@ -1829,9 +1906,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     private UiViewModel AddUi(UiDef def)
     {
         Pack.Uis.Add(def);
-        var vm = new UiViewModel(def) { NewName = NewName };
+        var vm = new UiViewModel(def, PackMadeOn) { NewName = NewName };
         vm.PropertyChanged += UiRenamed;
         Uis.Add(vm);
+        OnPropertyChanged(nameof(HasUis));
         SelectedUi = vm;
         RebuildUiOptions();
         OnPropertyChanged(nameof(AvailableUiScreens)); OnPropertyChanged(nameof(AvailableUiScreensGrouped));
@@ -1870,8 +1948,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         var chosen = SelectedUi;
         if (chosen == null) return;
         chosen.PropertyChanged -= UiRenamed;
+        chosen.ForgetHidden();
         Pack.Uis.Remove(chosen.Model);
         Uis.Remove(chosen);
+        OnPropertyChanged(nameof(HasUis));
         SelectedUi = Uis.FirstOrDefault();
         RebuildUiOptions();
         OnPropertyChanged(nameof(AvailableUiScreens)); OnPropertyChanged(nameof(AvailableUiScreensGrouped));
@@ -1913,13 +1993,17 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         // Packs written while UI extensions were a list of their own fold in
         // here, before anything reads Pack.Uis.
         Pack.MigrateUi();
+
+        // What is hidden in the preview is remembered per pack folder, and each
+        // row reads it as it is made.
+        Services.UiPreviewHiding.Open(PackRoot);
         Uis.Clear();
         // Each seeds itself from the shipped vanilla UI on construction, so an
         // extension that holds three nodes on disk opens as the whole screen.
         // The delta pass prunes it back on save, so this cannot grow a manifest.
         foreach (var u in Pack.Uis)
         {
-            var row = new UiViewModel(u) { NewName = NewName };
+            var row = new UiViewModel(u, PackMadeOn) { NewName = NewName };
             row.PropertyChanged += UiRenamed;
             Uis.Add(row);
         }
@@ -4156,6 +4240,13 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         // going through the command rather than a click handler is what puts
         // the new UI on the undo stack.
         AddOwnUiCommand = new RelayCommand(AddOwnUi);
+        StartStayingUiCommand = new RelayCommand(StartStayingUi);
+        StartWindowUiCommand = new RelayCommand(() => AddOwnUi(UiTemplate.Find("window")));
+        StartUiTutorialCommand = new RelayCommand(() =>
+        {
+            var tutorial = SMSModForge.Tutorials.TutorialCatalog.All.FirstOrDefault(t => t.Id == "a-screen-of-your-own");
+            if (tutorial != null) TutorialRunner.Start(tutorial);
+        });
         RemoveUiCommand = new RelayCommand(RemoveUi, () => SelectedUi != null);
         AddVanillaExtensionButtonCommand = new RelayCommand(AddVanillaExtensionButton, () => SelectedVanillaExtension != null);
         AddVanillaExtensionGameObjectCommand = new RelayCommand(

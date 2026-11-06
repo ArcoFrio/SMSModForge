@@ -151,6 +151,118 @@ public static class UiSlice
         return dest;
     }
 
+    /// <summary>
+    /// A Tiled picture: repeated at its own size from the rectangle's bottom
+    /// left, as the game's mesh does - so a picture bigger than its rectangle
+    /// shows its bottom left part rather than being squeezed in. A border stays
+    /// a frame, and only what is inside it repeats.
+    /// </summary>
+    public static byte[] Tile(byte[] source, int sourceWidth, int sourceHeight, SliceBorder border,
+                              int targetWidth, int targetHeight, bool fillCenter = true, double divisor = 1.0)
+    {
+        if (targetWidth <= 0 || targetHeight <= 0) return Array.Empty<byte>();
+        if (divisor <= 0) divisor = 1;
+        var dest = new byte[targetWidth * targetHeight * 4];
+
+        double innerW = sourceWidth - border.Left - border.Right, innerH = sourceHeight - border.Top - border.Bottom;
+        double left = border.Left / divisor, right = border.Right / divisor;
+        double top = border.Top / divisor, bottom = border.Bottom / divisor;
+        double tileW = innerW / divisor, tileH = innerH / divisor;
+
+        for (int y = 0; y < targetHeight; y++)
+        {
+            // Rows count up from the bottom, where the tiling starts.
+            double up = targetHeight - y - 0.5;
+            double sy;
+            bool middleY = false;
+            if (up < bottom) sy = sourceHeight - up * divisor;
+            else if (up >= targetHeight - top) sy = (targetHeight - up) * divisor;
+            else
+            {
+                middleY = true;
+                double along = tileH > 0 ? (up - bottom) % tileH : 0;
+                sy = sourceHeight - border.Bottom - along * divisor;
+            }
+
+            for (int x = 0; x < targetWidth; x++)
+            {
+                double across = x + 0.5;
+                double sx;
+                bool middleX = false;
+                if (across < left) sx = across * divisor;
+                else if (across >= targetWidth - right) sx = sourceWidth - (targetWidth - across) * divisor;
+                else
+                {
+                    middleX = true;
+                    double along = tileW > 0 ? (across - left) % tileW : 0;
+                    sx = border.Left + along * divisor;
+                }
+                if (!fillCenter && middleX && middleY) continue;
+
+                int sxi = Math.Min(sourceWidth - 1, Math.Max(0, (int)sx));
+                int syi = Math.Min(sourceHeight - 1, Math.Max(0, (int)sy));
+                Buffer.BlockCopy(source, (syi * sourceWidth + sxi) * 4, dest, (y * targetWidth + x) * 4, 4);
+            }
+        }
+        return dest;
+    }
+
+    /// <summary>
+    /// The part of an object's rectangle its picture really covers, as the game
+    /// works it out. A sprite trimmed of its empty edges keeps the size it had:
+    /// the game insets the picture by what was trimmed, so a check mark with 60
+    /// empty pixels each side of a 256-pixel sprite does not fill its box. Keeping
+    /// its shape goes by that whole size too, and applies only to a plain or
+    /// Filled picture; a Sliced or Tiled one has its own idea of stretching.
+    /// </summary>
+    public static UiRect DrawnArea(UiRect box, UiSprite sprite, bool sliced, bool tiled, bool keepShape, double divisor,
+                                   double pivotX, double pivotY)
+    {
+        double wholeW = sprite.RectWidth > 0 ? sprite.RectWidth : sprite.Width;
+        double wholeH = sprite.RectHeight > 0 ? sprite.RectHeight : sprite.Height;
+
+        if (keepShape && !sliced && !tiled)
+        {
+            var (fx, fy, fw, fh) = FitShape(box.Width, box.Height, wholeW, wholeH, pivotX, pivotY);
+            box = new UiRect(box.X + fx, box.Y + fy, fw, fh);
+        }
+
+        var p = sprite.Padding;
+        if (p == null || p.Length < 4 || tiled) return box;
+
+        // left, bottom, right, top. In a share of the box when it stretches, in
+        // pixels at its own size when it is sliced; y grows downwards here.
+        double kx = sliced ? 1 / Math.Max(0.0001, divisor) : box.Width / wholeW;
+        double ky = sliced ? 1 / Math.Max(0.0001, divisor) : box.Height / wholeH;
+        return new UiRect(box.X + p[0] * kx, box.Y + p[3] * ky,
+                          Math.Max(0, box.Width - (p[0] + p[2]) * kx), Math.Max(0, box.Height - (p[1] + p[3]) * ky));
+    }
+
+    /// <summary>
+    /// Where a picture that keeps its shape goes inside its rectangle: as large
+    /// as fits, with the spare room shared out by the object's pivot, which is
+    /// Unity's own rule - a picture pivoted at its bottom left sits in the bottom
+    /// left of its box. In drawing coordinates, y down, so the pivot's Y counts
+    /// from the bottom.
+    /// </summary>
+    public static (double X, double Y, double Width, double Height) FitShape(
+        double width, double height, double spriteWidth, double spriteHeight,
+        double pivotX, double pivotY)
+    {
+        if (spriteWidth <= 0 || spriteHeight <= 0 || width <= 0 || height <= 0) return (0, 0, width, height);
+        double spriteRatio = spriteWidth / spriteHeight, boxRatio = width / height;
+        if (spriteRatio > boxRatio)
+        {
+            double fitted = width / spriteRatio;
+            return (0, (height - fitted) * (1 - pivotY), width, fitted);
+        }
+        else
+        {
+            double fitted = height * spriteRatio;
+            return ((width - fitted) * pivotX, 0, fitted, height);
+        }
+    }
+
     /// <summary>Three cuts into four ordered boundaries, kept monotonic so a
     /// border wider than its own sprite cannot produce a negative-width cell.</summary>
     private static double[] Bounds(double a, double b, double c, double d)

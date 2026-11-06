@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
@@ -36,12 +37,21 @@ public sealed class UiViewModel : ObservableObject
     /// row, since the preview redraws the whole screen anyway.</summary>
     public event Action? Changed;
 
-    public UiViewModel(UiDef model)
+    /// <param name="packMade">Where the pack itself puts objects on a game's
+    /// screen when it runs, by screen - see <see cref="VanillaUiSeed.Merge"/>.
+    /// A function because it has to be asked again each time the screen is
+    /// seeded, and that first happens in this constructor.</param>
+    public UiViewModel(UiDef model, Func<string, ISet<string>?>? packMade = null)
     {
         Model = model;
+        _packMade = packMade;
         Nodes = new ObservableCollection<UiNodeViewModel>(
-            model.Nodes.Select(n => new UiNodeViewModel(n, null, HasChanges, Reset)));
-        foreach (var node in Nodes) node.Changed += Bubble;
+            model.Nodes.Select(n => new UiNodeViewModel(n, null, HasChanges, Reset, GameNodeOf, RememberHidden)));
+        foreach (var node in Nodes)
+        {
+            node.Changed += Bubble;
+            node.IsExpanded = true;
+        }
 
         // Watched like a rule's: the screen opens on the moment they become
         // met, so a Timer here restarts when it does and a Random is not offered.
@@ -56,7 +66,65 @@ public sealed class UiViewModel : ObservableObject
         // nodes and not a screen. Seeding here rebuilds the working copy so it
         // opens looking like the game rather than like the diff.
         EnsureSeeded();
+        ApplyHidden();
     }
+
+    // ── Hidden in the preview ────────────────────────────────────────
+
+    /// <summary>What this UI is remembered under: a game's screen by which one, a
+    /// UI of the pack's own by its id, which a rename leaves alone.</summary>
+    private string HidingKey => Model.IsVanillaBased ? Model.Source : Model.Id;
+
+    /// <summary>An object's path for that memory: where the game has it, or where
+    /// it sits in the tree, which survives everything but a rename, and a rename
+    /// writes the new one.</summary>
+    private static IEnumerable<(UiNodeViewModel Row, string Path)> Walk(UiNodeViewModel row, string above)
+    {
+        string path = row.Model.IsBound ? row.Model.Bind : above.Length == 0 ? row.Model.Name : above + "/" + row.Model.Name;
+        yield return (row, path);
+        foreach (var child in row.Children)
+            foreach (var deeper in Walk(child, path))
+                yield return deeper;
+    }
+
+    private IEnumerable<(UiNodeViewModel Row, string Path)> AllRows()
+        => Nodes.SelectMany(n => Walk(n, ""));
+
+    /// <summary>Put back what the editor remembers. The rows have only just been
+    /// made, which an undo does to all of them.</summary>
+    private void ApplyHidden()
+    {
+        var hidden = Services.UiPreviewHiding.Of(HidingKey);
+        if (hidden.Count == 0) return;
+        foreach (var (row, path) in AllRows()) row.Model.HiddenInPreview = hidden.Contains(path);
+    }
+
+    private void RememberHidden()
+    {
+        Services.UiPreviewHiding.Set(HidingKey, AllRows().Where(r => r.Row.IsHiddenInPreview).Select(r => r.Path));
+        OnPropertyChanged(nameof(HasHiddenInPreview));
+        OnPropertyChanged(nameof(PreviewHiddenNote));
+    }
+
+    private int HiddenCount => AllRows().Count(r => r.Row.IsHiddenInPreview);
+
+    /// <summary>Whether anything is hidden here, which the preview says out loud:
+    /// otherwise an object an author hid last week just looks lost.</summary>
+    public bool HasHiddenInPreview => HiddenCount > 0;
+
+    public string PreviewHiddenNote => Loc.P("ui.preview.hidden", HiddenCount);
+
+    /// <summary>Everything back on show, and nothing in the pack any different.</summary>
+    public RelayCommand ShowAllInPreviewCommand => _showAll ??= new RelayCommand(() =>
+    {
+        foreach (var (row, _) in AllRows().ToList()) row.IsHiddenInPreview = false;
+    });
+
+    private RelayCommand? _showAll;
+
+    /// <summary>Taken off the UI altogether, when the UI is removed: choosing
+    /// that game's screen again later starts it with everything on show.</summary>
+    public void ForgetHidden() => Services.UiPreviewHiding.Set(HidingKey, Array.Empty<string>());
 
     // ── Which vanilla UI ─────────────────────────────────────────────
 
@@ -133,7 +201,21 @@ public sealed class UiViewModel : ObservableObject
         set
         {
             if (ReferenceEquals(_selectedNode, value)) return;
+            var before = _selectedNode;
             _selectedNode = value;
+
+            // The tree follows, wherever the choice came from: the picture, a
+            // new object just added inside a closed branch, the settings row.
+            // The old row is only told when there is no new one - choosing the
+            // new row deselects it anyway, and telling it first would raise a
+            // "nothing selected" that overwrites the choice being made here.
+            if (value != null)
+            {
+                for (var up = value.Parent; up != null; up = up.Parent) up.IsExpanded = true;
+                value.IsSelected = true;
+            }
+            else if (before != null) before.IsSelected = false;
+
             OnPropertyChanged();
             OnPropertyChanged(nameof(HasSelection));
             OnPropertyChanged(nameof(SelectedModel));
@@ -145,6 +227,34 @@ public sealed class UiViewModel : ObservableObject
 
     public bool HasSelection => _selectedNode != null;
     public UiNodeDef? SelectedModel => _selectedNode?.Model;
+
+    /// <summary>Back from an object to the settings of the UI as a whole.</summary>
+    public RelayCommand ShowSettingsCommand => _showSettings ??= new RelayCommand(() => SelectedNode = null);
+
+    private RelayCommand? _showSettings;
+
+    /// <summary>What opens it, in a few words, for the head of that section -
+    /// the first thing anyone asks of a screen that does not appear.</summary>
+    public string OpensSummary
+        => StartsOpen ? Loc.T("ui.summary.startsOpen")
+           : OpensByConditions ? Loc.P("ui.summary.conditions", Model.OpenConditions.Count)
+           : Loc.T("ui.summary.byAction");
+
+    public string MovesSummary
+    {
+        get
+        {
+            var parts = new List<string>();
+            if (Model.Open is { DoesAnything: true }) parts.Add(Loc.T("ui.summary.arrives"));
+            if (Model.Close is { DoesAnything: true }) parts.Add(Loc.T("ui.summary.leaves"));
+            return parts.Count == 0 ? Loc.T("ui.summary.nothing") : string.Join(" · ", parts);
+        }
+    }
+
+    public string SoundSummary
+        => !ButtonsMakeSound ? Loc.T("ui.summary.silent")
+           : string.IsNullOrEmpty(Model.ButtonSound) ? Loc.T("ui.summary.gameClick")
+           : Model.ButtonSound;
 
     /// <summary>
     /// The canvas this UI is drawn on, in the coordinates its anchors are
@@ -302,6 +412,7 @@ public sealed class UiViewModel : ObservableObject
             if (Model.StartsOpen == value) return;
             Model.StartsOpen = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(OpensSummary));
         }
     }
 
@@ -323,6 +434,7 @@ public sealed class UiViewModel : ObservableObject
         Model.OpenConditions.Add(def);
         OpenConditions.Add(new NodeConditionViewModel(def, RemoveOpenCondition, context: ConditionContext.Rule));
         OnPropertyChanged(nameof(OpensByConditions));
+        OnPropertyChanged(nameof(OpensSummary));
     }
 
     private void RemoveOpenCondition(NodeConditionViewModel row)
@@ -330,6 +442,7 @@ public sealed class UiViewModel : ObservableObject
         Model.OpenConditions.Remove(row.Model);
         OpenConditions.Remove(row);
         OnPropertyChanged(nameof(OpensByConditions));
+        OnPropertyChanged(nameof(OpensSummary));
     }
 
     /// <summary>
@@ -348,6 +461,7 @@ public sealed class UiViewModel : ObservableObject
             if (Model.SilentButtons == !value) return;
             Model.SilentButtons = !value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(SoundSummary));
             OnPropertyChanged(nameof(ButtonSoundInEffect));
             OnPropertyChanged(nameof(ShowsDefaultButtonSound));
         }
@@ -373,14 +487,14 @@ public sealed class UiViewModel : ObservableObject
     /// <summary>How this screen arrives when it is switched on.</summary>
     public UiOpenViewModel Open => _open ??= new UiOpenViewModel(
         () => Model.Open, v => Model.Open = v,
-        () => Model.Nodes.FirstOrDefault());
+        () => Model.Nodes.FirstOrDefault(), changed: () => OnPropertyChanged(nameof(MovesSummary)));
 
     private UiOpenViewModel? _open;
 
     /// <summary>How this screen leaves when an action switches it off.</summary>
     public UiOpenViewModel Close => _close ??= new UiOpenViewModel(
         () => Model.Close, v => Model.Close = v,
-        () => Model.Nodes.FirstOrDefault(), closing: true);
+        () => Model.Nodes.FirstOrDefault(), closing: true, changed: () => OnPropertyChanged(nameof(MovesSummary)));
 
     private UiOpenViewModel? _close;
 
@@ -394,6 +508,7 @@ public sealed class UiViewModel : ObservableObject
             if (Model.ButtonSound == value) return;
             Model.ButtonSound = value ?? "";
             OnPropertyChanged();
+            OnPropertyChanged(nameof(SoundSummary));
             OnPropertyChanged(nameof(ShowsDefaultButtonSound));
         }
     }
@@ -497,6 +612,16 @@ public sealed class UiViewModel : ObservableObject
         return against != null && VanillaUiDelta.Asserts(node, against);
     }
 
+    /// <summary>The game's own object a row is bound to, if it can be found.</summary>
+    private VanillaUiSurface.Node? GameNodeOf(UiNodeDef node)
+    {
+        if (node == null || !node.IsBound || !Model.IsVanillaBased) return null;
+        var vanilla = VanillaUiLibrary.Node(Catalog);
+        return vanilla == null ? null : VanillaUiDelta.NodeAt(vanilla, node.Bind);
+    }
+
+    private readonly Func<string, ISet<string>?>? _packMade;
+
     /// <summary>What this extension is doing, in a line: how much of the screen
     /// it touches against how much it merely holds. An author who has moved one
     /// label should be able to see that they have moved one label.</summary>
@@ -535,7 +660,8 @@ public sealed class UiViewModel : ObservableObject
         if (vanilla == null) return;
 
         var merged = VanillaUiSeed.Merge(vanilla, Model.Nodes, out int stranded,
-                                         VanillaUiLibrary.Assets.NameForKey);
+                                         VanillaUiLibrary.Assets.NameForKey,
+                                         _packMade?.Invoke(Model.Source));
         Stranded = stranded;
 
         Model.Nodes.Clear();
@@ -543,9 +669,12 @@ public sealed class UiViewModel : ObservableObject
         Nodes.Clear();
 
         Model.Nodes.Add(merged);
-        var vm = new UiNodeViewModel(merged, null, HasChanges, Reset);
+        // Open at the top, so the tree shows what is inside: a single closed
+        // row under "Objects" reads as a screen with one thing in it.
+        var vm = new UiNodeViewModel(merged, null, HasChanges, Reset, GameNodeOf, RememberHidden) { IsExpanded = true };
         vm.Changed += Bubble;
         Nodes.Add(vm);
+        ApplyHidden();
 
         _selectedNode = null;
         OnPropertyChanged(nameof(Summary));
@@ -606,6 +735,8 @@ public sealed class UiViewModel : ObservableObject
         OnPropertyChanged(nameof(Summary));
         OnPropertyChanged(nameof(RootNode));
         OnPropertyChanged(nameof(Revision));
+        OnPropertyChanged(nameof(HasHiddenInPreview));
+        OnPropertyChanged(nameof(PreviewHiddenNote));
         Changed?.Invoke();
     }
 }

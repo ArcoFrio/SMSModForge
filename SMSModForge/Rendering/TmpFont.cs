@@ -38,6 +38,8 @@ public sealed class TmpFont
         [JsonProperty("meanLine")] public float MeanLine { get; set; }
         [JsonProperty("underlineOffset")] public float UnderlineOffset { get; set; }
         [JsonProperty("underlineThickness")] public float UnderlineThickness { get; set; }
+        [JsonProperty("strikethroughOffset")] public float StrikethroughOffset { get; set; }
+        [JsonProperty("strikethroughThickness")] public float StrikethroughThickness { get; set; }
         [JsonProperty("tabWidth")] public float TabWidth { get; set; }
     }
 
@@ -62,6 +64,10 @@ public sealed class TmpFont
 
     public sealed class Glyph
     {
+        /// <summary>The font this glyph's atlas belongs to, so a letter found in a
+        /// fallback is drawn from the fallback's atlas.</summary>
+        [JsonIgnore] public TmpFont? Owner { get; internal set; }
+
         [JsonProperty("index")] public int Index { get; set; }
 
         /// <summary>The glyph's box in the atlas, counted from the TOP, ready to
@@ -106,6 +112,14 @@ public sealed class TmpFont
     [JsonProperty("sourceFontFile")] public string SourceFontFile { get; set; } = "";
     [JsonProperty("atlasPopulationMode")] public string AtlasPopulationMode { get; set; } = "";
     [JsonProperty("fallbacks")] public List<string> Fallbacks { get; set; } = new();
+
+    /// <summary>The font's own letter spacing, in the same units as a text's
+    /// character spacing: a few of the game's set one, and every letter on a line
+    /// moves by it. Read from the game - see Tools/Game/preview-data-from-game.py.</summary>
+    [JsonProperty("normalSpacing")] public double NormalSpacing { get; set; }
+
+    /// <summary>The extra spacing of bold letters. TextMeshPro's default is 7.</summary>
+    [JsonProperty("boldSpacing")] public double BoldSpacing { get; set; } = 7;
     [JsonProperty("atlas")] public AtlasInfo Atlas { get; set; } = new();
     [JsonProperty("face")] public FaceInfo Face { get; set; } = new();
     [JsonProperty("glyphs")] public List<Glyph> Glyphs { get; set; } = new();
@@ -237,6 +251,17 @@ public sealed class TmpFont
     /// of a string that a future TMP could rename.
     /// </summary>
     public bool IsDistanceField => SdfSpread.HasValue;
+
+    /// <summary>
+    /// Whether this font's letters are a coloured picture: the shader multiplies
+    /// the atlas's own colours by the text's, so the outline and shadow baked in
+    /// stay dark whatever colour the words are. Every Alata-Regular-Outline is
+    /// one, about 430 labels across the game, and drawing only their alpha left
+    /// them thin and flat.
+    /// </summary>
+    public bool IsColourAtlas
+        => Material != null && Material.TryGetValue("shader", out object? shader)
+           && shader is string name && name.Contains("Custom Atlas", StringComparison.OrdinalIgnoreCase);   // English on purpose: the shader's name.
 
     public double? MaterialNumber(string key)
     {
@@ -396,7 +421,10 @@ public sealed class TmpFont
         try
         {
             if (!File.Exists(path)) return null;
-            return JsonConvert.DeserializeObject<TmpFont>(File.ReadAllText(path));
+            var font = JsonConvert.DeserializeObject<TmpFont>(File.ReadAllText(path));
+            if (font != null)
+                foreach (var glyph in font.Glyphs) glyph.Owner = font;
+            return font;
         }
         catch
         {

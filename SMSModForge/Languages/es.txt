@@ -305,6 +305,10 @@ game.notice.news.1.8.0 = Los sonidos de los packs suenan con el momento y el vol
 # en: A pack's conversation no longer starts over the game's own when you arrive somewhere.
 game.notice.news.1.8.2 = La conversación de un pack ya no empieza encima de la del propio juego cuando llegas a un lugar.
 
+# What ModForge 1.8.3 changes for players, one line each (\n starts the next)
+# en: Screens from packs now sit where their authors put them, and their changes to the game's own screens all show up.\nA pack's place no longer plays its arrival in the room you are still in when the game refuses the trip.
+game.notice.news.1.8.3 = Las pantallas de los packs ahora aparecen donde las colocaron sus autores, y sus cambios en las pantallas del propio juego se ven por completo.\nUn lugar de un pack ya no reproduce su llegada en la sala donde sigues cuando el juego rechaza el viaje.
+
 [Where an NPC stands]
 
 # Text
@@ -580,6 +584,14 @@ param.label.totalTimeS = Tiempo total (s)
 # Tooltip on the 'Total time (s)' field of the TransitionLevels action
 # en: Total transition length; cross-fade and signal share this budget.
 action.transitionLevels.seconds.tip = Duración total de la transición; el fundido cruzado y la señal comparten este tiempo.
+
+# Tooltip on the 'To level' field of the Travel action
+# en: The place to go to - one of your places or one of the game's. The player travels there as its map or navigator button would take them.
+action.travel.target.tip = El lugar al que ir: uno de tus lugares o uno del juego. El jugador viaja allí como lo llevaría su botón del mapa o del navegador.
+
+# Tooltip on the 'Music key' field of the Travel action
+# en: Music to switch to on the way, as a navigator button's music does. Leave it empty to keep what is playing.
+action.travel.music.tip = Música a la que cambiar por el camino, como la música de un botón del navegador. Déjalo vacío para mantener la que suena.
 
 # Label beside a field of an action or condition
 # en: Target alpha
@@ -1924,6 +1936,22 @@ gameObject.levelSBuiltNpcs = El objeto de NPC propio del nivel: su transform des
 # en: This GameObject already exists (bind, don't create)
 gameObject.gameobjectAlreadyExistsBind = Este GameObject ya existe (enlazar, no crear)
 
+# Text
+# en: Copy of
+gameObject.copyOf = Copia de
+
+# Tooltip on a text box
+# en: Make this object a copy of one of the game's: its path in the game's scene, like 5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas or 6_Effects/CFXR2 Expression Loving (Timed). The copy is made each time the game loads and stays as the original was, unless the overrides below say otherwise. Its children with Bind reach the copy's own parts by name; new children are added to it. Leave it empty for an object of the pack's own.
+gameObject.copyOf.tip = Convierte este objeto en una copia de uno del juego: su ruta en la escena del juego, como 5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas o 6_Effects/CFXR2 Expression Loving (Timed). La copia se hace cada vez que el juego carga y queda como estaba el original, salvo que las sustituciones de abajo digan otra cosa. Sus hijos con Bind llegan a las partes de la copia por su nombre; los hijos nuevos se añaden a ella. Déjalo vacío para un objeto propio del pack.
+
+# Text
+# en: Beside the original
+gameObject.copyBeside = Junto al original
+
+# Tooltip on a tick box
+# en: Put the copy under the same parent as the original, instead of in this place - for something that is not the place's, like an effect your dialogues switch on by its path.
+gameObject.copyBeside.tip = Pon la copia bajo el mismo padre que el original, en vez de en este lugar: para algo que no es del lugar, como un efecto que tus diálogos activan por su ruta.
+
 # Tick box
 # en: Override its transform
 gameObject.overrideTransform = Sobrescribir su transform
@@ -2063,6 +2091,22 @@ gameObject.overrideTransform.tip = Desactivado (por defecto) deja el objeto exis
 # Tooltip on "Override active"
 # en: Off (default) leaves the object's own active state alone. On applies the Start-active checkbox. Not needed when you're gating it with Active-when conditions.
 gameObject.overrideActive.tip = Desactivado (por defecto) deja en paz el estado activo del objeto. Activado aplica la casilla «Empieza activo». No hace falta cuando lo controlas con condiciones de «Activo cuando».
+
+# Text
+# en: Override parallax
+gameObject.overrideParallax = Sobrescribir parallax
+
+# Tooltip on a tick box and the number beside it
+# en: Off (default) leaves how the object drifts with the mouse as the game made it. On sets how far it drifts to the number beside it - lower is softer, 0 holds it still. An object that does not drift is left alone.
+gameObject.overrideParallax.tip = Apagado (por defecto) deja cómo se desplaza el objeto con el ratón tal como lo hizo el juego. Encendido fija cuánto se desplaza con el número de al lado: menos es más suave, 0 lo deja quieto. Un objeto que no se desplaza no se toca.
+
+# Text
+# en: Particle colour
+gameObject.particleColor = Color de partículas
+
+# Tooltip on a text box
+# en: The colour this object's particles start in, as #RRGGBB or #RRGGBBAA - for one of the game's effects, copied or as it is. Only this object's own particles: a part with particles of its own takes a child of its own. Empty leaves them as they are.
+gameObject.particleColor.tip = El color con el que empiezan las partículas de este objeto, como #RRGGBB o #RRGGBBAA: para un efecto del juego, copiado o tal cual. Solo las partículas propias de este objeto: una parte con partículas propias lleva un hijo propio. Vacío las deja como están.
 
 # Tooltip on a part of the window
 # en: Pack-relative PNG path. Leave blank for a pure container GameObject (an empty transform that just groups children).
@@ -6812,29 +6856,17 @@ ui.pasteNode = Pegar
 # en: Preview
 ui.preview = Vista previa
 
-# Text
-# en: Select an object in the tree to change it.
-ui.selectObjectTreeChange = Selecciona un objeto del árbol para cambiarlo.
-
 # Button
 # en: Reset
 ui.reset = Restablecer
 
-# Text
-# en: Position
-ui.position = Posición
-
-# Text
-# en: from its anchors, in canvas pixels
-ui.anchorsCanvasPixels = desde sus anclas, en píxeles del canvas
-
-# Text
-# en: Size
-ui.size = Tamaño
-
 # Tick box
 # en: Visible at start
 ui.visibleStart = Visible al principio
+
+# Tick box
+# en: Stays upright
+ui.upright = Se mantiene recto
 
 # Text
 # en: Sprite
@@ -6847,10 +6879,6 @@ ui.text = Texto
 # Text
 # en: Colour
 ui.colour = Color
-
-# Expandable section
-# en: Shown when
-ui.shownWhen = Se muestra cuando
 
 # Button
 # en: + Condition
@@ -6869,16 +6897,60 @@ ui.opensWhen.help = La pantalla se abre sola en el momento en que se cumplen tod
 ui.addOpenCondition.tip = Sin ninguna, la pantalla solo se abre cuando una acción la abre, o al principio si está en pantalla desde el principio. Con alguna, se abre sola en el momento en que se cumplen todas.
 
 # Expandable section
-# en: When it opens
-ui.whenOpens = Cuando se abre
+# en: Keeps moving
+ui.loop = Sigue moviéndose
 
-# Expandable section
-# en: When it closes
-ui.whenCloses = Cuando se cierra
+# Tick box
+# en: Pulse fade
+ui.loop.fade = Pulso de opacidad
 
-# Expandable section
-# en: Arrange children
-ui.arrangeChildren = Colocar los hijos
+# Tooltip on a tick box and its numbers
+# en: Its fade goes from the first number to the second and back once a pass, as fractions of its own - 0.4 to 1 breathes a glow. Everything on it fades with it.
+ui.loop.fade.tip = Su opacidad va del primer número al segundo y vuelve una vez por pasada, como fracción de la propia: de 0,4 a 1 hace respirar un brillo. Todo lo que tiene encima se desvanece con él.
+
+# Tick box
+# en: Pulse size
+ui.loop.size = Pulso de tamaño
+
+# Tooltip on a tick box and its numbers
+# en: Its size goes from the first number to the second and back once a pass, as fractions of its own.
+ui.loop.size.tip = Su tamaño va del primer número al segundo y vuelve una vez por pasada, como fracción del propio.
+
+# Tick box
+# en: Sweep
+ui.loop.sweep = Barrido
+
+# Tooltip on a tick box and its numbers
+# en: It moves from the first place to the second - x and y from where it is - and starts again. A highlight under a parent that clips its children becomes a shine running along it: put both ends outside the parent.
+ui.loop.sweep.tip = Se mueve del primer punto al segundo (x e y desde donde está) y vuelve a empezar. Un brillo bajo un padre que recorta a sus hijos se convierte en un destello que lo recorre: pon ambos extremos fuera del padre.
+
+# Text
+# en: Seconds
+ui.loop.seconds = Segundos
+
+# Tooltip on a text box
+# en: How long one pass takes. It plays in the game while the object is shown; the preview shows it still.
+ui.loop.seconds.tip = Cuánto dura una pasada. En el juego se reproduce mientras el objeto se muestra; la vista previa lo muestra quieto.
+
+# Text
+# en: Pause
+ui.loop.pause = Pausa
+
+# Tooltip on a text box
+# en: Seconds it rests at the start between passes.
+ui.loop.pause.tip = Segundos que descansa al principio entre pasadas.
+
+# Text
+# en: Delay
+ui.loop.delay = Retraso
+
+# Tooltip on a text box
+# en: Seconds before the first pass, from when it is shown - give copies of one object different delays so they do not all move together.
+ui.loop.delay.tip = Segundos antes de la primera pasada, desde que se muestra: da a las copias de un objeto retrasos distintos para que no se muevan todas a la vez.
+
+# Tooltip on a dropdown
+# en: The sweep's curve. A pulse always eases back and forth.
+ui.loop.easing.tip = La curva del barrido. Un pulso siempre va y vuelve suavemente.
 
 # Text
 # en: Arrange
@@ -6920,13 +6992,17 @@ ui.cell = Celda
 # en: Centre a last row that is not full
 ui.centreLastRowNot = Centrar la última fila si no está llena
 
-# Expandable section
-# en: When clicked
-ui.whenClicked = Al hacer clic
+# Text
+# en: Only as big as what it holds
+ui.fitToContent = Solo tan grande como lo que contiene
 
 # Text
 # en: Hover
 ui.hover = Al pasar por encima
+
+# Text
+# en: Pressed
+ui.pressScale = Pulsado
 
 # Text
 # en: Sound
@@ -6951,6 +7027,475 @@ ui.overwriteActions = Sobrescribir
 # Text
 # en: Font
 ui.font = Fuente
+
+# The UI tab's start page: heading
+# en: What do you want to do?
+ui.start.title = ¿Qué quieres hacer?
+
+# The UI tab's start page: what a UI is
+# en: A UI is anything drawn over the game: a window, a menu, a button, a badge.
+ui.start.subtitle = Una UI es cualquier cosa dibujada sobre el juego: una ventana, un menú, un botón, una insignia.
+
+# The UI tab's start page, when the pack already has UIs
+# en: Or pick one of this pack's UIs from the list on the left.
+ui.start.pickExisting = O elige una de las UI de este pack en la lista de la izquierda.
+
+# Start page card
+# en: Change one of the game's UIs
+ui.start.change.title = Cambiar una UI del juego
+
+# Start page card
+# en: Move, restyle or add to a screen the game already has. Only what you change is saved.
+ui.start.change.body = Mueve, cambia de estilo o amplía una pantalla que el juego ya tiene. Solo se guarda lo que cambias.
+
+# Start page card
+# en: Add something that stays on screen
+ui.start.staying.title = Añadir algo que se queda en pantalla
+
+# Start page card
+# en: A badge, a counter, a bar in the corner. It is there as soon as the game is.
+ui.start.staying.body = Una insignia, un contador, una barra en una esquina. Está ahí en cuanto lo está el juego.
+
+# Start page card
+# en: Make a window that opens
+ui.start.window.title = Crear una ventana que se abre
+
+# Start page card
+# en: A panel with a title and a close button. A dialogue, a rule or a button opens it.
+ui.start.window.body = Un panel con título y botón de cerrar. Lo abre un diálogo, una regla o un botón.
+
+# Start page button
+# en: Show me step by step
+ui.start.tutorial = Enséñamelo paso a paso
+
+# UI tab: heading over a UI's object tree
+# en: Objects
+ui.objects = Objetos
+
+# UI tab: the row and heading for the settings of a whole UI
+# en: UI settings
+ui.settingsRow = Ajustes de la UI
+
+# Tooltip
+# en: The UI as a whole: its name, how it opens, where it lives and how it moves.
+ui.settingsRow.tip = La UI en conjunto: su nombre, cómo se abre, dónde está y cómo se mueve.
+
+# UI tab: under the preview
+# en: Click an object to select it. Drag it to move it, or drag its handles to resize it.
+ui.preview.hint = Haz clic en un objeto para seleccionarlo. Arrástralo para moverlo, o arrastra sus tiradores para cambiar su tamaño.
+
+# Tooltip on the eye beside an object in the UI tab's tree
+# en: Hide this and everything inside it in the preview, to reach what is behind it. Only here: the pack and the game are not changed.
+ui.eye.hide.tip = Oculta esto y todo lo que tiene dentro en la vista previa, para llegar a lo que hay detrás. Solo aquí: ni el pack ni el juego cambian.
+
+# Tooltip on the eye of an object hidden in the preview
+# en: Hidden in the preview only. Click to show it again. In the game it is unaffected.
+ui.eye.show.tip = Oculto solo en la vista previa. Haz clic para volver a mostrarlo. En el juego no cambia nada.
+
+# Tooltip on the eye of an object inside one hidden in the preview
+# en: Hidden in the preview because something it sits inside is. In the game it is unaffected.
+ui.eye.parent.tip = Oculto en la vista previa porque lo está algo que lo contiene. En el juego no cambia nada.
+
+# Tooltip on the eye of an object that starts switched off
+# en: Not visible at start, so the preview does not draw it either way. Tick Visible at start to work on it here.
+ui.eye.startsOff.tip = No es visible al principio, así que la vista previa no lo dibuja en ningún caso. Marca «Visible al principio» para trabajar en él aquí.
+
+# Above the UI preview: how many objects the author has hidden there
+# one: 1 · other: 0, 2, 3, 4…
+# en: {count} object hidden here, not in the game
+ui.preview.hidden.one = {count} objeto oculto aquí, no en el juego
+# en: {count} objects hidden here, not in the game
+ui.preview.hidden.other = {count} objetos ocultos aquí, no en el juego
+
+# Button above the UI preview
+# en: Show all
+ui.preview.showAll = Mostrar todo
+
+# Tooltip
+# en: Show everything you hid in this preview again.
+ui.preview.showAll.tip = Vuelve a mostrar todo lo que has ocultado en esta vista previa.
+
+# UI tab: settings of a change to one of the game's screens
+# en: This is one of the game's own screens. Pick an object in the tree or the preview to change it: only what you change is saved.
+ui.gameUi.note = Esta es una de las pantallas propias del juego. Elige un objeto en el árbol o en la vista previa para cambiarlo: solo se guarda lo que cambias.
+
+# UI tab: how else a UI opens
+# en: Anything that can run an action can also open it: Set Active, with its category set to UI.
+ui.opensByAction.help = Todo lo que puede ejecutar una acción también puede abrirla: la de activar, con su categoría puesta en UI.
+
+# UI tab section title
+# en: How it opens
+ui.section.opens = Cómo se abre
+
+# UI tab section title
+# en: Where it lives
+ui.section.lives = Dónde está
+
+# UI tab section title
+# en: How it moves
+ui.section.moves = Cómo se mueve
+
+# UI tab section title
+# en: Button sound
+ui.section.sound = Sonido de los botones
+
+# UI tab section title
+# en: Where it sits
+ui.section.where = Dónde se coloca
+
+# UI tab section title
+# en: How it looks
+ui.section.looks = Qué aspecto tiene
+
+# UI tab section title
+# en: When it shows
+ui.section.shows = Cuándo se muestra
+
+# UI tab section title
+# en: What clicking does
+ui.section.clicks = Qué hace un clic
+
+# UI tab section title
+# en: What's inside
+ui.section.inside = Qué tiene dentro
+
+# UI tab section title
+# en: Extra components
+ui.section.components = Componentes adicionales
+
+# Section summary: a UI is up from the start
+# en: from the start
+ui.summary.startsOpen = desde el principio
+
+# Section summary: only an action opens this UI
+# en: by an action
+ui.summary.byAction = con una acción
+
+# Section summary
+# one: 1 · other: 0, 2, 3, 4…
+# en: {count} condition
+ui.summary.conditions.one = {count} condición
+# en: {count} conditions
+ui.summary.conditions.other = {count} condiciones
+
+# Section summary
+# one: 1 · other: 0, 2, 3, 4…
+# en: {count} action
+ui.summary.actions.one = {count} acción
+# en: {count} actions
+ui.summary.actions.other = {count} acciones
+
+# Section summary: it animates on arrival
+# en: arrives
+ui.summary.arrives = entra animado
+
+# Section summary: it animates on leaving
+# en: leaves
+ui.summary.leaves = sale animado
+
+# Section summary: it loops while shown
+# en: keeps moving
+ui.summary.keepsMoving = sigue moviéndose
+
+# Section summary: nothing set here
+# en: nothing
+ui.summary.nothing = nada
+
+# Section summary: always shown
+# en: always
+ui.summary.always = siempre
+
+# Section summary
+# en: starts hidden
+ui.summary.startsHidden = empieza oculto
+
+# Section summary: it clips what is inside it
+# en: clips
+ui.summary.clips = recorta
+
+# Section summary: buttons make no sound
+# en: silent
+ui.summary.silent = sin sonido
+
+# Section summary: buttons use the game's click
+# en: the game's click
+ui.summary.gameClick = el clic del juego
+
+# Section summary: its parent decides where it goes
+# en: arranged by its parent
+ui.summary.arranged = lo coloca su padre
+
+# Section summary: fills its parent
+# en: fills its parent
+ui.summary.fills = llena a su padre
+
+# What a UI object is, in a word
+# en: Button
+ui.kind.button = Botón
+
+# What a UI object is, in a word
+# en: Picture
+ui.kind.picture = Imagen
+
+# What a UI object is, in a word
+# en: Text
+ui.kind.text = Texto
+
+# What a UI object is, in a word
+# en: Group
+ui.kind.group = Grupo
+
+# What a UI object is, in a word
+# en: Empty
+ui.kind.empty = Vacío
+
+# Label over the 3x3 grid of places an object sticks to
+# en: Stick to
+ui.stick = Pegado a
+
+# Tooltip
+# en: Which part of its parent this object stays with. Picking one puts it flush against that place.
+ui.stick.tip = A qué parte de su padre se queda unido este objeto. Al elegir una, queda justo contra ese sitio.
+
+# UI object placement
+# en: Fill the width
+ui.fillWidth = Llenar el ancho
+
+# Tooltip
+# en: As wide as its parent, however wide that is. Left and Right say how far in each side stays.
+ui.fillWidth.tip = Tan ancho como su padre, sea cual sea su ancho. Izquierda y Derecha dicen cuánto hacia dentro queda cada lado.
+
+# UI object placement
+# en: Fill the height
+ui.fillHeight = Llenar el alto
+
+# Tooltip
+# en: As tall as its parent, however tall that is. Top and Bottom say how far in each side stays.
+ui.fillHeight.tip = Tan alto como su padre, sea cual sea su alto. Arriba y Abajo dicen cuánto hacia dentro queda cada lado.
+
+# UI object placement
+# en: X
+ui.place.x = X
+
+# UI object placement
+# en: Y
+ui.place.y = Y
+
+# Tooltip
+# en: How far from where it sticks, in canvas pixels. Up and right are positive.
+ui.place.x.tip = A qué distancia del sitio al que está pegado, en píxeles de lienzo. Hacia arriba y a la derecha es positivo.
+
+# UI object placement
+# en: Width
+ui.place.width = Ancho
+
+# UI object placement
+# en: Height
+ui.place.height = Alto
+
+# UI object placement: margin
+# en: Left
+ui.place.left = Izquierda
+
+# UI object placement: margin
+# en: Right
+ui.place.right = Derecha
+
+# UI object placement: margin
+# en: Top
+ui.place.top = Arriba
+
+# UI object placement: margin
+# en: Bottom
+ui.place.bottom = Abajo
+
+# Tooltip
+# en: How far in from that side of its parent, in canvas pixels.
+ui.place.margin.tip = Cuánto hacia dentro desde ese lado de su padre, en píxeles de lienzo.
+
+# UI object placement note
+# en: This object stretches across part of its parent. Width and Height here are how much bigger than that part it is, not its size.
+ui.stretchedPartly = Este objeto se estira sobre una parte de su padre. Aquí Ancho y Alto dicen cuánto más grande es que esa parte, no su tamaño.
+
+# UI object placement note
+# en: Its parent arranges what is inside it, so the parent decides where this goes.
+ui.arrangedByParent = Su padre coloca lo que tiene dentro, así que es él quien decide dónde va esto.
+
+# UI object: rotation
+# en: Turn
+ui.turn = Giro
+
+# Tooltip
+# en: Rotation in degrees, anticlockwise, around its pivot. The handles in the preview stay level.
+ui.turn.tip = Rotación en grados, en sentido antihorario, alrededor de su pivote. Los tiradores de la vista previa se quedan rectos.
+
+# UI object: scale across
+# en: Scale X
+ui.scaleX = Escala X
+
+# UI object: scale down
+# en: Scale Y
+ui.scaleY = Escala Y
+
+# Tooltip
+# en: Multiplies its size and everything inside it, around its pivot. 1 is its own size.
+ui.scale.tip = Multiplica su tamaño y todo lo que tiene dentro, alrededor de su pivote. 1 es su propio tamaño.
+
+# UI object placement: collapsed part
+# en: Exact anchors and pivot
+ui.exactAnchors = Anclajes y pivote exactos
+
+# UI object placement
+# en: Anchor min
+ui.anchorMin = Anclaje mín.
+
+# UI object placement
+# en: Anchor max
+ui.anchorMax = Anclaje máx.
+
+# UI object placement
+# en: Pivot
+ui.pivot = Pivote
+
+# Tooltip
+# en: The point of the object its position is measured from and that it turns and scales around. 0 is its left or bottom, 1 its right or top.
+ui.pivot.tip = El punto del objeto desde el que se mide su posición y alrededor del cual gira y escala. 0 es su izquierda o abajo, 1 su derecha o arriba.
+
+# UI object: picture colour
+# en: Tint
+ui.tint = Tinte
+
+# UI object: picture type
+# en: Drawn as
+ui.drawnAs = Dibujado como
+
+# Tooltip
+# en: Simple stretches the picture. Sliced keeps its corners and stretches the middle. Tiled repeats it. Filled draws it whole here, as nothing sets how full it is.
+ui.drawnAs.tip = Simple estira la imagen. Sliced conserva las esquinas y estira el centro. Tiled la repite. Filled la dibuja entera aquí, porque nada indica cuánto se llena.
+
+# UI object: sliced picture
+# en: Corner scale
+ui.borderScale = Escala de esquinas
+
+# Tooltip
+# en: How the corners are sized: 2 makes them half as big, 0.5 twice as big.
+ui.borderScale.tip = El tamaño de las esquinas: 2 las hace la mitad de grandes, 0.5 el doble.
+
+# UI object: picture
+# en: Keep its shape
+ui.keepAspect = Conservar su forma
+
+# Tooltip
+# en: Draws the picture as large as fits without stretching it.
+ui.keepAspect.tip = Dibuja la imagen tan grande como quepa sin estirarla.
+
+# UI object: sliced picture
+# en: Fill the middle
+ui.fillMiddle = Llenar el centro
+
+# Tooltip
+# en: Unticked, only the frame of a sliced picture is drawn.
+ui.fillMiddle.tip = Sin marcar, de una imagen Sliced solo se dibuja el marco.
+
+# UI object: picture
+# en: Catches the mouse
+ui.catchesMouse = Capta el ratón
+
+# Tooltip
+# en: Unticked, the pointer goes straight through this picture to whatever is behind it.
+ui.catchesMouse.tip = Sin marcar, el puntero atraviesa esta imagen hasta lo que haya detrás.
+
+# UI object: text
+# en: Size
+ui.fontSize = Tamaño
+
+# UI object: text
+# en: Alignment
+ui.alignment = Alineación
+
+# Tooltip
+# en: Where the words sit inside the object: TextMeshPro's own names.
+ui.alignment.tip = Dónde quedan las palabras dentro del objeto: los nombres propios de TextMeshPro.
+
+# UI object: text
+# en: Wrap lines
+ui.wrap = Ajustar líneas
+
+# Tooltip
+# en: Unticked, the words stay on one line and run past the edge.
+ui.wrap.tip = Sin marcar, las palabras siguen en una línea y se salen del borde.
+
+# UI object: text
+# en: Shrink to fit
+ui.shrinkToFit = Reducir para que quepa
+
+# Tooltip
+# en: Picks the largest size between the two given that fits the object, instead of the Size above.
+ui.shrinkToFit.tip = Elige el mayor tamaño entre los dos indicados que quepa en el objeto, en lugar del Tamaño de arriba.
+
+# UI object: text, smallest size
+# en: From
+ui.shrinkMin = De
+
+# UI object: text, largest size
+# en: To
+ui.shrinkMax = A
+
+# UI object: text
+# en: Line gap
+ui.lineSpacing = Separación de líneas
+
+# UI object: text
+# en: Letter gap
+ui.letterSpacing = Separación de letras
+
+# Tooltip
+# en: Extra space on top of what the font gives. 0 is the font's own.
+ui.lineSpacing.tip = Espacio adicional al que da la fuente. 0 es el de la propia fuente.
+
+# UI object
+# en: Opacity
+ui.opacity = Opacidad
+
+# Tooltip
+# en: From 0 to 1, for this object and everything inside it. Empty leaves it as it is.
+ui.opacity.tip = De 0 a 1, para este objeto y todo lo que tiene dentro. Vacío lo deja como está.
+
+# UI object
+# en: Shadow
+ui.shadow = Sombra
+
+# Tooltip
+# en: A copy of this object in one colour, offset behind it. The two numbers are how far across and up.
+ui.shadow.tip = Una copia de este objeto en un solo color, desplazada detrás de él. Los dos números dicen cuánto a lo ancho y hacia arriba.
+
+# UI object
+# en: Outline
+ui.outline = Contorno
+
+# Tooltip
+# en: Copies of this object in one colour, offset to each corner behind it. The two numbers are how far across and up.
+ui.outline.tip = Copias de este objeto en un solo color, desplazadas hacia cada esquina detrás de él. Los dos números dicen cuánto a lo ancho y hacia arriba.
+
+# UI object: note when a shadow or outline is on an object with only words on it
+# en: The game draws no shadow or outline on words. A font that has them built in does: try Alata-Regular-Outline.
+ui.effects.textNote = El juego no dibuja sombra ni contorno en las palabras. Sí lo hace una fuente que los lleve incorporados: prueba Alata-Regular-Outline.
+
+# Tooltip
+# en: Offset in canvas pixels: across, then up.
+ui.effectOffset.tip = Desplazamiento en píxeles de lienzo: a lo ancho y luego hacia arriba.
+
+# UI object
+# en: Clip what's inside to this object
+ui.clip = Recortar el contenido a este objeto
+
+# Tooltip
+# en: Anything inside it that reaches past its edges is cut off there.
+ui.clip.tip = Lo que tenga dentro y sobrepase sus bordes se corta ahí.
+
+# UI object: note on a game object that clips
+# en: The game clips this one, and a pack cannot take that off.
+ui.clip.gameOwn = El juego recorta este, y un pack no puede quitarlo.
 
 # Tooltip on "+ UI"
 # en: A screen of your own: a window, a panel, a HUD element.
@@ -7044,6 +7589,10 @@ ui.objectsGameOwnsKeep.tip = Los objetos del juego conservan sus propios nombres
 # en: Most of a vanilla screen starts hidden and is switched on by the game when its moment arrives.
 ui.visibleStart.tip = Casi toda pantalla del juego empieza oculta y el juego la enciende cuando llega su momento.
 
+# Tooltip on "Stays upright"
+# en: Stays level while what it hangs on turns: it moves and grows with its parent but never turns with it. For something on one of the game's buttons that swing round - a district's buttons on the world map turn as it opens.
+ui.upright.tip = Se mantiene nivelado mientras gira aquello de lo que cuelga: se mueve y crece con su padre, pero nunca gira con él. Para algo sobre botones del juego que giran: los botones de un distrito en el mapa del mundo giran al abrirse.
+
 # Tooltip on a button
 # en: Choose the colour on a wheel instead of typing hex.
 ui.pickUiTint.tip = Elige el color en una rueda en lugar de escribir el hex.
@@ -7116,9 +7665,17 @@ ui.flexibleFitsManyAcross.tip = Flexible mete tantos por línea como permita el 
 # en: Nineteen things in rows of seven leave a last row of five, and it is normally packed against the start corner - so a grid that is even everywhere else ends lopsided. This centres that row, and only that row. Unity has no such setting, so the preview and the game both do it here.
 ui.nineteenThingsRowsSeven.tip = Diecinueve cosas en filas de siete dejan una última fila de cinco, que normalmente queda pegada a la esquina inicial, así que una cuadrícula uniforme en todo lo demás acaba descompensada. Esto centra esa fila, y solo esa. Unity no tiene un ajuste así, por eso lo hacen aquí tanto la vista previa como el juego.
 
+# Tooltip on a tick box
+# en: With a set number of columns, the grid is only as wide as the columns its objects fill - two objects in a grid of eight columns make it two cells wide - so something sized to the grid, like a Content Size Fitter, grows and shrinks with what it holds. With a set number of rows, the same for its height. Unity's own grid is always as wide as all its columns. Only in the game: the preview draws the grid at its own size.
+ui.fitToContent.tip = Con un número fijo de columnas, la cuadrícula solo es tan ancha como las columnas que llenan sus objetos (dos objetos en una cuadrícula de ocho columnas la dejan en dos celdas de ancho), así que lo que se ajusta a la cuadrícula, como un Content Size Fitter, crece y se encoge con lo que contiene. Con un número fijo de filas, lo mismo para su altura. La cuadrícula propia de Unity siempre es tan ancha como todas sus columnas. Solo en el juego: la vista previa dibuja la cuadrícula a su propio tamaño.
+
 # Tooltip on a text box
 # en: Tint while the pointer is over this object, as #RRGGBB or #RRGGBBAA. Leave blank for no hover feedback. The game's own hover is per-button artwork rather than a rule, so there is nothing general to copy - this is the part a pack can state.
 ui.tintWhilePointerOver.tip = Tinte mientras el puntero está encima de este objeto, como #RRGGBB o #RRGGBBAA. Déjalo en blanco para que no haya respuesta al pasar por encima. El juego hace su propio efecto con arte por botón y no con una regla, así que no hay nada general que copiar: esta es la parte que un pack sí puede declarar.
+
+# Tooltip on a text box
+# en: Its size while held down, as a fraction of its own - 0.95 shrinks it a little while the pointer is down and lets it back on release, everything on it too. Empty for none: then the game's own press plays as it is clicked, once let go. Set, it stands in for that press - useful when the click closes the screen before that press could be seen.
+ui.pressScale.tip = Su tamaño mientras se mantiene pulsado, como fracción del propio: 0,95 lo encoge un poco mientras el puntero está abajo y lo devuelve al soltar, con todo lo que tiene encima. Vacío para nada: entonces la pulsación propia del juego se reproduce al hacer clic, una vez suelto. Puesto, sustituye a esa pulsación; útil cuando el clic cierra la pantalla antes de que se vea.
 
 # Tooltip on a dropdown
 # en: What THIS object sounds like when clicked. Blank follows the screen, which is usually what you want - set this only where one button should differ. A sound named here plays even on a screen whose buttons are otherwise silent.
@@ -10541,6 +11098,14 @@ docs.places.addObjectRoomArt.term = + Añadir GameObject
 docs.places.addObjectRoomArt = Añade un objeto a la sala: arte, un objeto, un contenedor para otros objetos.
 
 # Docs: the bold label in front of the next text, usually a name on screen
+# en: Copy of
+docs.places.copyOfGameObject.term = Copia de
+
+# Docs: a point in the topic
+# en: Make an object a copy of one of the game's, by its path in the game's scene - a room's buttons for a room of your own, an effect recoloured. The copy is made each time the game loads, in your place or beside the original, and keeps how the original was unless you override it; children with Bind change its parts, and a particle colour recolours the game's effects.
+docs.places.copyOfGameObject = Convierte un objeto en una copia de uno del juego, por su ruta en la escena del juego: los botones de una habitación para una habitación tuya, un efecto con otro color. La copia se hace cada vez que el juego carga, en tu lugar o junto al original, y queda como era el original salvo que la sustituyas; los hijos con Bind cambian sus partes, y un color de partículas cambia el color de los efectos del juego.
+
+# Docs: the bold label in front of the next text, usually a name on screen
 # en: + Add NPC
 docs.places.placeOneNpcsInto.term = + Añadir NPC
 
@@ -12341,6 +12906,14 @@ docs.actions.playDialogue.term = PlayDialogue
 # Docs: a point in the topic
 # en: Play one of the pack's dialogues or one of the game's conversations as soon as nothing else is on screen - on a line, right after its dialogue - and, if you like, set a variable when it ends.
 docs.actions.playDialogue = Reproducir un diálogo del pack o una conversación del juego en cuanto no haya nada más en pantalla (en una línea, justo después de su diálogo) y, si quieres, fijar una variable al terminar.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Travel
+docs.actions.travel.term = Travel
+
+# Docs: a point in the topic
+# en: Take the player to a place - one of yours or one of the game's - as its map or navigator button would: the game's own journey with its fade, the place's arrival conversation, and music if you name one. While the game is busy - a conversation on screen, another journey, a locked moment - it waits, so on a line the player goes once the dialogue ends. Nothing happens if they are already there.
+docs.actions.travel = Lleva al jugador a un lugar (uno tuyo o uno del juego) como lo haría su botón del mapa o del navegador: el propio viaje del juego con su fundido, la conversación de llegada del lugar y la música, si indicas una. Mientras el juego está ocupado (una conversación en pantalla, otro viaje, un momento bloqueado), espera; así, en una línea, el jugador se va cuando termina el diálogo. Si ya está allí, no pasa nada.
 
 # Docs: a heading inside the topic
 # en: Places and scenes
@@ -14493,8 +15066,8 @@ tutorial.aScreenOfYourOwn.summary = Construye un panel, ponle algo, y míralo co
 tutorial.aScreenOfYourOwn.screensPackOwns.title = Pantallas que son del pack
 
 # Tutorials: what the step says
-# en: This tab is for anything drawn on top of the game rather than in it — a window, a panel, a bar in the corner. Two kinds live here together, and deliberately so: screens you invent, and screens the game already has that your pack changes.\n\nThey share a tab because from your side they are the same job. A tree of objects on the left, what the selected one is underneath, and a picture of the result on the right.
-tutorial.aScreenOfYourOwn.screensPackOwns.body = Esta pestaña es para todo lo que se dibuja encima del juego en vez de dentro de él: una ventana, un panel, una barra en una esquina. Aquí conviven dos clases, y a propósito: pantallas que inventas tú, y pantallas que el juego ya tiene y que tu pack cambia.\n\nComparten pestaña porque desde tu lado son el mismo trabajo. Un árbol de objetos a la izquierda, qué es el seleccionado debajo, y una imagen del resultado a la derecha.
+# en: This tab is for anything drawn on top of the game rather than in it — a window, a panel, a bar in the corner. Two kinds live here together, and deliberately so: screens you invent, and screens the game already has that your pack changes.\n\nThey share a tab because from your side they are the same job. Pick on the left, see the result in the middle, and change what is selected on the right.
+tutorial.aScreenOfYourOwn.screensPackOwns.body = Esta pestaña es para todo lo que se dibuja encima del juego en vez de dentro de él: una ventana, un panel, una barra en una esquina. Aquí conviven dos clases, y a propósito: pantallas que inventas tú, y pantallas que el juego ya tiene y que tu pack cambia.\n\nComparten pestaña porque desde tu lado son el mismo trabajo. Eliges a la izquierda, ves el resultado en el medio y cambias lo seleccionado a la derecha.
 
 # Tutorials: the heading of a step
 # en: Start one
@@ -14517,16 +15090,16 @@ tutorial.aScreenOfYourOwn.callSomething.title = Ponle un nombre
 tutorial.aScreenOfYourOwn.callSomething.body = Cambia el Nombre por algo que vayas a reconocer dentro de un mes: «Nota de misión» antes que «Panel en blanco 2». Este es el nombre que vas a elegir de una lista cada vez que algo tenga que abrirla.\n\nEl id de debajo no cambia con él, y no debe: renombrar una pantalla no puede desenganchar en silencio lo que la estuviera abriendo.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: The Name box, top of the middle column.
-tutorial.aScreenOfYourOwn.callSomething.hint = El campo Nombre, arriba de la columna del medio.
+# en: The Name box, at the top of the right column.
+tutorial.aScreenOfYourOwn.callSomething.hint = El campo Nombre, arriba de la columna derecha.
 
 # Tutorials: the heading of a step
 # en: Put something on it
 tutorial.aScreenOfYourOwn.putSomething.title = Ponle algo encima
 
 # Tutorials: what the step says
-# en: The tree is what the screen is made of. Select the panel and press + Object to put an empty object inside it; the arrow beside that button offers ready-made pieces instead — a button, a row, a line of text.\n\nEverything is inside something else, and that is what decides where it sits: an object is positioned against its parent, so moving the panel takes everything on it along.
-tutorial.aScreenOfYourOwn.putSomething.body = El árbol es de lo que está hecha la pantalla. Selecciona el panel y pulsa + Objeto para meter un objeto vacío dentro; la flecha que hay junto a ese botón ofrece en cambio piezas ya hechas: un botón, una fila, una línea de texto.\n\nTodo está dentro de otra cosa, y eso es lo que decide dónde queda: un objeto se posiciona respecto a su padre, así que mover el panel se lleva todo lo que tiene encima.
+# en: The tree is what the screen is made of. Select the panel and press + Object to put an empty object inside it; + Shape and + Piece beside it offer ready-made ones — a button, a row, a line of text.\n\nEverything is inside something else, and that is what decides where it sits: an object is positioned against its parent, so moving the panel takes everything on it along.
+tutorial.aScreenOfYourOwn.putSomething.body = El árbol es de lo que está hecha la pantalla. Selecciona el panel y pulsa + Objeto para meter un objeto vacío dentro; + Forma y + Pieza, a su lado, ofrecen otros ya hechos: un botón, una fila, una línea de texto.\n\nTodo está dentro de otra cosa, y eso es lo que decide dónde queda: un objeto se posiciona respecto a su padre, así que mover el panel se lleva todo lo que tiene encima.
 
 # Tutorials: the nudge shown when a step has been waiting a while
 # en: Select the panel in the tree first — + Object adds INSIDE whatever is selected.
@@ -14537,8 +15110,8 @@ tutorial.aScreenOfYourOwn.putSomething.hint = Selecciona primero el panel en el 
 tutorial.aScreenOfYourOwn.say.title = Di qué es
 
 # Tutorials: what the step says
-# en: With the new object selected, the box underneath is everything about it: its name, where it sits, how big it is, and what it draws.\n\nPosition is measured from the object's anchors, in canvas pixels, and the canvas is the whole screen. Give it a name and a size you can see — a few hundred pixels each way is a good start, since anything smaller is hard to find in the preview.
-tutorial.aScreenOfYourOwn.say.body = Con el objeto nuevo seleccionado, el cuadro de debajo es todo lo suyo: su nombre, dónde está, lo grande que es y qué dibuja.\n\nLa posición se mide desde los anclajes del objeto, en píxeles de lienzo, y el lienzo es la pantalla entera. Dale un nombre y un tamaño que se vea: unos cientos de píxeles por lado es un buen comienzo, ya que cualquier cosa más pequeña cuesta de encontrar en la vista previa.
+# en: With the new object selected, the right column is everything about it, in sections: where it sits, how it looks, when it shows, what clicking does and how it moves. A closed section says what is in it.\n\nStick to says which part of its parent it stays with, and X and Y measure from there in canvas pixels. Give it a name and a size you can see — a few hundred pixels each way is a good start, since anything smaller is hard to find in the preview.
+tutorial.aScreenOfYourOwn.say.body = Con el objeto nuevo seleccionado, la columna derecha es todo lo suyo, por secciones: dónde se coloca, qué aspecto tiene, cuándo se muestra, qué hace un clic y cómo se mueve. Una sección cerrada dice lo que contiene.\n\nPegado a dice a qué parte de su padre se queda unido, y X e Y miden desde ahí en píxeles de lienzo. Dale un nombre y un tamaño que se vea: unos cientos de píxeles por lado es un buen comienzo, ya que cualquier cosa más pequeña cuesta de encontrar en la vista previa.
 
 # Tutorials: the nudge shown when a step has been waiting a while
 # en: Select the object you just added, then fill in Name and Size.
@@ -14810,6 +15383,14 @@ validation.action.playDialogue.unknownDialogue = Play dialogue indica «{name}»
 # Validation message
 # en: Play dialogue names '{name}', which is none of the game's conversations - nothing will play.
 validation.action.playDialogue.unknownConversation = Play dialogue indica «{name}», que no es ninguna de las conversaciones del juego; no se reproducirá nada.
+
+# Validation message
+# en: Travel names no place - the player will not go anywhere.
+validation.action.travel.none = Travel no indica ningún lugar; el jugador no irá a ninguna parte.
+
+# Validation message
+# en: '{name}': the particle colour '{colour}' is not one the game reads - write it as #RRGGBB or #RRGGBBAA.
+validation.gameObject.particleColor = '{name}': el juego no lee el color de partículas '{colour}'; escríbelo como #RRGGBB o #RRGGBBAA.
 
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.
@@ -15534,6 +16115,10 @@ note.action.transform = Fijar la posición y el tamaño de algo donde está
 note.action.playDialogue = Reproducir un diálogo del pack o una conversación del juego
 
 # A note beside an action type in its dropdown, saying what it does
+# en: Take the player to a place, as its map or navigator button does
+note.action.travel = Llevar al jugador a un lugar, como lo hace su botón del mapa o del navegador
+
+# A note beside an action type in its dropdown, saying what it does
 # en: Change a setting the other actions don't reach
 note.action.component = Cambiar un ajuste que las otras acciones no alcanzan
 
@@ -15542,8 +16127,8 @@ note.action.component = Cambiar un ajuste que las otras acciones no alcanzan
 note.action.deactivateAllScenes = Ocultar todas las escenas que mostró este pack
 
 # A note beside an action type in its dropdown, saying what it does
-# en: Take the player to another place
-note.action.transitionLevels = Llevar al jugador a otro lugar
+# en: Cross-fade one place into another, without the game's journey
+note.action.transitionLevels = Fundir un lugar en otro, sin el viaje del juego
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Cover the screen while things change

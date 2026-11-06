@@ -120,6 +120,7 @@ public sealed class TmpGlyphBaker
         var bounds = outline.Bounds;
         var glyph = new TmpFont.Glyph
         {
+            Owner = _font,
             Index = _nextIndex++,
             Scale = 1f,
             Metrics = new TmpFont.GlyphMetrics { Advance = (float)advance },

@@ -77,6 +77,13 @@ public static class ActionSchemas
             new ParamSchema("seconds", "param.label.delayS", ParamType.Float, "0",
                 "action.emitSignal.seconds.tip"),
         },
+        [NodeActionTypes.Travel] = new[]
+        {
+            new ParamSchema("target", "param.label.toLevel", ParamType.LevelRef, "",
+                "action.travel.target.tip"),
+            new ParamSchema("music", "param.label.musicKey", ParamType.MusicRef, "",
+                "action.travel.music.tip"),
+        },
         [NodeActionTypes.TransitionLevels] = new[]
         {
             new ParamSchema("fromLevel", "param.label.fromLevel", ParamType.LevelRef, "",

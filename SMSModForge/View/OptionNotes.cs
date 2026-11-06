@@ -56,6 +56,7 @@ public static class OptionNotes
         [NodeActionTypes.PlayDialogue] = "note.action.playDialogue",
         [NodeActionTypes.SetComponentProperty] = "note.action.component",
         [NodeActionTypes.DeactivateAllScenes] = "note.action.deactivateAllScenes",
+        [NodeActionTypes.Travel] = "note.action.travel",
         [NodeActionTypes.TransitionLevels] = "note.action.transitionLevels",
         [NodeActionTypes.Transitions] = "note.action.transitions",
         [NodeActionTypes.LeaveUiFaded] = "note.action.leaveUiFaded",

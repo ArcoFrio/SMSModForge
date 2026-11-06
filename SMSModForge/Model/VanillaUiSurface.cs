@@ -75,6 +75,10 @@ public sealed class VanillaUiSurface
         [JsonProperty("wordWrapping")] public string WordWrapping { get; set; } = "";
         [JsonProperty("characterSpacing")] public string CharacterSpacing { get; set; } = "";
         [JsonProperty("lineSpacing")] public string LineSpacing { get; set; } = "";
+        [JsonProperty("fontStyle")] public string FontStyle { get; set; } = "";
+        [JsonProperty("autoSize")] public string AutoSize { get; set; } = "";
+        [JsonProperty("fontSizeMin")] public string FontSizeMin { get; set; } = "";
+        [JsonProperty("fontSizeMax")] public string FontSizeMax { get; set; } = "";
 
         /// <summary>TextMeshPro reports numbers through reflection, so they
         /// arrive as text. A value that will not parse is treated as absent
@@ -87,6 +91,7 @@ public sealed class VanillaUiSurface
 
         public double Size => Number(FontSize) ?? 36;
         public bool Wraps => !string.Equals(WordWrapping, "False", StringComparison.OrdinalIgnoreCase);
+        public bool AutoSizes => string.Equals(AutoSize, "True", StringComparison.OrdinalIgnoreCase);
     }
 
     public sealed class Effect
@@ -163,6 +168,15 @@ public sealed class VanillaUiSurface
         /// RectMask2D differ in how the game implements them, but from the
         /// outside both mean the same thing to a preview.</summary>
         public bool Clips => Mask != null || RectMask != null;
+
+        /// <summary>
+        /// What the game multiplies this object's picture or words by while it
+        /// rests, because a button's colour transition targets it. Not in the
+        /// picture's own colour, and it can be anything: 316 objects rest fully
+        /// transparent (click areas), and a close button's cross is black at 60%.
+        /// Read from the running game - see Tools/Game/preview-data-from-game.py.
+        /// </summary>
+        [JsonProperty("restingTint")] public string RestingTint { get; set; } = "";
 
         public IEnumerable<Node> Walk()
         {

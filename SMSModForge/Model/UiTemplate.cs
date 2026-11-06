@@ -259,11 +259,15 @@ public sealed class UiTemplate
         return row;
     }
 
+    /// <summary>What a template calls its close button, so whoever makes a
+    /// window from one can give it something to do.</summary>
+    public const string CloseButtonName = "Close";
+
     private static UiNodeDef CloseButton()
     {
         var button = new UiNodeDef
         {
-            Name = "Close",
+            Name = CloseButtonName,
             Rect = new UiRectDef
             {
                 // Pinned to the corner, so it stays in the corner when the

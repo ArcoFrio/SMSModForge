@@ -102,6 +102,21 @@ public sealed class UiLayoutDef
 
     public bool ShouldSerializeCenterLastLine() => CenterLastLine;
 
+    /// <summary>
+    /// Only as big as what it holds: with a fixed number of columns, as wide
+    /// as the columns its children fill; with a fixed number of rows, as tall
+    /// as the rows. Unity's grid asks for all its columns whatever it holds,
+    /// so a Content Size Fitter over a grid of eight columns makes it eight
+    /// cells wide holding two. It matters only to whatever sizes the grid by
+    /// what it asks for - in the game; the preview draws a grid at its own
+    /// size either way. Nothing to do with a Flexible grid, whose size already
+    /// follows its children.
+    /// </summary>
+    [JsonProperty("fitToContent", Order = 15, NullValueHandling = NullValueHandling.Ignore)]
+    public bool FitToContent { get; set; }
+
+    public bool ShouldSerializeFitToContent() => FitToContent;
+
     [JsonProperty("startCorner", Order = 13)]
     public string StartCorner { get; set; } = "UpperLeft";
 
@@ -123,7 +138,9 @@ public sealed class UiLayoutDef
         Constraint = Constraint,
         ConstraintCount = ConstraintCount,
         StartAxis = StartAxis,
+        CenterLastLine = CenterLastLine,
         StartCorner = StartCorner,
+        FitToContent = FitToContent,
     };
 }
 

@@ -312,7 +312,7 @@ namespace SMSModForge.PackPlugin
 
             // Schedule destination roomtalk after the transition fade.
             if (b.TargetRoomTalk != null)
-                NavigatorRuntime.SchedulePendingRoomTalk(b.TargetRoomTalk, 1.0f);
+                NavigatorRuntime.SchedulePendingRoomTalk(b.TargetRoomTalk, 1.0f, b.TargetSiblingIndex);
         }
 
         // ----- Helpers --------------------------------------------------

@@ -278,6 +278,7 @@ namespace SMSModForge.PackPlugin
 
                 _surface = new Texture2D(sw, sh, TextureFormat.RGBA32, false);
                 _surface.filterMode = FilterMode.Bilinear;
+                _surface.wrapMode = TextureWrapMode.Clamp;   // an edge never takes in the opposite one
                 _scratch = new RenderTexture(sw, sh, 0);
                 _scratch.Create();
 

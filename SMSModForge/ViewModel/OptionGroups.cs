@@ -192,7 +192,7 @@ public static class OptionGroups
         }),
         ("typeGroup.screen", new[]
         {
-            NodeActionTypes.TransitionLevels, NodeActionTypes.Transitions, NodeActionTypes.LeaveUiFaded,
+            NodeActionTypes.Travel, NodeActionTypes.TransitionLevels, NodeActionTypes.Transitions, NodeActionTypes.LeaveUiFaded,
             NodeActionTypes.EmitSignal, NodeActionTypes.SetWeather,
         }),
         ("typeGroup.sound", new[] { NodeActionTypes.SwitchMusic, NodeActionTypes.PlaySFX }),

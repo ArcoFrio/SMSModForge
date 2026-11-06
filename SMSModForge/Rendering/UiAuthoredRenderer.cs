@@ -71,14 +71,38 @@ public static class UiAuthoredRenderer
                              UiRenderReport report, string path,
                              double canvasWidth, double canvasHeight,
                              UiNodeDef? highlight, bool forceVisible,
-                             UiRect? placed = null)
+                             UiRect? placed = null, double turnedBy = 0, bool level = false)
     {
         if (!node.StartActive && !forceVisible) return;
+
+        // The author's eye, and only this draw: what arranges the object has
+        // already counted it, so hiding one moves nothing else.
+        if (node.HiddenInPreview) return;
 
         // Shared with the gizmo, deliberately — see UiGeometry. Two rectangles
         // out of it: children are laid out against the unscaled one, everything
         // is drawn at the scaled one.
         var (layout, rect, inner) = UiGeometry.Place(node, parentRect, inherited, placed);
+
+        // Turned: this object and everything inside it are drawn level into a
+        // layer of their own and that is turned about its pivot. One that stays
+        // upright is turned back by exactly what the objects around it turned,
+        // which leaves it level and still carried along with them.
+        double turn = node.Upright ? -turnedBy : node.Rect.RotationZ;
+        if (!level && Math.Abs(turn) > 0.001)
+        {
+            var layer = UiCompositor.NewLayer(w, h);
+            Draw(layer, w, h, node, parentRect, inherited, assets, alpha, null, report, path,
+                 canvasWidth, canvasHeight, highlight, forceVisible, placed, turnedBy + turn, level: true);
+
+            var pivot = UiLayout.ToScreen(
+                inherited.Apply(new UiRect(layout.X + At(node.Rect.Pivot, 0) * layout.Width,
+                                           layout.Y + At(node.Rect.Pivot, 1) * layout.Height, 0, 0)),
+                canvasWidth, canvasHeight);
+            UiCompositor.BlendTurned(target, layer, w, h, pivot.X, pivot.Y, turn,
+                                     clip is { } outer ? UiLayout.ToScreen(outer, canvasWidth, canvasHeight) : null);
+            return;
+        }
 
         // The root is shown at full opacity even when the game fades it in,
         // for the same reason it is shown at all - see UiSceneRenderer.
@@ -87,9 +111,9 @@ public static class UiAuthoredRenderer
 
         var innerClip = node.ClipChildren ? Intersect(clip, rect) : clip;
 
-        DrawImage(target, w, h, node, rect, assets, here, clip, report,
+        DrawImage(target, w, h, node, rect, layout, inner, assets, here, clip, report,
                   canvasWidth, canvasHeight);
-        DrawText(target, w, h, node, rect, assets, here, clip, report,
+        DrawText(target, w, h, node, rect, layout, inner, assets, here, clip, report,
                  canvasWidth, canvasHeight);
 
         // A node that arranges its children hands each one its rectangle.
@@ -99,7 +123,7 @@ public static class UiAuthoredRenderer
             var child = node.Children[i];
             Draw(target, w, h, child, layout, inner, assets, here, innerClip, report,
                  path + "/" + child.Name, canvasWidth, canvasHeight, highlight,
-                 forceVisible: false, placed: arranged?[i]);
+                 forceVisible: false, placed: arranged?[i], turnedBy: turnedBy);
         }
 
         // Drawn last so it sits over the object it marks, and over its
@@ -109,13 +133,14 @@ public static class UiAuthoredRenderer
     }
 
     private static void DrawImage(byte[] target, int w, int h, UiNodeDef node, UiRect rect,
+                                  UiRect own, UiXform scale,
                                   IUiAssets assets, double alpha, UiRect? clip,
                                   UiRenderReport report, double canvasWidth, double canvasHeight)
     {
         var image = node.Image;
         if (image == null || string.IsNullOrEmpty(image.Sprite)) return;
 
-        var tint = UiColor.Parse(image.Tint);
+        var tint = UiGameLook.Rested(UiColor.Parse(image.Tint), node.GameTint);
         if (tint.IsInvisible) return;
 
         var sprite = assets.SpriteByName(image.Sprite);
@@ -125,23 +150,44 @@ public static class UiAuthoredRenderer
         int dw = (int)Math.Round(screen.Width), dh = (int)Math.Round(screen.Height);
         if (dw <= 0 || dh <= 0) return;
 
+        bool sliced = image.Type.Equals("Sliced", StringComparison.OrdinalIgnoreCase);
+        bool tiled = image.Type.Equals("Tiled", StringComparison.OrdinalIgnoreCase);
+
         // The border belongs to the sprite, not to the authored node — an
         // author picks a sprite, and how it slices is a property of the art.
-        var border = image.Type.Equals("Sliced", StringComparison.OrdinalIgnoreCase)
-            ? BorderFor(image.Sprite, assets) : default;
+        var border = sliced || tiled ? BorderFor(image.Sprite, assets) : default;
 
         double divisor = UiSlice.DivisorFor(PixelsPerUnitFor(image.Sprite, assets),
                                             100, image.PixelsPerUnitMultiplier);
-        var pixels = UiSlice.Compose(sprite.Pixels, sprite.Width, sprite.Height,
-                                     border, dw, dh, image.FillCenter, divisor);
+
+        // Worked out at the object's own size and then scaled, as the game's mesh
+        // is: under a scaled parent the corners of a sliced picture shrink with
+        // it. Worked out at the scaled size they stayed full size.
+        var area = UiSlice.DrawnArea(new UiRect(0, 0, own.Width, own.Height), sprite, sliced, tiled, image.PreserveAspect,
+                                     divisor, At(node.Rect.Pivot, 0), At(node.Rect.Pivot, 1));
+        int ow = (int)Math.Round(area.Width), oh = (int)Math.Round(area.Height);
+        if (ow <= 0 || oh <= 0) return;
+
+        var pixels = tiled
+            ? UiSlice.Tile(sprite.Pixels, sprite.Width, sprite.Height, border, ow, oh, image.FillCenter, divisor)
+            : UiSlice.Compose(sprite.Pixels, sprite.Width, sprite.Height,
+                              border, ow, oh, image.FillCenter, divisor);
+
+        screen = new UiRect(screen.X + area.X * scale.ScaleX, screen.Y + area.Y * scale.ScaleY,
+                            area.Width * scale.ScaleX, area.Height * scale.ScaleY);
+        dw = (int)Math.Round(screen.Width);
+        dh = (int)Math.Round(screen.Height);
+        if (dw <= 0 || dh <= 0) return;
+        if (dw != ow || dh != oh) pixels = PixelResample.Bilinear(pixels, ow, oh, dw, dh);
         UiSlice.Tint(pixels, tint.B, tint.G, tint.R, tint.A);
 
         Place(target, w, h, pixels, dw, dh, screen, node, clip, alpha,
-              canvasWidth, canvasHeight);
+              canvasWidth, canvasHeight, scale: scale);
         report.Drawn++;
     }
 
     private static void DrawText(byte[] target, int w, int h, UiNodeDef node, UiRect rect,
+                                 UiRect own, UiXform scale,
                                  IUiAssets assets, double alpha, UiRect? clip,
                                  UiRenderReport report, double canvasWidth, double canvasHeight)
     {
@@ -155,7 +201,7 @@ public static class UiAuthoredRenderer
         string shown = UiTextTokens.Resolve(text.Value);
         if (string.IsNullOrEmpty(shown)) return;
 
-        var colour = UiColor.Parse(text.Color);
+        var colour = UiGameLook.Rested(UiColor.Parse(text.Color), node.GameTint);
         if (colour.IsInvisible) return;
 
         var set = assets.Font(text.Font);
@@ -165,47 +211,50 @@ public static class UiAuthoredRenderer
         int dw = (int)Math.Round(screen.Width), dh = (int)Math.Round(screen.Height);
         if (dw <= 0 || dh <= 0) return;
 
-        var fallbacks = new List<TmpFont>();
-        foreach (string name in set.Font.Fallbacks)
-        {
-            var also = assets.Font(name);
-            if (also != null) fallbacks.Add(also.Font);
-        }
+        var fallbacks = UiTextBlock.Fallbacks(set, assets);
 
-        var layout = TmpTextLayout.Measure(set.Font, shown, text.Size,
-                                           text.Wrap ? dw : 0, Align(text.Alignment),
-                                           text.LineSpacing, text.CharacterSpacing,
-                                           fallbacks);
+        var style = UiTextStyle.Parse(text.GameStyle);
+
+        // At the object's own size, the words broken where its own width breaks
+        // them, and all of it then scaled: a parent at 0.7 draws smaller words in
+        // the same lines, not the same words in a narrower box.
+        int ow = (int)Math.Round(own.Width), oh = (int)Math.Round(own.Height);
+        if (ow <= 0 || oh <= 0) return;
+        double size = text.AutoSize
+            ? UiTextBlock.FitSize(set.Font, shown, style, ow, oh, text.Wrap, text.AutoSizeMin, text.AutoSizeMax,
+                                  text.LineSpacing, text.CharacterSpacing, fallbacks)
+            : text.Size;
+
+        var layout = UiTextBlock.Measure(set.Font, shown, style, size,
+                                         text.Wrap ? ow : 0, Align(text.Alignment),
+                                         text.LineSpacing, text.CharacterSpacing,
+                                         fallbacks);
         foreach (int missing in layout.Missing)
             report.MissingGlyph($"'{(char)missing}' in {text.Font}");
+        layout = UiTextBlock.Scaled(layout, scale.ScaleX, scale.ScaleY);
 
-        double offset = VerticalOffset(text.Alignment, dh, layout.Height);
-        int above = (int)Math.Max(0, Math.Ceiling(-offset));
-        int below = (int)Math.Max(0, Math.Ceiling(offset + layout.Height - dh));
-        int th = dh + above + below;
+        var (laid, left, above, tw, th) = UiTextBlock.Fit(layout, set.Font, dw, dh, text.Wrap, text.Alignment);
+        var pixels = UiTextBlock.Draw(laid, set, assets, tw, th, colour, style);
 
-        var shifted = new TextLayout { Height = layout.Height };
-        foreach (var g in layout.Glyphs) shifted.Glyphs.Add(g with { Y = g.Y + offset + above });
-        shifted.LineWidths.AddRange(layout.LineWidths);
-
-        var pixels = UiTextRaster.Draw(shifted, set.Font, set.Alpha, set.Width, set.Height,
-                                       dw, th, colour);
-        Place(target, w, h, pixels, dw, th,
-              new UiRect(screen.X, screen.Y - above, dw, th), node, clip, alpha,
-              canvasWidth, canvasHeight);
+        // No shadow or outline: those work on a mesh uGUI builds, and TextMeshPro
+        // builds its own. The game draws none on text, whatever the object says.
+        Place(target, w, h, pixels, tw, th,
+              new UiRect(screen.X - left, screen.Y - above, tw, th), node, clip, alpha,
+              canvasWidth, canvasHeight, effects: false);
         report.Drawn++;
     }
 
     private static void Place(byte[] target, int w, int h, byte[] pixels, int dw, int dh,
                               UiRect screen, UiNodeDef node, UiRect? clip, double alpha,
-                              double canvasWidth, double canvasHeight)
+                              double canvasWidth, double canvasHeight, bool effects = true, UiXform? scale = null)
     {
         if (clip is { } c)
             Clip(pixels, dw, dh, screen, UiLayout.ToScreen(c, canvasWidth, canvasHeight));
 
+        double kx = scale?.ScaleX ?? 1, ky = scale?.ScaleY ?? 1;
         UiEffects.Draw(target, w, h, pixels, dw, dh,
                        (int)Math.Round(screen.X), (int)Math.Round(screen.Y),
-                       ToEffect(node.Shadow), ToEffect(node.Outline), alpha);
+                       effects ? ToEffect(node.Shadow, kx, ky) : null, effects ? ToEffect(node.Outline, kx, ky) : null, alpha);
     }
 
     /// <summary>A dashed box round the selected object, drawn straight onto the
@@ -255,11 +304,12 @@ public static class UiAuthoredRenderer
     private static double PixelsPerUnitFor(string spriteName, IUiAssets assets)
         => assets is VanillaUiAssets known ? known.PixelsPerUnitByName(spriteName) : 100;
 
-    private static UiEffect? ToEffect(UiEffectDef? e)
+    /// <summary>A shadow's reach scales with its object, being part of its mesh.</summary>
+    private static UiEffect? ToEffect(UiEffectDef? e, double kx = 1, double ky = 1)
         => e == null ? null
            : new UiEffect(UiColor.Parse(e.Color),
-                          e.Distance.Length > 0 ? e.Distance[0] : 0,
-                          e.Distance.Length > 1 ? e.Distance[1] : 0);
+                          (e.Distance.Length > 0 ? e.Distance[0] : 0) * kx,
+                          (e.Distance.Length > 1 ? e.Distance[1] : 0) * ky);
 
     private static UiRect Intersect(UiRect? outer, UiRect inner)
     {
@@ -269,13 +319,8 @@ public static class UiAuthoredRenderer
         return new UiRect(x, y, Math.Max(0, right - x), Math.Max(0, top - y));
     }
 
-    private static double VerticalOffset(string? alignment, double boxHeight, double textHeight)
-    {
-        string a = (alignment ?? "").ToLowerInvariant();
-        if (a.Contains("top")) return 0;
-        if (a.Contains("bottom")) return boxHeight - textHeight;
-        return (boxHeight - textHeight) / 2.0;
-    }
+    private static double At(float[]? pair, int i)
+        => pair != null && pair.Length > i ? pair[i] : 0.5;
 
     private static TextAlign Align(string? alignment)
     {

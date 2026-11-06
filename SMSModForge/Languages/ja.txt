@@ -290,6 +290,10 @@ game.notice.news.1.8.0 = パックの効果音が、作者の設定したタイ�
 # en: A pack's conversation no longer starts over the game's own when you arrive somewhere.
 game.notice.news.1.8.2 = どこかに着いたとき、パックの会話がゲーム本来の会話に重なって始まらなくなりました。
 
+# What ModForge 1.8.3 changes for players, one line each (\n starts the next)
+# en: Screens from packs now sit where their authors put them, and their changes to the game's own screens all show up.\nA pack's place no longer plays its arrival in the room you are still in when the game refuses the trip.
+game.notice.news.1.8.3 = パックの画面が作者の置いた位置に表示され、ゲーム本来の画面への変更もすべて反映されるようになりました。\nゲームが移動を断ったとき、パックの場所の到着シーンが今いる部屋で再生されなくなりました。
+
 [Where an NPC stands]
 
 # Text
@@ -565,6 +569,14 @@ param.label.totalTimeS = 合計時間（秒）
 # Tooltip on the 'Total time (s)' field of the TransitionLevels action
 # en: Total transition length; cross-fade and signal share this budget.
 action.transitionLevels.seconds.tip = 遷移全体の長さ。クロスフェードとシグナルはこの時間の中で行われます。
+
+# Tooltip on the 'To level' field of the Travel action
+# en: The place to go to - one of your places or one of the game's. The player travels there as its map or navigator button would take them.
+action.travel.target.tip = 移動先の場所です。自分の場所でもゲームの場所でもかまいません。マップやナビゲーターボタンと同じようにそこへ移動します。
+
+# Tooltip on the 'Music key' field of the Travel action
+# en: Music to switch to on the way, as a navigator button's music does. Leave it empty to keep what is playing.
+action.travel.music.tip = 移動中に切り替える音楽です。ナビゲーターボタンの音楽と同じです。空欄なら今の音楽のままです。
 
 # Label beside a field of an action or condition
 # en: Target alpha
@@ -1909,6 +1921,22 @@ gameObject.levelSBuiltNpcs = レベルに組み込まれた NPCs オブジェク
 # en: This GameObject already exists (bind, don't create)
 gameObject.gameobjectAlreadyExistsBind = この GameObject はすでにある（作らずに結び付ける）
 
+# Text
+# en: Copy of
+gameObject.copyOf = コピー元
+
+# Tooltip on a text box
+# en: Make this object a copy of one of the game's: its path in the game's scene, like 5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas or 6_Effects/CFXR2 Expression Loving (Timed). The copy is made each time the game loads and stays as the original was, unless the overrides below say otherwise. Its children with Bind reach the copy's own parts by name; new children are added to it. Leave it empty for an object of the pack's own.
+gameObject.copyOf.tip = このオブジェクトをゲームのオブジェクトのコピーにします。ゲームのシーン内のパスを書きます（例：5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas、6_Effects/CFXR2 Expression Loving (Timed)）。コピーはゲームを読み込むたびに作られ、下の上書き設定がない限り元のままです。Bind を付けた子は名前でコピーの部品に届き、新しい子はコピーに追加されます。パック独自のオブジェクトなら空欄のままにします。
+
+# Text
+# en: Beside the original
+gameObject.copyBeside = 元と同じ場所に置く
+
+# Tooltip on a tick box
+# en: Put the copy under the same parent as the original, instead of in this place - for something that is not the place's, like an effect your dialogues switch on by its path.
+gameObject.copyBeside.tip = コピーをこの場所ではなく、元のオブジェクトと同じ親の下に置きます。セリフからパスでオンにするエフェクトなど、場所に属さないもの向けです。
+
 # Tick box
 # en: Override its transform
 gameObject.overrideTransform = トランスフォームを上書き
@@ -2048,6 +2076,22 @@ gameObject.overrideTransform.tip = オフ（既定）なら既存のオブジェ
 # Tooltip on "Override active"
 # en: Off (default) leaves the object's own active state alone. On applies the Start-active checkbox. Not needed when you're gating it with Active-when conditions.
 gameObject.overrideActive.tip = オフ（既定）ならオブジェクト自身の有効状態には触れません。オンにすると「最初から有効」のチェックを適用します。「有効にする条件」で制御している場合は不要です。
+
+# Text
+# en: Override parallax
+gameObject.overrideParallax = 視差を上書き
+
+# Tooltip on a tick box and the number beside it
+# en: Off (default) leaves how the object drifts with the mouse as the game made it. On sets how far it drifts to the number beside it - lower is softer, 0 holds it still. An object that does not drift is left alone.
+gameObject.overrideParallax.tip = オフ（既定）では、マウスに合わせたオブジェクトの動きをゲームのままにします。オンにすると、動く量を隣の数値にします。小さいほど穏やかで、0 なら動きません。動かないオブジェクトはそのままです。
+
+# Text
+# en: Particle colour
+gameObject.particleColor = パーティクルの色
+
+# Tooltip on a text box
+# en: The colour this object's particles start in, as #RRGGBB or #RRGGBBAA - for one of the game's effects, copied or as it is. Only this object's own particles: a part with particles of its own takes a child of its own. Empty leaves them as they are.
+gameObject.particleColor.tip = このオブジェクトのパーティクルの開始時の色（#RRGGBB または #RRGGBBAA）。ゲームのエフェクトに、コピーでもそのままでも使えます。このオブジェクト自身のパーティクルだけで、自分のパーティクルを持つ部品には別の子を使います。空欄なら変えません。
 
 # Tooltip on a part of the window
 # en: Pack-relative PNG path. Leave blank for a pure container GameObject (an empty transform that just groups children).
@@ -6773,29 +6817,17 @@ ui.pasteNode = 貼り付け
 # en: Preview
 ui.preview = プレビュー
 
-# Text
-# en: Select an object in the tree to change it.
-ui.selectObjectTreeChange = 変更するには、ツリーでオブジェクトを選んでください。
-
 # Button
 # en: Reset
 ui.reset = リセット
 
-# Text
-# en: Position
-ui.position = 位置
-
-# Text
-# en: from its anchors, in canvas pixels
-ui.anchorsCanvasPixels = アンカーからの距離（キャンバスのピクセル）
-
-# Text
-# en: Size
-ui.size = サイズ
-
 # Tick box
 # en: Visible at start
 ui.visibleStart = 最初から表示
+
+# Tick box
+# en: Stays upright
+ui.upright = 常にまっすぐ
 
 # Text
 # en: Sprite
@@ -6808,10 +6840,6 @@ ui.text = テキスト
 # Text
 # en: Colour
 ui.colour = 色
-
-# Expandable section
-# en: Shown when
-ui.shownWhen = 表示する条件
 
 # Button
 # en: + Condition
@@ -6830,16 +6858,60 @@ ui.opensWhen.help = これらの条件がすべて満たされた瞬間に、画
 ui.addOpenCondition.tip = 条件がなければ、画面はアクションが開いたときだけ開きます（「最初から画面に出す」なら最初にも）。条件があれば、すべて満たされた瞬間にひとりでに開きます。
 
 # Expandable section
-# en: When it opens
-ui.whenOpens = 開いたとき
+# en: Keeps moving
+ui.loop = 動き続ける
 
-# Expandable section
-# en: When it closes
-ui.whenCloses = 閉じたとき
+# Tick box
+# en: Pulse fade
+ui.loop.fade = 不透明度の脈動
 
-# Expandable section
-# en: Arrange children
-ui.arrangeChildren = 子の並べ方
+# Tooltip on a tick box and its numbers
+# en: Its fade goes from the first number to the second and back once a pass, as fractions of its own - 0.4 to 1 breathes a glow. Everything on it fades with it.
+ui.loop.fade.tip = 1 回の周期ごとに、不透明度が 1 つ目の数値から 2 つ目へ行って戻ります（元に対する割合）。0.4 から 1 で光がゆっくり呼吸します。上に載っているものも一緒に変わります。
+
+# Tick box
+# en: Pulse size
+ui.loop.size = 大きさの脈動
+
+# Tooltip on a tick box and its numbers
+# en: Its size goes from the first number to the second and back once a pass, as fractions of its own.
+ui.loop.size.tip = 1 回の周期ごとに、大きさが 1 つ目の数値から 2 つ目へ行って戻ります（元に対する割合）。
+
+# Tick box
+# en: Sweep
+ui.loop.sweep = スイープ
+
+# Tooltip on a tick box and its numbers
+# en: It moves from the first place to the second - x and y from where it is - and starts again. A highlight under a parent that clips its children becomes a shine running along it: put both ends outside the parent.
+ui.loop.sweep.tip = 1 つ目の位置から 2 つ目の位置へ移動し（自分の位置からの x と y）、また最初からやり直します。子を切り抜く親の下に置いたハイライトは、親の上を走る光沢になります。両端は親の外に置いてください。
+
+# Text
+# en: Seconds
+ui.loop.seconds = 秒数
+
+# Tooltip on a text box
+# en: How long one pass takes. It plays in the game while the object is shown; the preview shows it still.
+ui.loop.seconds.tip = 1 回の周期にかかる時間です。ゲームではオブジェクトが表示されている間ずっと動きます。プレビューでは止まったまま表示されます。
+
+# Text
+# en: Pause
+ui.loop.pause = 休止
+
+# Tooltip on a text box
+# en: Seconds it rests at the start between passes.
+ui.loop.pause.tip = 周期と周期の間に、始めの状態で止まる秒数です。
+
+# Text
+# en: Delay
+ui.loop.delay = 遅延
+
+# Tooltip on a text box
+# en: Seconds before the first pass, from when it is shown - give copies of one object different delays so they do not all move together.
+ui.loop.delay.tip = 表示されてから最初の周期までの秒数です。同じオブジェクトのコピーに別々の遅延を付けると、全部が揃って動かなくなります。
+
+# Tooltip on a dropdown
+# en: The sweep's curve. A pulse always eases back and forth.
+ui.loop.easing.tip = スイープの動き方の曲線です。脈動は常になめらかに行き来します。
 
 # Text
 # en: Arrange
@@ -6881,13 +6953,17 @@ ui.cell = セル
 # en: Centre a last row that is not full
 ui.centreLastRowNot = 埋まっていない最後の行を中央に寄せる
 
-# Expandable section
-# en: When clicked
-ui.whenClicked = クリックしたとき
+# Text
+# en: Only as big as what it holds
+ui.fitToContent = 中身の分だけの大きさにする
 
 # Text
 # en: Hover
 ui.hover = ホバー
+
+# Text
+# en: Pressed
+ui.pressScale = 押下時
 
 # Text
 # en: Sound
@@ -6912,6 +6988,466 @@ ui.overwriteActions = 上書き
 # Text
 # en: Font
 ui.font = フォント
+
+# The UI tab's start page: heading
+# en: What do you want to do?
+ui.start.title = 何をしますか？
+
+# The UI tab's start page: what a UI is
+# en: A UI is anything drawn over the game: a window, a menu, a button, a badge.
+ui.start.subtitle = UI とは、ゲームの上に描かれるものすべてです。ウィンドウ、メニュー、ボタン、バッジなど。
+
+# The UI tab's start page, when the pack already has UIs
+# en: Or pick one of this pack's UIs from the list on the left.
+ui.start.pickExisting = または、左のリストからこのパックの UI を選んでください。
+
+# Start page card
+# en: Change one of the game's UIs
+ui.start.change.title = ゲームの UI を変更する
+
+# Start page card
+# en: Move, restyle or add to a screen the game already has. Only what you change is saved.
+ui.start.change.body = ゲームにすでにある画面を動かしたり、見た目を変えたり、追加したりします。変更した部分だけが保存されます。
+
+# Start page card
+# en: Add something that stays on screen
+ui.start.staying.title = 画面に出たままのものを追加する
+
+# Start page card
+# en: A badge, a counter, a bar in the corner. It is there as soon as the game is.
+ui.start.staying.body = バッジ、カウンター、隅のバーなど。ゲームが始まるとすぐそこにあります。
+
+# Start page card
+# en: Make a window that opens
+ui.start.window.title = 開くウィンドウを作る
+
+# Start page card
+# en: A panel with a title and a close button. A dialogue, a rule or a button opens it.
+ui.start.window.body = タイトルと閉じるボタンのあるパネルです。会話、ルール、ボタンから開きます。
+
+# Start page button
+# en: Show me step by step
+ui.start.tutorial = 手順を見せて
+
+# UI tab: heading over a UI's object tree
+# en: Objects
+ui.objects = オブジェクト
+
+# UI tab: the row and heading for the settings of a whole UI
+# en: UI settings
+ui.settingsRow = UI の設定
+
+# Tooltip
+# en: The UI as a whole: its name, how it opens, where it lives and how it moves.
+ui.settingsRow.tip = UI 全体の設定です。名前、開き方、置き場所、動き方。
+
+# UI tab: under the preview
+# en: Click an object to select it. Drag it to move it, or drag its handles to resize it.
+ui.preview.hint = オブジェクトをクリックすると選択します。ドラッグで移動し、ハンドルをドラッグで大きさを変えます。
+
+# Tooltip on the eye beside an object in the UI tab's tree
+# en: Hide this and everything inside it in the preview, to reach what is behind it. Only here: the pack and the game are not changed.
+ui.eye.hide.tip = プレビューでこれと中身をすべて隠し、後ろのものに触れるようにします。ここだけのことで、パックとゲームは変わりません。
+
+# Tooltip on the eye of an object hidden in the preview
+# en: Hidden in the preview only. Click to show it again. In the game it is unaffected.
+ui.eye.show.tip = プレビューでだけ隠れています。クリックするとまた表示します。ゲームには影響しません。
+
+# Tooltip on the eye of an object inside one hidden in the preview
+# en: Hidden in the preview because something it sits inside is. In the game it is unaffected.
+ui.eye.parent.tip = これを含むものが隠れているため、プレビューで隠れています。ゲームには影響しません。
+
+# Tooltip on the eye of an object that starts switched off
+# en: Not visible at start, so the preview does not draw it either way. Tick Visible at start to work on it here.
+ui.eye.startsOff.tip = 最初は表示されないので、プレビューはどちらにしても描きません。ここで作業するには「最初から表示」をオンにしてください。
+
+# Above the UI preview: how many objects the author has hidden there
+# en: {count} objects hidden here, not in the game
+ui.preview.hidden.other = {count} 個のオブジェクトをここでだけ非表示（ゲームには影響なし）
+
+# Button above the UI preview
+# en: Show all
+ui.preview.showAll = すべて表示
+
+# Tooltip
+# en: Show everything you hid in this preview again.
+ui.preview.showAll.tip = このプレビューで隠したものをすべてまた表示します。
+
+# UI tab: settings of a change to one of the game's screens
+# en: This is one of the game's own screens. Pick an object in the tree or the preview to change it: only what you change is saved.
+ui.gameUi.note = これはゲーム自身の画面です。ツリーかプレビューでオブジェクトを選んで変更してください。変更した部分だけが保存されます。
+
+# UI tab: how else a UI opens
+# en: Anything that can run an action can also open it: Set Active, with its category set to UI.
+ui.opensByAction.help = アクションを実行できるものなら何でもこれを開けます。Set Active で、カテゴリを UI にします。
+
+# UI tab section title
+# en: How it opens
+ui.section.opens = 開き方
+
+# UI tab section title
+# en: Where it lives
+ui.section.lives = 置き場所
+
+# UI tab section title
+# en: How it moves
+ui.section.moves = 動き方
+
+# UI tab section title
+# en: Button sound
+ui.section.sound = ボタンの音
+
+# UI tab section title
+# en: Where it sits
+ui.section.where = 位置
+
+# UI tab section title
+# en: How it looks
+ui.section.looks = 見た目
+
+# UI tab section title
+# en: When it shows
+ui.section.shows = 表示するとき
+
+# UI tab section title
+# en: What clicking does
+ui.section.clicks = クリックの動作
+
+# UI tab section title
+# en: What's inside
+ui.section.inside = 中身
+
+# UI tab section title
+# en: Extra components
+ui.section.components = 追加コンポーネント
+
+# Section summary: a UI is up from the start
+# en: from the start
+ui.summary.startsOpen = 最初から
+
+# Section summary: only an action opens this UI
+# en: by an action
+ui.summary.byAction = アクションで
+
+# Section summary
+# en: {count} conditions
+ui.summary.conditions.other = 条件 {count} 個
+
+# Section summary
+# en: {count} actions
+ui.summary.actions.other = アクション {count} 個
+
+# Section summary: it animates on arrival
+# en: arrives
+ui.summary.arrives = 登場アニメあり
+
+# Section summary: it animates on leaving
+# en: leaves
+ui.summary.leaves = 退場アニメあり
+
+# Section summary: it loops while shown
+# en: keeps moving
+ui.summary.keepsMoving = 動き続ける
+
+# Section summary: nothing set here
+# en: nothing
+ui.summary.nothing = なし
+
+# Section summary: always shown
+# en: always
+ui.summary.always = 常に
+
+# Section summary
+# en: starts hidden
+ui.summary.startsHidden = 最初は非表示
+
+# Section summary: it clips what is inside it
+# en: clips
+ui.summary.clips = 切り抜く
+
+# Section summary: buttons make no sound
+# en: silent
+ui.summary.silent = 無音
+
+# Section summary: buttons use the game's click
+# en: the game's click
+ui.summary.gameClick = ゲームのクリック音
+
+# Section summary: its parent decides where it goes
+# en: arranged by its parent
+ui.summary.arranged = 親が配置
+
+# Section summary: fills its parent
+# en: fills its parent
+ui.summary.fills = 親いっぱい
+
+# What a UI object is, in a word
+# en: Button
+ui.kind.button = ボタン
+
+# What a UI object is, in a word
+# en: Picture
+ui.kind.picture = 画像
+
+# What a UI object is, in a word
+# en: Text
+ui.kind.text = テキスト
+
+# What a UI object is, in a word
+# en: Group
+ui.kind.group = グループ
+
+# What a UI object is, in a word
+# en: Empty
+ui.kind.empty = 空
+
+# Label over the 3x3 grid of places an object sticks to
+# en: Stick to
+ui.stick = 固定先
+
+# Tooltip
+# en: Which part of its parent this object stays with. Picking one puts it flush against that place.
+ui.stick.tip = このオブジェクトが親のどの部分に付いていくかです。選ぶとその場所にぴったり寄せます。
+
+# UI object placement
+# en: Fill the width
+ui.fillWidth = 幅いっぱい
+
+# Tooltip
+# en: As wide as its parent, however wide that is. Left and Right say how far in each side stays.
+ui.fillWidth.tip = 親の幅がいくつでも、親と同じ幅にします。左と右で、各辺をどれだけ内側に置くかを決めます。
+
+# UI object placement
+# en: Fill the height
+ui.fillHeight = 高さいっぱい
+
+# Tooltip
+# en: As tall as its parent, however tall that is. Top and Bottom say how far in each side stays.
+ui.fillHeight.tip = 親の高さがいくつでも、親と同じ高さにします。上と下で、各辺をどれだけ内側に置くかを決めます。
+
+# UI object placement
+# en: X
+ui.place.x = X
+
+# UI object placement
+# en: Y
+ui.place.y = Y
+
+# Tooltip
+# en: How far from where it sticks, in canvas pixels. Up and right are positive.
+ui.place.x.tip = 固定先からの距離で、キャンバスのピクセル単位です。上と右が正です。
+
+# UI object placement
+# en: Width
+ui.place.width = 幅
+
+# UI object placement
+# en: Height
+ui.place.height = 高さ
+
+# UI object placement: margin
+# en: Left
+ui.place.left = 左
+
+# UI object placement: margin
+# en: Right
+ui.place.right = 右
+
+# UI object placement: margin
+# en: Top
+ui.place.top = 上
+
+# UI object placement: margin
+# en: Bottom
+ui.place.bottom = 下
+
+# Tooltip
+# en: How far in from that side of its parent, in canvas pixels.
+ui.place.margin.tip = 親のその辺からどれだけ内側か、キャンバスのピクセル単位です。
+
+# UI object placement note
+# en: This object stretches across part of its parent. Width and Height here are how much bigger than that part it is, not its size.
+ui.stretchedPartly = このオブジェクトは親の一部に広がっています。ここでの幅と高さは大きさではなく、その部分よりどれだけ大きいかです。
+
+# UI object placement note
+# en: Its parent arranges what is inside it, so the parent decides where this goes.
+ui.arrangedByParent = 親が中身を並べるので、これの位置は親が決めます。
+
+# UI object: rotation
+# en: Turn
+ui.turn = 回転
+
+# Tooltip
+# en: Rotation in degrees, anticlockwise, around its pivot. The handles in the preview stay level.
+ui.turn.tip = ピボットを中心に反時計回りの回転を度で指定します。プレビューのハンドルは水平のままです。
+
+# UI object: scale across
+# en: Scale X
+ui.scaleX = スケール X
+
+# UI object: scale down
+# en: Scale Y
+ui.scaleY = スケール Y
+
+# Tooltip
+# en: Multiplies its size and everything inside it, around its pivot. 1 is its own size.
+ui.scale.tip = ピボットを中心に、大きさと中身すべてを掛け算します。1 が元の大きさです。
+
+# UI object placement: collapsed part
+# en: Exact anchors and pivot
+ui.exactAnchors = アンカーとピボットの数値
+
+# UI object placement
+# en: Anchor min
+ui.anchorMin = アンカー最小
+
+# UI object placement
+# en: Anchor max
+ui.anchorMax = アンカー最大
+
+# UI object placement
+# en: Pivot
+ui.pivot = ピボット
+
+# Tooltip
+# en: The point of the object its position is measured from and that it turns and scales around. 0 is its left or bottom, 1 its right or top.
+ui.pivot.tip = 位置を測る基準で、回転と拡大縮小の中心になる点です。0 が左または下、1 が右または上です。
+
+# UI object: picture colour
+# en: Tint
+ui.tint = 色合い
+
+# UI object: picture type
+# en: Drawn as
+ui.drawnAs = 描き方
+
+# Tooltip
+# en: Simple stretches the picture. Sliced keeps its corners and stretches the middle. Tiled repeats it. Filled draws it whole here, as nothing sets how full it is.
+ui.drawnAs.tip = Simple は画像を引き伸ばします。Sliced は角を保って中央を伸ばします。Tiled は繰り返します。Filled は、どこまで満たすかを決めるものがないので、ここでは全体を描きます。
+
+# UI object: sliced picture
+# en: Corner scale
+ui.borderScale = 角のスケール
+
+# Tooltip
+# en: How the corners are sized: 2 makes them half as big, 0.5 twice as big.
+ui.borderScale.tip = 角の大きさです。2 で半分に、0.5 で 2 倍になります。
+
+# UI object: picture
+# en: Keep its shape
+ui.keepAspect = 形を保つ
+
+# Tooltip
+# en: Draws the picture as large as fits without stretching it.
+ui.keepAspect.tip = 画像を伸ばさず、収まる最大の大きさで描きます。
+
+# UI object: sliced picture
+# en: Fill the middle
+ui.fillMiddle = 中央を塗る
+
+# Tooltip
+# en: Unticked, only the frame of a sliced picture is drawn.
+ui.fillMiddle.tip = オフにすると、Sliced の画像は枠だけを描きます。
+
+# UI object: picture
+# en: Catches the mouse
+ui.catchesMouse = マウスを受ける
+
+# Tooltip
+# en: Unticked, the pointer goes straight through this picture to whatever is behind it.
+ui.catchesMouse.tip = オフにすると、ポインターはこの画像を通り抜けて後ろのものに届きます。
+
+# UI object: text
+# en: Size
+ui.fontSize = サイズ
+
+# UI object: text
+# en: Alignment
+ui.alignment = 配置
+
+# Tooltip
+# en: Where the words sit inside the object: TextMeshPro's own names.
+ui.alignment.tip = オブジェクトの中で文字を置く場所です。TextMeshPro 自身の名前です。
+
+# UI object: text
+# en: Wrap lines
+ui.wrap = 折り返す
+
+# Tooltip
+# en: Unticked, the words stay on one line and run past the edge.
+ui.wrap.tip = オフにすると、文字は 1 行のままで端からはみ出します。
+
+# UI object: text
+# en: Shrink to fit
+ui.shrinkToFit = 収まるよう縮小
+
+# Tooltip
+# en: Picks the largest size between the two given that fits the object, instead of the Size above.
+ui.shrinkToFit.tip = 上のサイズの代わりに、指定した 2 つの間でオブジェクトに収まる最大のサイズを選びます。
+
+# UI object: text, smallest size
+# en: From
+ui.shrinkMin = 最小
+
+# UI object: text, largest size
+# en: To
+ui.shrinkMax = 最大
+
+# UI object: text
+# en: Line gap
+ui.lineSpacing = 行間
+
+# UI object: text
+# en: Letter gap
+ui.letterSpacing = 字間
+
+# Tooltip
+# en: Extra space on top of what the font gives. 0 is the font's own.
+ui.lineSpacing.tip = フォントの間隔に足す分です。0 はフォントのままです。
+
+# UI object
+# en: Opacity
+ui.opacity = 不透明度
+
+# Tooltip
+# en: From 0 to 1, for this object and everything inside it. Empty leaves it as it is.
+ui.opacity.tip = 0 から 1 で、このオブジェクトと中身すべてに効きます。空欄ならそのままです。
+
+# UI object
+# en: Shadow
+ui.shadow = 影
+
+# Tooltip
+# en: A copy of this object in one colour, offset behind it. The two numbers are how far across and up.
+ui.shadow.tip = このオブジェクトの単色のコピーを後ろにずらして置きます。2 つの数は横と上へのずれです。
+
+# UI object
+# en: Outline
+ui.outline = 輪郭
+
+# Tooltip
+# en: Copies of this object in one colour, offset to each corner behind it. The two numbers are how far across and up.
+ui.outline.tip = このオブジェクトの単色のコピーを後ろの四隅へずらして置きます。2 つの数は横と上へのずれです。
+
+# UI object: note when a shadow or outline is on an object with only words on it
+# en: The game draws no shadow or outline on words. A font that has them built in does: try Alata-Regular-Outline.
+ui.effects.textNote = ゲームは文字に影も輪郭も描きません。それらを組み込んだフォントなら描けます。Alata-Regular-Outline を試してください。
+
+# Tooltip
+# en: Offset in canvas pixels: across, then up.
+ui.effectOffset.tip = ずれをキャンバスのピクセルで指定します。横、次に上です。
+
+# UI object
+# en: Clip what's inside to this object
+ui.clip = 中身をこのオブジェクトで切り抜く
+
+# Tooltip
+# en: Anything inside it that reaches past its edges is cut off there.
+ui.clip.tip = 中身のうち、縁からはみ出す部分はそこで切られます。
+
+# UI object: note on a game object that clips
+# en: The game clips this one, and a pack cannot take that off.
+ui.clip.gameOwn = これはゲームが切り抜いているので、パックからは外せません。
 
 # Tooltip on "+ UI"
 # en: A screen of your own: a window, a panel, a HUD element.
@@ -7005,6 +7541,10 @@ ui.objectsGameOwnsKeep.tip = ゲームのオブジェクトは自分の名前を
 # en: Most of a vanilla screen starts hidden and is switched on by the game when its moment arrives.
 ui.visibleStart.tip = ゲームの画面の大部分は最初は隠れていて、出番が来るとゲームがオンにします。
 
+# Tooltip on "Stays upright"
+# en: Stays level while what it hangs on turns: it moves and grows with its parent but never turns with it. For something on one of the game's buttons that swing round - a district's buttons on the world map turn as it opens.
+ui.upright.tip = ぶら下がっている親が回転しても水平のままです。親と一緒に動いたり大きくなったりしますが、一緒に回転はしません。回転するゲームのボタンに付けるもの向けです（ワールドマップの地区のボタンは開くときに回転します）。
+
 # Tooltip on a button
 # en: Choose the colour on a wheel instead of typing hex.
 ui.pickUiTint.tip = 16進を入力する代わりに、カラーホイールで色を選びます。
@@ -7077,9 +7617,17 @@ ui.flexibleFitsManyAcross.tip = 「フレキシブル」は幅が許すだけ横
 # en: Nineteen things in rows of seven leave a last row of five, and it is normally packed against the start corner - so a grid that is even everywhere else ends lopsided. This centres that row, and only that row. Unity has no such setting, so the preview and the game both do it here.
 ui.nineteenThingsRowsSeven.tip = 19 個を7個ずつの行に並べると、最後の行は5個になり、ふつうは開始側の角に詰められます。そのため、ほかは均等なグリッドが最後だけ偏ります。これはその行を、その行だけを中央に寄せます。Unity にはこの設定がないので、プレビューもゲームもここで行います。
 
+# Tooltip on a tick box
+# en: With a set number of columns, the grid is only as wide as the columns its objects fill - two objects in a grid of eight columns make it two cells wide - so something sized to the grid, like a Content Size Fitter, grows and shrinks with what it holds. With a set number of rows, the same for its height. Unity's own grid is always as wide as all its columns. Only in the game: the preview draws the grid at its own size.
+ui.fitToContent.tip = 列数を固定したグリッドが、オブジェクトで埋まっている列の分の幅だけになります（8列のグリッドにオブジェクトが2つなら2セル分の幅）。Content Size Fitter のようにグリッドに合わせて大きさが決まるものは、中身に合わせて伸び縮みします。行数を固定した場合は、高さが同じようになります。Unity のグリッドは、中身に関係なく常に全列分の幅です。ゲーム内でのみ効き、プレビューではグリッドを設定した大きさのまま描きます。
+
 # Tooltip on a text box
 # en: Tint while the pointer is over this object, as #RRGGBB or #RRGGBBAA. Leave blank for no hover feedback. The game's own hover is per-button artwork rather than a rule, so there is nothing general to copy - this is the part a pack can state.
 ui.tintWhilePointerOver.tip = ポインターがこのオブジェクトの上にある間の色合い。#RRGGBB または #RRGGBBAA で指定します。ホバー時の反応がいらなければ空のままにします。ゲーム自身のホバーはルールではなくボタンごとの絵なので、一般的に写せるものはありません。これはパックが指定できる部分です。
+
+# Tooltip on a text box
+# en: Its size while held down, as a fraction of its own - 0.95 shrinks it a little while the pointer is down and lets it back on release, everything on it too. Empty for none: then the game's own press plays as it is clicked, once let go. Set, it stands in for that press - useful when the click closes the screen before that press could be seen.
+ui.pressScale.tip = 押している間の大きさを、元の大きさに対する割合で指定します。0.95 なら、ポインターを押している間少し縮み、離すと戻ります（上に載っているものも一緒に）。空欄なら何もせず、離したときのクリックでゲーム本来の押下が再生されます。設定すると、その押下の代わりになります。クリックで画面が閉じて押下が見えない場合に便利です。
 
 # Tooltip on a dropdown
 # en: What THIS object sounds like when clicked. Blank follows the screen, which is usually what you want - set this only where one button should differ. A sound named here plays even on a screen whose buttons are otherwise silent.
@@ -10484,6 +11032,14 @@ docs.places.addObjectRoomArt.term = + GameObject を追加
 docs.places.addObjectRoomArt = 部屋にオブジェクトを追加します。絵、小物、ほかのオブジェクトの入れ物などです。
 
 # Docs: the bold label in front of the next text, usually a name on screen
+# en: Copy of
+docs.places.copyOfGameObject.term = コピー元
+
+# Docs: a point in the topic
+# en: Make an object a copy of one of the game's, by its path in the game's scene - a room's buttons for a room of your own, an effect recoloured. The copy is made each time the game loads, in your place or beside the original, and keeps how the original was unless you override it; children with Bind change its parts, and a particle colour recolours the game's effects.
+docs.places.copyOfGameObject = オブジェクトを、ゲームのシーン内のパスで指定したゲームのオブジェクトのコピーにします（部屋のボタンを自分の部屋に、エフェクトを色違いに）。コピーはゲームを読み込むたびに、自分の場所か元のオブジェクトの隣に作られ、上書きしない限り元のままです。Bind を付けた子で部品を変え、パーティクルの色でゲームのエフェクトの色を変えられます。
+
+# Docs: the bold label in front of the next text, usually a name on screen
 # en: + Add NPC
 docs.places.placeOneNpcsInto.term = + NPC を追加
 
@@ -12284,6 +12840,14 @@ docs.actions.playDialogue.term = PlayDialogue
 # Docs: a point in the topic
 # en: Play one of the pack's dialogues or one of the game's conversations as soon as nothing else is on screen - on a line, right after its dialogue - and, if you like, set a variable when it ends.
 docs.actions.playDialogue = 画面にほかに何もなくなりしだい、パックのダイアログかゲームの会話を再生します（台詞で使えば、そのダイアログの直後）。終了時に変数を設定することもできます。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Travel
+docs.actions.travel.term = Travel
+
+# Docs: a point in the topic
+# en: Take the player to a place - one of yours or one of the game's - as its map or navigator button would: the game's own journey with its fade, the place's arrival conversation, and music if you name one. While the game is busy - a conversation on screen, another journey, a locked moment - it waits, so on a line the player goes once the dialogue ends. Nothing happens if they are already there.
+docs.actions.travel = マップやナビゲーターボタンと同じように、プレイヤーを場所（自分の場所でもゲームの場所でも）へ移動させます。ゲーム本来の移動とそのフェード、その場所に着いたときの会話、指定すれば音楽も含みます。会話の表示中、別の移動中、ロック中など、ゲームが手を離せないあいだは待つので、セリフに付けると会話が終わってから移動します。すでにその場所にいる場合は何も起きません。
 
 # Docs: a heading inside the topic
 # en: Places and scenes
@@ -14436,8 +15000,8 @@ tutorial.aScreenOfYourOwn.summary = パネルを作り、何かを載せ、ゲ�
 tutorial.aScreenOfYourOwn.screensPackOwns.title = パックが持つ画面
 
 # Tutorials: what the step says
-# en: This tab is for anything drawn on top of the game rather than in it — a window, a panel, a bar in the corner. Two kinds live here together, and deliberately so: screens you invent, and screens the game already has that your pack changes.\n\nThey share a tab because from your side they are the same job. A tree of objects on the left, what the selected one is underneath, and a picture of the result on the right.
-tutorial.aScreenOfYourOwn.screensPackOwns.body = このタブは、ゲームの中ではなくゲームの上に描くもののためのものです。ウィンドウ、パネル、隅のバーなど。ここには2種類が一緒にあり、それはわざとです。自分で考えた画面と、ゲームにすでにあってパックが変える画面です。\n\nあなたの側から見れば同じ仕事なので、1つのタブを分け合っています。左にオブジェクトのツリー、その下に選んだものの内容、右に結果の絵です。
+# en: This tab is for anything drawn on top of the game rather than in it — a window, a panel, a bar in the corner. Two kinds live here together, and deliberately so: screens you invent, and screens the game already has that your pack changes.\n\nThey share a tab because from your side they are the same job. Pick on the left, see the result in the middle, and change what is selected on the right.
+tutorial.aScreenOfYourOwn.screensPackOwns.body = このタブは、ゲームの中ではなくゲームの上に描くもののためのものです。ウィンドウ、パネル、隅のバーなど。ここには2種類が一緒にあり、それはわざとです。自分で考えた画面と、ゲームにすでにあってパックが変える画面です。\n\nあなたの側から見れば同じ仕事なので、1つのタブを分け合っています。左で選び、真ん中で結果を見て、右で選んだものを変更します。
 
 # Tutorials: the heading of a step
 # en: Start one
@@ -14460,16 +15024,16 @@ tutorial.aScreenOfYourOwn.callSomething.title = 名前を付ける
 tutorial.aScreenOfYourOwn.callSomething.body = 「名前」を、1か月後にもわかるものに変えてください。「空のパネル 2」ではなく「クエストのメモ」のように。何かがこれを開く必要があるたびに、一覧から選ぶ名前です。\n\nその下の ID は一緒には変わらず、変わるべきでもありません。画面の名前を変えたせいで、それを開いていたものが黙って外れてはいけないからです。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: The Name box, top of the middle column.
-tutorial.aScreenOfYourOwn.callSomething.hint = 真ん中の列の上の「名前」欄です。
+# en: The Name box, at the top of the right column.
+tutorial.aScreenOfYourOwn.callSomething.hint = 右の列の上の「名前」欄です。
 
 # Tutorials: the heading of a step
 # en: Put something on it
 tutorial.aScreenOfYourOwn.putSomething.title = 何かを載せる
 
 # Tutorials: what the step says
-# en: The tree is what the screen is made of. Select the panel and press + Object to put an empty object inside it; the arrow beside that button offers ready-made pieces instead — a button, a row, a line of text.\n\nEverything is inside something else, and that is what decides where it sits: an object is positioned against its parent, so moving the panel takes everything on it along.
-tutorial.aScreenOfYourOwn.putSomething.body = ツリーが画面の中身です。パネルを選んで「+ オブジェクト」を押すと、その中に空のオブジェクトが入ります。そのボタンの横の矢印では、代わりに出来合いのパーツ（ボタン、行、テキストの行）を選べます。\n\nすべては何かの中にあり、それが置かれる場所を決めます。オブジェクトは親に対して位置が決まるので、パネルを動かせば上のものがすべて一緒に動きます。
+# en: The tree is what the screen is made of. Select the panel and press + Object to put an empty object inside it; + Shape and + Piece beside it offer ready-made ones — a button, a row, a line of text.\n\nEverything is inside something else, and that is what decides where it sits: an object is positioned against its parent, so moving the panel takes everything on it along.
+tutorial.aScreenOfYourOwn.putSomething.body = ツリーが画面の中身です。パネルを選んで「+ オブジェクト」を押すと、その中に空のオブジェクトが入ります。その横の「+ 形」と「+ パーツ」では、出来合いのもの（ボタン、行、テキストの行）を選べます。\n\nすべては何かの中にあり、それが置かれる場所を決めます。オブジェクトは親に対して位置が決まるので、パネルを動かせば上のものがすべて一緒に動きます。
 
 # Tutorials: the nudge shown when a step has been waiting a while
 # en: Select the panel in the tree first — + Object adds INSIDE whatever is selected.
@@ -14480,8 +15044,8 @@ tutorial.aScreenOfYourOwn.putSomething.hint = 先にツリーでパネルを選�
 tutorial.aScreenOfYourOwn.say.title = それが何かを決める
 
 # Tutorials: what the step says
-# en: With the new object selected, the box underneath is everything about it: its name, where it sits, how big it is, and what it draws.\n\nPosition is measured from the object's anchors, in canvas pixels, and the canvas is the whole screen. Give it a name and a size you can see — a few hundred pixels each way is a good start, since anything smaller is hard to find in the preview.
-tutorial.aScreenOfYourOwn.say.body = 新しいオブジェクトを選ぶと、下の欄にそのすべてがあります。名前、置く場所、大きさ、何を描くか。\n\n位置はオブジェクトのアンカーから、キャンバスのピクセルで測り、キャンバスは画面全体です。名前と、見える大きさを付けてください。各方向に数百ピクセルから始めるのが良いでしょう。それより小さいとプレビューで見つけにくいからです。
+# en: With the new object selected, the right column is everything about it, in sections: where it sits, how it looks, when it shows, what clicking does and how it moves. A closed section says what is in it.\n\nStick to says which part of its parent it stays with, and X and Y measure from there in canvas pixels. Give it a name and a size you can see — a few hundred pixels each way is a good start, since anything smaller is hard to find in the preview.
+tutorial.aScreenOfYourOwn.say.body = 新しいオブジェクトを選ぶと、右の列にそのすべてがセクションごとにあります。位置、見た目、表示するとき、クリックの動作、動き方。閉じたセクションには中身の要約が出ます。\n\n「固定先」は親のどの部分に付いていくかで、X と Y はそこからキャンバスのピクセルで測ります。名前と、見える大きさを付けてください。各方向に数百ピクセルから始めるのが良いでしょう。それより小さいとプレビューで見つけにくいからです。
 
 # Tutorials: the nudge shown when a step has been waiting a while
 # en: Select the object you just added, then fill in Name and Size.
@@ -14750,6 +15314,14 @@ validation.action.playDialogue.unknownDialogue = Play dialogue が「{name}」�
 # Validation message
 # en: Play dialogue names '{name}', which is none of the game's conversations - nothing will play.
 validation.action.playDialogue.unknownConversation = Play dialogue が「{name}」を指定していますが、ゲームのどの会話でもありません。何も再生されません。
+
+# Validation message
+# en: Travel names no place - the player will not go anywhere.
+validation.action.travel.none = Travel に場所が指定されていません。プレイヤーはどこへも移動しません。
+
+# Validation message
+# en: '{name}': the particle colour '{colour}' is not one the game reads - write it as #RRGGBB or #RRGGBBAA.
+validation.gameObject.particleColor = '{name}'：パーティクルの色 '{colour}' はゲームが読めません。#RRGGBB か #RRGGBBAA で書いてください。
 
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.
@@ -15474,6 +16046,10 @@ note.action.transform = その場で何かの位置と大きさを決める
 note.action.playDialogue = パックのダイアログか、ゲームの会話を再生する
 
 # A note beside an action type in its dropdown, saying what it does
+# en: Take the player to a place, as its map or navigator button does
+note.action.travel = マップやナビゲーターボタンと同じように、プレイヤーを場所へ移動させる
+
+# A note beside an action type in its dropdown, saying what it does
 # en: Change a setting the other actions don't reach
 note.action.component = ほかのアクションでは届かない設定を変える
 
@@ -15482,8 +16058,8 @@ note.action.component = ほかのアクションでは届かない設定を変�
 note.action.deactivateAllScenes = このパックが表示したシーンをすべて隠す
 
 # A note beside an action type in its dropdown, saying what it does
-# en: Take the player to another place
-note.action.transitionLevels = プレイヤーを別の場所へ連れていく
+# en: Cross-fade one place into another, without the game's journey
+note.action.transitionLevels = ある場所から別の場所へクロスフェードする（ゲームの移動処理は通さない）
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Cover the screen while things change

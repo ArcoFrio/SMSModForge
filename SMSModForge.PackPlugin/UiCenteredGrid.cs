@@ -5,12 +5,20 @@ using UnityEngine.UI;
 namespace SMSModForge.PackPlugin
 {
     /// <summary>
-    /// A grid that centres its final line when that line never filled up.
+    /// A grid with the two things Unity's lacks: centring a final line that
+    /// never filled up, and being only as big as what it holds.
     /// <para/>
     /// Unity's own <see cref="GridLayoutGroup"/> packs an incomplete last row
     /// against the start corner, so nineteen things in rows of seven end with
     /// five shoved to one side under two full rows. There is no option for it,
     /// which is why this exists.
+    /// <para/>
+    /// And with a fixed number of columns it says it wants that many columns'
+    /// width whatever it holds, so something sizing itself to it (a Content
+    /// Size Fitter) is eight cells wide holding two. <see cref="FitToContent"/>
+    /// counts only the columns its children fill - the same for rows with a
+    /// fixed number of rows. Unity already places the cells for that width (it
+    /// clamps to the child count), so only the size asked for changes.
     /// <para/>
     /// It works from where the base class actually put things rather than
     /// re-deriving the column count. Unity's own rules for that - the
@@ -25,6 +33,35 @@ namespace SMSModForge.PackPlugin
         /// out in floats; a line is not a line to within a thousandth.</summary>
         private const float SameLine = 0.5f;
 
+        /// <summary>Centre a final line that never filled up.</summary>
+        public bool CentreLastLine = true;
+
+        /// <summary>Only as wide (a fixed number of columns) or as tall (a
+        /// fixed number of rows) as the lines its children fill.</summary>
+        public bool FitToContent;
+
+        public override void CalculateLayoutInputHorizontal()
+        {
+            base.CalculateLayoutInputHorizontal();
+            if (FitToContent && constraint == Constraint.FixedColumnCount)
+                Fit(0, Mathf.Min(rectChildren.Count, constraintCount), padding.horizontal, cellSize.x, spacing.x);
+        }
+
+        public override void CalculateLayoutInputVertical()
+        {
+            base.CalculateLayoutInputVertical();
+            if (FitToContent && constraint == Constraint.FixedRowCount)
+                Fit(1, Mathf.Min(rectChildren.Count, constraintCount), padding.vertical, cellSize.y, spacing.y);
+        }
+
+        /// <summary>The size of <paramref name="lines"/> cells along one axis,
+        /// as both the least and the preferred - Unity's own sum for its grid.</summary>
+        private void Fit(int axis, int lines, float pad, float cell, float gap)
+        {
+            float size = pad + Mathf.Max(0f, (cell + gap) * lines - gap);
+            SetLayoutInputForAxis(size, size, -1, axis);
+        }
+
         /// <summary>
         /// After the base class has placed everything, slide the short line.
         /// <para/>
@@ -35,7 +72,7 @@ namespace SMSModForge.PackPlugin
         public override void SetLayoutVertical()
         {
             base.SetLayoutVertical();
-            if (!isActiveAndEnabled) return;
+            if (!isActiveAndEnabled || !CentreLastLine) return;
 
             bool downFirst = startAxis == Axis.Vertical;
             Slide(downFirst);

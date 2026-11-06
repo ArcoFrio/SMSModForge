@@ -123,10 +123,10 @@ public class UiPreviewTests
         {
             if (!VanillaUiLibrary.IsAvailable) return;
 
-            var one = new UiPreview { BaseToken = "vanillaui:9_MainCanvas/Quitagme" };
+            var one = new UiPreview { BaseToken = "vanillaui:9_MainCanvas/TalkButton" };
             var all = new UiPreview
             {
-                BaseToken = "vanillaui:9_MainCanvas/Quitagme",
+                BaseToken = "vanillaui:9_MainCanvas/TalkButton",
                 ShowWholeSurface = true,
             };
 

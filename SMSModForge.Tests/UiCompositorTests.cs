@@ -79,13 +79,47 @@ public class UiCompositorTests
     public void A_half_transparent_layer_mixes_rather_than_replaces()
     {
         // Premultiplied: a 50% blue layer carries 128 in every channel it uses.
+        // Mixed in linear light, as the game does: half of full blue's light is
+        // stored as 188, not 128.
         var target = Solid(4, 4, 0, 0, 0, 255);
         var source = Solid(4, 4, 128, 0, 0, 128);
         UiCompositor.Blend(target, 4, 4, source, 4, 4, 0, 0);
 
         var (b, _, _, a) = At(target, 4, 0, 0);
-        Assert.InRange(b, 126, 130);
+        Assert.InRange(b, 186, 190);
         Assert.Equal(255, a);
+    }
+
+    [Fact]
+    public void A_see_through_black_darkens_as_little_as_it_does_in_the_game()
+    {
+        // Measured in the game: black at 0.84 took a white button to 112. Mixing
+        // the stored values, as this did until 1.8.3, gives 41.
+        var target = Solid(4, 4, 255, 255, 255, 255);
+        var source = Solid(4, 4, 0, 0, 0, (byte)(0.84 * 255));
+        UiCompositor.Blend(target, 4, 4, source, 4, 4, 0, 0);
+
+        var (b, g, r, _) = At(target, 4, 0, 0);
+        Assert.InRange(b, 108, 116);
+        Assert.Equal(b, g);
+        Assert.Equal(b, r);
+    }
+
+    [Fact]
+    public void A_layer_turned_a_quarter_goes_anticlockwise_about_its_pivot()
+    {
+        // A bar to the right of the pivot ends up above it, as Unity turns it.
+        const int size = 20;
+        var layer = new byte[size * size * 4];
+        for (int x = 11; x < 18; x++)
+            Buffer.BlockCopy(new byte[] { 255, 255, 255, 255 }, 0, layer, (10 * size + x) * 4, 4);
+
+        var target = new byte[size * size * 4];
+        UiCompositor.BlendTurned(target, layer, size, size, 10.5, 10.5, 90);
+
+        Assert.True(At(target, size, 10, 6).Item4 > 128, "nothing above the pivot");
+        Assert.True(At(target, size, 10, 14).Item4 < 16, "something below the pivot");   // the control
+        Assert.True(At(target, size, 14, 10).Item4 < 16, "still to the right of the pivot");
     }
 
     [Fact]

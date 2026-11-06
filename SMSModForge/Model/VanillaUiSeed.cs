@@ -53,10 +53,16 @@ public static class VanillaUiSeed
     /// losing an author's work is a bigger failure than showing it in an odd
     /// place. <paramref name="stranded"/> counts those so the editor can say so.
     /// </summary>
+    /// <param name="alsoThere">Paths on this screen that are not in the game's
+    /// files but will be there when it runs, because the pack itself makes them
+    /// - its map buttons, on the world map. Something bound to one of those
+    /// goes under its parent like anything else and is not stranded: telling an
+    /// author it refers to something the game "no longer has" was simply wrong.</param>
     public static UiNodeDef Merge(VanillaUiSurface.Node vanilla,
                                   IEnumerable<UiNodeDef>? stored,
                                   out int stranded,
-                                  Func<string, string>? nameForKey = null)
+                                  Func<string, string>? nameForKey = null,
+                                  ISet<string>? alsoThere = null)
     {
         var seeded = FromBase(vanilla, nameForKey);
         stranded = 0;
@@ -66,7 +72,7 @@ public static class VanillaUiSeed
         Index(seeded, byPath);
 
         foreach (var node in stored)
-            stranded += Apply(node, seeded, byPath);
+            stranded += Apply(node, seeded, byPath, alsoThere);
 
         // The stored places have been used; the tree an author edits says the
         // same thing by the order its lists are in. Leaving the numbers behind
@@ -115,6 +121,11 @@ public static class VanillaUiSeed
     private static void Unbind(UiNodeDef node)
     {
         node.Bind = "";
+
+        // A copy is built by the pack, with none of the game's button behind it
+        // and no font style, so it has neither.
+        node.GameTint = "";
+        if (node.Text != null) node.Text.GameStyle = "";
         node.OverrideRect = false;
         node.OverrideImage = false;
         node.OverrideText = false;
@@ -129,7 +140,8 @@ public static class VanillaUiSeed
     }
 
     private static int Apply(UiNodeDef stored, UiNodeDef seededRoot,
-                             Dictionary<string, UiNodeDef> byPath)
+                             Dictionary<string, UiNodeDef> byPath,
+                             ISet<string>? alsoThere = null)
     {
         if (!stored.IsBound)
         {
@@ -142,6 +154,15 @@ public static class VanillaUiSeed
 
         if (!byPath.TryGetValue(stored.Bind, out var target))
         {
+            // Something the pack itself makes when the game runs: under its
+            // parent, as it will be there, with what hangs on it in place.
+            if (alsoThere?.Contains(stored.Bind) == true && ParentOf(stored.Bind, byPath) is { } parent)
+            {
+                parent.Children.Add(stored);
+                byPath[stored.Bind] = stored;
+                return 0;
+            }
+
             // The object it was written against is gone. Kept where it can be
             // seen and re-saved rather than silently dropped.
             seededRoot.Children.Add(stored);
@@ -150,7 +171,22 @@ public static class VanillaUiSeed
 
         if (stored.OverrideRect) target.Rect = stored.Rect;
         if (stored.OverrideImage) target.Image = stored.Image;
-        if (stored.OverrideText) target.Text = stored.Text;
+        if (stored.OverrideText)
+        {
+            // The game's object keeps its style and its shrinking when a pack
+            // changes its words, whatever was stored.
+            if (stored.Text != null && target.Text != null)
+            {
+                stored.Text.GameStyle = target.Text.GameStyle;
+                if (target.Text.AutoSize && !stored.Text.AutoSize)
+                {
+                    stored.Text.AutoSize = true;
+                    stored.Text.AutoSizeMin = target.Text.AutoSizeMin;
+                    stored.Text.AutoSizeMax = target.Text.AutoSizeMax;
+                }
+            }
+            target.Text = stored.Text;
+        }
         if (stored.OverrideActive) target.StartActive = stored.StartActive;
         if (stored.Alpha.HasValue) target.Alpha = stored.Alpha;
         if (stored.Shadow != null) target.Shadow = stored.Shadow;
@@ -158,10 +194,30 @@ public static class VanillaUiSeed
         if (stored.Components.Count > 0) target.Components = stored.Components;
         if (stored.ActiveConditions.Count > 0) target.ActiveConditions = stored.ActiveConditions;
 
+        // Everything else a pack can say about one of the game's objects. The
+        // game has none of these to seed, so a stored one IS the author's. Left
+        // off this list they came back from a reopen gone, and the next save
+        // wrote the loss to disk: UiBoundObjectKeepsEverythingTests walks the
+        // model's saved settings so that cannot happen to a new one unnoticed.
+        if (stored.ClickConditions.Count > 0) target.ClickConditions = stored.ClickConditions;
+        if (stored.OnClick.Count > 0) target.OnClick = stored.OnClick;
+        if (!string.IsNullOrEmpty(stored.HoverTint)) target.HoverTint = stored.HoverTint;
+        if (!string.IsNullOrEmpty(stored.ClickSound)) target.ClickSound = stored.ClickSound;
+        if (stored.Open != null) target.Open = stored.Open;
+        if (stored.Close != null) target.Close = stored.Close;
+        if (stored.Layout != null) target.Layout = stored.Layout;
+        if (stored.Upright) target.Upright = true;
+        if (stored.PressScale != null) target.PressScale = stored.PressScale;
+        if (stored.Loop != null) target.Loop = stored.Loop;
+
+        // Only ever switched on: "clipChildren" is written when true, and the
+        // game's own clip on an object cannot be taken off - see CanChangeClip.
+        if (stored.ClipChildren) target.ClipChildren = true;
+
         int stranded = 0;
         foreach (var child in stored.Children)
         {
-            if (child.IsBound) { stranded += Apply(child, seededRoot, byPath); continue; }
+            if (child.IsBound) { stranded += Apply(child, seededRoot, byPath, alsoThere); continue; }
             target.Children.Add(child);          // an addition, in its right place
         }
 
@@ -170,6 +226,12 @@ public static class VanillaUiSeed
         // been added on the end.
         Reorder(stored, target, byPath);
         return stranded;
+    }
+
+    private static UiNodeDef? ParentOf(string bind, Dictionary<string, UiNodeDef> byPath)
+    {
+        int slash = bind.LastIndexOf('/');
+        return slash > 0 && byPath.TryGetValue(bind[..slash], out var parent) ? parent : null;
     }
 
     /// <summary>
@@ -223,8 +285,19 @@ public static class VanillaUiSeed
         node.Outline = EffectOf(vanilla.Outline);
         node.ClipChildren = vanilla.Clips;
         node.StartActive = vanilla.ActiveSelf;
+        node.GameTint = vanilla.RestingTint;
         node.ActiveConditions.Clear();
         node.Components.Clear();
+        node.ClickConditions.Clear();
+        node.OnClick.Clear();
+        node.HoverTint = "";
+        node.ClickSound = "";
+        node.Open = null;
+        node.Close = null;
+        node.Layout = null;
+        node.Upright = false;
+        node.PressScale = null;
+        node.Loop = null;
     }
 
     /// <summary>The bind paths a tree uses, in order. For checking that a seed
@@ -252,6 +325,7 @@ public static class VanillaUiSeed
             Shadow = EffectOf(vanilla.Shadow),
             Outline = EffectOf(vanilla.Outline),
             ClipChildren = vanilla.Clips,
+            GameTint = vanilla.RestingTint,
         };
 
         // Repeated sibling names get the #n suffix the catalog and the delta
@@ -320,6 +394,10 @@ public static class VanillaUiSeed
             Wrap = from.Wraps,
             LineSpacing = (float)(from.Number(from.LineSpacing) ?? 0),
             CharacterSpacing = (float)(from.Number(from.CharacterSpacing) ?? 0),
+            GameStyle = (string.Equals(from.Kind, "UI.Text", StringComparison.OrdinalIgnoreCase) ? Rendering.UiTextStyle.LegacyMark : "") + from.FontStyle,
+            AutoSize = from.AutoSizes,
+            AutoSizeMin = (float)(from.Number(from.FontSizeMin) ?? 12),
+            AutoSizeMax = (float)(from.Number(from.FontSizeMax) ?? 72),
         };
 
     private static UiEffectDef? EffectOf(VanillaUiSurface.Effect? from)

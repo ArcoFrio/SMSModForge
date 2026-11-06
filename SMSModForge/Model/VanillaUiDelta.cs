@@ -249,7 +249,16 @@ public static class VanillaUiDelta
             || node.OnClick.Count > 0
             || node.ClickConditions.Count > 0
             || !string.IsNullOrEmpty(node.HoverTint)
-            || node.Layout != null;
+            || !string.IsNullOrEmpty(node.ClickSound)
+            || node.Open is { DoesAnything: true }
+            || node.Close is { DoesAnything: true }
+            || node.Layout != null
+            || node.Upright
+            || node.PressScale != null
+            || node.Loop is { DoesAnything: true }
+            // Only one way round: a clip the game's object lacks can be added,
+            // the game's own cannot be taken off (see CanChangeClip).
+            || (node.ClipChildren && !vanilla.Clips);
     }
 
     // ── Comparisons ──────────────────────────────────────────────────
@@ -300,7 +309,9 @@ public static class VanillaUiDelta
             || authored.FillCenter != vanilla.FillCenter
             || authored.PreserveAspect != vanilla.PreserveAspect
             || Math.Abs(authored.PixelsPerUnitMultiplier
-                        - vanilla.PixelsPerUnitMultiplier) > Epsilon;
+                        - vanilla.PixelsPerUnitMultiplier) > Epsilon
+            // The extraction does not record this one, and a seed starts it on.
+            || !authored.RaycastTarget;
     }
 
     private static bool TextDiffers(UiTextDef? authored, VanillaUiSurface.Text? vanilla)
@@ -316,7 +327,8 @@ public static class VanillaUiDelta
             || authored.Wrap != vanilla.Wraps
             || Math.Abs(authored.LineSpacing - (vanilla.Number(vanilla.LineSpacing) ?? 0)) > Epsilon
             || Math.Abs(authored.CharacterSpacing
-                        - (vanilla.Number(vanilla.CharacterSpacing) ?? 0)) > Epsilon;
+                        - (vanilla.Number(vanilla.CharacterSpacing) ?? 0)) > Epsilon
+            || authored.AutoSize != vanilla.AutoSizes;
     }
 
     /// <summary>Colours compare by value rather than by spelling, so "#ffffff"
@@ -369,7 +381,13 @@ public static class VanillaUiDelta
         OnClick = from.OnClick,
         ClickConditions = from.ClickConditions,
         HoverTint = from.HoverTint,
+        ClickSound = from.ClickSound,
+        Open = from.Open,
+        Close = from.Close,
         Layout = from.Layout,
+        Upright = from.Upright,
+        PressScale = from.PressScale,
+        Loop = from.Loop,
     };
 
     // ── Order ─────────────────────────────────────────────────

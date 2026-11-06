@@ -172,6 +172,15 @@ public sealed class UiTextDef
     [JsonProperty("autoSizeMax", Order = 9)]
     public float AutoSizeMax { get; set; } = 72f;
 
+    /// <summary>
+    /// The font style the game's object has, for the preview to draw it by. Read
+    /// from the game rather than stored: a pack changing the words on one of the
+    /// game's labels leaves the object's style as it is, and has no way to set
+    /// one on an object of its own.
+    /// </summary>
+    [JsonIgnore]
+    public string GameStyle { get; set; } = "";
+
     public bool ShouldSerializeWrap() => !Wrap;
     public bool ShouldSerializeAutoSize() => AutoSize;
     public bool ShouldSerializeAutoSizeMin() => AutoSize;
@@ -326,6 +335,21 @@ public sealed class UiNodeDef
     [JsonIgnore]
     public bool IsClickable => OnClick.Count > 0;
 
+    /// <summary>
+    /// Hidden in the editor's preview only, with everything inside it: not drawn
+    /// and not caught by a click, while it keeps its place in whatever arranges
+    /// it. Never saved, so it cannot reach a player - see
+    /// <see cref="Services.UiPreviewHiding"/>.
+    /// </summary>
+    [JsonIgnore]
+    public bool HiddenInPreview { get; set; }
+
+    /// <summary>What the game multiplies this object by while it rests - see
+    /// <see cref="VanillaUiSurface.Node.RestingTint"/>. Read from the game when
+    /// a screen is opened, never stored; empty on anything the pack made.</summary>
+    [JsonIgnore]
+    public string GameTint { get; set; } = "";
+
     // ── Extending something that already exists ──────────────────────
     //
     // The same delta scheme places use. A node with Bind set is not created:
@@ -374,6 +398,36 @@ public sealed class UiNodeDef
     [JsonProperty("siblingIndex", Order = 25)]
     public int SiblingIndex { get; set; } = -1;
 
+    /// <summary>
+    /// Stay level while what it hangs on turns: it follows its parent's place
+    /// and size, never its rotation. The game swings some of its own groups
+    /// round - a district's buttons on the world map turn from 180 to 0 degrees
+    /// as it opens - and anything a pack hangs on them turned too, upside down
+    /// for most of a second (1.8.3). Works on an object the pack adds and on
+    /// one of the game's it binds.
+    /// </summary>
+    [JsonProperty("upright", Order = 26)]
+    public bool Upright { get; set; }
+
+    public bool ShouldSerializeUpright() => Upright;
+
+    /// <summary>
+    /// The size, as a fraction of its own, while it is held down - it eases
+    /// there on the press and back on release, everything under it with it.
+    /// Null for none. A pack button's own press is the game's, played on the
+    /// click, once let go: a card whose click closes its screen never showed
+    /// it. Set, this stands in for that press (1.8.3).
+    /// </summary>
+    [JsonProperty("pressScale", Order = 27, NullValueHandling = NullValueHandling.Ignore)]
+    public float? PressScale { get; set; }
+
+    /// <summary>How it keeps moving while shown, or null - see
+    /// <see cref="UiLoopDef"/>.</summary>
+    [JsonProperty("loop", Order = 28, NullValueHandling = NullValueHandling.Ignore)]
+    public UiLoopDef? Loop { get; set; }
+
+    public bool ShouldSerializeLoop() => Loop is { DoesAnything: true };
+
     public bool IsBound => !string.IsNullOrEmpty(Bind);
 
     public bool ShouldSerializeActiveConditions() => ActiveConditions.Count > 0;
@@ -397,6 +451,22 @@ public sealed class UiNodeDef
 }
 
 /// <summary>A shadow or an outline: a colour and how far it is offset.</summary>
+public static class UiGameLook
+{
+    /// <summary>
+    /// A colour times the resting tint of the game's object it is on. In the game
+    /// the two are separate and stay so: a pack changing a button's picture does
+    /// not change what the button's colour transition multiplies it by.
+    /// </summary>
+    public static Rendering.UiColor Rested(Rendering.UiColor colour, string? resting)
+    {
+        if (string.IsNullOrEmpty(resting)) return colour;
+        var by = Rendering.UiColor.Parse(resting);
+        return new Rendering.UiColor((byte)(colour.B * by.B / 255), (byte)(colour.G * by.G / 255),
+                                     (byte)(colour.R * by.R / 255), (byte)(colour.A * by.A / 255));
+    }
+}
+
 public sealed class UiEffectDef
 {
     [JsonProperty("color", Order = 1)]

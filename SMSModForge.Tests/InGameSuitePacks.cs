@@ -133,6 +133,17 @@ internal static class InGameSuitePacks
         public const string Room = "checkroom", RoomObject = "CheckRoom";
         public const string Store = "32_StorageRoom", Town = "26_Downtown";
 
+        /// <summary>The room's copies of the game's objects, and the game's
+        /// effect the second is a copy of.</summary>
+        public const string PlantCopy = "PlantCopy", HeartsCopy = "SuiteHearts",
+                            HeartsEffect = "CFXR2 Expression Loving (Timed)", PlantLevel = "8_Pool";
+
+        /// <summary>The Pool's potted plant - a prop with a picture and no
+        /// scripts - as the editor's catalogue of the game's levels names it.</summary>
+        public static string PlantSource()
+            => VanillaLevelCatalog.RootChildren(VanillaLevelCatalog.FindLevel(PlantLevel))
+                   .First(n => n.SpriteRenderer?.Sprite == "PottedPlant").Name;
+
         /// <summary>The game's character the pack adopts, and her two busts:
         /// the one given the pack's picture, and one left as the game has it.</summary>
         public const string Adopted = "Samantha";
@@ -178,6 +189,16 @@ internal static class InGameSuitePacks
                     {
                         Name = "Holder",
                         Children = { new GameObjectDef { Name = "Inner", Sprite = sign, X = 4f, Y = 1f } },
+                    },
+                    // Copies of the game's objects: the Pool's potted plant,
+                    // here at 3,2; and the game's hearts effect, beside the
+                    // original, its particles and its Hearts' recoloured.
+                    new GameObjectDef { Name = PlantCopy, CopyOf = "5_Levels/" + PlantLevel + "/" + PlantSource(), OverrideTransform = true, X = 3f, Y = 2f,
+                                        OverrideParallax = true, ParallaxStrength = 0.25f },
+                    new GameObjectDef
+                    {
+                        Name = HeartsCopy, CopyOf = "6_Effects/" + HeartsEffect, CopyBeside = true, ParticleColor = "#FF99E6",
+                        Children = { new GameObjectDef { Name = "Hearts", Bind = true, ParticleColor = "#FF59B3" } },
                     },
                     new GameObjectDef
                     {
@@ -240,6 +261,13 @@ internal static class InGameSuitePacks
             pack.Dialogues.Add(Script("unframe", "Zoom out.",
                 On(NodeActionTypes.TransformGameObject, "Inner", ("x", "4"), ("scale", "1")),
                 On(NodeActionTypes.TransformGameObject, "Lamp", ("x", "1.5"), ("y", "-2"))));
+
+            // Journeys asked for from a line: to the room, to the Storage
+            // Room (one of the game's), and to the Storage Room again - where
+            // the player already is.
+            pack.Dialogues.Add(Script("goroom", "Off to the room.", Act(NodeActionTypes.Travel, ("target", "place:" + Room))));
+            pack.Dialogues.Add(Script("gostore", "Off to the store.", Act(NodeActionTypes.Travel, ("target", "vanilla:" + Store))));
+            pack.Dialogues.Add(Script("gostoreagain", "The store again.", Act(NodeActionTypes.Travel, ("target", "vanilla:" + Store))));
 
             // On the World Map, in the Seaside district, once mapOk is true.
             pack.MapButtons.Add(new MapButtonDef { Target = "self:" + Room, District = "Seaside", Label = "Map Room",
@@ -410,20 +438,162 @@ internal static class InGameSuitePacks
             // label's words changed. The save keeps only that change.
             var screen = VanillaUiCatalog.Find(GameScreen) ?? throw new InvalidOperationException("No " + GameScreen + " in the editor's catalogue.");
             var root = VanillaUiSeed.FromBase(VanillaUiLibrary.Node(screen)!);
-            var labels = Flatten(root).Where(n => n.Text != null && n.Text.Value.Trim().Length > 0 && !n.Bind.Contains('#') && n.Bind != ".").ToList();
+            var labels = Flatten(root).Where(n => n.Text != null && n.Text.Value.Trim().Length > 0 && !n.Bind.Contains('#') && n.Bind != "."
+                                                  && n.Bind != DeepLabel && n.Bind != DeepKeptLabel).ToList();
             if (labels.Count < 2) throw new InvalidOperationException(GameScreen + " has fewer than two labels to work with.");
             PatchedLabel = labels[0].Bind;
             KeptLabel = labels[1].Bind;
             KeptWords = labels[1].Text!.Value;
             labels[0].Text!.Value = PatchedWords;
-            pack.Uis.Add(new UiDef { Id = "quitpatch", Name = "Quit, patched", Source = screen.Token, Nodes = { root } });
+            // Further down: a button's own label reworded two levels down, and
+            // an object added three levels down. Each is saved with its path
+            // from the screen, as every bound object is.
+            Flatten(root).Single(n => n.Bind == DeepLabel).Text!.Value = DeepWords;
+            Flatten(root).Single(n => n.Bind == DeepParent).Children.Add(new UiNodeDef
+            {
+                Name = DeepAdded, Rect = { Size = new[] { 10f, 10f } },
+                Image = new UiImageDef { Sprite = "Ui/panel.png", Tint = "#FF00FFFF" },
+            });
+            PatchedUi = new UiDef { Id = "quitpatch", Name = "Quit, patched", Source = screen.Token, Nodes = { root } };
+            pack.Uis.Add(PatchedUi);
+
+            // Screens of the pack's own, one on a canvas of its own and one on
+            // the game's interface, each with an object in the bottom-right
+            // corner, one stretched over the screen and one in the middle.
+            UiNodeDef Placed(string name, float[] anchorMin, float[] anchorMax, float[] pivot, float[] size) => new()
+            {
+                Name = name,
+                Rect = { AnchorMin = anchorMin, AnchorMax = anchorMax, Pivot = pivot, Size = size },
+                Image = new UiImageDef { Sprite = "Ui/panel.png", Tint = "#20C0C040" },
+            };
+            foreach (var (id, hides) in new[] { (CornersOwn, false), (CornersGame, true) })
+                pack.Uis.Add(new UiDef
+                {
+                    Id = id, Name = id, HidesWithGameplayUi = hides, SortingOrder = 43,
+                    Nodes =
+                    {
+                        Placed("Corner", new[] { 1f, 0f }, new[] { 1f, 0f }, new[] { 1f, 0f }, new[] { 200f, 100f }),
+                        Placed("Fill", new[] { 0f, 0f }, new[] { 1f, 1f }, new[] { 0.5f, 0.5f }, new[] { 0f, 0f }),
+                        Placed("Middle", new[] { 0.5f, 0.5f }, new[] { 0.5f, 0.5f }, new[] { 0.5f, 0.5f }, new[] { 100f, 100f }),
+                    },
+                });
+
+            // A group turned 90 degrees with two objects on it: one kept
+            // upright, one not. And a picture of the pack's drawn tiled,
+            // beside the plain ones above.
+            var turned = Placed("Turned", new[] { 0.5f, 0.5f }, new[] { 0.5f, 0.5f }, new[] { 0.5f, 0.5f }, new[] { 120f, 60f });
+            turned.Rect.RotationZ = 90f;
+            var level = Placed("Level", new[] { 0.5f, 0.5f }, new[] { 0.5f, 0.5f }, new[] { 0.5f, 0.5f }, new[] { 40f, 20f });
+            level.Upright = true;
+            turned.Children.Add(level);
+            turned.Children.Add(Placed("Along", new[] { 0.5f, 0.5f }, new[] { 0.5f, 0.5f }, new[] { 0.5f, 0.5f }, new[] { 40f, 20f }));
+            var tiles = Placed("Tiles", new[] { 0f, 1f }, new[] { 0f, 1f }, new[] { 0f, 1f }, new[] { 64f, 64f });
+            tiles.Image = new UiImageDef { Sprite = Png(folder, "Ui/tile.png", 8, 8, Colors.White), Type = "Tiled", Tint = "#C02020FF" };
+            pack.Uis.Single(u => u.Id == CornersOwn).Nodes.AddRange(new[] { turned, tiles });
+            pack.Dialogues.Add(Script("opencorners", "Corners.", Show("UI", CornersOwn, true), Show("UI", CornersGame, true)));
+            pack.Dialogues.Add(Script("closecorners", "No corners.", Show("UI", CornersOwn, false), Show("UI", CornersGame, false)));
+
+            // Grids of eight 40x40 columns, 4 apart, each sized to what it asks
+            // for by a Content Size Fitter: three cells fitted to what they hold,
+            // ten fitted, and three in Unity's own grid.
+            UiNodeDef Grid(string name, float y, int cells, bool fit)
+            {
+                var grid = new UiNodeDef
+                {
+                    Name = name, Rect = { Position = new[] { 0f, y } },
+                    Layout = new UiLayoutDef
+                    {
+                        Kind = UiLayoutKinds.Grid, Constraint = "FixedColumnCount", ConstraintCount = 8,
+                        CellSize = new[] { 40f, 40f }, Spacing = new[] { 4f, 4f }, FitToContent = fit,
+                    },
+                    Components = { new ComponentDef { Type = "ContentSizeFitter",
+                                                      Params = { ["horizontalFit"] = "PreferredSize", ["verticalFit"] = "PreferredSize" } } },
+                };
+                for (int i = 1; i <= cells; i++)
+                    grid.Children.Add(new UiNodeDef { Name = "C" + i, Image = new UiImageDef { Sprite = "Ui/panel.png", Tint = "#C0C02080" } });
+                return grid;
+            }
+            pack.Uis.Add(new UiDef
+            {
+                Id = Grids, Name = Grids, HidesWithGameplayUi = false, SortingOrder = 44,
+                Nodes = { Grid("Fit", 200f, 3, true), Grid("Full", 0f, 10, true), Grid("Unfit", -200f, 3, false) },
+            });
+            // Card-style buttons, their look a child of the clickable object:
+            // one with the game's hover bounce on it, one without.
+            pack.Variables.Add(Var("cardClicks", PackVariableType.Int, "0"));
+            UiNodeDef Card(string name, string words, float x, bool bounce)
+            {
+                var card = new UiNodeDef
+                {
+                    Name = name, Rect = { Position = new[] { x, 0f }, Size = new[] { 128f, 196f } },
+                    Image = new UiImageDef { Sprite = "Ui/panel.png", Tint = "#FFFFFF00" },
+                    OnClick = { Add("cardClicks") },
+                    Children = { new UiNodeDef { Name = "Face", Rect = { Size = new[] { 120f, 60f } },
+                                                 Text = new UiTextDef { Value = words, Size = 28f } } },
+                };
+                if (bounce)
+                    card.Components.Add(new ComponentDef { Type = "UIHoverBounce", Params = { ["bounceType"] = "Scale", ["bounceAmount"] = 1.05,
+                                                                                             ["speed"] = 12, ["bounciness"] = 0.3 } });
+                return card;
+            }
+            // One that shrinks while held, on top of the bounce; and three that
+            // keep moving: a fade pulse, a sweep, and one left still.
+            var pressy = Card("Pressy", "Check Pressy", 0f, true);
+            pressy.PressScale = 0.9f;
+            UiNodeDef Mover(string name, float y, UiLoopDef? loop) => new()
+            {
+                Name = name, Rect = { Position = new[] { 0f, y }, Size = new[] { 40f, 10f } },
+                Image = new UiImageDef { Sprite = "Ui/panel.png", Tint = "#FFE080FF" }, Loop = loop,
+            };
+            pack.Uis.Add(new UiDef
+            {
+                Id = Cards, Name = Cards, HidesWithGameplayUi = false, SortingOrder = 45,
+                Nodes =
+                {
+                    Card("Bouncy", "Check Bouncy", -150f, true), Card("Plain", "Check Plain", 150f, false), pressy,
+                    Mover("Glow", -200f, new UiLoopDef { Alpha = new[] { 0.2f, 1f }, Seconds = 1f }),
+                    Mover("Shine", -240f, new UiLoopDef { MoveFrom = new[] { -100f, 0f }, MoveTo = new[] { 100f, 0f }, Seconds = 1f }),
+                    Mover("Still", -280f, null),
+                },
+            });
+            pack.Dialogues.Add(Script("opencards", "Cards.", Show("UI", Cards, true)));
+            pack.Dialogues.Add(Script("closecards", "No cards.", Show("UI", Cards, false)));
+
+            pack.Dialogues.Add(Script("opengrids", "Grids.", Show("UI", Grids, true)));
+            pack.Dialogues.Add(Script("closegrids", "No grids.", Show("UI", Grids, false)));
+
+            // Every setting of a UI object on one screen, for the preview to be
+            // compared with what the game draws.
+            pack.Uis.Add(InGameSuitePreviewSheet.Build());
+            pack.Dialogues.Add(Script("opensheet", "Sheet.", Show("UI", InGameSuitePreviewSheet.Id, true)));
+            pack.Dialogues.Add(Script("closesheet", "No sheet.", Show("UI", InGameSuitePreviewSheet.Id, false)));
             return pack;
         }
+
+        /// <summary>The screen with grids fitted to what they hold, and one not.</summary>
+        public const string Grids = "fitgrids";
+
+        /// <summary>The screen with card-style buttons.</summary>
+        public const string Cards = "cards";
+
+        /// <summary>Deeper on the game's screen: a label two levels down the
+        /// pack rewords and its neighbour's it leaves, and an object it adds
+        /// three levels down.</summary>
+        public const string DeepLabel = "Button/Text (TMP)", DeepWords = "Check Deep",
+                            DeepKeptLabel = "Button (2)/Text (TMP)", DeepKeptWords = "Main Menu",
+                            DeepParent = "Slider/Fill Area/Fill", DeepAdded = "CheckDeepMark";
+
+        /// <summary>The two screens with objects in the corner, stretched and
+        /// in the middle: on a canvas of their own, and on the game's interface.</summary>
+        public const string CornersOwn = "cornersown", CornersGame = "cornersgame";
 
         /// <summary>The game's screen the pack changes, a label on it it
         /// rewords, and one it leaves alone (filled in as the pack is made).</summary>
         public const string GameScreen = "vanillaui:9_MainCanvas/Quitagme", PatchedWords = "Check Quit";
         public static string PatchedLabel = "", KeptLabel = "", KeptWords = "";
+
+        /// <summary>That change as the pack holds it, for the preview to draw.</summary>
+        public static UiDef? PatchedUi;
 
         private static IEnumerable<UiNodeDef> Flatten(UiNodeDef node)
             => new[] { node }.Concat(node.Children.SelectMany(Flatten));

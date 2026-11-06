@@ -47,6 +47,23 @@ namespace SMSModForge.PackPlugin
         private static GameObject _pendingRoomTalk;
         private static float _pendingRoomTalkAt = -1f;
 
+        /// <summary>A Travel action's journey, waiting for the game to be free
+        /// to make it. The latest asked for wins.</summary>
+        private static PlaceRegistry.Entry _pendingTravel;
+        private static string _pendingTravelMusic;
+        private static ManualLogSource _travelLog;
+        private static float _travelSetOutAt = -1f;   // when the latest try set out; -1 while none has
+        private static int _travelRefused;
+
+        /// <summary>How long a journey has to arrive before it counts as
+        /// refused, and how many refusals before a Travel gives up.</summary>
+        private const float TravelArrives = 3f;
+        private const int TravelTries = 5;
+
+        /// <summary>The destination of the journey whose room talk is due:
+        /// the talk comes up only once that level is the one up.</summary>
+        private static GameObject _pendingRoomTalkLevel;
+
         /// <summary>
         /// Cached reference to the <c>Navigator/MapButtons</c> parent.
         /// Used in <see cref="Tick"/> to walk all active children in
@@ -59,8 +76,88 @@ namespace SMSModForge.PackPlugin
             _bindings.Clear();
             _pendingRoomTalk = null;
             _pendingRoomTalkAt = -1f;
+            _pendingRoomTalkLevel = null;
             _mapButtonsParent = null;
+            _pendingTravel = null;
         }
+
+        /// <summary>
+        /// The journey a Travel action asks for: the one a navigator button to
+        /// that place makes, now if the game is free, else as soon as it is.
+        /// <para/>
+        /// Free means what a player pressing the button would need, and more: a
+        /// button refuses while Lock-Game is on, and nobody can press one with a
+        /// conversation on screen - but an action can ask from a line. So it
+        /// waits while the game is locked, while a conversation is up (a
+        /// Travel on a line goes once its dialogue has ended), while a room's
+        /// arrival script runs, while a journey is under way, and while the
+        /// game's own journey would refuse it (<see cref="GameWouldRefuse"/>).
+        /// A journey the game refuses all the same is set out on again, a few
+        /// times, as a player clicks again.
+        /// </summary>
+        internal static void RequestTravel(PlaceRegistry.Entry place, string music, ManualLogSource log)
+        {
+            _pendingTravel = place;
+            _pendingTravelMusic = music;
+            _travelLog = log;
+            _travelSetOutAt = -1f;
+            _travelRefused = 0;
+            TryPendingTravel();
+        }
+
+        private static void TryPendingTravel()
+        {
+            var place = _pendingTravel;
+            if (place == null) return;
+            if (place.Level == null) { _pendingTravel = null; return; }    // the scene it was for has gone
+            if (_travelSetOutAt >= 0f)
+            {
+                // Set out: arrived, or refused - the game's failsave puts
+                // Start-Transfer back and the level never comes up.
+                if (place.Level.activeSelf)
+                {
+                    _pendingTravel = null;
+                    _travelLog?.LogInfo("[SMSModForge.PackPlugin] Travel: arrived at " + place.Level.name + ".");
+                    return;
+                }
+                if (Time.time < _travelSetOutAt + TravelArrives) return;
+                if (++_travelRefused >= TravelTries)
+                {
+                    _pendingTravel = null;
+                    _travelLog?.LogWarning("[SMSModForge.PackPlugin] Travel: the game refused the journey to " +
+                        place.Level.name + " " + TravelTries + " times; given up.");
+                    return;
+                }
+                _travelSetOutAt = -1f;     // again, once the game is free
+            }
+            if (GameVariableBridge.GetBool("Start-Transfer") || RoomTalkPending || GameRoomTalks.Running
+                || DialogueDispatcher.IsAnyDialoguePlayingGlobal() || GameWouldRefuse())
+                return;
+            if (place.Level.activeSelf)
+            {
+                // Nowhere to go: the game has no journey to where you are.
+                _pendingTravel = null;
+                _travelLog?.LogInfo("[SMSModForge.PackPlugin] Travel: already at " + place.Level.name + ".");
+                return;
+            }
+            if (!Travel(place.AbsoluteSiblingIndex, place.RoomTalk, _pendingTravelMusic)) return;   // locked
+            _travelSetOutAt = Time.time;
+            _travelLog?.LogInfo("[SMSModForge.PackPlugin] Travel: to " + place.Level.name + ".");
+        }
+
+        /// <summary>
+        /// What the game's own journey would refuse for, by its
+        /// <c>10_Gameplay/Travel_Failsave</c> (1.8E): for a moment around every
+        /// conversation - while its box is up, while <c>travel-failsavecheckbool</c>
+        /// holds (3 s) and until <c>2025-fadein-travelblock</c> is let go (2 s
+        /// after the box and the lock are gone). Its other reasons, screens
+        /// that are open (a shop, the phone, the save menu...), are rarer, and
+        /// a journey refused for one is set out on again.
+        /// </summary>
+        private static bool GameWouldRefuse()
+            => GameVariableBridge.GetBool("travel-failsavecheckbool")
+               || GameVariableBridge.GetBool("2025-fadein-travelblock")
+               || GameObject.Find("Dialogue_Default_Dialogue(Clone)") != null;
 
         public static void WireAll(PackManifest pack, ManualLogSource logger)
         {
@@ -238,12 +335,24 @@ namespace SMSModForge.PackPlugin
             // the cadence Places.ClickMapButton uses, so the vanilla
             // TransferScene fade-out can finish before the destination
             // dialogue infrastructure shows up.
+            // Only once the journey has arrived: the game refuses some (its
+            // Travel_Failsave - just after a conversation, a screen open), and
+            // until 1.8.3 the destination's arrival script still came up a
+            // second later, where the player still was. One that has not
+            // arrived a few seconds on was refused, and its talk is dropped.
             if (_pendingRoomTalk != null && _pendingRoomTalkAt > 0f && Time.time >= _pendingRoomTalkAt)
             {
-                _pendingRoomTalk.SetActive(true);
-                _pendingRoomTalk = null;
-                _pendingRoomTalkAt = -1f;
+                bool arrived = _pendingRoomTalkLevel == null || _pendingRoomTalkLevel.activeSelf;
+                if (arrived) _pendingRoomTalk.SetActive(true);
+                if (arrived || Time.time >= _pendingRoomTalkAt + TravelArrives)
+                {
+                    _pendingRoomTalk = null;
+                    _pendingRoomTalkAt = -1f;
+                    _pendingRoomTalkLevel = null;
+                }
             }
+
+            TryPendingTravel();
         }
 
         // -------------------------------------------------------------------
@@ -292,26 +401,31 @@ namespace SMSModForge.PackPlugin
 
             // Schedule the destination roomtalk to come up after the transition.
             if (roomTalk != null)
-                SchedulePendingRoomTalk(roomTalk, 1.0f);
+                SchedulePendingRoomTalk(roomTalk, 1.0f, siblingIndex);
             return true;
         }
 
-        /// <summary>
-        /// Queues a roomtalk GameObject to be activated after
-        /// <paramref name="delaySeconds"/>. Shared between this runtime
-        /// and <see cref="RadialButtonRuntime"/> so both flows wait for
-        /// the vanilla <c>TransferScene</c> fade-out before bringing the
-        /// destination dialogue infrastructure up.
-        /// </summary>
         /// <summary>A journey of ours has yet to switch its room talk on: the
         /// room's arrival script is still to come.</summary>
         internal static bool RoomTalkPending => _pendingRoomTalk != null;
 
-        public static void SchedulePendingRoomTalk(GameObject roomTalk, float delaySeconds)
+        /// <summary>
+        /// Queues a roomtalk GameObject to be activated after
+        /// <paramref name="delaySeconds"/>, once the journey's destination -
+        /// <c>5_Levels</c>' child <paramref name="siblingIndex"/> - is the
+        /// level up. Shared between this runtime and
+        /// <see cref="RadialButtonRuntime"/> so both flows wait for the vanilla
+        /// <c>TransferScene</c> fade-out before bringing the destination
+        /// dialogue infrastructure up.
+        /// </summary>
+        public static void SchedulePendingRoomTalk(GameObject roomTalk, float delaySeconds, int siblingIndex)
         {
             if (roomTalk == null) return;
             _pendingRoomTalk = roomTalk;
             _pendingRoomTalkAt = Time.time + delaySeconds;
+            var level5 = GameObject.Find("5_Levels")?.transform;
+            _pendingRoomTalkLevel = level5 != null && siblingIndex >= 0 && siblingIndex < level5.childCount
+                ? level5.GetChild(siblingIndex).gameObject : null;
         }
 
         /// <summary>

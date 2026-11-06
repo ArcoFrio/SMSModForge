@@ -290,6 +290,10 @@ game.notice.news.1.8.0 = 팩의 효과음이 제작자가 정한 타이밍과 �
 # en: A pack's conversation no longer starts over the game's own when you arrive somewhere.
 game.notice.news.1.8.2 = 어딘가에 도착했을 때, 팩의 대화가 게임 기본 대화 위에 겹쳐 시작되지 않습니다.
 
+# What ModForge 1.8.3 changes for players, one line each (\n starts the next)
+# en: Screens from packs now sit where their authors put them, and their changes to the game's own screens all show up.\nA pack's place no longer plays its arrival in the room you are still in when the game refuses the trip.
+game.notice.news.1.8.3 = 팩의 화면이 제작자가 둔 자리에 나타나고, 게임 자체 화면에 대한 변경도 모두 보이게 되었습니다.\n게임이 이동을 거절할 때 팩 장소의 도착 장면이 아직 있는 방에서 재생되지 않습니다.
+
 [Where an NPC stands]
 
 # Text
@@ -565,6 +569,14 @@ param.label.totalTimeS = 총 시간 (초)
 # Tooltip on the 'Total time (s)' field of the TransitionLevels action
 # en: Total transition length; cross-fade and signal share this budget.
 action.transitionLevels.seconds.tip = 전환의 전체 길이. 크로스페이드와 신호가 이 시간을 나눠 씁니다.
+
+# Tooltip on the 'To level' field of the Travel action
+# en: The place to go to - one of your places or one of the game's. The player travels there as its map or navigator button would take them.
+action.travel.target.tip = 갈 장소입니다. 직접 만든 장소나 게임의 장소 모두 됩니다. 지도나 내비게이터 버튼이 데려가는 것처럼 플레이어가 그곳으로 이동합니다.
+
+# Tooltip on the 'Music key' field of the Travel action
+# en: Music to switch to on the way, as a navigator button's music does. Leave it empty to keep what is playing.
+action.travel.music.tip = 이동하면서 바꿀 음악입니다. 내비게이터 버튼의 음악과 같습니다. 비워 두면 지금 나오는 음악이 그대로 이어집니다.
 
 # Label beside a field of an action or condition
 # en: Target alpha
@@ -1909,6 +1921,22 @@ gameObject.levelSBuiltNpcs = 레벨에 내장된 NPCs 오브젝트입니다. 그
 # en: This GameObject already exists (bind, don't create)
 gameObject.gameobjectAlreadyExistsBind = 이 GameObject는 이미 있음(만들지 않고 연결)
 
+# Text
+# en: Copy of
+gameObject.copyOf = 복사할 대상
+
+# Tooltip on a text box
+# en: Make this object a copy of one of the game's: its path in the game's scene, like 5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas or 6_Effects/CFXR2 Expression Loving (Timed). The copy is made each time the game loads and stays as the original was, unless the overrides below say otherwise. Its children with Bind reach the copy's own parts by name; new children are added to it. Leave it empty for an object of the pack's own.
+gameObject.copyOf.tip = 이 오브젝트를 게임 오브젝트의 복사본으로 만듭니다. 게임 장면 안의 경로를 씁니다(예: 5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas, 6_Effects/CFXR2 Expression Loving (Timed)). 복사본은 게임을 불러올 때마다 만들어지며, 아래 덮어쓰기 설정이 없으면 원본 그대로입니다. Bind를 켠 자식은 이름으로 복사본의 부품에 닿고, 새 자식은 복사본에 추가됩니다. 팩 자체의 오브젝트라면 비워 둡니다.
+
+# Text
+# en: Beside the original
+gameObject.copyBeside = 원본 옆에 두기
+
+# Tooltip on a tick box
+# en: Put the copy under the same parent as the original, instead of in this place - for something that is not the place's, like an effect your dialogues switch on by its path.
+gameObject.copyBeside.tip = 복사본을 이 장소가 아니라 원본과 같은 부모 아래에 둡니다. 대화에서 경로로 켜는 효과처럼 장소에 속하지 않는 것에 씁니다.
+
 # Tick box
 # en: Override its transform
 gameObject.overrideTransform = 트랜스폼 덮어쓰기
@@ -2048,6 +2076,22 @@ gameObject.overrideTransform.tip = 끔(기본값)은 기존 오브젝트를 그 
 # Tooltip on "Override active"
 # en: Off (default) leaves the object's own active state alone. On applies the Start-active checkbox. Not needed when you're gating it with Active-when conditions.
 gameObject.overrideActive.tip = 끔(기본값)은 오브젝트 자신의 활성 상태를 건드리지 않습니다. 켜면 '처음부터 활성' 체크를 적용합니다. '활성 조건'으로 제어한다면 필요 없습니다.
+
+# Text
+# en: Override parallax
+gameObject.overrideParallax = 시차 덮어쓰기
+
+# Tooltip on a tick box and the number beside it
+# en: Off (default) leaves how the object drifts with the mouse as the game made it. On sets how far it drifts to the number beside it - lower is softer, 0 holds it still. An object that does not drift is left alone.
+gameObject.overrideParallax.tip = 끄면(기본값) 오브젝트가 마우스를 따라 움직이는 정도를 게임 그대로 둡니다. 켜면 움직이는 정도를 옆의 숫자로 정합니다. 작을수록 부드럽고, 0이면 움직이지 않습니다. 움직이지 않는 오브젝트는 그대로 둡니다.
+
+# Text
+# en: Particle colour
+gameObject.particleColor = 파티클 색
+
+# Tooltip on a text box
+# en: The colour this object's particles start in, as #RRGGBB or #RRGGBBAA - for one of the game's effects, copied or as it is. Only this object's own particles: a part with particles of its own takes a child of its own. Empty leaves them as they are.
+gameObject.particleColor.tip = 이 오브젝트의 파티클이 시작하는 색(#RRGGBB 또는 #RRGGBBAA)입니다. 복사본이든 원래 그대로든 게임의 효과에 씁니다. 이 오브젝트 자신의 파티클만 바꾸며, 자기 파티클이 있는 부품은 따로 자식을 둡니다. 비워 두면 그대로입니다.
 
 # Tooltip on a part of the window
 # en: Pack-relative PNG path. Leave blank for a pure container GameObject (an empty transform that just groups children).
@@ -6773,29 +6817,17 @@ ui.pasteNode = 붙여넣기
 # en: Preview
 ui.preview = 미리보기
 
-# Text
-# en: Select an object in the tree to change it.
-ui.selectObjectTreeChange = 바꾸려면 트리에서 오브젝트를 선택하세요.
-
 # Button
 # en: Reset
 ui.reset = 초기화
 
-# Text
-# en: Position
-ui.position = 위치
-
-# Text
-# en: from its anchors, in canvas pixels
-ui.anchorsCanvasPixels = 앵커로부터, 캔버스 픽셀 단위
-
-# Text
-# en: Size
-ui.size = 크기
-
 # Tick box
 # en: Visible at start
 ui.visibleStart = 처음부터 보임
+
+# Tick box
+# en: Stays upright
+ui.upright = 항상 똑바로
 
 # Text
 # en: Sprite
@@ -6808,10 +6840,6 @@ ui.text = 텍스트
 # Text
 # en: Colour
 ui.colour = 색
-
-# Expandable section
-# en: Shown when
-ui.shownWhen = 표시 조건
 
 # Button
 # en: + Condition
@@ -6830,16 +6858,60 @@ ui.opensWhen.help = 이 조건이 모두 충족되는 순간 화면이 저절로
 ui.addOpenCondition.tip = 조건이 없으면 화면은 액션이 열 때만 열립니다('처음부터 화면에 표시'라면 처음에도). 조건이 있으면 모두 충족되는 순간 저절로 열립니다.
 
 # Expandable section
-# en: When it opens
-ui.whenOpens = 열릴 때
+# en: Keeps moving
+ui.loop = 계속 움직이기
 
-# Expandable section
-# en: When it closes
-ui.whenCloses = 닫힐 때
+# Tick box
+# en: Pulse fade
+ui.loop.fade = 투명도 맥동
 
-# Expandable section
-# en: Arrange children
-ui.arrangeChildren = 자식 배치
+# Tooltip on a tick box and its numbers
+# en: Its fade goes from the first number to the second and back once a pass, as fractions of its own - 0.4 to 1 breathes a glow. Everything on it fades with it.
+ui.loop.fade.tip = 한 회차마다 투명도가 첫 번째 숫자에서 두 번째로 갔다가 돌아옵니다(원래 값에 대한 비율). 0.4에서 1이면 빛이 숨 쉬듯 합니다. 위에 있는 것도 함께 변합니다.
+
+# Tick box
+# en: Pulse size
+ui.loop.size = 크기 맥동
+
+# Tooltip on a tick box and its numbers
+# en: Its size goes from the first number to the second and back once a pass, as fractions of its own.
+ui.loop.size.tip = 한 회차마다 크기가 첫 번째 숫자에서 두 번째로 갔다가 돌아옵니다(원래 크기에 대한 비율).
+
+# Tick box
+# en: Sweep
+ui.loop.sweep = 스윕
+
+# Tooltip on a tick box and its numbers
+# en: It moves from the first place to the second - x and y from where it is - and starts again. A highlight under a parent that clips its children becomes a shine running along it: put both ends outside the parent.
+ui.loop.sweep.tip = 첫 번째 위치에서 두 번째 위치로 이동하고(제자리 기준 x, y) 다시 처음부터 시작합니다. 자식을 잘라 내는 부모 아래의 하이라이트는 그 위를 지나가는 광택이 됩니다. 양 끝은 부모 밖에 두세요.
+
+# Text
+# en: Seconds
+ui.loop.seconds = 초
+
+# Tooltip on a text box
+# en: How long one pass takes. It plays in the game while the object is shown; the preview shows it still.
+ui.loop.seconds.tip = 한 회차에 걸리는 시간입니다. 게임에서는 오브젝트가 보이는 동안 계속 움직이고, 미리보기에서는 멈춘 모습으로 보입니다.
+
+# Text
+# en: Pause
+ui.loop.pause = 쉬는 시간
+
+# Tooltip on a text box
+# en: Seconds it rests at the start between passes.
+ui.loop.pause.tip = 회차와 회차 사이에 처음 상태로 쉬는 초입니다.
+
+# Text
+# en: Delay
+ui.loop.delay = 지연
+
+# Tooltip on a text box
+# en: Seconds before the first pass, from when it is shown - give copies of one object different delays so they do not all move together.
+ui.loop.delay.tip = 보인 뒤 첫 회차까지의 초입니다. 같은 오브젝트의 복사본마다 지연을 다르게 주면 모두 한꺼번에 움직이지 않습니다.
+
+# Tooltip on a dropdown
+# en: The sweep's curve. A pulse always eases back and forth.
+ui.loop.easing.tip = 스윕의 곡선입니다. 맥동은 항상 부드럽게 오갑니다.
 
 # Text
 # en: Arrange
@@ -6881,13 +6953,17 @@ ui.cell = 셀
 # en: Centre a last row that is not full
 ui.centreLastRowNot = 다 차지 않은 마지막 줄 가운데 정렬
 
-# Expandable section
-# en: When clicked
-ui.whenClicked = 클릭할 때
+# Text
+# en: Only as big as what it holds
+ui.fitToContent = 담긴 만큼만 크게
 
 # Text
 # en: Hover
 ui.hover = 호버
+
+# Text
+# en: Pressed
+ui.pressScale = 누를 때
 
 # Text
 # en: Sound
@@ -6912,6 +6988,466 @@ ui.overwriteActions = 덮어쓰기
 # Text
 # en: Font
 ui.font = 글꼴
+
+# The UI tab's start page: heading
+# en: What do you want to do?
+ui.start.title = 무엇을 하시겠습니까?
+
+# The UI tab's start page: what a UI is
+# en: A UI is anything drawn over the game: a window, a menu, a button, a badge.
+ui.start.subtitle = UI는 게임 위에 그려지는 모든 것입니다. 창, 메뉴, 버튼, 배지 같은 것이죠.
+
+# The UI tab's start page, when the pack already has UIs
+# en: Or pick one of this pack's UIs from the list on the left.
+ui.start.pickExisting = 또는 왼쪽 목록에서 이 팩의 UI를 고르세요.
+
+# Start page card
+# en: Change one of the game's UIs
+ui.start.change.title = 게임의 UI 바꾸기
+
+# Start page card
+# en: Move, restyle or add to a screen the game already has. Only what you change is saved.
+ui.start.change.body = 게임에 이미 있는 화면을 옮기거나, 모양을 바꾸거나, 무언가를 더합니다. 바꾼 것만 저장됩니다.
+
+# Start page card
+# en: Add something that stays on screen
+ui.start.staying.title = 화면에 계속 있는 것 추가하기
+
+# Start page card
+# en: A badge, a counter, a bar in the corner. It is there as soon as the game is.
+ui.start.staying.body = 배지, 카운터, 구석의 막대 같은 것입니다. 게임이 시작되면 바로 거기 있습니다.
+
+# Start page card
+# en: Make a window that opens
+ui.start.window.title = 열리는 창 만들기
+
+# Start page card
+# en: A panel with a title and a close button. A dialogue, a rule or a button opens it.
+ui.start.window.body = 제목과 닫기 버튼이 있는 패널입니다. 대화, 규칙 또는 버튼이 엽니다.
+
+# Start page button
+# en: Show me step by step
+ui.start.tutorial = 단계별로 보여 주세요
+
+# UI tab: heading over a UI's object tree
+# en: Objects
+ui.objects = 오브젝트
+
+# UI tab: the row and heading for the settings of a whole UI
+# en: UI settings
+ui.settingsRow = UI 설정
+
+# Tooltip
+# en: The UI as a whole: its name, how it opens, where it lives and how it moves.
+ui.settingsRow.tip = UI 전체에 관한 설정입니다. 이름, 열리는 방식, 있는 곳, 움직이는 방식.
+
+# UI tab: under the preview
+# en: Click an object to select it. Drag it to move it, or drag its handles to resize it.
+ui.preview.hint = 오브젝트를 클릭하면 선택됩니다. 끌어서 옮기고, 핸들을 끌어서 크기를 바꿉니다.
+
+# Tooltip on the eye beside an object in the UI tab's tree
+# en: Hide this and everything inside it in the preview, to reach what is behind it. Only here: the pack and the game are not changed.
+ui.eye.hide.tip = 미리보기에서 이것과 그 안의 모든 것을 숨겨 뒤에 있는 것에 닿게 합니다. 여기서만 그렇습니다. 팩과 게임은 바뀌지 않습니다.
+
+# Tooltip on the eye of an object hidden in the preview
+# en: Hidden in the preview only. Click to show it again. In the game it is unaffected.
+ui.eye.show.tip = 미리보기에서만 숨겨져 있습니다. 클릭하면 다시 보입니다. 게임에는 영향이 없습니다.
+
+# Tooltip on the eye of an object inside one hidden in the preview
+# en: Hidden in the preview because something it sits inside is. In the game it is unaffected.
+ui.eye.parent.tip = 이것을 담고 있는 것이 숨겨져 있어 미리보기에서 숨겨졌습니다. 게임에는 영향이 없습니다.
+
+# Tooltip on the eye of an object that starts switched off
+# en: Not visible at start, so the preview does not draw it either way. Tick Visible at start to work on it here.
+ui.eye.startsOff.tip = 처음에 보이지 않으므로 미리보기는 어차피 그리지 않습니다. 여기서 작업하려면 '처음부터 보임'을 켜세요.
+
+# Above the UI preview: how many objects the author has hidden there
+# en: {count} objects hidden here, not in the game
+ui.preview.hidden.other = 오브젝트 {count}개를 여기서만 숨김(게임에는 영향 없음)
+
+# Button above the UI preview
+# en: Show all
+ui.preview.showAll = 모두 표시
+
+# Tooltip
+# en: Show everything you hid in this preview again.
+ui.preview.showAll.tip = 이 미리보기에서 숨긴 것을 모두 다시 보여 줍니다.
+
+# UI tab: settings of a change to one of the game's screens
+# en: This is one of the game's own screens. Pick an object in the tree or the preview to change it: only what you change is saved.
+ui.gameUi.note = 게임 자체의 화면입니다. 트리나 미리보기에서 오브젝트를 골라 바꾸세요. 바꾼 것만 저장됩니다.
+
+# UI tab: how else a UI opens
+# en: Anything that can run an action can also open it: Set Active, with its category set to UI.
+ui.opensByAction.help = 액션을 실행할 수 있는 것이면 무엇이든 이것을 열 수 있습니다. Set Active에서 카테고리를 UI로 지정하세요.
+
+# UI tab section title
+# en: How it opens
+ui.section.opens = 열리는 방식
+
+# UI tab section title
+# en: Where it lives
+ui.section.lives = 있는 곳
+
+# UI tab section title
+# en: How it moves
+ui.section.moves = 움직이는 방식
+
+# UI tab section title
+# en: Button sound
+ui.section.sound = 버튼 소리
+
+# UI tab section title
+# en: Where it sits
+ui.section.where = 위치
+
+# UI tab section title
+# en: How it looks
+ui.section.looks = 모양
+
+# UI tab section title
+# en: When it shows
+ui.section.shows = 보이는 때
+
+# UI tab section title
+# en: What clicking does
+ui.section.clicks = 클릭하면 하는 일
+
+# UI tab section title
+# en: What's inside
+ui.section.inside = 안에 있는 것
+
+# UI tab section title
+# en: Extra components
+ui.section.components = 추가 컴포넌트
+
+# Section summary: a UI is up from the start
+# en: from the start
+ui.summary.startsOpen = 처음부터
+
+# Section summary: only an action opens this UI
+# en: by an action
+ui.summary.byAction = 액션으로
+
+# Section summary
+# en: {count} conditions
+ui.summary.conditions.other = 조건 {count}개
+
+# Section summary
+# en: {count} actions
+ui.summary.actions.other = 액션 {count}개
+
+# Section summary: it animates on arrival
+# en: arrives
+ui.summary.arrives = 등장 애니메이션
+
+# Section summary: it animates on leaving
+# en: leaves
+ui.summary.leaves = 퇴장 애니메이션
+
+# Section summary: it loops while shown
+# en: keeps moving
+ui.summary.keepsMoving = 계속 움직임
+
+# Section summary: nothing set here
+# en: nothing
+ui.summary.nothing = 없음
+
+# Section summary: always shown
+# en: always
+ui.summary.always = 항상
+
+# Section summary
+# en: starts hidden
+ui.summary.startsHidden = 처음에 숨김
+
+# Section summary: it clips what is inside it
+# en: clips
+ui.summary.clips = 잘라냄
+
+# Section summary: buttons make no sound
+# en: silent
+ui.summary.silent = 소리 없음
+
+# Section summary: buttons use the game's click
+# en: the game's click
+ui.summary.gameClick = 게임의 클릭 소리
+
+# Section summary: its parent decides where it goes
+# en: arranged by its parent
+ui.summary.arranged = 부모가 배치
+
+# Section summary: fills its parent
+# en: fills its parent
+ui.summary.fills = 부모를 채움
+
+# What a UI object is, in a word
+# en: Button
+ui.kind.button = 버튼
+
+# What a UI object is, in a word
+# en: Picture
+ui.kind.picture = 그림
+
+# What a UI object is, in a word
+# en: Text
+ui.kind.text = 텍스트
+
+# What a UI object is, in a word
+# en: Group
+ui.kind.group = 그룹
+
+# What a UI object is, in a word
+# en: Empty
+ui.kind.empty = 비어 있음
+
+# Label over the 3x3 grid of places an object sticks to
+# en: Stick to
+ui.stick = 붙는 곳
+
+# Tooltip
+# en: Which part of its parent this object stays with. Picking one puts it flush against that place.
+ui.stick.tip = 이 오브젝트가 부모의 어느 부분에 붙어 있을지 정합니다. 고르면 그 자리에 딱 붙습니다.
+
+# UI object placement
+# en: Fill the width
+ui.fillWidth = 너비 채우기
+
+# Tooltip
+# en: As wide as its parent, however wide that is. Left and Right say how far in each side stays.
+ui.fillWidth.tip = 부모의 너비가 얼마든 부모만큼 넓습니다. 왼쪽과 오른쪽은 각 변이 얼마나 안쪽에 있는지를 정합니다.
+
+# UI object placement
+# en: Fill the height
+ui.fillHeight = 높이 채우기
+
+# Tooltip
+# en: As tall as its parent, however tall that is. Top and Bottom say how far in each side stays.
+ui.fillHeight.tip = 부모의 높이가 얼마든 부모만큼 높습니다. 위쪽과 아래쪽은 각 변이 얼마나 안쪽에 있는지를 정합니다.
+
+# UI object placement
+# en: X
+ui.place.x = X
+
+# UI object placement
+# en: Y
+ui.place.y = Y
+
+# Tooltip
+# en: How far from where it sticks, in canvas pixels. Up and right are positive.
+ui.place.x.tip = 붙은 곳에서 얼마나 떨어져 있는지, 캔버스 픽셀로 잽니다. 위쪽과 오른쪽이 양수입니다.
+
+# UI object placement
+# en: Width
+ui.place.width = 너비
+
+# UI object placement
+# en: Height
+ui.place.height = 높이
+
+# UI object placement: margin
+# en: Left
+ui.place.left = 왼쪽
+
+# UI object placement: margin
+# en: Right
+ui.place.right = 오른쪽
+
+# UI object placement: margin
+# en: Top
+ui.place.top = 위쪽
+
+# UI object placement: margin
+# en: Bottom
+ui.place.bottom = 아래쪽
+
+# Tooltip
+# en: How far in from that side of its parent, in canvas pixels.
+ui.place.margin.tip = 부모의 그 변에서 얼마나 안쪽인지, 캔버스 픽셀로 잽니다.
+
+# UI object placement note
+# en: This object stretches across part of its parent. Width and Height here are how much bigger than that part it is, not its size.
+ui.stretchedPartly = 이 오브젝트는 부모의 일부에 걸쳐 늘어납니다. 여기서 너비와 높이는 크기가 아니라 그 부분보다 얼마나 큰지를 나타냅니다.
+
+# UI object placement note
+# en: Its parent arranges what is inside it, so the parent decides where this goes.
+ui.arrangedByParent = 부모가 안에 있는 것을 배치하므로 이것의 자리는 부모가 정합니다.
+
+# UI object: rotation
+# en: Turn
+ui.turn = 회전
+
+# Tooltip
+# en: Rotation in degrees, anticlockwise, around its pivot. The handles in the preview stay level.
+ui.turn.tip = 피벗을 중심으로 시계 반대 방향으로 도는 각도입니다. 미리보기의 핸들은 수평을 유지합니다.
+
+# UI object: scale across
+# en: Scale X
+ui.scaleX = 스케일 X
+
+# UI object: scale down
+# en: Scale Y
+ui.scaleY = 스케일 Y
+
+# Tooltip
+# en: Multiplies its size and everything inside it, around its pivot. 1 is its own size.
+ui.scale.tip = 피벗을 중심으로 크기와 그 안의 모든 것에 곱합니다. 1이 원래 크기입니다.
+
+# UI object placement: collapsed part
+# en: Exact anchors and pivot
+ui.exactAnchors = 앵커와 피벗 값
+
+# UI object placement
+# en: Anchor min
+ui.anchorMin = 앵커 최소
+
+# UI object placement
+# en: Anchor max
+ui.anchorMax = 앵커 최대
+
+# UI object placement
+# en: Pivot
+ui.pivot = 피벗
+
+# Tooltip
+# en: The point of the object its position is measured from and that it turns and scales around. 0 is its left or bottom, 1 its right or top.
+ui.pivot.tip = 위치를 재는 기준이자 회전과 크기 조절의 중심이 되는 점입니다. 0은 왼쪽이나 아래쪽, 1은 오른쪽이나 위쪽입니다.
+
+# UI object: picture colour
+# en: Tint
+ui.tint = 색조
+
+# UI object: picture type
+# en: Drawn as
+ui.drawnAs = 그리는 방식
+
+# Tooltip
+# en: Simple stretches the picture. Sliced keeps its corners and stretches the middle. Tiled repeats it. Filled draws it whole here, as nothing sets how full it is.
+ui.drawnAs.tip = Simple은 그림을 늘립니다. Sliced는 모서리를 유지하고 가운데를 늘립니다. Tiled는 반복합니다. Filled는 얼마나 채울지 정하는 것이 없어 여기서는 전체를 그립니다.
+
+# UI object: sliced picture
+# en: Corner scale
+ui.borderScale = 모서리 스케일
+
+# Tooltip
+# en: How the corners are sized: 2 makes them half as big, 0.5 twice as big.
+ui.borderScale.tip = 모서리의 크기입니다. 2는 절반으로, 0.5는 두 배로 만듭니다.
+
+# UI object: picture
+# en: Keep its shape
+ui.keepAspect = 모양 유지
+
+# Tooltip
+# en: Draws the picture as large as fits without stretching it.
+ui.keepAspect.tip = 그림을 늘리지 않고 들어가는 만큼 가장 크게 그립니다.
+
+# UI object: sliced picture
+# en: Fill the middle
+ui.fillMiddle = 가운데 채우기
+
+# Tooltip
+# en: Unticked, only the frame of a sliced picture is drawn.
+ui.fillMiddle.tip = 끄면 Sliced 그림의 테두리만 그립니다.
+
+# UI object: picture
+# en: Catches the mouse
+ui.catchesMouse = 마우스 받기
+
+# Tooltip
+# en: Unticked, the pointer goes straight through this picture to whatever is behind it.
+ui.catchesMouse.tip = 끄면 포인터가 이 그림을 통과해 뒤에 있는 것에 닿습니다.
+
+# UI object: text
+# en: Size
+ui.fontSize = 크기
+
+# UI object: text
+# en: Alignment
+ui.alignment = 정렬
+
+# Tooltip
+# en: Where the words sit inside the object: TextMeshPro's own names.
+ui.alignment.tip = 오브젝트 안에서 글자가 놓이는 곳입니다. TextMeshPro 자체의 이름입니다.
+
+# UI object: text
+# en: Wrap lines
+ui.wrap = 줄 바꿈
+
+# Tooltip
+# en: Unticked, the words stay on one line and run past the edge.
+ui.wrap.tip = 끄면 글자가 한 줄로 이어져 가장자리를 넘어갑니다.
+
+# UI object: text
+# en: Shrink to fit
+ui.shrinkToFit = 맞게 줄이기
+
+# Tooltip
+# en: Picks the largest size between the two given that fits the object, instead of the Size above.
+ui.shrinkToFit.tip = 위의 크기 대신, 지정한 두 값 사이에서 오브젝트에 들어가는 가장 큰 크기를 고릅니다.
+
+# UI object: text, smallest size
+# en: From
+ui.shrinkMin = 최소
+
+# UI object: text, largest size
+# en: To
+ui.shrinkMax = 최대
+
+# UI object: text
+# en: Line gap
+ui.lineSpacing = 줄 간격
+
+# UI object: text
+# en: Letter gap
+ui.letterSpacing = 글자 간격
+
+# Tooltip
+# en: Extra space on top of what the font gives. 0 is the font's own.
+ui.lineSpacing.tip = 글꼴의 간격에 더하는 공간입니다. 0은 글꼴 그대로입니다.
+
+# UI object
+# en: Opacity
+ui.opacity = 불투명도
+
+# Tooltip
+# en: From 0 to 1, for this object and everything inside it. Empty leaves it as it is.
+ui.opacity.tip = 0에서 1까지, 이 오브젝트와 그 안의 모든 것에 적용됩니다. 비워 두면 그대로입니다.
+
+# UI object
+# en: Shadow
+ui.shadow = 그림자
+
+# Tooltip
+# en: A copy of this object in one colour, offset behind it. The two numbers are how far across and up.
+ui.shadow.tip = 이 오브젝트의 단색 사본을 뒤에 비껴 둡니다. 두 숫자는 가로와 위쪽으로 비끼는 양입니다.
+
+# UI object
+# en: Outline
+ui.outline = 윤곽선
+
+# Tooltip
+# en: Copies of this object in one colour, offset to each corner behind it. The two numbers are how far across and up.
+ui.outline.tip = 이 오브젝트의 단색 사본들을 뒤의 네 모서리로 비껴 둡니다. 두 숫자는 가로와 위쪽으로 비끼는 양입니다.
+
+# UI object: note when a shadow or outline is on an object with only words on it
+# en: The game draws no shadow or outline on words. A font that has them built in does: try Alata-Regular-Outline.
+ui.effects.textNote = 게임은 글자에 그림자나 윤곽선을 그리지 않습니다. 그것이 내장된 글꼴은 그려집니다. Alata-Regular-Outline을 써 보세요.
+
+# Tooltip
+# en: Offset in canvas pixels: across, then up.
+ui.effectOffset.tip = 캔버스 픽셀로 비끼는 양입니다. 가로, 그다음 위쪽.
+
+# UI object
+# en: Clip what's inside to this object
+ui.clip = 안에 있는 것을 이 오브젝트에 맞춰 자르기
+
+# Tooltip
+# en: Anything inside it that reaches past its edges is cut off there.
+ui.clip.tip = 안에 있는 것 중 가장자리를 넘어가는 부분은 거기서 잘립니다.
+
+# UI object: note on a game object that clips
+# en: The game clips this one, and a pack cannot take that off.
+ui.clip.gameOwn = 이것은 게임이 잘라내므로 팩에서 뺄 수 없습니다.
 
 # Tooltip on "+ UI"
 # en: A screen of your own: a window, a panel, a HUD element.
@@ -7005,6 +7541,10 @@ ui.objectsGameOwnsKeep.tip = 게임의 오브젝트는 자기 이름을 유지�
 # en: Most of a vanilla screen starts hidden and is switched on by the game when its moment arrives.
 ui.visibleStart.tip = 게임 화면의 대부분은 처음에 숨겨져 있다가, 차례가 오면 게임이 켭니다.
 
+# Tooltip on "Stays upright"
+# en: Stays level while what it hangs on turns: it moves and grows with its parent but never turns with it. For something on one of the game's buttons that swing round - a district's buttons on the world map turn as it opens.
+ui.upright.tip = 매달린 대상이 회전해도 수평을 유지합니다. 부모와 함께 움직이고 커지지만 함께 회전하지는 않습니다. 빙 도는 게임 버튼 위에 둔 것에 씁니다(월드맵의 구역 버튼은 열릴 때 회전합니다).
+
 # Tooltip on a button
 # en: Choose the colour on a wheel instead of typing hex.
 ui.pickUiTint.tip = 16진을 입력하는 대신 색상환에서 색을 고릅니다.
@@ -7077,9 +7617,17 @@ ui.flexibleFitsManyAcross.tip = '유동'은 너비가 허락하는 만큼 가로
 # en: Nineteen things in rows of seven leave a last row of five, and it is normally packed against the start corner - so a grid that is even everywhere else ends lopsided. This centres that row, and only that row. Unity has no such setting, so the preview and the game both do it here.
 ui.nineteenThingsRowsSeven.tip = 19개를 7개씩 줄지으면 마지막 줄은 5개가 되고, 보통 시작 모서리 쪽에 몰립니다. 그래서 다른 곳은 고른 격자가 끝에서 한쪽으로 쏠립니다. 이 설정은 그 줄을, 그 줄만 가운데로 모읍니다. Unity에는 이런 설정이 없으므로 미리보기와 게임 모두 여기서 처리합니다.
 
+# Tooltip on a tick box
+# en: With a set number of columns, the grid is only as wide as the columns its objects fill - two objects in a grid of eight columns make it two cells wide - so something sized to the grid, like a Content Size Fitter, grows and shrinks with what it holds. With a set number of rows, the same for its height. Unity's own grid is always as wide as all its columns. Only in the game: the preview draws the grid at its own size.
+ui.fitToContent.tip = 열 수가 정해진 그리드는 오브젝트가 채운 열만큼만 넓어집니다(8열 그리드에 오브젝트가 2개면 2칸 너비). 그래서 Content Size Fitter처럼 그리드에 맞춰 크기가 정해지는 것은 담긴 것에 따라 늘었다 줄었다 합니다. 행 수가 정해진 그리드는 높이가 같은 식으로 바뀝니다. Unity 기본 그리드는 항상 모든 열만큼 넓습니다. 게임에서만 적용되며, 미리보기는 그리드를 원래 크기로 그립니다.
+
 # Tooltip on a text box
 # en: Tint while the pointer is over this object, as #RRGGBB or #RRGGBBAA. Leave blank for no hover feedback. The game's own hover is per-button artwork rather than a rule, so there is nothing general to copy - this is the part a pack can state.
 ui.tintWhilePointerOver.tip = 포인터가 이 오브젝트 위에 있는 동안의 색조, #RRGGBB 또는 #RRGGBBAA. 호버 반응이 필요 없으면 비워 두세요. 게임 자체의 호버는 규칙이 아니라 버튼마다 그린 그림이라 일반적으로 옮겨 올 것이 없습니다. 이것이 팩이 정할 수 있는 부분입니다.
+
+# Tooltip on a text box
+# en: Its size while held down, as a fraction of its own - 0.95 shrinks it a little while the pointer is down and lets it back on release, everything on it too. Empty for none: then the game's own press plays as it is clicked, once let go. Set, it stands in for that press - useful when the click closes the screen before that press could be seen.
+ui.pressScale.tip = 누르고 있는 동안의 크기를 원래 크기에 대한 비율로 정합니다. 0.95면 포인터를 누르는 동안 조금 작아졌다가 떼면 돌아옵니다(위에 있는 것도 함께). 비워 두면 없음: 떼는 순간의 클릭에 게임 기본 누름 효과가 재생됩니다. 설정하면 그 누름 효과를 대신합니다. 클릭으로 화면이 닫혀 누름 효과가 보이지 않을 때 유용합니다.
 
 # Tooltip on a dropdown
 # en: What THIS object sounds like when clicked. Blank follows the screen, which is usually what you want - set this only where one button should differ. A sound named here plays even on a screen whose buttons are otherwise silent.
@@ -10484,6 +11032,14 @@ docs.places.addObjectRoomArt.term = + GameObject 추가
 docs.places.addObjectRoomArt = 방에 오브젝트를 추가합니다. 그림, 소품, 다른 오브젝트를 담는 그릇 등입니다.
 
 # Docs: the bold label in front of the next text, usually a name on screen
+# en: Copy of
+docs.places.copyOfGameObject.term = 복사할 대상
+
+# Docs: a point in the topic
+# en: Make an object a copy of one of the game's, by its path in the game's scene - a room's buttons for a room of your own, an effect recoloured. The copy is made each time the game loads, in your place or beside the original, and keeps how the original was unless you override it; children with Bind change its parts, and a particle colour recolours the game's effects.
+docs.places.copyOfGameObject = 오브젝트를 게임 장면 안의 경로로 지정한 게임 오브젝트의 복사본으로 만듭니다(방의 버튼을 내 방으로, 효과를 다른 색으로). 복사본은 게임을 불러올 때마다 내 장소나 원본 옆에 만들어지며, 덮어쓰지 않으면 원본 그대로입니다. Bind를 켠 자식으로 부품을 바꾸고, 파티클 색으로 게임의 효과 색을 바꿉니다.
+
+# Docs: the bold label in front of the next text, usually a name on screen
 # en: + Add NPC
 docs.places.placeOneNpcsInto.term = + NPC 추가
 
@@ -12284,6 +12840,14 @@ docs.actions.playDialogue.term = PlayDialogue
 # Docs: a point in the topic
 # en: Play one of the pack's dialogues or one of the game's conversations as soon as nothing else is on screen - on a line, right after its dialogue - and, if you like, set a variable when it ends.
 docs.actions.playDialogue = 화면에 다른 것이 없어지는 대로 팩의 대화나 게임의 대화를 재생하고(대사에서 쓰면 그 대화 직후), 원하면 끝날 때 변수를 설정합니다.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Travel
+docs.actions.travel.term = Travel
+
+# Docs: a point in the topic
+# en: Take the player to a place - one of yours or one of the game's - as its map or navigator button would: the game's own journey with its fade, the place's arrival conversation, and music if you name one. While the game is busy - a conversation on screen, another journey, a locked moment - it waits, so on a line the player goes once the dialogue ends. Nothing happens if they are already there.
+docs.actions.travel = 지도나 내비게이터 버튼처럼 플레이어를 장소(직접 만든 장소나 게임의 장소)로 데려갑니다. 게임 자체의 이동과 페이드, 그 장소의 도착 대화, 지정하면 음악까지 포함합니다. 화면에 대화가 있거나, 다른 이동 중이거나, 잠긴 순간처럼 게임이 바쁜 동안에는 기다리므로, 대사에 붙이면 대화가 끝난 뒤 이동합니다. 이미 그곳에 있으면 아무 일도 일어나지 않습니다.
 
 # Docs: a heading inside the topic
 # en: Places and scenes
@@ -14436,8 +15000,8 @@ tutorial.aScreenOfYourOwn.summary = 패널을 만들고, 무언가를 올리고,
 tutorial.aScreenOfYourOwn.screensPackOwns.title = 팩이 가진 화면
 
 # Tutorials: what the step says
-# en: This tab is for anything drawn on top of the game rather than in it — a window, a panel, a bar in the corner. Two kinds live here together, and deliberately so: screens you invent, and screens the game already has that your pack changes.\n\nThey share a tab because from your side they are the same job. A tree of objects on the left, what the selected one is underneath, and a picture of the result on the right.
-tutorial.aScreenOfYourOwn.screensPackOwns.body = 이 탭은 게임 안이 아니라 게임 위에 그려지는 모든 것을 위한 곳입니다. 창, 패널, 구석의 막대 같은 것이죠. 여기에는 두 종류가 함께 있고, 일부러 그렇게 했습니다. 여러분이 새로 만드는 화면과, 게임에 이미 있고 팩이 바꾸는 화면입니다.\n\n여러분 쪽에서 보면 같은 일이라서 한 탭을 함께 씁니다. 왼쪽에 오브젝트 트리, 그 아래에 선택한 것의 내용, 오른쪽에 결과 그림이 있습니다.
+# en: This tab is for anything drawn on top of the game rather than in it — a window, a panel, a bar in the corner. Two kinds live here together, and deliberately so: screens you invent, and screens the game already has that your pack changes.\n\nThey share a tab because from your side they are the same job. Pick on the left, see the result in the middle, and change what is selected on the right.
+tutorial.aScreenOfYourOwn.screensPackOwns.body = 이 탭은 게임 안이 아니라 게임 위에 그려지는 모든 것을 위한 곳입니다. 창, 패널, 구석의 막대 같은 것이죠. 여기에는 두 종류가 함께 있고, 일부러 그렇게 했습니다. 여러분이 새로 만드는 화면과, 게임에 이미 있고 팩이 바꾸는 화면입니다.\n\n여러분 쪽에서 보면 같은 일이라서 한 탭을 함께 씁니다. 왼쪽에서 고르고, 가운데에서 결과를 보고, 오른쪽에서 선택한 것을 바꿉니다.
 
 # Tutorials: the heading of a step
 # en: Start one
@@ -14460,16 +15024,16 @@ tutorial.aScreenOfYourOwn.callSomething.title = 이름 붙이기
 tutorial.aScreenOfYourOwn.callSomething.body = 이름을 한 달 뒤에도 알아볼 수 있는 것으로 바꾸세요. "빈 패널 2"가 아니라 "퀘스트 메모"처럼요. 무언가가 이 화면을 열어야 할 때마다 목록에서 고르게 될 이름입니다.\n\n그 아래의 ID는 함께 바뀌지 않고, 바뀌어서도 안 됩니다. 화면 이름을 바꿨다고 그것을 열던 것이 조용히 끊겨서는 안 되니까요.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: The Name box, top of the middle column.
-tutorial.aScreenOfYourOwn.callSomething.hint = 가운데 열 위쪽의 이름 칸입니다.
+# en: The Name box, at the top of the right column.
+tutorial.aScreenOfYourOwn.callSomething.hint = 오른쪽 열 위쪽의 이름 칸입니다.
 
 # Tutorials: the heading of a step
 # en: Put something on it
 tutorial.aScreenOfYourOwn.putSomething.title = 무언가 올리기
 
 # Tutorials: what the step says
-# en: The tree is what the screen is made of. Select the panel and press + Object to put an empty object inside it; the arrow beside that button offers ready-made pieces instead — a button, a row, a line of text.\n\nEverything is inside something else, and that is what decides where it sits: an object is positioned against its parent, so moving the panel takes everything on it along.
-tutorial.aScreenOfYourOwn.putSomething.body = 트리가 화면을 이루는 것입니다. 패널을 선택하고 + 오브젝트를 누르면 그 안에 빈 오브젝트가 들어갑니다. 그 버튼 옆의 화살표에서는 대신 미리 만든 부품(버튼, 행, 텍스트 한 줄)을 고를 수 있습니다.\n\n모든 것은 다른 무언가의 안에 있고, 그것이 놓이는 자리를 정합니다. 오브젝트는 부모를 기준으로 위치가 정해지므로, 패널을 옮기면 그 위의 모든 것이 함께 움직입니다.
+# en: The tree is what the screen is made of. Select the panel and press + Object to put an empty object inside it; + Shape and + Piece beside it offer ready-made ones — a button, a row, a line of text.\n\nEverything is inside something else, and that is what decides where it sits: an object is positioned against its parent, so moving the panel takes everything on it along.
+tutorial.aScreenOfYourOwn.putSomething.body = 트리가 화면을 이루는 것입니다. 패널을 선택하고 + 오브젝트를 누르면 그 안에 빈 오브젝트가 들어갑니다. 그 옆의 + 모양과 + 부품에서는 미리 만든 것(버튼, 행, 텍스트 한 줄)을 고를 수 있습니다.\n\n모든 것은 다른 무언가의 안에 있고, 그것이 놓이는 자리를 정합니다. 오브젝트는 부모를 기준으로 위치가 정해지므로, 패널을 옮기면 그 위의 모든 것이 함께 움직입니다.
 
 # Tutorials: the nudge shown when a step has been waiting a while
 # en: Select the panel in the tree first — + Object adds INSIDE whatever is selected.
@@ -14480,8 +15044,8 @@ tutorial.aScreenOfYourOwn.putSomething.hint = 먼저 트리에서 패널을 선�
 tutorial.aScreenOfYourOwn.say.title = 무엇인지 정하기
 
 # Tutorials: what the step says
-# en: With the new object selected, the box underneath is everything about it: its name, where it sits, how big it is, and what it draws.\n\nPosition is measured from the object's anchors, in canvas pixels, and the canvas is the whole screen. Give it a name and a size you can see — a few hundred pixels each way is a good start, since anything smaller is hard to find in the preview.
-tutorial.aScreenOfYourOwn.say.body = 새 오브젝트를 선택하면, 아래 칸에 그에 관한 모든 것이 있습니다. 이름, 놓이는 자리, 크기, 그리고 무엇을 그리는지.\n\n위치는 오브젝트의 앵커에서 캔버스 픽셀로 재며, 캔버스는 화면 전체입니다. 이름과 눈에 보이는 크기를 주세요. 가로세로 각각 몇백 픽셀로 시작하는 게 좋습니다. 그보다 작으면 미리보기에서 찾기 어렵습니다.
+# en: With the new object selected, the right column is everything about it, in sections: where it sits, how it looks, when it shows, what clicking does and how it moves. A closed section says what is in it.\n\nStick to says which part of its parent it stays with, and X and Y measure from there in canvas pixels. Give it a name and a size you can see — a few hundred pixels each way is a good start, since anything smaller is hard to find in the preview.
+tutorial.aScreenOfYourOwn.say.body = 새 오브젝트를 선택하면, 오른쪽 열에 그에 관한 모든 것이 섹션별로 있습니다. 위치, 모양, 보이는 때, 클릭하면 하는 일, 움직이는 방식. 닫힌 섹션은 안에 무엇이 있는지 알려 줍니다.\n\n붙는 곳은 부모의 어느 부분에 붙어 있을지를 정하고, X와 Y는 거기서부터 캔버스 픽셀로 잽니다. 이름과 눈에 보이는 크기를 주세요. 가로세로 각각 몇백 픽셀로 시작하는 게 좋습니다. 그보다 작으면 미리보기에서 찾기 어렵습니다.
 
 # Tutorials: the nudge shown when a step has been waiting a while
 # en: Select the object you just added, then fill in Name and Size.
@@ -14750,6 +15314,14 @@ validation.action.playDialogue.unknownDialogue = Play dialogue가 '{name}'을(�
 # Validation message
 # en: Play dialogue names '{name}', which is none of the game's conversations - nothing will play.
 validation.action.playDialogue.unknownConversation = Play dialogue가 '{name}'을(를) 지정했지만 게임의 대화가 아닙니다 - 아무것도 재생되지 않습니다.
+
+# Validation message
+# en: Travel names no place - the player will not go anywhere.
+validation.action.travel.none = Travel에 장소가 지정되지 않았습니다 - 플레이어는 어디로도 가지 않습니다.
+
+# Validation message
+# en: '{name}': the particle colour '{colour}' is not one the game reads - write it as #RRGGBB or #RRGGBBAA.
+validation.gameObject.particleColor = '{name}': 게임은 파티클 색 '{colour}'을(를) 읽을 수 없습니다 - #RRGGBB 또는 #RRGGBBAA로 쓰세요.
 
 # Validation message. {name} is the character's name
 # en: {name} has no pronouns. Choose Male, Female or Neutral on the Characters tab - translation needs them, and guesses male without.
@@ -15474,6 +16046,10 @@ note.action.transform = 제자리에서 무언가의 위치와 크기를 정합�
 note.action.playDialogue = 팩의 대화나 게임의 대화를 재생합니다
 
 # A note beside an action type in its dropdown, saying what it does
+# en: Take the player to a place, as its map or navigator button does
+note.action.travel = 지도나 내비게이터 버튼처럼 플레이어를 장소로 데려가기
+
+# A note beside an action type in its dropdown, saying what it does
 # en: Change a setting the other actions don't reach
 note.action.component = 다른 액션이 닿지 않는 설정 바꾸기
 
@@ -15482,8 +16058,8 @@ note.action.component = 다른 액션이 닿지 않는 설정 바꾸기
 note.action.deactivateAllScenes = 이 팩이 보인 씬을 모두 숨기기
 
 # A note beside an action type in its dropdown, saying what it does
-# en: Take the player to another place
-note.action.transitionLevels = 플레이어를 다른 장소로 데려가기
+# en: Cross-fade one place into another, without the game's journey
+note.action.transitionLevels = 한 장소에서 다른 장소로 크로스페이드하기 (게임의 이동 과정 없이)
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Cover the screen while things change

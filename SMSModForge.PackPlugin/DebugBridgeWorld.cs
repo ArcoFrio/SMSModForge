@@ -89,6 +89,307 @@ namespace SMSModForge.PackPlugin
                     Say("ok pset " + a + "." + words[0] + " = " + ctx.Vars.GetString(words[0]));
                     return true;
                 }
+                case "font-atlas":
+                {
+                    // font-atlas <font name>: what the game really draws this font
+                    // from - its shader, its textures and their pixels as a PNG, and
+                    // the glyph table - for comparing with the editor's copy.
+                    string fontName = (a + " " + rest).Trim();
+                    if (fontName == "*")
+                    {
+                        // Every font that draws from a texture other than its atlas:
+                        // an RGBA picture of its letters, outline and shadow baked in.
+                        var coloured = new List<string>();
+                        foreach (var f in Resources.FindObjectsOfTypeAll<TMP_FontAsset>())
+                        {
+                            if (f == null || f.material == null || !f.material.HasProperty("_MainTex")) continue;
+                            var drawnFrom = f.material.GetTexture("_MainTex");
+                            if (drawnFrom == null || drawnFrom == f.atlasTexture) continue;
+                            var rt = RenderTexture.GetTemporary(drawnFrom.width, drawnFrom.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+                            var before = RenderTexture.active;
+                            Graphics.Blit(drawnFrom, rt);
+                            RenderTexture.active = rt;
+                            var read = new Texture2D(drawnFrom.width, drawnFrom.height, TextureFormat.RGBA32, false);
+                            read.ReadPixels(new Rect(0, 0, drawnFrom.width, drawnFrom.height), 0, 0);
+                            read.Apply();
+                            RenderTexture.active = before;
+                            RenderTexture.ReleaseTemporary(rt);
+                            System.IO.File.WriteAllBytes(System.IO.Path.Combine(_dir, "shots", "colour-" + f.name + ".png"), ImageConversion.EncodeToPNG(read));
+                            Destroy(read);
+                            coloured.Add(f.name + " [" + f.material.shader.name + "] " + drawnFrom.width + "x" + drawnFrom.height);
+                        }
+                        Say("ok font-atlas colour: " + string.Join("; ", coloured.ToArray()));
+                        return true;
+                    }
+                    var font = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f != null && f.name == fontName);
+                    if (font == null) { Say("error font-atlas: not loaded: " + fontName); return true; }
+                    var material = font.material;
+                    var parts = new List<string>
+                    {
+                        "shader " + (material != null && material.shader != null ? material.shader.name : "(none)"),
+                        "material " + (material != null ? material.name : "(none)"),
+                        "mode " + font.atlasPopulationMode,
+                        "padding " + font.atlasPadding,
+                    };
+                    var seen = new HashSet<Texture>();
+                    void Dump(string slot, Texture texture)
+                    {
+                        if (texture == null || !seen.Add(texture)) return;
+                        var rt = RenderTexture.GetTemporary(texture.width, texture.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+                        var before = RenderTexture.active;
+                        Graphics.Blit(texture, rt);
+                        RenderTexture.active = rt;
+                        var read = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
+                        read.ReadPixels(new Rect(0, 0, texture.width, texture.height), 0, 0);
+                        read.Apply();
+                        RenderTexture.active = before;
+                        RenderTexture.ReleaseTemporary(rt);
+                        string file = "atlas-" + fontName + "-" + slot + ".png";
+                        System.IO.File.WriteAllBytes(System.IO.Path.Combine(_dir, "shots", file), ImageConversion.EncodeToPNG(read));
+                        Destroy(read);
+                        parts.Add(slot + " " + texture.name + " " + texture.width + "x" + texture.height + " -> " + file);
+                    }
+                    Dump("atlas", font.atlasTexture);
+                    if (material != null)
+                        foreach (string slot in material.GetTexturePropertyNames())
+                            Dump(slot, material.GetTexture(slot));
+                    Say("ok font-atlas " + string.Join("; ", parts.ToArray()));
+                    return true;
+                }
+                case "text-info":
+                {
+                    // text-info <path>: how a text object is really being drawn.
+                    string where = (a + " " + rest).Trim();
+                    GameObject go;
+                    if (where.StartsWith("says:", StringComparison.Ordinal))
+                    {
+                        string says = where.Substring(5);
+                        var saying = FindObjectsOfType<TMP_Text>().FirstOrDefault(t => t.text != null && t.text.Contains(says));
+                        go = saying != null ? saying.gameObject : null;
+                    }
+                    else go = TransformExtensions.ResolveGameObject(where);
+                    var tmp = go != null ? go.GetComponent<TMP_Text>() : null;
+                    if (tmp == null) { Say("error text-info: no text at " + where); return true; }
+                    tmp.ForceMeshUpdate();
+                    var info = tmp.textInfo;
+                    var used = new List<string>();
+                    var fontsSeen = new HashSet<string>();
+                    if (info != null)
+                        for (int i = 0; i < info.characterCount; i++)
+                        {
+                            var c = info.characterInfo[i];
+                            string asset = c.fontAsset != null ? c.fontAsset.name : "(none)";
+                            if (!fontsSeen.Add(asset) && i > 0 && c.character != '’') continue;
+                            used.Add("'" + c.character + "' " + asset + " scale " + N(c.scale, "0.###")
+                                     + " from " + N(c.origin, "0.##") + " to " + N(c.xAdvance, "0.##"));
+                        }
+                    if (info != null)
+                        for (int i = 0; i < info.lineCount; i++)
+                            used.Add("line " + i + " " + info.lineInfo[i].firstCharacterIndex + "-" + info.lineInfo[i].lastCharacterIndex
+                                     + " advance " + N(info.characterInfo[info.lineInfo[i].lastVisibleCharacterIndex].xAdvance
+                                                       - info.characterInfo[info.lineInfo[i].firstCharacterIndex].origin, "0.##"));
+                    var mat = tmp.fontSharedMaterial;
+                    var rendering = tmp.materialForRendering;
+                    var props = new List<string>();
+                    foreach (var m in new[] { mat, rendering })
+                    {
+                        if (m == null) continue;
+                        props.Add(m.name + " [" + (m.shader != null ? m.shader.name : "-") + "] keywords " + string.Join(",", m.shaderKeywords));
+                        foreach (string f in new[] { "_OutlineWidth", "_FaceDilate", "_UnderlayDilate", "_UnderlayOffsetX", "_UnderlayOffsetY", "_UnderlaySoftness", "_WeightNormal", "_GradientScale" })
+                            if (m.HasProperty(f)) props.Add(f + "=" + N(m.GetFloat(f), "0.###"));
+                        foreach (string t in m.GetTexturePropertyNames())
+                            if (m.GetTexture(t) != null) props.Add(t + "=" + m.GetTexture(t).name);
+                    }
+                    Say("ok text-info font " + (tmp.font != null ? tmp.font.name : "(none)")
+                        + "; atlas " + (tmp.font != null && tmp.font.atlasTexture != null ? tmp.font.atlasTexture.name : "-")
+                        + "; size " + N(tmp.fontSize, "0.##") + "; style " + tmp.fontStyle + "; auto " + tmp.enableAutoSizing
+                        + "; effects " + string.Join(",", go.GetComponents<UnityEngine.UI.BaseMeshEffect>().Select(e => e.GetType().Name).ToArray())
+                        + "; used " + string.Join(" | ", used.ToArray())
+                        + "; material " + string.Join(" ", props.ToArray()));
+                    return true;
+                }
+                case "image-info":
+                {
+                    // image-info <path>: how a picture is really being drawn.
+                    string where = (a + " " + rest).Trim();
+                    var go = FindPath(where);
+                    var image = go != null ? go.GetComponent<UnityEngine.UI.Image>() : null;
+                    if (image == null) { Say("error image-info: no picture at " + where); return true; }
+                    var s = image.overrideSprite ?? image.sprite;
+                    var parts = new List<string>
+                    {
+                        "type " + image.type,
+                        "colour " + Hex(image.color),
+                        "rendered " + Hex(image.canvasRenderer != null ? image.canvasRenderer.GetColor() : Color.white),
+                        "aspect " + image.preserveAspect,
+                        "ppuMul " + N(image.pixelsPerUnitMultiplier, "0.##"),
+                        "size " + N(((RectTransform)image.transform).rect.width, "0.#") + "x" + N(((RectTransform)image.transform).rect.height, "0.#"),
+                        "material " + (image.material != null ? image.material.name : "-"),
+                    };
+                    if (s != null)
+                    {
+                        var p = UnityEngine.Sprites.DataUtility.GetPadding(s);
+                        parts.Add("sprite " + s.name + " rect " + s.rect.width + "x" + s.rect.height + " at " + s.rect.x + "," + s.rect.y
+                                  + " texture " + (s.texture != null ? s.texture.name : "-")
+                                  + " border " + s.border.x + "," + s.border.y + "," + s.border.z + "," + s.border.w
+                                  + " ppu " + N(s.pixelsPerUnit, "0.##") + " padding " + p.x + "," + p.y + "," + p.z + "," + p.w + " packed " + s.packed);
+                    }
+                    foreach (var selectable in go.GetComponentsInParent<UnityEngine.UI.Selectable>(true))
+                        if (selectable.targetGraphic == image)
+                            parts.Add("target of " + selectable.name + " " + selectable.transition + " normal " + Hex(selectable.colors.normalColor)
+                                      + " disabled " + Hex(selectable.colors.disabledColor) + " x" + N(selectable.colors.colorMultiplier, "0.##")
+                                      + " interactable " + selectable.interactable);
+                    Say("ok image-info " + string.Join("; ", parts.ToArray()));
+                    return true;
+                }
+                case "sprite-dump":
+                {
+                    // sprite-dump: every sprite named in sprites-wanted.txt beside the
+                    // results, its pixels at full quality into shots/sprites, and its
+                    // sizes into shots/sprites.tsv - what the game really draws from.
+                    string wantedFile = System.IO.Path.Combine(_dir, "sprites-wanted.txt");
+                    if (!System.IO.File.Exists(wantedFile)) { Say("error sprite-dump: no " + wantedFile); return true; }
+                    var wanted = new HashSet<string>(System.IO.File.ReadAllLines(wantedFile));
+                    string into = System.IO.Path.Combine(_dir, "shots", "sprites");
+                    System.IO.Directory.CreateDirectory(into);
+                    var table = new List<string>();
+                    var readable = new Dictionary<Texture2D, Texture2D>();
+                    int written = 0, failed = 0;
+                    foreach (var s in Resources.FindObjectsOfTypeAll<Sprite>())
+                    {
+                        if (s == null || s.texture == null || !wanted.Contains(s.name)) continue;
+                        try
+                        {
+                            Texture2D whole;
+                            if (!readable.TryGetValue(s.texture, out whole))
+                            {
+                                var rt = RenderTexture.GetTemporary(s.texture.width, s.texture.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+                                var before = RenderTexture.active;
+                                Graphics.Blit(s.texture, rt);
+                                RenderTexture.active = rt;
+                                whole = new Texture2D(s.texture.width, s.texture.height, TextureFormat.RGBA32, false);
+                                whole.ReadPixels(new Rect(0, 0, s.texture.width, s.texture.height), 0, 0);
+                                whole.Apply();
+                                RenderTexture.active = before;
+                                RenderTexture.ReleaseTemporary(rt);
+                                readable[s.texture] = whole;
+                            }
+                            var r = s.textureRect;
+                            int x = Mathf.FloorToInt(r.x), y = Mathf.FloorToInt(r.y);
+                            int w = Mathf.Clamp(Mathf.CeilToInt(r.xMax) - x, 1, whole.width - x);
+                            int h = Mathf.Clamp(Mathf.CeilToInt(r.yMax) - y, 1, whole.height - y);
+                            var crop = new Texture2D(w, h, TextureFormat.RGBA32, false);
+                            crop.SetPixels(whole.GetPixels(x, y, w, h));
+                            crop.Apply();
+                            string file = written + ".png";
+                            System.IO.File.WriteAllBytes(System.IO.Path.Combine(into, file), ImageConversion.EncodeToPNG(crop));
+                            Destroy(crop);
+                            var p = UnityEngine.Sprites.DataUtility.GetPadding(s);
+                            table.Add(string.Join("\t", new[]
+                            {
+                                s.name, s.texture.name, file,
+                                N(r.x, "0.#####"), N(r.y, "0.#####"), N(r.width, "0.#####"), N(r.height, "0.#####"),
+                                N(s.rect.width, "0.#####"), N(s.rect.height, "0.#####"),
+                                N(p.x, "0.#####"), N(p.y, "0.#####"), N(p.z, "0.#####"), N(p.w, "0.#####"),
+                                N(s.pixelsPerUnit, "0.###"),
+                            }));
+                            written++;
+                        }
+                        catch (Exception e) { failed++; table.Add("# " + s.name + ": " + e.Message); }
+                    }
+                    foreach (var t in readable.Values) Destroy(t);
+                    System.IO.File.WriteAllLines(System.IO.Path.Combine(_dir, "shots", "sprites.tsv"), table.ToArray());
+                    Say("ok sprite-dump " + written + " written, " + failed + " failed, of " + wanted.Count + " names");
+                    return true;
+                }
+                case "ui-objects":
+                {
+                    // ui-objects: every UI object in the scene as the game has it right
+                    // now, one line each, into shots/ui-objects.tsv - to compare with
+                    // the editor's extraction.
+                    var rows = new List<string>();
+                    foreach (var rt in Resources.FindObjectsOfTypeAll<RectTransform>())
+                    {
+                        if (rt == null || !rt.gameObject.scene.IsValid()) continue;
+                        var img = rt.GetComponent<UnityEngine.UI.Image>();
+                        var label = rt.GetComponent<TMP_Text>();
+                        string F(float v) => v.ToString("0.###", CultureInfo.InvariantCulture);
+                        rows.Add(string.Join("\t", new[]
+                        {
+                            FullPath(rt),
+                            rt.GetSiblingIndex().ToString(),
+                            rt.gameObject.activeSelf ? "1" : "0",
+                            F(rt.anchorMin.x), F(rt.anchorMin.y), F(rt.anchorMax.x), F(rt.anchorMax.y),
+                            F(rt.pivot.x), F(rt.pivot.y),
+                            F(rt.anchoredPosition.x), F(rt.anchoredPosition.y),
+                            F(rt.sizeDelta.x), F(rt.sizeDelta.y),
+                            F(rt.localScale.x), F(rt.localScale.y),
+                            F(rt.localEulerAngles.z),
+                            img != null && img.sprite != null ? img.sprite.name : "",
+                            label != null ? label.font != null ? label.font.name : "-" : "",
+                            label != null ? F(label.fontSize) : "",
+                            label != null ? (label.text ?? "").Replace("\t", " ").Replace("\r", " ").Replace("\n", " ") : "",
+                        }));
+                    }
+                    System.IO.File.WriteAllLines(System.IO.Path.Combine(_dir, "shots", "ui-objects.tsv"), rows.ToArray());
+                    Say("ok ui-objects " + rows.Count);
+                    return true;
+                }
+                case "font-spacing":
+                {
+                    // font-spacing: each font's own letter spacing, into
+                    // shots/font-spacing.tsv - the export does not carry it.
+                    var rows = new List<string>();
+                    foreach (var f in Resources.FindObjectsOfTypeAll<TMP_FontAsset>())
+                        if (f != null)
+                            rows.Add(f.name + "\t" + f.normalSpacingOffset.ToString(CultureInfo.InvariantCulture)
+                                     + "\t" + f.boldSpacing.ToString(CultureInfo.InvariantCulture));
+                    System.IO.File.WriteAllLines(System.IO.Path.Combine(_dir, "shots", "font-spacing.tsv"), rows.ToArray());
+                    Say("ok font-spacing " + rows.Count);
+                    return true;
+                }
+                case "selectable-tints":
+                {
+                    // Every Selectable whose resting colour is not plain white: what
+                    // the game multiplies its picture by, which the picture's own
+                    // colour does not say.
+                    var seenColours = new Dictionary<string, int>();
+                    var lines = new List<string>();
+                    int total = 0;
+                    foreach (var selectable in Resources.FindObjectsOfTypeAll<UnityEngine.UI.Selectable>())
+                    {
+                        if (selectable == null || !selectable.gameObject.scene.IsValid()) continue;
+                        total++;
+                        if (selectable.transition != UnityEngine.UI.Selectable.Transition.ColorTint || selectable.targetGraphic == null) continue;
+                        var c = selectable.interactable ? selectable.colors.normalColor : selectable.colors.disabledColor;
+                        c *= selectable.colors.colorMultiplier;
+                        Color32 c32 = c;
+                        string hex = "#" + c32.r.ToString("X2") + c32.g.ToString("X2") + c32.b.ToString("X2") + c32.a.ToString("X2");
+                        int had;
+                        seenColours.TryGetValue(hex, out had);
+                        seenColours[hex] = had + 1;
+                        if (hex != "#FFFFFFFF")
+                        {
+                            var down = new List<string>();
+                            for (var t = selectable.targetGraphic.transform; t != null; t = t.parent)
+                                down.Insert(0, t.GetSiblingIndex().ToString());
+                            lines.Add(FullPath(selectable.targetGraphic.transform) + "\t" + string.Join("/", down.ToArray()) + "\t" + hex);
+                        }
+                    }
+                    System.IO.File.WriteAllLines(System.IO.Path.Combine(_dir, "shots", "selectable-tints.txt"), lines.ToArray());
+                    Say("ok selectable-tints of " + total + ": " + string.Join(", ", seenColours.Select(kv => kv.Key + " x" + kv.Value).ToArray()));
+                    return true;
+                }
+                case "resolution":
+                {
+                    // resolution <width> <height>: the window's size, for a check that
+                    // compares pictures at one canvas pixel to one screen pixel.
+                    int width, height;
+                    if (!int.TryParse(a, out width) || !int.TryParse(rest.Trim(), out height)) { Say("error resolution: resolution <width> <height>"); return true; }
+                    Screen.SetResolution(width, height, false);
+                    Say("ok resolution " + width + "x" + height);
+                    return true;
+                }
                 case "level":
                 {
                     var levels = GameObject.Find("5_Levels");
@@ -276,6 +577,19 @@ namespace SMSModForge.PackPlugin
                     Say("ok warning open: " + string.Join(" | ", texts));
                     return true;
                 }
+                case "scripts":
+                {
+                    // scripts <path>: every script on an object and under it,
+                    // switched on or not, written to a file in the BepInEx folder
+                    // (ScriptDump) - what one of the game's scripts does.
+                    var target = FindPath(all);
+                    if (target == null) { Say("error scripts: no " + all); return true; }
+                    // Named after the object: several asked for in one second
+                    // would otherwise write over each other.
+                    string label = "scripts-" + new string(target.name.Select(ch => char.IsLetterOrDigit(ch) ? ch : '_').ToArray());
+                    Say("ok scripts " + ScriptDump.WriteUnder(target, Plugin.Log, label));
+                    return true;
+                }
                 case "members":
                 {
                     // members <type's full name>: what a type of the game's offers
@@ -295,6 +609,30 @@ namespace SMSModForge.PackPlugin
                     if (texts.Count == 0) { Say("error find-text: no text '" + all + "'"); return true; }
                     var owner = texts[0].transform.parent != null ? texts[0].transform.parent.gameObject : texts[0].gameObject;
                     Say("ok find-text " + all + ": " + Describe(owner) + "; matches " + texts.Count);
+                    return true;
+                }
+                case "pointer":
+                {
+                    // pointer <enter|down|up|click|exit> <words>: one of a click's
+                    // events alone, on what a player sees with those words - a
+                    // press held between its down and its up, a hover left on.
+                    var text = Texts(rest, onScreenOnly: true).FirstOrDefault();
+                    if (text == null) { Say("error pointer: no text '" + rest + "' on screen"); return true; }
+                    var owner = text.GetComponentsInParent<MonoBehaviour>()
+                        .FirstOrDefault(b => b is IPointerClickHandler || b is IPointerDownHandler || b is IPointerEnterHandler);
+                    var target = owner != null ? owner.gameObject : text.gameObject;
+                    var data = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left };
+                    bool heard;
+                    switch (a)
+                    {
+                        case "enter": heard = ExecuteEvents.Execute(target, data, ExecuteEvents.pointerEnterHandler); break;
+                        case "down": heard = ExecuteEvents.Execute(target, data, ExecuteEvents.pointerDownHandler); break;
+                        case "up": heard = ExecuteEvents.Execute(target, data, ExecuteEvents.pointerUpHandler); break;
+                        case "click": heard = ExecuteEvents.Execute(target, data, ExecuteEvents.pointerClickHandler); break;
+                        case "exit": heard = ExecuteEvents.Execute(target, data, ExecuteEvents.pointerExitHandler); break;
+                        default: Say("error pointer: no event '" + a + "'"); return true;
+                    }
+                    Say("ok pointer " + a + " (" + FullPath(target.transform) + (heard ? ")" : ": nothing listens)"));
                     return true;
                 }
                 case "press-text":
@@ -399,8 +737,27 @@ namespace SMSModForge.PackPlugin
                 "world " + V(t.position),
                 "home " + V(t.position - LevelDrift(t)),
                 "rotz " + N(t.localEulerAngles.z, "0.##"),
+                "worldrotz " + N(t.eulerAngles.z, "0.##"),
                 "scale " + N(t.localScale.x, "0.###") + "," + N(t.localScale.y, "0.###"),
             };
+            if (t is RectTransform rt)
+            {
+                // A UI object's own size, and where it is drawn: left, bottom,
+                // right, top as fractions of the screen, whatever its size.
+                parts.Add("size " + N(rt.rect.width, "0.#") + "," + N(rt.rect.height, "0.#"));
+                var canvas = go.GetComponentInParent<Canvas>();
+                var cam = canvas == null || canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+                var corners = new Vector3[4];
+                rt.GetWorldCorners(corners);
+                var lo = RectTransformUtility.WorldToScreenPoint(cam, corners[0]);
+                var hi = RectTransformUtility.WorldToScreenPoint(cam, corners[2]);
+                parts.Add("screen " + N(lo.x / Screen.width, "0.###") + "," + N(lo.y / Screen.height, "0.###")
+                          + "," + N(hi.x / Screen.width, "0.###") + "," + N(hi.y / Screen.height, "0.###"));
+            }
+            var ps = go.GetComponent<ParticleSystem>();
+            if (ps != null) parts.Add("particles " + Hex(ps.main.startColor.color));
+            var group = go.GetComponent<CanvasGroup>();
+            if (group != null) parts.Add("group " + N(group.alpha, "0.###"));
             var sr = go.GetComponent<SpriteRenderer>();
             if (sr != null)
             {
@@ -415,6 +772,8 @@ namespace SMSModForge.PackPlugin
                 parts.Add("image " + (image.sprite != null ? image.sprite.name : "(none)") + " colour " + Hex(image.color)
                           + " alpha " + N(image.color.a, "0.##") + " enabled " + image.enabled);
                 parts.Add("texel " + Texel(image.sprite));
+                if (image.sprite != null && image.sprite.texture != null)
+                    parts.Add("wrap " + image.sprite.texture.wrapMode + " " + image.type);
             }
             var tmp = go.GetComponent<TMP_Text>();
             if (tmp != null) parts.Add("text '" + tmp.text.Replace("\n", "\\n") + "' colour " + Hex(tmp.color));

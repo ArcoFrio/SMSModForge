@@ -102,6 +102,8 @@ public sealed class GameObjectViewModel : ObservableObject
             Model.Bind = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(IsCreated));
+            OnPropertyChanged(nameof(IsCopy));
+            OnPropertyChanged(nameof(KeepsWhatItFinds));
             // Binding a node named "NPCs" turns it into the NPC host, which the
             // "+ Add NPC child" button keys off.
             OnPropertyChanged(nameof(IsNpcHost));
@@ -110,9 +112,59 @@ public sealed class GameObjectViewModel : ObservableObject
         }
     }
 
-    /// <summary>Inverse of <see cref="Bind"/> — the sprite / sorting / parallax
+    /// <summary>Neither bound nor a copy — the sprite / sorting / parallax
     /// fields only mean something for an object this pack actually creates.</summary>
-    public bool IsCreated => !Model.Bind;
+    public bool IsCreated => !Model.KeepsWhatItFinds;
+
+    // ── A copy of one of the game's objects ───────────────────────────────
+
+    /// <summary>The path of the game's object this one is a copy of - see
+    /// <see cref="GameObjectDef.CopyOf"/>.</summary>
+    public string CopyOf
+    {
+        get => Model.CopyOf;
+        set
+        {
+            if (Model.CopyOf == value) return;
+            Model.CopyOf = value ?? "";
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(IsCopy));
+            OnPropertyChanged(nameof(IsCreated));
+            OnPropertyChanged(nameof(KeepsWhatItFinds));
+        }
+    }
+
+    public bool CopyBeside
+    {
+        get => Model.CopyBeside;
+        set { Model.CopyBeside = value; OnPropertyChanged(); }
+    }
+
+    public string ParticleColor
+    {
+        get => Model.ParticleColor;
+        set { Model.ParticleColor = value ?? ""; OnPropertyChanged(); }
+    }
+
+    /// <summary>Apply the parallax strength to the object's own parallax - see
+    /// <see cref="GameObjectDef.OverrideParallax"/>. Switched on, the strength
+    /// shown is the one saved.</summary>
+    public bool OverrideParallax
+    {
+        get => Model.OverrideParallax;
+        set
+        {
+            Model.OverrideParallax = value;
+            if (value) Model.ParallaxStrength ??= 0.75f;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ParallaxStrength));
+        }
+    }
+
+    public bool IsCopy => Model.IsCopy;
+
+    /// <summary>Bound or a copy: what it is stays as found unless overridden.</summary>
+    public bool KeepsWhatItFinds => Model.KeepsWhatItFinds;
 
     /// <summary>One of the game's own NPCs, in a level of the game's this pack
     /// extends - listed under the NPCs category rather than GameObjects, beside

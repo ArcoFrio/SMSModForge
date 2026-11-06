@@ -160,6 +160,12 @@ namespace SMSModForge.PackPlugin
                 if (bytes != null && bytes.Length > 0)
                 {
                     var texture = new Texture2D(2, 2, TextureFormat.RGBA32, mipChain: false);
+                    // Clamped: Unity's default Repeat lets filtering at an edge
+                    // take in the opposite edge whenever the picture does not
+                    // land on whole pixels (always, on the zoomed world map) -
+                    // a line along a picture's top showed along its bottom too,
+                    // until 1.8.3. A Tiled image sets it back (UiFactory).
+                    texture.wrapMode = TextureWrapMode.Clamp;
                     if (texture.LoadImage(bytes))
                         made = UnityEngine.Sprite.Create(
                             texture,
@@ -174,5 +180,10 @@ namespace SMSModForge.PackPlugin
         }
 
         public static void ClearPackSprites() => PackSprites.Clear();
+
+        /// <summary>Whether a sprite is one of a pack's own - whose texture is
+        /// the pack's to set, where the game's are not.</summary>
+        internal static bool IsPackSprite(Sprite sprite)
+            => sprite != null && PackSprites.ContainsValue(sprite);
     }
 }

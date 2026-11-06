@@ -27,7 +27,7 @@ namespace SMSModForge.Tests;
 /// test save, in the test copy's own saves folder - see Tools/Game.
 /// </summary>
 [TestCaseOrderer("SMSModForge.Tests.ByName", "SMSModForge.Tests")]
-public sealed class InGameSuiteTests : IClassFixture<InGameSuiteTests.Session>
+public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Session>
 {
     private readonly Session _s;
     private readonly ITestOutputHelper _out;
@@ -284,6 +284,79 @@ public sealed class InGameSuiteTests : IClassFixture<InGameSuiteTests.Session>
 
         TravelToRoom(game);
         Assert.Equal("2", VarSoon(game, id, "entered", "2"));
+    }
+
+    [Fact]
+    public void B8_A_Travel_on_a_line_makes_the_journey_once_its_conversation_is_over()
+    {
+        // The journey a navigator button makes, asked for by an action. The
+        // game makes none with a conversation on screen, so one asked from a
+        // line waits for the line's dialogue to end.
+        if (Off) return;
+        var game = _s.InGame();
+        const string id = InGameSuitePacks.World.Id, store = InGameSuitePacks.World.Store;
+        Travel(game, "vanilla:" + store, store);
+        int entered = int.Parse(game.PackVar(id, "entered"), CultureInfo.InvariantCulture);
+
+        string go = Timeline(game, "travel-line", $"dialogue {id} goroom", 10);
+        double line = At(go, "on screen: .*goroom");
+        double over = At(go, "on screen: -", line);
+        Assert.True(At(go, "transfer: True", line) >= over, "The journey set out with the conversation still on screen.");
+        Arrived(game, "_" + InGameSuitePacks.World.RoomObject, "a Travel on a line");
+        // The place's arrival ran, as for any journey there.
+        Assert.Equal((entered + 1).ToString(CultureInfo.InvariantCulture),
+                     VarSoon(game, id, "entered", (entered + 1).ToString(CultureInfo.InvariantCulture)));
+
+        // To one of the game's levels.
+        Play(game, "gostore", id);
+        Arrived(game, store, "a Travel to the Storage Room");
+
+        // Control: to where the player already is, no journey at all.
+        string stay = Timeline(game, "travel-here", $"dialogue {id} gostoreagain", 6);
+        At(stay, "on screen: .*gostoreagain");
+        Assert.DoesNotMatch(new Regex(@"^\+\S+ f\d+ transfer: True", RegexOptions.Multiline), stay);
+        Assert.True(OnlyMapUp(game.Ask("level"), store), "The Storage Room is not the map up after a Travel to it from there.");
+    }
+
+    [Fact]
+    public void B9_A_copy_of_one_of_the_games_objects_is_made_where_the_pack_puts_it_and_the_original_is_untouched()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        const string pool = InGameSuitePacks.World.PlantLevel;
+        string source = InGameSuitePacks.World.PlantSource();
+        var original = VanillaLevelCatalog.FindNode(VanillaLevelCatalog.FindLevel(pool), source)!;
+        // Away from the room and the Pool, so neither drifts with the mouse
+        // while their places are read.
+        Travel(game, "vanilla:" + InGameSuitePacks.World.Store, InGameSuitePacks.World.Store);
+
+        // In the room, where the pack put it, with the original's picture: the
+        // place its drift with the mouse is anchored to - it drifts while the
+        // room is up - or where it stands if the room never was.
+        string copied = "5_Levels/*_" + InGameSuitePacks.World.RoomObject + "/" + InGameSuitePacks.World.PlantCopy;
+        string copy = Find(game, copied);
+        string parallax = game.Ask("fields ParallaxMouseEffect " + copied);
+        string anchor = Regex.Match(parallax, @"startPosition=([^;]+)").Groups[1].Value;
+        var (cx, cy) = XY(anchor.Length == 0 || anchor == "0,0,0" ? Field(copy, "local") : anchor);
+        Near(3f, cx, "the copy's x");
+        Near(2f, cy, "the copy's y");
+        Assert.StartsWith(original.SpriteRenderer!.Sprite + " ", Field(copy, "sprite"));
+        // Its drift with the mouse softened to 0.25, and the original's left.
+        Assert.Contains("parallaxStrength=0.25;", parallax);
+        Assert.DoesNotContain("parallaxStrength=0.25;", game.Ask("fields ParallaxMouseEffect 5_Levels/" + pool + "/" + source));
+        // Control: the original is still the Pool's, where the game has it.
+        var (ox, oy) = XY(Field(Find(game, "5_Levels/" + pool + "/" + source), "local"));
+        Near(original.X, ox, "the original's x");
+        Near(original.Y, oy, "the original's y");
+
+        // Beside the original, with its particles and its Hearts' recoloured.
+        const string effects = "6_Effects/";
+        Assert.Equal("#FF99E6", Field(Find(game, effects + InGameSuitePacks.World.HeartsCopy), "particles"));
+        Assert.Equal("#FF59B3", Field(Find(game, effects + InGameSuitePacks.World.HeartsCopy + "/Hearts"), "particles"));
+        Assert.DoesNotContain("CheckRoom", game.Ask("find-all " + InGameSuitePacks.World.HeartsCopy));
+        // Control: the game's own keeps its colours.
+        Assert.NotEqual("#FF99E6", Field(Find(game, effects + InGameSuitePacks.World.HeartsEffect), "particles"));
+        Assert.NotEqual("#FF59B3", Field(Find(game, effects + InGameSuitePacks.World.HeartsEffect + "/Hearts"), "particles"));
     }
 
     [Fact]
@@ -1511,6 +1584,201 @@ public sealed class InGameSuiteTests : IClassFixture<InGameSuiteTests.Session>
         // Control: the label the pack did not touch keeps the game's words.
         string kept = Find(game, screen + "/" + InGameSuitePacks.Story.KeptLabel);
         Assert.StartsWith("'" + InGameSuitePacks.Story.KeptWords.Replace("\n", "\\n") + "'", Field(kept, "text"));
+    }
+
+    [Fact]
+    public void F4_A_change_further_down_one_of_the_games_screens_is_made_there_too()
+    {
+        // Objects two and three levels down, saved with their path from the
+        // screen: the game looked for each under its parent instead and
+        // skipped it, so only the first level was ever changed.
+        if (Off) return;
+        var game = _s.InGame();
+        string screen = InGameSuitePacks.Story.GameScreen.Substring("vanillaui:".Length);
+        Assert.StartsWith("'" + InGameSuitePacks.Story.DeepWords + "'",
+                          Field(Find(game, screen + "/" + InGameSuitePacks.Story.DeepLabel), "text"));
+        Assert.Contains(InGameSuitePacks.Story.DeepAdded, Field(Find(game, screen + "/" + InGameSuitePacks.Story.DeepParent), "children"));
+        // Control: the label beside it keeps the game's words.
+        Assert.StartsWith("'" + InGameSuitePacks.Story.DeepKeptWords + "'",
+                          Field(Find(game, screen + "/" + InGameSuitePacks.Story.DeepKeptLabel), "text"));
+    }
+
+    [Fact]
+    public void F5_A_screen_of_the_packs_own_is_laid_out_over_the_whole_screen()
+    {
+        // As the editor shows it: an object in a corner is in the screen's
+        // corner, a stretched one covers the screen. Both were laid out in a
+        // 100x100 box in the middle, on a canvas of the pack's own and on the
+        // game's interface alike.
+        if (Off) return;
+        var game = _s.InGame();
+        Play(game, "opencorners");
+        try
+        {
+            foreach (var (canvas, id) in new[] { ("PackUiCanvas_" + InGameSuitePacks.Story.CornersOwn, InGameSuitePacks.Story.CornersOwn),
+                                                 ("9_MainCanvas", InGameSuitePacks.Story.CornersGame) })
+            {
+                string at = canvas + "/Pack_" + id;
+                Assert.True(ActiveSoon(game, at, true), $"{id} did not open.");
+                var whole = OnScreen(Find(game, canvas));
+                var corner = OnScreen(Find(game, at + "/Corner"));
+                var fill = OnScreen(Find(game, at + "/Fill"));
+                var middle = OnScreen(Find(game, at + "/Middle"));
+                _out.WriteLine($"{id}: canvas {whole}, corner {corner}, fill {fill}, middle {middle}");
+                Near(whole.R, corner.R, id + ": the corner's right");
+                Near(whole.B, corner.B, id + ": the corner's bottom");
+                Near(whole.L, fill.L, id + ": the stretched one's left");
+                Near(whole.B, fill.B, id + ": the stretched one's bottom");
+                Near(whole.R, fill.R, id + ": the stretched one's right");
+                Near(whole.T, fill.T, id + ": the stretched one's top");
+                // Control: the middle is the middle either way.
+                Near((whole.L + whole.R) / 2, (middle.L + middle.R) / 2, id + ": the middle one, across");
+                Near((whole.B + whole.T) / 2, (middle.B + middle.T) / 2, id + ": the middle one, up");
+            }
+        }
+        finally { Play(game, "closecorners"); }
+    }
+
+    [Fact]
+    public void F6_A_grid_fitted_to_what_it_holds_is_only_as_wide_as_its_cells_and_still_wraps()
+    {
+        // Eight 40x40 columns, 4 apart, each grid sized by a Content Size
+        // Fitter to what it asks for. Unity's grid asks for all eight columns
+        // whatever it holds.
+        if (Off) return;
+        var game = _s.InGame();
+        const string at = "PackUiCanvas_" + InGameSuitePacks.Story.Grids + "/Pack_" + InGameSuitePacks.Story.Grids;
+        Play(game, "opengrids");
+        try
+        {
+            Assert.True(ActiveSoon(game, at, true), "The grids did not open.");
+            string Size(string node) => Field(Find(game, at + "/" + node), "size");
+            Assert.Equal("128,40", Size("Fit"));      // three of the eight columns
+            Assert.Equal("348,84", Size("Full"));     // ten: a full row of eight, and a second
+            // Control: Unity's grid holding the same three is eight columns wide.
+            Assert.Equal("348,40", Size("Unfit"));
+            // The cells are in it, from its left edge to its right.
+            var fit = OnScreen(Find(game, at + "/Fit"));
+            Near(fit.L, OnScreen(Find(game, at + "/Fit/C1")).L, "the first cell's left", 0.002f);
+            Near(fit.R, OnScreen(Find(game, at + "/Fit/C3")).R, "the last cell's right", 0.002f);
+        }
+        finally { Play(game, "closegrids"); }
+    }
+
+    [Fact]
+    public void F7_A_packs_picture_keeps_to_its_own_edges_and_an_upright_object_stays_level_on_a_turned_one()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        const string at = "PackUiCanvas_" + InGameSuitePacks.Story.CornersOwn + "/Pack_" + InGameSuitePacks.Story.CornersOwn;
+        Play(game, "opencorners");
+        try
+        {
+            Assert.True(ActiveSoon(game, at, true), "The screen did not open.");
+            // Clamped: an edge never takes in the opposite one when the
+            // picture lands between pixels. Control: a picture drawn tiled
+            // repeats, so it is left wrapping.
+            Assert.Equal("Clamp Simple", Field(Find(game, at + "/Corner"), "wrap"));
+            Assert.Equal("Repeat Tiled", Field(Find(game, at + "/Tiles"), "wrap"));
+
+            // On a group turned 90 degrees, the upright one is level on the
+            // screen; control: the one beside it turns with the group.
+            float Turn(string node) => float.Parse(Field(Find(game, at + "/Turned/" + node), "worldrotz"), CultureInfo.InvariantCulture);
+            float level = Turn("Level"), along = Turn("Along");
+            _out.WriteLine($"level {level}, along {along}");
+            Assert.True(level < 0.5f || level > 359.5f, $"The upright object is turned {level} degrees.");
+            Near(90f, along, "the other object's turn", 0.5f);
+        }
+        finally { Play(game, "closecorners"); }
+    }
+
+    private const string CardsAt = "PackUiCanvas_" + InGameSuitePacks.Story.Cards + "/Pack_" + InGameSuitePacks.Story.Cards;
+
+    [Fact]
+    public void F8_A_button_shrinks_while_held_over_its_hover_and_one_without_keeps_the_games_press()
+    {
+        // A press shown while the pointer is down - the game's own plays only
+        // on the click, once let go, too late when the click closes the screen.
+        if (Off) return;
+        var game = _s.InGame();
+        const string id = InGameSuitePacks.Story.Id;
+        Play(game, "opencards");
+        try
+        {
+            Assert.True(ActiveSoon(game, CardsAt, true), "The cards did not open.");
+            float Scale(string card) => XY(Field(Find(game, CardsAt + "/" + card), "scale")).X;
+            int clicks = int.Parse(game.PackVar(id, "cardClicks"), CultureInfo.InvariantCulture);
+
+            // Held: 0.9 of the size the game's hover bounce gives it (1.05).
+            game.Ask("pointer enter Check Pressy");
+            game.Ask("wait 1", 10);
+            Near(1.05f, Scale("Pressy"), "hovered", 0.01f);
+            game.Ask("pointer down Check Pressy");
+            game.Ask("wait 0.4", 10);
+            Near(0.945f, Scale("Pressy"), "held", 0.01f);
+            // Let go: back to the hover's size, the game's press (to 0.84)
+            // not played on top, and the click still counted.
+            game.Ask("pointer up Check Pressy");
+            game.Ask("pointer click Check Pressy");
+            var released = Enumerable.Range(0, 5).Select(_ => Scale("Pressy")).ToList();
+            _out.WriteLine("released: " + string.Join(" ", released));
+            Assert.All(released, s => Assert.True(s > 0.935f, $"Pressed twice: {s}"));
+            game.Ask("wait 0.5", 10);
+            Near(1.05f, Scale("Pressy"), "let go", 0.01f);
+            Assert.Equal((clicks + 1).ToString(CultureInfo.InvariantCulture), game.PackVar(id, "cardClicks"));
+            game.Ask("pointer exit Check Pressy");
+
+            // Control: one without it does not change while held, and plays
+            // the game's press when clicked.
+            game.Ask("pointer down Check Plain");
+            game.Ask("wait 0.4", 10);
+            Near(1f, Scale("Plain"), "the plain card held", 0.001f);
+            game.Ask("pointer up Check Plain");
+            game.Ask("pointer click Check Plain");
+            var pressed = Enumerable.Range(0, 5).Select(_ => Scale("Plain")).ToList();
+            _out.WriteLine("plain clicked: " + string.Join(" ", pressed));
+            Assert.True(pressed.Min() < 0.9f, "The game's press did not play on the plain card.");
+        }
+        finally { Play(game, "closecards"); }
+    }
+
+    [Fact]
+    public void F9_An_object_that_keeps_moving_pulses_and_sweeps_while_shown_and_one_without_stays_put()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        Play(game, "opencards");
+        try
+        {
+            Assert.True(ActiveSoon(game, CardsAt, true), "The cards did not open.");
+            var glow = new List<float>();
+            var shine = new List<float>();
+            var still = new List<float>();
+            for (int i = 0; i < 10; i++)
+            {
+                glow.Add(float.Parse(Field(Find(game, CardsAt + "/Glow"), "group"), CultureInfo.InvariantCulture));
+                shine.Add(XY(Field(Find(game, CardsAt + "/Shine"), "local")).X);
+                still.Add(XY(Field(Find(game, CardsAt + "/Still"), "local")).X);
+                game.Ask("wait 0.13", 10);
+            }
+            _out.WriteLine("glow " + string.Join(" ", glow) + " | shine " + string.Join(" ", shine) + " | still " + string.Join(" ", still));
+            // The fade breathes between 0.2 and 1 of its own.
+            Assert.All(glow, a => Assert.InRange(a, 0.19f, 1.01f));
+            Assert.True(glow.Max() - glow.Min() > 0.4f, "The fade did not pulse.");
+            // The sweep runs between its ends, 100 either side of its place.
+            Assert.All(shine, x => Assert.InRange(x, -100.5f, 100.5f));
+            Assert.True(shine.Max() - shine.Min() > 80f, "The sweep did not move.");
+            // Control: one with no loop stays where it is.
+            Assert.True(still.Max() - still.Min() < 0.01f, "The still one moved.");
+        }
+        finally { Play(game, "closecards"); }
+    }
+
+    /// <summary>Where a UI object is drawn, as fractions of the screen.</summary>
+    private static (float L, float B, float R, float T) OnScreen(string found)
+    {
+        var n = Field(found, "screen").Split(',').Select(v => float.Parse(v, CultureInfo.InvariantCulture)).ToArray();
+        return (n[0], n[1], n[2], n[3]);
     }
 
     /// <summary>Plays one of a check pack's short conversations to its end.</summary>

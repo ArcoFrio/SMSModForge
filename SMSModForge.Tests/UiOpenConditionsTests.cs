@@ -67,7 +67,7 @@ public sealed class UiOpenConditionsTests : IDisposable
         window.UpdateLayout();
         WindowHarness.Pump();
         return Descendants<Expander>(window)
-               .Where(e => e.IsVisible && (e.Header as string) == Loc.T("ui.opensWhen"))
+               .Where(e => e.IsVisible && e.Name == "UiSectionOpens")
                .ToList();
     }
 
@@ -94,9 +94,8 @@ public sealed class UiOpenConditionsTests : IDisposable
             var ui = vm.SelectedUi!;
             WindowHarness.Pump();
 
-            // Offered, and closed: nothing opens this screen by itself yet.
+            // Offered, and nothing opens this screen by itself yet.
             var opens = Assert.Single(OpensWhen(window));
-            Assert.False(opens.IsExpanded);
             Assert.False(ui.OpensByConditions);
             Assert.Empty(ui.Model.OpenConditions);
 

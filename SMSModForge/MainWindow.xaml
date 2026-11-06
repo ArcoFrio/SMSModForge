@@ -742,7 +742,7 @@
                     </DockPanel>
 
                     <DockPanel Margin="0,0,0,3">
-                        <TextBlock Text="{l:T uiOpen.over}" Width="42" VerticalAlignment="Center"/>
+                        <TextBlock Text="{l:T uiOpen.over}" MinWidth="42" VerticalAlignment="Center"/>
                         <TextBlock Text="{l:T uiOpen.seconds}" DockPanel.Dock="Right" Margin="6,0,0,0"
                                    VerticalAlignment="Center" Opacity="0.7"/>
                         <TextBox Style="{StaticResource NumberBox}" Text="{Binding Duration, UpdateSourceTrigger=LostFocus, StringFormat=0.###}"
@@ -750,7 +750,7 @@
                     </DockPanel>
 
                     <DockPanel Margin="0,0,0,4">
-                        <TextBlock Text="{l:T uiOpen.curve}" Width="42" VerticalAlignment="Center"/>
+                        <TextBlock Text="{l:T uiOpen.curve}" MinWidth="42" VerticalAlignment="Center"/>
                         <ComboBox Style="{StaticResource GroupedComboBox}" ItemsSource="{Binding Easings}"
                                   SelectedItem="{Binding Easing, Mode=TwoWay}"
                                   ToolTip="{l:T uiOpen.curvesGameItselfUses.tip}"/>
@@ -3185,16 +3185,42 @@
                                 Visibility="{Binding CanEditIdentity, Converter={StaticResource BoolToVisibility}}">
                         <CheckBox IsChecked="{Binding Bind}"
                                   Content="{l:T gameObject.gameobjectAlreadyExistsBind}"
+                                  IsEnabled="{Binding IsCopy, Converter={StaticResource InverseBoolConverter}}"
                                   ToolTip="{l:T gameObject.gameobjectAlreadyExistsBind.tip}"/>
+                        <!-- A copy of one of the game's objects (1.8.3): its path
+                             in the game's scene. Not for a bound node - that one
+                             IS the game's object. -->
+                        <DockPanel Margin="0,4,0,0"
+                                   Visibility="{Binding Bind, Converter={StaticResource InverseBoolToVisibility}}">
+                            <TextBlock Text="{l:T gameObject.copyOf}" Width="96" VerticalAlignment="Center"
+                                       ToolTip="{l:T gameObject.copyOf.tip}"/>
+                            <TextBox Text="{Binding CopyOf, UpdateSourceTrigger=LostFocus}"
+                                     ToolTip="{l:T gameObject.copyOf.tip}"/>
+                        </DockPanel>
+                        <CheckBox IsChecked="{Binding CopyBeside}" Content="{l:T gameObject.copyBeside}" Margin="16,2,0,0"
+                                  Visibility="{Binding IsCopy, Converter={StaticResource BoolToVisibility}}"
+                                  ToolTip="{l:T gameObject.copyBeside.tip}"/>
                         <StackPanel Orientation="Horizontal" Margin="16,2,0,0"
-                                    Visibility="{Binding Bind, Converter={StaticResource BoolToVisibility}}">
+                                    Visibility="{Binding KeepsWhatItFinds, Converter={StaticResource BoolToVisibility}}">
                             <CheckBox IsChecked="{Binding OverrideTransform}" Content="{l:T gameObject.overrideTransform}"
                                       ToolTip="{l:T gameObject.overrideTransform.tip}"/>
                             <CheckBox IsChecked="{Binding OverrideActive}" Content="{l:T gameObject.overrideActive}" Margin="12,0,0,0"
                                       ToolTip="{l:T gameObject.overrideActive.tip}"/>
+                            <CheckBox IsChecked="{Binding OverrideParallax}" Content="{l:T gameObject.overrideParallax}" Margin="12,0,0,0"
+                                      ToolTip="{l:T gameObject.overrideParallax.tip}"/>
+                            <TextBox Text="{Binding ParallaxStrength, StringFormat=F2, UpdateSourceTrigger=LostFocus}" Width="45" Margin="4,0,0,0"
+                                     Visibility="{Binding OverrideParallax, Converter={StaticResource BoolToVisibility}}"
+                                     ToolTip="{l:T gameObject.overrideParallax.tip}"/>
                         </StackPanel>
+                        <DockPanel Margin="16,2,0,0"
+                                   Visibility="{Binding KeepsWhatItFinds, Converter={StaticResource BoolToVisibility}}">
+                            <TextBlock Text="{l:T gameObject.particleColor}" Width="96" VerticalAlignment="Center"
+                                       ToolTip="{l:T gameObject.particleColor.tip}"/>
+                            <TextBox Text="{Binding ParticleColor, UpdateSourceTrigger=LostFocus}" Width="90" HorizontalAlignment="Left"
+                                     ToolTip="{l:T gameObject.particleColor.tip}"/>
+                        </DockPanel>
                         <TextBlock Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" TextWrapping="Wrap" Margin="16,2,0,0"
-                                   Visibility="{Binding Bind, Converter={StaticResource BoolToVisibility}}"
+                                   Visibility="{Binding KeepsWhatItFinds, Converter={StaticResource BoolToVisibility}}"
                                    Text="{l:T gameObject.componentsActiveWhenConditions}"/>
                     </StackPanel>
                     </StackPanel>
@@ -3809,6 +3835,174 @@
                 </StackPanel>
             </Border>
         </DataTemplate>
+
+        <!-- ══ The UI tab ═══════════════════════════════════════════════════
+             Local rather than in App.xaml: they use the theme's brushes, so they
+             need no EX counterpart, and nothing else draws these parts. -->
+        <Style x:Key="UiSectionBox" TargetType="Border">
+            <Setter Property="BorderThickness" Value="0,1,0,0"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Theme.Border}"/>
+            <Setter Property="Padding" Value="0,2,0,2"/>
+        </Style>
+        <Style x:Key="UiSection" TargetType="Expander" BasedOn="{StaticResource {x:Type Expander}}">
+            <Setter Property="Padding" Value="2,3,0,6"/>
+        </Style>
+        <Style x:Key="UiSectionTitle" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <!-- What a section holds, so a closed one can still be read. -->
+        <Style x:Key="UiSectionSummary" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Margin" Value="8,0,0,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.TextMuted}"/>
+        </Style>
+        <Style x:Key="UiNote" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.TextMuted}"/>
+        </Style>
+        <Style x:Key="UiFieldLabel" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="MinWidth" Value="46"/>
+            <Setter Property="Margin" Value="0,0,4,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="UiField" TargetType="TextBox" BasedOn="{StaticResource NumberBox}">
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <!-- One of the nine places an object can stick to. Lit where it is stuck,
+             and a dot rather than a filled square so the grid reads as a picture of
+             its parent with the object's place in it. -->
+        <Style x:Key="UiStickCell" TargetType="Button">
+            <Setter Property="Focusable" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="box" Margin="1" Background="{DynamicResource Theme.Control}"
+                                BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1">
+                            <Ellipse x:Name="dot" Width="7" Height="7" Fill="{DynamicResource Theme.ControlBorder}"
+                                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsOn}" Value="True">
+                                <Setter TargetName="box" Property="Background" Value="{DynamicResource Theme.Accent}"/>
+                                <Setter TargetName="box" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                                <Setter TargetName="dot" Property="Fill" Value="{DynamicResource Theme.SelectionText}"/>
+                            </DataTrigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="box" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- A row's eye: shown or hidden in the preview only. Faint until wanted,
+             so a tree of a thousand rows is not a thousand eyes looking back, and
+             plain once it is the reason something is missing. -->
+        <Style x:Key="UiEye" TargetType="Button">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Width" Value="18"/>
+            <Setter Property="Margin" Value="0,0,3,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="Transparent">
+                            <TextBlock x:Name="glyph" Text="&#xE890;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.6"
+                                       Foreground="{DynamicResource Theme.TextMuted}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding ShownInPreview}" Value="False">
+                                <Setter TargetName="glyph" Property="Text" Value="&#xED1A;"/>
+                                <Setter TargetName="glyph" Property="Opacity" Value="0.75"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsHiddenInPreview}" Value="True">
+                                <Setter TargetName="glyph" Property="Opacity" Value="1"/>
+                                <Setter TargetName="glyph" Property="Foreground" Value="{DynamicResource Theme.Accent}"/>
+                            </DataTrigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="glyph" Property="Opacity" Value="1"/>
+                                <Setter TargetName="glyph" Property="Foreground" Value="{DynamicResource Theme.Accent}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="glyph" Property="Opacity" Value="0.35"/>
+                                <Setter TargetName="glyph" Property="Foreground" Value="{DynamicResource Theme.TextMuted}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- The row above the tree that goes back to the UI as a whole. -->
+        <Style x:Key="UiSettingsRow" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="box" Background="Transparent" Padding="6,3" Margin="0,0,0,2">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="box" Property="Background" Value="{DynamicResource Theme.Hover}"/>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding HasSelection}" Value="False">
+                                <Setter TargetName="box" Property="Background" Value="{DynamicResource Theme.Selection}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource Theme.SelectionText}"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- A way to begin, on the tab's start page. -->
+        <Style x:Key="UiStartCard" TargetType="Button">
+            <Setter Property="Margin" Value="6"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="box" Background="{DynamicResource Theme.Surface}" Padding="14,12"
+                                BorderBrush="{DynamicResource Theme.Border}" BorderThickness="1" CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="box" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                                <Setter TargetName="box" Property="Background" Value="{DynamicResource Theme.Hover}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="box" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="UiStartIcon" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Accent}"/>
+        </Style>
+        <Style x:Key="UiStartTitle" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+        <Style x:Key="UiStartBody" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.TextMuted}"/>
+        </Style>
     </Window.Resources>
 
     <!-- Grid wrapper exists only so the save-confirmation toast can overlay the
@@ -8473,36 +8667,48 @@
                  what tells an author which is which.
                  ═══════════════════════════════════════════════════ -->
             <TabItem view:TabIcon.Glyph="&#xE737;" view:TabIcon.Count="{Binding Uis.Count}" Header="{l:T ui.ui}">
+                <!-- Pick on the left, see in the middle, change on the right.
+                     Nothing selected gets a start page instead of three empty
+                     columns: what this tab is for has to be readable before
+                     anything has been made in it. -->
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" MinWidth="180"/>
+                        <ColumnDefinition Width="2.2*" MinWidth="240"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="4*" MinWidth="240"/>
+                        <ColumnDefinition Width="5*" MinWidth="300"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="5*" MinWidth="240"/>
+                        <ColumnDefinition Width="2.8*" MinWidth="310"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Which screens this pack changes -->
-                    <DockPanel Grid.Column="0">
-                        <TextBlock DockPanel.Dock="Top" Text="{l:T ui.ui}"
-                                   FontWeight="Bold" Margin="6,4,0,2"/>
-                        <!-- A button and a menu beside it. The button is
-                             the plain panel in one click; the menu is for
-                             choosing a shape, and the shapes are the
-                             game's own. Keeping the button a Button also
-                             keeps it a keyboard-focus target, which a Menu
-                             is not. -->
-                        <ctl:NavigatorBar Style="{StaticResource Navigator}" List="{Binding ElementName=UiList}"
-                                          AddAnchor="btn:addUiExtension" AddText="{l:T ui.addOwnUi}" AddCommand="{Binding AddOwnUiCommand}" AddTip="{l:T ui.addOwnUi.tip}"
-                                          DeleteText="{l:T ui.removeUi}" DeleteCommand="{Binding RemoveUiCommand}">
-                            <Menu ctl:NavigatorBar.AfterAdd="True" Background="Transparent">
-                            </Menu>
-                            <Button ctl:NavigatorBar.AfterAdd="True" Content="{l:T ui.addVanillaUi}" Command="{Binding AddVanillaUiCommand}"
-                                    ToolTip="{l:T ui.addVanillaUi.tip}"/>
-                        </ctl:NavigatorBar>
-                        <ListBox x:Name="UiList" ItemsSource="{Binding Uis}"
+                    <!-- ══ Left: which UI, and what it is made of ══════════════ -->
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0">
+                            <TextBlock Text="{l:T ui.ui}" FontWeight="Bold" Margin="6,4,0,2"/>
+                            <!-- A button and a menu beside it. The button is
+                                 the plain panel in one click; the menu is for
+                                 choosing a shape, and the shapes are the
+                                 game's own. Keeping the button a Button also
+                                 keeps it a keyboard-focus target, which a Menu
+                                 is not. -->
+                            <ctl:NavigatorBar Style="{StaticResource Navigator}" List="{Binding ElementName=UiList}"
+                                              AddAnchor="btn:addUiExtension" AddText="{l:T ui.addOwnUi}" AddCommand="{Binding AddOwnUiCommand}" AddTip="{l:T ui.addOwnUi.tip}"
+                                              DeleteText="{l:T ui.removeUi}" DeleteCommand="{Binding RemoveUiCommand}">
+                                <Menu ctl:NavigatorBar.AfterAdd="True" Background="Transparent">
+                                </Menu>
+                                <Button ctl:NavigatorBar.AfterAdd="True" Content="{l:T ui.addVanillaUi}" Command="{Binding AddVanillaUiCommand}"
+                                        ToolTip="{l:T ui.addVanillaUi.tip}"/>
+                            </ctl:NavigatorBar>
+                        </StackPanel>
+
+                        <ListBox x:Name="UiList" Grid.Row="1" ItemsSource="{Binding Uis}"
                                  SelectedItem="{Binding SelectedUi, Mode=TwoWay}"
-                                 HorizontalContentAlignment="Stretch">
+                                 HorizontalContentAlignment="Stretch" MaxHeight="220" MinHeight="44">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="0,2">
@@ -8526,647 +8732,245 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                    </DockPanel>
+
+                        <!-- The whole part is hidden until a UI is picked: a tree
+                             toolbar with nothing behind it is furniture, and it
+                             invites clicks that do nothing. -->
+                        <DockPanel Grid.Row="2" DataContext="{Binding SelectedUi}"
+                                   Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
+                            <TextBlock DockPanel.Dock="Top" Text="{l:T ui.objects}" FontWeight="Bold" Margin="6,8,0,2"/>
+
+                            <!-- The way back from an object to the UI as a whole.
+                                 Lit while it is what the right column shows, so
+                                 "where did the settings go" has an answer on
+                                 screen. -->
+                            <Button x:Name="UiSettingsRow" DockPanel.Dock="Top" Style="{StaticResource UiSettingsRow}"
+                                    Command="{Binding ShowSettingsCommand}" ToolTip="{l:T ui.settingsRow.tip}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                                               VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                    <TextBlock Text="{l:T ui.settingsRow}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <ctl:NavigatorBar DockPanel.Dock="Top" Margin="0,4,0,0" List="{Binding ElementName=UiTree}"
+                                              AddAnchor="btn:addUiObject" AddText="{l:T ui.addChild}" AddCommand="{Binding AddChildCommand}" AddTip="{l:T ui.addChild.tip}"
+                                              DuplicateCommand="{Binding DuplicateNodeCommand}" DuplicateTip="{l:T ui.duplicateNode.tip}"
+                                              DeleteText="{l:T ui.removeUi}" DeleteCommand="{Binding RemoveNodeCommand}" DeleteTip="{l:T ui.removeUi.tip}"
+                                              CopyCommand="{Binding CopyNodeCommand}" PasteCommand="{Binding PasteNodeCommand}">
+                                <Menu ctl:NavigatorBar.AfterAdd="True" Background="Transparent">
+                                    <!-- A piece of one of the game's screens, brought
+                                         in as a child. Its own screens are assembled
+                                         this way - the gift window is two lists and a
+                                         close button - so a pack building something
+                                         similar needs the same pieces. -->
+                                    <MenuItem x:Name="AddCopyChildMenu" Header="{l:T ui.addCopyChildMenu}"
+                                              ToolTip="{l:T ui.addCopyChildMenu.tip}"
+                                              ItemsSource="{Binding DataContext.CopyableUiScreens,
+                                                            RelativeSource={RelativeSource AncestorType=Window}}">
+                                        <MenuItem.ItemContainerStyle>
+                                            <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                <Setter Property="Header" Value="{Binding Id}"/>
+                                                <Setter Property="Command"
+                                                        Value="{Binding DataContext.SelectedUi.AddCopyChildCommand,
+                                                                RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                <Setter Property="CommandParameter" Value="{Binding}"/>
+                                            </Style>
+                                        </MenuItem.ItemContainerStyle>
+                                    </MenuItem>
+                                    <!-- Whole shapes belong here too. They used to
+                                         sit on the list beside "+ UI", which put
+                                         "make a new screen" and "put a window in
+                                         this one" in different places for no reason
+                                         an author can see. Everything that adds an
+                                         object is on the tree; the list only makes
+                                         and removes screens. -->
+                                    <MenuItem x:Name="AddShapeMenu" Header="{l:T ui.addShapeMenu}"
+                                              ToolTip="{l:T ui.addShapeMenu.tip}"
+                                              ItemsSource="{Binding Source={x:Static model:UiTemplate.Screens}}">
+                                        <MenuItem.ItemContainerStyle>
+                                            <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                <Setter Property="Header" Value="{Binding Name}"/>
+                                                <Setter Property="ToolTip" Value="{Binding Summary}"/>
+                                                <Setter Property="Command"
+                                                        Value="{Binding DataContext.SelectedUi.AddChildTemplateCommand,
+                                                                RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                <Setter Property="CommandParameter" Value="{Binding}"/>
+                                            </Style>
+                                        </MenuItem.ItemContainerStyle>
+                                    </MenuItem>
+                                    <MenuItem x:Name="AddPieceMenu" Header="{l:T ui.addPieceMenu}"
+                                              ToolTip="{l:T ui.addPieceMenu.tip}"
+                                              ItemsSource="{Binding Source={x:Static model:UiTemplate.Pieces}}">
+                                        <MenuItem.ItemContainerStyle>
+                                            <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                <Setter Property="Header" Value="{Binding Name}"/>
+                                                <Setter Property="ToolTip" Value="{Binding Summary}"/>
+                                                <Setter Property="Command"
+                                                        Value="{Binding DataContext.SelectedUi.AddChildTemplateCommand,
+                                                                RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                <Setter Property="CommandParameter" Value="{Binding}"/>
+                                            </Style>
+                                        </MenuItem.ItemContainerStyle>
+                                    </MenuItem>
+                                </Menu>
+                                <Button ctl:NavigatorBar.Keys="{l:T ui.copyNode.keys}" Content="{l:T ui.copyNode}" Command="{Binding CopyNodeCommand}"
+                                        ToolTip="{l:T ui.copyNode.tip}"/>
+                                <Button ctl:NavigatorBar.Keys="{l:T ui.pasteNode.keys}" Content="{l:T ui.pasteNode}" Command="{Binding PasteNodeCommand}"
+                                        ToolTip="{l:T ui.pasteNode.tip}"/>
+                                <!-- A canvas has no depth: an object is in front of
+                                     another because it comes after it. So these are
+                                     not a tidying-up tool, they decide what covers
+                                     what. -->
+                                <Button Content="&#x25B2;" Command="{Binding SelectedNode.MoveUpCommand}" ToolTip="{l:T ui.moveUp.tip}"/>
+                                <Button Content="&#x25BC;" Command="{Binding SelectedNode.MoveDownCommand}" ToolTip="{l:T ui.moveDown.tip}"/>
+                            </ctl:NavigatorBar>
+
+                            <TreeView x:Name="UiTree" view:TutorialAnchor.Id="tree:uiObjects"
+                                      ItemsSource="{Binding Nodes}" Margin="0,4,0,0"
+                                      SelectedItemChanged="UiTree_SelectedItemChanged"
+                                      AllowDrop="True"
+                                      PreviewMouseLeftButtonDown="UiTree_MouseDown"
+                                      MouseMove="UiTree_MouseMove"
+                                      DragOver="UiTree_DragOver"
+                                      Drop="UiTree_Drop">
+                                <!-- Selection and expansion live on the row, because
+                                     a click in the preview has to be able to push a
+                                     selection INTO the tree, and TreeView.SelectedItem
+                                     is read-only. -->
+                                <TreeView.ItemContainerStyle>
+                                    <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                    </Style>
+                                </TreeView.ItemContainerStyle>
+                                <TreeView.ItemTemplate>
+                                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                        <StackPanel Orientation="Horizontal" Margin="0,1" ToolTip="{Binding Summary}">
+                                            <!-- Shown or hidden in the preview only, as Unity's
+                                                 eye is. It keeps its own tooltip, and a click on
+                                                 it does not select the row. -->
+                                            <Button x:Name="UiRowEye" Style="{StaticResource UiEye}"
+                                                    Command="{Binding ToggleHiddenCommand}" ToolTip="{Binding EyeTip}"/>
+                                            <!-- The pack's own objects are marked, because
+                                                 what may be done to a row depends entirely
+                                                 on whether the game owns it. -->
+                                            <!-- An untouched vanilla row is deliberately
+                                                 quiet: a screen can hold 1434 of them and
+                                                 the two or three that were touched are
+                                                 what an author is looking for. The marker
+                                                 uses the same rule that decides what gets
+                                                 saved, so a marked row and a stored row
+                                                 are the same rows. -->
+                                            <Border CornerRadius="2" Padding="4,0" Margin="0,0,6,0"
+                                                    VerticalAlignment="Center">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Status}" Value="new">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                                <Setter Property="Background" Value="#2E7D32"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="changed">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                                <Setter Property="Background" Value="#B26A00"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock Text="{Binding Status}" FontSize="10"
+                                                           Foreground="White"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding Display}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                        <Setter Property="Opacity" Value="0.55"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsUntouched}" Value="False">
+                                                                <Setter Property="Opacity" Value="1"/>
+                                                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding ShownInPreview}" Value="False">
+                                                                <Setter Property="Opacity" Value="0.4"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.ItemTemplate>
+                            </TreeView>
+                        </DockPanel>
+                    </Grid>
 
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
 
-                    <!-- The screen's objects. The whole column is hidden
-                         until a screen is picked: a name box, a tree toolbar and
-                         a property panel with nothing behind them are furniture,
-                         and they invite clicks that do nothing. -->
-                    <DockPanel Grid.Column="2" DataContext="{Binding SelectedUi}"
-                               view:TutorialAnchor.Id="panel:uiDetail"
-                               Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
-                        <StackPanel DockPanel.Dock="Top" Margin="6,4">
-                            <!-- A name and a parenting choice belong to a UI of the
-                                 pack's own. One built on a vanilla screen is named
-                                 by that screen and inherits its place in the
-                                 hierarchy, so these are hidden rather than shown
-                                 disabled: a disabled box invites an author to
-                                 wonder what would happen if they could use it. -->
-                            <StackPanel>
-                                <StackPanel.Style>
-                                    <Style TargetType="StackPanel">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ShowsScreenPicker}" Value="True">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </StackPanel.Style>
-                                <TextBlock Text="{l:T ui.name}" FontWeight="Bold"/>
-                                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                         Margin="0,2,0,6"/>
-                                <!-- What this actually chooses is WHERE the screen
-                                     lives: inside the game's own canvas, or on one
-                                     of its own with a sorting order. It was labelled
-                                     as fading with the game's interface, which it
-                                     does not do - fading is a FadeUI signal that an
-                                     object has to listen for, not something that
-                                     happens by sharing a canvas. -->
-                                <CheckBox IsChecked="{Binding HidesWithGameplayUi, Mode=TwoWay}"
-                                          Margin="0,0,0,6"
-                                          ToolTip="{l:T ui.tickedScreenOneObject.tip}">
-                                    <TextBlock Text="{l:T ui.sitInsideGameS}"
-                                               TextWrapping="Wrap"/>
-                                </CheckBox>
+                    <!-- ══ Nothing selected: what this tab is for ══════════════ -->
+                    <ScrollViewer x:Name="UiStartPage" Grid.Column="2" Grid.ColumnSpan="3"
+                                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                  Visibility="{Binding ShowsUiStart, Converter={StaticResource BoolToVisibility}}">
+                        <StackPanel MaxWidth="880" Margin="24,28,24,16">
+                            <TextBlock Text="{l:T ui.start.title}" FontSize="22" FontWeight="SemiBold"/>
+                            <TextBlock Text="{l:T ui.start.subtitle}" TextWrapping="Wrap" Margin="0,4,0,16"
+                                       Foreground="{DynamicResource Theme.TextMuted}"/>
 
-                                <CheckBox IsChecked="{Binding StartsOpen, Mode=TwoWay}"
-                                          Margin="0,0,0,6"
-                                          ToolTip="{l:T ui.mostUINotScreen.tip}">
-                                    <TextBlock Text="{l:T ui.screenStart}" TextWrapping="Wrap"/>
-                                </CheckBox>
-
-                                <!-- The screen opening by itself, without a rule
-                                     written for it. On the moment they become
-                                     met, not while: a screen the player closed
-                                     stays closed until they are met anew. -->
-                                <Expander Header="{l:T ui.opensWhen}" Margin="0,0,0,6"
-                                          IsExpanded="{Binding OpensByConditions, Mode=OneWay}">
-                                    <StackPanel Margin="0,4,0,0">
-                                        <Button Content="{l:T ui.addActiveCondition}" Padding="8,2"
-                                                HorizontalAlignment="Left" Margin="0,0,0,4"
-                                                Command="{Binding AddOpenConditionCommand}"
-                                                ToolTip="{l:T ui.addOpenCondition.tip}"/>
-                                        <ItemsControl ItemsSource="{Binding OpenConditions}"
-                                                      ItemTemplateSelector="{StaticResource ConditionTemplateSelector}"/>
-                                        <TextBlock Text="{l:T ui.opensWhen.help}" FontSize="10" Opacity="0.6"
-                                                   TextWrapping="Wrap" Margin="0,2,0,0"/>
+                            <UniformGrid Columns="3">
+                                <Button x:Name="UiStartChange" Style="{StaticResource UiStartCard}"
+                                        Command="{Binding AddVanillaUiCommand}">
+                                    <StackPanel>
+                                        <TextBlock Text="&#xE70F;" Style="{StaticResource UiStartIcon}"/>
+                                        <TextBlock Text="{l:T ui.start.change.title}" Style="{StaticResource UiStartTitle}"/>
+                                        <TextBlock Text="{l:T ui.start.change.body}" Style="{StaticResource UiStartBody}"/>
                                     </StackPanel>
-                                </Expander>
+                                </Button>
+                                <Button x:Name="UiStartStaying" Style="{StaticResource UiStartCard}"
+                                        Command="{Binding StartStayingUiCommand}">
+                                    <StackPanel>
+                                        <TextBlock Text="&#xE840;" Style="{StaticResource UiStartIcon}"/>
+                                        <TextBlock Text="{l:T ui.start.staying.title}" Style="{StaticResource UiStartTitle}"/>
+                                        <TextBlock Text="{l:T ui.start.staying.body}" Style="{StaticResource UiStartBody}"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="UiStartWindow" Style="{StaticResource UiStartCard}"
+                                        Command="{Binding StartWindowUiCommand}">
+                                    <StackPanel>
+                                        <TextBlock Text="&#xE8A7;" Style="{StaticResource UiStartIcon}"/>
+                                        <TextBlock Text="{l:T ui.start.window.title}" Style="{StaticResource UiStartTitle}"/>
+                                        <TextBlock Text="{l:T ui.start.window.body}" Style="{StaticResource UiStartBody}"/>
+                                    </StackPanel>
+                                </Button>
+                            </UniformGrid>
 
-                                <!-- One decision for the whole screen. Setting a
-                                     sound on thirty buttons one at a time is not
-                                     authoring, it is data entry. -->
-                                <CheckBox IsChecked="{Binding ButtonsMakeSound, Mode=TwoWay}"
-                                          Margin="0,0,0,4"
-                                          ToolTip="{l:T ui.buttonsScreenClickWhen.tip}">
-                                    <TextBlock Text="{l:T ui.buttonsMakeSound}" TextWrapping="Wrap"/>
-                                </CheckBox>
-
-                                <ContentControl Content="{Binding Open}"
-                                                ContentTemplate="{StaticResource UiOpenTemplate}"
-                                                Margin="0,0,0,6"/>
-
-                                <!-- Played by an ACTION switching the screen off.
-                                     A screen hidden by an activation condition
-                                     goes at once: nothing asked first, and a
-                                     deactivated object cannot animate itself. -->
-                                <ContentControl Content="{Binding Close}"
-                                                ContentTemplate="{StaticResource UiOpenTemplate}"
-                                                Margin="0,0,0,6"/>
-
-                                <!-- Blank is not nothing: it is the game's own
-                                     click. The line below says so, because a
-                                     field that looks empty reads as silent. -->
-                                <DockPanel Margin="0,0,0,2"
-                                           IsEnabled="{Binding ButtonsMakeSound}">
-                                    <TextBlock Text="{l:T ui.buttonSound}" Width="96" VerticalAlignment="Center"/>
-                                    <ComboBox IsEditable="True" Style="{StaticResource GroupedComboBox}"
-                                              Text="{Binding ButtonSound, UpdateSourceTrigger=PropertyChanged}"
-                                              ItemsSource="{Binding DataContext.ButtonSoundOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"
-                                              ToolTip="{l:T ui.leaveBlankGameS.tip}">
-                                        <ComboBox.GroupStyle>
-                                            <StaticResource ResourceKey="MusicOriginGroupStyle"/>
-                                        </ComboBox.GroupStyle>
-                                    </ComboBox>
-                                </DockPanel>
-
-                                <TextBlock Margin="96,0,0,6" FontSize="10" Opacity="0.6"
-                                           TextWrapping="Wrap"
-                                           Visibility="{Binding ShowsDefaultButtonSound, Converter={StaticResource BoolToVisibility}}"
-                                           Text="{Binding ButtonSoundInEffect}"/>
-
-                                <!-- Only where it does something. Inside the
-                                     gameplay canvas this UI is one object among
-                                     the game's, and order there is the object
-                                     tree below, not a number. -->
-                                <DockPanel Margin="0,0,0,6">
-                                    <DockPanel.Style>
-                                        <Style TargetType="DockPanel">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ShowsSortingOrder}" Value="True">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </DockPanel.Style>
-                                    <TextBlock Text="{l:T ui.sortingOrder}" Width="90" VerticalAlignment="Center"/>
-                                    <TextBox Style="{StaticResource NumberBox}" Text="{Binding SortingOrder, UpdateSourceTrigger=LostFocus}"
-                                             ToolTip="{l:T ui.drawOrderAgainstOther.tip}"/>
-                                </DockPanel>
-                            </StackPanel>
-
-                            <TextBlock Text="{l:T ui.whichScreen}" FontWeight="Bold">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ShowsScreenPicker}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                            <ComboBox ItemsSource="{Binding DataContext.AvailableUiScreensGrouped,
-                                              RelativeSource={RelativeSource AncestorType=Window}}"
-                                      Style="{StaticResource GroupedComboBox}"
-                                      SelectedValue="{Binding Source, Mode=TwoWay}"
-                                      SelectedValuePath="Token" DisplayMemberPath="Id"
-                                      IsEditable="False" Margin="0,2,0,0"
-                                      view:OptionNotes.Kind="gameScreen" ItemContainerStyle="{StaticResource DescribedItem}"
-                                      ToolTip="{l:T ui.everyUIGameHas.tip}">
-                                <ComboBox.GroupStyle><StaticResource ResourceKey="MusicOriginGroupStyle"/></ComboBox.GroupStyle>
-                            </ComboBox>
-                            <TextBlock Text="{Binding Warning}" Foreground="{DynamicResource Theme.Warning}" FontSize="11"
-                                       TextWrapping="Wrap" Margin="0,4,0,0">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Stranded}" Value="0">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                            <DockPanel Margin="6,14,6,0">
+                                <Button x:Name="UiStartTutorial" DockPanel.Dock="Left" Content="{l:T ui.start.tutorial}" Padding="10,3"
+                                        Command="{Binding StartUiTutorialCommand}"/>
+                                <TextBlock Text="{l:T ui.start.pickExisting}" Margin="12,0,0,0" VerticalAlignment="Center"
+                                           TextWrapping="Wrap" Foreground="{DynamicResource Theme.TextMuted}"
+                                           Visibility="{Binding HasUis, Converter={StaticResource BoolToVisibility}}"/>
+                            </DockPanel>
                         </StackPanel>
+                    </ScrollViewer>
 
-                        <ctl:NavigatorBar DockPanel.Dock="Top" Margin="0,4,0,0" List="{Binding ElementName=UiTree}"
-                                          AddAnchor="btn:addUiObject" AddText="{l:T ui.addChild}" AddCommand="{Binding AddChildCommand}" AddTip="{l:T ui.addChild.tip}"
-                                          DuplicateCommand="{Binding DuplicateNodeCommand}" DuplicateTip="{l:T ui.duplicateNode.tip}"
-                                          DeleteText="{l:T ui.removeUi}" DeleteCommand="{Binding RemoveNodeCommand}" DeleteTip="{l:T ui.removeUi.tip}"
-                                          CopyCommand="{Binding CopyNodeCommand}" PasteCommand="{Binding PasteNodeCommand}">
-                            <Menu ctl:NavigatorBar.AfterAdd="True" Background="Transparent">
-                                <!-- A piece of one of the game's screens, brought
-                                     in as a child. Its own screens are assembled
-                                     this way - the gift window is two lists and a
-                                     close button - so a pack building something
-                                     similar needs the same pieces. -->
-                                <MenuItem x:Name="AddCopyChildMenu" Header="{l:T ui.addCopyChildMenu}"
-                                          ToolTip="{l:T ui.addCopyChildMenu.tip}"
-                                          ItemsSource="{Binding DataContext.CopyableUiScreens,
-                                                        RelativeSource={RelativeSource AncestorType=Window}}">
-                                    <MenuItem.ItemContainerStyle>
-                                        <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
-                                            <Setter Property="Header" Value="{Binding Id}"/>
-                                            <Setter Property="Command"
-                                                    Value="{Binding DataContext.SelectedUi.AddCopyChildCommand,
-                                                            RelativeSource={RelativeSource AncestorType=Window}}"/>
-                                            <Setter Property="CommandParameter" Value="{Binding}"/>
-                                        </Style>
-                                    </MenuItem.ItemContainerStyle>
-                                </MenuItem>
-                                <!-- Whole shapes belong here too. They used to
-                                     sit on the list beside "+ UI", which put
-                                     "make a new screen" and "put a window in
-                                     this one" in different places for no reason
-                                     an author can see. Everything that adds an
-                                     object is on the tree; the list only makes
-                                     and removes screens. -->
-                                <MenuItem x:Name="AddShapeMenu" Header="{l:T ui.addShapeMenu}"
-                                          ToolTip="{l:T ui.addShapeMenu.tip}"
-                                          ItemsSource="{Binding Source={x:Static model:UiTemplate.Screens}}">
-                                    <MenuItem.ItemContainerStyle>
-                                        <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
-                                            <Setter Property="Header" Value="{Binding Name}"/>
-                                            <Setter Property="ToolTip" Value="{Binding Summary}"/>
-                                            <Setter Property="Command"
-                                                    Value="{Binding DataContext.SelectedUi.AddChildTemplateCommand,
-                                                            RelativeSource={RelativeSource AncestorType=Window}}"/>
-                                            <Setter Property="CommandParameter" Value="{Binding}"/>
-                                        </Style>
-                                    </MenuItem.ItemContainerStyle>
-                                </MenuItem>
-                                <MenuItem x:Name="AddPieceMenu" Header="{l:T ui.addPieceMenu}"
-                                          ToolTip="{l:T ui.addPieceMenu.tip}"
-                                          ItemsSource="{Binding Source={x:Static model:UiTemplate.Pieces}}">
-                                    <MenuItem.ItemContainerStyle>
-                                        <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
-                                            <Setter Property="Header" Value="{Binding Name}"/>
-                                            <Setter Property="ToolTip" Value="{Binding Summary}"/>
-                                            <Setter Property="Command"
-                                                    Value="{Binding DataContext.SelectedUi.AddChildTemplateCommand,
-                                                            RelativeSource={RelativeSource AncestorType=Window}}"/>
-                                            <Setter Property="CommandParameter" Value="{Binding}"/>
-                                        </Style>
-                                    </MenuItem.ItemContainerStyle>
-                                </MenuItem>
-                            </Menu>
-                            <Button ctl:NavigatorBar.Keys="{l:T ui.copyNode.keys}" Content="{l:T ui.copyNode}" Command="{Binding CopyNodeCommand}"
-                                    ToolTip="{l:T ui.copyNode.tip}"/>
-                            <Button ctl:NavigatorBar.Keys="{l:T ui.pasteNode.keys}" Content="{l:T ui.pasteNode}" Command="{Binding PasteNodeCommand}"
-                                    ToolTip="{l:T ui.pasteNode.tip}"/>
-                            <!-- A canvas has no depth: an object is in front of
-                                 another because it comes after it. So these are
-                                 not a tidying-up tool, they decide what covers
-                                 what. -->
-                            <Button Content="&#x25B2;" Command="{Binding SelectedNode.MoveUpCommand}" ToolTip="{l:T ui.moveUp.tip}"/>
-                            <Button Content="&#x25BC;" Command="{Binding SelectedNode.MoveDownCommand}" ToolTip="{l:T ui.moveDown.tip}"/>
-                        </ctl:NavigatorBar>
-
-                        <TreeView x:Name="UiTree" view:TutorialAnchor.Id="tree:uiObjects"
-                                  ItemsSource="{Binding Nodes}" Margin="0,4,0,0"
-                                  SelectedItemChanged="UiTree_SelectedItemChanged"
-                                  AllowDrop="True"
-                                  PreviewMouseLeftButtonDown="UiTree_MouseDown"
-                                  MouseMove="UiTree_MouseMove"
-                                  DragOver="UiTree_DragOver"
-                                  Drop="UiTree_Drop">
-                            <!-- Selection and expansion live on the row, because
-                                 a click in the preview has to be able to push a
-                                 selection INTO the tree, and TreeView.SelectedItem
-                                 is read-only. -->
-                            <TreeView.ItemContainerStyle>
-                                <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
-                                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
-                                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
-                                </Style>
-                            </TreeView.ItemContainerStyle>
-                            <TreeView.ItemTemplate>
-                                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                    <StackPanel Orientation="Horizontal" Margin="0,1">
-                                        <!-- The pack's own objects are marked, because
-                                             what may be done to a row depends entirely
-                                             on whether the game owns it. -->
-                                        <!-- An untouched vanilla row is deliberately
-                                             quiet: a screen can hold 1434 of them and
-                                             the two or three that were touched are
-                                             what an author is looking for. The marker
-                                             uses the same rule that decides what gets
-                                             saved, so a marked row and a stored row
-                                             are the same rows. -->
-                                        <Border CornerRadius="2" Padding="4,0" Margin="0,0,6,0"
-                                                VerticalAlignment="Center">
-                                            <Border.Style>
-                                                <Style TargetType="Border">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Status}" Value="new">
-                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                            <Setter Property="Background" Value="#2E7D32"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="changed">
-                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                            <Setter Property="Background" Value="#B26A00"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Border.Style>
-                                            <TextBlock Text="{Binding Status}" FontSize="10"
-                                                       Foreground="White"/>
-                                        </Border>
-                                        <TextBlock Text="{Binding Display}">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                                    <Setter Property="Opacity" Value="0.55"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsUntouched}" Value="False">
-                                                            <Setter Property="Opacity" Value="1"/>
-                                                            <Setter Property="FontWeight" Value="SemiBold"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                        <TextBlock Text="{Binding Summary}" FontSize="11"
-                                                   Opacity="0.65" Margin="8,0,0,0"
-                                                   TextTrimming="CharacterEllipsis"/>
-                                    </StackPanel>
-                                </HierarchicalDataTemplate>
-                            </TreeView.ItemTemplate>
-                        </TreeView>
-                    </DockPanel>
-
-                    <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch"/>
-
-                    <!-- What it looks like -->
-                    <DockPanel Grid.Column="4">
+                    <!-- ══ Middle: what it looks like ══════════════════════════ -->
+                    <DockPanel x:Name="UiPreviewColumn" Grid.Column="2"
+                               Visibility="{Binding ShowsUiStart, Converter={StaticResource InverseBoolToVisibility}}">
                         <DockPanel DockPanel.Dock="Top" Margin="6,4,6,2">
-                            <TextBlock Text="{l:T ui.preview}" FontWeight="Bold"/>
+                            <!-- Said out loud: an object hidden last week otherwise
+                                 just looks lost. -->
+                            <StackPanel x:Name="UiPreviewHiddenNote" DockPanel.Dock="Right" Orientation="Horizontal"
+                                        Visibility="{Binding SelectedUi.HasHiddenInPreview, Converter={StaticResource BoolToVisibility}, FallbackValue=Collapsed}">
+                                <TextBlock Text="{Binding SelectedUi.PreviewHiddenNote}" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"
+                                           Foreground="{DynamicResource Theme.TextMuted}"/>
+                                <Button x:Name="UiPreviewShowAll" Content="{l:T ui.preview.showAll}" Padding="6,0"
+                                        Command="{Binding SelectedUi.ShowAllInPreviewCommand}"
+                                        ToolTip="{l:T ui.preview.showAll.tip}"/>
+                            </StackPanel>
+                            <TextBlock Text="{l:T ui.preview}" FontWeight="Bold" VerticalAlignment="Center"/>
                         </DockPanel>
-
-                        <!-- Under the picture rather than beside it, so the
-                             preview keeps the width. Every box here writes
-                             straight through to the model and the picture
-                             redraws, which is the whole point of having them
-                             next to each other. -->
-                        <Border DockPanel.Dock="Bottom" BorderThickness="0,1,0,0"
-                                view:TutorialAnchor.Id="panel:uiObjectDetail"
-                                BorderBrush="{DynamicResource Theme.Accent}"
-                                Padding="8,6" DataContext="{Binding SelectedUi}">
-                            <Grid>
-                                <TextBlock x:Name="UiNoSelectionHint"
-                                           Text="{l:T ui.selectObjectTreeChange}"
-                                           Foreground="{DynamicResource Theme.TextMuted}" Margin="0,8">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding HasSelection}" Value="True">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-
-                                <!-- Shown by the OWNER's HasSelection rather than by
-                                     testing SelectedNode against null, which needs a
-                                     converter that does not exist and would be the
-                                     same fact spelled twice. -->
-                                <StackPanel x:Name="UiNodeFields"
-                                            DataContext="{Binding SelectedNode}"
-                                            Visibility="{Binding DataContext.HasSelection,
-                                                RelativeSource={RelativeSource AncestorType=Border},
-                                                Converter={StaticResource BoolToVisibility},
-                                                FallbackValue=Collapsed,
-                                                TargetNullValue=Collapsed}">
-
-                                    <!-- Name. Read-only on an object the game
-                                         owns: the name is what its binding is
-                                         built from, so renaming would quietly
-                                         unhook the change from the object. -->
-                                    <DockPanel Margin="0,0,0,4">
-                                        <TextBlock Text="{l:T ui.name}" Width="66" VerticalAlignment="Center"/>
-                                        <!-- Only enabled on a vanilla object that
-                                             currently differs: on the pack's own
-                                             there is no default to go back to, and
-                                             on an untouched one it would do
-                                             nothing. -->
-                                        <Button Content="{l:T ui.reset}" DockPanel.Dock="Right" Padding="8,0"
-                                                Margin="6,0,0,0" Command="{Binding ResetCommand}"
-                                                ToolTip="{l:T ui.reset.tip}"/>
-                                        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                                 IsReadOnly="{Binding IsVanilla}"
-                                                 ToolTip="{l:T ui.objectsGameOwnsKeep.tip}"/>
-                                    </DockPanel>
-
-                                    <DockPanel Margin="0,0,0,4">
-                                        <TextBlock Text="{l:T ui.position}" Width="66" VerticalAlignment="Center"/>
-                                        <TextBox Text="{Binding PositionX, UpdateSourceTrigger=LostFocus}"
-                                                 Width="70" Margin="0,0,4,0"/>
-                                        <TextBox Text="{Binding PositionY, UpdateSourceTrigger=LostFocus}"
-                                                 Width="70" Margin="0,0,4,0"/>
-                                        <TextBlock Text="{l:T ui.anchorsCanvasPixels}"
-                                                   Opacity="0.6" VerticalAlignment="Center"/>
-                                    </DockPanel>
-
-                                    <DockPanel Margin="0,0,0,4">
-                                        <TextBlock Text="{l:T ui.size}" Width="66" VerticalAlignment="Center"/>
-                                        <TextBox Text="{Binding Width, UpdateSourceTrigger=LostFocus}"
-                                                 Width="70" Margin="0,0,4,0"/>
-                                        <TextBox Text="{Binding Height, UpdateSourceTrigger=LostFocus}"
-                                                 Width="70" Margin="0,0,4,0"/>
-                                        <CheckBox IsChecked="{Binding StartActive}" VerticalAlignment="Center"
-                                                  Content="{l:T ui.visibleStart}"
-                                                  ToolTip="{l:T ui.visibleStart.tip}"/>
-                                    </DockPanel>
-
-                                    <DockPanel Margin="0,0,0,4">
-                                        <TextBlock Text="{l:T ui.sprite}" Width="66" VerticalAlignment="Center"/>
-                                        <Button Content="..." DockPanel.Dock="Right" Padding="6,0"
-                                                Margin="4,0,0,0" Click="PickUiTint_Click"
-                                                ToolTip="{l:T ui.pickUiTint.tip}"/>
-                                        <TextBox Text="{Binding Tint, UpdateSourceTrigger=LostFocus}"
-                                                 Width="86" DockPanel.Dock="Right" Margin="4,0,0,0"
-                                                 ToolTip="{l:T ui.tintRRGGBBRRGGBBAAMost.tip}"/>
-                                        <Border Width="20" Height="16" DockPanel.Dock="Right"
-                                                BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1" Margin="4,0,0,0"
-                                                Background="{Binding TintBrush}"
-                                                VerticalAlignment="Center"/>
-                                        <!-- A box and a picker, not a dropdown.
-                                             A dropdown bound to the value writes
-                                             as you move through it, so merely
-                                             looking put sprites nobody chose onto
-                                             the undo stack - and 840 entries is
-                                             not a list anyone scrolls anyway. -->
-                                        <Button Content="..." DockPanel.Dock="Right" Padding="6,0"
-                                                Margin="4,0,0,0" Click="PickUiSprite_Click"
-                                                ToolTip="{l:T ui.pickUiSprite.tip}"/>
-                                        <TextBox Text="{Binding Sprite, UpdateSourceTrigger=LostFocus}"
-                                                 ToolTip="{l:T ui.spriteGameHasPack.tip}"/>
-                                    </DockPanel>
-
-                                    <DockPanel Margin="0,0,0,4">
-                                        <TextBlock Text="{l:T ui.text}" Width="66" VerticalAlignment="Center"/>
-                                        <TextBox Text="{Binding FontSize, UpdateSourceTrigger=LostFocus}"
-                                                 Width="50" DockPanel.Dock="Right" Margin="4,0,0,0"
-                                                 ToolTip="{l:T ui.fontSize.tip}"/>
-                                        <TextBox Text="{Binding Text, UpdateSourceTrigger=LostFocus}"
-                                                 ToolTip="{l:T ui.whatObjectSaysClearing.tip}"/>
-                                    </DockPanel>
-
-                                    <DockPanel Margin="0,0,0,4"
-                                               Visibility="{Binding HasText, Converter={StaticResource BoolToVisibility}}">
-                                        <TextBlock Text="{l:T ui.colour}" Width="66" VerticalAlignment="Center"/>
-                                        <Button Content="..." DockPanel.Dock="Right" Padding="6,0"
-                                                Margin="4,0,0,0" Click="PickUiTextColor_Click"
-                                                ToolTip="{l:T ui.pickUiTint.tip}"/>
-                                        <Border Width="20" Height="16" BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1"
-                                                Margin="0,0,4,0" Background="{Binding TextColorBrush}"
-                                                VerticalAlignment="Center"/>
-                                        <TextBox Text="{Binding TextColor, UpdateSourceTrigger=LostFocus}"
-                                                 ToolTip="{l:T ui.textColourRRGGBBRRGGBBAA.tip}"/>
-                                    </DockPanel>
-
-                                    <!-- When this object is on screen. Checked
-                                         every frame in the game, so a shelf
-                                         drops what has already been bought
-                                         without a rule per item saying so - the
-                                         object carries its own condition, which
-                                         is where an author looks for it. -->
-                                    <Expander Header="{l:T ui.shownWhen}" Margin="0,6,0,0"
-                                              IsExpanded="{Binding IsGated, Mode=OneWay}">
-                                        <StackPanel Margin="0,4,0,0">
-                                            <Button Content="{l:T ui.addActiveCondition}" Padding="8,2"
-                                                    HorizontalAlignment="Left" Margin="0,0,0,4"
-                                                    Command="{Binding AddActiveConditionCommand}"
-                                                    ToolTip="{l:T ui.addActiveCondition.tip}"/>
-                                            <ItemsControl ItemsSource="{Binding ActiveConditions}"
-                                                          ItemTemplateSelector="{StaticResource ConditionTemplateSelector}"/>
-                                        </StackPanel>
-                                    </Expander>
-
-                                    <Expander Header="{l:T ui.whenOpens}" Margin="0,6,0,0"
-                                              IsExpanded="{Binding Open.Animates, Mode=OneWay}">
-                                        <ContentControl Content="{Binding Open}"
-                                                        ContentTemplate="{StaticResource UiOpenTemplate}"
-                                                        Margin="0,4,0,0"/>
-                                    </Expander>
-
-                                    <Expander Header="{l:T ui.whenCloses}" Margin="0,6,0,0"
-                                              IsExpanded="{Binding Close.Animates, Mode=OneWay}">
-                                        <ContentControl Content="{Binding Close}"
-                                                        ContentTemplate="{StaticResource UiOpenTemplate}"
-                                                        Margin="0,4,0,0"/>
-                                    </Expander>
-
-                                    <!-- What it does with the things inside it.
-                                         The reason to reach for one is a list
-                                         that changes: hide an item from fixed
-                                         positions and it leaves a hole, while a
-                                         row that arranges itself closes ranks. -->
-                                    <Expander Header="{l:T ui.arrangeChildren}" Margin="0,6,0,0"
-                                              IsExpanded="{Binding Arranges, Mode=OneWay}">
-                                        <StackPanel Margin="0,4,0,0">
-                                            <DockPanel Margin="0,0,0,4">
-                                                <TextBlock Text="{l:T ui.arrange}" Width="66" VerticalAlignment="Center"/>
-                                                <ComboBox SelectedValue="{Binding Arrange, Mode=TwoWay}"
-                                                          ItemsSource="{Binding Source={x:Static vm:UiNodeViewModel.ArrangeOptions}}"
-                                                          ToolTip="{l:T ui.noneLeavesEveryChild.tip}"/>
-                                            </DockPanel>
-
-                                            <StackPanel Visibility="{Binding Arranges, Converter={StaticResource BoolToVisibility}}">
-                                                <DockPanel Margin="0,0,0,4">
-                                                    <TextBlock Text="{l:T ui.spacing}" Width="66" VerticalAlignment="Center"/>
-                                                    <TextBox Text="{Binding SpacingX, UpdateSourceTrigger=LostFocus}"
-                                                             Width="60" Margin="0,0,4,0"
-                                                             ToolTip="{l:T ui.gapBetweenChildrenGrid.tip}"/>
-                                                    <TextBox Text="{Binding SpacingY, UpdateSourceTrigger=LostFocus}"
-                                                             Width="60" Margin="0,0,4,0"
-                                                             Visibility="{Binding ArrangesAsGrid, Converter={StaticResource BoolToVisibility}}"/>
-                                                    <ComboBox SelectedValue="{Binding ArrangeAlign, Mode=TwoWay}"
-                                                              ItemsSource="{Binding Source={x:Static vm:UiNodeViewModel.AlignOptions}}"
-                                                              ToolTip="{l:T ui.whereArrangedBlockSits.tip}"/>
-                                                </DockPanel>
-
-                                                <DockPanel Margin="0,0,0,4">
-                                                    <TextBlock Text="{l:T ui.padding}" Width="66" VerticalAlignment="Center"
-                                                               ToolTip="{l:T ui.padding.tip}"/>
-                                                    <TextBox Text="{Binding PadLeft, UpdateSourceTrigger=LostFocus}" Width="44" Margin="0,0,3,0"/>
-                                                    <TextBox Text="{Binding PadRight, UpdateSourceTrigger=LostFocus}" Width="44" Margin="0,0,3,0"/>
-                                                    <TextBox Text="{Binding PadTop, UpdateSourceTrigger=LostFocus}" Width="44" Margin="0,0,3,0"/>
-                                                    <TextBox Text="{Binding PadBottom, UpdateSourceTrigger=LostFocus}" Width="44"/>
-                                                </DockPanel>
-
-                                                <!-- Rows and columns only. -->
-                                                <WrapPanel Margin="0,0,0,4"
-                                                           Visibility="{Binding ArrangesInLine, Converter={StaticResource BoolToVisibility}}">
-                                                    <CheckBox IsChecked="{Binding SetsChildWidth}" Content="{l:T ui.setWidth}" Margin="0,0,10,0"
-                                                              ToolTip="{l:T ui.setWidth.tip}"/>
-                                                    <CheckBox IsChecked="{Binding SetsChildHeight}" Content="{l:T ui.setHeight}" Margin="0,0,10,0"/>
-                                                    <CheckBox IsChecked="{Binding SharesWidth}" Content="{l:T ui.shareWidth}" Margin="0,0,10,0"
-                                                              ToolTip="{l:T ui.shareWidth.tip}"/>
-                                                    <CheckBox IsChecked="{Binding SharesHeight}" Content="{l:T ui.shareHeight}" Margin="0,0,10,0"/>
-                                                    <CheckBox IsChecked="{Binding ArrangeReversed}" Content="{l:T ui.reverse}"
-                                                              ToolTip="{l:T ui.reverse.tip}"/>
-                                                </WrapPanel>
-
-                                                <!-- Grid only. -->
-                                                <DockPanel Margin="0,0,0,4"
-                                                           Visibility="{Binding ArrangesAsGrid, Converter={StaticResource BoolToVisibility}}">
-                                                    <TextBlock Text="{l:T ui.cell}" Width="66" VerticalAlignment="Center"/>
-                                                    <TextBox Text="{Binding ArrangeConstraintCount, UpdateSourceTrigger=LostFocus}"
-                                                             Width="44" DockPanel.Dock="Right"
-                                                             ToolTip="{l:T ui.howManyColumnsHow.tip}"/>
-                                                    <TextBox Text="{Binding CellWidth, UpdateSourceTrigger=LostFocus}" Width="60" Margin="0,0,4,0"/>
-                                                    <TextBox Text="{Binding CellHeight, UpdateSourceTrigger=LostFocus}" Width="60" Margin="0,0,4,0"/>
-                                                    <ComboBox SelectedValue="{Binding ArrangeConstraint, Mode=TwoWay}"
-                                                              ItemsSource="{Binding Source={x:Static vm:UiNodeViewModel.ConstraintOptions}}"
-                                                              Margin="0,0,4,0"
-                                                              ToolTip="{l:T ui.flexibleFitsManyAcross.tip}"/>
-                                                </DockPanel>
-
-                                                <CheckBox IsChecked="{Binding CentersLastLine}"
-                                                          Margin="0,0,0,4"
-                                                          Visibility="{Binding ArrangesAsGrid, Converter={StaticResource BoolToVisibility}}"
-                                                          ToolTip="{l:T ui.nineteenThingsRowsSeven.tip}">
-                                                    <TextBlock Text="{l:T ui.centreLastRowNot}"
-                                                               TextWrapping="Wrap"/>
-                                                </CheckBox>
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </Expander>
-
-                                    <!-- What clicking it does. Empty means the
-                                         object is decoration and the pointer
-                                         passes straight through it, which is
-                                         what most of a screen should do. -->
-                                    <Expander Header="{l:T ui.whenClicked}" Margin="0,6,0,0"
-                                              IsExpanded="{Binding IsClickable, Mode=OneWay}">
-                                        <StackPanel Margin="0,4,0,0">
-                                            <DockPanel Margin="0,0,0,4">
-                                                <TextBlock Text="{l:T ui.hover}" Width="66" VerticalAlignment="Center"/>
-                                                <Button Content="..." DockPanel.Dock="Right" Padding="6,0"
-                                                        Margin="4,0,0,0" Click="PickUiHoverTint_Click"
-                                                        ToolTip="{l:T ui.pickUiTint.tip}"/>
-                                                <Border Width="20" Height="16" DockPanel.Dock="Right"
-                                                        BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1" Margin="4,0,0,0"
-                                                        Background="{Binding HoverTintBrush}"
-                                                        VerticalAlignment="Center"/>
-                                                <TextBox Text="{Binding HoverTint, UpdateSourceTrigger=LostFocus}"
-                                                         ToolTip="{l:T ui.tintWhilePointerOver.tip}"/>
-                                            </DockPanel>
-
-                                            <DockPanel Margin="0,0,0,4">
-                                                <TextBlock Text="{l:T ui.sound}" Width="66" VerticalAlignment="Center"/>
-                                                <ComboBox IsEditable="True" Style="{StaticResource GroupedComboBox}"
-                                                          Text="{Binding ClickSound, UpdateSourceTrigger=PropertyChanged}"
-                                                          ItemsSource="{Binding DataContext.ButtonSoundOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                          ToolTip="{l:T ui.whatObjectSoundsLike.tip}">
-                                                    <ComboBox.GroupStyle><StaticResource ResourceKey="MusicOriginGroupStyle"/></ComboBox.GroupStyle>
-                                                </ComboBox>
-                                            </DockPanel>
-
-                                            <!-- The question the button asks before
-                                                 it acts: "is there enough money".
-                                                 Without it, anything conditional
-                                                 had to be pushed out into a rule
-                                                 per item, with the click reduced
-                                                 to writing down what was asked. -->
-                                            <Button Content="{l:T ui.addClickCondition}" Padding="8,2"
-                                                    HorizontalAlignment="Left" Margin="0,0,0,4"
-                                                    Command="{Binding AddClickConditionCommand}"
-                                                    ToolTip="{l:T ui.addClickCondition.tip}"/>
-                                            <ItemsControl ItemsSource="{Binding ClickConditions}"
-                                                          ItemTemplateSelector="{StaticResource ConditionTemplateSelector}"
-                                                          Margin="0,0,0,4"/>
-
-                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                                                <Button Content="{l:T ui.addAction}" Padding="8,2" Margin="0,0,4,0"
-                                                        Command="{Binding AddActionCommand}"
-                                                        ToolTip="{l:T ui.addAction.tip}"/>
-                                                <StackPanel Orientation="Horizontal" view:HoverTools.Reveal="True">
-                                                    <Border Width="1" Background="{DynamicResource Theme.Border}" Margin="4,2,8,2"/>
-                                                    <Button Content="{l:T ui.copyActions}" Padding="8,2" Margin="0,0,4,0"
-                                                            Command="{Binding CopyActionsCommand}"/>
-                                                    <Button Content="{l:T ui.pasteNode}" Padding="8,2" Margin="0,0,4,0"
-                                                            Command="{Binding PasteActionsCommand}"/>
-                                                    <Button Content="{l:T ui.overwriteActions}" Padding="8,2"
-                                                            Command="{Binding OverwriteActionsCommand}"/>
-                                                </StackPanel>
-                                            </StackPanel>
-
-                                            <ItemsControl ItemsSource="{Binding Actions}"
-                                                          ItemTemplate="{StaticResource ActionRowTemplate}"/>
-                                        </StackPanel>
-                                    </Expander>
-
-                                    <DockPanel Margin="0,0,0,2"
-                                               Visibility="{Binding HasText, Converter={StaticResource BoolToVisibility}}">
-                                        <TextBlock Text="{l:T ui.font}" Width="66" VerticalAlignment="Center"/>
-                                        <!-- PropertyChanged, not LostFocus. An undo
-                                             step is marked when focus leaves, so
-                                             committing on focus loss TOO means the
-                                             open/close of the dropdown lands
-                                             mid-browse and each visit leaves steps
-                                             for values nobody chose. Tracking the
-                                             highlight live and checkpointing once
-                                             on the way out gives one step holding
-                                             what was actually picked. -->
-                                        <ComboBox IsEditable="True"
-                                                  Text="{Binding Font, UpdateSourceTrigger=PropertyChanged}"
-                                                  ItemsSource="{Binding Source={x:Static rend:VanillaUiLibrary.FontNames}}"
-                                                  ToolTip="{l:T ui.textmeshproFontAssetNot.tip}"/>
-                                    </DockPanel>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
+                        <TextBlock DockPanel.Dock="Bottom" Text="{l:T ui.preview.hint}" FontSize="11" Margin="6,2,6,4"
+                                   TextWrapping="Wrap" Foreground="{DynamicResource Theme.TextMuted}"/>
                         <ctl:UiPreview x:Name="UiScreenPreview"
                                        view:TutorialAnchor.Id="preview:ui"
                                        BaseToken="{Binding SelectedUiPreviewToken}"
@@ -9177,6 +8981,871 @@
                                        CanvasHeight="{Binding SelectedUi.CanvasHeight}"
                                        Margin="4"/>
                     </DockPanel>
+
+                    <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch"
+                                  Visibility="{Binding ShowsUiStart, Converter={StaticResource InverseBoolToVisibility}}"/>
+
+                    <!-- ══ Right: change what is selected ══════════════════════ -->
+                    <Border x:Name="UiInspector" Grid.Column="4" DataContext="{Binding SelectedUi}"
+                            view:TutorialAnchor.Id="panel:uiObjectDetail"
+                            Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <Grid Margin="6,4,8,8">
+                                <!-- The UI as a whole, until an object is chosen. -->
+                                <StackPanel x:Name="UiSettingsFields" view:TutorialAnchor.Id="panel:uiDetail"
+                                            Visibility="{Binding HasSelection, Converter={StaticResource InverseBoolToVisibility}}">
+                                    <TextBlock Text="{l:T ui.settingsRow}" FontWeight="Bold" Margin="0,0,0,6"/>
+
+                                    <!-- Which of the game's screens. Both the label and
+                                         the box, or a UI of the pack's own shows a
+                                         dropdown with no name that does nothing it can
+                                         explain. -->
+                                    <StackPanel x:Name="UiScreenPickerRow"
+                                                Visibility="{Binding ShowsScreenPicker, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T ui.whichScreen}" FontWeight="SemiBold"/>
+                                        <ComboBox ItemsSource="{Binding DataContext.AvailableUiScreensGrouped,
+                                                          RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  Style="{StaticResource GroupedComboBox}"
+                                                  SelectedValue="{Binding Source, Mode=TwoWay}"
+                                                  SelectedValuePath="Token" DisplayMemberPath="Id"
+                                                  IsEditable="False" Margin="0,2,0,6"
+                                                  view:OptionNotes.Kind="gameScreen" ItemContainerStyle="{StaticResource DescribedItem}"
+                                                  ToolTip="{l:T ui.everyUIGameHas.tip}">
+                                            <ComboBox.GroupStyle><StaticResource ResourceKey="MusicOriginGroupStyle"/></ComboBox.GroupStyle>
+                                        </ComboBox>
+                                        <TextBlock Text="{l:T ui.gameUi.note}" Style="{StaticResource UiNote}" Margin="0,0,0,4"/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="{Binding Warning}" Foreground="{DynamicResource Theme.Warning}" FontSize="11"
+                                               TextWrapping="Wrap" Margin="0,0,0,6">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Stranded}" Value="0">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+
+                                    <!-- A name and the rest belong to a UI of the pack's
+                                         own. One built on a game's screen is named by
+                                         that screen and inherits all of this, so they
+                                         are hidden rather than shown disabled: a
+                                         disabled box invites an author to wonder what
+                                         would happen if they could use it. -->
+                                    <StackPanel x:Name="UiOwnSettings"
+                                                Visibility="{Binding ShowsOwnSettings, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T ui.name}" FontWeight="SemiBold"/>
+                                        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,6"/>
+
+                                        <Border Style="{StaticResource UiSectionBox}">
+                                            <Expander x:Name="UiSectionOpens" Style="{StaticResource UiSection}" IsExpanded="True">
+                                                <Expander.Header>
+                                                    <DockPanel>
+                                                        <TextBlock Text="{l:T ui.section.opens}" Style="{StaticResource UiSectionTitle}"/>
+                                                        <TextBlock Text="{Binding OpensSummary}" Style="{StaticResource UiSectionSummary}"/>
+                                                    </DockPanel>
+                                                </Expander.Header>
+                                                <StackPanel>
+                                                    <CheckBox IsChecked="{Binding StartsOpen, Mode=TwoWay}" Margin="0,0,0,4"
+                                                              ToolTip="{l:T ui.mostUINotScreen.tip}">
+                                                        <TextBlock Text="{l:T ui.screenStart}" TextWrapping="Wrap"/>
+                                                    </CheckBox>
+
+                                                    <!-- The screen opening by itself, without a rule
+                                                         written for it. On the moment they become
+                                                         met, not while: a screen the player closed
+                                                         stays closed until they are met anew. -->
+                                                    <TextBlock Text="{l:T ui.opensWhen}" FontWeight="SemiBold" Margin="0,4,0,2"/>
+                                                    <Button Content="{l:T ui.addActiveCondition}" Padding="8,2"
+                                                            HorizontalAlignment="Left" Margin="0,0,0,4"
+                                                            Command="{Binding AddOpenConditionCommand}"
+                                                            ToolTip="{l:T ui.addOpenCondition.tip}"/>
+                                                    <ItemsControl ItemsSource="{Binding OpenConditions}"
+                                                                  ItemTemplateSelector="{StaticResource ConditionTemplateSelector}"/>
+                                                    <TextBlock Text="{l:T ui.opensWhen.help}" Style="{StaticResource UiNote}" Margin="0,2,0,4"/>
+                                                    <TextBlock Text="{l:T ui.opensByAction.help}" Style="{StaticResource UiNote}"/>
+                                                </StackPanel>
+                                            </Expander>
+                                        </Border>
+
+                                        <Border Style="{StaticResource UiSectionBox}">
+                                            <Expander Style="{StaticResource UiSection}" IsExpanded="True">
+                                                <Expander.Header>
+                                                    <TextBlock Text="{l:T ui.section.lives}" Style="{StaticResource UiSectionTitle}"/>
+                                                </Expander.Header>
+                                                <StackPanel>
+                                                    <!-- What this actually chooses is WHERE the screen
+                                                         lives: inside the game's own canvas, or on one
+                                                         of its own with a sorting order. It was labelled
+                                                         as fading with the game's interface, which it
+                                                         does not do - fading is a FadeUI signal that an
+                                                         object has to listen for, not something that
+                                                         happens by sharing a canvas. -->
+                                                    <CheckBox IsChecked="{Binding HidesWithGameplayUi, Mode=TwoWay}" Margin="0,0,0,4"
+                                                              ToolTip="{l:T ui.tickedScreenOneObject.tip}">
+                                                        <TextBlock Text="{l:T ui.sitInsideGameS}" TextWrapping="Wrap"/>
+                                                    </CheckBox>
+                                                    <!-- Only where it does something. Inside the
+                                                         gameplay canvas this UI is one object among
+                                                         the game's, and order there is the object
+                                                         tree, not a number. -->
+                                                    <DockPanel Margin="0,0,0,2"
+                                                               Visibility="{Binding ShowsSortingOrder, Converter={StaticResource BoolToVisibility}}">
+                                                        <TextBlock Text="{l:T ui.sortingOrder}" MinWidth="96" VerticalAlignment="Center"/>
+                                                        <TextBox Style="{StaticResource NumberBox}" Text="{Binding SortingOrder, UpdateSourceTrigger=LostFocus}"
+                                                                 ToolTip="{l:T ui.drawOrderAgainstOther.tip}"/>
+                                                    </DockPanel>
+                                                </StackPanel>
+                                            </Expander>
+                                        </Border>
+
+                                        <Border Style="{StaticResource UiSectionBox}">
+                                            <Expander Style="{StaticResource UiSection}">
+                                                <Expander.Header>
+                                                    <DockPanel>
+                                                        <TextBlock Text="{l:T ui.section.moves}" Style="{StaticResource UiSectionTitle}"/>
+                                                        <TextBlock Text="{Binding MovesSummary}" Style="{StaticResource UiSectionSummary}"/>
+                                                    </DockPanel>
+                                                </Expander.Header>
+                                                <StackPanel>
+                                                    <ContentControl Content="{Binding Open}"
+                                                                    ContentTemplate="{StaticResource UiOpenTemplate}"
+                                                                    Margin="0,0,0,6"/>
+                                                    <!-- Played by an ACTION switching the screen off.
+                                                         A screen hidden by an activation condition
+                                                         goes at once: nothing asked first, and a
+                                                         deactivated object cannot animate itself. -->
+                                                    <ContentControl Content="{Binding Close}"
+                                                                    ContentTemplate="{StaticResource UiOpenTemplate}"/>
+                                                </StackPanel>
+                                            </Expander>
+                                        </Border>
+
+                                        <Border Style="{StaticResource UiSectionBox}">
+                                            <Expander Style="{StaticResource UiSection}">
+                                                <Expander.Header>
+                                                    <DockPanel>
+                                                        <TextBlock Text="{l:T ui.section.sound}" Style="{StaticResource UiSectionTitle}"/>
+                                                        <TextBlock Text="{Binding SoundSummary}" Style="{StaticResource UiSectionSummary}"/>
+                                                    </DockPanel>
+                                                </Expander.Header>
+                                                <StackPanel>
+                                                    <!-- One decision for the whole screen. Setting a
+                                                         sound on thirty buttons one at a time is not
+                                                         authoring, it is data entry. -->
+                                                    <CheckBox IsChecked="{Binding ButtonsMakeSound, Mode=TwoWay}" Margin="0,0,0,4"
+                                                              ToolTip="{l:T ui.buttonsScreenClickWhen.tip}">
+                                                        <TextBlock Text="{l:T ui.buttonsMakeSound}" TextWrapping="Wrap"/>
+                                                    </CheckBox>
+                                                    <!-- Blank is not nothing: it is the game's own
+                                                         click. The line below says so, because a
+                                                         field that looks empty reads as silent. -->
+                                                    <DockPanel Margin="0,0,0,2" IsEnabled="{Binding ButtonsMakeSound}">
+                                                        <TextBlock Text="{l:T ui.buttonSound}" MinWidth="96" VerticalAlignment="Center"/>
+                                                        <ComboBox IsEditable="True" Style="{StaticResource GroupedComboBox}"
+                                                                  Text="{Binding ButtonSound, UpdateSourceTrigger=PropertyChanged}"
+                                                                  ItemsSource="{Binding DataContext.ButtonSoundOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                  ToolTip="{l:T ui.leaveBlankGameS.tip}">
+                                                            <ComboBox.GroupStyle>
+                                                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                                                            </ComboBox.GroupStyle>
+                                                        </ComboBox>
+                                                    </DockPanel>
+                                                    <TextBlock Margin="96,0,0,2" Style="{StaticResource UiNote}"
+                                                               Visibility="{Binding ShowsDefaultButtonSound, Converter={StaticResource BoolToVisibility}}"
+                                                               Text="{Binding ButtonSoundInEffect}"/>
+                                                </StackPanel>
+                                            </Expander>
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- One object. Shown by the OWNER's HasSelection
+                                     rather than by testing SelectedNode against null,
+                                     which needs a converter that does not exist and
+                                     would be the same fact spelled twice.
+
+                                     Sections open and close as the author leaves them:
+                                     they are not bound to what the object holds, so
+                                     clicking from one object to another does not
+                                     rearrange the panel under the pointer. A closed
+                                     one says what is in it. -->
+                                <StackPanel x:Name="UiNodeFields"
+                                            DataContext="{Binding SelectedNode}"
+                                            Visibility="{Binding DataContext.HasSelection, ElementName=UiInspector,
+                                                Converter={StaticResource BoolToVisibility},
+                                                FallbackValue=Collapsed,
+                                                TargetNullValue=Collapsed}">
+
+                                    <!-- Name. Read-only on an object the game
+                                         owns: the name is what its binding is
+                                         built from, so renaming would quietly
+                                         unhook the change from the object. -->
+                                    <DockPanel Margin="0,0,0,6">
+                                        <!-- Only enabled on a vanilla object that
+                                             currently differs: on the pack's own
+                                             there is no default to go back to, and
+                                             on an untouched one it would do
+                                             nothing. -->
+                                        <Button Content="{l:T ui.reset}" DockPanel.Dock="Right" Padding="8,0"
+                                                Margin="6,0,0,0" Command="{Binding ResetCommand}"
+                                                ToolTip="{l:T ui.reset.tip}"/>
+                                        <TextBlock x:Name="UiNodeKind" Text="{Binding KindLabel}" DockPanel.Dock="Right" Margin="6,0,0,0"
+                                                   VerticalAlignment="Center" FontSize="11"
+                                                   Foreground="{DynamicResource Theme.TextMuted}"/>
+                                        <TextBlock Text="{l:T ui.name}" MinWidth="50" VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                                 IsReadOnly="{Binding IsVanilla}"
+                                                 ToolTip="{l:T ui.objectsGameOwnsKeep.tip}"/>
+                                    </DockPanel>
+
+                                    <!-- ── Where it sits ──────────────────────── -->
+                                    <Border Style="{StaticResource UiSectionBox}">
+                                        <Expander x:Name="UiSectionWhere" Style="{StaticResource UiSection}" IsExpanded="True">
+                                            <Expander.Header>
+                                                <DockPanel>
+                                                    <TextBlock Text="{l:T ui.section.where}" Style="{StaticResource UiSectionTitle}"/>
+                                                    <TextBlock Text="{Binding PlaceSummary}" Style="{StaticResource UiSectionSummary}"/>
+                                                </DockPanel>
+                                            </Expander.Header>
+                                            <StackPanel>
+                                                <TextBlock Text="{l:T ui.arrangedByParent}" Style="{StaticResource UiNote}" Margin="0,0,0,4"
+                                                           Visibility="{Binding IsArranged, Converter={StaticResource BoolToVisibility}}"/>
+
+                                                <StackPanel Visibility="{Binding IsArranged, Converter={StaticResource InverseBoolToVisibility}}">
+                                                    <DockPanel Margin="0,0,0,6">
+                                                        <StackPanel DockPanel.Dock="Left" Margin="0,0,12,0">
+                                                            <TextBlock Text="{l:T ui.stick}" Margin="0,0,0,2" ToolTip="{l:T ui.stick.tip}"/>
+                                                            <ItemsControl x:Name="UiStickGrid" ItemsSource="{Binding StickCells}"
+                                                                          Width="63" Height="63" HorizontalAlignment="Left"
+                                                                          ToolTip="{l:T ui.stick.tip}">
+                                                                <ItemsControl.ItemsPanel>
+                                                                    <ItemsPanelTemplate><UniformGrid Rows="3" Columns="3"/></ItemsPanelTemplate>
+                                                                </ItemsControl.ItemsPanel>
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Button Style="{StaticResource UiStickCell}" Command="{Binding Pick}"/>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                        </StackPanel>
+                                                        <StackPanel VerticalAlignment="Bottom">
+                                                            <CheckBox x:Name="UiFillWidth" IsChecked="{Binding FillsWidth}" Margin="0,0,0,4"
+                                                                      ToolTip="{l:T ui.fillWidth.tip}">
+                                                                <TextBlock Text="{l:T ui.fillWidth}" TextWrapping="Wrap"/>
+                                                            </CheckBox>
+                                                            <CheckBox x:Name="UiFillHeight" IsChecked="{Binding FillsHeight}"
+                                                                      ToolTip="{l:T ui.fillHeight.tip}">
+                                                                <TextBlock Text="{l:T ui.fillHeight}" TextWrapping="Wrap"/>
+                                                            </CheckBox>
+                                                        </StackPanel>
+                                                    </DockPanel>
+
+                                                    <!-- Across, then down. An axis that fills
+                                                         has no X or width to give: it has how
+                                                         far in each side stays. -->
+                                                    <UniformGrid Columns="2" Margin="0,0,0,2"
+                                                                 Visibility="{Binding FillsWidth, Converter={StaticResource InverseBoolToVisibility}}">
+                                                        <DockPanel Margin="0,0,6,0">
+                                                            <TextBlock Text="{l:T ui.place.x}" Style="{StaticResource UiFieldLabel}" ToolTip="{l:T ui.place.x.tip}"/>
+                                                            <TextBox Text="{Binding PositionX, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </DockPanel>
+                                                        <DockPanel>
+                                                            <TextBlock Text="{l:T ui.place.width}" Style="{StaticResource UiFieldLabel}"/>
+                                                            <TextBox Text="{Binding Width, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </DockPanel>
+                                                    </UniformGrid>
+                                                    <UniformGrid Columns="2" Margin="0,0,0,2"
+                                                                 Visibility="{Binding FillsWidth, Converter={StaticResource BoolToVisibility}}">
+                                                        <DockPanel Margin="0,0,6,0">
+                                                            <TextBlock Text="{l:T ui.place.left}" Style="{StaticResource UiFieldLabel}" ToolTip="{l:T ui.place.margin.tip}"/>
+                                                            <TextBox Text="{Binding MarginLeft, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </DockPanel>
+                                                        <DockPanel>
+                                                            <TextBlock Text="{l:T ui.place.right}" Style="{StaticResource UiFieldLabel}" ToolTip="{l:T ui.place.margin.tip}"/>
+                                                            <TextBox Text="{Binding MarginRight, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </DockPanel>
+                                                    </UniformGrid>
+                                                    <UniformGrid Columns="2" Margin="0,0,0,2"
+                                                                 Visibility="{Binding FillsHeight, Converter={StaticResource InverseBoolToVisibility}}">
+                                                        <DockPanel Margin="0,0,6,0">
+                                                            <TextBlock Text="{l:T ui.place.y}" Style="{StaticResource UiFieldLabel}" ToolTip="{l:T ui.place.x.tip}"/>
+                                                            <TextBox Text="{Binding PositionY, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </DockPanel>
+                                                        <DockPanel>
+                                                            <TextBlock Text="{l:T ui.place.height}" Style="{StaticResource UiFieldLabel}"/>
+                                                            <TextBox Text="{Binding Height, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </DockPanel>
+                                                    </UniformGrid>
+                                                    <UniformGrid Columns="2" Margin="0,0,0,2"
+                                                                 Visibility="{Binding FillsHeight, Converter={StaticResource BoolToVisibility}}">
+                                                        <DockPanel Margin="0,0,6,0">
+                                                            <TextBlock Text="{l:T ui.place.top}" Style="{StaticResource UiFieldLabel}" ToolTip="{l:T ui.place.margin.tip}"/>
+                                                            <TextBox Text="{Binding MarginTop, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </DockPanel>
+                                                        <DockPanel>
+                                                            <TextBlock Text="{l:T ui.place.bottom}" Style="{StaticResource UiFieldLabel}" ToolTip="{l:T ui.place.margin.tip}"/>
+                                                            <TextBox Text="{Binding MarginBottom, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </DockPanel>
+                                                    </UniformGrid>
+
+                                                    <TextBlock Text="{l:T ui.stretchedPartly}" Style="{StaticResource UiNote}" Margin="0,2,0,2"
+                                                               Visibility="{Binding StretchesPartly, Converter={StaticResource BoolToVisibility}}"/>
+                                                </StackPanel>
+
+                                                <UniformGrid Columns="2" Margin="0,4,0,2">
+                                                    <DockPanel Margin="0,0,6,0">
+                                                        <TextBlock Text="{l:T ui.turn}" Style="{StaticResource UiFieldLabel}" ToolTip="{l:T ui.turn.tip}"/>
+                                                        <TextBox x:Name="UiTurn" Text="{Binding RotationZ, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                    </DockPanel>
+                                                    <CheckBox IsChecked="{Binding Upright}" VerticalAlignment="Center"
+                                                              Content="{l:T ui.upright}"
+                                                              ToolTip="{l:T ui.upright.tip}"/>
+                                                </UniformGrid>
+                                                <UniformGrid Columns="2" Margin="0,0,0,2">
+                                                    <DockPanel Margin="0,0,6,0">
+                                                        <TextBlock Text="{l:T ui.scaleX}" Style="{StaticResource UiFieldLabel}" ToolTip="{l:T ui.scale.tip}"/>
+                                                        <TextBox Text="{Binding ScaleX, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                    </DockPanel>
+                                                    <DockPanel>
+                                                        <TextBlock Text="{l:T ui.scaleY}" Style="{StaticResource UiFieldLabel}" ToolTip="{l:T ui.scale.tip}"/>
+                                                        <TextBox Text="{Binding ScaleY, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                    </DockPanel>
+                                                </UniformGrid>
+
+                                                <!-- The numbers behind the grid. The game's own
+                                                     screens use anchors between the nine places,
+                                                     and they have to stay readable and editable. -->
+                                                <Expander Header="{l:T ui.exactAnchors}" Margin="0,4,0,0" Padding="4,2,0,0">
+                                                    <StackPanel>
+                                                        <UniformGrid Columns="2" Margin="0,0,0,2">
+                                                            <DockPanel Margin="0,0,6,0">
+                                                                <TextBlock Text="{l:T ui.anchorMin}" Style="{StaticResource UiFieldLabel}"/>
+                                                                <TextBox Text="{Binding AnchorMinX, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                            </DockPanel>
+                                                            <TextBox Text="{Binding AnchorMinY, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </UniformGrid>
+                                                        <UniformGrid Columns="2" Margin="0,0,0,2">
+                                                            <DockPanel Margin="0,0,6,0">
+                                                                <TextBlock Text="{l:T ui.anchorMax}" Style="{StaticResource UiFieldLabel}"/>
+                                                                <TextBox Text="{Binding AnchorMaxX, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                            </DockPanel>
+                                                            <TextBox Text="{Binding AnchorMaxY, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </UniformGrid>
+                                                        <UniformGrid Columns="2">
+                                                            <DockPanel Margin="0,0,6,0">
+                                                                <TextBlock Text="{l:T ui.pivot}" Style="{StaticResource UiFieldLabel}" ToolTip="{l:T ui.pivot.tip}"/>
+                                                                <TextBox Text="{Binding PivotX, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                            </DockPanel>
+                                                            <TextBox Text="{Binding PivotY, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </UniformGrid>
+                                                    </StackPanel>
+                                                </Expander>
+                                            </StackPanel>
+                                        </Expander>
+                                    </Border>
+
+                                    <!-- ── How it looks ───────────────────────── -->
+                                    <Border Style="{StaticResource UiSectionBox}">
+                                        <Expander x:Name="UiSectionLooks" Style="{StaticResource UiSection}" IsExpanded="True">
+                                            <Expander.Header>
+                                                <DockPanel>
+                                                    <TextBlock Text="{l:T ui.section.looks}" Style="{StaticResource UiSectionTitle}"/>
+                                                    <TextBlock Text="{Binding LooksSummary}" Style="{StaticResource UiSectionSummary}"/>
+                                                </DockPanel>
+                                            </Expander.Header>
+                                            <StackPanel>
+                                                <!-- A box and a picker, not a dropdown.
+                                                     A dropdown bound to the value writes
+                                                     as you move through it, so merely
+                                                     looking put sprites nobody chose onto
+                                                     the undo stack - and 840 entries is
+                                                     not a list anyone scrolls anyway. -->
+                                                <DockPanel Margin="0,0,0,3">
+                                                    <TextBlock Text="{l:T ui.sprite}" MinWidth="66" VerticalAlignment="Center"/>
+                                                    <Button Content="..." DockPanel.Dock="Right" Padding="6,0"
+                                                            Margin="4,0,0,0" Click="PickUiSprite_Click"
+                                                            ToolTip="{l:T ui.pickUiSprite.tip}"/>
+                                                    <TextBox Text="{Binding Sprite, UpdateSourceTrigger=LostFocus}"
+                                                             ToolTip="{l:T ui.spriteGameHasPack.tip}"/>
+                                                </DockPanel>
+
+                                                <StackPanel Visibility="{Binding HasImage, Converter={StaticResource BoolToVisibility}}">
+                                                    <DockPanel Margin="0,0,0,3">
+                                                        <TextBlock Text="{l:T ui.tint}" MinWidth="66" VerticalAlignment="Center"/>
+                                                        <Button Content="..." DockPanel.Dock="Right" Padding="6,0"
+                                                                Margin="4,0,0,0" Click="PickUiTint_Click"
+                                                                ToolTip="{l:T ui.pickUiTint.tip}"/>
+                                                        <Border Width="20" Height="16" BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1"
+                                                                Margin="0,0,4,0" Background="{Binding TintBrush}" VerticalAlignment="Center"/>
+                                                        <TextBox Text="{Binding Tint, UpdateSourceTrigger=LostFocus}"
+                                                                 ToolTip="{l:T ui.tintRRGGBBRRGGBBAAMost.tip}"/>
+                                                    </DockPanel>
+                                                    <DockPanel Margin="0,0,0,3">
+                                                        <TextBlock Text="{l:T ui.drawnAs}" MinWidth="66" VerticalAlignment="Center"/>
+                                                        <ComboBox x:Name="UiImageType" SelectedValue="{Binding ImageType, Mode=TwoWay}"
+                                                                  ItemsSource="{Binding Source={x:Static vm:UiNodeViewModel.ImageTypes}}"
+                                                                  ToolTip="{l:T ui.drawnAs.tip}"/>
+                                                    </DockPanel>
+                                                    <DockPanel Margin="66,0,0,3"
+                                                               Visibility="{Binding IsSliced, Converter={StaticResource BoolToVisibility}}">
+                                                        <TextBlock Text="{l:T ui.borderScale}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                                        <TextBox Text="{Binding BorderScale, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumberBox}" Width="50"
+                                                                 ToolTip="{l:T ui.borderScale.tip}"/>
+                                                    </DockPanel>
+                                                    <WrapPanel Margin="66,0,0,3">
+                                                        <CheckBox IsChecked="{Binding KeepsAspect}" Content="{l:T ui.keepAspect}" Margin="0,0,10,2"
+                                                                  ToolTip="{l:T ui.keepAspect.tip}"/>
+                                                        <CheckBox IsChecked="{Binding FillsCenter}" Content="{l:T ui.fillMiddle}" Margin="0,0,10,2"
+                                                                  Visibility="{Binding IsSliced, Converter={StaticResource BoolToVisibility}}"
+                                                                  ToolTip="{l:T ui.fillMiddle.tip}"/>
+                                                        <CheckBox IsChecked="{Binding CatchesMouse}" Content="{l:T ui.catchesMouse}" Margin="0,0,0,2"
+                                                                  ToolTip="{l:T ui.catchesMouse.tip}"/>
+                                                    </WrapPanel>
+                                                </StackPanel>
+
+                                                <DockPanel Margin="0,4,0,3">
+                                                    <TextBlock Text="{l:T ui.text}" MinWidth="66" VerticalAlignment="Center"/>
+                                                    <TextBox Text="{Binding Text, UpdateSourceTrigger=LostFocus}"
+                                                             ToolTip="{l:T ui.whatObjectSaysClearing.tip}"/>
+                                                </DockPanel>
+
+                                                <StackPanel Visibility="{Binding HasText, Converter={StaticResource BoolToVisibility}}">
+                                                    <DockPanel Margin="0,0,0,3">
+                                                        <TextBlock Text="{l:T ui.font}" MinWidth="66" VerticalAlignment="Center"/>
+                                                        <!-- PropertyChanged, not LostFocus. An undo
+                                                             step is marked when focus leaves, so
+                                                             committing on focus loss TOO means the
+                                                             open/close of the dropdown lands
+                                                             mid-browse and each visit leaves steps
+                                                             for values nobody chose. Tracking the
+                                                             highlight live and checkpointing once
+                                                             on the way out gives one step holding
+                                                             what was actually picked. -->
+                                                        <ComboBox IsEditable="True"
+                                                                  Text="{Binding Font, UpdateSourceTrigger=PropertyChanged}"
+                                                                  ItemsSource="{Binding Source={x:Static rend:VanillaUiLibrary.FontNames}}"
+                                                                  ToolTip="{l:T ui.textmeshproFontAssetNot.tip}"/>
+                                                    </DockPanel>
+                                                    <DockPanel Margin="0,0,0,3">
+                                                        <TextBlock Text="{l:T ui.fontSize}" MinWidth="66" VerticalAlignment="Center"/>
+                                                        <TextBox Text="{Binding FontSize, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumberBox}" Width="50"
+                                                                 ToolTip="{l:T ui.fontSize.tip}"/>
+                                                    </DockPanel>
+                                                    <DockPanel Margin="0,0,0,3">
+                                                        <TextBlock Text="{l:T ui.colour}" MinWidth="66" VerticalAlignment="Center"/>
+                                                        <Button Content="..." DockPanel.Dock="Right" Padding="6,0"
+                                                                Margin="4,0,0,0" Click="PickUiTextColor_Click"
+                                                                ToolTip="{l:T ui.pickUiTint.tip}"/>
+                                                        <Border Width="20" Height="16" BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1"
+                                                                Margin="0,0,4,0" Background="{Binding TextColorBrush}"
+                                                                VerticalAlignment="Center"/>
+                                                        <TextBox Text="{Binding TextColor, UpdateSourceTrigger=LostFocus}"
+                                                                 ToolTip="{l:T ui.textColourRRGGBBRRGGBBAA.tip}"/>
+                                                    </DockPanel>
+                                                    <DockPanel Margin="0,0,0,3">
+                                                        <TextBlock Text="{l:T ui.alignment}" MinWidth="66" VerticalAlignment="Center"/>
+                                                        <ComboBox x:Name="UiTextAlignment" IsEditable="True"
+                                                                  Text="{Binding TextAlignment, UpdateSourceTrigger=PropertyChanged}"
+                                                                  ItemsSource="{Binding Source={x:Static vm:UiNodeViewModel.TextAlignments}}"
+                                                                  ToolTip="{l:T ui.alignment.tip}"/>
+                                                    </DockPanel>
+                                                    <WrapPanel Margin="66,0,0,3">
+                                                        <CheckBox IsChecked="{Binding WrapsText}" Content="{l:T ui.wrap}" Margin="0,0,10,2"
+                                                                  ToolTip="{l:T ui.wrap.tip}"/>
+                                                        <CheckBox IsChecked="{Binding ShrinksToFit}" Content="{l:T ui.shrinkToFit}" Margin="0,0,0,2"
+                                                                  IsEnabled="{Binding CanChangeShrink}"
+                                                                  ToolTip="{l:T ui.shrinkToFit.tip}"/>
+                                                    </WrapPanel>
+                                                    <UniformGrid Columns="2" Margin="66,0,0,3"
+                                                                 Visibility="{Binding ShrinksToFit, Converter={StaticResource BoolToVisibility}}">
+                                                        <DockPanel Margin="0,0,6,0">
+                                                            <TextBlock Text="{l:T ui.shrinkMin}" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                                            <TextBox Text="{Binding ShrinkMin, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </DockPanel>
+                                                        <DockPanel>
+                                                            <TextBlock Text="{l:T ui.shrinkMax}" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                                            <TextBox Text="{Binding ShrinkMax, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </DockPanel>
+                                                    </UniformGrid>
+                                                    <UniformGrid Columns="2" Margin="0,0,0,3">
+                                                        <DockPanel Margin="0,0,6,0">
+                                                            <TextBlock Text="{l:T ui.lineSpacing}" Margin="0,0,4,0" VerticalAlignment="Center" ToolTip="{l:T ui.lineSpacing.tip}"/>
+                                                            <TextBox Text="{Binding LineSpacing, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </DockPanel>
+                                                        <DockPanel>
+                                                            <TextBlock Text="{l:T ui.letterSpacing}" Margin="0,0,4,0" VerticalAlignment="Center" ToolTip="{l:T ui.lineSpacing.tip}"/>
+                                                            <TextBox Text="{Binding LetterSpacing, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"/>
+                                                        </DockPanel>
+                                                    </UniformGrid>
+                                                </StackPanel>
+
+                                                <DockPanel Margin="0,4,0,3">
+                                                    <TextBlock Text="{l:T ui.opacity}" MinWidth="66" VerticalAlignment="Center" ToolTip="{l:T ui.opacity.tip}"/>
+                                                    <TextBox Text="{Binding Opacity, UpdateSourceTrigger=LostFocus}" Width="60" HorizontalAlignment="Left"
+                                                             ToolTip="{l:T ui.opacity.tip}"/>
+                                                </DockPanel>
+
+                                                <!-- Shadow and outline: the game's own effects,
+                                                     drawn as offset copies of what is here. -->
+                                                <DockPanel Margin="0,0,0,3">
+                                                    <CheckBox IsChecked="{Binding HasShadow}" Content="{l:T ui.shadow}" MinWidth="66" VerticalAlignment="Center"
+                                                              ToolTip="{l:T ui.shadow.tip}"/>
+                                                    <Grid Visibility="{Binding HasShadow, Converter={StaticResource BoolToVisibility}}">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="38"/>
+                                                            <ColumnDefinition Width="38"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Border Width="20" Height="16" BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1"
+                                                                Margin="0,0,4,0" Background="{Binding ShadowColorBrush}" VerticalAlignment="Center"/>
+                                                        <TextBox Grid.Column="1" Text="{Binding ShadowColor, UpdateSourceTrigger=LostFocus}"/>
+                                                        <Button Grid.Column="2" Content="..." Padding="6,0" Margin="4,0" Click="PickUiShadowColor_Click"
+                                                                ToolTip="{l:T ui.pickUiTint.tip}"/>
+                                                        <TextBox Grid.Column="3" Text="{Binding ShadowX, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}" Margin="0,0,2,0"
+                                                                 ToolTip="{l:T ui.effectOffset.tip}"/>
+                                                        <TextBox Grid.Column="4" Text="{Binding ShadowY, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"
+                                                                 ToolTip="{l:T ui.effectOffset.tip}"/>
+                                                    </Grid>
+                                                </DockPanel>
+                                                <DockPanel Margin="0,0,0,2">
+                                                    <CheckBox IsChecked="{Binding HasOutline}" Content="{l:T ui.outline}" MinWidth="66" VerticalAlignment="Center"
+                                                              ToolTip="{l:T ui.outline.tip}"/>
+                                                    <Grid Visibility="{Binding HasOutline, Converter={StaticResource BoolToVisibility}}">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="38"/>
+                                                            <ColumnDefinition Width="38"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Border Width="20" Height="16" BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1"
+                                                                Margin="0,0,4,0" Background="{Binding OutlineColorBrush}" VerticalAlignment="Center"/>
+                                                        <TextBox Grid.Column="1" Text="{Binding OutlineColor, UpdateSourceTrigger=LostFocus}"/>
+                                                        <Button Grid.Column="2" Content="..." Padding="6,0" Margin="4,0" Click="PickUiOutlineColor_Click"
+                                                                ToolTip="{l:T ui.pickUiTint.tip}"/>
+                                                        <TextBox Grid.Column="3" Text="{Binding OutlineX, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}" Margin="0,0,2,0"
+                                                                 ToolTip="{l:T ui.effectOffset.tip}"/>
+                                                        <TextBox Grid.Column="4" Text="{Binding OutlineY, UpdateSourceTrigger=LostFocus}" Style="{StaticResource UiField}"
+                                                                 ToolTip="{l:T ui.effectOffset.tip}"/>
+                                                    </Grid>
+                                                </DockPanel>
+                                                <TextBlock Text="{l:T ui.effects.textNote}" Style="{StaticResource UiNote}" Margin="0,2,0,0"
+                                                           Visibility="{Binding EffectsDoNothing, Converter={StaticResource BoolToVisibility}}"/>
+                                            </StackPanel>
+                                        </Expander>
+                                    </Border>
+
+                                    <!-- ── When it shows ──────────────────────── -->
+                                    <!-- Checked every frame in the game, so a shelf
+                                         drops what has already been bought without a
+                                         rule per item saying so - the object carries
+                                         its own condition, which is where an author
+                                         looks for it. -->
+                                    <Border Style="{StaticResource UiSectionBox}">
+                                        <Expander x:Name="UiSectionShows" Style="{StaticResource UiSection}">
+                                            <Expander.Header>
+                                                <DockPanel>
+                                                    <TextBlock Text="{l:T ui.section.shows}" Style="{StaticResource UiSectionTitle}"/>
+                                                    <TextBlock Text="{Binding ShowsSummary}" Style="{StaticResource UiSectionSummary}"/>
+                                                </DockPanel>
+                                            </Expander.Header>
+                                            <StackPanel>
+                                                <CheckBox IsChecked="{Binding StartActive}" Margin="0,0,0,4"
+                                                          Content="{l:T ui.visibleStart}"
+                                                          ToolTip="{l:T ui.visibleStart.tip}"/>
+                                                <Button Content="{l:T ui.addActiveCondition}" Padding="8,2"
+                                                        HorizontalAlignment="Left" Margin="0,0,0,4"
+                                                        Command="{Binding AddActiveConditionCommand}"
+                                                        ToolTip="{l:T ui.addActiveCondition.tip}"/>
+                                                <ItemsControl ItemsSource="{Binding ActiveConditions}"
+                                                              ItemTemplateSelector="{StaticResource ConditionTemplateSelector}"/>
+                                            </StackPanel>
+                                        </Expander>
+                                    </Border>
+
+                                    <!-- ── What clicking does ─────────────────── -->
+                                    <!-- Empty means the object is decoration and the
+                                         pointer passes straight through it, which is
+                                         what most of a screen should do. -->
+                                    <Border Style="{StaticResource UiSectionBox}">
+                                        <Expander x:Name="UiSectionClicks" Style="{StaticResource UiSection}">
+                                            <Expander.Header>
+                                                <DockPanel>
+                                                    <TextBlock Text="{l:T ui.section.clicks}" Style="{StaticResource UiSectionTitle}"/>
+                                                    <TextBlock Text="{Binding ClicksSummary}" Style="{StaticResource UiSectionSummary}"/>
+                                                </DockPanel>
+                                            </Expander.Header>
+                                            <StackPanel>
+                                                <DockPanel Margin="0,0,0,4">
+                                                    <TextBlock Text="{l:T ui.hover}" MinWidth="66" VerticalAlignment="Center"/>
+                                                    <Button Content="..." DockPanel.Dock="Right" Padding="6,0"
+                                                            Margin="4,0,0,0" Click="PickUiHoverTint_Click"
+                                                            ToolTip="{l:T ui.pickUiTint.tip}"/>
+                                                    <Border Width="20" Height="16" DockPanel.Dock="Right"
+                                                            BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1" Margin="4,0,0,0"
+                                                            Background="{Binding HoverTintBrush}"
+                                                            VerticalAlignment="Center"/>
+                                                    <TextBox Text="{Binding HoverTint, UpdateSourceTrigger=LostFocus}"
+                                                             ToolTip="{l:T ui.tintWhilePointerOver.tip}"/>
+                                                </DockPanel>
+
+                                                <DockPanel Margin="0,0,0,4">
+                                                    <TextBlock Text="{l:T ui.pressScale}" MinWidth="66" VerticalAlignment="Center"
+                                                               ToolTip="{l:T ui.pressScale.tip}"/>
+                                                    <TextBox Text="{Binding PressScale, UpdateSourceTrigger=LostFocus}" Width="60"
+                                                             HorizontalAlignment="Left"
+                                                             ToolTip="{l:T ui.pressScale.tip}"/>
+                                                </DockPanel>
+
+                                                <DockPanel Margin="0,0,0,4">
+                                                    <TextBlock Text="{l:T ui.sound}" MinWidth="66" VerticalAlignment="Center"/>
+                                                    <ComboBox IsEditable="True" Style="{StaticResource GroupedComboBox}"
+                                                              Text="{Binding ClickSound, UpdateSourceTrigger=PropertyChanged}"
+                                                              ItemsSource="{Binding DataContext.ButtonSoundOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                              ToolTip="{l:T ui.whatObjectSoundsLike.tip}">
+                                                        <ComboBox.GroupStyle><StaticResource ResourceKey="MusicOriginGroupStyle"/></ComboBox.GroupStyle>
+                                                    </ComboBox>
+                                                </DockPanel>
+
+                                                <!-- The question the button asks before
+                                                     it acts: "is there enough money".
+                                                     Without it, anything conditional
+                                                     had to be pushed out into a rule
+                                                     per item, with the click reduced
+                                                     to writing down what was asked. -->
+                                                <Button Content="{l:T ui.addClickCondition}" Padding="8,2"
+                                                        HorizontalAlignment="Left" Margin="0,0,0,4"
+                                                        Command="{Binding AddClickConditionCommand}"
+                                                        ToolTip="{l:T ui.addClickCondition.tip}"/>
+                                                <ItemsControl ItemsSource="{Binding ClickConditions}"
+                                                              ItemTemplateSelector="{StaticResource ConditionTemplateSelector}"
+                                                              Margin="0,0,0,4"/>
+
+                                                <WrapPanel Margin="0,0,0,4">
+                                                    <Button Content="{l:T ui.addAction}" Padding="8,2" Margin="0,0,4,2"
+                                                            Command="{Binding AddActionCommand}"
+                                                            ToolTip="{l:T ui.addAction.tip}"/>
+                                                    <StackPanel Orientation="Horizontal" view:HoverTools.Reveal="True">
+                                                        <Border Width="1" Background="{DynamicResource Theme.Border}" Margin="4,2,8,2"/>
+                                                        <Button Content="{l:T ui.copyActions}" Padding="8,2" Margin="0,0,4,2"
+                                                                Command="{Binding CopyActionsCommand}"/>
+                                                        <Button Content="{l:T ui.pasteNode}" Padding="8,2" Margin="0,0,4,2"
+                                                                Command="{Binding PasteActionsCommand}"/>
+                                                        <Button Content="{l:T ui.overwriteActions}" Padding="8,2" Margin="0,0,0,2"
+                                                                Command="{Binding OverwriteActionsCommand}"/>
+                                                    </StackPanel>
+                                                </WrapPanel>
+
+                                                <ItemsControl ItemsSource="{Binding Actions}"
+                                                              ItemTemplate="{StaticResource ActionRowTemplate}"/>
+                                            </StackPanel>
+                                        </Expander>
+                                    </Border>
+
+                                    <!-- ── How it moves ───────────────────────── -->
+                                    <Border Style="{StaticResource UiSectionBox}">
+                                        <Expander x:Name="UiSectionMoves" Style="{StaticResource UiSection}">
+                                            <Expander.Header>
+                                                <DockPanel>
+                                                    <TextBlock Text="{l:T ui.section.moves}" Style="{StaticResource UiSectionTitle}"/>
+                                                    <TextBlock Text="{Binding MovesSummary}" Style="{StaticResource UiSectionSummary}"/>
+                                                </DockPanel>
+                                            </Expander.Header>
+                                            <StackPanel>
+                                                <ContentControl Content="{Binding Open}"
+                                                                ContentTemplate="{StaticResource UiOpenTemplate}"
+                                                                Margin="0,0,0,6"/>
+                                                <ContentControl Content="{Binding Close}"
+                                                                ContentTemplate="{StaticResource UiOpenTemplate}"
+                                                                Margin="0,0,0,6"/>
+
+                                                <!-- Keeps moving while shown (1.8.3): a pulse of its fade
+                                                     or size, a sweep from one place to another. -->
+                                                <TextBlock Text="{l:T ui.loop}" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                                                <DockPanel Margin="0,0,0,3">
+                                                    <CheckBox IsChecked="{Binding PulsesFade}" Content="{l:T ui.loop.fade}" MinWidth="110"
+                                                              VerticalAlignment="Center" ToolTip="{l:T ui.loop.fade.tip}"/>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Visibility="{Binding PulsesFade, Converter={StaticResource BoolToVisibility}}">
+                                                        <TextBox Text="{Binding FadeFrom, UpdateSourceTrigger=LostFocus}" Width="50"/>
+                                                        <TextBlock Text="→" Margin="4,0" VerticalAlignment="Center"/>
+                                                        <TextBox Text="{Binding FadeTo, UpdateSourceTrigger=LostFocus}" Width="50"/>
+                                                    </StackPanel>
+                                                </DockPanel>
+                                                <DockPanel Margin="0,0,0,3">
+                                                    <CheckBox IsChecked="{Binding PulsesSize}" Content="{l:T ui.loop.size}" MinWidth="110"
+                                                              VerticalAlignment="Center" ToolTip="{l:T ui.loop.size.tip}"/>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Visibility="{Binding PulsesSize, Converter={StaticResource BoolToVisibility}}">
+                                                        <TextBox Text="{Binding SizeFrom, UpdateSourceTrigger=LostFocus}" Width="50"/>
+                                                        <TextBlock Text="→" Margin="4,0" VerticalAlignment="Center"/>
+                                                        <TextBox Text="{Binding SizeTo, UpdateSourceTrigger=LostFocus}" Width="50"/>
+                                                    </StackPanel>
+                                                </DockPanel>
+                                                <DockPanel Margin="0,0,0,3">
+                                                    <CheckBox IsChecked="{Binding Sweeps}" Content="{l:T ui.loop.sweep}" MinWidth="110"
+                                                              VerticalAlignment="Center" ToolTip="{l:T ui.loop.sweep.tip}"/>
+                                                    <WrapPanel Visibility="{Binding Sweeps, Converter={StaticResource BoolToVisibility}}">
+                                                        <TextBox Text="{Binding SweepFromX, UpdateSourceTrigger=LostFocus}" Width="50" Margin="0,0,3,0"/>
+                                                        <TextBox Text="{Binding SweepFromY, UpdateSourceTrigger=LostFocus}" Width="50"/>
+                                                        <TextBlock Text="→" Margin="4,0" VerticalAlignment="Center"/>
+                                                        <TextBox Text="{Binding SweepToX, UpdateSourceTrigger=LostFocus}" Width="50" Margin="0,0,3,0"/>
+                                                        <TextBox Text="{Binding SweepToY, UpdateSourceTrigger=LostFocus}" Width="50"/>
+                                                    </WrapPanel>
+                                                </DockPanel>
+                                                <WrapPanel Margin="0,2,0,0"
+                                                           Visibility="{Binding Loops, Converter={StaticResource BoolToVisibility}}">
+                                                    <TextBlock Text="{l:T ui.loop.seconds}" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                                                    <TextBox Text="{Binding LoopSeconds, UpdateSourceTrigger=LostFocus}" Width="45" Margin="0,0,10,2"
+                                                             ToolTip="{l:T ui.loop.seconds.tip}"/>
+                                                    <TextBlock Text="{l:T ui.loop.pause}" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                                                    <TextBox Text="{Binding LoopPause, UpdateSourceTrigger=LostFocus}" Width="45" Margin="0,0,10,2"
+                                                             ToolTip="{l:T ui.loop.pause.tip}"/>
+                                                    <TextBlock Text="{l:T ui.loop.delay}" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                                                    <TextBox Text="{Binding LoopDelay, UpdateSourceTrigger=LostFocus}" Width="45" Margin="0,0,10,2"
+                                                             ToolTip="{l:T ui.loop.delay.tip}"/>
+                                                    <ComboBox SelectedValue="{Binding LoopEasing, Mode=TwoWay}" Width="100" Margin="0,0,0,2"
+                                                              ItemsSource="{Binding Source={x:Static vm:UiOpenViewModel.Easings}}"
+                                                              Visibility="{Binding Sweeps, Converter={StaticResource BoolToVisibility}}"
+                                                              ToolTip="{l:T ui.loop.easing.tip}"/>
+                                                </WrapPanel>
+                                            </StackPanel>
+                                        </Expander>
+                                    </Border>
+
+                                    <!-- ── What's inside ──────────────────────── -->
+                                    <!-- What it does with the things inside it.
+                                         The reason to reach for one is a list
+                                         that changes: hide an item from fixed
+                                         positions and it leaves a hole, while a
+                                         row that arranges itself closes ranks. -->
+                                    <Border Style="{StaticResource UiSectionBox}">
+                                        <Expander x:Name="UiSectionInside" Style="{StaticResource UiSection}">
+                                            <Expander.Header>
+                                                <DockPanel>
+                                                    <TextBlock Text="{l:T ui.section.inside}" Style="{StaticResource UiSectionTitle}"/>
+                                                    <TextBlock Text="{Binding InsideSummary}" Style="{StaticResource UiSectionSummary}"/>
+                                                </DockPanel>
+                                            </Expander.Header>
+                                            <StackPanel>
+                                                <DockPanel Margin="0,0,0,4">
+                                                    <TextBlock Text="{l:T ui.arrange}" MinWidth="66" VerticalAlignment="Center"/>
+                                                    <ComboBox SelectedValue="{Binding Arrange, Mode=TwoWay}"
+                                                              ItemsSource="{Binding Source={x:Static vm:UiNodeViewModel.ArrangeOptions}}"
+                                                              ToolTip="{l:T ui.noneLeavesEveryChild.tip}"/>
+                                                </DockPanel>
+
+                                                <StackPanel Visibility="{Binding Arranges, Converter={StaticResource BoolToVisibility}}">
+                                                    <DockPanel Margin="0,0,0,4">
+                                                        <TextBlock Text="{l:T ui.spacing}" MinWidth="66" VerticalAlignment="Center"/>
+                                                        <TextBox Text="{Binding SpacingX, UpdateSourceTrigger=LostFocus}"
+                                                                 Width="60" Margin="0,0,4,0"
+                                                                 ToolTip="{l:T ui.gapBetweenChildrenGrid.tip}"/>
+                                                        <TextBox Text="{Binding SpacingY, UpdateSourceTrigger=LostFocus}"
+                                                                 Width="60" Margin="0,0,4,0"
+                                                                 Visibility="{Binding ArrangesAsGrid, Converter={StaticResource BoolToVisibility}}"/>
+                                                        <ComboBox SelectedValue="{Binding ArrangeAlign, Mode=TwoWay}"
+                                                                  ItemsSource="{Binding Source={x:Static vm:UiNodeViewModel.AlignOptions}}"
+                                                                  ToolTip="{l:T ui.whereArrangedBlockSits.tip}"/>
+                                                    </DockPanel>
+
+                                                    <DockPanel Margin="0,0,0,4">
+                                                        <TextBlock Text="{l:T ui.padding}" MinWidth="66" VerticalAlignment="Center"
+                                                                   ToolTip="{l:T ui.padding.tip}"/>
+                                                        <TextBox Text="{Binding PadLeft, UpdateSourceTrigger=LostFocus}" Width="44" Margin="0,0,3,0"/>
+                                                        <TextBox Text="{Binding PadRight, UpdateSourceTrigger=LostFocus}" Width="44" Margin="0,0,3,0"/>
+                                                        <TextBox Text="{Binding PadTop, UpdateSourceTrigger=LostFocus}" Width="44" Margin="0,0,3,0"/>
+                                                        <TextBox Text="{Binding PadBottom, UpdateSourceTrigger=LostFocus}" Width="44"/>
+                                                    </DockPanel>
+
+                                                    <!-- Rows and columns only. -->
+                                                    <WrapPanel Margin="0,0,0,4"
+                                                               Visibility="{Binding ArrangesInLine, Converter={StaticResource BoolToVisibility}}">
+                                                        <CheckBox IsChecked="{Binding SetsChildWidth}" Content="{l:T ui.setWidth}" Margin="0,0,10,0"
+                                                                  ToolTip="{l:T ui.setWidth.tip}"/>
+                                                        <CheckBox IsChecked="{Binding SetsChildHeight}" Content="{l:T ui.setHeight}" Margin="0,0,10,0"/>
+                                                        <CheckBox IsChecked="{Binding SharesWidth}" Content="{l:T ui.shareWidth}" Margin="0,0,10,0"
+                                                                  ToolTip="{l:T ui.shareWidth.tip}"/>
+                                                        <CheckBox IsChecked="{Binding SharesHeight}" Content="{l:T ui.shareHeight}" Margin="0,0,10,0"/>
+                                                        <CheckBox IsChecked="{Binding ArrangeReversed}" Content="{l:T ui.reverse}"
+                                                                  ToolTip="{l:T ui.reverse.tip}"/>
+                                                    </WrapPanel>
+
+                                                    <!-- Grid only. -->
+                                                    <DockPanel Margin="0,0,0,4"
+                                                               Visibility="{Binding ArrangesAsGrid, Converter={StaticResource BoolToVisibility}}">
+                                                        <TextBlock Text="{l:T ui.cell}" MinWidth="66" VerticalAlignment="Center"/>
+                                                        <TextBox Text="{Binding CellWidth, UpdateSourceTrigger=LostFocus}" Width="60" Margin="0,0,4,0"/>
+                                                        <TextBox Text="{Binding CellHeight, UpdateSourceTrigger=LostFocus}" Width="60"/>
+                                                    </DockPanel>
+                                                    <DockPanel Margin="66,0,0,4"
+                                                               Visibility="{Binding ArrangesAsGrid, Converter={StaticResource BoolToVisibility}}">
+                                                        <TextBox Text="{Binding ArrangeConstraintCount, UpdateSourceTrigger=LostFocus}"
+                                                                 Width="44" DockPanel.Dock="Right" Margin="4,0,0,0"
+                                                                 ToolTip="{l:T ui.howManyColumnsHow.tip}"/>
+                                                        <ComboBox SelectedValue="{Binding ArrangeConstraint, Mode=TwoWay}"
+                                                                  ItemsSource="{Binding Source={x:Static vm:UiNodeViewModel.ConstraintOptions}}"
+                                                                  ToolTip="{l:T ui.flexibleFitsManyAcross.tip}"/>
+                                                    </DockPanel>
+
+                                                    <CheckBox IsChecked="{Binding CentersLastLine}"
+                                                              Margin="0,0,0,4"
+                                                              Visibility="{Binding ArrangesAsGrid, Converter={StaticResource BoolToVisibility}}"
+                                                              ToolTip="{l:T ui.nineteenThingsRowsSeven.tip}">
+                                                        <TextBlock Text="{l:T ui.centreLastRowNot}"
+                                                                   TextWrapping="Wrap"/>
+                                                    </CheckBox>
+
+                                                    <CheckBox IsChecked="{Binding FitsToContent}"
+                                                              Margin="0,0,0,4"
+                                                              Visibility="{Binding ShowsFitToContent, Converter={StaticResource BoolToVisibility}}"
+                                                              ToolTip="{l:T ui.fitToContent.tip}">
+                                                        <TextBlock Text="{l:T ui.fitToContent}"
+                                                                   TextWrapping="Wrap"/>
+                                                    </CheckBox>
+                                                </StackPanel>
+
+                                                <CheckBox IsChecked="{Binding ClipsChildren}" Margin="0,2,0,0"
+                                                          IsEnabled="{Binding CanChangeClip}"
+                                                          ToolTip="{l:T ui.clip.tip}">
+                                                    <TextBlock Text="{l:T ui.clip}" TextWrapping="Wrap"/>
+                                                </CheckBox>
+                                                <TextBlock Text="{l:T ui.clip.gameOwn}" Style="{StaticResource UiNote}" Margin="18,2,0,0"
+                                                           Visibility="{Binding CanChangeClip, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                            </StackPanel>
+                                        </Expander>
+                                    </Border>
+
+                                    <!-- ── Extra components ───────────────────── -->
+                                    <Border Style="{StaticResource UiSectionBox}">
+                                        <Expander x:Name="UiSectionComponents" Style="{StaticResource UiSection}">
+                                            <Expander.Header>
+                                                <DockPanel>
+                                                    <TextBlock Text="{l:T ui.section.components}" Style="{StaticResource UiSectionTitle}"/>
+                                                    <TextBlock Text="{Binding ComponentsSummary}" Style="{StaticResource UiSectionSummary}"/>
+                                                </DockPanel>
+                                            </Expander.Header>
+                                            <StackPanel>
+                                                <Button Content="{l:T gameObject.addComponent}" Padding="8,2" HorizontalAlignment="Left"
+                                                        Command="{Binding AddComponentCommand}"
+                                                        ToolTip="{l:T gameObject.addComponent.tip}"/>
+                                                <!-- No ItemTemplate: ComponentRowViewModel resolves to
+                                                     the implicit template the Places tab uses. -->
+                                                <ItemsControl ItemsSource="{Binding Components}" Margin="0,4,0,0"/>
+                                            </StackPanel>
+                                        </Expander>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+                        </ScrollViewer>
+                    </Border>
                 </Grid>
             </TabItem>
 

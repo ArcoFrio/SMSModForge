@@ -2018,9 +2018,10 @@ public sealed class PlacePreview : Grid
             // mirror what the runtime does: the NPCs root builds with
             // localPosition, and so does a BOUND node — it's addressing an
             // object that already lives in a hierarchy, so its transform is
-            // local by definition. Anything else is a pack-created object,
-            // which the runtime places in world space.
-            bool composed = inNpcSubtree || o.IsNpcRoot || o.Bind;
+            // local by definition - and so does a copy of one, made under its
+            // parent. Anything else is a pack-created object, which the
+            // runtime places in world space.
+            bool composed = inNpcSubtree || o.IsNpcRoot || o.Bind || o.IsCopy;
 
             Aff local = NodeAff(o);
             Aff world = composed ? parentWorld.Then(local) : local;

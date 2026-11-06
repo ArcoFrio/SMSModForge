@@ -131,6 +131,44 @@ Each is a snapshot; a new game version needs each one re-made and diffed.
       and scripts they run (no wait-until, no loop). After an update, re-run the
       scan of the room talks' instruction types on a fresh F10 dump, and the
       in-game suite's J5.
+- [ ] **Travel** (1.8.3, `NavigatorRuntime.RequestTravel`) makes the journey a
+      navigator button makes - `Upcoming-Level`, `Start-Transfer` and
+      `10_Gameplay/TransferScene`'s Trigger - and waits on the same things as
+      above plus a conversation on screen. That script (1.8E, read with the
+      bridge's `scripts`) raises its fade, the signal `FadeIn2025`, between
+      setting Active-Level and switching the level, which is why Travel has no
+      fade-less option: re-read it if the game's journey changes. Its
+      `10_Gameplay/Travel_Failsave` cancels a journey (Start-Transfer back to
+      false) while `Core_NoSave2[travel-failsavecheckbool]` or
+      `[2025-fadein-travelblock]` holds, while `Dialogue_Default_Dialogue(Clone)`
+      is active, and while one of a list of its screens is (ShopCore, Starmaker,
+      SaveLoadSystem, Desktop, Payout, Return_Home...); Travel waits on the first
+      three (`NavigatorRuntime.GameWouldRefuse`) and retries after the rest. A
+      pack place's room talk comes up only once its level is up
+      (`SchedulePendingRoomTalk`). In-game suite B8.
+- [ ] **A copy of one of the game's objects** (1.8.3, `PlaceFactory`, `copyOf`)
+      finds the original by its scene path through `ResolveGameObject`
+      (`Transform.Find`, inactive included) and `Object.Instantiate`s it; its
+      parallax override sets `ParallaxMouseEffect.parallaxStrength`. A moved or
+      renamed original is skipped with a warning - packs name these paths
+      themselves, so a game update can break theirs. In-game suite B9.
+- [ ] **A UI object's press and loop** (1.8.3, `UiOverlay`, `UiPress`, `UiLoop`)
+      are drawn over what the object is: put back in Update at
+      `DefaultExecutionOrder(-30000)`, before the game's scripts, and applied
+      in LateUpdate. They compose with the game's `UIHoverBounce` because it
+      sets its scale in Update (measured: hovered 1.05, held 0.945). If the
+      game's components ever set scale in LateUpdate, recheck. In-game suite
+      F8 and F9.
+- [ ] **Upright UI objects** (1.8.3, `UiUpright`) are levelled in LateUpdate,
+      after the game's own scripts have turned their parents that frame (the
+      world map's district groups turn by a GC2 transition). If the game ever
+      turns them later in the frame, the object would lag a frame. In-game
+      suite F7.
+- [ ] **A grid fitted to what it holds** (1.8.3, `UiCenteredGrid.FitToContent`)
+      changes only the size the grid asks for: it relies on Unity's
+      `GridLayoutGroup` placing a fixed-column grid's cells for as many columns
+      as it has children (`SetCellsAlongAxis` clamps to the child count, Unity
+      2019 on). A Unity upgrade could change that. In-game suite F6.
 - [ ] **Saves**: GC2 save layout (SAVE.GZ: GNVs, lists, one local set, quest
       journal); the sleep autosave writes slot 1 (+ slot 2 on Mondays);
       `Shared/SaveLoadChecks.cs`, `SaveRecord.cs`, `VanillaSaveSlot.cs`.
@@ -231,7 +269,14 @@ Each is a snapshot; a new game version needs each one re-made and diffed.
         Scrollarea/CoreGallery`; wallpapers `9_MainCanvas/Desktop/Wallpaper`
         and `9_MainCanvas/Wallpaperselection/UI_Core/List`; busts under
         `2_Bust_Manager` (body on `MBase1`); a game screen patched:
-        `vanillaui:9_MainCanvas/Quitagme`.
+        `vanillaui:9_MainCanvas/Quitagme`, further down too (1.8.3): its
+        `Button/Text (TMP)` ("Desktop"), `Button (2)/Text (TMP)` ("Main Menu")
+        and `Slider/Fill Area/Fill`; pack screens on the gameplay canvas
+        `9_MainCanvas`.
+      - Copies (1.8.3): the Pool's potted plant `5_Levels/8_Pool/8_Pool (2)`
+        (sprite `PottedPlant`, a ParallaxMouseEffect), and the effect
+        `6_Effects/CFXR2 Expression Loving (Timed)` with its child `Hearts`,
+        both with a ParticleSystem.
       - Conversations: the skin's box is a root `Dialogue_*` (speech under
         `/Speech/`, choices under `/Choices/`, speaker `Actor`); Game Creator's
         `Story.Continue()` is a player's click; `Story.m_CurrentId` the line.
@@ -240,3 +285,22 @@ Each is a snapshot; a new game version needs each one re-made and diffed.
         target's plain-line ancestors (Story.StackFromJump).
       - A pack meeting a save for the first time catches the day up: its
         Daily refresh and on-day-change rules run once at load.
+
+## The UI preview's copy of the game (1.8.3)
+
+F10 and F11 in the in-game suite compare the editor's preview with screenshots of
+the game. If either starts failing after an update, the game's art or fonts have
+probably moved. Refresh the editor's copy from the running game:
+
+- In the test copy, through the bridge: `font-atlas *`, `font-spacing`, `selectable-tints`, and
+  `sprite-dump` (with `sprites-wanted.txt` beside the results, one sprite name per
+  line). They write into the bridge's `shots` folder.
+- `python Tools/Game/preview-data-from-game.py <shots folder>` puts them in
+  `Resources/VanillaOverlays`: the coloured atlases of fonts with a "Custom Atlas"
+  material, sprites in full colour where that costs little, each sprite's whole size
+  and padding in its index, and each object's resting tint in its surface. Re-run it
+  after re-extracting surfaces or sprites too: the extractors do not write these.
+
+Assumed by the preview, and measured in 1.8E: the game renders in linear colour
+space; TextMeshPro draws no uGUI Shadow or Outline; the last-resort font is
+`LiberationSans SDF`.

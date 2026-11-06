@@ -6,10 +6,10 @@ using SMSModForge.Localization;
 namespace SMSModForge.Rendering;
 
 /// <summary>A decoded sprite, ready to draw.</summary>
-public sealed record UiSprite(byte[] Pixels, int Width, int Height);
+public sealed record UiSprite(byte[] Pixels, int Width, int Height, double RectWidth = 0, double RectHeight = 0, double[]? Padding = null);
 
 /// <summary>A font asset with its atlas already decoded to one byte per texel.</summary>
-public sealed record UiFontSet(TmpFont Font, byte[] Alpha, int Width, int Height);
+public sealed record UiFontSet(TmpFont Font, byte[] Alpha, int Width, int Height, byte[]? Colour = null);
 
 /// <summary>Where the renderer gets its pictures and its letters. An interface
 /// so the renderer can be tested without a disk, and so a pack's own assets can
@@ -134,7 +134,7 @@ public static class UiSceneRenderer
                              VanillaUiSurface.Node node, UiRect parentRect,
                              VanillaUiSurface surface, IUiAssets assets,
                              double alpha, UiRect? clip,
-                             UiRenderReport report, string path, bool forceVisible)
+                             UiRenderReport report, string path, bool forceVisible, bool level = false)
     {
         // A switched-off object draws nothing, and neither does anything under
         // it. forceVisible is for looking at one base on purpose: the game keeps
@@ -148,6 +148,22 @@ public static class UiSceneRenderer
                                Doubles(node.Rect.AnchorMin), Doubles(node.Rect.AnchorMax),
                                Doubles(node.Rect.Pivot), Doubles(node.Rect.AnchoredPosition),
                                Doubles(node.Rect.SizeDelta));
+
+        // Turned: drawn level into a layer of its own, and that turned about the
+        // pivot - as the renderer of an authored tree does.
+        double turn = node.Rect?.LocalEuler is { Length: > 2 } euler ? euler[2] : 0;
+        if (!level && Math.Abs(turn) > 0.001)
+        {
+            var layer = UiCompositor.NewLayer(w, h);
+            Draw(layer, w, h, node, parentRect, surface, assets, alpha, null, report, path, forceVisible, level: true);
+            var pivots = node.Rect!.Pivot;
+            var pivot = UiLayout.ToScreen(new UiRect(rect.X + (pivots is { Length: > 0 } ? pivots[0] : 0.5) * rect.Width,
+                                                     rect.Y + (pivots is { Length: > 1 } ? pivots[1] : 0.5) * rect.Height, 0, 0),
+                                          surface.Width, surface.Height);
+            UiCompositor.BlendTurned(target, layer, w, h, pivot.X, pivot.Y, turn,
+                                     clip is { } outer ? UiLayout.ToScreen(outer, surface.Width, surface.Height) : null);
+            return;
+        }
 
         if (node.Rect?.Resolved is { IsTrustworthy: false })
             report.NotTrustworthy(path);
@@ -179,7 +195,7 @@ public static class UiSceneRenderer
         var image = node.Image;
         if (image == null || !image.Enabled || string.IsNullOrEmpty(image.SpriteKey)) return;
 
-        var tint = UiColor.Parse(image.Color);
+        var tint = Model.UiGameLook.Rested(UiColor.Parse(image.Color), node.RestingTint);
         if (tint.IsInvisible) return;
 
         var sprite = assets.Sprite(image.SpriteKey);
@@ -198,8 +214,19 @@ public static class UiSceneRenderer
                                             surface.Canvas.ReferencePixelsPerUnit,
                                             image.PixelsPerUnitMultiplier);
 
-        var pixels = UiSlice.Compose(sprite.Pixels, sprite.Width, sprite.Height,
-                                     border, dw, dh, image.FillCenter, divisor);
+        bool tiled = string.Equals(image.Type, "Tiled", StringComparison.OrdinalIgnoreCase);
+        var pivots = node.Rect?.Pivot;
+        screen = UiSlice.DrawnArea(screen, sprite, image.IsSliced, tiled, image.PreserveAspect, divisor,
+                                   pivots is { Length: > 0 } ? pivots[0] : 0.5,
+                                   pivots is { Length: > 1 } ? pivots[1] : 0.5);
+        dw = (int)Math.Round(screen.Width);
+        dh = (int)Math.Round(screen.Height);
+        if (dw <= 0 || dh <= 0) return;
+
+        var pixels = tiled
+            ? UiSlice.Tile(sprite.Pixels, sprite.Width, sprite.Height, border, dw, dh, image.FillCenter, divisor)
+            : UiSlice.Compose(sprite.Pixels, sprite.Width, sprite.Height,
+                              border, dw, dh, image.FillCenter, divisor);
         UiSlice.Tint(pixels, tint.B, tint.G, tint.R, tint.A);
 
         Place(target, w, h, pixels, dw, dh, screen, node, clip, alpha, surface);
@@ -215,18 +242,15 @@ public static class UiSceneRenderer
         var text = node.Text;
         if (text == null || !text.Enabled || string.IsNullOrEmpty(text.Value)) return;
 
-        var colour = UiColor.Parse(text.Color);
+        var colour = Model.UiGameLook.Rested(UiColor.Parse(text.Color), node.RestingTint);
         if (colour.IsInvisible) return;
 
-        // Legacy UI.Text points at a Unity font file rather than a TMP
-        // asset, so there is no atlas to draw from. Said plainly instead of
-        // reported as a missing font, which would send someone looking for an
-        // export that was never going to contain it.
+        // Legacy UI.Text points at a Unity font file rather than a TMP asset, so
+        // it has no atlas of its own: it is drawn from the asset made from the
+        // same file (see VanillaUiAssets.Font), which is close. Said plainly
+        // rather than reported as a missing font.
         if (string.Equals(text.Kind, "UI.Text", StringComparison.OrdinalIgnoreCase))
-        {
             report.Legacy(path + "  (" + (text.Font.Length > 0 ? text.Font : Loc.T("preview.ui.noFont")) + ")");
-            return;
-        }
 
         var set = assets.Font(text.Font);
         if (set == null) { report.MissingFont(text.Font); return; }
@@ -234,50 +258,41 @@ public static class UiSceneRenderer
         // The font's own fallback chain, which is how the game resolves a
         // character its first atlas never baked. Reproducing it is what stops
         // the preview failing where the game succeeds.
-        var fallbacks = new List<TmpFont>();
-        foreach (string name in set.Font.Fallbacks)
-        {
-            var also = assets.Font(name);
-            if (also != null) fallbacks.Add(also.Font);
-        }
+        var fallbacks = UiTextBlock.Fallbacks(set, assets);
 
         var screen = UiLayout.ToScreen(rect, surface.Width, surface.Height);
         int dw = (int)Math.Round(screen.Width), dh = (int)Math.Round(screen.Height);
         if (dw <= 0 || dh <= 0) return;
 
-        var layout = TmpTextLayout.Measure(set.Font, text.Value, text.Size,
-                                           text.Wraps ? dw : 0,
-                                           Align(text.Alignment),
-                                           text.Number(text.LineSpacing) ?? 0,
-                                           text.Number(text.CharacterSpacing) ?? 0,
-                                           fallbacks);
+        var style = UiTextStyle.Parse((string.Equals(text.Kind, "UI.Text", StringComparison.OrdinalIgnoreCase) ? UiTextStyle.LegacyMark : "") + text.FontStyle);
+        double lineSpacing = text.Number(text.LineSpacing) ?? 0, characterSpacing = text.Number(text.CharacterSpacing) ?? 0;
+        double size = text.AutoSizes
+            ? UiTextBlock.FitSize(set.Font, text.Value, style, dw, dh, text.Wraps,
+                                  text.Number(text.FontSizeMin) ?? 12, text.Number(text.FontSizeMax) ?? 72,
+                                  lineSpacing, characterSpacing, fallbacks)
+            : text.Size;
+        var layout = UiTextBlock.Measure(set.Font, text.Value, style, size,
+                                         text.Wraps ? dw : 0,
+                                         Align(text.Alignment),
+                                         lineSpacing, characterSpacing,
+                                         fallbacks);
         foreach (int missing in layout.Missing)
             report.MissingGlyph($"'{(char)missing}' in {text.Font}");
 
-        // Where the block sits vertically inside its rectangle. This is not a
-        // detail: 1945 of the game's 2273 TextMeshPro objects are vertically
-        // middled, and laying every one of them from the top cut titles in half
-        // wherever the font was larger than its box.
-        double offset = VerticalOffset(text.Alignment, dh, layout.Height);
+        // Where the block sits inside its rectangle. This is not a detail: 1945
+        // of the game's 2273 TextMeshPro objects are vertically middled, and
+        // laying every one of them from the top cut titles in half wherever the
+        // font was larger than its box. TextMeshPro lets text overflow by default,
+        // so the buffer is grown to hold whatever spills rather than cropping it:
+        // a preview that trimmed the overflow would hide exactly the authoring
+        // mistake it exists to show.
+        var (laid, left, above, tw, th) = UiTextBlock.Fit(layout, set.Font, dw, dh, text.Wraps, text.Alignment);
+        var pixels = UiTextBlock.Draw(laid, set, assets, tw, th, colour, style);
 
-        // TextMeshPro lets text overflow its rectangle by default, so the
-        // buffer is grown to hold whatever spills rather than cropping it. A
-        // preview that silently trimmed the overflow would hide exactly the
-        // authoring mistake it exists to show.
-        int above = (int)Math.Max(0, Math.Ceiling(-offset));
-        int below = (int)Math.Max(0, Math.Ceiling(offset + layout.Height - dh));
-        int th = dh + above + below;
-
-        var shifted = new TextLayout();
-        shifted.Height = layout.Height;
-        foreach (var g in layout.Glyphs)
-            shifted.Glyphs.Add(g with { Y = g.Y + offset + above });
-        shifted.LineWidths.AddRange(layout.LineWidths);
-
-        var pixels = UiTextRaster.Draw(shifted, set.Font, set.Alpha, set.Width, set.Height,
-                                       dw, th, colour);
-        var placed = new UiRect(screen.X, screen.Y - above, dw, th);
-        Place(target, w, h, pixels, dw, th, placed, node, clip, alpha, surface);
+        // No shadow or outline: TextMeshPro builds its own mesh, so the game draws
+        // neither on text, whatever the object carries.
+        var placed = new UiRect(screen.X - left, screen.Y - above, tw, th);
+        Place(target, w, h, pixels, tw, th, placed, node, clip, alpha, surface, effects: false);
         report.Drawn++;
     }
 
@@ -285,7 +300,7 @@ public static class UiSceneRenderer
     /// whatever is clipping it.</summary>
     private static void Place(byte[] target, int w, int h, byte[] pixels, int dw, int dh,
                               UiRect screen, VanillaUiSurface.Node node,
-                              UiRect? clip, double alpha, VanillaUiSurface surface)
+                              UiRect? clip, double alpha, VanillaUiSurface surface, bool effects = true)
     {
         // The clip is carried down the tree in canvas space, like every other
         // rectangle here, and converted only at the point it is used against a
@@ -295,7 +310,7 @@ public static class UiSceneRenderer
 
         UiEffects.Draw(target, w, h, pixels, dw, dh,
                        (int)Math.Round(screen.X), (int)Math.Round(screen.Y),
-                       ToEffect(node.Shadow), ToEffect(node.Outline), alpha);
+                       effects ? ToEffect(node.Shadow) : null, effects ? ToEffect(node.Outline) : null, alpha);
     }
 
     /// <summary>Erase whatever falls outside a mask. Done to the graphic before

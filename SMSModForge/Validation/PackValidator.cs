@@ -1231,6 +1231,7 @@ public static class PackValidator
         }
 
         CheckLevelTokens(pack, issues);
+        CheckParticleColours(pack, issues);
         QuestValidation.Check(pack, issues);
         VariableChecks.Check(pack, issues);
 
@@ -1267,6 +1268,27 @@ public static class PackValidator
     /// Both are right in their own field, and validating one against the other's
     /// catalog would flag most of the pack.
     /// </summary>
+    /// <summary>A particle colour the game cannot read: it reads #RRGGBB and
+    /// #RRGGBBAA, and anything else leaves the particles as they were with
+    /// only a line in its log.</summary>
+    private static void CheckParticleColours(ModPack pack, List<ValidationIssue> issues)
+    {
+        var colour = new System.Text.RegularExpressions.Regex("^#?[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$");
+        void Walk(IEnumerable<GameObjectDef> nodes, string where)
+        {
+            foreach (var n in nodes)
+            {
+                string at = $"{where}.{n.Name}";
+                if (!string.IsNullOrWhiteSpace(n.ParticleColor) && !colour.IsMatch(n.ParticleColor.Trim()))
+                    issues.Add(new(Severity.Error, at + ".particleColor",
+                        Loc.F("validation.gameObject.particleColor", "name", n.Name, "colour", n.ParticleColor), "gameObject.particleColor"));
+                Walk(n.Children, at);
+            }
+        }
+        foreach (var place in pack.Places) Walk(place.GameObjects, $"places[{place.Key}]");
+        foreach (var ext in pack.VanillaExtensions) Walk(ext.GameObjects, $"vanillaExtensions[{ext.Source}]");
+    }
+
     private static void CheckLevelTokens(ModPack pack, List<ValidationIssue> issues)
     {
         var goNames = new HashSet<string>(

@@ -4,7 +4,8 @@
 # Commands: ping | wait <s> | wait-ingame [s] | load <slot> | get <var> | set <var> <value> |
 #           dialogue <packId> <key> | vanilla-dialogue <path> | wait-dialogue-end [s] | playing |
 #           click <button's words> | speaker | menu | screen <name> | shot <name> |
-#           inspect <root>/<path> | materials <word> | volumes |
+#           inspect <root>/<path> | materials <word> | volumes | scripts <path> (every script under it, to a
+#           file in BepInEx - what one of the game's scripts does) |
 #           watch <s> <packId> <var,var> | listen <s> <name> | timeline <s> <name> | mute on|off | log <text> | quit
 # watch, listen and timeline answer when their time is up, and the commands after them run meanwhile. timeline
 # writes timeline-<name>.txt beside the results: frame by frame, each change in the maps up, the game's scripts

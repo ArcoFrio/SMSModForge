@@ -1,5 +1,163 @@
 # Changelog
 
+## 1.8.3
+
+The UI tab is rebuilt around what you came to do: a start page, a much bigger
+preview, a control for every setting of an object, grouped by what it answers,
+and an eye to hide an object while you work on what is behind it. That preview
+now draws what the game draws, checked against the game's own screenshots.
+Also new: a Travel action, copies of the game's objects in your places, objects
+that keep moving, a pressed size on buttons, Stays upright, and grids only as
+big as what they hold. Settings on the game's objects no longer vanish when a
+pack is reopened, and changes deep inside the game's own screens now reach the
+game.
+
+### Before you update
+
+- **A screen of your own is laid out over the whole screen now, as the
+  editor shows it.** In the game, every screen a pack made itself was laid out
+  in a small box in the middle of the screen, so an object anchored to a
+  corner came out near the middle and one stretched to fill the screen was
+  100 pixels wide. Objects anchored to the middle were right, and still are.
+  If you moved a corner-anchored object around in the editor until it looked
+  right in the game, it now sits where the editor shows it - check those
+  screens once after updating.
+
+### New
+
+- **The UI tab says what to do.** With nothing selected it opens on a start
+  page: change one of the game's UIs, add something that stays on screen, or
+  make a window that opens, each one click away. After that it reads from left
+  to right: pick a UI and an object, see it in a much bigger preview, change it
+  on the right. A row above the tree goes back to the UI's own settings.
+- **Every setting of a UI object now has a control, grouped by what it
+  answers:** where it sits, how it looks, when it shows, what clicking does, how
+  it moves, what's inside. A closed section says what is in it ("2 actions",
+  "starts hidden"). New here, and until now only reachable by editing the pack
+  by hand: a "Stick to" grid for which part of its parent an object stays with,
+  filling the width or height with margins, exact anchors and pivot, turn, scale,
+  how a picture is drawn (sliced, tiled, filled), keeping its shape, text
+  alignment, wrapping, shrink to fit, line and letter gaps, opacity, shadow,
+  outline, clipping and extra components.
+- **An eye on every object in the UI tab's tree hides it in the preview only.**
+  So an object in the way can stay where it is while you work on what is behind
+  it: a hidden object is not drawn and clicks go through it, along with everything
+  inside it, and whatever arranges it keeps its place so nothing else moves. It
+  never touches the pack or the game. The editor remembers what you hid for that
+  pack, and the preview says how many are hidden, with a Show all beside it.
+- **The UI preview now shows what the game draws.** It was compared with the
+  game's own screenshots, setting by setting, and put right wherever they
+  differed: see-through colours and shadows were far too dark (the game mixes
+  them in linear light), turned objects were drawn level, tiled pictures
+  stretched, pictures that keep their shape squashed, and shrink to fit ignored.
+  Unwrapped text stopped at the edge of its box where the game runs on. The
+  game's outlined title fonts were thin and flat, its uppercase, small capitals,
+  bold, italic and underlined labels were drawn plain, its buttons' resting
+  colours were missing (so click areas the game leaves invisible were drawn
+  solid), and trimmed pictures were drawn too large. Soft UI art is sharper too.
+  Three things the preview cannot know are left alone: anything hidden by
+  conditions is still drawn, so you can work on it; a slider stands at the
+  player's own setting; and a picture a script fills as the game runs is drawn
+  full.
+- **A new action, Travel: take the player to a place, as its map or
+  navigator button does.** One of your places or one of the game's, with the
+  game's own journey and fade, the place's arrival conversation, and music if
+  you name one. While the game is busy - a conversation on screen, another
+  journey, a locked moment, and the few seconds after a conversation in which
+  the game itself turns journeys down - it waits, so on a line the player goes
+  once the dialogue ends; a button would simply refuse. If the game turns the
+  journey down anyway (a screen of its own is open), it tries again a few
+  times, as a player clicks again. If the player is already there, nothing
+  happens. There is no option to skip the fade: it is part of the
+  game's journey, and a journey without it would be a copy of the game's
+  rather than the game's own.
+- **An object in a place can be a copy of one of the game's.** "Copy of"
+  takes the original's path in the game's scene - a room's button canvas for
+  a room of your own, the TV, an effect - and the copy is made each time the
+  game loads, in your place or, with "Beside the original", next to the
+  original (for an effect your dialogues switch on by its path). It stays as
+  the original was unless you override its place, its on/off or its parallax;
+  children marked Bind reach its parts by name - to move one of its buttons -
+  and new children are added to it. Until now a pack could make its own
+  objects or change the game's, never copy one.
+- **Particle colour** on a copied or bound object sets the colour its
+  particles start in, so one of the game's effects can be recoloured; and
+  **Override parallax** sets how far a copied or bound object drifts with the
+  mouse.
+- **An object of a screen can keep moving while it is shown.** "Keeps moving"
+  (beside "When it opens" and "When it closes", which play once) repeats:
+  a pulse of its fade or its size - a glow that breathes - or a sweep from
+  one place to another and back to the start - a highlight under a parent
+  that clips it becomes a shine running along a line. Each pass takes the
+  seconds you give, with a pause between passes and a delay before the first,
+  so copies of one object need not move in step. The editor's preview shows it
+  still.
+- **"Pressed" on a button: it shrinks while held down.** A button's own press
+  is the game's, played on the click - once it is let go - so a button whose
+  click closes its screen or starts a conversation never showed it. With
+  "Pressed" set (0.95, say) it shrinks while the pointer is down, together
+  with everything on it, and comes back on release; it then stands in for the
+  game's press rather than adding a second one. It works alongside the game's
+  hover bounce.
+- **"Stays upright" on an object of a screen** keeps it level while what it
+  hangs on turns: it moves and grows with its parent, never turns with it.
+  The game swings some of its buttons round - a district's buttons on the
+  world map turn as it opens - and anything a pack hung on them turned upside
+  down for most of a second. It works on objects you add and on the game's
+  own you bind.
+- **A grid can be only as big as what it holds.** "Only as big as what it
+  holds", on a grid with a set number of columns, makes it ask for only the
+  columns its objects fill: a strip of faces that wraps at eight is as wide
+  as the two showing, not always eight wide, so a Content Size Fitter on it
+  grows and shrinks with its contents. The same goes for height with a set
+  number of rows. Unity's own grid always asks for all its columns.
+
+### Fixed
+
+- **Settings on one of the game's objects could be lost.** Reopening a pack
+  dropped a click, its conditions, a hover colour, an arrangement of children, a
+  keeps-moving, a pressed size or stays-upright from any object of the game's,
+  and the next save wrote the loss to the file. Saving alone dropped how it opens
+  and closes and its click sound. Everything now comes back, and a check walks
+  every saved setting so a new one cannot be forgotten. Anything already lost
+  this way has to be set again.
+- **Taking a picture or words off one of the game's objects only worked in the
+  preview.** The game kept showing them. It now removes them too. Emptying an
+  object's opacity goes back to the game's own value.
+- A window started from the template now has a close button that closes it.
+- The UI tab's "Which screen" came up blank for the world map, and a stray
+  unlabelled dropdown sat on every UI of the pack's own.
+- The world map said "2 changes refer to objects the game no longer has" about
+  things hung on the pack's own map buttons. Those buttons are there when the game
+  runs, so the warning was wrong: they now sit under their district in the tree.
+- The dialogue preview drew its lines narrower than the game does: the game's
+  dialogue font sets a letter spacing of its own, which the editor did not know
+  about. Lines now run as long as they do in the game, so one that was only just
+  fitting may show as too long.
+- With a language or a pack that needs Windows' fonts, a letter the game's fonts
+  lack - a curly apostrophe, in most of them - came from that font rather than the
+  game's own last resort, leaving gaps in the game's English sentences.
+- **Changes further down one of the game's screens were dropped in the
+  game.** On a screen of the game's that your pack extends, anything two or
+  more levels down - an object added inside a button inside a group, a label
+  reworded inside a button - was looked for in the wrong place and skipped,
+  with only a line in the game's log. Only the first level ever worked. The
+  editor saved them correctly all along, so they now appear without
+  re-saving.
+- **A picture's edge no longer shows a line from its opposite edge.** Your
+  pictures on screens were loaded to repeat, so wherever one landed between
+  whole pixels - always, on the zoomed world map - each edge took in a little
+  of the opposite one: a line along a picture's top also showed faintly along
+  its bottom, and a cut corner had a strip of colour inside it. Pictures on
+  screens and wallpapers now stop at their own edges. A picture you draw
+  Tiled still repeats, as it must.
+- **A place's arrival script no longer runs where you are when the game turns
+  the journey down.** The game refuses a journey for a few seconds after a
+  conversation, and while some of its screens are open; a navigator or World
+  Map button to one of your places pressed then went nowhere, but a second
+  later that place's arrival script ran in the room you were still in. It now
+  runs only once you arrive.
+
 ## 1.8.2
 
 Two new actions - PlayDialogue, to play another of your dialogues or one of
