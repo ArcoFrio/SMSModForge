@@ -15,7 +15,7 @@
 # The author's files are hashed before and after, and the script fails if one changed. It refuses while a copy
 # of the game runs (one may be writing the very save being copied) unless the author has said it is not theirs.
 param(
-    [string]$Test = 'D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E - ModForge test',
+    [string]$Test = (([xml](Get-Content -Raw (Join-Path $env:USERPROFILE '.sms\game.props'))).Project.PropertyGroup.StarmakerModForgeTest),
     [int]$From = 1,
     [switch]$Refresh,
     [switch]$NotTheAuthors

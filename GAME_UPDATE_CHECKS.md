@@ -9,8 +9,9 @@ before releasing a ModForge for it, and re-extract what the "how" column says.
 game is built: a name, a path, a number, a reflected field, a script read by
 hand. A line nobody adds is a break nobody finds until a player does.
 
-Game install used for 1.8E: `D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E`
-(the plugin build's output; `Directory.Build.props`). Extracted project: the
+Game install used for 1.8E: the author's game, `StarmakerGame` in the local
+`%USERPROFILE%\.sms\game.props` (CLAUDE.md, "Game installs"; the plugin build's
+output, through `Directory.Build.props`). Extracted project: the
 author's AssetRipper export (they will say where the 1.9 one is).
 
 ---

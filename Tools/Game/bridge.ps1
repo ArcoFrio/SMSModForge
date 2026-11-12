@@ -13,7 +13,7 @@
 # each sound inside the game, before its mixer - but the game's own volume at 0 (-mfMute) gives it only
 # silence (1.8E, measured), so it needs "mute off"; Windows' mute of the game stays on unless -Sound.
 param(
-    [string]$Test = 'D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E - ModForge test',
+    [string]$Test = (([xml](Get-Content -Raw (Join-Path $env:USERPROFILE '.sms\game.props'))).Project.PropertyGroup.StarmakerModForgeTest),
     [string]$Bridge = 'b0',
     [int]$Timeout = 180,
     [Parameter(Mandatory = $true)][string[]]$Commands

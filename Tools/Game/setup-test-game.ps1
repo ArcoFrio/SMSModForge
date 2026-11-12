@@ -4,8 +4,8 @@
 # test bridge is built into the copy (-Build), never into the author's game.
 #   powershell -File Tools\Game\setup-test-game.ps1 -Build
 param(
-    [string]$Game = 'D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E',
-    [string]$Test = 'D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E - ModForge test',
+    [string]$Game = (([xml](Get-Content -Raw (Join-Path $env:USERPROFILE '.sms\game.props'))).Project.PropertyGroup.StarmakerGame),
+    [string]$Test = (([xml](Get-Content -Raw (Join-Path $env:USERPROFILE '.sms\game.props'))).Project.PropertyGroup.StarmakerModForgeTest),
     [switch]$Build
 )
 $ErrorActionPreference = 'Stop'

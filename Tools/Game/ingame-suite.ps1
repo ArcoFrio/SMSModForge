@@ -12,7 +12,7 @@
 # A transcript of everything the bridge said is written beside the suite's packs, in
 # %TEMP%\SMSModForge-ingame\<time>\.
 param(
-    [string]$Test = 'D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E - ModForge test',
+    [string]$Test = (([xml](Get-Content -Raw (Join-Path $env:USERPROFILE '.sms\game.props'))).Project.PropertyGroup.StarmakerModForgeTest),
     [string]$Filter = '',
     [switch]$Detailed
 )

@@ -1,7 +1,7 @@
 # Closes the test copy of the game: asks it through the bridge, then ends it if it has not gone in 15 s.
 # Never touches a game the author is in, nor their own copy.
 param(
-    [string]$Test = 'D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E - ModForge test',
+    [string]$Test = (([xml](Get-Content -Raw (Join-Path $env:USERPROFILE '.sms\game.props'))).Project.PropertyGroup.StarmakerModForgeTest),
     [string]$Bridge = 'b0'
 )
 Add-Type -Path (Join-Path $PSScriptRoot 'GameNative.cs')

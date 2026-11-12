@@ -267,3 +267,28 @@ that looks exactly like a real defect and is not. Finish the edits, then run.
 Committed tests must not hard-code a path to anyone's pack. Where a real pack is
 genuinely the only meaningful subject — backward compatibility, for one — gate it
 behind an environment variable and ship the harness with no subject.
+
+## Game installs (moved 2026-11-12)
+
+The author moved Starmaker Story and every test copy to a new place, under opaque folder
+names. Where each one is now is in a single local file outside every
+repository, shared by all the SMS* repos and never committed:
+`%USERPROFILE%\.sms\game.props`.
+
+| Property | What |
+| --- | --- |
+| `StarmakerGame` | The author's own game |
+| `StarmakerModForgeTest` | ModForge's test copy (`Tools/Game`) |
+| `StarmakerAndroidsTest`, `StarmakerGalleryTest` | SMSAndroids' and the Gallery's test copies |
+
+- The local `Directory.Build.props` imports it: `PluginOutputPath` is
+  `$(StarmakerGame)\BepInEx\plugins\`. The scripts in `Tools/Game` take their
+  `-Game` / `-Test` defaults from it. If a copy moves, change that file only.
+- **Never write those paths into a tracked file**, a commit message or
+  anything pushed: name the property instead. Don't rename the folders.
+- The test copies' folders no longer end in " test". `launch.ps1` now tells
+  another check's copy from the author's game by the product it was renamed to
+  in its own `Starmaker Story_Data\app.info` (anything but `Starmaker Story`).
+- Notes, logs and backups that still name `D:\Downloads\SkyrimM\...` (this
+  file's older sections, `IN_GAME_LOOK.md`, `modpack BACKUP.json`, the
+  `extract_shader*.py` scratch scripts) describe the old place.

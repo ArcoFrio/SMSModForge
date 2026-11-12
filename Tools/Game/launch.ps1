@@ -20,7 +20,7 @@
 #
 # Then drive it with bridge.ps1, and close it with stop.ps1.
 param(
-    [string]$Test = 'D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E - ModForge test',
+    [string]$Test = (([xml](Get-Content -Raw (Join-Path $env:USERPROFILE '.sms\game.props'))).Project.PropertyGroup.StarmakerModForgeTest),
     [string]$Bridge = 'b0',
     [int]$Slot = 1,
     [string]$Vars = '',
@@ -40,12 +40,14 @@ if (-not (Test-Path $exe)) { throw "No test copy at $Test - run setup-test-game.
 # Never while the author's game is running - not only while they are in it: a second game beside theirs is in
 # the way of their play - and never two test copies at once. -NotTheAuthors: the author has said the game
 # running is not theirs (another agent's, 2026-10-24); even then, never one in front, where somebody may be in it.
-# Another check's test copy - a folder ending " test", made for checks the way this one was (the Gallery's
-# is "Starmaker Story 1.8E - Gallery test") - is not the author's game either.
+# Another check's test copy, made for checks the way this one was, is not the author's game either. The copies
+# have opaque folder names, so it is known by the product it was renamed to in its own game data (the Gallery's
+# "SMSGalleryTests"); the author's game is "Starmaker Story".
 foreach ($p in Get-Process -Name 'Starmaker Story' -ErrorAction SilentlyContinue) {
     if ($p.Path -like "$Test*") { throw "The test copy is already running (pid $($p.Id)); stop.ps1 first." }
     if ($p.Id -eq [GameNative]::ForegroundProcess()) { throw "Somebody is in the game (pid $($p.Id)); not starting." }
-    $anotherTestCopy = $p.Path -and ((Split-Path (Split-Path $p.Path) -Leaf) -match ' test$')
+    $otherInfo = if ($p.Path) { Join-Path (Split-Path $p.Path) 'Starmaker Story_Data\app.info' } else { '' }
+    $anotherTestCopy = $otherInfo -and (Test-Path $otherInfo) -and (@(Get-Content $otherInfo)[1] -ne 'Starmaker Story')
     if (-not $NotTheAuthors -and -not $anotherTestCopy) { throw "Another copy of the game is running (pid $($p.Id)) - the author's? Not starting (-NotTheAuthors only if they said it is not)." }
 }
 
