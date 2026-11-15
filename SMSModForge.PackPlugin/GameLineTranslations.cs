@@ -39,10 +39,22 @@ namespace SMSModForge.PackPlugin
             public string Text;
         }
 
-        /// <summary>How many of the game's lines the pack's translation into the
-        /// player's language would show - zero when it has none, or the player
+        /// <summary>How many of the game's lines each pack showed in the player's
+        /// language when it was last built. Kept as they are put in: after that
+        /// each one says the translation, which is no longer what it was
+        /// translated from, so counting them again found none - and the save
+        /// warning, which asks once a save is chosen, never told the player.</summary>
+        private static readonly Dictionary<string, int> _shown = new Dictionary<string, int>(StringComparer.Ordinal);
+
+        /// <summary>How many of the game's lines the pack shows in the player's
+        /// language - zero when it has no translation into it, or the player
         /// reads the pack in its own words.</summary>
-        public static int Usable(PackContext ctx) => Find(ctx).Count;
+        public static int Usable(PackContext ctx)
+        {
+            if (ctx == null) return 0;
+            int shown;
+            return _shown.TryGetValue(ctx.PackId ?? "", out shown) ? shown : Find(ctx).Count;
+        }
 
         /// <summary>Show them. Asking again changes nothing: a line already
         /// showing the translation no longer says what it was translated from.</summary>
@@ -56,6 +68,7 @@ namespace SMSModForge.PackPlugin
                 // In the pack's translation: not for XUnity.AutoTranslator to translate again.
                 XUnityLink.Note(line.Text, ctx.Pack.TranslatedInto);
             }
+            if (ctx != null) _shown[ctx.PackId ?? ""] = shown;
             if (lines.Count > 0)
                 log?.LogInfo(Tag + ctx.PackId + ": " + shown + " of the game's own lines shown in "
                              + (ctx.Pack.TranslatedInto ?? "?") + ", as the player chose.");
@@ -100,9 +113,11 @@ namespace SMSModForge.PackPlugin
                     catch (Exception) { continue; }
                     if (node == null) continue;
 
+                    // The line's words as written: Node.Text is empty until the
+                    // line plays, and compared with that no note ever matched.
                     string theirs = PackTexts.Usable(translation,
                                                      PackTexts.LineKey(key, id.ToString(CultureInfo.InvariantCulture)),
-                                                     node.Text ?? "");
+                                                     VanillaDialogueInjector.RawText(node) ?? "");
                     if (theirs != null) found.Add(new Line { Node = node, Text = theirs });
                 }
             }

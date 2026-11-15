@@ -69,6 +69,40 @@ namespace SMSModForge.PackPlugin
                     Say("ok find-all " + all + ": " + (paths.Length == 0 ? "(none)" : string.Join(" | ", paths)));
                     return true;
                 }
+                case "glists":
+                {
+                    // glists: the game's variable lists in the order a name-only
+                    // address searches them. Game Creator's manager fills its
+                    // Values dictionary from the variables repository in this
+                    // order (GlobalNameVariablesManager.OnCreate), and
+                    // GameVariableBridge returns the first list holding a name.
+                    var lists = GameCreator.Runtime.Common.TRepository<GameCreator.Runtime.Variables.VariablesRepository>
+                        .Get.Variables.NameVariables;
+                    Say("ok glists " + lists.Length + ": " + string.Join(" | ", lists.Select(l => l == null ? "(null)" : l.name)));
+                    return true;
+                }
+                case "gget":
+                case "gset":
+                {
+                    // gget List[name] / gset List[name] <value>: one of the game's
+                    // variables by its list too. `get`/`set` go by name alone,
+                    // the first list that has it, and a name like "5" is in a
+                    // dozen lists (Gallery, Gallery_2, Comments...).
+                    var m = System.Text.RegularExpressions.Regex.Match(all, @"^(?<list>.+?)\[(?<name>[^\]]+)\]\s*(?<value>.*)$");
+                    if (!m.Success) { Say("error " + verb + ": write List[name]"); return true; }
+                    string listName = m.Groups["list"].Value.Trim(), varName = m.Groups["name"].Value;
+                    var list = Resources.FindObjectsOfTypeAll<GameCreator.Runtime.Variables.GlobalNameVariables>()
+                        .FirstOrDefault(l => l != null && l.name == listName);
+                    if (list == null) { Say("error " + verb + ": no list " + listName); return true; }
+                    if (!list.Exists(varName)) { Say("error " + verb + ": " + listName + " has no " + varName); return true; }
+                    if (verb == "gset") list.Set(varName, Value(m.Groups["value"].Value.Trim()));
+                    // An object's value by its full path: several share a name ("Default" under each
+                    // girl of the milking minigame).
+                    var got = list.Get(varName);
+                    string shown = got is GameObject go ? PathOf(go.transform) : got?.ToString() ?? "(none)";
+                    Say("ok " + verb + " " + listName + "[" + varName + "] = " + shown);
+                    return true;
+                }
                 case "pvar":
                 {
                     var ctx = Plugin.FindContext(a);
@@ -76,6 +110,15 @@ namespace SMSModForge.PackPlugin
                     if (ctx == null || ctx.Vars == null) { Say("error pvar: no pack " + a); return true; }
                     if (!ctx.Vars.Exists(name)) { Say("error pvar: " + a + " has no variable " + name); return true; }
                     Say("ok pvar " + a + "." + name + " = " + ctx.Vars.GetString(name));
+                    return true;
+                }
+                case "pphoto":
+                {
+                    // pphoto <pack> <scene key>: whether the pack's store counts that
+                    // scene's Starmaker photo as taken.
+                    var ctx = Plugin.FindContext(a);
+                    if (ctx == null || ctx.Vars == null) { Say("error pphoto: no pack " + a); return true; }
+                    Say("ok pphoto " + a + "." + rest.Trim() + " = " + ctx.Vars.IsPhotoTaken(rest.Trim()));
                     return true;
                 }
                 case "pset":
@@ -426,6 +469,9 @@ namespace SMSModForge.PackPlugin
                     var journal = QuestRegistry.FindJournal();
                     if (quest == null || journal == null) { Say("error quest: no quest " + a + "." + rest + (journal == null ? " (no journal)" : "")); return true; }
                     var parts = new List<string> { "quest=" + journal.GetQuestState(quest) };
+                    // ...and its title as the journal reads it, tokens filled in.
+                    try { parts.Add("title=" + quest.GetTitle(GameCreator.Runtime.Common.Args.EMPTY)); }
+                    catch (Exception ex) { parts.Add("title=(" + ex.GetType().Name + ")"); }
                     if (words.Length > 1)
                         foreach (var task in words[1].Split(',').Select(t => t.Trim()).Where(t => t.Length > 0))
                         {
@@ -433,6 +479,27 @@ namespace SMSModForge.PackPlugin
                             parts.Add(task + "=" + journal.GetTaskState(quest, id) + " " + N((float)journal.GetTaskValue(quest, id), "0.##"));
                         }
                     Say("ok quest " + a + "." + words[0] + ": " + string.Join("; ", parts.ToArray()));
+                    return true;
+                }
+                case "scene-catalog":
+                    // scene-catalog [max side]: the game's scenes for the editor's catalogue.
+                    return SceneCatalog(a);
+                case "game-scene":
+                    // game-scene <path>: one of the game's scenes as it stands now.
+                    GameSceneState(all);
+                    return true;
+                case "signals":
+                    // signals: the kiss and flash signals raised since the last ask.
+                    HeardSignals();
+                    return true;
+                case "game-text":
+                {
+                    // game-text line|quest|ui <where, as VanillaNameMentions has it>:
+                    // one of the game's texts as it reads now.
+                    string where = rest.Trim();
+                    string said = GameNameMentions.TextNow(a, where);
+                    Say(said == null ? "error game-text: no " + a + " " + where + " (" + GameNameMentions.WhyNot(a, where) + ")"
+                                     : "ok game-text " + a + " " + where + " = " + said.Replace("\n", "\\n"));
                     return true;
                 }
                 case "gquest":
@@ -590,6 +657,16 @@ namespace SMSModForge.PackPlugin
                     Say("ok scripts " + ScriptDump.WriteUnder(target, Plugin.Log, label));
                     return true;
                 }
+                case "variable-evidence":
+                {
+                    // variable-evidence <label>: every global name variable list
+                    // and its values now, every script, prefab and asset naming
+                    // one, and names written in text - to a folder in the BepInEx
+                    // folder (VariableEvidence; the research behind the editor's
+                    // variable hints).
+                    Say("ok variable-evidence " + VariableEvidence.Write(all.Length > 0 ? all : "now", Plugin.Log));
+                    return true;
+                }
                 case "members":
                 {
                     // members <type's full name>: what a type of the game's offers
@@ -668,10 +745,17 @@ namespace SMSModForge.PackPlugin
 
         /// <summary>Text objects saying exactly these words, on screen first.</summary>
         private static List<TMP_Text> Texts(string words, bool onScreenOnly)
-            => Resources.FindObjectsOfTypeAll<TMP_Text>()
-                .Where(t => t != null && t.gameObject.scene.IsValid() && (!onScreenOnly || t.gameObject.activeInHierarchy)
-                            && string.Equals((t.text ?? "").Trim(), words, StringComparison.Ordinal))
-                .OrderByDescending(t => t.gameObject.activeInHierarchy).ToList();
+        {
+            var shown = Resources.FindObjectsOfTypeAll<TMP_Text>()
+                .Where(t => t != null && t.gameObject.scene.IsValid() && (!onScreenOnly || t.gameObject.activeInHierarchy)).ToList();
+            var exact = shown.Where(t => string.Equals((t.text ?? "").Trim(), words, StringComparison.Ordinal))
+                             .OrderByDescending(t => t.gameObject.activeInHierarchy).ToList();
+            if (exact.Count > 0) return exact;
+            // Else words the text holds: a game line with a curly apostrophe ("Let’s") cannot be
+            // typed through the bridge's command file, but "do it by hand today." can.
+            return shown.Where(t => (t.text ?? "").IndexOf(words, StringComparison.Ordinal) >= 0)
+                        .OrderByDescending(t => t.gameObject.activeInHierarchy).ToList();
+        }
 
         private System.Collections.IEnumerator FindAsDrawn(string path)
         {

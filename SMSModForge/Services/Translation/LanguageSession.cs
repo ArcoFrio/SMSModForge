@@ -437,6 +437,15 @@ public sealed class LanguageSession
         return slots;
     }
 
+    /// <summary>
+    /// Whether any of the pack's text fields of a kind <paramref name="kind"/>
+    /// takes holds a text <paramref name="test"/> takes - read straight off the
+    /// model, without writing the pack out. Every <see cref="Slot"/> but the
+    /// game's own lines reads one of these fields, of the same kind.
+    /// </summary>
+    internal static bool AnyText(ModPack pack, Func<PackTexts.Kind, bool> kind, Func<string, bool> test)
+        => pack != null && Candidates(pack).Any(c => kind(c.Kind) && test(c.Get() ?? ""));
+
     private sealed class Candidate
     {
         public PackTexts.Kind Kind;

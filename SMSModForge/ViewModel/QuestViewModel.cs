@@ -370,13 +370,7 @@ public sealed class QuestViewModel : ObservableObject, ISiteConditionsOwner
         get
         {
             if (!ShowsVanillaPanel || Model.Source.Length == 0) return "";
-            int added = Model.AddedTasks.Sum(a => a.SelfAndDescendants().Count());
-            int takenOut = Model.VanillaTasks.Count(h => h.Removed);
-            int other = Model.VanillaTasks.Count(h => h.DoesAnything && !h.Removed)
-                        + (Model.Description.Length > 0 ? 1 : 0)
-                        + (Model.StartConditions.Count > 0 ? 1 : 0)
-                        + (Model.ResetConditions.Count > 0 ? 1 : 0)
-                        + ChangedPlaces;
+            var (added, takenOut, other) = ChangeCounts();
 
             var parts = new List<string>();
             if (added > 0) parts.Add(Loc.P("quests.summary.added", added));
@@ -386,8 +380,29 @@ public sealed class QuestViewModel : ObservableObject, ISiteConditionsOwner
         }
     }
 
-    /// <summary>Whether the entry changes anything of the game's quest.</summary>
-    public bool HasChanges => ShowsVanillaPanel && Model.Source.Length > 0 && ChangeSummary != "unchanged";
+    /// <summary>What the summary counts: tasks added, game tasks taken out, and
+    /// everything else the entry changes.</summary>
+    private (int Added, int TakenOut, int Other) ChangeCounts()
+        => (Model.AddedTasks.Sum(a => a.SelfAndDescendants().Count()),
+            Model.VanillaTasks.Count(h => h.Removed),
+            Model.VanillaTasks.Count(h => h.DoesAnything && !h.Removed)
+                + (Model.Description.Length > 0 ? 1 : 0)
+                + (Model.StartConditions.Count > 0 ? 1 : 0)
+                + (Model.ResetConditions.Count > 0 ? 1 : 0)
+                + ChangedPlaces);
+
+    /// <summary>Whether the entry changes anything of the game's quest. From the
+    /// counts: it compared the summary with the English word "unchanged", so in
+    /// every other language every game quest read as changed (1.9.0).</summary>
+    public bool HasChanges
+    {
+        get
+        {
+            if (!ShowsVanillaPanel || Model.Source.Length == 0) return false;
+            var (added, takenOut, other) = ChangeCounts();
+            return added > 0 || takenOut > 0 || other > 0;
+        }
+    }
 
     /// <summary>
     /// Put the game's quest back the way the game has it: its description,

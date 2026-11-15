@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace SMSModForge.Shared
 {
@@ -114,6 +115,52 @@ namespace SMSModForge.Shared
                 case Script.Thai: return new[] { "Leelawadee UI", "Tahoma" };
                 default: return new string[0];
             }
+        }
+
+        /// <summary>
+        /// Every letter from U+0E00 up in the manifest's names and texts, in the
+        /// order its written-out text has them: all the font scan reads of it
+        /// (TextScripts.Of and PluginFonts.Prepare skip everything below), got
+        /// without writing megabytes of JSON out to read them (1.9.0). The JSON
+        /// writer leaves such letters as they are - it escapes only control
+        /// characters, quotes, backslashes and U+0085/U+2028/U+2029, which are
+        /// spaces to the scan and skipped by it.
+        /// </summary>
+        public static string WideLettersOf(JToken root)
+        {
+            var letters = new System.Text.StringBuilder();
+            void Add(string s)
+            {
+                if (s == null) return;
+                foreach (char c in s) if (c >= 0x0E00) letters.Append(c);
+            }
+            void Walk(JToken token)
+            {
+                switch (token)
+                {
+                    case JObject o:
+                        foreach (var p in o.Properties()) { Add(p.Name); Walk(p.Value); }
+                        break;
+                    case JArray a:
+                        foreach (var item in a) Walk(item);
+                        break;
+                    case JValue v:
+                        if (v.Type == JTokenType.String) Add((string)v.Value);
+                        else if (v.Type != JTokenType.Integer && v.Type != JTokenType.Float
+                                 && v.Type != JTokenType.Boolean && v.Type != JTokenType.Null)
+                            Add(v.ToString(Newtonsoft.Json.Formatting.None));
+                        break;
+                    case JProperty p:
+                        Add(p.Name); Walk(p.Value);
+                        break;
+                    case JConstructor c:
+                        Add(c.Name);
+                        foreach (var item in c.Children()) Walk(item);
+                        break;
+                }
+            }
+            Walk(root);
+            return letters.ToString();
         }
     }
 }

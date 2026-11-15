@@ -31,6 +31,44 @@
     <Compile Include="..\Shared\ForgeVersion.cs" Link="Shared\ForgeVersion.cs" />
   </ItemGroup>
 
+  <!--
+    Its own words (1.9.0): the setup.* lines of every language the editor ships,
+    so a setup that downloads what it installs speaks the player's language before
+    it has anything else. Only those lines - the files are megabytes of the editor's
+    texts.
+  -->
+  <UsingTask TaskName="KeepSetupTexts" TaskFactory="RoslynCodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Sources ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <OutputFolder ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Linq" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        Directory.CreateDirectory(OutputFolder);
+        foreach (var item in Sources)
+        {
+            var kept = File.ReadAllLines(item.ItemSpec).Where(l => l.StartsWith("setup.")).ToArray();
+            File.WriteAllLines(Path.Combine(OutputFolder, Path.GetFileName(item.ItemSpec)), kept, new System.Text.UTF8Encoding(false));
+        }
+      ]]></Code>
+    </Task>
+  </UsingTask>
+  <ItemGroup>
+    <SetupLanguage Include="..\SMSModForge\Languages\en.txt;..\SMSModForge\Languages\de.txt;..\SMSModForge\Languages\es.txt;..\SMSModForge\Languages\fr.txt;..\SMSModForge\Languages\ja.txt;..\SMSModForge\Languages\ko.txt;..\SMSModForge\Languages\pt-BR.txt;..\SMSModForge\Languages\ru.txt;..\SMSModForge\Languages\zh-Hans.txt" />
+  </ItemGroup>
+  <!-- Before the build, not before PrepareResources: that target's own dependencies
+       have already collected the resources by the time a BeforeTargets hook runs. -->
+  <Target Name="EmbedSetupTexts" BeforeTargets="BeforeBuild">
+    <KeepSetupTexts Sources="@(SetupLanguage)" OutputFolder="$(IntermediateOutputPath)setup-texts" />
+    <ItemGroup>
+      <_SetupText Include="$(IntermediateOutputPath)setup-texts\*.txt" />
+      <EmbeddedResource Include="@(_SetupText)" LogicalName="setup.texts.%(_SetupText.Filename).txt" />
+    </ItemGroup>
+  </Target>
+
   <ItemGroup Condition="'$(EditorZip)' != ''">
     <EmbeddedResource Include="$(EditorZip)" LogicalName="payload.editor.zip" />
   </ItemGroup>

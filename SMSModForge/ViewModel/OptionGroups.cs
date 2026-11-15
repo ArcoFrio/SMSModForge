@@ -33,11 +33,15 @@ public static class OptionGroups
     /// <param name="sortHeadings">False for a list whose items already come
     /// in the order its headings should - the action types under their
     /// topics.</param>
+    /// <param name="gamesLast">True for a list whose game's-own part is long and
+    /// split under headings of its own (all starting with "The game's own"):
+    /// those go after every heading of the pack's, the unfiled ones included,
+    /// so the pack's few are not buried under the game's 1,255 scenes.</param>
     public static ICollectionView Under(System.Collections.IEnumerable source, Func<object?, string> heading,
-                                        bool sortHeadings = true)
+                                        bool sortHeadings = true, bool gamesLast = false)
     {
         var groups = new System.Windows.Data.PropertyGroupDescription(null, new View.Converters.HeadingConverter(heading));
-        if (sortHeadings) groups.CustomSort = HeadingOrder.Instance;
+        if (sortHeadings) groups.CustomSort = gamesLast ? HeadingOrder.GamesLast : HeadingOrder.Instance;
 
         // A view made directly, not through a CollectionViewSource: that one
         // files every view it makes with WPF's binding engine, keyed to its
@@ -62,12 +66,18 @@ public static class OptionGroups
     /// </summary>
     private sealed class HeadingOrder : System.Collections.IComparer
     {
-        public static readonly HeadingOrder Instance = new();
+        public static readonly HeadingOrder Instance = new(false);
+        public static readonly HeadingOrder GamesLast = new(true);
+
+        private readonly bool _gamesLast;
+        private HeadingOrder(bool gamesLast) => _gamesLast = gamesLast;
 
         private static string Name(object? group) => (group as System.Windows.Data.CollectionViewGroup)?.Name as string ?? "";
 
-        private static int Rank(string name)
-            => name == ThisPack ? 0 : name == GamesOwn ? 2 : name == NotInFolder ? 3 : 1;
+        private int Rank(string name)
+            => name == ThisPack ? 0
+             : _gamesLast && name.StartsWith(GamesOwn, StringComparison.CurrentCulture) ? 4
+             : name == GamesOwn ? 2 : name == NotInFolder ? 3 : 1;
 
         public int Compare(object? x, object? y)
         {
@@ -93,11 +103,11 @@ public static class OptionGroups
         private readonly Func<object?, string> _heading;
         private string _filing = "";
 
-        public Live(System.Collections.IEnumerable source, Func<object?, string> heading)
+        public Live(System.Collections.IEnumerable source, Func<object?, string> heading, bool gamesLast = false)
         {
             _source = source;
             _heading = heading;
-            View = Under(source, heading);
+            View = Under(source, heading, gamesLast: gamesLast);
             _filing = Filing();
         }
 

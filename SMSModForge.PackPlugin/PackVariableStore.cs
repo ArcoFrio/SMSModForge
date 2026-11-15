@@ -795,22 +795,36 @@ namespace SMSModForge.PackPlugin
         {
             var raw = GetString(name);
             if (string.IsNullOrEmpty(raw)) return new List<string>();
+
+            // The last reading of each list, kept with the text it was read from:
+            // conditions read lists every frame, and parsing the same JSON each
+            // time was garbage for nothing (1.9.0). The same text reads the same,
+            // so it is used only while the text is exactly that; the caller gets
+            // a copy of its own, as it always had a new list.
+            if (name != null && _listsRead.TryGetValue(name, out var known) && string.Equals(known.Key, raw, StringComparison.Ordinal))
+                return new List<string>(known.Value);
+
+            List<string> result;
             try
             {
                 var arr = Newtonsoft.Json.Linq.JArray.Parse(raw);
-                var result = new List<string>(arr.Count);
+                result = new List<string>(arr.Count);
                 foreach (var item in arr)
                 {
                     var s = (string)item;
                     if (!string.IsNullOrEmpty(s)) result.Add(s);
                 }
-                return result;
             }
             catch
             {
-                return new List<string>();
+                result = new List<string>();
             }
+            if (name != null) _listsRead[name] = new KeyValuePair<string, List<string>>(raw, new List<string>(result));
+            return result;
         }
+
+        private readonly Dictionary<string, KeyValuePair<string, List<string>>> _listsRead =
+            new Dictionary<string, KeyValuePair<string, List<string>>>(StringComparer.Ordinal);
 
         /// <summary>
         /// Write a list back as a JSON array literal. Persisted under

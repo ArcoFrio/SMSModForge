@@ -67,6 +67,27 @@ public sealed class VariableCheckValidationTests
         Assert.False(Says(About(Check(real, source: "vanilla", value: "1")), "condition.undeclaredVariable"));
     }
 
+    /// <summary>
+    /// The game tells capitals apart (Game Creator's NameVariableRuntime is a
+    /// plain Dictionary&lt;string, ...&gt;, read from the game's assembly, 1.9.0):
+    /// "Mei-corrupted" and "mei-corrupted" are two variables, and "MEI-CORRUPTED"
+    /// reaches nothing. Until 1.9.0 the check ignored case and passed it.
+    /// </summary>
+    [Fact]
+    public void A_game_variable_with_other_capitals_is_named_with_the_games_spelling()
+    {
+        Assert.Empty(About(Check("Mei-corrupted", source: "vanilla")));     // the control: both are the game's
+        Assert.Empty(About(Check("mei-corrupted", source: "vanilla")));
+        var wrong = About(Check("MEI-CORRUPTED", source: "vanilla"));
+        Assert.True(Says(wrong, "condition.unknownVanillaVariable", "MEI-CORRUPTED"));
+        Assert.Contains(wrong, i => i.Message.Contains("'Mei-corrupted'") || i.Message.Contains("'mei-corrupted'"));
+        // A name the game has in no spelling at all keeps the plain message.
+        Assert.DoesNotContain(About(Check("NoSuchGameVariable", source: "vanilla")),
+                              i => i.Message == SMSModForge.Localization.Loc.F("validation.vanillaVariableCapitals",
+                                       "name", "NoSuchGameVariable", "game", ""));
+        Assert.Equal("", VanillaGameVariables.SpelledOtherwise("NoSuchGameVariable"));
+    }
+
     [Fact]
     public void A_comparison_the_game_does_not_know_and_an_order_against_nothing_are_flagged()
     {

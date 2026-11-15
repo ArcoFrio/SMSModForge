@@ -123,7 +123,11 @@ public sealed class DialogueViewModel : ObservableObject
         foreach (var row in Nodes) Adopt(row);
         Nodes.CollectionChanged += (_, e) =>
         {
-            if (e.NewItems != null)
+            // Not on a move: a moved row is the same row, adopted already. It
+            // was adopted again (a move reports the row as new) every time the
+            // list was put in tree order - after every add, remove and drag -
+            // and each keystroke on it then recounted once per handler (1.9.0).
+            if (e.NewItems != null && e.Action != System.Collections.Specialized.NotifyCollectionChangedAction.Move)
                 foreach (DialogueNodeViewModel row in e.NewItems) Adopt(row);
             Recount();
         };
@@ -387,7 +391,8 @@ public sealed class DialogueViewModel : ObservableObject
         row.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(DialogueNodeViewModel.IsChangedFromVanilla)
-                || e.PropertyName == nameof(DialogueNodeViewModel.ChangedFieldsText)) return;
+                || e.PropertyName == nameof(DialogueNodeViewModel.ChangedFieldsText)
+                || DialogueNodeViewModel.AlwaysFollowsItsField(e.PropertyName)) return;
 
             if (e.PropertyName == nameof(DialogueNodeViewModel.Actor)) CarryTheirLook(row);
 
@@ -429,9 +434,16 @@ public sealed class DialogueViewModel : ObservableObject
 
     private void Recount()
     {
+        if (_recountHold > 0) { _recountWanted = true; return; }
         OnPropertyChanged(nameof(ChangeSummary));
         OnPropertyChanged(nameof(HasAnyChanges));
     }
+
+    /// <summary>Recounts asked for while the tree is redrawn are told once, at
+    /// the end (1.9.0): every row's depth and children notify, and each made
+    /// the summary count every line again.</summary>
+    private int _recountHold;
+    private bool _recountWanted;
 
     /// <summary>Whether this conversation changes anything at all.</summary>
     public bool HasAnyChanges => IsVanillaBased && (Model.Nodes.Any(HasChanges) || GateRemovals > 0);
@@ -1196,20 +1208,33 @@ public sealed class DialogueViewModel : ObservableObject
     /// </summary>
     public void RecomputeDepths()
     {
-        var depths = new Dictionary<int, int>();
-        var choiceChildren = new HashSet<int>();
-        var order = new List<int>();
-        foreach (var rootId in Model.RootNodeIds)
-            AssignDepth(rootId, 0, depths, choiceChildren, order);
-
-        foreach (var nodeVm in Nodes)
+        _recountHold++;
+        try
         {
-            nodeVm.Depth = depths.TryGetValue(nodeVm.Id, out var d) ? d : 0;
-            nodeVm.IsChoiceChild = choiceChildren.Contains(nodeVm.Id);
-            nodeVm.TreeChanged();
-        }
+            var depths = new Dictionary<int, int>();
+            var choiceChildren = new HashSet<int>();
+            var order = new List<int>();
+            foreach (var rootId in Model.RootNodeIds)
+                AssignDepth(rootId, 0, depths, choiceChildren, order);
 
-        ReorderToTreeOrder(order);
+            foreach (var nodeVm in Nodes)
+            {
+                nodeVm.Depth = depths.TryGetValue(nodeVm.Id, out var d) ? d : 0;
+                nodeVm.IsChoiceChild = choiceChildren.Contains(nodeVm.Id);
+                nodeVm.TreeChanged();
+            }
+
+            ReorderToTreeOrder(order);
+        }
+        finally
+        {
+            _recountHold--;
+            if (_recountHold == 0 && _recountWanted)
+            {
+                _recountWanted = false;
+                Recount();
+            }
+        }
     }
 
     private void AssignDepth(int id, int depth, Dictionary<int, int> depths,

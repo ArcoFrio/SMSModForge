@@ -171,6 +171,23 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
         Assert.DoesNotContain("suitenothere", menu, StringComparison.OrdinalIgnoreCase);
     }
 
+    [Fact]
+    public void A3_Two_packs_changing_one_of_the_games_scenes_are_marked_as_clashing_on_the_main_menu()
+    {
+        if (Off) return;
+        var game = _s.Game!;
+        string menu = game.AskUntil("menu", m => InGameSuitePacks.Ids.All(id => m.Contains(id, StringComparison.OrdinalIgnoreCase)), 30);
+        _out.WriteLine(menu);
+        string Row(string id) => menu.Split(" | ").First(r => r.Contains(id, StringComparison.OrdinalIgnoreCase));
+        // The Story and Talk packs both change ameliablow (1), 01_MSmile (D4) and
+        // ameliablow (2) (D5), and nothing else in common: each row names the other.
+        Assert.Contains(InGameSuitePacks.Talk.Id, Row(InGameSuitePacks.Story.Id), StringComparison.OrdinalIgnoreCase);
+        Assert.Contains(InGameSuitePacks.Story.Id, Row(InGameSuitePacks.Talk.Id), StringComparison.OrdinalIgnoreCase);
+        // Control: a pack that changes none of the same things names neither.
+        Assert.DoesNotContain(InGameSuitePacks.Story.Id, Row(InGameSuitePacks.Rules.Id), StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(InGameSuitePacks.Talk.Id, Row(InGameSuitePacks.Rules.Id), StringComparison.OrdinalIgnoreCase);
+    }
+
     /// <summary>ModForge's settings file in the test copy.</summary>
     private string Settings => Path.Combine(_s.Game!.Test, "BepInEx", "config", "treboy.starmakerstory.smsmodforge.packplugin.cfg");
 
@@ -570,9 +587,329 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
         string rows = game.AskUntil("find-all SMSModForge_Photo_*", r => !r.Contains("(none)"), 6);
         _out.WriteLine(rows);
         var paths = rows.Substring(rows.IndexOf(": ", StringComparison.Ordinal) + 2).Split(" | ");
-        Assert.Single(paths);       // the photo's; the still is not a photo
-        Assert.Contains("CoreGallery/SMSModForge_Photo_", paths[0]);
-        Assert.Contains("#8844CCFF", game.Ask("find " + paths[0]));
+        // The photo's, and the ones of the game's scenes the packs make photos (D3, D5:
+        // two of the Story pack's and one the Talk pack shares with it); the stills
+        // are not photos.
+        string photo = Assert.Single(paths, p => p.EndsWith("_" + InGameSuitePacks.Story.Id + "_photo", StringComparison.Ordinal));
+        foreach (var key in new[] { "gphoto", "gmoving", "gsam" })
+            Assert.Contains(paths, p => p.EndsWith("_" + InGameSuitePacks.Story.Id + "_" + key, StringComparison.Ordinal));
+        Assert.Contains(paths, p => p.EndsWith("_" + InGameSuitePacks.Talk.Id + "_tmoving", StringComparison.Ordinal));
+        Assert.DoesNotContain(paths, p => p.EndsWith("_still", StringComparison.Ordinal));
+        Assert.Equal(5, paths.Length);
+        Assert.Contains("CoreGallery/SMSModForge_Photo_", photo);
+        Assert.Contains("#8844CCFF", game.Ask("find " + photo));
+    }
+
+    /// <summary>One of the game's scenes as it stands, by the bridge's
+    /// <c>game-scene</c>: <c>name=value</c> parts.</summary>
+    private Dictionary<string, string> GameScene(GameRun game, string path)
+    {
+        string said = game.Ask("game-scene " + path);
+        _out.WriteLine(said);
+        var parts = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var part in said.Substring(said.IndexOf(": ", StringComparison.Ordinal) + 2).Split("; "))
+        {
+            int eq = part.IndexOf('=');
+            if (eq > 0) parts[part.Substring(0, eq)] = part.Substring(eq + 1);
+        }
+        return parts;
+    }
+
+    [Fact]
+    public void D3_A_change_to_one_of_the_games_scenes_dresses_it_in_place_and_leaves_the_rest_the_games()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        var kiss = GameScene(game, InGameSuitePacks.Story.GameSceneKiss);
+        var control = GameScene(game, InGameSuitePacks.Story.GameSceneControl);
+
+        // The control first: the game's own art (a texture nobody can read back),
+        // the game's frame, its own kiss.
+        Assert.Equal("False", control["readable"]);
+        Assert.StartsWith("SexyFrame ", control["frame"]);
+        Assert.Equal("[kiss]", control["signals"]);
+
+        // Changed: the pack's picture (its colour), the shipped photo frame at its
+        // own size, the kiss turned into a flash - same name, every component kept.
+        Assert.Equal("AmeliaStretching", kiss["name"]);
+        Assert.Equal("True", kiss["readable"]);
+        Assert.Equal("#CC4488", kiss["texel"]);
+        var frame = System.Windows.Media.Imaging.BitmapFrame.Create(new Uri(Path.Combine(AppContext.BaseDirectory, "VanillaFrames", "PhotoFrame.png")),
+            System.Windows.Media.Imaging.BitmapCreateOptions.DelayCreation, System.Windows.Media.Imaging.BitmapCacheOption.None);
+        Assert.EndsWith(" " + frame.PixelWidth + "x" + frame.PixelHeight, kiss["frame"]);
+        Assert.Equal("[flash]", kiss["signals"]);
+        Assert.Equal(control["components"], kiss["components"]);
+        Assert.Equal(control["artSize"], kiss["artSize"]);
+
+        // Sound only: the signal is still there, switched off; the picture the game's.
+        var quiet = GameScene(game, InGameSuitePacks.Story.GameSceneQuiet);
+        Assert.Equal("[kiss off]", quiet["signals"]);
+        Assert.Equal("False", quiet["readable"]);
+        Assert.Equal(control["components"], quiet["components"]);
+
+        // A photo whose trigger raises nothing gets a kiss of its own; a scene made a
+        // Starmaker photo takes it as it appears - each by a component added, none taken.
+        var noSignal = GameScene(game, InGameSuitePacks.Story.GameSceneNoSignal);
+        Assert.Equal("[]", noSignal["signals"]);
+        Assert.Contains("PackSceneSignal", noSignal["components"]);
+        var photo = GameScene(game, InGameSuitePacks.Story.GameScenePhoto);
+        Assert.Equal(control["components"] + ",PackScenePhoto", photo["components"]);
+        Assert.DoesNotContain("PackScene", control["components"]);
+
+        // The scene whose art the game draws at half its size: a picture of the
+        // common size comes out the size of the control's.
+        var big = GameScene(game, InGameSuitePacks.Story.GameSceneBig);
+        Assert.Equal("#2288CC", big["texel"]);
+        Assert.Equal("1", big["artScale"]);
+        Assert.Equal(control["artSize"], big["artSize"]);
+
+        // It is one of the game's photos, and the Starmaker site's gallery draws its
+        // picture too: the row follows; another photo's row keeps the game's.
+        string row = game.Ask("find " + InGameSuitePacks.Story.GameSceneBigRow);
+        string otherRow = game.Ask("find " + InGameSuitePacks.Story.GalleryControlRow);
+        _out.WriteLine(row);
+        _out.WriteLine(otherRow);
+        Assert.Contains("#2288CCFF", row);
+        Assert.DoesNotContain("#2288CCFF", otherRow);
+
+        // Shown as the game shows them - the object switched on - each raises what
+        // it now raises: the flash from the changed one, nothing from the silent one,
+        // the kiss from the control.
+        game.Ask("signals");
+        string Heard(string path)
+        {
+            game.Ask("set-active " + path + " true");
+            game.Ask("wait 0.5", 10);
+            string heard = game.Ask("signals");
+            game.Ask("set-active " + path + " false");
+            _out.WriteLine(path + ": " + heard);
+            return heard;
+        }
+        Assert.Contains("flash(AmeliaStretching)", Heard(InGameSuitePacks.Story.GameSceneKiss));
+        Assert.DoesNotContain("(ameliajog)", Heard(InGameSuitePacks.Story.GameSceneQuiet));
+        string controlHeard = Heard(InGameSuitePacks.Story.GameSceneControl);
+        Assert.Contains("kiss(ameliastrip)", controlHeard);
+        Assert.DoesNotContain("flash", controlHeard);
+
+        // And by the pack's own action, by its key, as one of its own scenes.
+        Play(game, "showgkiss");
+        Assert.Equal("True", GameScene(game, InGameSuitePacks.Story.GameSceneKiss)["active"]);
+        Play(game, "hidescenes");
+        Assert.Equal("False", GameScene(game, InGameSuitePacks.Story.GameSceneKiss)["active"]);
+    }
+
+    [Fact]
+    public void D4_A_changed_game_scene_takes_a_frame_and_a_moving_picture_shows_from_the_games_own_conversation_and_two_packs_share_it()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        const string clean = InGameSuitePacks.Story.GameSceneClean;
+
+        // A frame of the pack's own, at its own size, the game's picture and sound kept.
+        var framed = GameScene(game, InGameSuitePacks.Story.GameSceneFrame);
+        Assert.EndsWith(" 300x320", framed["frame"]);
+        Assert.Equal("False", framed["readable"]);
+        Assert.Equal("[kiss]", framed["signals"]);
+
+        // Two packs on one scene: the later pack's picture and sound show, and the earlier
+        // pack's frame - which the later one leaves alone - stays.
+        var shared = GameScene(game, InGameSuitePacks.Story.GameSceneShared);
+        Assert.Equal("#0066AA", shared["texel"]);
+        Assert.EndsWith(" 297x310", shared["frame"]);
+        Assert.Equal("[kiss off]", shared["signals"]);
+        // ...and one component for a sound both give a scene that has none.
+        var noSignal = GameScene(game, InGameSuitePacks.Story.GameSceneNoSignal);
+        Assert.Single(Regex.Matches(noSignal["components"], "PackSceneSignal"));
+
+        // A two-frame GIF: it animates on the game's object. Read several times while
+        // shown, the picture changes; the control above (a still) never does.
+        Assert.Contains("AnimatedSprite", GameScene(game, InGameSuitePacks.Story.GameSceneGif)["components"]);
+        game.Ask("set-active " + InGameSuitePacks.Story.GameSceneGif + " true");
+        var seen = new HashSet<string>();
+        for (int i = 0; i < 10; i++)
+        {
+            seen.Add(GameScene(game, InGameSuitePacks.Story.GameSceneGif)["texel"]);
+            game.Ask("wait 0.07", 10);
+        }
+        game.Ask("set-active " + InGameSuitePacks.Story.GameSceneGif + " false");
+        _out.WriteLine("the GIF drew: " + string.Join(", ", seen));
+        Assert.True(seen.Count >= 2, "the GIF on one of the game's scenes did not move: " + string.Join(", ", seen));
+
+        // Shown by one of the game's own conversations, as it always was: the pack's
+        // picture, and its flash rather than the game's kiss.
+        SeeConversationsThrough(game);
+        game.Ask("signals");
+        game.Ask("vanilla-dialogue " + InGameSuitePacks.Story.CleanTalk);
+        game.AskUntil("game-scene " + clean, s => s.Contains("active=True"), 10);
+        var cleaning = GameScene(game, clean);
+        Assert.Equal("True", cleaning["active"]);
+        Assert.Equal("#44AA22", cleaning["texel"]);
+        string heard = game.Ask("signals");
+        _out.WriteLine(heard);
+        Assert.Contains("flash(AnnaCleaning)", heard);
+        Assert.DoesNotContain("kiss(AnnaCleaning)", heard);
+        SeeConversationsThrough(game);
+        game.Ask("set-active " + clean + " false");
+
+        // A sound given by two packs to one of the game's photos that has none: shown, it
+        // plays once, the later pack's.
+        game.Ask("signals");
+        game.Ask("set-active " + InGameSuitePacks.Story.GameSceneNoSignal + " true");
+        game.Ask("wait 0.5", 10);
+        heard = game.Ask("signals");
+        game.Ask("set-active " + InGameSuitePacks.Story.GameSceneNoSignal + " false");
+        _out.WriteLine(heard);
+        Assert.Single(Regex.Matches(heard, Regex.Escape("flash(01_MSmile)")));
+        Assert.DoesNotContain("kiss(01_MSmile)", heard);
+
+        // One of the game's scenes made a Starmaker photo: shown, the photo is taken - the
+        // pack remembers it, and the game's own payout runs (PhotoBonus counts every
+        // photo in Core_2[photos-taken-alltime] as it starts). Control: showing one of
+        // the game's scenes that is no photo counts nothing.
+        int Photos() => (int)double.Parse(game.Ask("gget Core_2[photos-taken-alltime]").Split('=').Last().Trim(), CultureInfo.InvariantCulture);
+        game.Ask("wait 3", 10);   // the photo above has finished paying out
+        int before = Photos();
+        game.Ask("set-active " + InGameSuitePacks.Story.GameSceneControl + " true");
+        game.Ask("wait 2", 10);
+        game.Ask("set-active " + InGameSuitePacks.Story.GameSceneControl + " false");
+        Assert.Equal(before, Photos());
+        Assert.EndsWith("= False", game.Ask("pphoto " + InGameSuitePacks.Story.Id + " gphoto"));
+        game.Ask("set-active " + InGameSuitePacks.Story.GameScenePhoto + " true");
+        game.Ask("wait 2", 10);
+        game.Ask("set-active " + InGameSuitePacks.Story.GameScenePhoto + " false");
+        Assert.EndsWith("= True", game.Ask("pphoto " + InGameSuitePacks.Story.Id + " gphoto"));
+        Assert.Equal(before + 1, Photos());
+    }
+
+    [Fact]
+    public void D5_Two_packs_on_one_game_scene_show_the_later_picture_and_share_its_photo_and_a_change_reaches_nothing_else()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        int Photos() => (int)double.Parse(game.Ask("gget Core_2[photos-taken-alltime]").Split('=').Last().Trim(), CultureInfo.InvariantCulture);
+        const string story = InGameSuitePacks.Story.Id, talk = InGameSuitePacks.Talk.Id;
+        const string moving = InGameSuitePacks.Story.GameSceneMoving;
+
+        // The Story pack gave this scene a GIF, the Talk pack (loaded later) a still: the
+        // still shows, and stays - the GIF's frames are gone, not drawing over it.
+        // Control: the Story pack's other GIF, which nobody overrides, still has its own (D4).
+        var shared = GameScene(game, moving);
+        Assert.DoesNotContain("AnimatedSprite", shared["components"]);
+        Assert.Contains("AnimatedSprite", GameScene(game, InGameSuitePacks.Story.GameSceneGif)["components"]);
+        Assert.Single(Regex.Matches(shared["components"], "PackScenePhoto"));
+        game.Ask("wait 3", 10);   // any photo before has finished paying out
+        int before = Photos();
+        Assert.EndsWith("= False", game.Ask("pphoto " + story + " gmoving"));
+        Assert.EndsWith("= False", game.Ask("pphoto " + talk + " tmoving"));
+        game.Ask("set-active " + moving + " true");
+        var seen = new HashSet<string>();
+        for (int i = 0; i < 8; i++)
+        {
+            seen.Add(GameScene(game, moving)["texel"]);
+            game.Ask("wait 0.07", 10);
+        }
+        game.Ask("wait 2", 10);
+        game.Ask("set-active " + moving + " false");
+        _out.WriteLine("the shared scene drew: " + string.Join(", ", seen));
+        Assert.Equal("#55AA33", Assert.Single(seen));
+        // Both packs made it a Starmaker photo: both remember it was taken, and the
+        // game paid it out once - one photo was taken.
+        Assert.EndsWith("= True", game.Ask("pphoto " + story + " gmoving"));
+        Assert.EndsWith("= True", game.Ask("pphoto " + talk + " tmoving"));
+        Assert.Equal(before + 1, Photos());
+
+        // The Story pack changed Samanthabeach, the scene every pack scene is cloned
+        // from: its frame, its sound, its picture, a photo. Changed there...
+        var sam = GameScene(game, InGameSuitePacks.Story.GameScenePrototype);
+        Assert.EndsWith(" 310x330", sam["frame"]);
+        Assert.Equal("#7733AA", sam["texel"]);
+        Assert.Contains("PackScenePhoto", sam["components"]);
+        // ...and nowhere else: the Talk pack's own scene, built after it, is cloned as
+        // the Story pack's own (built before it) is - the game's frame, no photo.
+        var ownBefore = GameScene(game, "4_CG_Manager-Sexy/pack:" + story + ".still");
+        var ownAfter = GameScene(game, "4_CG_Manager-Sexy/pack:" + talk + ".tstill");
+        Assert.Equal("#33AA77", ownAfter["texel"]);
+        Assert.Equal(ownBefore["frame"], ownAfter["frame"]);
+        Assert.Equal(ownBefore["components"], ownAfter["components"]);
+        Assert.DoesNotContain("PackScene", ownAfter["components"]);
+        game.Ask("wait 3", 10);
+        before = Photos();
+        game.Ask("set-active 4_CG_Manager-Sexy/pack:" + talk + ".tstill true");
+        game.Ask("wait 2", 10);
+        game.Ask("set-active 4_CG_Manager-Sexy/pack:" + talk + ".tstill false");
+        Assert.Equal(before, Photos());
+
+        // A scene that is no photo but draws the picture of one (gropepark, 08_MPark's
+        // "Park1"): given a picture, the scene shows it, and the photo's gallery row
+        // keeps the game's. Control: a photo's row follows its picture (D3). Measured
+        // 2026-11-15: with galleries redrawn for every scene, not only photos, this
+        // still passes - the game draws gropepark with a sprite of its own, the same
+        // picture under the same name - so this guards the row, and proves nothing
+        // about the photos-only rule itself.
+        Assert.Equal("#3355DD", GameScene(game, InGameSuitePacks.Story.GameSceneSharesPhotoArt)["texel"]);
+        string row = game.Ask("find " + InGameSuitePacks.Story.SharedArtRow);
+        _out.WriteLine(row);
+        Assert.Contains("image Park1 ", row);
+        Assert.DoesNotContain("#3355DDFF", row);
+        Assert.Contains("#2288CCFF", game.Ask("find " + InGameSuitePacks.Story.GameSceneBigRow));
+    }
+
+    /// <summary>
+    /// One of the game's scenes the pack does not change, named by where it sits in
+    /// the Scene category (ArcoFrio, 1.9.0: the pack's scene handling for the game's
+    /// scenes too): shown by the pack's action with its own sound, seen by a
+    /// condition, repainted by a sprite swap, and put away by "hide every scene this
+    /// pack showed" - which leaves a scene the pack did not show alone (the control).
+    /// The same swap on one of the pack's own scenes paints its picture as well.
+    /// </summary>
+    [Fact]
+    public void D6_One_of_the_games_scenes_by_where_it_sits_is_shown_seen_repainted_and_put_away_by_the_pack()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        const string path = InGameSuitePacks.Story.GameSceneByPath;
+        const string control = InGameSuitePacks.Story.GameSceneControl;
+        string badge = Panel + "/Panel/SceneBadge";
+
+        // Before: off, the game's own picture, and the badge that asks about it out.
+        var before = GameScene(game, path);
+        Assert.Equal("False", before["active"]);
+        Assert.Equal("False", before["readable"]);
+        Play(game, "openpanel");
+        try
+        {
+            Assert.True(ActiveSoon(game, Panel, true), "The screen did not open.");
+            Assert.False(ActiveSoon(game, badge, false), "The badge is in while the scene is not showing.");
+
+            // Shown by the pack's action: on, its own trigger raising its own kiss.
+            game.Ask("signals");
+            Play(game, "showgamepath");
+            Assert.Equal("True", GameScene(game, path)["active"]);
+            string heard = game.Ask("signals");
+            _out.WriteLine(heard);
+            Assert.Contains("kiss(EmmaXBigfoot (0))", heard);
+            Assert.True(ActiveSoon(game, badge, true), "The condition did not see the game's scene showing.");
+
+            // A sprite swap on it paints its picture, at the picture's size.
+            Play(game, "swapgamepath");
+            var swapped = GameScene(game, path);
+            Assert.Equal(InGameSuitePacks.Story.SwapColour, swapped["texel"]);
+            Assert.Equal(before["artSize"], swapped["artSize"]);
+
+            // Put away with everything the pack showed; one the pack did not show stays.
+            game.Ask("set-active " + control + " true");
+            Play(game, "hidescenes");
+            Assert.Equal("False", GameScene(game, path)["active"]);
+            Assert.Equal("True", GameScene(game, control)["active"]);
+            game.Ask("set-active " + control + " false");
+            Assert.False(ActiveSoon(game, badge, false), "The badge stayed in once the scene was put away.");
+
+            // The same swap on one of the pack's own scenes.
+            Play(game, "swapstill");
+            Assert.Equal(InGameSuitePacks.Story.SwapColour,
+                         GameScene(game, "4_CG_Manager-Sexy/pack:" + InGameSuitePacks.Story.Id + ".still")["texel"]);
+        }
+        finally { Play(game, "closepanel"); }
     }
 
     // ── E: wallpapers ────────────────────────────────────────────────────
@@ -863,6 +1200,32 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
     }
 
     [Fact]
+    public void J2b_A_lines_children_all_play_in_order_and_an_exit_ends_the_conversation_there()
+    {
+        // The flow the variable research assumes (Tools/Research/Variables,
+        // brief-hints.md), measured: both plain children play; an Exit in a first
+        // child stops the second; an Exit in a first root stops the second root.
+        if (Off) return;
+        var game = _s.InGame();
+        const string id = InGameSuitePacks.Talk.Id;
+        SeeConversationsThrough(game);
+        Begin(game, id, "kids");
+        SeeConversationsThrough(game);
+        Assert.Equal("true", VarSoon(game, id, "kidA", "true"));
+        Assert.Equal("true", VarSoon(game, id, "kidB", "true"));     // the second child played too
+
+        Begin(game, id, "kidexit");
+        SeeConversationsThrough(game);
+        Assert.Equal("true", VarSoon(game, id, "exitA", "true"));    // control: the exiting child ran
+        Assert.Equal("false", game.PackVar(id, "exitB"));
+
+        Begin(game, id, "rootexit");
+        SeeConversationsThrough(game);
+        Assert.Equal("true", VarSoon(game, id, "rootExit", "true"));
+        Assert.Equal("false", game.PackVar(id, "rootAfter"));
+    }
+
+    [Fact]
     public void J3_A_random_line_picks_one_of_its_lines_each_time()
     {
         if (Off) return;
@@ -1028,6 +1391,96 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
     }
 
     [Fact]
+    public void K8_A_new_name_for_one_of_the_games_characters_is_shown_over_every_line_they_speak_and_nobody_elses()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        SeeConversationsThrough(game);
+
+        // The game's own line. gamecheck calls Josef "Joe", gameorder - loaded
+        // later - "Joseph"; his name colour, the game's, follows the new name.
+        // (The label's text opens with the game's own "<noparse></noparse>", so a
+        // name is matched by what follows it.)
+        game.Ask("vanilla-dialogue " + InGameCheckPacksTests.JosefTalks);
+        string theirs = game.AskUntil("speaker", s => s.Contains("Jose") || s.Contains("Joe'"), 8);
+        _out.WriteLine("the game's line: " + theirs);
+        Assert.Matches("Joseph'[^|]*drawn #FFB999", theirs);
+        Assert.DoesNotContain("Joe'", theirs);       // control: the earlier pack's
+        Assert.DoesNotContain("Josef'", theirs);     // ...and the game's own
+        SeeConversationsThrough(game);
+
+        // A pack's line he speaks: gamecheck's, under gameorder's name for him.
+        Begin(game, "gamecheck", "names");
+        string packs = game.AskUntil("speaker", s => s.Contains("Joseph'"), 6);
+        _out.WriteLine("gamecheck's line: " + packs);
+        Assert.Contains("Joseph'", packs);
+
+        // Control: gamecheck's own character called Josef is somebody else, and
+        // keeps the name.
+        string own = game.AskUntil("speaker", s => s.Contains("Josef'"), 8);
+        _out.WriteLine("gamecheck's own Josef: " + own);
+        Assert.Contains("Josef'", own);
+        game.Ask("wait-dialogue-end 20", 30);
+    }
+
+    [Fact]
+    public void K9_A_name_token_in_a_packs_line_reads_as_that_characters_name_now()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        SeeConversationsThrough(game);
+        Begin(game, "gamecheck", "names");
+        string line = game.AskUntil("line", l => l.Contains("stays."), 6);
+        _out.WriteLine(line);
+        // The game's Josef by the name gameorder gives him; gamecheck's own Josef
+        // by his, his key in other capitals too (as the editor and Validate read
+        // it; the game left that one as written before 1.9.0's review); and - the
+        // control - a key nobody has stays as written.
+        Assert.Contains(InGameCheckPacksTests.NamesLineShown, line);
+        game.Ask("wait-dialogue-end 20", 30);
+
+        // Not only lines: suitequest's quest title names him too, as the journal
+        // reads it - a third pack, taking gameorder's name for him.
+        string quest = game.Ask("quest " + InGameSuitePacks.Quests.Id + " chase");
+        _out.WriteLine(quest);
+        Assert.Contains("title=" + InGameSuitePacks.Quests.ChaseTitleShown, quest);
+    }
+
+    [Fact]
+    public void K10_A_new_name_reaches_the_games_own_words_where_they_mean_that_character()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        string Text(string source, string where)
+        {
+            string said = game.Ask($"game-text {source} {where}");
+            _out.WriteLine(said);
+            Assert.DoesNotContain("error", said);
+            return said;
+        }
+        bool Says(string text, string word) => System.Text.RegularExpressions.Regex.IsMatch(text, @"(?<!\w)" + word + @"(?!\w)");
+
+        // One of the game's lines naming Josef, whom gameorder calls Joseph.
+        string line = Text("line", "8_Room_Talk/Kitchen/AboutAdrian#-1600756773");
+        Assert.True(Says(line, "Joseph") && !Says(line, "Josef"), line);
+
+        // One of the game's quests (the one suitequest adds a task to): its paragraph.
+        string quest = Text("quest", "Explore The City#description");
+        Assert.True(Says(quest, "Joseph") && !Says(quest, "Josef"), quest);
+
+        // One of the game's screens, naming Celeste, whom gameorder calls Celestia.
+        string screen = Text("ui", "9_MainCanvas/Payout/CelesteStoleFollowers/Text (TMP)");
+        Assert.Contains("Celestia lured away", screen);
+
+        // Controls. A line of the game's that gamecheck rewrote is gamecheck's, and
+        // keeps its words; a line naming Anna, whom nobody renames, keeps her name.
+        string rewritten = Text("line", InGameCheckPacksTests.RewrittenConversation + "#" + InGameCheckPacksTests.RewrittenNode);
+        Assert.EndsWith("= " + InGameCheckPacksTests.RewrittenLine, rewritten);
+        string anna = Text("line", "8_Room_Talk/Kitchen/AnnaGropeLove#-378333926");
+        Assert.True(Says(anna, "Anna"), anna);
+    }
+
+    [Fact]
     public void K3_A_line_a_pack_adds_to_one_of_the_games_conversations_is_said_in_its_place()
     {
         if (Off) return;
@@ -1105,6 +1558,43 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
         game.Ask("wait-dialogue-end 20", 30);
         Assert.False(ActiveSoon(game, day, false), "Bea's bust stayed up after a dialogue that leaves its busts.");
         Assert.StartsWith("False/", Field(Find(game, night), "active"));
+    }
+
+    /// <summary>
+    /// A face a pack's line gives one of the game's busts stays on it, also on a
+    /// portrait that follows another character's number (1.9.0): Chloe's copies
+    /// Charlotte's on every variable write, and until 1.9.0 ModForge wrote
+    /// Chloe's own, so her face went back at the next write.
+    /// </summary>
+    [Fact]
+    public void K7_A_face_given_to_a_game_portrait_that_follows_another_characters_number_stays()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        string faces = "2_Bust_Manager/" + InGameSuitePacks.Talk.FollowerBust + "/MBase1/Expressions";
+        SeeConversationsThrough(game);
+        game.Ask("gset Expressions[Charlotte] 0");
+
+        Begin(game, InGameSuitePacks.Talk.Id, "face");
+        game.AskUntil("line", l => LineParts(l, "line").Contains("Smiling."), 6);
+        Assert.True(ActiveSoon(game, faces + "/Happy", true), "Chloe's happy face is not on her line.");
+
+        // Any variable write runs the portrait's trigger, which copies its number again.
+        // An unused variable of the game's, so nothing else reacts.
+        game.Ask("gset Inventory[black-lingerie] true");
+        game.Ask("gset Inventory[black-lingerie] false");
+        game.Ask("wait 1", 10);
+        string number = game.Ask("gget Expressions[Charlotte]");
+        _out.WriteLine(number);
+        Assert.Matches(@"= 1(\.0+)?\s*$", number);
+        Assert.True(ActiveSoon(game, faces + "/Happy", true), "Chloe's face went back after a variable write.");
+
+        // Control: the portrait follows Charlotte's number - set it to 2 and the face is another one.
+        game.Ask("gset Expressions[Charlotte] 2");
+        game.Ask("wait 1", 10);
+        Assert.False(ActiveSoon(game, faces + "/Happy", false), "The portrait does not follow Charlotte's number.");
+        game.Ask("gset Expressions[Charlotte] 0");
+        SeeConversationsThrough(game);
     }
 
     /// <summary>The object a bust draws its body on - MBase1 on most of the
@@ -1486,8 +1976,20 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
         // The language, chosen here too, for the next check: packs follow it
         // the next time a game is loaded.
         Assert.Equal(InGameSuitePacks.Talk.TranslatedInto, game.Ask("lang " + InGameSuitePacks.Talk.TranslatedInto));
+        // Control for the notice below: the loads in English told nothing, as no
+        // pack shows the game's lines in English.
+        Assert.Contains("GameLinesNoticeShown = false", File.ReadAllText(Settings));
 
         game = _s.InGame();
+        // The player is told, once, that a pack shows the game's own lines in this
+        // language (the Talk pack translates one into pt-BR, Z5). Until 1.9.0's review
+        // the notice counted them after they were shown, found none and never came.
+        string body = File.ReadLines(Path.Combine(TranslationCoverageTests.EditorDir, "Languages", InGameSuitePacks.Talk.TranslatedInto + ".txt"))
+                          .First(l => l.StartsWith("game.gameLines.body.one = ", StringComparison.Ordinal));
+        string told = body.Substring(body.IndexOf("{language}", StringComparison.Ordinal) + "{language}".Length).Split('.')[0].Trim();
+        _out.WriteLine("the save warning: " + _s.Warning);
+        Assert.Contains(told, _s.Warning);
+        Assert.Contains("GameLinesNoticeShown = true", File.ReadAllText(Settings));
         SeeConversationsThrough(game);
         game.Ask("vanilla-dialogue 8_Room_Talk/Kitchen/Anna_DishesDecline");
         string speaker = game.AskUntil("speaker", s => s.Contains("Anna"), 8);
@@ -1524,7 +2026,7 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
         var game = _s.Restart();
         const string off = InGameSuitePacks.Rules.Id;
         string menu = game.AskUntil("menu", m => m.Contains(off, StringComparison.Ordinal), 15);
-        var row = System.Text.RegularExpressions.Regex.Match(menu, @"(\d+): '[^']*" + off);
+        var row = System.Text.RegularExpressions.Regex.Match(menu, @"(\d+): '[^']*?(?<!\w)" + Regex.Escape(off) + @"\s+v\d");
         Assert.True(row.Success, "No row for " + off + ": " + menu);
         // The box on that pack's row, wherever in the row it sits.
         string switches = game.Ask("find-all PackSwitch");
@@ -1540,6 +2042,99 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
         game = _s.InGame();
         Assert.Throws<BridgeError>(() => game.PackVar(off, "loaded"));
         Assert.Equal("0", game.PackVar(InGameSuitePacks.Saving.Id, "keptNumber"));   // control: the others play
+    }
+
+    [Fact]
+    public void Z5_The_games_own_lines_in_a_conversation_a_pack_extends_are_shown_in_its_translation()
+    {
+        // In pt-BR since Z2. Found while renaming characters (1.9.0): the plugin
+        // compared a translation's note with Node.Text, which is empty until a line
+        // plays, so none of the game's lines was ever shown translated.
+        if (Off) return;
+        var game = _s.InGame();
+        _out.WriteLine("the save warning: " + _s.Warning);
+        string Text(int id)
+        {
+            string said = game.Ask($"game-text line {InGameSuitePacks.Talk.GameLinesConversation}#{id}");
+            _out.WriteLine(said);
+            return said;
+        }
+        Assert.EndsWith("= " + InGameSuitePacks.Talk.GameLineInPortuguese, Text(InGameSuitePacks.Talk.GameLineTranslated));
+        // Control: a line of the same conversation the translation does not have
+        // stays in the game's words.
+        Assert.EndsWith("= Maybe next time.", Text(InGameSuitePacks.Talk.GameLineLeft));
+    }
+
+    [Fact]
+    public void Z6_Back_on_the_main_menu_with_the_renaming_packs_switched_off_the_games_characters_have_their_own_names_again()
+    {
+        // Put back in the same game (1.9.0's review: nothing checked it). The game's
+        // characters are assets that live as long as the game runs, so a new name
+        // would outlast the pack that gave it if nothing put it back as the level goes.
+        if (Off) return;
+        var game = _s.InGame();
+        bool Says(string text, string word) => Regex.IsMatch(text, @"(?<!\w)" + word + @"(?!\w)");
+        string Line()
+        {
+            string said = game.Ask("game-text line 8_Room_Talk/Kitchen/AboutAdrian#-1600756773");
+            _out.WriteLine(said);
+            return said;
+        }
+        string Speaker()
+        {
+            SeeConversationsThrough(game);
+            game.Ask("vanilla-dialogue " + InGameCheckPacksTests.JosefTalks);
+            string said = game.AskUntil("speaker", s => s.Contains("Jose") || s.Contains("Joe'"), 8);
+            _out.WriteLine(said);
+            SeeConversationsThrough(game);
+            return said;
+        }
+        // The control: with both renaming packs on, he has a new name - gameorder's
+        // Joseph (K8, K10), or gamecheck's Joe once Z2 has moved gameorder to load first.
+        string before = Speaker();
+        Assert.True(before.Contains("Joseph'") || before.Contains("Joe'"), before);
+        Assert.DoesNotContain("Josef'", before);
+        string lineBefore = Line();
+        Assert.True((Says(lineBefore, "Joseph") || Says(lineBefore, "Joe")) && !Says(lineBefore, "Josef"), lineBefore);
+
+        // The game's own Main Menu button, as a player leaves a game: on its panel,
+        // which the game opens from its menu (here switched on directly).
+        game.Ask("set-active 9_MainCanvas/Quitagme true");
+        game.Ask("wait 0.5", 10);
+        Assert.Contains("click", game.Ask("press 9_MainCanvas/Quitagme/Button (2)"));
+        // Leaving a level the suite has played in for ten minutes takes the game a
+        // while, and the bridge answers nothing until it has: up to three minutes.
+        game.Ask("ping", 180);
+        game.AskUntil("menu", m => m.Contains("gameorder", StringComparison.Ordinal), 90);
+        foreach (var id in new[] { "gamecheck", "gameorder" })
+        {
+            string menu = game.AskUntil("menu", m => m.Contains(id, StringComparison.Ordinal), 15);
+            // The pack's own row: its id where it stands, before its version - another
+            // row's clash note names it too ("Clashes with gamecheck").
+            var row = Regex.Match(menu, @"(\d+): '[^']*?(?<!\w)" + Regex.Escape(id) + @"\s+v\d");
+            Assert.True(row.Success, "No row for " + id + ": " + menu);
+            string switches = game.Ask("find-all PackSwitch");
+            string box = switches.Substring(switches.IndexOf(": ", StringComparison.Ordinal) + 2).Split(" | ")
+                                 .FirstOrDefault(p => p.Contains("SMSModForgeBanner_" + row.Groups[1].Value + "/", StringComparison.Ordinal)
+                                                      || p.EndsWith("SMSModForgeBanner_" + row.Groups[1].Value, StringComparison.Ordinal)) ?? "";
+            Assert.True(box.Length > 0, $"No switch on row {row.Groups[1].Value}: {switches}");
+            game.Ask("press " + box);
+        }
+        string settings = File.ReadAllText(Settings);
+        Assert.Contains("gamecheck", settings.Split('\n').First(l => l.StartsWith("SwitchedOff = ", StringComparison.Ordinal)));
+        Assert.Contains("gameorder", settings.Split('\n').First(l => l.StartsWith("SwitchedOff = ", StringComparison.Ordinal)));
+
+        // The save again, with nobody renaming him: the game's own Josef.
+        game.Ask("load");
+        game.Ask("wait-ingame 150", 180);
+        string warning = game.AskUntil("warning", w => w.StartsWith("open", StringComparison.Ordinal), 15);
+        if (warning.StartsWith("open", StringComparison.Ordinal)) game.Ask("warning go-on");
+        game.Ask("wait 2", 10);
+        string after = Speaker();
+        Assert.Contains("Josef'", after);
+        Assert.DoesNotContain("Joseph'", after);
+        string line = Line();
+        Assert.True(Says(line, "Josef") && !Says(line, "Joseph"), line);
     }
 
     /// <summary>

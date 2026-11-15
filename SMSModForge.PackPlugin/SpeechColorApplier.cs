@@ -215,13 +215,13 @@ namespace SMSModForge.PackPlugin
         /// worth a line in the log: it is the difference between "this name has
         /// no colour" and "this name lost the one it had".
         /// </summary>
-        public static bool CarryColour(string original, string translated, ManualLogSource log)
+        public static bool CarryColour(string original, string translated, ManualLogSource log, bool sayNone = true)
         {
             if (string.IsNullOrEmpty(original) || string.IsNullOrEmpty(translated)) return false;
             if (string.Equals(original, translated, System.StringComparison.Ordinal)) return false;
             if (!ResolveTypes(log)) return false;
 
-            bool carried = false;
+            bool carried = false, coloured = false;
             foreach (var colorizer in FindColorizers())
             {
                 if (colorizer == null) continue;
@@ -236,6 +236,7 @@ namespace SMSModForge.PackPlugin
                     if (string.Equals(word, original, System.StringComparison.OrdinalIgnoreCase)) was = item;
                     else if (string.Equals(word, translated, System.StringComparison.OrdinalIgnoreCase)) already = true;
                 }
+                if (was != null) coloured = true;
                 if (was == null || already) continue;
 
                 // Kept so Forget puts this list back as it was: these are
@@ -258,7 +259,10 @@ namespace SMSModForge.PackPlugin
             if (carried)
                 log?.LogInfo("[SMSModForge.PackPlugin] Speech colours: '" + translated
                              + "' now draws in the colour '" + original + "' draws in.");
-            else
+            // Only when no colorizer knows the name: one that already draws the
+            // new name in its colour has nothing to say, and asked again for every
+            // conversation (NewNames.Tick) the line was the log's most common.
+            else if (!coloured && sayNone)
                 log?.LogInfo("[SMSModForge.PackPlugin] Speech colours: nothing gives '" + original
                              + "' a colour of its own, so '" + translated
                              + "' needs none carried over.");

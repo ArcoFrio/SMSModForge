@@ -21,7 +21,7 @@ public sealed class JigglePreview : Image
 {
     public static readonly DependencyProperty OutfitProperty =
         DependencyProperty.Register(nameof(Outfit), typeof(OutfitViewModel), typeof(JigglePreview),
-            new PropertyMetadata(null, (d, e) => ((JigglePreview)d).OnOutfitChanged()));
+            new PropertyMetadata(null, (d, e) => ((JigglePreview)d).OnOutfitChanged(e.OldValue as OutfitViewModel)));
 
     public OutfitViewModel? Outfit
     {
@@ -391,11 +391,22 @@ public sealed class JigglePreview : Image
         nameof(OutfitViewModel.Overrides),
     };
 
-    private void OnOutfitChanged()
+    /// <summary>
+    /// The one handler on the outfit shown, moved to each new outfit and taken
+    /// off the last (1.9.0). A new one was added every time an outfit was shown
+    /// and none was ever removed, so every outfit ever looked at reloaded this
+    /// preview's pictures on each of its own changes - each keystroke in a path
+    /// box loaded the pictures once per outfit visited.
+    /// </summary>
+    private System.ComponentModel.PropertyChangedEventHandler? _watching;
+
+    private void OnOutfitChanged(OutfitViewModel? old)
     {
+        if (old != null && _watching != null) old.PropertyChanged -= _watching;
+        _watching = null;
         if (Outfit != null)
         {
-            Outfit.PropertyChanged += (_, e) =>
+            _watching = (_, e) =>
             {
                 if (e.PropertyName is null || _texturePathProps.Contains(e.PropertyName))
                 {
@@ -414,9 +425,10 @@ public sealed class JigglePreview : Image
                 // One read, when the live buffer goes away. Not on
                 // LiveMaskRevision, which fires per brush stamp.
                 if (e.PropertyName == nameof(OutfitViewModel.LiveMaskBgra) &&
-                    Outfit.LiveMaskBgra == null)
+                    Outfit?.LiveMaskBgra == null)
                     ReloadTextures();
             };
+            Outfit.PropertyChanged += _watching;
         }
         ReloadTextures();
     }
@@ -425,8 +437,12 @@ public sealed class JigglePreview : Image
     /// against the previous outfit can't paint its result over the new one.</summary>
     private int _renderGeneration;
 
+    /// <summary>How many times the pictures were loaded - for tests.</summary>
+    internal int TextureLoads { get; private set; }
+
     private void ReloadTextures()
     {
+        TextureLoads++;
         LoadTextures();
 
         // After every route through the load, including the ones that return
@@ -937,8 +953,13 @@ public sealed class JigglePreview : Image
         _renderingHooked = false;
     }
 
+    /// <summary>How many frame callbacks this preview has had - for tests, to
+    /// prove one that cannot be seen is not drawing (1.9.0, the mask studio).</summary>
+    internal int FrameCallbacks { get; private set; }
+
     private void OnCompositionRendering(object? sender, EventArgs e)
     {
+        FrameCallbacks++;
         if (!IsVisible) return;
         if (Breathing)
         {

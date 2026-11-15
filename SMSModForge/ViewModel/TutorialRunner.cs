@@ -79,8 +79,10 @@ public sealed class TutorialRunner : ObservableObject
 
     public bool IsLastStep => _tutorial != null && _index == _tutorial.Steps.Count - 1;
 
-    /// <summary>Label on the forward button: the last step finishes rather than continues.</summary>
-    public string NextLabel => IsLastStep ? "Finish" : "Next";
+    /// <summary>Label on the forward button: the last step finishes rather than
+    /// continues. In the editor's language: until 1.9.0 these two were English in
+    /// every language, written over the button's own translated text.</summary>
+    public string NextLabel => IsLastStep ? Loc.T("tutorialOverlay.finish") : Loc.T("tutorialOverlay.next");
 
     private bool _satisfied;
     /// <summary>Whether the current step's check passes. Always true for a step

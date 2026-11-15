@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using SMSModForge.Rendering;
 using Xunit;
@@ -31,6 +32,29 @@ public sealed class DialogueFitTests
     }
 
     private const string Sentence = "I went down to the beach this morning and the water was warmer than I expected. ";
+
+    [Fact]
+    public void SpillsAnswersAsTheVerdictDoes_AtEveryLength()
+    {
+        // 1.9.0: validation asks DialogueFit.Spills, which stops before the size
+        // search. It must answer exactly as Of's verdict at every length, across
+        // the edge from fitting to shrinking to spilling, with markup and with
+        // letters the font lacks.
+        var font = Font();
+        var counts = new System.Collections.Generic.Dictionary<DialogueFit.Verdict, int>();
+        foreach (string unit in new[] { Sentence, "<b>Bold</b> <size=120%>big</size> words, ", "你好世界 " })
+            for (int n = 0; n <= 14; n++)
+            {
+                string line = string.Concat(System.Linq.Enumerable.Repeat(unit, n)) + (n % 2 == 0 ? "" : "end.");
+                var verdict = DialogueFit.Of(font, line).Verdict;
+                counts[verdict] = counts.GetValueOrDefault(verdict) + 1;
+                Assert.Equal(verdict == DialogueFit.Verdict.Spills, DialogueFit.Spills(font, line));
+            }
+        _out.WriteLine(string.Join(", ", counts.Select(kv => $"{kv.Key} {kv.Value}")));
+        // Every verdict was tried, so the agreement covers the spill edge.
+        foreach (DialogueFit.Verdict v in System.Enum.GetValues<DialogueFit.Verdict>())
+            Assert.True(counts.GetValueOrDefault(v) > 0, $"no line came out {v}");
+    }
 
     [Fact]
     public void AShortLineFitsAtTheFullSize()

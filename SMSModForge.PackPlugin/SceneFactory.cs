@@ -37,7 +37,7 @@ namespace SMSModForge.PackPlugin
                 logger.LogWarning("[SMSModForge.PackPlugin] Scenes: 4_CG_Manager-Sexy not found — skipping scene build for pack " + pack.PackId);
                 return;
             }
-            var prototype = cgManager.Find("Samanthabeach")?.gameObject;
+            var prototype = Prototype(logger);
             if (prototype == null)
             {
                 logger.LogWarning("[SMSModForge.PackPlugin] Scenes: Samanthabeach prototype missing under 4_CG_Manager-Sexy — skipping scene build for pack " + pack.PackId);
@@ -64,6 +64,9 @@ namespace SMSModForge.PackPlugin
             int built = 0;
             foreach (var s in scenes)
             {
+                // A change to one of the game's own scenes (1.9.0) builds
+                // nothing: VanillaSceneExtensions dresses the game's object.
+                if (VanillaSceneExtensions.IsGameScene(s as JObject)) continue;
                 try
                 {
                     var go = BuildOne((JObject)s, pack, registry, cgManager, prototype, frameRoot, logger);
@@ -91,6 +94,34 @@ namespace SMSModForge.PackPlugin
                 }
                 logger.LogInfo("[SMSModForge.PackPlugin] Pack '" + pack.PackId + "' built " + built + " scene(s).");
             }
+        }
+
+        /// <summary>The copy of Samanthabeach every pack scene is cloned from, made
+        /// before any pack changes the game's scenes.</summary>
+        private static GameObject _prototype;
+
+        /// <summary>
+        /// The scene every pack scene is cloned from: the game's
+        /// <c>Samanthabeach</c>, as the game made it. A copy is kept the first
+        /// time it is asked for - before any pack's changes to the game's scenes
+        /// (1.9.0) are applied, which ask for it first - so a pack that changes
+        /// Samanthabeach itself (its picture, its frame, its sound, a photo)
+        /// changes that one scene and not every scene of the packs loaded after
+        /// it. Kept switched off under a root of its own, where nothing of the
+        /// game reaches it; it goes with the level when a save loads.
+        /// </summary>
+        internal static GameObject Prototype(ManualLogSource logger)
+        {
+            if (_prototype != null) return _prototype;       // Unity's ==: gone with the level
+            var cgManager = GameObject.Find("4_CG_Manager-Sexy")?.transform;
+            var game = cgManager == null ? null : cgManager.Find("Samanthabeach")?.gameObject;
+            if (game == null) return null;
+            var holder = new GameObject("SMSModForge (untouched scenes)");
+            holder.SetActive(false);
+            _prototype = Object.Instantiate(game, holder.transform);
+            _prototype.name = "Samanthabeach";
+            _prototype.SetActive(false);
+            return _prototype;
         }
 
         /// <summary>Builds one scene; returns the built GameObject (for
@@ -137,8 +168,42 @@ namespace SMSModForge.PackPlugin
                 logger.LogWarning("[SMSModForge.PackPlugin] Scene '" + key + "' — prototype has no Core/Art child; scene image not applied.");
             }
 
-            // Frame: Core SpriteRenderer. customFrameSprite (archive-
-            // relative) wins over vanillaFrame (plugin-bundled, loose).
+            ApplyFrame(core, pack, s, frameRoot, key, logger);
+
+            // Sound override. None = leave the trigger alone. Anything else
+            // strips the Trigger so the prototype's clip never plays — the
+            // ActivateScene action emits the configured signal alongside the
+            // SetActive(true) call.
+            string soundMode = (string)s["sound"] ?? "Silent";
+            string activationSignal = null;
+            if (soundMode != "None")
+            {
+                DestroyComponentByName(scene, "Trigger");
+                if (soundMode == "Kiss") activationSignal = "kiss";
+                else if (soundMode == "Flash") activationSignal = "flash";
+                // "Silent" → no signal, just the stripped trigger.
+            }
+
+            // Off unless the pack says otherwise: most scenes are story art,
+            // and a pack whose every scene paid out followers would be raising
+            // the day's income on lines that are not photographs at all.
+            bool starmakerPhoto = s["starmakerPhoto"]?.Type == Newtonsoft.Json.Linq.JTokenType.Boolean
+                                  && (bool)s["starmakerPhoto"];
+
+            registry.Register(key, scene, activationSignal, starmakerPhoto);
+            return scene;
+        }
+
+        /// <summary>
+        /// The frame: the <c>Core</c> SpriteRenderer. customFrameSprite
+        /// (archive-relative) wins over vanillaFrame (plugin-bundled, loose);
+        /// neither leaves the frame that is there. Shared with
+        /// <see cref="VanillaSceneExtensions"/>, which dresses the game's own
+        /// scenes the same way.
+        /// </summary>
+        internal static void ApplyFrame(Transform core, PackManifest pack, JObject s, string frameRoot,
+                                        string key, ManualLogSource logger)
+        {
             string customFrame = (string)s["customFrameSprite"];
             string vanillaFrame = (string)s["vanillaFrame"];
 
@@ -168,29 +233,6 @@ namespace SMSModForge.PackPlugin
                     logger.LogWarning("[SMSModForge.PackPlugin] Scene '" + key + "' vanilla frame not found at " + framePath + " — keeping prototype's frame.");
                 }
             }
-
-            // Sound override. None = leave the trigger alone. Anything else
-            // strips the Trigger so the prototype's clip never plays — the
-            // ActivateScene action emits the configured signal alongside the
-            // SetActive(true) call.
-            string soundMode = (string)s["sound"] ?? "Silent";
-            string activationSignal = null;
-            if (soundMode != "None")
-            {
-                DestroyComponentByName(scene, "Trigger");
-                if (soundMode == "Kiss") activationSignal = "kiss";
-                else if (soundMode == "Flash") activationSignal = "flash";
-                // "Silent" → no signal, just the stripped trigger.
-            }
-
-            // Off unless the pack says otherwise: most scenes are story art,
-            // and a pack whose every scene paid out followers would be raising
-            // the day's income on lines that are not photographs at all.
-            bool starmakerPhoto = s["starmakerPhoto"]?.Type == Newtonsoft.Json.Linq.JTokenType.Boolean
-                                  && (bool)s["starmakerPhoto"];
-
-            registry.Register(key, scene, activationSignal, starmakerPhoto);
-            return scene;
         }
 
         /// <summary>
@@ -226,7 +268,7 @@ namespace SMSModForge.PackPlugin
         /// already established. An animation is not a different kind of scene,
         /// it is a scene that moves.
         /// </summary>
-        private static void Dress(SpriteRenderer sr, GameObject scene, PackManifest pack,
+        internal static void Dress(SpriteRenderer sr, GameObject scene, PackManifest pack,
                                   JObject s, string sceneRel, string key,
                                   ManualLogSource logger)
         {
@@ -330,7 +372,7 @@ namespace SMSModForge.PackPlugin
         /// "vanilla frame names won't resolve", which is fine because
         /// custom frames take precedence anyway.
         /// </summary>
-        private static string ResolvePluginFrameRoot()
+        internal static string ResolvePluginFrameRoot()
         {
             try
             {

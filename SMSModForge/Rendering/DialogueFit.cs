@@ -45,7 +45,18 @@ public static class DialogueFit
 
     /// <summary>How <paramref name="line"/> - markup and all - fits the box
     /// when typed in <paramref name="font"/>.</summary>
-    public static Result Of(TmpFont font, string? line)
+    public static Result Of(TmpFont font, string? line) => Decide(font, line, findSize: true);
+
+    /// <summary>
+    /// Whether the line runs out of the box even at the smallest size: the
+    /// verdict of <see cref="Of"/> being <see cref="Verdict.Spills"/>, without
+    /// the search for the size a shrinking line ends at, which is what most of
+    /// <see cref="Of"/> costs and is not needed to tell (1.9.0: validation asks
+    /// this of every line in every language).
+    /// </summary>
+    public static bool Spills(TmpFont font, string? line) => Decide(font, line, findSize: false).Verdict == Verdict.Spills;
+
+    private static Result Decide(TmpFont font, string? line, bool findSize)
     {
         var runs = new List<StyledRun>();
         string text = line ?? "";
@@ -62,6 +73,8 @@ public static class DialogueFit
 
         var smallest = Measure(font, runs, DialogueLook.BodyMinPointSize);
         if (smallest.Height > BoxHeight) return new Result(Verdict.Spills, DialogueLook.BodyMinPointSize, smallest.Layout.Lines);
+        // It shrinks; only the size it shrinks to is left, and Spills does not ask.
+        if (!findSize) return new Result(Verdict.Shrinks, DialogueLook.BodyMinPointSize, smallest.Layout.Lines);
 
         // The largest size that fits, to a tenth of a point: fitting only gets
         // easier as the size goes down, so halving the gap finds it.

@@ -299,10 +299,14 @@ public sealed class QuestTabTests
             var found = TypeAndRead(countVariable, "heal");
             _out.WriteLine($"counter variable: {found.Count} of {countVariable.Items.Count}: {string.Join(", ", found.Take(8))}");
             Assert.Contains("health", found);
-            // Every entry left showing matches. A count alone would not do: a
-            // list this long only builds the rows near the top, so an unnarrowed
-            // one shows far fewer than it holds.
-            Assert.All(found, name => Assert.Contains("heal", name, System.StringComparison.OrdinalIgnoreCase));
+            // Every entry left showing matches - by its name, or (1.9.0) by the
+            // note the game's variables carry, which the search reads too. A count
+            // alone would not do: a list this long only builds the rows near the
+            // top, so an unnarrowed one shows far fewer than it holds.
+            Assert.All(found, name => Assert.True(
+                name.Contains("heal", System.StringComparison.OrdinalIgnoreCase)
+                || SMSModForge.Model.VanillaVariableHints.For(name).Contains("heal", System.StringComparison.OrdinalIgnoreCase),
+                name + " matches neither by its name nor by its note"));
             WindowHarness.SetOpen(countVariable, false);
             WindowHarness.Pump();
 

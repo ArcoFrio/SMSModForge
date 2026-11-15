@@ -94,6 +94,15 @@ namespace SMSModForge.PackPlugin
             return null;
         }
 
+        /// <summary>A pack's characters, for what a <c>{name:key}</c> in its
+        /// text names, or null for a pack not loaded.</summary>
+        internal static ActorRegistry TryGetPackActors(string packId)
+        {
+            for (int i = 0; i < _contexts.Count; i++)
+                if (_contexts[i].PackId == packId) return _contexts[i].Actors;
+            return null;
+        }
+
         /// <summary>
         /// Cached DialogueSkin from a vanilla dialogue, reused across all
         /// pack-built dialogues. We harvest it once per CoreGameScene
@@ -920,8 +929,14 @@ namespace SMSModForge.PackPlugin
             // The gallery rows went with the scene, and the sprites belong to
             // packs that are being unloaded.
             StarmakerGallery.Forget();
+            VanillaSceneExtensions.Forget();
             SubtaskCounters.Forget();
             VanillaVoiceOverrides.Restore();
+            // The same Actors' names, and the table of new names with them.
+            NewNames.Restore();
+            // ...and the game's quests' texts, which outlive the scene. After the
+            // quests' own restore above, which may have put one of these back.
+            GameNameMentions.Restore();
             // The key watch list was built out of the conditions those packs
             // ran; nothing should still be polled for a pack that is gone.
             InputRuntime.Reset();
@@ -1831,10 +1846,16 @@ namespace SMSModForge.PackPlugin
                     {
                         try
                         {
-                            string text = archive.ReadText(PackArchive.ManifestEntryName);
-                            if (text != null)
+                            // Parsed already while it was opened (1.9.0); read
+                            // again only if somebody took that.
+                            var json = archive.TakeManifest();
+                            if (json == null)
                             {
-                                var json = Newtonsoft.Json.Linq.JObject.Parse(text);
+                                string text = archive.ReadText(PackArchive.ManifestEntryName);
+                                if (text != null) json = Newtonsoft.Json.Linq.JObject.Parse(text);
+                            }
+                            if (json != null)
+                            {
                                 entry.PackId = (string)json["packId"] ?? entry.DirName;
                                 entry.GameVersion = (string)json["gameVersion"] ?? "";
                                 entry.Version = (string)json["version"] ?? "";
@@ -2116,6 +2137,7 @@ namespace SMSModForge.PackPlugin
                 // loaded yet when the pack was. Free once they have all been
                 // found, which is the ordinary case.
                 try { VanillaVoiceOverrides.Tick(Logger); } catch (System.Exception ex) { FailedThisFrame("Typing voices", ex); }
+                try { NewNames.Tick(Logger); } catch (System.Exception ex) { FailedThisFrame("New names", ex); }
 #if DEBUG
                 // Measure the dialogue box once, the first time one is up.
                 var speechForLayout = GameCreator.Runtime.Dialogue.UnityUI.SpeechUI.Current;
@@ -2128,6 +2150,7 @@ namespace SMSModForge.PackPlugin
                 // ...and the Starmaker gallery's pack rows, which cannot be
                 // built until the Starmaker screen has loaded.
                 try { StarmakerGallery.Tick(Logger); } catch (System.Exception ex) { FailedThisFrame("Starmaker gallery", ex); }
+                try { VanillaSceneExtensions.Tick(Logger); } catch (System.Exception ex) { FailedThisFrame("Game scenes' gallery pictures", ex); }
                 for (int i = 0; i < _dispatchers.Count; i++)
                 {
                     try { _dispatchers[i].Tick(); }
@@ -2731,6 +2754,14 @@ namespace SMSModForge.PackPlugin
 
         private void LoadAllPacks(Transform bustManager, GameObject baseBust)
         {
+            // Each picture decoded once for the whole load (1.9.0) - see LoadedArt.
+            LoadedArt.Begin();
+            try { LoadAllPacksSharingArt(bustManager, baseBust); }
+            finally { LoadedArt.End(); }
+        }
+
+        private void LoadAllPacksSharingArt(Transform bustManager, GameObject baseBust)
+        {
             var files = PackFiles();
             if (files.Count == 0)
             {
@@ -2862,7 +2893,16 @@ namespace SMSModForge.PackPlugin
                 // in every scene the game plays itself.
                 try { VanillaVoiceOverrides.ApplyAll(m, Logger); }
                 catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Voice overrides failed in " + m.PackId + ": " + ex); }
+
+                // ...and the new names, every pack's before any line is built: a
+                // pack's lines spoken by the game's character take the name too.
+                try { NewNames.Collect(m, Logger); }
+                catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] New names failed in " + m.PackId + ": " + ex); }
             }
+
+            // The game's own Actors, once every pack has said what it calls them.
+            try { NewNames.ApplyToGame(Logger); }
+            catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Renaming the game's characters failed: " + ex); }
 
             // Refresh the SpriteManager once after all busts are built.
             var spriteManager = bustManager.GetComponent("SpriteManager");
@@ -2912,6 +2952,12 @@ namespace SMSModForge.PackPlugin
                 try { BuildDialogueRuntimeFor(m); }
                 catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Dialogue runtime failed in " + m.PackId + ": " + ex); }
             }
+
+            // The new names in the game's own words, once every pack has made its
+            // changes to the game's conversations and quests: a line a pack rewrote
+            // or translated is the pack's, and keeps what the pack wrote.
+            try { GameNameMentions.Apply(Logger); }
+            catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] New names in the game's words failed: " + ex); }
         }
 
         private void RegisterQuestSteps(PackManifest m, PackContext ctx)
@@ -2964,6 +3010,11 @@ namespace SMSModForge.PackPlugin
             // SceneFactory tolerates the absence of a "scenes" key.
             try { SceneFactory.BuildAll(m, ctx.Scenes, Logger); }
             catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Scene build failed in " + m.PackId + ": " + ex); }
+
+            // And its changes to the game's own scenes (1.9.0), dressed where
+            // they stand and registered under their keys beside the pack's own.
+            try { VanillaSceneExtensions.ApplyAll(m, ctx, Logger); }
+            catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Game scene changes failed in " + m.PackId + ": " + ex); }
 
             // The ones marked as Starmaker photos also want a row in the
             // gallery. Taken from the built scene rather than from the archive,
@@ -3114,7 +3165,10 @@ namespace SMSModForge.PackPlugin
                     var ao = (Newtonsoft.Json.Linq.JObject)a;
                     ctx.Actors.Declare(ao);
 
-                    string displayName = (string)ao["displayName"] ?? (string)ao["key"];
+                    // Under the name drawn: a new name for one of the game's
+                    // characters, from whichever pack gave it (NewNames).
+                    string displayName = NewNames.NameOf(NewNames.CastKeyOf(ao))
+                                         ?? (string)ao["displayName"] ?? (string)ao["key"];
                     string hex = (string)ao["nameColor"];
                     // Never the player's: "You" is the game's grey in every
                     // pack, and a colour here would repaint it everywhere.

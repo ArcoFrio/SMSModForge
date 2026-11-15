@@ -309,6 +309,7 @@ public sealed class PlacePreview : Grid
     };
 
     private static BitmapSource? _cachedOverlay;
+    private static readonly Dictionary<string, BitmapSource> _buttonSprites = new(StringComparer.Ordinal);
     private static BitmapSource? _cachedOverlayExtended;
     private static FontFamily? _numberFont;
     private static FontFamily? _labelFont;
@@ -393,7 +394,16 @@ public sealed class PlacePreview : Grid
 
         // The Wet droplet markers animate only while the control is actually
         // visible (not on a hidden/unselected tab).
-        IsVisibleChanged += (_, _) => { _isLoaded = IsVisible; UpdateWetTimer(); };
+        IsVisibleChanged += (_, _) =>
+        {
+            _isLoaded = IsVisible;
+            UpdateWetTimer();
+            // The shaders' clock too (1.9.0): it ticked on behind another tab or
+            // the mask studio, waking the editor 30 times a second to draw
+            // nothing. Back on screen, it starts again where the shaders are.
+            if (!IsVisible) _shaderTimer?.Stop();
+            else if (_shaderTargets.Count > 0) SyncShaderTimer();
+        };
 
         Refresh();
     }
@@ -951,7 +961,15 @@ public sealed class PlacePreview : Grid
                                         double cx, double cy, double w, double h,
                                         Int32Rect sourceRect = default)
     {
-        var src = LoadOverlayFile(file);
+        // The editor's own button sprites, read once (1.9.0): they were decoded
+        // again for every button of every redraw - each label keystroke. They
+        // ship with the editor and never change; one that would not load is
+        // tried again next time, as before.
+        if (!_buttonSprites.TryGetValue(file, out var src))
+        {
+            src = LoadOverlayFile(file);
+            if (src != null) _buttonSprites[file] = src;
+        }
         if (src == null) return;
         BitmapSource masked = sourceRect.HasArea
             ? new CroppedBitmap(src, sourceRect)
@@ -1703,7 +1721,13 @@ public sealed class PlacePreview : Grid
     /// <summary>Refresh rate for the animated passes. The jiggle is a slow
     /// wobble — a third of a display refresh reads as continuous and leaves the
     /// UI thread alone for everything else.</summary>
-    private static readonly TimeSpan ShaderTick = TimeSpan.FromMilliseconds(33);
+    /// <summary>How often the level's shaders are drawn: the preview quality's
+    /// frame cap (1.9.0; Medium, the default, is the 30 a second it always was).</summary>
+    private static TimeSpan ShaderTick
+        => TimeSpan.FromMilliseconds(1000.0 / Math.Max(1, Services.PreviewQualityManager.Current.MaxFps));
+
+    /// <summary>Whether the shaders' clock is running - for tests.</summary>
+    internal bool ShaderClockRunning => _shaderTimer?.IsEnabled == true;
 
     private sealed class ShaderTarget
     {
@@ -1831,6 +1855,8 @@ public sealed class PlacePreview : Grid
             _shaderTimer.Tick += (_, _) => StepShaders();
         }
         _shaderTimer.Interval = ShaderTick;
+        // Built while off screen: started when it comes on (IsVisibleChanged).
+        if (!IsVisible) { _shaderTimer.Stop(); return; }
         _shaderTimer.Start();
         StepShaders();          // draw once now rather than after the first tick
     }
@@ -1840,6 +1866,8 @@ public sealed class PlacePreview : Grid
         // Nothing to show while the control is off screen, and a background
         // tab should not be burning a core on invisible pixels.
         if (!IsVisible) return;
+        // A quality changed while the shaders run takes effect at once.
+        if (_shaderTimer != null && _shaderTimer.Interval != ShaderTick) _shaderTimer.Interval = ShaderTick;
         float t = (float)_shaderClock.Elapsed.TotalSeconds;
         foreach (var s in _shaderTargets)
         {

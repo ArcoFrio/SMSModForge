@@ -70,6 +70,7 @@ public static class VariableRenamer
         // Every other text a player reads. [PV:name] is filled in in all of
         // them now, so a rename that left one behind would leave it naming a
         // variable that no longer exists - read as nothing, the token gone.
+        if (OtherTextsMayHold(pack, oldName))
         foreach (var slot in OtherTexts(pack))
         {
             string before = slot.Get() ?? "";
@@ -84,11 +85,34 @@ public static class VariableRenamer
     /// <summary>The texts a player reads that the walks above do not reach:
     /// everything but dialogue lines and button labels, which they do.</summary>
     private static IEnumerable<Translation.LanguageSession.Slot> OtherTexts(ModPack pack)
-        => Translation.LanguageSession.Slots(pack, out _)
-            .Where(s => s.Kind != Shared.PackTexts.Kind.Line
-                        && s.Kind != Shared.PackTexts.Kind.NavigatorLabel
-                        && s.Kind != Shared.PackTexts.Kind.MapLabel
-                        && s.Kind != Shared.PackTexts.Kind.TransitionText);
+        => Translation.LanguageSession.Slots(pack, out _).Where(s => IsOtherText(s.Kind));
+
+    /// <summary>Gather <see cref="OtherTexts"/> every time, as before 1.9.0 -
+    /// for the test that holds the quick look to it.</summary>
+    internal static bool GatherOtherTextsAlways;
+
+    private static bool IsOtherText(Shared.PackTexts.Kind kind)
+        => kind != Shared.PackTexts.Kind.Line
+           && kind != Shared.PackTexts.Kind.NavigatorLabel
+           && kind != Shared.PackTexts.Kind.MapLabel
+           && kind != Shared.PackTexts.Kind.TransitionText;
+
+    /// <summary>
+    /// Whether any of <see cref="OtherTexts"/> can hold <c>[PV:name]</c>: when
+    /// none does, they are not gathered at all. Gathering them writes the
+    /// whole pack out and parses it, which was most of what clicking a
+    /// variable cost (1.9.0). Exact: every one of those texts is read through
+    /// one of the model's text fields of the same kind, which this looks at
+    /// directly, and every match - a use, a rename - contains the token
+    /// written out.
+    /// </summary>
+    private static bool OtherTextsMayHold(ModPack pack, string name)
+    {
+        if (GatherOtherTextsAlways) return true;
+        string token = "[PV:" + name + "]";
+        return Translation.LanguageSession.AnyText(pack, IsOtherText,
+            text => text.Contains(token, System.StringComparison.Ordinal));
+    }
 
     /// <summary>Where one of <see cref="OtherTexts"/> is, said the way the
     /// rest of the list says it.</summary>
@@ -130,6 +154,7 @@ public static class VariableRenamer
             if (q.AllTasks().Any(t => t.CountsFromVariable && !t.CountVariableIsVanilla && t.CountVariable == name))
                 Hit(Loc.F("walk.quest", "name", q.Key));
 
+        if (OtherTextsMayHold(pack, name))
         foreach (var slot in OtherTexts(pack))
         {
             if (!HasToken(slot.Get(), name)) continue;
@@ -178,9 +203,10 @@ public static class VariableRenamer
                 if (t.CountsFromVariable && !t.CountVariableIsVanilla && t.CountVariable == name)
                     Add(UseKind.Reads, new PackWalk.Spot(Loc.F("walk.questTask", "name", q.Key, "task", t.Key),
                         $"quests[{q.Key}].{(string.IsNullOrEmpty(q.Source) ? "tasks" : "addedTasks")}[{t.Key}]"));
-        foreach (var slot in OtherTexts(pack))
-            if (HasToken(slot.Get(), name))
-                Add(UseKind.Shows, new PackWalk.Spot(WhereIs(pack, slot), PathOf(pack, slot)));
+        if (OtherTextsMayHold(pack, name))
+            foreach (var slot in OtherTexts(pack))
+                if (HasToken(slot.Get(), name))
+                    Add(UseKind.Shows, new PackWalk.Spot(WhereIs(pack, slot), PathOf(pack, slot)));
 
         return uses.OrderBy(u => u.Kind).ToList();
     }
@@ -283,7 +309,10 @@ public static class VariableRenamer
         return count;
     }
 
+    /// <summary>The token written out: the pattern this was, an escaped name
+    /// between <c>[PV:</c> and <c>]</c> with no options, matches exactly where the
+    /// text holds it.</summary>
     private static bool HasToken(string text, string name)
         => !string.IsNullOrEmpty(text) &&
-           Regex.IsMatch(text ?? "", @"\[PV:" + Regex.Escape(name) + @"\]");
+           text.Contains("[PV:" + name + "]", System.StringComparison.Ordinal);
 }

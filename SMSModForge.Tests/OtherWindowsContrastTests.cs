@@ -40,7 +40,7 @@ public sealed class OtherWindowsContrastTests : IDisposable
     public void Dispose() { try { Directory.Delete(_dir, true); } catch (IOException) { } }
 
     public static IEnumerable<object[]> Windows()
-        => new[] { "ColorPicker", "CustomThemes", "ExportSize", "MaskEditor", "PackTranslations", "SaveConfirm",
+        => new[] { "ColorPicker", "CustomThemes", "ExportSize", "PackTranslations", "SaveConfirm",
                    "SpritePicker", "TextPrompt", "TextReport", "TranslatePack", "UiTextEdit", "Update" }
            .Select(n => new object[] { n });
 
@@ -51,7 +51,7 @@ public sealed class OtherWindowsContrastTests : IDisposable
     public void Every_window_is_measured()
     {
         var measured = Windows().Select(w => (string)w[0] + "Window").ToHashSet();
-        var all = typeof(MaskEditorWindow).Assembly.GetTypes()
+        var all = typeof(MainWindow).Assembly.GetTypes()
             .Where(t => t.Namespace == "SMSModForge.View" && typeof(Window).IsAssignableFrom(t) && !t.IsAbstract)
             .Select(t => t.Name).Where(n => n != "BrowserTranslatorWindow").ToList();
         Assert.Empty(all.Where(n => !measured.Contains(n)));
@@ -61,8 +61,6 @@ public sealed class OtherWindowsContrastTests : IDisposable
     {
         switch (name)
         {
-            case "MaskEditor":
-                return new MaskEditorWindow(new OutfitViewModel(new OutfitDef { Key = "o", GameObjectName = "O" }), _dir);
             case "PackTranslations":
                 return new PackTranslationsWindow(Pack(), _dir);
             case "TranslatePack":
@@ -79,7 +77,7 @@ public sealed class OtherWindowsContrastTests : IDisposable
                 return (Window)Activator.CreateInstance(typeof(UiTextEditWindow), BindingFlags.NonPublic | BindingFlags.Instance, null,
                                                         new object[] { Array.Empty<UiTextMarks.Found>() }, null)!;
             default:
-                var type = typeof(MaskEditorWindow).Assembly.GetType("SMSModForge.View." + name + "Window", throwOnError: true)!;
+                var type = typeof(MainWindow).Assembly.GetType("SMSModForge.View." + name + "Window", throwOnError: true)!;
                 return (Window)Activator.CreateInstance(type, nonPublic: true)!;
         }
     }

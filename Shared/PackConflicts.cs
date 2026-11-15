@@ -61,7 +61,8 @@ namespace SMSModForge.Shared
             public Change LaterChange;
         }
 
-        private static readonly string[] MediaExtensions = { ".png", ".jpg", ".jpeg", ".ogg", ".wav", ".mp3" };
+        private static readonly string[] MediaExtensions =
+            { ".png", ".jpg", ".jpeg", ".ogg", ".wav", ".mp3", ".gif", ".mp4", ".m4v", ".mov", ".webm" };
 
         // ── What one pack changes ─────────────────────────────────────────
 
@@ -71,19 +72,22 @@ namespace SMSModForge.Shared
         {
             var changes = new List<Change>();
             if (manifest == null) return changes;
-            try
+            // Each part on its own: a part shaped in a way this does not expect
+            // is not a reason to lose the pack list, nor the pack's other changes.
+            // (Until 1.9.0 one try held them all, and a pack that changed one of
+            // the game's screens lost every change it made, characters to scenes:
+            // its screens threw first.)
+            void Part(Action read)
             {
-                Characters(manifest["characters"] as JArray, changes);
-                Levels(manifest["vanillaExtensions"] as JArray, changes);
-                Screens(manifest["uis"] as JArray, changes);
-                Conversations(manifest["dialogues"] as JArray, changes);
-                Quests(manifest["quests"] as JArray, changes);
+                try { read(); }
+                catch (Exception) { }
             }
-            catch (Exception)
-            {
-                // A manifest shaped in a way this does not expect is not a
-                // reason to lose the pack list: it simply reports what it got.
-            }
+            Part(() => Characters(manifest["characters"] as JArray, changes));
+            Part(() => Levels(manifest["vanillaExtensions"] as JArray, changes));
+            Part(() => Screens(manifest["uis"] as JArray, changes));
+            Part(() => Conversations(manifest["dialogues"] as JArray, changes));
+            Part(() => Quests(manifest["quests"] as JArray, changes));
+            Part(() => Scenes(manifest["scenes"] as JArray, changes));
             return changes;
         }
 
@@ -194,10 +198,27 @@ namespace SMSModForge.Shared
             if (nodes == null) return;
             foreach (var n in nodes.OfType<JObject>())
             {
-                if (!((bool?)n["bind"] ?? false)) continue;
+                // A level's object says it is the game's with "bind": true; a
+                // screen's names the game's object it is, by its path from the
+                // screen ("." for the screen itself, empty for one of the pack's).
+                var bind = n["bind"];
+                string bindPath = bind != null && bind.Type == JTokenType.String ? (string)bind : "";
+                bool bound = bind != null && (bind.Type == JTokenType.Boolean ? (bool)bind : bindPath.Length > 0);
+                if (!bound) continue;
                 string name = (string)n["name"] ?? "";
-                string path = parentPath.Length == 0 ? name : parentPath + " > " + name;
-                string thing = path + " in " + where;
+                string path, thing;
+                if (screen)
+                {
+                    // By the path it binds to, which is what two packs share; names
+                    // are each pack's own.
+                    path = bindPath;
+                    thing = bindPath == "." ? where : bindPath + " in " + where;
+                }
+                else
+                {
+                    path = parentPath.Length == 0 ? name : parentPath + " > " + name;
+                    thing = path + " in " + where;
+                }
 
                 if (screen)
                 {
@@ -269,6 +290,36 @@ namespace SMSModForge.Shared
                     if (!string.IsNullOrEmpty(task) && !string.IsNullOrEmpty(said))
                         Add(into, "task " + task + " of quest " + source, "questDescription", said);
                 }
+            }
+        }
+
+        /// <summary>
+        /// The game's scenes a pack changes in place (1.9.0): the picture, the
+        /// frame, the sound and the photo, each a field of its own. What a change
+        /// leaves the game's is not a change - two packs where one swaps the
+        /// picture and the other the sound both show.
+        /// </summary>
+        private static void Scenes(JArray scenes, List<Change> into)
+        {
+            if (scenes == null) return;
+            foreach (var sc in scenes.OfType<JObject>())
+            {
+                string source = (string)sc["source"];
+                if (string.IsNullOrEmpty(source)) continue;
+                string thing = "scene " + source;
+                string picture = (string)sc["sceneSprite"];
+                if (!string.IsNullOrEmpty(picture)) Add(into, thing, "sceneSprite", picture);
+                // A frame of the pack's own is a file, which two packs never
+                // agree on; one the plugin ships is the same in every pack.
+                string frame = (string)sc["customFrameSprite"];
+                string shipped = (string)sc["vanillaFrame"];
+                if (string.IsNullOrEmpty(frame) && !string.IsNullOrEmpty(shipped))
+                    frame = "shipped " + System.IO.Path.GetFileNameWithoutExtension(shipped);
+                if (!string.IsNullOrEmpty(frame)) Add(into, thing, "frame", frame);
+                string sound = (string)sc["sound"];
+                if (!string.IsNullOrEmpty(sound) && sound != "None") Add(into, thing, "sound", sound);
+                if (sc["starmakerPhoto"]?.Type == JTokenType.Boolean && (bool)sc["starmakerPhoto"])
+                    Add(into, thing, "starmakerPhoto", true);
             }
         }
 

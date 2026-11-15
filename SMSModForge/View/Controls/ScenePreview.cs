@@ -77,6 +77,34 @@ public sealed class ScenePreview : Grid
         set => SetValue(CustomFrameSpriteProperty, value);
     }
 
+    public static readonly DependencyProperty GamePictureProperty =
+        DependencyProperty.Register(nameof(GamePicture), typeof(string), typeof(ScenePreview),
+            new PropertyMetadata("", OnInputChanged));
+
+    /// <summary>
+    /// For a change to one of the game's scenes (1.9.0): the game's own picture
+    /// of it, on disk, drawn while <see cref="SceneSprite"/> is empty - which is
+    /// what the game will show then. A smaller copy than the game's, fitted to
+    /// the scene's square like any art.
+    /// </summary>
+    public string GamePicture
+    {
+        get => (string)GetValue(GamePictureProperty);
+        set => SetValue(GamePictureProperty, value);
+    }
+
+    public static readonly DependencyProperty GameFrameProperty =
+        DependencyProperty.Register(nameof(GameFrame), typeof(string), typeof(ScenePreview),
+            new PropertyMetadata("", OnInputChanged));
+
+    /// <summary>For a change to one of the game's scenes: the game's own frame of
+    /// it among the shipped vanilla frames, drawn while neither frame is set.</summary>
+    public string GameFrame
+    {
+        get => (string)GetValue(GameFrameProperty);
+        set => SetValue(GameFrameProperty, value);
+    }
+
     public static readonly DependencyProperty BoxSizeProperty =
         DependencyProperty.Register(nameof(BoxSize), typeof(double), typeof(ScenePreview),
             new PropertyMetadata(FixedSize, OnBoxSizeChanged));
@@ -328,14 +356,41 @@ public sealed class ScenePreview : Grid
         RenderOptions.SetBitmapScalingMode(_frameImage, scaling);
     }
 
+    private static readonly DependencyPropertyKey ShowsGameArtKey =
+        DependencyProperty.RegisterReadOnly(nameof(ShowsGameArt), typeof(bool), typeof(ScenePreview), new PropertyMetadata(false));
+
+    public static readonly DependencyProperty ShowsGameArtProperty = ShowsGameArtKey.DependencyProperty;
+
+    /// <summary>Whether the picture drawn is the game's own (the editor's
+    /// reduced copy of it), so the panel can say why it is smaller than in the
+    /// game (1.9.0). False for the pack's own picture, and for none.</summary>
+    public bool ShowsGameArt => (bool)GetValue(ShowsGameArtProperty);
+
     private void Refresh()
     {
+        SetValue(ShowsGameArtKey, false);
         string root = PackRoot ?? "";
         string sprite = SceneSprite ?? "";
 
-        // Nothing useful to show when no sprite path is authored.
+        // Nothing useful to show when no sprite path is authored - unless this
+        // is one of the game's scenes, which then keeps the game's picture.
         if (string.IsNullOrWhiteSpace(sprite))
         {
+            string game = GamePicture ?? "";
+            if (game.Length > 0 && File.Exists(game))
+            {
+                StopVideo();
+                StopGif();
+                var gameArt = IsSmall ? Thumbnails.Load(game, SmallArtSide) : TryLoad(game);
+                _sceneImage.Source = gameArt;
+                _sceneImage.Visibility = Visibility.Visible;
+                _sceneImage.LayoutTransform = ArtScale(gameArt);
+                ShowFrame(root);
+                _placeholder.Visibility = Visibility.Collapsed;
+                _note.Visibility = Visibility.Collapsed;
+                SetValue(ShowsGameArtKey, gameArt != null);
+                return;
+            }
             ShowPlaceholder(string.IsNullOrEmpty(root)
                 ? Loc.T("preview.scene.saveAndSet")
                 : Loc.T("preview.scene.noSprite"));
@@ -631,6 +686,8 @@ public sealed class ScenePreview : Grid
             return Path.Combine(packRoot, custom);
 
         string vanilla = VanillaFrame ?? "";
+        // Neither set on one of the game's scenes: the game keeps its own frame.
+        if (string.IsNullOrWhiteSpace(vanilla)) vanilla = GameFrame ?? "";
         if (!string.IsNullOrWhiteSpace(vanilla))
         {
             string? frameDir = FindVanillaFramesFolder();

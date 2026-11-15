@@ -40,6 +40,36 @@ public enum SceneSoundMode
 public sealed class SceneDef
 {
     /// <summary>
+    /// The game's scene this entry changes in place (1.9.0), by where it sits -
+    /// <c>4_CG_Manager-Sexy/AmeliaStretching</c> - or null for a scene of the
+    /// pack's own.
+    /// <para/>
+    /// Such an entry builds nothing: the game's own object is dressed where it
+    /// stands, keeping its name and every component, and whatever the entry
+    /// leaves empty stays the game's - an empty picture keeps the game's
+    /// picture, no frame keeps its frame, <see cref="SceneSoundMode.None"/> its
+    /// sound. The game shows it when it always did; a pack can also show it by
+    /// its key, as it shows one of its own.
+    /// <para/>
+    /// Empty, not null, while the author has added one and not picked which:
+    /// it is still one of the game's scenes, and stays one through an undo or a
+    /// save, rather than turning into a scene of the pack's own with no picture.
+    /// <para/>
+    /// A plugin older than 1.9.0 does not know the field and takes the entry for
+    /// a scene of the pack's own, leaving the game's scene as it is: with no
+    /// picture it skips the entry, with one it builds a scene of the pack's own
+    /// from it, which the game never shows but the pack's own actions showing it
+    /// by its key do.
+    /// </summary>
+    [JsonProperty("source", Order = 0, NullValueHandling = NullValueHandling.Ignore)]
+    public string? Source { get; set; }
+
+    /// <summary>Whether this entry changes one of the game's scenes, chosen or
+    /// not yet.</summary>
+    [JsonIgnore]
+    public bool IsGameScene => Source != null;
+
+    /// <summary>
     /// Pack-local key. Used to address the scene from a dialogue action
     /// (<c>ActivateScene</c> takes <c>scene = &lt;key&gt;</c>). Becomes the
     /// scene GO name at runtime, prefixed with the pack id so two packs
@@ -99,6 +129,10 @@ public sealed class SceneDef
     /// How the scene's audio behaves on activation. See <see cref="SceneSoundMode"/>.
     /// Defaults to <see cref="SceneSoundMode.Silent"/> — the prototype's audio is
     /// rarely the right fit for a pack-authored scene.
+    /// <para/>
+    /// One of the game's scenes is added with <see cref="SceneSoundMode.None"/>,
+    /// its own sound, and always written: the default a missing value loads
+    /// with is Silent, which would quietly take its sound away.
     /// </summary>
     [JsonProperty("sound", Order = 6)]
     public SceneSoundMode Sound { get; set; } = SceneSoundMode.Silent;

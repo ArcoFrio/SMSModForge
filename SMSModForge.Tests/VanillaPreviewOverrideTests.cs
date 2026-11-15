@@ -277,7 +277,7 @@ public sealed class VanillaPreviewOverrideTests : IDisposable
 
             Assert.Null(bust.LiveMaskBgra);
 
-            // Exactly what MaskEditorWindow does on open, through the same
+            // Exactly what the mask studio does on open, through the same
             // interface it holds the host by.
             var host = (IMaskEditorHost)row;
             var painting = Strokes(0x7F);

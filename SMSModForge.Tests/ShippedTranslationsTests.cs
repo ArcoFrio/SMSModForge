@@ -81,7 +81,12 @@ public class ShippedTranslationsTests
         var codes = Shipped().Select(Path.GetFileNameWithoutExtension).ToList();
         bool fromParts = Directory.Exists(how);
         if (fromParts)
-            codes = codes.Union(Directory.EnumerateDirectories(how).Select(Path.GetFileName), StringComparer.OrdinalIgnoreCase).ToList();
+            // A folder is a new language only when it is named for one: the hints' English
+            // chunks sit beside the translations in "src", and were written out as a
+            // language called "src" once (1.9.0).
+            codes = codes.Union(Directory.EnumerateDirectories(how).Select(Path.GetFileName)
+                                         .Where(c => TranslationFiles.NativeName(c!) != null),
+                                StringComparer.OrdinalIgnoreCase).ToList();
 
         foreach (string? code in codes)
         {

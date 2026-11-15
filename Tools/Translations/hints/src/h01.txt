@@ -1,0 +1,397 @@
+vhint.notUsed = Not used by the game: nothing sets or reads it (1.8E).
+vhint.mark.inferred = (inferred)
+vhint.mark.unconfirmed = (unconfirmed)
+# TowerDefense[tower-stored]
+vhint.TowerDefense.tower-stored = Set to 0 when the bakery minigame (defending Amelia's storage with Minis) starts. Nothing in the game reads it.
+# TowerDefense[health]
+vhint.TowerDefense.health = Your life in the bakery minigame: 20 at the start, -1 per enemy that gets through, more from Life cards and the Shaman Mini. At 0 you lose and earn nothing.
+# TowerDefense[timer]
+vhint.TowerDefense.timer = The countdown shown on screen during a bakery-minigame round: 60 at each round's start, down 1 a second. The round ends after a fixed wait, not at 0.
+# TowerDefense[Energy]
+vhint.TowerDefense.Energy = Your gold in the bakery minigame, spent to place Minis (10-70 each): 25 at the start, +1 per enemy defeated, +5/20/50 from Gold cards between rounds.
+# TowerDefense[tdmoneyinc]
+vhint.TowerDefense.tdmoneyinc = Cash the bakery minigame will pay: each round you start adds its reward (Easy $100, Medium $250, Hard $500). Paid if you survive every round; lost at 0 life.
+# TowerDefense[towercombatactive]
+vhint.TowerDefense.towercombatactive = True while a bakery-minigame round is being fought; false between rounds and after the minigame ends. The Shaman Mini heals you only while it is true.
+# TowerDefense[currentround]
+vhint.TowerDefense.currentround = Bakery-minigame rounds finished: 0 at the start, +1 as each round ends. After rounds 1, 2 and 4 enemies spawn more often (interval 4, then 3, 2, 1).
+# TowerDefense[roundsremaining]
+vhint.TowerDefense.roundsremaining = Rounds left to survive in the bakery minigame: 5, minus 1 as each round ends; at 0 you win and are paid the rounds' rewards. Set back to 5 after the minigame.
+# Achievements[anna-saved]
+vhint.Achievements.anna-saved = You helped Anna out of her wine-drinking low (kitchen thank-you talk). Shows the 'Savior' trophy; she turns down gifted wine; Celeste's StarCon offer needs it.
+# Achievements[Rich]
+vhint.Achievements.Rich = Your money has reached $1,000,000: checked when it goes up, except by the per-minute income. Shows the 'Rich' trophy on your PC.
+# Achievements[Celebrity]
+vhint.Achievements.Celebrity = You took Anna to StarCon: set by her first line in the convention hotel room. Shows the 'Celebrity' trophy on your PC ('Visit the Starcon').
+# Achievements[anna-liz-done]
+vhint.Achievements.anna-liz-done = You spent the Tuesday night with Anna and Liz at the hotel once Liz agreed; set as it starts. Shows the 'Night Out' trophy on your PC.
+# Achievements[ghost-girl]
+vhint.Achievements.ghost-girl = You found the Ghost in the living room and took the intimate option. Shows the 'TV' trophy ('Find the Ghost') and ends the room's Secret Detector mystery sound.
+# Achievements[android]
+vhint.Achievements.android = You found Cerise, the android in the villa's lab: set as her wake-up talk starts ('W-What is this place?'). Shows the 'Future' trophy ('Find the Android').
+# Achievements[save-tristan]
+vhint.Achievements.save-tristan = You helped Tristan, the rich rival you beat downtown, turn his life around in his final talk. Shows the 'Friend' trophy ('Convince Tristan to change').
+# Achievements[collection]
+vhint.Achievements.collection = You own both dealership cars, the Yellow Sports Car and the Black Old Timer: checked when you close a shop. Shows the 'Collection' trophy on your PC.
+# Achievements[happy-together]
+vhint.Achievements.happy-together = You took the intimate group scene with Anna, Josef and Adrian at the hiking trip's lake. Its pop-up shows, but the 'Together' trophy is on no screen you open.
+# Achievements[ken-swimming]
+vhint.Achievements.ken-swimming = Ken learned to swim in his training with Samantha at the public pool ('I did it! I actually did it!'). Shows the 'Training' trophy on your PC.
+# Achievements[matchmaker]
+vhint.Achievements.matchmaker = Joey tells you at the tech store that he and Zuri are a couple. Its pop-up shows, but the 'Matchmaker' trophy is on no screen you open.
+# Achievements[master]
+vhint.Achievements.master = You have all ten traits at level 5, checked when you earn a trait; shows the 'Master' trophy. Never set if the car wash's Pervert trait comes last.
+# Achievements[heroic]
+vhint.Achievements.heroic = You helped Sofia arrest Mario at his villa: set as he is taken away ('Enough. You're going to jail now.'). Shows the 'Heroic' trophy on your PC.
+# Combat[enemy-health]
+vhint.Combat.enemy-health = Health of the spirit you fight at the Shrine: 2-9 as it appears. Each sword hit takes 1, more with the Master Blade, max Charming or a boost; at 0 it falls.
+# Combat[enemy-speed]
+vhint.Combat.enemy-speed = Seconds between the current spirit's attacks in the Shrine's spirit fight, set as it appears: 4 for the slowest spirits, 1 for the two hard-level ones.
+# Combat[player-health]
+vhint.Combat.player-health = Your health in the Shrine's spirit fight: 3 plus Health Upgrade, max Athletic and blade bonuses. Each hit taken costs 1; at 0 you lose and go to hospital.
+# Combat[enemy-damage]
+vhint.Combat.enemy-damage = How much one hit from the current spirit changes your health in the Shrine's spirit fight: every spirit sets -1, so each hit taken costs 1.
+# Combat[active-weapon]
+vhint.Combat.active-weapon = The blade you fight with in the Shrine's spirit fight, set from your 'Choose your blade' pick as it starts. Only the blade's glow and fade effects use it.
+# Combat[active-enemy]
+vhint.Combat.active-enemy = The enemy object of the Shrine's spirit fight, set as each fight starts; your sword hits use it to show the enemy's hit effect.
+# Combat[current-eney-sprite]
+vhint.Combat.current-eney-sprite = Picture of the spirit you are fighting at the Shrine, set as it appears; used to fade it in and out and to flash it when hit.
+# Combat[enemy-type-incoming]
+vhint.Combat.enemy-type-incoming = Roll as each spirit appears at the Shrine; with the danger level it picks which: easy Succubus, Knight, Imp; medium Brute, Fox, Spirit; hard Alien, God.
+# Combat[combat-active]
+vhint.Combat.combat-active = A spirit is on the field at the Shrine: set once it has appeared, cleared when it falls or you lose. Your attacks and blocks and its attacks need it.
+# Combat[block-active]
+vhint.Combat.block-active = Your blade is guarding in the Shrine's spirit fight: on briefly when you block (right-click), or after you collect energy, until it stops the next attack.
+# Combat[enemies-incoming]
+vhint.Combat.enemies-incoming = Spirits left to beat in the current Shrine spirit fight: 3 at the start, 1 less as each falls. At 0 you win the fight; three squares show it.
+# Combat[enemy-level]
+vhint.Combat.enemy-level = Set to 1 by every spirit as it appears in the Shrine's spirit fight; nothing in the game reads it.
+# Combat[evade-attack]
+vhint.Combat.evade-attack = The current spirit at the Shrine has an evade attack, used when its attack roll is 2: the Knight, Brute, Alien and God have it. Cleared as each spirit appears.
+# Combat[fast-attack]
+vhint.Combat.fast-attack = The current spirit at the Shrine has a fast attack, used when its attack roll is 1: the Imp, Spirit, Alien and God have it. Cleared as each spirit appears.
+# Combat[moving-attack]
+vhint.Combat.moving-attack = The current spirit at the Shrine has a moving attack, used when its attack roll is 3: only the Fox and God have it. Cleared as each spirit appears.
+# Combat[enemy-attack-incoming]
+vhint.Combat.enemy-attack-incoming = Roll before each attack of the spirit at the Shrine: 3 a moving, 2 an evade, 1 a fast attack, if the spirit has that kind; otherwise a normal attack.
+# Combat[battle-won]
+vhint.Combat.battle-won = Never set true: only cleared when a Shrine spirit fight starts, and nothing reads it. A won fight raises the spirit-fight progress instead.
+# Combat[battle-lost]
+vhint.Combat.battle-lost = Never set true: losing a Shrine spirit fight sets it to false, as the fight's start does, and nothing reads it.
+# Combat[shrine-danger-level]
+vhint.Combat.shrine-danger-level = Today's danger at the Shrine, rolled each night: 1 easy, 2 medium, 3 hard. It picks which spirits the spirit fight sends, and the Shrine shows it.
+# Combat[ddpickup-strikeactive]
+vhint.Combat.ddpickup-strikeactive = You collected a damage boost in the Shrine's spirit fight: your next sword hit deals 1 more damage and clears it. Boosts appear only at max Smart.
+# Combat[himariblock-cd]
+vhint.Combat.himariblock-cd = Himari's block is spent in the Shrine's spirit fight: set when she blocks a hit for you, cleared again by the companion timer. Her icon dims meanwhile.
+# Comments[1]
+vhint.Comments.1 = Set at the end of the intro, right after Anna's first profile photo is taken. Shows its 3 viewer comments on Starmaker.
+# Comments[2]
+vhint.Comments.2 = Set when you secretly photograph Anna in the shower ('[Take a photo for Starmaker]'). Shows its 2 viewer comments on Starmaker.
+# Comments[3]
+vhint.Comments.3 = Set by 3 of the 5 random kitchen photos of Anna ('Let's take a photo.'), not the 2 added after 'We need to talk'. Shows its 2 viewer comments on Starmaker.
+# Comments[4]
+vhint.Comments.4 = Set by Anna's white-lingerie photo on your first wardrobe visit ('Close the door.'). Shows its 3 viewer comments on Starmaker.
+# Comments[5]
+vhint.Comments.5 = Set by Anna's pool photos: the first pool shoot and most 'How about another Pool Photo?' poses. Shows its 3 viewer comments on Starmaker.
+# Comments[6]
+vhint.Comments.6 = Set by a nude shower photo you ask for after 'We need to talk', if Anna's hallway talk on the secret photo came first. Shows its 2 viewer comments on Starmaker.
+# Comments[7]
+vhint.Comments.7 = Set by the first photo of Anna's 'We need to talk' scene in your room (at 300 subscribers). Shows its 3 viewer comments on Starmaker.
+# Comments[8]
+vhint.Comments.8 = Set by a car photo of Anna ('How about a photo?' while driving, after her 'We need to talk' scene). Shows its 2 viewer comments on Starmaker.
+# Comments[9]
+vhint.Comments.9 = Set by any couch photo of Anna after a movie night ('Can I take a photo of you?'). Shows its 2 viewer comments on Starmaker.
+# Comments[10]
+vhint.Comments.10 = Set by any pose of the basement studio shoot in White Lingerie (studio Outfits menu). Shows its 3 viewer comments on Starmaker.
+# Comments[11]
+vhint.Comments.11 = Set by any pose of the basement studio shoot in the Default Outfit, but no comment on the Starmaker page checks it: nothing in the game reads it.
+# Comments[12]
+vhint.Comments.12 = Set by any pose of the basement studio shoot in Hotpants & Black Sweater (studio Outfits menu). Shows its 3 viewer comments on Starmaker.
+# Comments[13]
+vhint.Comments.13 = Set by any pose of the basement studio shoot in the Gold Bikini (studio Outfits menu). Shows its 3 viewer comments on Starmaker.
+# Comments[14]
+vhint.Comments.14 = Set by any pose of the basement studio shoot in Red Tanktop & Panties (studio Outfits menu). Shows its 3 viewer comments on Starmaker.
+# Comments[15]
+vhint.Comments.15 = Set by any pose of the basement studio shoot in the Office Outfit (studio Outfits menu). Shows its 3 viewer comments on Starmaker.
+# Comments[16]
+vhint.Comments.16 = Set by any pose of the basement studio shoot in the Maid Uniform (studio Outfits menu). Shows its 3 viewer comments on Starmaker.
+# Comments[17]
+vhint.Comments.17 = Set by any pose of the basement studio shoot in the Boutique's $17,500 outfit (studio Outfits menu). Shows its 3 viewer comments on Starmaker.
+# Comments[18]
+vhint.Comments.18 = Set by the two park-trip photos of Anna added after her 'We need to talk' scene, but no comment on the Starmaker page checks it: nothing in the game reads it.
+# Comments[19]
+vhint.Comments.19 = Set by Anna's penis-photo shoot in the basement: the one-time scene at 2,500 subscribers and each studio menu repeat. Shows its 3 viewer comments on Starmaker.
+# Comments[20]
+vhint.Comments.20 = Set when Anna gives in to oral sex in a repeat of the basement penis-photo shoot, and by each repeat after. Shows its 3 viewer comments on Starmaker.
+# Comments[21]
+vhint.Comments.21 = Set by the basement studio's titjob scene (studio menu, its first two photos). Shows its 2 viewer comments on Starmaker.
+# Comments[22]
+vhint.Comments.22 = Set by the basement studio's handjob scene (studio menu, its first two photos). Shows its 2 viewer comments on Starmaker.
+# Comments[23]
+vhint.Comments.23 = Set by Anna's first condom sex scene in the basement (unless you turn her down) and its studio menu repeat. Shows its 2 viewer comments on Starmaker.
+# Comments[24]
+vhint.Comments.24 = Set by the first of the two studio group scenes with Anna and Josef (studio menu, after inviting Josef). Shows its 3 viewer comments on Starmaker.
+# Comments[25]
+vhint.Comments.25 = Set by a campfire photo on the Hiking Trip ('Can I take a photo of you?'), not the 2 bolder poses. Shows its 3 viewer comments on Starmaker.
+# Comments[26]
+vhint.Comments.26 = Set by Anna's 2 bolder Hiking Trip campfire photos, after Josef's studio group scene and her first time with Adrian. Shows its 3 viewer comments on Starmaker.
+# Comments[27]
+vhint.Comments.27 = Set by the basement studio's sex scene without a condom (studio menu, its first two photos). Shows its 4 viewer comments on Starmaker.
+# Comments[28]
+vhint.Comments.28 = Set by the basement studio's anal scene (studio menu, its first two photos). Shows its 3 viewer comments on Starmaker.
+# Comments[29]
+vhint.Comments.29 = Set in Ken's basement studio visit (Invite > Ken) by the second option, the group scene short of sex. Shows its 3 viewer comments on Starmaker.
+# Comments[30]
+vhint.Comments.30 = Set in Ken's basement studio visit (Invite > Ken) by the sex scene ('How about some sex?'). Shows its 3 viewer comments on Starmaker.
+# Comments[31]
+vhint.Comments.31 = Set by any pose of the Nude basement studio shoot, and by 'Let's just take a photo.' in Ken's studio visit. Shows its 3 viewer comments on Starmaker.
+# Comments[32]
+vhint.Comments.32 = Set by any pose of the basement studio shoot in Black Lingerie (studio Outfits menu). Shows its 3 viewer comments on Starmaker.
+# Comments[33]
+vhint.Comments.33 = Set by Anna's topless beach photo with Adrian, once she gave in at a penis-photo repeat, till her first time with him. Shows its 2 viewer comments on Starmaker.
+# Comments[34]
+vhint.Comments.34 = Set by Anna's bolder beach photo with Adrian there, after her first time with him. Shows its 3 viewer comments on Starmaker.
+# Comments[35]
+vhint.Comments.35 = Set by the basement studio's Vibrating Egg scene (studio menu; needs the egg). Shows its 2 viewer comments on Starmaker.
+# Comments[36]
+vhint.Comments.36 = Set by the basement studio's Anal Plug scene (studio menu; needs the plug), its first photo. Shows its 2 viewer comments on Starmaker.
+# Comments[37]
+vhint.Comments.37 = Set by the basement studio's Anal Beads scene (studio menu; needs the beads), its first photo. Shows its 2 viewer comments on Starmaker.
+# Comments[38]
+vhint.Comments.38 = Set by the basement studio's Equine Dildo scene (studio menu; needs the toy), its first photo. Shows its 2 viewer comments on Starmaker.
+# Comments[39]
+vhint.Comments.39 = Set by the basement studio's Dildo scene (studio menu; needs the toy). Shows its 2 viewer comments on Starmaker.
+# ComapreMinigame[actual-mistake]
+vhint.ComapreMinigame.actual-mistake = Mario's paperwork job (spot the lie in a client card vs a detective's report): which card detail is false, set as each card appears. 0 = all match.
+# ComapreMinigame[chosen-mistake]
+vhint.ComapreMinigame.chosen-mistake = The card detail you have marked in Mario's paperwork job; SUBMIT scores it against the right answer and clears it. CLEAR also sets 0 (no lie marked).
+# ComapreMinigame[left-name]
+vhint.ComapreMinigame.left-name = The client's name on the card shown in Mario's paperwork job, set as each of its 9 cards appears. No condition checks it.
+# ComapreMinigame[left-age]
+vhint.ComapreMinigame.left-age = The client's age (as text) on the card shown in Mario's paperwork job, set as each of its 9 cards appears. No condition checks it.
+# ComapreMinigame[left-current-adress]
+vhint.ComapreMinigame.left-current-adress = The client's address on the card shown in Mario's paperwork job, set as each of its 9 cards appears. No condition checks it.
+# ComapreMinigame[left-job]
+vhint.ComapreMinigame.left-job = The client's profession on the card shown in Mario's paperwork job, set as each of its 9 cards appears. No condition checks it.
+# ComapreMinigame[left-yearly-income]
+vhint.ComapreMinigame.left-yearly-income = The client's yearly income (as text) on the card shown in Mario's paperwork job, set as each of its 9 cards appears. No condition checks it.
+# ComapreMinigame[Detective-text]
+vhint.ComapreMinigame.Detective-text = The detective's report on the client whose card is shown in Mario's paperwork job, set as each of its 9 cards appears. No condition checks it.
+# Cooldown[Showercooldown]
+vhint.Cooldown.Showercooldown = Set by Anna's Bath scenes (Tuesday shower alone or with Adrian; seducing him); cleared each night. While false, her Tuesday shower plays unless she's at work.
+# Cooldown[photo-cooldown]
+vhint.Cooldown.photo-cooldown = Daily lock on Anna's kitchen photo ('Let's take a photo.'): set when one is taken, and by her first pool photo; cleared each night.
+# Cooldown[videogame-adrian]
+vhint.Cooldown.videogame-adrian = Set when the Tuesday video-game session with Adrian in his room starts (even if he sends you away); cleared each night, so once per Tuesday.
+# Cooldown[church-visit]
+vhint.Cooldown.church-visit = Set when the Friday church trip starts as you enter the hallway (you can still stay home); cleared each night, so it starts once per Friday.
+# Cooldown[movie-night]
+vhint.Cooldown.movie-night = Set after Thursday movie night in the living room (with Anna and Josef, or Anna alone once he has left); cleared each night.
+# Cooldown[park-visit]
+vhint.Cooldown.park-visit = Daily lock shared by Charlotte's Monday visits with Anna in the living room and Anna's Wednesday park outing (asked in the kitchen). Cleared each night.
+# Cooldown[club-cooldown]
+vhint.Cooldown.club-cooldown = Set after Alice's talk at the club and after the scene with her and Adrian in the club's Toilets; cleared each night. Nothing reads it.
+# Cooldown[gabriel-cooldown]
+vhint.Cooldown.gabriel-cooldown = Daily lock at Gabriel's Mansion: set after each of his photo lessons and task talks, and after the group scene with him and Haniya; cleared each night.
+# Cooldown[ken-photo]
+vhint.Cooldown.ken-photo = Set after Ken's Thursday photo visit with Anna at the Entrance (once you agreed to it at Ken's Home). The night does not clear it; only that visit checks it.
+# Cooldown[tit-sucky-cooldown-shower]
+vhint.Cooldown.tit-sucky-cooldown-shower = Daily lock on two random hallway moments with Anna: the Thursday repeat of her towel talk and the Monday floor cleaning. Set when one plays; cleared each night.
+# Cooldown[beer-given]
+vhint.Cooldown.beer-given = Set when Josef accepts a beer at the Entrance (Fridays); that visit plays his next beer talk if one is due (of three) and clears it. Also cleared each night.
+# Cooldown[beer-cooldown]
+vhint.Cooldown.beer-cooldown = Set when Josef accepts a beer at the Entrance; cleared each night. Nothing reads it: his one-drink-a-day limit is 'josefbeergiven2025'.
+# Cooldown[mall-drive-cooldown]
+vhint.Cooldown.mall-drive-cooldown = Set when Anna asks in the garage for a ride to the mall (Fridays, after her 'We need to talk' scene), whatever you answer; cleared each night.
+# Cooldown[hacking-cooldown]
+vhint.Cooldown.hacking-cooldown = Set when Samantha starts her hacking puzzle with you ('Show me what you can do.'); cleared each night. While true she puts you off ('Another day, sweetheart?').
+# Cooldown[samantha-beach-cooldown]
+vhint.Cooldown.samantha-beach-cooldown = Set after Samantha's Monday talk at the beach (once her beach visits are open); cleared each night, so once per Monday.
+# Cooldown[ken-talk-cooldown]
+vhint.Cooldown.ken-talk-cooldown = Weekly lock on Ken's talks at Ken's Home: each of his three talks sets it, and it is cleared when a new week starts, so one talk a week.
+# Cooldown[rich-guy]
+vhint.Cooldown.rich-guy = Daily lock on Tristan's Wednesday insult battles (mall, then beach, then downtown): set after one plays, win or lose; cleared each night.
+# Cooldown[hiking-cooldown]
+vhint.Cooldown.hiking-cooldown = Only ever cleared (each night); nothing sets it true or reads it. Josef's hiking invitation in the upstairs hallway uses '2025new-hikingcooldown'.
+# Cooldown[wine-cooldown]
+vhint.Cooldown.wine-cooldown = Set when Anna's wine talk in the kitchen starts (Inner Regret quest, after her first time with you); cleared each night. Later that day she won't talk.
+# Cooldown[upstairs-cooldown]
+vhint.Cooldown.upstairs-cooldown = Set after Alice's Wednesday talk in the upstairs hallway; cleared each night. While true, the upstairs hallway starts none of its random talks that day.
+# Cooldown[mall-random-talk-cooldown]
+vhint.Cooldown.mall-random-talk-cooldown = Set after a random mall encounter (others, Charlotte or Katarina), even if its roll shows no one. Not cleared each night: only loading a game clears it.
+# Cooldown[kate-free-day-cooldown]
+vhint.Cooldown.kate-free-day-cooldown = Set after one of Kate's Thursday outings (park, bar or beach); cleared each night, so only one Kate outing per Thursday.
+# Cooldown[p-doing-it-cooldown]
+vhint.Cooldown.p-doing-it-cooldown = Set when you overhear Anna and Josef in their bedroom from the upstairs hallway (Mondays while he lives with you, 3 visits in 10); cleared each night.
+# Cooldown[samantha-sex-cooldown]
+vhint.Cooldown.samantha-sex-cooldown = Set after a photo session or intimate scene with Samantha at Ken's Home; cleared each night. It hides 'Can I take a photo of you?' and 'Can I join the fun?'
+# Cooldown[samantha-ken-small-scene-cooldown]
+vhint.Cooldown.samantha-ken-small-scene-cooldown = Daily lock on the scene you walk in on at Ken's Home (Samantha alone or with Ken), after your first scene with both; set after it, cleared each night.
+# Cooldown[anna-beach]
+vhint.Cooldown.anna-beach = Daily lock on beach visitors: Anna with Adrian (Tuesdays), Isabella or Alice (Thursdays, random), Amelia (Fridays). Set when one plays; cleared each night.
+# Cooldown[isabella-cooldown]
+vhint.Cooldown.isabella-cooldown = Set when the intimate scene with Isabella starts in hotel Room 24; cleared each night. While true, its option in her talk there is hidden.
+# Cooldown[anna-pub-visit]
+vhint.Cooldown.anna-pub-visit = Set after Anna's Tuesday bar visit with Liz (three talks in turn, once Anna has given in at the penis-photo shoot); cleared each night.
+# Cooldown[convention-gangbang]
+vhint.Cooldown.convention-gangbang = Set when Anna agrees to a group scene with fans in the StarCon hotel room; cleared when she asks how to act at the start of each trip, so once per trip.
+# Cooldown[D-omega-drunk]
+vhint.Cooldown.D-omega-drunk = Josef took your whiskey (Fridays): Anna's bedroom talk drops 'too risky', and after her first studio scene without a condom he's passed out. Cleared each night.
+# Cooldown[anna-bedroom-sex]
+vhint.Cooldown.anna-bedroom-sex = Daily lock on 'Maybe we can cuddle a bit?' in Anna's bedroom talk: set when she accepts and invites you in; cleared each night.
+# Cooldown[mall-photo]
+vhint.Cooldown.mall-photo = Set after you find Anna in the mall restroom (once you drove her to the mall) and her talk there plays; cleared each night.
+# Cooldown[anna-grope-cooldown]
+vhint.Cooldown.anna-grope-cooldown = Daily lock on Anna's kitchen '[Grope her]', cleared each night. Only her plain reaction sets it: before her first time with you and the hiking group scene.
+# Cooldown[car-photo-cooldown]
+vhint.Cooldown.car-photo-cooldown = Daily lock on the car photo of Anna ('How about a photo?' while driving her): set when she agrees, after her 'We need to talk' scene; cleared each night.
+# Cooldown[river-week-cooldown]
+vhint.Cooldown.river-week-cooldown = Set after any of River's talks at the suburbs park; cleared when a new week starts. His first three talks need it false, so one a week.
+# Cooldown[chloe-week-cooldown]
+vhint.Cooldown.chloe-week-cooldown = Weekly lock on Chloe at her Mansion: set after her first talk, her weekly shoot or the shoot with Anna; cleared when a new week starts.
+# Cooldown[anna-ventilator-cooldown]
+vhint.Cooldown.anna-ventilator-cooldown = Set after Anna's random hot-day moment with the fan in the living room ('it's like an oven in here'); cleared when a new week starts, so once a week.
+# Cooldown[pool-photo-cooldown]
+vhint.Cooldown.pool-photo-cooldown = Daily lock on pool photos: Anna's 'How about another Pool Photo?' and the photo on her red-bikini days (with Charlotte too). Set after one; cleared each night.
+# Cooldown[mario-week-cooldown]
+vhint.Cooldown.mario-week-cooldown = Weekly lock on Mario's work in his villa office: set when you start his paperwork job or a recorded talk with him; cleared when a new week starts.
+# Cooldown[emma-week-cooldown]
+vhint.Cooldown.emma-week-cooldown = Weekly lock on Emma's talks in the sauna of Mario's villa: set whenever you leave the sauna, even if it was empty; cleared when a new week starts.
+# Cooldown[katarina-daily-cooldown]
+vhint.Cooldown.katarina-daily-cooldown = Set when Mario's office scene with Katarina repeats; cleared each night. Nothing reads it: that scene's daily limit is 'katarinamallcooldown'.
+# Cooldown[sofia-pub-talk-cooldown-week]
+vhint.Cooldown.sofia-pub-talk-cooldown-week = Weekly lock on Sofia's undercover Wednesday talk at the bar (once you agreed to help her against Mario): set after it, cleared when a new week starts.
+# Cooldown[master-week-cooldown]
+vhint.Cooldown.master-week-cooldown = Only ever cleared, when a new week starts; nothing sets it true or reads it.
+# Cooldown[daily-random-event-kitchen]
+vhint.Cooldown.daily-random-event-kitchen = Set after your everyday kitchen talk with Anna; cleared each night. While false, that talk may open with a short random moment with Josef or Adrian.
+# Cooldown[Alice-visit-cooldown]
+vhint.Cooldown.Alice-visit-cooldown = Set after Alice's Wednesday visit in Adrian's room (once your first scene with her in the club's Toilets has played, with Adrian or alone); cleared each night.
+# Cooldown[public-pool-cooldown]
+vhint.Cooldown.public-pool-cooldown = Set when you rent the whole public pool from the lifeguard Nadia ($3,000, after Ken agrees to swim training); cleared each night. Her talk is skipped till then.
+# Cooldown[combat-cooldown]
+vhint.Cooldown.combat-cooldown = Set when you strike the shrine's gong ('Enter') for a spirit sword fight; cleared each night. While true, Enter stays hidden and Tasha's Temple delivery waits.
+# Cooldown[2025new-hikingcooldown]
+vhint.Cooldown.2025new-hikingcooldown = Set when Josef asks you all hiking in the upstairs hallway (Thursdays after 8 days in, while he lives with you), whatever you answer; cleared each night.
+# Cooldown[astrid-hauntedhousecooldown]
+vhint.Cooldown.astrid-hauntedhousecooldown = Set when Astrid's Monday raid on Noire's mansion (the Haunted House) starts, whatever you answer; cleared each night, so one try per Monday.
+# Cooldown2[SofioaHomecooldown]
+vhint.Cooldown2.SofioaHomecooldown = You visited Sofia at her home today. A second visit that day, before her kidnapping, ends with 'You could visit tomorrow?'. Cleared each night.
+# Cooldown2[annagardencooldown]
+vhint.Cooldown2.annagardencooldown = Only ever cleared, each night; nothing sets it true or reads it.
+# Cooldown2[hospitalhallwaycooldown]
+vhint.Cooldown2.hospitalhallwaycooldown = A hospital-hallway scene with Dr. Evelyn Frost played today (10% each): Josef (till he joins you and Anna or leaves for good), Katarina or Samantha once met.
+# Cooldown2[katarinamallcooldown]
+vhint.Cooldown2.katarinamallcooldown = Daily lock shared by Mario's 'I'm ready for Katarina.', a random Samantha and Adrian scene in her room and Katarina's mall talk (once per loaded game anyway).
+# Cooldown2[homehallwaycooldown]
+vhint.Cooldown2.homehallwaycooldown = Anna and Josef's relationship talk in the home hallway has played today (40% a visit once Josef has joined you and Anna; plays once). Cleared each night.
+# Cooldown2[yogacooldown]
+vhint.Cooldown2.yogacooldown = Anna's Wednesday yoga in the living room has played today; later living-room visits that day skip it. Cleared each night.
+# Cooldown2[kitchensexcooldown]
+vhint.Cooldown2.kitchensexcooldown = Daily lock on Anna's quick intimate kitchen scene (corrupt path from her first time with you): set when it plays, hiding your advance; cleared each night.
+# Cooldown2[kitchen-dishes]
+vhint.Cooldown2.kitchen-dishes = Checked by Anna's Friday dishes request in the kitchen (needs false), but nothing sets it true, so it never blocks it. Only ever cleared, each night.
+# Cooldown2[anna-does-dishes]
+vhint.Cooldown2.anna-does-dishes = You turned down Anna's Friday request to help with the dishes. That day the kitchen plays 'I'm kinda busy with the dishes right now'. Cleared each night.
+# Cooldown2[racecooldown]
+vhint.Cooldown2.racecooldown = Jack's Wednesday street race ($20,000) at the Parking Lot has started today; he refuses another that day ('We already raced this week'). Cleared each night.
+# Cooldown2[himaridinner-cooldown]
+vhint.Cooldown2.himaridinner-cooldown = You had dinner with Himari and her parents at her home today; her map button ('Himari') stays hidden that day. Cleared each night.
+# Cooldown2[samgaming-cooldown]
+vhint.Cooldown2.samgaming-cooldown = Daily lock on Samantha's Friday gaming night in her room ('Sam (Gaming)' on the calendar): set when it plays, cleared each night.
+# Cooldown2[celeste-cooldown]
+vhint.Cooldown2.celeste-cooldown = You visited Celeste's home today: that day her agent stops meeting you at the Theme Park and 'Let's call Celeste.' is hidden at StarCon. Cleared each night.
+# Cooldown2[celeste-sexcd]
+vhint.Cooldown2.celeste-sexcd = Set when Celeste answers 'I feel something has changed between us' at her home, even if you refuse her. Hides 'In the mood for some fun?'; cleared each night.
+# Cooldown2[river-outfitcdweek]
+vhint.Cooldown2.river-outfitcdweek = River is sewing the cosplay you ordered at the Park ($2,000): his cosplay talk there is skipped. Cleared when a new week starts; he then hands it over.
+# Cooldown2[annapoolgrope]
+vhint.Cooldown2.annapoolgrope = Daily lock on the pool grope options: set when you grope Anna there while she still resists (her later, willing reactions don't); cleared each night.
+# Cooldown2[hallwaybottom-cd]
+vhint.Cooldown2.hallwaybottom-cd = Daily lock on Charlotte's Monday visit in the home hallway (a short talk with Josef, Adrian or Anna): set when it plays, cleared each night.
+# Cooldown2[hallwaytop-cd]
+vhint.Cooldown2.hallwaytop-cd = Daily lock on the random chats in the upstairs hallway (Anna with Josef, Anna with Adrian, or all three): set when one plays, cleared each night.
+# Cooldown2[adrianmrandomhouseevent]
+vhint.Cooldown2.adrianmrandomhouseevent = Daily lock on the random intimate scenes of Anna and Adrian on entering his room (after her first time with him): set when one plays, cleared each night.
+# Cooldown2[annacartalk]
+vhint.Cooldown2.annacartalk = Anna's car talk on the drive to the mall (when she rides with you) has played today; later drives that day skip it. Cleared each night.
+# Cooldown2[special-carwashcd]
+vhint.Cooldown2.special-carwashcd = Daily lock on the Monday charity car wash at the gas station (Anna, Katarina, Amelia or Astrid, picked at random): set when it plays, cleared each night.
+# Cooldown2[tonibar]
+vhint.Cooldown2.tonibar = Daily lock on Toni's Thursday date at the Bar: set when it plays, cleared each night.
+# Cooldown2[gabrielhaniyaworldevents]
+vhint.Cooldown2.gabrielhaniyaworldevents = Gabriel and Haniya's photo shoot has played this week: first suburbs Park visit, or 40% a Boutique visit. Only once you joined them at Gabriel's final test.
+# Cooldown2[zuribar]
+vhint.Cooldown2.zuribar = Daily lock on Zuri's Wednesday evening at the Bar (after your scene with her, alone or with Joey): set when it plays, cleared each night.
+# Cooldown2[beachgothmilfcld]
+vhint.Cooldown2.beachgothmilfcld = Daily lock on Nightheart and Pop Pop's Wednesday beach scene (1 in 2 a visit from day 10, not in rain or snow): set when it plays, cleared each night.
+# Cooldown2[josefbeergiven2025]
+vhint.Cooldown2.josefbeergiven2025 = You gave Josef a beer or whiskey at the Entrance today; he turns down another that day ('one is more than enough for today'). Cleared each night.
+# Cooldown2[tabletop-minigamecooldown]
+vhint.Cooldown2.tabletop-minigamecooldown = You played Dungeon Master with Tasha at her store today, won or lost; that day she answers 'Slow down, dungeon junkie...' instead. Cleared each night.
+# Cooldown2[cooldown-manmilk]
+vhint.Cooldown2.cooldown-manmilk = Only ever cleared, each night; nothing sets it true or reads it.
+# Cooldown2[cooldown-automilk]
+vhint.Cooldown2.cooldown-automilk = Only ever cleared, each night; nothing sets it true or reads it.
+# Cooldown2[cooldown-cowphotofarm]
+vhint.Cooldown2.cooldown-cowphotofarm = Daily lock on Anna's cowprint photo shoot at the barn: set when it is done, hiding the option to start it; cleared each night.
+# Cooldown2[callanna-cooldown]
+vhint.Cooldown2.callanna-cooldown = Daily lock on the Call Anna button (it brings her into a scene where you are): set when you use it, cleared each night.
+# Cooldown2[kirbylove-cooldown]
+vhint.Cooldown2.kirbylove-cooldown = Only ever cleared, each night; nothing sets it true or reads it.
+# Cooldown2[robertkirby-cooldown]
+vhint.Cooldown2.robertkirby-cooldown = Kirby and Robert's shared scene in the Shed has played; later visits play Robert's own talk. Not cleared each night: only loading a game clears it.
+# Cooldown2[charlottephoenix-worldevents]
+vhint.Cooldown2.charlottephoenix-worldevents = Daily lock on Charlotte and Phoenix's dress-shopping scene at the Boutique (40% a visit, from step 3 of their quest): set when it plays, cleared each night.
+# Cooldown2[river-worldevents]
+vhint.Cooldown2.river-worldevents = Daily lock on River's random intimate scene in the suburbs park Restroom (35% a visit, after his final stage): set when it plays, cleared each night.
+# Cooldown2[claudia-cooldown]
+vhint.Cooldown2.claudia-cooldown = Daily lock on Claudia, the TV news host, meeting you at the Bar (25% a visit once you have seen her news): set when she does, cleared each night.
+# Cooldown2[weekly-emmacryptidhuntcd]
+vhint.Cooldown2.weekly-emmacryptidhuntcd = Weekly lock on Emma's Tuesday cryptid-hunt talk downtown: set when it plays, cleared when a new week starts.
+# Cooldown2[weekly-evelynlabcd]
+vhint.Cooldown2.weekly-evelynlabcd = Only ever cleared, when a new week starts; nothing sets it true or reads it.
+# Cooldown2[vanessa-weeklystudy]
+vhint.Cooldown2.vanessa-weeklystudy = You paid Vanessa for a study lesson at the library this week ($500); she turns down another that week. Cleared when a new week starts.
+# Cooldown2[vanessa-sexcooldown]
+vhint.Cooldown2.vanessa-sexcooldown = Daily lock on Vanessa's random intimate library scene (30% a visit, once she gave in at her flirt talk): set when it plays, cleared each night.
+# Cooldown2[annawardrobe-cd25]
+vhint.Cooldown2.annawardrobe-cd25 = Daily lock on Anna's repeat Wednesday wardrobe photo shoot (only before the basement studio opens): set when it plays, cleared each night.
+# Cooldown2[evelyn-labsexcooldown]
+vhint.Cooldown2.evelyn-labsexcooldown = Daily lock on Evelyn's random intimate scenes in her Secret Lab (30% each, after you meet Dr. Mura): set when one plays, cleared each night.
+# Cooldown2[gloryhole-cooldown25]
+vhint.Cooldown2.gloryhole-cooldown25 = Daily lock on the random anonymous stall scenes in the suburbs park Restroom (River's or two strangers', 35% each): set when one plays, cleared each night.
+# Cooldown2[alice-danceclubcd25]
+vhint.Cooldown2.alice-danceclubcd25 = You looked for Alice at the club this week ('Let's see if Alice is around.'); that week it ends 'I'll try again next week.' Cleared when a new week starts.
+# Cooldown2[norah-publicpoolcd]
+vhint.Cooldown2.norah-publicpoolcd = Norah's random public-pool scene (40% a visit, once Alice's sharing or stealing route starts) has played. Not cleared each night: only loading a game clears it.
+# Cooldown2[windowcleaning-weekcd]
+vhint.Cooldown2.windowcleaning-weekcd = Anna has asked for help with the tall living-room windows (cleaning minigame) this week: your first living-room visit, except Monday's first (Charlotte's talk).
+# Core[Active-Level]
+vhint.Core.Active-Level = Number of the place the player last travelled to with the map (14 beach, 19 bar, 25 mall...). Scenes that send you straight home do not change it.
+# Core[Upcoming-Level]
+vhint.Core.Upcoming-Level = The place a map or travel button has picked to go to next; the trip copies it into 'Active-Level' and then sets it back to 0.
+# Core[Special-Fam-Check]
+vhint.Core.Special-Fam-Check = True if the names the player chose contain mom, mother, dad, father or son; the game then also uses family words (Parents, Family, Sister) in other names.
+# Core[Lock-Game]
+vhint.Core.Lock-Game = True while a scene, talk or transition is running; the map, travel keys, room buttons and the Talk button do nothing until it is false again.
+# Core[Start-Transfer]
+vhint.Core.Start-Transfer = Set true by a map or travel button to start the trip to the place in 'Upcoming-Level'; the travel script sets it back to false when the move is done.
+# Core[Cash]
+vhint.Core.Cash = Money the player has (200 at the start, capped at 50,000,000). Shops and payments take from it; the nightly Starmaker payout, jobs and winnings add to it.
+# Core[Daily-Income]
+vhint.Core.Daily-Income = Starmaker income, never paid out or lowered: photos (+25), shoots and some scenes raise it. At 5000+ Frank, the insurance man, can visit the garage on Mondays.
+# Core[Follower]
+vhint.Core.Follower = Followers on the Starmaker page; photos, shoots and events add them. Sleeping on a Tuesday cuts them to 60% unless Celeste's quest is done.
+# Core[Subscriber]
+vhint.Core.Subscriber = Subscribers on the Starmaker page; each night's payout pays per subscriber. Sleeping on a Friday usually cuts them to 40% (50% with the Loyal Makers perk).
+# Core[Debt]
+vhint.Core.Debt = Josef's debt, 1,000,000 at the start. Set to 0 when it is paid: gifting Josef $1,000,000 at his office, Emma's sauna deal, or telling Josef to leave.
+# Core[Auto-Skip]
+vhint.Core.Auto-Skip = Auto-skip switch, flipped by a key press outside minigames. While true, lines in the empty dialogue box skip by themselves; the main box uses its speed button.
+# Core[Cash-Before]
+vhint.Core.Cash-Before = Cash when the register sound last played: a Cash change to at least this (not by idle income) plays the sound and updates it. Spending leaves it high.
+# Core[Day]
+vhint.Core.Day = Day of the week: 1 = Monday to 5 = Friday. Goes up by 1 each night and back to 1 after Friday; the skip button in your room jumps it ahead.

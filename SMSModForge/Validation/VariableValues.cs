@@ -34,6 +34,11 @@ internal sealed class VariableValues
     private readonly List<(string Target, string List)> _picks = new();
 
     public static VariableValues Of(ModPack pack)
+        => Of(pack, PackWalk.Actions(pack).Select(h => h.Action));
+
+    /// <summary>The same, from the pack's actions walked already (in
+    /// <see cref="PackWalk.Actions"/>' order).</summary>
+    public static VariableValues Of(ModPack pack, IEnumerable<NodeActionDef> actions)
     {
         var v = new VariableValues();
         foreach (var d in pack.Variables)
@@ -45,7 +50,7 @@ internal sealed class VariableValues
             if (d.Type == PackVariableType.List) foreach (var item in ListItems(d.DefaultValue)) v.Add(d.Name, item);
             else v.Add(d.Name, d.DefaultValue ?? "");
         }
-        foreach (var (a, _) in PackWalk.Actions(pack)) v.Read(a);
+        foreach (var a in actions) v.Read(a);
         // A pick takes whatever its list can hold - once the lists are known.
         foreach (var (target, list) in v._picks)
         {

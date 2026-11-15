@@ -28,8 +28,10 @@ namespace SMSModForge.PackPlugin
         public static bool All(JArray conditions, PackVariableStore vars, ManualLogSource log, string thisPackId = null)
         {
             if (conditions == null) return true;
-            foreach (var c in conditions)
-                if (!Evaluate((JObject)c, vars, log, thisPackId)) return false;
+            // By index: foreach over a JArray allocates an enumerator, and these
+            // lists are evaluated every frame (1.9.0).
+            for (int i = 0; i < conditions.Count; i++)
+                if (!Evaluate((JObject)conditions[i], vars, log, thisPackId)) return false;
             return true;
         }
 
@@ -42,8 +44,8 @@ namespace SMSModForge.PackPlugin
         public static bool Any(JArray conditions, PackVariableStore vars, ManualLogSource log, string thisPackId = null)
         {
             if (conditions == null || conditions.Count == 0) return true;
-            foreach (var c in conditions)
-                if (Evaluate((JObject)c, vars, log, thisPackId)) return true;
+            for (int i = 0; i < conditions.Count; i++)
+                if (Evaluate((JObject)conditions[i], vars, log, thisPackId)) return true;
             return false;
         }
 
@@ -59,6 +61,12 @@ namespace SMSModForge.PackPlugin
         private static bool EvaluateInner(JObject c, PackVariableStore vars, ManualLogSource log, string thisPackId)
         {
             string type = (string)c["type"];
+
+            // A group has no params: decided before an empty set is made for it,
+            // once per group per frame (1.9.0).
+            if (type == "All") return All(c["conditions"] as JArray, vars, log, thisPackId);
+            if (type == "Any") return Any(c["conditions"] as JArray, vars, log, thisPackId);
+
             var p = c["params"] as JObject ?? new JObject();
 
             switch (type)
@@ -287,7 +295,7 @@ namespace SMSModForge.PackPlugin
                     {
                         string token = (string)p["level"];
                         if (string.IsNullOrEmpty(token)) return false;
-                        var level5 = GameObject.Find("5_Levels")?.transform;
+                        var level5 = PlaceRegistry.Level5();
                         if (level5 == null) return false;
 
                         // The editor emits scheme-prefixed tokens
@@ -298,9 +306,7 @@ namespace SMSModForge.PackPlugin
                         // bare tokens.
                         if (HasScheme(token))
                         {
-                            string resolveToken = token.StartsWith("place:")
-                                ? "self:" + token.Substring("place:".Length)
-                                : token;
+                            string resolveToken = SelfToken(token);
                             var entry = PlaceRegistry.Resolve(resolveToken, thisPackId, level5);
                             if (entry?.Level != null) return entry.Level.activeSelf;
                             // Fall through to literal lookup if registry resolution
@@ -333,7 +339,9 @@ namespace SMSModForge.PackPlugin
                             // pack that authored the condition rather than by name.
                             var sctx = Plugin.FindContext(thisPackId);
                             go = sctx?.Scenes != null && sctx.Scenes.TryGet(target, out var sentry)
-                                ? sentry.SceneGo : null;
+                                ? sentry.SceneGo
+                                // ...or one of the game's own, by where it sits (1.9.0).
+                                : ActionRuntime.GameScene(target);
                         }
                         else
                         {
@@ -347,9 +355,7 @@ namespace SMSModForge.PackPlugin
                                 string overlayLevel = DerefValue((string)p["overlayLevel"] ?? "", p, vars);
                                 if (!string.IsNullOrEmpty(overlayLevel))
                                 {
-                                    var level5 = GameObject.Find("5_Levels");
-                                    levelGo = Plugin.ResolveLevelTarget(overlayLevel, thisPackId,
-                                                                       level5 != null ? level5.transform : null);
+                                    levelGo = Plugin.ResolveLevelTarget(overlayLevel, thisPackId, PlaceRegistry.Level5());
                                 }
                             }
                             go = levelGo != null
@@ -568,6 +574,22 @@ namespace SMSModForge.PackPlugin
         /// <c>$$</c> escapes a literal dollar; an unknown variable resolves to
         /// empty, matching the stores' own reads.
         /// </summary>
+        /// <summary><c>place:key</c> as PlaceRegistry spells it, <c>self:key</c>;
+        /// anything else as it is. Remembered per token: asked every frame
+        /// (1.9.0), and the same token always spells the same.</summary>
+        private static string SelfToken(string token)
+        {
+            if (_selfTokens.TryGetValue(token, out var known)) return known;
+            string resolved = token.StartsWith("place:")
+                ? "self:" + token.Substring("place:".Length)
+                : token;
+            if (_selfTokens.Count < 4096) _selfTokens[token] = resolved;
+            return resolved;
+        }
+
+        private static readonly System.Collections.Generic.Dictionary<string, string> _selfTokens =
+            new System.Collections.Generic.Dictionary<string, string>(System.StringComparer.Ordinal);
+
         private static string DerefValue(string raw, JObject p, PackVariableStore vars)
         {
             // Which store a $name on the VALUE side reads, the way 'source'
@@ -579,6 +601,10 @@ namespace SMSModForge.PackPlugin
             // had no equivalent here at all.
             bool vanilla = string.Equals((string)p["valueSource"], "vanilla",
                                          System.StringComparison.OrdinalIgnoreCase);
+
+            // Nothing to resolve: what Resolve returns at once, without making
+            // the lookup it would not call (1.9.0: every frame, per value).
+            if (string.IsNullOrEmpty(raw) || raw.IndexOf('$') < 0) return raw;
 
             return SMSModForge.Shared.VarText.Resolve(raw, name => vanilla
                 ? SMSModForge.Shared.VarCompare.Text(GameVariableBridge.Get(name))

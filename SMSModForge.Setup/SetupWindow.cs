@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -54,11 +55,22 @@ public sealed class SetupWindow : Window
     public string EndText => _endText.Text;
     public bool OffersTheEditor => _open.Visibility == Visibility.Visible;
 
-    public SetupWindow(SetupTexts texts, Payload payload, IWindowsPlaces windows, string? gameGuess, string? folderGuess)
+    /// <summary>Where what this setup does not carry is downloaded from (1.9.0), or
+    /// null for a setup that must have everything with it.</summary>
+    private readonly ReleaseSource? _online;
+    private CancellationTokenSource? _downloading;
+    private readonly Button _stop;
+
+    /// <summary>The version a download fetched, for reading back.</summary>
+    public string? Downloaded { get; private set; }
+
+    public SetupWindow(SetupTexts texts, Payload payload, IWindowsPlaces windows, string? gameGuess, string? folderGuess,
+                       ReleaseSource? online = null)
     {
         _t = texts;
         _payload = payload;
         _windows = windows;
+        _online = online;
         SetupLook.OwnStyles(this);
         Title = _t.T("setup.title");
         Width = 640;
@@ -73,8 +85,12 @@ public sealed class SetupWindow : Window
         // ── What to install ──
         // Only the plugin first, and chosen already: most people running
         // this want to play packs, not make them (the author, 1.8.0).
-        PluginOnly = SetupLook.Choice("kind", _t.T("setup.kind.plugin"), _t.T("setup.kind.plugin.help"), true);
-        Everything = SetupLook.Choice("kind", _t.T("setup.kind.everything"), _t.T("setup.kind.everything.help"), false);
+        // ...except over an earlier install that has the editor: updating only the
+        // plugin there would leave the old editor behind, under the new version's name
+        // in Windows' Apps list.
+        bool hadEditor = folderGuess != null && File.Exists(Path.Combine(folderGuess, Installer.EditorExe));
+        PluginOnly = SetupLook.Choice("kind", _t.T("setup.kind.plugin"), _t.T("setup.kind.plugin.help"), !hadEditor);
+        Everything = SetupLook.Choice("kind", _t.T("setup.kind.everything"), _t.T("setup.kind.everything.help"), hadEditor);
         _kindPage.Children.Add(SetupLook.Heading(_t.T("setup.kind.heading")));
         _kindPage.Children.Add(PluginOnly);
         _kindPage.Children.Add(Everything);
@@ -111,11 +127,15 @@ public sealed class SetupWindow : Window
         // ── Installing, and done ──
         _open = SetupLook.Button(_t.T("setup.done.open"), primary: true);
         _close = SetupLook.Button(_t.T("setup.close"));
+        _stop = SetupLook.Button(_t.T("setup.download.stop"));
+        _stop.Visibility = Visibility.Collapsed;
         _open.Click += (_, _) => OpenEditor();
         _close.Click += (_, _) => Close();
+        _stop.Click += (_, _) => _downloading?.Cancel();
         var endButtons = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(-8, 8, 0, 0) };
         endButtons.Children.Add(_open);
         endButtons.Children.Add(_close);
+        endButtons.Children.Add(_stop);
         _endPage.Children.Add(_endHeading);
         _endPage.Children.Add(_endText);
         _endPage.Children.Add(endButtons);
@@ -265,15 +285,36 @@ public sealed class SetupWindow : Window
         }
         FolderStatus.Text = "";
 
-        var options = new Installer.Options(game, folder, editor && StartMenu.IsChecked == true, editor && Desktop.IsChecked == true, editor);
         Next.IsEnabled = Back.IsEnabled = Cancel.IsEnabled = false;
         _endHeading.Text = _t.T("setup.installing");
         _endText.Text = "";
         _open.Visibility = _close.Visibility = Visibility.Collapsed;
         Go(EndStep);
+
+        // What this setup does not carry is downloaded first (1.9.0): only what this
+        // install needs - the plugin alone is a few megabytes, the editor many more.
+        var payload = _payload;
+        string? version = null;
+        bool needEditor = editor && !payload.HasEditor, needPlugin = !payload.HasPlugin;
+        if ((needEditor || needPlugin) && _online != null)
+        {
+            var fetched = await DownloadAsync(needEditor, needPlugin);
+            if (fetched == null) return;
+            payload = fetched.Value.Payload;
+            version = fetched.Value.Version;
+        }
+
+        var options = new Installer.Options(game, folder, editor && StartMenu.IsChecked == true, editor && Desktop.IsChecked == true, editor, version);
+        _endHeading.Text = _t.T("setup.installing");
+        _endText.Text = "";
         try
         {
-            var result = await Task.Run(() => Installer.Run(options, _payload, _windows));
+            var result = await Task.Run(() => Installer.Run(options, payload, _windows));
+            // What was downloaded is installed now: its folder in the temporary
+            // files goes, rather than tens of megabytes staying behind per version.
+            if (version != null)
+                try { Directory.Delete(ReleaseSource.DownloadFolder(version), recursive: true); }
+                catch (Exception) { /* Windows clears its temporary files in time */ }
             _endHeading.Text = _t.T(editor ? "setup.done.heading" : "setup.done.pluginHeading");
             _endText.Text = (editor ? _t.F("setup.done.help", ("folder", folder)) : _t.T("setup.done.pluginHelp"))
                             + (result.BepInExWasThere ? "\n\n" + _t.T("setup.bepinexKept") : "");
@@ -287,6 +328,76 @@ public sealed class SetupWindow : Window
         }
         _close.Visibility = Visibility.Visible;
     }
+
+    /// <summary>
+    /// Fetch what is missing from the release, saying how far it has got; the payload
+    /// to install from, or null when it could not be had - then the page says why, and
+    /// how to install without the internet, or (stopped by the player) goes back to the
+    /// page with Install on it.
+    /// </summary>
+    private async Task<(Payload Payload, string Version)?> DownloadAsync(bool editor, bool plugin)
+    {
+        using var stop = new CancellationTokenSource();
+        _downloading = stop;
+        _stop.Visibility = Visibility.Visible;
+        _endHeading.Text = _t.T("setup.download.finding");
+        try
+        {
+            var release = await _online!.FindAsync(SMSModForge.Shared.ForgeVersion.Current, stop.Token);
+            var editorZip = editor ? release.Editor ?? throw new InvalidOperationException(_t.T("setup.download.noEditor")) : null;
+            var pluginZip = release.Plugin ?? throw new InvalidOperationException(_t.T("setup.download.noPlugin"));
+            string where = ReleaseSource.DownloadFolder(release.Version);
+            long total = (editorZip?.Size ?? 0) + (plugin ? pluginZip.Size : 0), before = 0;
+            _endHeading.Text = _t.F("setup.download.heading", ("version", release.Version));
+
+            async Task<string> Fetch(ReleaseAsset asset)
+            {
+                var progress = new Progress<long>(done => _endText.Text = _t.F("setup.download.progress",
+                    ("done", Megabytes(before + done)), ("total", Megabytes(total))));
+                string path = await _online.FetchAsync(asset, where, progress, stop.Token);
+                before += asset.Size;
+                return path;
+            }
+
+            string? editorPath = editorZip == null ? null : await Fetch(editorZip);
+            string? pluginPath = plugin ? await Fetch(pluginZip) : null;
+            Downloaded = release.Version;
+            var from = editorPath == null && pluginPath == null ? _payload
+                     : new Payload
+                     {
+                         Editor = editorPath != null ? () => File.OpenRead(editorPath) : _payload.Editor,
+                         Plugin = pluginPath != null ? () => File.OpenRead(pluginPath) : _payload.Plugin,
+                         Uninstaller = _payload.Uninstaller,
+                     };
+            return (from, release.Version);
+        }
+        // Stopped by the player only: a timeout is a failure, said as one.
+        catch (OperationCanceledException) when (stop.IsCancellationRequested)
+        {
+            Go(WithEditor ? FolderStep : GameStep);
+            Next.IsEnabled = Back.IsEnabled = Cancel.IsEnabled = true;
+            FolderStatus.Text = _t.T("setup.download.stopped");
+            return null;
+        }
+        catch (Exception e)
+        {
+            // In the player's language when the download knows what went wrong.
+            string problem = e is SetupProblem known ? _t.F(known.Key, known.Gaps) : e.Message;
+            _problem = problem;
+            _endHeading.Text = _t.T("setup.download.failedHeading");
+            _endText.Text = _t.F("setup.download.failed", ("problem", problem), ("url", ReleaseSource.ReleasesPage));
+            _close.Visibility = Visibility.Visible;
+            return null;
+        }
+        finally
+        {
+            _stop.Visibility = Visibility.Collapsed;
+            _downloading = null;
+        }
+    }
+
+    private static string Megabytes(long bytes)
+        => (bytes / 1048576.0).ToString("0.0", System.Globalization.CultureInfo.CurrentCulture);
 
     private static bool Running(string exe)
     {

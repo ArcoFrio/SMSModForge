@@ -117,7 +117,14 @@ namespace SMSModForge.PackPlugin
         {
             foreach (var loaded in AppDomain.CurrentDomain.GetAssemblies())
             {
-                if (!string.Equals(loaded.GetName().Name, assembly, StringComparison.OrdinalIgnoreCase)) continue;
+                // The simple name off FullName, not GetName(): on Windows set to
+                // Turkish, Assembly.GetName throws for some of the game's own
+                // assemblies (found by the Gallery, 2.0.0), and this loop asks
+                // every one loaded (1.9.0).
+                string simple = loaded.FullName ?? "";
+                int comma = simple.IndexOf(',');
+                if (comma >= 0) simple = simple.Substring(0, comma);
+                if (!string.Equals(simple.Trim(), assembly, StringComparison.OrdinalIgnoreCase)) continue;
                 var type = loaded.GetType(name, false);
                 if (type != null) return type;
             }

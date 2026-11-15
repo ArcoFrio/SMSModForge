@@ -26,10 +26,11 @@ public sealed class LanguageGuessTests
     private readonly ITestOutputHelper _out;
     public LanguageGuessTests(ITestOutputHelper o) => _out = o;
 
-    private static List<string> Shipped(string code, bool english = false)
+    private static List<string> Shipped(string code, bool english = false, bool withHints = true)
     {
         var file = TextFile.Parse(File.ReadAllText(Path.Combine(Loc.ShippedFolder, code + ".txt")));
-        return file.Entries.Select(e => english ? e.English : e.Text)
+        return file.Entries.Where(e => withHints || !e.Key.StartsWith("vhint.", System.StringComparison.Ordinal))
+                   .Select(e => english ? e.English : e.Text)
                    .Where(t => !string.IsNullOrWhiteSpace(t)).Select(t => t!).ToList();
     }
 
@@ -112,7 +113,11 @@ public sealed class LanguageGuessTests
     [InlineData("pt-BR", "es", "pt", 0.45)]    // measured 48%
     public void AnotherLanguageIsCaught(string file, string own, string expected, double atLeast)
     {
-        var lines = file == "en" ? Shipped("es", english: true) : Shipped(file);
+        // Without the notes on the game's variables (1.9.0): the floors were
+        // measured before they existed, and they are a kind of text of their own -
+        // dense with the game's English names (perks, places), which are rightly
+        // no evidence of any language. They are held to "never wrong" above.
+        var lines = file == "en" ? Shipped("es", english: true, withHints: false) : Shipped(file, withHints: false);
         // Only lines long enough to judge: a two-word label is every language.
         var judgeable = lines.Where(l => LanguageGuess.Plain(l).Split(' ', System.StringSplitOptions.RemoveEmptyEntries).Length >= 8).ToList();
         var said = Measure(file + " (8+ words)", judgeable, own);

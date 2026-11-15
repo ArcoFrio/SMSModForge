@@ -9,7 +9,7 @@ PLURAL = {"zero", "one", "two", "few", "many", "other"}
 
 def read(path):
     d = {}
-    for line in open(path, encoding="utf-8").read().splitlines():
+    for line in open(path, encoding="utf-8-sig").read().splitlines():  # -sig: a BOM hid the first key
         m = re.match(r"^([\w.\-]+) = ?(.*)$", line.strip())
         if m:
             if m.group(1) in d:
@@ -26,9 +26,10 @@ def codes(s):
     return sorted(out)
 
 
-def main(code, nn):
-    src = read(f"{BASE}\\src\\{nn}.txt")
-    dst = read(f"{BASE}\\out\\{code}\\{nn}.txt")
+def main(code, nn, src_dir=None, out_dir=None):
+    # --src <folder> --out <folder>: chunks elsewhere (the game-variable hints: src\hNN.txt, <code>\hNN.txt)
+    src = read(f"{src_dir or BASE + chr(92) + 'src'}\\{nn}.txt")
+    dst = read(f"{out_dir or BASE + chr(92) + 'out'}\\{code}\\{nn}.txt")
     forms = FORMS.get(code, ["one", "other"])
     want = {}
     done_base = set()
@@ -67,4 +68,6 @@ def main(code, nn):
     print(code, nn, len(dst), "of", len(want))
 
 
-main(sys.argv[1], sys.argv[2])
+args = sys.argv[1:]
+opts = {args[i]: args[i + 1] for i in range(2, len(args) - 1, 2) if args[i].startswith("--")}
+main(args[0], args[1], opts.get("--src"), opts.get("--out"))

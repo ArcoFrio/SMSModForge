@@ -75,12 +75,16 @@
             /// asset, that decides which face this character is wearing --
             /// or null for a character the game never gave one.
             /// <para/>
-            /// Every bust on screen carries a trigger watching for a
-            /// global-name variable change; on one, it copies its own
-            /// character's number into <c>Currently-Chosen</c> and switches the
-            /// matching child of <c>Expressions</c> on. So switching a child on
-            /// by hand lasts exactly until the next global variable is written,
-            /// anywhere, by anything. Setting this is how a face stays.
+            /// Nearly every bust with faces carries a trigger watching for a
+            /// global-name variable change; on one, it copies a character's
+            /// number into <c>Currently-Chosen</c> and switches the matching
+            /// child of <c>Expressions</c> on. So switching a child on by hand
+            /// lasts exactly until the next global variable is written,
+            /// anywhere, by anything. Setting the number is how a face stays.
+            /// Not always THIS character's number (Chloe's busts copy
+            /// Charlotte's): the plugin writes the one each bust follows,
+            /// <see cref="VanillaBustWatches"/>. A few busts copy none
+            /// (Clay's, Robert's, Claudia's only move the mouth).
             /// </summary>
             public string ExpressionVariable { get; private set; }
 

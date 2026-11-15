@@ -58,7 +58,30 @@ namespace SMSModForge.PackPlugin
         /// <summary>Every scene this pack created — used by DeactivateAllScenes.</summary>
         public IEnumerable<Entry> All => _byKey.Values;
 
+        // The game's own scenes this pack switched on by where they sit (1.9.0),
+        // so "hide every scene this pack showed" hides those too. Objects of a
+        // load since replaced are gone (null) and skipped.
+        private readonly List<GameObject> _gameShown = new List<GameObject>();
+
+        /// <summary>Remember one of the game's own scenes this pack showed.</summary>
+        public void ShowedGameScene(GameObject sceneGo)
+        {
+            if (sceneGo == null) return;
+            _gameShown.RemoveAll(g => g == null);
+            if (!_gameShown.Contains(sceneGo)) _gameShown.Add(sceneGo);
+        }
+
+        /// <summary>The game's own scenes this pack showed and that still exist.</summary>
+        public IEnumerable<GameObject> GameScenesShown
+        {
+            get { foreach (var g in _gameShown) if (g != null) yield return g; }
+        }
+
         /// <summary>Drop every registered scene's GO without destroying it (scene reload handles cleanup).</summary>
-        public void Reset() => _byKey.Clear();
+        public void Reset()
+        {
+            _byKey.Clear();
+            _gameShown.Clear();
+        }
     }
 }

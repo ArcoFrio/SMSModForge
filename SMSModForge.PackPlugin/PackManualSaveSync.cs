@@ -31,6 +31,7 @@ namespace SMSModForge.PackPlugin
     {
         private bool _listenersAttached;
         private int _pendingOverwriteSlot = -1;
+        private Transform _nano;
 
         // Marker components stamped on hooked buttons so re-scans don't stack
         // duplicate listeners. Distinct from SaveManager's own markers.
@@ -44,8 +45,13 @@ namespace SMSModForge.PackPlugin
             // NanoSave is a root GameObject that activates when the save menu
             // opens. GetRootGameObjects includes inactive roots, so we find it
             // either way and gate on activeSelf.
-            Transform nano = Plugin.currentScene.GetRootGameObjects()
-                .FirstOrDefault(go => go.name == "NanoSave")?.transform;
+            // Kept once found, while it is still alive, still a root and still in
+            // this scene (1.9.0): the search made an array of every root and a
+            // string of each name, every frame. The game has one NanoSave.
+            if (_nano == null || _nano.parent != null || _nano.gameObject.scene != Plugin.currentScene)
+                _nano = Plugin.currentScene.GetRootGameObjects()
+                    .FirstOrDefault(go => go.name == "NanoSave")?.transform;
+            Transform nano = _nano;
             bool active = nano != null && nano.gameObject.activeSelf;
 
             if (active && !_listenersAttached)

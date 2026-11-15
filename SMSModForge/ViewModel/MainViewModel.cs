@@ -483,6 +483,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     {
         OnPropertyChanged(nameof(EditingLanguage));
         OnPropertyChanged(nameof(IsEditingTranslation));
+        foreach (var c in Characters) c.RaiseTranslating();
         OnPropertyChanged(nameof(HasUnsavedChanges));
         RaiseTextLanguage();
     }
@@ -1096,7 +1097,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// <summary>
     /// The same names under the list each belongs to.
     /// <para/>
-    /// 1,924 of them flat is a scroll bar with no landmarks; under their 64
+    /// 1,926 of them flat is a scroll bar with no landmarks; under their 64
     /// owning lists - Gallery, Events, Inventory, Cooldown - it is somewhere to
     /// look. A name that appears in more than one list is filed under the first,
     /// which is the same rule the catalog itself documents.
@@ -1296,6 +1297,47 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     private OptionGroups.Live SceneKeysLive
         => _sceneKeysLive ??= new OptionGroups.Live(SceneKeyOptions, o => OptionGroups.FolderOf(Pack.SceneFolders, o as string));
     private OptionGroups.Live? _sceneKeysLive;
+
+    /// <summary>
+    /// What the Scene category of an action or a condition offers (1.9.0): the
+    /// pack's scenes under its folders, then every one of the game's own under
+    /// "The game's own: Sexy", "...: Photos" - the root each sits under - by
+    /// where it sits (<c>4_CG_Manager-Sexy/Samanthabeach</c>), which is what the
+    /// runtime finds it by. A game scene this pack changes is offered once, by
+    /// the pack's name for it: that entry shows the change.
+    /// </summary>
+    public ObservableCollection<string> SceneTargetOptions { get; } = new();
+
+    public System.ComponentModel.ICollectionView SceneTargetOptionsGrouped => SceneTargetsLive.View;
+    private OptionGroups.Live SceneTargetsLive
+        => _sceneTargetsLive ??= new OptionGroups.Live(SceneTargetOptions, o => SceneTargetHeading(o as string), gamesLast: true);
+    private OptionGroups.Live? _sceneTargetsLive;
+
+    private string SceneTargetHeading(string? token)
+        => VanillaScenes.Find(token) is { } game
+            // Made from "The game's own" itself, so its headings sort after the
+            // pack's in every language (OptionGroups' gamesLast).
+            ? OptionGroups.GamesOwn + ": " + game.Group
+            : OptionGroups.FolderOf(Pack.SceneFolders, token);
+
+    /// <summary>
+    /// What a Scene target that names one of the game's own scenes previews:
+    /// this pack's change to it when it has one (so the preview shows the
+    /// change), else the game's scene as it is. Null for a name that is
+    /// neither one of the pack's scenes nor one of the game's - no preview,
+    /// which is also the sign that the name is off. One made per scene, kept.
+    /// </summary>
+    private SceneViewModel? GameSceneTarget(string? path)
+    {
+        if (VanillaScenes.Find(path) is not { } game) return null;
+        var changed = Scenes.FirstOrDefault(s => s.IsGameScene && string.Equals(s.Model.Source, game.Path, StringComparison.Ordinal));
+        if (changed != null) return changed;
+        if (!_gameSceneTargets.TryGetValue(game.Path, out var shown))
+            _gameSceneTargets[game.Path] = shown = new SceneViewModel(new SceneDef { Key = game.Name, DisplayName = game.Name, Source = game.Path });
+        return shown;
+    }
+
+    private readonly System.Collections.Generic.Dictionary<string, SceneViewModel> _gameSceneTargets = new(StringComparer.Ordinal);
 
     /// <summary>The same, for a SceneRef field, whose items are labelled.</summary>
     public System.ComponentModel.ICollectionView SceneOptionsGrouped => ScenesLive.View;
@@ -1523,6 +1565,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             OnPropertyChanged();
             OnPropertyChanged(nameof(Title));
             OnPropertyChanged(nameof(PackName));
+            OnPropertyChanged(nameof(CanChooseLoadPackOnStart));
             // The export commands' CanExecute is gated on PackRoot — kick
             // a requery so the menu items flip between disabled (in-
             // memory only) and enabled (saved to disk).
@@ -1633,6 +1676,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             if (ReferenceEquals(_selectedCharacter, value)) return;
             // Leaving a character commits whatever was typed into its key box.
             CommitPendingRenames();
+            // ...and an emptied name box goes back to the game's name.
+            _selectedCharacter?.ForgetTyping();
             _selectedCharacter = value;
             WatchRename(value);
             OnPropertyChanged();
@@ -2300,8 +2345,19 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         var node = SelectedNode;
         if (node == null || node.Model.Kind != DialogueNodeKind.Text || string.IsNullOrWhiteSpace(node.Text)) return null;
         var font = Rendering.VanillaUiLibrary.IsAvailable ? Rendering.VanillaUiLibrary.Assets.Font(Rendering.DialogueLook.FontName)?.Font : null;
-        return font == null ? null : Rendering.DialogueFit.Of(font, node.Text);
+        if (font == null) return null;
+        // The note and its colour both ask, and each asking laid the line out
+        // three times over in a search for its size - per keystroke (1.9.0).
+        // The same words in the same font fit the same way.
+        string text = node.Text;
+        if (_lastFit is { } last && ReferenceEquals(last.Font, font) && string.Equals(last.Text, text, StringComparison.Ordinal))
+            return last.Fit;
+        var fit = Rendering.DialogueFit.Of(font, text);
+        _lastFit = (font, text, fit);
+        return fit;
     }
+
+    private (object Font, string Text, Rendering.DialogueFit.Result Fit)? _lastFit;
 
     private void RaiseSelectedNodeFit()
     {
@@ -3715,6 +3771,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     public RelayCommand AddInitialValueCommand { get; }
     public RelayCommand AddSceneCommand { get; }
     public RelayCommand RemoveSceneCommand { get; }
+    public RelayCommand AddGameSceneCommand { get; }
+    public RelayCommand RemoveGameSceneCommand { get; }
     public RelayCommand AddNpcCommand { get; }
     public RelayCommand RemoveNpcCommand { get; }
     public RelayCommand AddWallpaperCommand { get; }
@@ -4004,7 +4062,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             o => SelectedPlace = (PlaceViewModel)o, () => Undo.Checkpoint());
         SceneTree = new UnitTreeController(() => Pack.SceneFolders,
             o => ((SceneViewModel)o).Key, o => ((SceneViewModel)o).Display,
-            o => SelectedScene = (SceneViewModel)o, () => Undo.Checkpoint());
+            o => { SelectedScene = (SceneViewModel)o; LetGoOfGameScene(); }, () => Undo.Checkpoint());
         NpcTree = new UnitTreeController(() => Pack.NpcFolders,
             o => ((NpcViewModel)o).Key, o => ((NpcViewModel)o).Display,
             o => SelectedNpc = (NpcViewModel)o, () => Undo.Checkpoint());
@@ -4047,6 +4105,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         DialogueNodeViewModel.ActorColorProvider = ActorColorFor;
         // A name token is drawn in the colour of whoever it stands in for.
         Rendering.DialogueMarkup.TokenColor = TokenColorFor;
+        // ...and a {name:key} as their name, from this pack's characters.
+        Rendering.DialogueMarkup.NameOf = NameTokenName;
         // And a sound's auto-trigger pattern is marked wherever a line shows.
         // A Play dialogue action offers the pack's dialogues as they are now.
         Dialogues.CollectionChanged += (_, __) => RebuildDialogueKeyOptions();
@@ -4064,8 +4124,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         // carry GameObjects (pack places + vanilla extensions).
         NodeActionViewModel.OverlayLevelProvider = OverlayLevelOptionTokens;
         // A Set-Active row aimed at a scene previews it, found as the game
-        // finds it: by key, case for case.
-        NodeActionViewModel.SceneLookup = key => Scenes.FirstOrDefault(s => string.Equals(s.Key, key, StringComparison.Ordinal));
+        // finds it: by key, case for case - or one of the game's own scenes, by
+        // where it sits (1.9.0).
+        NodeActionViewModel.SceneLookup = key => Scenes.FirstOrDefault(s => string.Equals(s.Key, key, StringComparison.Ordinal))
+                                                 ?? GameSceneTarget(key);
         // ...and one aimed at a bust, a level's GameObject or a whole place
         // shows that, found the way the runtime finds it.
         NodeActionViewModel.BustArtLookup = name => Rendering.VanillaArtResolver.FindBaseSpritePath(name, Pack, PackRoot);
@@ -4318,6 +4380,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         AddInitialValueCommand        = new RelayCommand(() => SelectedVariable?.AddInitialValue());
         AddSceneCommand               = new RelayCommand(AddScene);
         RemoveSceneCommand            = new RelayCommand(RemoveScene, () => SelectedScene != null || SceneTree.Selected is UnitFolderNode);
+        AddGameSceneCommand           = new RelayCommand(AddGameScene);
+        RemoveGameSceneCommand        = new RelayCommand(RemoveGameScene, () => SelectedGameScene != null);
         AddNpcCommand                 = new RelayCommand(AddNpc);
         RemoveNpcCommand              = new RelayCommand(RemoveNpc);
         AddWallpaperCommand           = new RelayCommand(AddWallpaper);
@@ -4456,9 +4520,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RebindPlaces()
     {
-        Places.Clear();
-        foreach (var p in Pack.Places)
-            Places.Add(new PlaceViewModel(p));
+        Refill(Places, Pack.Places.Select(p => new PlaceViewModel(p)));
         WatchKeys(Places, () => Places.Select(x => x.Key));
         PlaceTree.Build(Places);
         SelectedPlace = Places.FirstOrDefault();
@@ -4577,8 +4639,16 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// </summary>
     public Action? CommitEditsInProgress { get; set; }
 
+    /// <summary>
+    /// Asks the mask studio, when one is open, to close before anything replaces
+    /// the pack under it (1.9.0): its strokes are saved, thrown away or kept -
+    /// false when the author chose to stay. Set by the window.
+    /// </summary>
+    public Func<bool>? LeaveMaskStudio { get; set; }
+
     private bool ConfirmDiscardChanges(string question)
     {
+        if (LeaveMaskStudio != null && !LeaveMaskStudio()) return false;
         // What is being typed counts as unsaved, as soon as it is typed.
         CommitEditsInProgress?.Invoke();
         CommitPendingRenames();
@@ -4642,6 +4712,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         TranslationSummaries.Forget();
         Pack = PackRepository.CreateEmpty("Untitled");
         PackRoot = null;
+        NewerForgeVersion = null;
         RebindAll();
         MarkSaved();
         Undo.Reset();
@@ -4728,6 +4799,19 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// real folder - which is the only way to test what an author sees when a
     /// migration changes something on the way in.
     /// </summary>
+    /// <summary>
+    /// The ModForge that last saved the open pack, when it is newer than this
+    /// one; null otherwise. Saving such a pack here would lose what the newer
+    /// one added, so the author is told on opening and asked before a save.
+    /// Cleared by a save (the pack is then this version's) and by a new pack.
+    /// </summary>
+    public string? NewerForgeVersion
+    {
+        get => _newerForgeVersion;
+        private set { _newerForgeVersion = value; OnPropertyChanged(); }
+    }
+    private string? _newerForgeVersion;
+
     internal void OpenPackFromPath(string dir)
     {
         // Guarded HERE rather than in each caller: the Open dialog and the
@@ -4768,6 +4852,16 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             // a click nobody is there to give. See Services.TestMode.
             if (migration != null && migration.Migrated && !Services.TestMode.Active)
                 Tell(migration.Describe(), Loc.T("open.migrated.title"), MessageBoxImage.Information);
+
+            // A pack last saved by a newer ModForge (1.9.0): this one cannot show
+            // what that one added, and saving here drops it - an older editor
+            // reads past every field it does not know and writes the pack again
+            // without them. Said once now, and asked again before a save.
+            NewerForgeVersion = Shared.ForgeVersion.Compare(Pack.ForgeVersion ?? "", Shared.ForgeVersion.Current) > 0
+                ? Pack.ForgeVersion : null;
+            if (NewerForgeVersion != null)
+                Tell(Loc.F("open.newerPack", "pack", NewerForgeVersion, "editor", Shared.ForgeVersion.Current),
+                     Loc.T("open.newerPack.title"), MessageBoxImage.Warning);
         }
         catch (Exception ex)
         {
@@ -4808,6 +4902,74 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     {
         RecentFilesService.Add(path);
         LoadRecentFiles();
+        Services.EditorPrefs.LastPack = path;
+        OnPropertyChanged(nameof(LoadPackOnStart));
+        OnPropertyChanged(nameof(CanChooseLoadPackOnStart));
+    }
+
+    /// <summary>
+    /// "Load this pack on start" (the author, 1.9.0), on File and on the
+    /// ModForge tab: whether the editor opens the pack it last loaded as it
+    /// starts. Ticked once any pack has been loaded, until it is unticked -
+    /// which then holds for other packs too, until it is ticked again. Shown
+    /// unticked while no pack was ever loaded, there being none to open.
+    /// </summary>
+    public bool LoadPackOnStart
+    {
+        get => Services.EditorPrefs.LoadPackOnStart && Services.EditorPrefs.LastPack.Length > 0;
+        set
+        {
+            if (value == LoadPackOnStart) return;
+            Services.EditorPrefs.LoadPackOnStart = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>Only with a pack that is in a folder: "this pack" is the one
+    /// the editor would open, and an unsaved one has nowhere to open from.</summary>
+    public bool CanChooseLoadPackOnStart => !string.IsNullOrEmpty(PackRoot);
+
+    /// <summary>
+    /// Open the pack loaded last, as the editor starts, when "Load this pack on
+    /// start" is on. Never in a test run (the tests' editor must not open
+    /// anybody's pack), never over a pack already open, and not a pack the
+    /// editor did not survive opening at the last start - that one is said and
+    /// left. A pack that is no longer where it was is said in passing.
+    /// </summary>
+    public void OpenPackOnStart()
+    {
+        if (Services.TestMode.Active) return;
+        var (open, say, warn) = PackToOpenOnStart();
+        if (warn.Length > 0) Tell(warn, Loc.T("start.packNotReopened.title"), MessageBoxImage.Warning);
+        if (say.Length > 0) Notify(say);
+        if (open == null) return;
+        Services.EditorPrefs.StartLoadPending = open;
+        try { OpenPackFromPath(open); }
+        finally { Services.EditorPrefs.StartLoadPending = ""; }
+    }
+
+    /// <summary>
+    /// What <see cref="OpenPackOnStart"/> does, decided: the folder to open
+    /// (null for none), a passing notice, a warning. Clears a pending start
+    /// left by a start that did not survive, as it reads it.
+    /// </summary>
+    internal (string? Open, string Say, string Warn) PackToOpenOnStart()
+    {
+        if (PackRoot != null) return (null, "", "");
+        string last = Services.EditorPrefs.LastPack;
+        if (!Services.EditorPrefs.LoadPackOnStart || last.Length == 0) return (null, "", "");
+
+        string pending = Services.EditorPrefs.StartLoadPending;
+        if (pending.Length > 0)
+        {
+            Services.EditorPrefs.StartLoadPending = "";
+            if (string.Equals(pending, last, StringComparison.OrdinalIgnoreCase))
+                return (null, "", Loc.F("start.packNotReopened", "path", last));
+        }
+        if (!File.Exists(Path.Combine(last, PackRepository.ManifestFileName))
+            && !File.Exists(Path.Combine(last, PackRepository.LegacyManifestFileName)))
+            return (null, Loc.F("start.packGone", "path", last), "");
+        return (last, "", "");
     }
 
     /// <summary>
@@ -5084,6 +5246,13 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         // The translations follow any rename before the list of changes is
         // put together, so the list shows the lines that move.
         FileTranslationsWhereTheirTextsAre();
+        // A pack a newer ModForge saved loses what that one added when this one
+        // writes it: asked first. Unattended (the harness), the save goes ahead.
+        if (NewerForgeVersion != null &&
+            Ask(Loc.F("save.newerPack.ask", "pack", NewerForgeVersion, "editor", Shared.ForgeVersion.Current),
+                Loc.T("save.newerPack.title"), MessageBoxButton.YesNo, MessageBoxImage.Warning,
+                whenNobodyIsThere: MessageBoxResult.Yes) != MessageBoxResult.Yes)
+            return false;
         if (!ConfirmChangesBeforeWriting()) return false;
         if (!SettleVersionBeforeWriting()) return false;
         try
@@ -5097,6 +5266,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             // In its own words, whatever is on screen. Saving while the Spanish
             // is up must not put the Spanish into the pack.
             using (OwnWords()) PackRepository.Save(Pack, PackRoot);
+            NewerForgeVersion = null;   // the pack is this version's now
             ClearSoundsNoLongerMade(savedBefore);
             WriteEditingLanguage();
             Validate();
@@ -5291,7 +5461,23 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     }
 
     IReadOnlyDictionary<object, double>? ISuggestionSource.RankOptions(IReadOnlyList<SuggestionOption> options)
-        => SmartSuggestionsOn ? Suggestions.Rank(options) : null;
+    {
+        if (!SmartSuggestionsOn) return null;
+        // The game's own scenes are not suggested: they have headings of their
+        // own under the pack's, and ranked beside the pack's their 1,255 names
+        // would change how rare every word looks, so the pack's scenes would be
+        // starred differently than before the game's were in the list (1.9.0).
+        // The pack's are ranked among the pack's alone, as they always were.
+        if (options.Any(o => IsGameScenePath(o.Item)))
+            options = options.Where(o => !IsGameScenePath(o.Item)).ToList();
+        return Suggestions.Rank(options);
+    }
+
+    /// <summary>One of the game's scenes by where it sits - asked of the
+    /// catalogue only for what looks like one, so no other list loads it.</summary>
+    private static bool IsGameScenePath(object item)
+        => item is string s && s.StartsWith("4_CG_Manager-", StringComparison.Ordinal) && s.IndexOf('/') > 0
+           && Model.VanillaScenes.Find(s) != null;
 
     private bool _suggestionsFollowQueued;
 
@@ -6542,6 +6728,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// </summary>
     private CharacterViewModel HookSpeaker(CharacterViewModel vm)
     {
+        vm.Translating = () => IsEditingTranslation;
         // A face added, renamed or removed on the Busts tab is one a line can
         // ask for now: the lists that offer faces, and the face the line's
         // preview shows, follow at once rather than when the line's speaker
@@ -6584,9 +6771,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// The notes beside a Set-Active target (1.7.0): whose bust a bust is -
     /// a character and their outfit, or one of the game's cast - and what a
     /// scene is called, where its key does not say. Nothing for the rest.
+    /// And under one of the pack's variables, its description (1.9.0).
     /// </summary>
     private string? NoteFromPack(string kind, string value)
     {
+        if (kind == View.OptionNotes.PackVariable) return PackVariableNote(value);
         if (kind != View.OptionNotes.Target || string.IsNullOrEmpty(value)) return null;
 
         foreach (var c in Characters)
@@ -6606,8 +6795,59 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         if (scene != null && !string.IsNullOrWhiteSpace(scene.DisplayName)
             && !string.Equals(scene.DisplayName, value, StringComparison.OrdinalIgnoreCase))
             return scene.DisplayName;
+
+        // One of the game's own scenes (1.9.0): the conversations that show it,
+        // by their folder and name - the way to tell 1,255 scenes apart, and to
+        // find one by the talk it belongs to.
+        if (VanillaScenes.Find(value) is { } gameScene && gameScene.ShownBy.Count > 0)
+            return string.Join(", ", gameScene.ShownBy.Select(by =>
+            {
+                string[] parts = by.Split('/');
+                return parts.Length >= 2 ? parts[^2] + "/" + parts[^1] : by;
+            }));
         return null;
     }
+
+    /// <summary>The longest description drawn under a variable's name; a longer
+    /// one is cut at a word with an ellipsis, so one essay cannot make a
+    /// dropdown a page per item. A search matches the same text that is drawn.</summary>
+    internal const int PackVariableNoteLength = 300;
+
+    /// <summary>
+    /// What the Variables tab says one of the pack's variables is for, as the
+    /// note under its name in every list of the pack's variables (the author,
+    /// 1.9.0: "the Pack variables show hints as well, with the contents of their
+    /// description"). The outfit picker lists them as <c>$name</c>. Blank lines
+    /// are closed up; empty for a variable with no description, or a name the
+    /// pack does not have.
+    /// </summary>
+    internal string PackVariableNote(string? value)
+    {
+        string name = (value ?? "").Trim().TrimStart('$');
+        if (name.Length == 0) return "";
+        var v = Variables.FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.Ordinal))
+                ?? Variables.FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase));
+        string text = v?.Description.Trim() ?? "";
+        if (text.Length == 0) return "";
+        text = System.Text.RegularExpressions.Regex.Replace(text.Replace("\r\n", "\n").Replace('\r', '\n'), @"\n\s*\n+", "\n");
+        if (text.Length <= PackVariableNoteLength) return text;
+        int cut = text.LastIndexOfAny(new[] { ' ', '\n', '\t' }, PackVariableNoteLength - 1);
+        if (cut < PackVariableNoteLength / 2) cut = PackVariableNoteLength - 1;
+        return text.Substring(0, cut).TrimEnd() + "…";
+    }
+
+    /// <summary>
+    /// Goes up by one whenever a pack variable's description changes, so the
+    /// notes an open list has already drawn are drawn again: the dropdowns'
+    /// items are names, which did not change, so nothing else would tell them.
+    /// The item style binds to it (HintedItem).
+    /// </summary>
+    public int PackNotesVersion
+    {
+        get => _packNotesVersion;
+        private set { _packNotesVersion = value; OnPropertyChanged(); }
+    }
+    private int _packNotesVersion;
 
     /// <summary>
     /// The colour a name token is drawn in: the player's name colour for
@@ -6622,12 +6862,33 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     {
         CharacterViewModel? who = token == Rendering.DialogueMarkup.PlayerToken
             ? Characters.FirstOrDefault(c => c.IsPlayer)
+            : SMSModForge.Shared.NameTokens.TryParse(token, out string key) ? NameTokenTarget(key)
             : Rendering.DialogueMarkup.TokenCharacters.TryGetValue(token, out var name) ? SpeakerFor(name) : null;
         if (who == null) return null;
         if (string.IsNullOrWhiteSpace(who.NameColor)) return Rendering.DialogueLook.NameFallbackColor;
         var c = who.NameColorValue;
         return new Rendering.UiColor(c.B, c.G, c.R, 255);
     }
+
+    /// <summary>
+    /// Whom a <c>{name:key}</c> in this pack's text names: the pack's character
+    /// under that key - which, for one of the game's, is the entry the cast is
+    /// seeded with. The runtime asks in the same order (the pack's key first),
+    /// so a pack's own Sakura keyed "sakura" is the one its token means. Never
+    /// the player, whose name is <c>{PC}</c>.
+    /// </summary>
+    internal CharacterViewModel? NameTokenTarget(string key)
+        => string.IsNullOrWhiteSpace(key) ? null
+         : Characters.FirstOrDefault(c => !c.IsPlayer && string.Equals(c.Key, key, StringComparison.OrdinalIgnoreCase))
+           // One of the game's, kept under an older key of the pack's (Master Zhen
+           // as "master"): the runtime finds them by the game's key all the same.
+           ?? Characters.FirstOrDefault(c => c.Model.IsVanillaCharacter
+                  && string.Equals(VanillaCharacters.KeyFor(c.Model.VanillaCharacter), key, StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>The name a <c>{name:key}</c> shows, or null for a key that is
+    /// nobody's.</summary>
+    private string? NameTokenName(string key)
+        => NameTokenTarget(key)?.Display ?? SMSModForge.Shared.VanillaCastData.NameOfKey(key);
 
     /// <summary>
     /// The character a node's speaker key refers to, or null.
@@ -6654,10 +6915,15 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         // name over an empty outfit picker.
         //
         // The pack's own key is tried first and wins, so nothing here can take
-        // a name an author has already claimed.
+        // a name an author has already claimed. And the game's actor is the
+        // game's character only: a pack's own Sakura keyed "sakura" is not the
+        // game's V_Sakura, whose lines took her colour, outfits and name - and
+        // offered her token in the name button's "speaking here" (1.9.0 review).
         var cast = VanillaCharacters.Find(VanillaDialogueCatalog.SpokenActorName(actorKey));
         return cast == null ? null : Characters.FirstOrDefault(
-            c => string.Equals(c.Key, cast.Key, StringComparison.OrdinalIgnoreCase));
+            c => c.Model.IsVanillaCharacter && string.Equals(c.Model.VanillaCharacter, cast.Name, StringComparison.Ordinal))
+            ?? Characters.FirstOrDefault(
+            c => c.Model.IsVanillaCharacter && string.Equals(c.Key, cast.Key, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>The colour authored for a speaker key, or null when the speaker
@@ -6674,7 +6940,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     private string ActorDisplayNameFor(string actorKey)
     {
         var c = SpeakerFor(actorKey);
-        return string.IsNullOrWhiteSpace(c?.Display) ? actorKey : c!.Display;
+        if (!string.IsNullOrWhiteSpace(c?.Display)) return c!.Display;
+        // One of the game's, not in the pack's list - a character of the pack's
+        // own took their key - reads as the game calls them, not by its file name.
+        return VanillaCharacters.Find(VanillaDialogueCatalog.SpokenActorName(actorKey))?.Name ?? actorKey;
     }
     private SfxViewModel MakeSfxVm(SfxDef d)
     { var vm = new SfxViewModel(d); vm.PropertyChanged += OnSfxChanged; return vm; }
@@ -6687,7 +6956,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             case TabPlaces: DuplicateFlat(SelectedPlace?.Model, Pack.Places, Places, p => p.Key, (p, k) => p.Key = k, d => new PlaceViewModel(d), vm => { PlaceTree.PlaceNew(vm); RebuildDialogueRoomTalkOptions(); }); break;
             case TabMapButtons: DuplicateFlat(SelectedMapButton?.Model, Pack.MapButtons, MapButtons, _ => "", (_, __) => { }, d => new MapButtonViewModel(d, RemoveMapButtonVm), vm => SelectedMapButton = vm); break;
             case TabDialogues: DuplicateDialogue(SelectedDialogue == null ? null : EditorClipboard.CloneOne(SelectedDialogue.Model)); break;
-            case TabScenes: DuplicateFlat(SelectedScene?.Model, Pack.Scenes, Scenes, s => s.Key, (s, k) => s.Key = k, d => new SceneViewModel(d), vm => { SceneTree.PlaceNew(vm); RebuildSceneOptions(); }); break;
+            case TabScenes: DuplicateFlat(SelectedScene?.Model, Pack.Scenes, Scenes, s => s.Key, (s, k) => s.Key = k, d => new SceneViewModel(d), PlaceNewScene); break;
             case TabNpcs: DuplicateFlat(SelectedNpc?.Model, Pack.Npcs, Npcs, n => n.Key, (n, k) => n.Key = k, d => new NpcViewModel(d), vm => { NpcTree.PlaceNew(vm); RebuildNpcOptions(); }); break;
             case TabVariables: DuplicateFlat(SelectedVariable?.Model, Pack.Variables, Variables, v => v.Name, (v, k) => v.Name = k, d => new PackVariableViewModel(d), vm => PlaceNewVariableInTree(vm)); break;
             case TabWallpapers: DuplicateFlat(SelectedWallpaper?.Model, Pack.Wallpapers, Wallpapers, w => w.Key, (w, k) => w.Key = k, d => new WallpaperViewModel(d), vm => WallpaperTree.PlaceNew(vm)); break;
@@ -6725,7 +6994,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             case TabPlaces: PasteFlat(Pack.Places, Places, p => p.Key, (p, k) => p.Key = k, d => new PlaceViewModel(d), vm => { PlaceTree.PlaceNew(vm); RebuildDialogueRoomTalkOptions(); }); break;
             case TabMapButtons: PasteFlat(Pack.MapButtons, MapButtons, _ => "", (_, __) => { }, d => new MapButtonViewModel(d, RemoveMapButtonVm), vm => SelectedMapButton = vm); break;
             case TabDialogues: DuplicateDialogue(EditorClipboard.GetItem<DialogueDef>()); break;
-            case TabScenes: PasteFlat(Pack.Scenes, Scenes, s => s.Key, (s, k) => s.Key = k, d => new SceneViewModel(d), vm => { SceneTree.PlaceNew(vm); RebuildSceneOptions(); }); break;
+            case TabScenes: PasteFlat(Pack.Scenes, Scenes, s => s.Key, (s, k) => s.Key = k, d => new SceneViewModel(d), PlaceNewScene); break;
             case TabNpcs: PasteFlat(Pack.Npcs, Npcs, n => n.Key, (n, k) => n.Key = k, d => new NpcViewModel(d), vm => { NpcTree.PlaceNew(vm); RebuildNpcOptions(); }); break;
             case TabVariables: PasteFlat(Pack.Variables, Variables, v => v.Name, (v, k) => v.Name = k, d => new PackVariableViewModel(d), vm => PlaceNewVariableInTree(vm)); break;
             case TabWallpapers: PasteFlat(Pack.Wallpapers, Wallpapers, w => w.Key, (w, k) => w.Key = k, d => new WallpaperViewModel(d), vm => WallpaperTree.PlaceNew(vm)); break;
@@ -7754,8 +8023,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RebindVariables()
     {
-        Variables.Clear();
-        foreach (var v in Pack.Variables) Variables.Add(new PackVariableViewModel(v));
+        Refill(Variables, Pack.Variables.Select(v => new PackVariableViewModel(v)));
         BuildVariableTree();
         SelectedVariable = Variables.FirstOrDefault();
     }
@@ -7792,9 +8060,49 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             // A Reset reports no OldItems, so dropped view models keep their
             // handler. Harmless: the publisher is the dead one and the
             // subscriber is this long-lived view model, so nothing is held.
-            rebuild();
+            RebuildOrHold(rebuild);
         };
     }
+
+    /// <summary>
+    /// Empty <paramref name="collection"/> and fill it with
+    /// <paramref name="items"/>, with the option lists its changes rebuild
+    /// rebuilt once, after the last item, rather than once per item (1.9.0):
+    /// opening a pack, every undo and every change of language rebuilt each
+    /// list as many times as the pack has records - the scene targets'
+    /// fourteen hundred entries two hundred times. A rebuild makes the lists
+    /// from the records as they are then, so the last one is all that shows;
+    /// it runs before anything is selected, as the per-item ones did.
+    /// </summary>
+    private void Refill<T>(ObservableCollection<T> collection, IEnumerable<T> items)
+    {
+        _holdRebuilds++;
+        try
+        {
+            collection.Clear();
+            foreach (var item in items) collection.Add(item);
+        }
+        finally
+        {
+            _holdRebuilds--;
+            if (_holdRebuilds == 0)
+            {
+                var held = _heldRebuilds.ToList();
+                _heldRebuilds.Clear();
+                foreach (var rebuild in held) rebuild();
+            }
+        }
+    }
+
+    /// <summary>Rebuild now, or once after the refill under way.</summary>
+    private void RebuildOrHold(System.Action rebuild)
+    {
+        if (_holdRebuilds == 0) { rebuild(); return; }
+        if (!_heldRebuilds.Contains(rebuild)) _heldRebuilds.Add(rebuild);
+    }
+
+    private int _holdRebuilds;
+    private readonly List<System.Action> _heldRebuilds = new();
 
     /// <summary>Every list that shows a place's name.</summary>
     private void RebuildPlaceNameOptions()
@@ -7813,14 +8121,20 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         // A Reset (Clear) reports no OldItems, so the dropped VMs keep their
         // handler. That's harmless: the publisher is the dead VM and the
         // subscriber is this long-lived view-model, so nothing is kept alive.
-        RebuildVariableNameOptions();
+        _variablesRebuild ??= () => { RebuildVariableNameOptions(); PackNotesVersion++; };
+        RebuildOrHold(_variablesRebuild);
     }
+
+    private System.Action? _variablesRebuild;
 
     private void OnVariableIdentityChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(PackVariableViewModel.Name) ||
             e.PropertyName == nameof(PackVariableViewModel.Type))
             RebuildVariableNameOptions();
+        if (e.PropertyName == nameof(PackVariableViewModel.Name) ||
+            e.PropertyName == nameof(PackVariableViewModel.Description))
+            PackNotesVersion++;
     }
 
     public void RebuildVariableNameOptions()
@@ -7908,7 +8222,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// list.
     /// <para/>
     /// Grouping is not a nicety on the longest of these: the game's variables
-    /// are 1,924 names in one flat list, which is a scroll bar with no
+    /// are 1,926 names in one flat list, which is a scroll bar with no
     /// landmarks. Under their 64 owning lists it is a place to look rather than
     /// a place to hunt.
     /// <para/>
@@ -8024,15 +8338,244 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RebindScenes()
     {
-        Scenes.Clear();
-        foreach (var s in Pack.Scenes) Scenes.Add(new SceneViewModel(s));
+        Refill(Scenes, Pack.Scenes.Select(s => new SceneViewModel(s)));
         WatchKeys(Scenes, () => Scenes.Select(x => x.Key));
+        // A change to one of the game's scenes with none picked yet, still called
+        // what it was added as (an undo, a reopened pack): the first pick names it.
+        string placeholder = NewName("scenes.game.newName");
+        foreach (var s in Scenes)
+            if (s.IsGameScene && string.IsNullOrEmpty(s.Model.Source) && s.DisplayName == placeholder)
+                s.StartsAs(placeholder);
         // Build the folder tree the left-hand list binds to. Missing this call
         // (unlike every other tab) left the Scenes list blank on load even
         // though the collection was populated — the detail pane still opened
         // the first scene, which is how the empty list gave itself away.
-        SceneTree.Build(Scenes);
-        SelectedScene = Scenes.FirstOrDefault();
+        // The pack's own only: changes to the game's scenes have a list of
+        // their own under it.
+        SceneTree.Build(Scenes.Where(s => !s.IsGameScene).ToList());
+        RefreshGameScenes();
+        _selectedGameScene = null;
+        OnPropertyChanged(nameof(SelectedGameScene));
+        SelectFirstScene();
+    }
+
+    /// <summary>
+    /// After the list is made again or a scene removed: the pack's first scene,
+    /// else the first change to the game's - picked through the list it is in,
+    /// so the panel never shows one of the game's scenes that their list does
+    /// not have selected (which left the game's list's Remove off, and the
+    /// tab's Remove taking the scene out of everything but that list).
+    /// </summary>
+    private void SelectFirstScene()
+    {
+        var own = Scenes.FirstOrDefault(s => !s.IsGameScene);
+        if (own != null || GameScenes.Count == 0)
+        {
+            LetGoOfGameScene();
+            SelectedScene = own;
+            return;
+        }
+        SelectedGameScene = GameScenes[0];
+    }
+
+    // ── The game's scenes (1.9.0) ────────────────────────────────────
+    //
+    // Changes to scenes the game already has, listed apart from the pack's
+    // own as the Dialogues tab lists changes to the game's conversations: the
+    // pack's are ones it made and can file in folders, these are the game's,
+    // found by where they sit. Still in Scenes as well, which stays the whole
+    // list - keys, the scene options of actions, and saving want every one.
+
+    /// <summary>The pack's changes to the game's scenes.</summary>
+    public ObservableCollection<SceneViewModel> GameScenes { get; } = new();
+
+    /// <summary>Rebuild the list from the whole one.</summary>
+    public void RefreshGameScenes()
+    {
+        foreach (var s in GameScenes) s.PropertyChanged -= GameSceneRenamed;
+        var wanted = Scenes.Where(s => s.IsGameScene).OrderBy(s => s.Display, StringComparer.OrdinalIgnoreCase).ToList();
+        GameScenes.Clear();
+        foreach (var s in wanted) { GameScenes.Add(s); s.PropertyChanged += GameSceneRenamed; }
+        GameSceneChoices.Refresh();
+    }
+
+    /// <summary>
+    /// A change renamed - picking a scene names it after the scene - moves to
+    /// where its new name sorts, as it would stand when the pack is opened
+    /// again. Moved rather than the list made again, so it stays selected.
+    /// </summary>
+    private void GameSceneRenamed(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(SceneViewModel.Display) || sender is not SceneViewModel moved) return;
+        int at = GameScenes.IndexOf(moved);
+        if (at < 0) return;
+        int to = 0;
+        foreach (var other in GameScenes)
+            if (!ReferenceEquals(other, moved) && StringComparer.OrdinalIgnoreCase.Compare(other.Display, moved.Display) <= 0) to++;
+        if (to != at) GameScenes.Move(at, to);
+    }
+
+    private SceneViewModel? _selectedGameScene;
+
+    /// <summary>The change picked in the game's list. Shares the detail pane
+    /// with the tree, since both edit a scene.</summary>
+    public SceneViewModel? SelectedGameScene
+    {
+        get => _selectedGameScene;
+        set
+        {
+            _selectedGameScene = value;
+            OnPropertyChanged();
+            if (value != null)
+            {
+                // The picker's list made for this one BEFORE the panel shows it:
+                // made after, the list still held what the previous one may pick
+                // and not this one's own, while the panel already wrote into
+                // this one - its own pick shown as none, or another's written in.
+                GameSceneChoices.Refresh();
+                SelectedScene = value;
+                // The tree lets go, so coming back to one of the pack's scenes
+                // is a real change rather than a click on a row the control
+                // still thinks is selected.
+                SceneTree.Deselect();
+            }
+        }
+    }
+
+    /// <summary>The game's list lets go when the tree picks one of the pack's.</summary>
+    private void LetGoOfGameScene()
+    {
+        if (_selectedGameScene == null) return;
+        _selectedGameScene = null;
+        OnPropertyChanged(nameof(SelectedGameScene));
+    }
+
+    private string _gameSceneSearch = "";
+
+    /// <summary>What the game's scene picker is narrowed to: words in the
+    /// scene's name, its group, or what shows it.</summary>
+    public string GameSceneSearch
+    {
+        get => _gameSceneSearch;
+        set
+        {
+            if (_gameSceneSearch == (value ?? "")) return;
+            _gameSceneSearch = value ?? "";
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(HasGameSceneSearch));
+            GameSceneChoices.Refresh();
+        }
+    }
+
+    /// <summary>Whether the picker's search box has anything in it (its hint
+    /// shows while it has not).</summary>
+    public bool HasGameSceneSearch => _gameSceneSearch.Length > 0;
+
+    private System.ComponentModel.ICollectionView? _gameSceneChoices;
+
+    /// <summary>
+    /// The game's scenes the picker offers: every one the editor knows, less
+    /// those another change in this pack already takes - two changes to one
+    /// scene would both dress the same object, and the later would win
+    /// silently - narrowed by <see cref="GameSceneSearch"/>, grouped by where
+    /// they sit.
+    /// </summary>
+    public System.ComponentModel.ICollectionView GameSceneChoices
+    {
+        get
+        {
+            if (_gameSceneChoices != null) return _gameSceneChoices;
+            var view = new System.Windows.Data.ListCollectionView(VanillaScenes.All.ToList());
+            view.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription(nameof(VanillaScenes.Scene.Group)));
+            view.Filter = o => o is VanillaScenes.Scene s && OffersGameScene(s);
+            return _gameSceneChoices = view;
+        }
+    }
+
+    private bool OffersGameScene(VanillaScenes.Scene s)
+    {
+        // The one picked in the game's list - set before the panel follows it.
+        var current = _selectedGameScene ?? SelectedScene;
+        if (current?.Model.Source == s.Path) return true;
+        if (Scenes.Any(x => x != current && x.IsGameScene && x.Model.Source == s.Path)) return false;
+        string q = _gameSceneSearch.Trim();
+        if (q.Length == 0) return true;
+        foreach (var word in q.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+            if (s.Path.IndexOf(word, StringComparison.OrdinalIgnoreCase) < 0
+                && !s.ShownBy.Any(b => b.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0))
+                return false;
+        return true;
+    }
+
+    /// <summary>Whether the editor has its catalogue of the game's scenes; the
+    /// tab says so when it does not.</summary>
+    public bool HasGameSceneCatalog => VanillaScenes.All.Count > 0;
+
+    /// <summary>
+    /// A change to one of the game's scenes, with none chosen yet: the picker
+    /// in the panel is where it is chosen. Everything starts as the game's -
+    /// no picture, no frame, its own sound.
+    /// </summary>
+    private void AddGameScene()
+    {
+        string name = NewName("scenes.game.newName");
+        var def = new SceneDef
+        {
+            Source = "",
+            Key = $"scene{Pack.Scenes.Count + 1}",
+            DisplayName = name,
+            Sound = SceneSoundMode.None,
+        };
+        Pack.Scenes.Add(def);
+        var vm = new SceneViewModel(def);
+        vm.StartsAs(name);
+        Scenes.Add(vm);
+        vm.DeriveKeyFromDisplayName(() => Scenes.Select(x => x.Key));
+        GameSceneSearch = "";
+        RefreshGameScenes();
+        RebuildSceneOptions();
+        SelectedGameScene = vm;
+    }
+
+    /// <summary>Drop a change to one of the game's scenes. The scene itself is
+    /// untouched - it was never the pack's.</summary>
+    private void RemoveGameScene()
+    {
+        var doomed = SelectedGameScene;
+        if (doomed == null) return;
+        Pack.Scenes.Remove(doomed.Model);
+        Scenes.Remove(doomed);
+        _selectedGameScene = null;
+        RefreshGameScenes();
+        RebuildSceneOptions();
+        // The next of the game's, so a row of changes can be cleared one after
+        // another; with none left, the pack's own.
+        if (GameScenes.Count > 0) SelectedGameScene = GameScenes[0];
+        else SelectFirstScene();
+    }
+
+    /// <summary>
+    /// A scene just duplicated or pasted, put where it belongs. A change to one
+    /// of the game's scenes goes in their list - with none chosen when this
+    /// pack already changes that scene, so it is a copy of the changes to put
+    /// on another rather than a second change to the same one.
+    /// </summary>
+    private void PlaceNewScene(SceneViewModel vm)
+    {
+        if (vm.IsGameScene)
+        {
+            if (Scenes.Any(x => x != vm && x.IsGameScene && x.Model.Source == vm.Model.Source && !string.IsNullOrEmpty(x.Model.Source)))
+            {
+                vm.Model.Source = "";
+                vm.StartsAs(vm.DisplayName);
+            }
+            RefreshGameScenes();
+            RebuildSceneOptions();
+            SelectedGameScene = vm;
+            return;
+        }
+        SceneTree.PlaceNew(vm);
+        RebuildSceneOptions();
     }
 
     /// <summary>
@@ -8126,6 +8669,17 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         }
         SyncOptions(SceneOptions, sceneOpts);
         SyncOptions(SceneKeyOptions, sceneKeys);
+
+        // The Scene category's list: the same keys, then the game's scenes this
+        // pack does not change (one it changes is there by its key).
+        var changed = new System.Collections.Generic.HashSet<string>(
+            Scenes.Where(s => s.IsGameScene && !string.IsNullOrEmpty(s.Model.Source)).Select(s => s.Model.Source!),
+            StringComparer.Ordinal);
+        var targets = new System.Collections.Generic.List<string>(sceneKeys);
+        foreach (var game in VanillaScenes.All)
+            if (!changed.Contains(game.Path)) targets.Add(game.Path);
+        SyncOptions(SceneTargetOptions, targets);
+        _sceneTargetsLive?.Regroup();
     }
 
     private const string SexyFrame = "SexyFrame.png";
@@ -8160,13 +8714,22 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RemoveScene()
     {
+        if (SelectedGameScene != null && ReferenceEquals(SelectedGameScene, SelectedScene)) { RemoveGameScene(); return; }
         if (SceneTree.RemoveSelectedFolderLiftChildren()) return;
         if (SelectedScene is null) return;
         var vm = SelectedScene;
+        if (vm.IsGameScene)
+        {
+            // One of the game's, however it came to be showing: out of their list
+            // too, not left there as a row of nothing.
+            _selectedGameScene = vm;
+            RemoveGameScene();
+            return;
+        }
         Pack.Scenes.Remove(vm.Model);
         Scenes.Remove(vm);
         SceneTree.RemoveLeafFor(vm);
-        SelectedScene = Scenes.FirstOrDefault();
+        SelectFirstScene();
         RebuildSceneOptions();
     }
 
@@ -8231,8 +8794,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RebindNpcs()
     {
-        Npcs.Clear();
-        foreach (var n in Pack.Npcs) Npcs.Add(new NpcViewModel(n));
+        Refill(Npcs, Pack.Npcs.Select(n => new NpcViewModel(n)));
         WatchKeys(Npcs, () => Npcs.Select(x => x.Key));
         NpcTree.Build(Npcs);
         SelectedNpc = Npcs.FirstOrDefault();
@@ -8798,6 +9360,35 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
                   .Select(p => new SfxPatternOption(p, s.DisplayName, s)))
               .ToList();
 
+    /// <summary>One character a line can name with a <c>{name:key}</c> (1.9.0).</summary>
+    public sealed record NameTokenOption(string Token, string Shown, bool IsGames);
+
+    /// <summary>
+    /// Whom the line editor's name button offers, in three groups: who speaks in
+    /// the conversation open now, then the pack's own characters, then the game's
+    /// (the long list, last). Each once, never the player - their name is
+    /// <c>{PC}</c>.
+    /// </summary>
+    public (IReadOnlyList<NameTokenOption> Speaking, IReadOnlyList<NameTokenOption> Own,
+            IReadOnlyList<NameTokenOption> Games) NameTokenOptions()
+    {
+        static NameTokenOption Of(CharacterViewModel c)
+            => new(SMSModForge.Shared.NameTokens.Make(c.Key), c.Display, c.Model.IsVanillaCharacter);
+        static IReadOnlyList<NameTokenOption> Sorted(IEnumerable<CharacterViewModel> those)
+            => those.OrderBy(c => c.Display, StringComparer.CurrentCultureIgnoreCase).Select(Of).ToList();
+
+        var speaking = (SelectedDialogue?.Nodes ?? Enumerable.Empty<DialogueNodeViewModel>())
+            .Select(n => SpeakerFor(n.Actor))
+            .Where(c => c != null && !c.IsPlayer)
+            .Select(c => c!)
+            .Distinct()
+            .ToList();
+        var taken = new HashSet<CharacterViewModel>(speaking);
+        return (Sorted(speaking),
+                Sorted(Characters.Where(c => !c.IsPlayer && !c.Model.IsVanillaCharacter && !taken.Contains(c))),
+                Sorted(Characters.Where(c => c.Model.IsVanillaCharacter && !taken.Contains(c))));
+    }
+
     /// <summary>The editor made to play an edited sound that is not the one
     /// open in the SFX tab, kept so a second click while it is still reading
     /// plays once.</summary>
@@ -9248,6 +9839,32 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         if (removed == 0) return;
         Undo.Checkpoint();
         Validate();
+    }
+
+    /// <summary>
+    /// Make the change an issue offers (1.9.0): one of the game's characters named
+    /// in a line written as their name token instead. Only in the pack's own words,
+    /// and only when the line still says what Validate read in it - anything else
+    /// is a line edited since, which is the author's and is left alone. One Undo
+    /// step. Validate runs again either way, so the list says what is true now.
+    /// </summary>
+    public bool FixIssue(ValidationIssue issue)
+    {
+        var fix = issue?.Fix;
+        if (fix == null || IsEditingTranslation) return false;
+
+        var node = Dialogues.FirstOrDefault(d => string.Equals(d.Model.Key, fix.Dialogue, StringComparison.Ordinal))?
+                            .Nodes.FirstOrDefault(n => n.Id == fix.Node);
+        string text = node?.Text ?? "";
+        bool same = node != null && fix.Start >= 0 && fix.Start + fix.Was.Length <= text.Length
+                    && string.CompareOrdinal(text, fix.Start, fix.Was, 0, fix.Was.Length) == 0;
+        if (same)
+        {
+            Undo.Checkpoint();
+            node!.Text = text[..fix.Start] + fix.Becomes + text[(fix.Start + fix.Was.Length)..];
+        }
+        Validate();
+        return same;
     }
 
     /// <summary>Hear about everything again.</summary>

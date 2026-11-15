@@ -209,6 +209,8 @@ public class TranslationKeyUseTests
                 used.Add("game.change." + part + "." + where);
         foreach (var q in PreviewQualityManager.All) { used.Add(q.NameKey); used.Add(q.NameKey + ".tip"); }
         foreach (string version in ForgeNotice.VersionsWithNews) used.Add(ForgeNotice.NewsKey(version));
+        foreach (var v in SMSModForge.Model.VanillaGameVariables.All)
+            used.Add(SMSModForge.Model.VanillaVariableHints.TextKeyOf(v.List, v.Name));
         foreach (var k in InputKeys.All) { used.Add(k.Name); used.Add(k.GroupKey); }
         foreach (var (field, option, _) in ChoicesShown()) used.Add(ParamSchema.ChoiceKey(field, option));
         foreach (var type in typeof(MainViewModel).Assembly.GetTypes().Where(t => t.IsEnum))

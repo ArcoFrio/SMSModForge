@@ -28,6 +28,9 @@ modpack BAK.json
 # catalogs, and none of it existed anywhere but one machine. Tracked now.
 __pycache__/
 *.pyc
+# What the research collects from the running game is the game's own text and
+# values: it stays on the machine, as the Gallery's Skeptic runs do.
+Tools/Research/*/runs/
 # One-off conversion / shader-analysis scratch scripts
 _convert_*.py
 _port_scenes.py
@@ -76,3 +79,6 @@ SMSModForge.Tests/obj/
 # what a pack can extend, so the tab works on a fresh clone even unpreviewed.
 SMSModForge/Resources/VanillaOverlays/report.txt
 SMSModForge/Resources/VanillaOverlays/fonts.json
+
+# The game's bugs found by the research: for the game's author first, not the public repo
+Tools/Research/Variables/game-bugs/

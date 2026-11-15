@@ -341,7 +341,15 @@ public sealed class DialogueLinePreview : Control
     /// the token list.</summary>
     public static readonly Brush BracketBrush = Frozen(DialogueLook.BracketHex);
 
-    internal readonly record struct Piece(string Text, DialogueMarkup.Style Style, bool Token, bool Bracketed = false);
+    /// <summary>One stretch of a line as it is drawn. <paramref name="Source"/> is the
+    /// token as written when <paramref name="Text"/> is what it shows instead: a
+    /// <c>{name:key}</c> is drawn as the name (1.9.0).</summary>
+    internal readonly record struct Piece(string Text, DialogueMarkup.Style Style, bool Token, bool Bracketed = false,
+                                          string? Source = null)
+    {
+        /// <summary>The token as written, for whose colour it takes.</summary>
+        public string Written => Source ?? Text;
+    }
 
     /// <summary>
     /// The words the player reads, split where the styling changes.
@@ -372,7 +380,13 @@ public sealed class DialogueLinePreview : Control
             }
             if (span.IsToken)
             {
-                pieces.Add(new Piece(text, span.Style, true, Bracketed(depth, colours, coloursAtOpen)));
+                // A character's name token reads as their name: the editor knows it,
+                // unlike the player's own name or what they call their family. Still
+                // on its chip, so it shows that a name goes there.
+                string? name = DialogueMarkup.NameIn(text);
+                pieces.Add(name != null
+                    ? new Piece(name, span.Style, true, Bracketed(depth, colours, coloursAtOpen), text)
+                    : new Piece(text, span.Style, true, Bracketed(depth, colours, coloursAtOpen)));
                 continue;
             }
 
@@ -545,7 +559,7 @@ public sealed class DialogueLinePreview : Control
     /// markup asked for, or the ordinary white.</summary>
     private static UiColor InkFor(Piece piece)
     {
-        if (piece.Token) return DialogueMarkup.TokenColor?.Invoke(piece.Text) ?? DialogueLook.TokenColor;
+        if (piece.Token) return DialogueMarkup.TokenColor?.Invoke(piece.Written) ?? DialogueLook.TokenColor;
         if (piece.Bracketed) return DialogueLook.BracketColor;
 
         // The game's reading of the value, shared with the Text box so the two

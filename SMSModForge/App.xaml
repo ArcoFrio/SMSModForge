@@ -439,6 +439,16 @@
             <Setter Property="Template" Value="{DynamicResource Theme.TextBoxTemplate}"/>
         </Style>
 
+        <!-- ══ The mask studio's header (1.9.0) ════════════════════════════
+             The bar over the painter inside the main window: the chrome's own
+             fill with a hairline under it here; EX draws its own. -->
+        <Style x:Key="Theme.MaskStudio.Header" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource Theme.Chrome}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Theme.Border}"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="10,6"/>
+        </Style>
+
         <!-- ══ Dropdowns ═══════════════════════════════════════════════════ -->
         <ControlTemplate x:Key="Theme.ComboTemplate" TargetType="ComboBox">
             <Grid>
@@ -466,9 +476,22 @@
                           MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
                         <Border x:Name="DropDownBorder" Background="{DynamicResource Theme.Control}"
                                 BorderBrush="{DynamicResource Theme.Border}" BorderThickness="1" CornerRadius="3"/>
-                        <ScrollViewer SnapsToDevicePixels="True" Margin="1">
-                            <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
-                        </ScrollViewer>
+                        <DockPanel Margin="1">
+                            <!-- On a list of variables only (1.9.0): whether their notes
+                                 are drawn and searched. Not focusable, so ticking it
+                                 leaves the typing where it was and the list open. -->
+                            <Border x:Name="NotesRow" DockPanel.Dock="Top" Padding="6,3,6,3"
+                                    BorderBrush="{DynamicResource Theme.Border}" BorderThickness="0,0,0,1"
+                                    Visibility="{Binding (view:OptionNotes.Kind), RelativeSource={RelativeSource TemplatedParent},
+                                                 Converter={x:Static conv:VariableListToVisibilityConverter.Instance}}">
+                                <CheckBox x:Name="NotesToggle" Focusable="False" FontSize="11"
+                                          Content="{l:T dropdown.variableNotes}" ToolTip="{l:T dropdown.variableNotes.tip}"
+                                          IsChecked="{Binding Show, Source={x:Static view:VariableNotes.Instance}}"/>
+                            </Border>
+                            <ScrollViewer SnapsToDevicePixels="True">
+                                <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
+                            </ScrollViewer>
+                        </DockPanel>
                     </Grid>
                 </Popup>
             </Grid>

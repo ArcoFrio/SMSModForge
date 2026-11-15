@@ -30,6 +30,67 @@ public static class EditorPrefs
     private const string KeySpellCheckNodeText = "spellCheckNodeText";
     private const string KeySmartSuggestions = "smartSuggestions";
 
+    private const string KeyLoadPackOnStart = "loadPackOnStart";
+    private const string KeyLastPack = "lastPack";
+    private const string KeyStartLoadPending = "startLoadPending";
+
+    /// <summary>
+    /// Whether the editor opens the pack it last loaded as it starts (the
+    /// author, 1.9.0: "Load this pack on start"). On until somebody unticks
+    /// it, and then off for every pack until it is ticked again: one setting,
+    /// not one per pack.
+    /// </summary>
+    public static bool LoadPackOnStart
+    {
+        get => GetBool(KeyLoadPackOnStart, defaultValue: true);
+        set => SetBool(KeyLoadPackOnStart, value);
+    }
+
+    /// <summary>The folder of the pack last opened or saved somewhere new; ""
+    /// before any.</summary>
+    public static string LastPack
+    {
+        get => GetString(KeyLastPack, "");
+        set => SetString(KeyLastPack, value ?? "");
+    }
+
+    /// <summary>The pack being opened at start, set just before and cleared
+    /// just after: still set at the next start means the editor did not
+    /// survive opening it, and it is not tried again.</summary>
+    public static string StartLoadPending
+    {
+        get => GetString(KeyStartLoadPending, "");
+        set => SetString(KeyStartLoadPending, value ?? "");
+    }
+
+    private const string KeyMaskStudioSplit = "maskStudioSplit";
+
+    /// <summary>The share of the mask studio's width the canvas takes, beside the
+    /// preview (1.9.0): as the divider was last left, half by default.</summary>
+    public static double MaskStudioSplit
+    {
+        get
+        {
+            double v = GetDouble(KeyMaskStudioSplit, 0.5);
+            return double.IsNaN(v) || v < 0.2 || v > 0.8 ? 0.5 : v;
+        }
+        set => SetDouble(KeyMaskStudioSplit, Math.Clamp(value, 0.2, 0.8));
+    }
+
+    private const string KeyVariableNotes = "variableNotes";
+
+    /// <summary>
+    /// Whether the lists of variables draw what each one is for under its name
+    /// - the game's hints, the pack's descriptions - and let typing search
+    /// those words too (the author, 1.9.0: one toggle for both, on the list
+    /// itself). On by default: the notes are the reason the lists were made.
+    /// </summary>
+    public static bool ShowVariableNotes
+    {
+        get => GetBool(KeyVariableNotes, defaultValue: true);
+        set => SetBool(KeyVariableNotes, value);
+    }
+
     /// <summary>
     /// Whether Save shows the change list for confirmation first. On by
     /// default: the whole point is that an author who doesn't know the feature

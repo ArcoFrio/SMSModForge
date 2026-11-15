@@ -198,7 +198,12 @@ public static class LanguageGuess
         string ownLanguage = Shared.PluralRules.LanguageOf(own ?? "");
         if (!anyOwn && !LittleWords.ContainsKey(ownLanguage)) return null;   // not one we have measured
 
-        var words = Word.Matches(plain.ToLowerInvariant()).Select(m => m.Value.Trim('\'')).Where(w => w.Length > 0).ToList();
+        var words = Word.Matches(plain)
+            // A capital inside a sentence starts a name - "Just Anna I", the game's
+            // "Stardom II" in a Spanish note - and a name is in no language. The
+            // first word of a sentence keeps its say (1.9.0).
+            .Where(m => !char.IsUpper(m.Value.TrimStart('\'').FirstOrDefault()) || StartsSentence(plain, m.Index))
+            .Select(m => m.Value.ToLowerInvariant().Trim('\'')).Where(w => w.Length > 0).ToList();
         if (words.Count < FewestWords) return null;
 
         var score = LittleWords.ToDictionary(l => l.Key, l => words.Count(w => l.Value.Contains(w)));
@@ -213,11 +218,38 @@ public static class LanguageGuess
         return best.Key;
     }
 
+    /// <summary>Whether the word at <paramref name="at"/> opens a sentence: nothing
+    /// but spaces, quotes and brackets between it and the start of the text or a
+    /// full stop, question or exclamation mark, colon or ellipsis.</summary>
+    private static bool StartsSentence(string text, int at)
+    {
+        for (int i = at - 1; i >= 0; i--)
+        {
+            char c = text[i];
+            if (char.IsWhiteSpace(c) || c is '"' or '\'' or '“' or '‘' or '«' or '(' or '[' or '-' or '—') continue;
+            return c is '.' or '!' or '?' or ':' or '…' or '¡' or '¿';
+        }
+        return true;
+    }
+
     // ── Plain words ──────────────────────────────────────────────────
 
     private static readonly Regex Markup = new(@"<[^>]*>|\[[A-Za-z]+:[^\]]*\]|\{[^}]*\}", RegexOptions.Compiled);
 
+    /// <summary>
+    /// Words in quotation marks: somebody else's, so not evidence of the
+    /// language a line is written in. A Spanish note quoting the game's English
+    /// choice - "con 'Nice to meet you Kate.'" - is Spanish (1.9.0, found by the
+    /// shipped notes on the game's variables). An apostrophe inside a word
+    /// ("I'll") does not close a quote.
+    /// </summary>
+    private static readonly Regex Quoted = new(
+        @"(?<!\p{L})'(?:[^'\n]|(?<=\p{L})'(?=\p{L}))+?'(?!\p{L})"
+        + @"|(?<!\p{L})‘(?:[^’\n]|(?<=\p{L})’(?=\p{L}))+?’(?!\p{L})"
+        + @"|""[^""\n]+""|“[^”\n]*”|«[^»\n]*»|「[^」\n]*」|『[^』\n]*』",
+        RegexOptions.Compiled);
+
     /// <summary>The words a player reads, without tags, variables or gaps -
-    /// none of which are in any language.</summary>
-    public static string Plain(string? text) => Markup.Replace(text ?? "", " ");
+    /// none of which are in any language - and without what the line quotes.</summary>
+    public static string Plain(string? text) => Quoted.Replace(Markup.Replace(text ?? "", " "), " ");
 }

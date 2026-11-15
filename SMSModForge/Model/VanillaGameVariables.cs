@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SMSModForge.Model;
@@ -13,7 +13,12 @@ namespace SMSModForge.Model;
 /// (first Global Name List that contains it), so <see cref="VanillaGameVariable.List"/>
 /// here is for display / grouping in the picker, not part of the address. A few
 /// names repeat across lists; <see cref="AllNames"/> de-duplicates them.
-/// Derived from a runtime dump of GlobalNameVariablesManager.
+/// <para/>
+/// Taken from the game itself, in a test copy with no mod but ModForge:
+/// <c>Tools/Research/Variables/collect.ps1</c>, then <c>update_catalog.py</c>.
+/// The first version came from a dump of a game with another mod loaded, and
+/// carried 36 variables that mod created at runtime (an unnamed list of
+/// affection values) while missing 38 of the game's own (1.9.0 fixed both).
 /// </summary>
 public static class VanillaGameVariables
 {
@@ -106,6 +111,7 @@ public static class VanillaGameVariables
         new("shrine-danger-level", "Combat", "Double"),
         new("enemyisblocking", "Combat", "Boolean"),
         new("ddpickup-strikeactive", "Combat", "Boolean"),
+        new("himariblock-cd", "Combat", "Boolean"),
         new("1", "Comments", "Boolean"),
         new("2", "Comments", "Boolean"),
         new("3", "Comments", "Boolean"),
@@ -255,6 +261,7 @@ public static class VanillaGameVariables
         new("gloryhole-cooldown25", "Cooldown2", "Boolean"),
         new("alice-danceclubcd25", "Cooldown2", "Boolean"),
         new("norah-publicpoolcd", "Cooldown2", "Boolean"),
+        new("windowcleaning-weekcd", "Cooldown2", "Boolean"),
         new("Active-Level", "Core", "Double"),
         new("Upcoming-Level", "Core", "Double"),
         new("Special-Fam-Check", "Core", "Boolean"),
@@ -348,6 +355,10 @@ public static class VanillaGameVariables
         new("tutorial-annamood", "Core_3", "Boolean"),
         new("tutorial-annastatus", "Core_3", "Boolean"),
         new("carradio-enabled", "Core_3", "Boolean"),
+        new("SpiritCombat-JustDone26", "Core_3", "Boolean"),
+        new("LastPayout-Purelyvisual", "Core_3", "Double"),
+        new("Tutorial-BigMenuBar", "Core_3", "Boolean"),
+        new("2026-tutorialsenabled", "Core_3", "Boolean"),
         new("Item-Received", "Core_NoSave", "String"),
         new("enter-room-from-hallway", "Core_NoSave", "Boolean"),
         new("new-trait", "Core_NoSave", "String"),
@@ -438,6 +449,8 @@ public static class VanillaGameVariables
         new("scene-after-talk-tempbool", "Core_NoSave3", "Boolean"),
         new("anna-redswimsuitdayactive", "Core_NoSave3", "Boolean"),
         new("RESTART-GAME-INCOMING25", "Core_NoSave3", "Boolean"),
+        new("2026bool-veryshort", "Core_NoSave3", "Boolean"),
+        new("blackscreen-waittime26", "Core_NoSave3", "Double"),
         new("Alice-SexOn", "CoreFinalStates", "Boolean"),
         new("CharlotteFinalStage", "CoreFinalStates", "Boolean"),
         new("cs-riverfinalstage", "CoreFinalStates", "Boolean"),
@@ -878,6 +891,22 @@ public static class VanillaGameVariables
         new("annafuta-firsttime", "Events_11", "Boolean"),
         new("annamegaboobs-firsttime", "Events_11", "Boolean"),
         new("gabrielannashoot-firsttime", "Events_11", "Boolean"),
+        new("himari-spiritfightunlocked", "Events_11", "Boolean"),
+        new("kate-spiritfightunlocked", "Events_11", "Boolean"),
+        new("kate-fight-firsttime", "Events_11", "Boolean"),
+        new("himari-fight-firsttime", "Events_11", "Boolean"),
+        new("spirit-activecomp", "Events_11", "Double"),
+        new("katehimarispirit-firsttalk", "Events_11", "Boolean"),
+        new("himari-poolpossible", "Events_11", "Boolean"),
+        new("casino-license", "Events_11", "Boolean"),
+        new("blackjack-nikki-won", "Events_11", "Double"),
+        new("nikki-met", "Events_11", "Boolean"),
+        new("Himari-Pool-Invited", "Events_11", "Boolean"),
+        new("Himari-Pool-FirstTime", "Events_11", "Boolean"),
+        new("Adrian-Mallquest", "Events_11", "Double"),
+        new("Adrian-mallquest-done", "Events_11", "Boolean"),
+        new("Anna-ComfyDates", "Events_11", "Double"),
+        new("SamKen-StarConSex-Done", "Events_11", "Boolean"),
         new("kate-hang-enabled", "Events_D_3", "Boolean"),
         new("kate-friendzoned", "Events_D_3", "Boolean"),
         new("kate-sex-declined", "Events_D_3", "Boolean"),
@@ -1070,6 +1099,7 @@ public static class VanillaGameVariables
         new("Clay", "Expressions", "Double"),
         new("Robert", "Expressions", "Double"),
         new("Vanessa", "Expressions", "Double"),
+        new("Nikki", "Expressions", "Double"),
         new("1", "Gallery", "Boolean"),
         new("2", "Gallery", "Boolean"),
         new("3", "Gallery", "Boolean"),
@@ -1590,6 +1620,9 @@ public static class VanillaGameVariables
         new("kirbyclay-sliceoflifetalks", "Milking Save", "Double"),
         new("KirbyFirstTimeMilked", "Milking Save", "Boolean"),
         new("kirbyrobertquest", "Milking Save", "Double"),
+        new("bafa-sofiaaccepted", "Milking Save", "Boolean"),
+        new("bafa-cowprint-sofia", "Milking Save", "Boolean"),
+        new("bafa-sofia-firsttimemilked", "Milking Save", "Boolean"),
         new("success", "Minigame", "Double"),
         new("failure", "Minigame", "Double"),
         new("total-clicks", "Minigame", "Double"),
@@ -1620,6 +1653,10 @@ public static class VanillaGameVariables
         new("cd-milked-amelia", "Minigame", "Boolean"),
         new("enableafter-wonminigame", "Minigame", "null"),
         new("enableafter-lostminigame", "Minigame", "null"),
+        new("blackjack-type", "Minigame", "Double"),
+        new("blackjack-cost", "Minigame", "Double"),
+        new("blackjack-win", "Minigame", "Double"),
+        new("Lotteryticketnumber", "Minigame", "Double"),
         new("miniquest-anna-tootight", "Miniquests", "Double"),
         new("tootight-talk-incoming", "Miniquests", "Boolean"),
         new("MINIQUEST-ACTIVE", "Miniquests", "Boolean"),
@@ -1675,6 +1712,7 @@ public static class VanillaGameVariables
         new("short-payout-store", "Payout", "Double"),
         new("give-away-ui-only", "Payout", "Double"),
         new("allstar-triggered", "Payout", "Boolean"),
+        new("subsgiftedbyfans", "Payout", "Double"),
         new("buff-itemgiftedtoday", "Save_BuffsAndStates", "Boolean"),
         new("Buff-Chocolate", "Save_BuffsAndStates", "Boolean"),
         new("nw-traitpoints", "Skill_Tree", "Double"),
@@ -1910,51 +1948,44 @@ public static class VanillaGameVariables
         new("aim-assist", "Main_Menu_Settings", "Boolean"),
         new("rats-killed", "Data_Bestiary", "Double"),
         new("boars-killed", "Data_Bestiary", "Double"),
-        new("Affection_Amber", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Claire", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Anis", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Centi", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Dorothy", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Elegg", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Frima", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Guilty", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Helm", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Maiden", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Mary", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Mast", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Neon", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Pepper", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Rapi", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Rosanna", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Tove", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Sakura", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Viper", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Affection_Yan", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Double"),
-        new("Gift_Beer", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Body-Oil", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Chocolate", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Flowers", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_red-meat", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Wine", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Whiskey", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Action-Figure", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Bikini", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Bonsai-Tree", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Parasol", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Ring", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Shark-Tooth-Necklace", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Sunglasses", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Sunscreen", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
-        new("Gift_Tropical-Flower-Bouquet", "Unknown Asset (ad7b9166-08b6-4228-97b6-f8d46082dd0f)", "Boolean"),
+        new("spirti-katehimari-weekcd", "Cooldown3", "Boolean"),
+        new("lookfornorah-cd", "Cooldown3", "Boolean"),
+        new("lookforvanessa-cd", "Cooldown3", "Boolean"),
+        new("tonygarage-cd", "Cooldown3", "Boolean"),
+        new("evelyn-dailysmollexperi", "Cooldown3", "Boolean"),
     };
 
-    /// <summary>Distinct GNV names (case-insensitive), sorted — what the editor's
-    /// Vanilla variable picker offers, since the address is name-only.</summary>
+    /// <summary>Distinct GNV names, sorted — what the editor's Vanilla variable
+    /// picker offers, since the address is name-only.
+    /// <para/>
+    /// Distinct EXACTLY, capitals and all, because the game tells them apart:
+    /// Game Creator keeps a list's variables in a plain
+    /// <c>Dictionary&lt;string, NameVariable&gt;</c> (<c>NameVariableRuntime</c>,
+    /// read from the game's own assembly, 1.9.0), so <c>mei-corrupted</c> and
+    /// <c>Mei-corrupted</c> are two variables that mean different things, and
+    /// so are <c>black-lingerie</c> and <c>Black-Lingerie</c>. Until 1.9.0 this
+    /// and the lookups below ignored case, so the picker offered one of each
+    /// pair and never the other.</summary>
     public static readonly IReadOnlyList<string> AllNames =
         All.Select(v => v.Name)
-           .Distinct(System.StringComparer.OrdinalIgnoreCase)
+           .Distinct(System.StringComparer.Ordinal)
            .OrderBy(n => n, System.StringComparer.OrdinalIgnoreCase)
+           .ThenBy(n => n, System.StringComparer.Ordinal)
            .ToList();
+
+    /// <summary>
+    /// The game's own spelling of a name typed with other capitals, or empty
+    /// when the name is the game's as it stands or is no name of the game's at
+    /// all. A name with the wrong capitals reaches nothing in the game: this is
+    /// what Validate offers instead.
+    /// </summary>
+    public static string SpelledOtherwise(string? name)
+    {
+        if (string.IsNullOrEmpty(name) || Contains(name!)) return "";
+        foreach (string n in AllNames)
+            if (string.Equals(n, name, System.StringComparison.OrdinalIgnoreCase)) return n;
+        return "";
+    }
 
     /// <summary>
     /// Which Global Name List a variable belongs to, for grouping a picker.
@@ -1971,7 +2002,7 @@ public static class VanillaGameVariables
 
     private static Dictionary<string, string> BuildLists()
     {
-        var made = new Dictionary<string, string>(System.StringComparer.OrdinalIgnoreCase);
+        var made = new Dictionary<string, string>(System.StringComparer.Ordinal);
         foreach (var v in All)
             if (!made.ContainsKey(v.Name)) made[v.Name] = v.List;
         return made;
@@ -1999,14 +2030,14 @@ public static class VanillaGameVariables
 
     private static Dictionary<string, string> BuildTypes()
     {
-        var made = new Dictionary<string, string>(System.StringComparer.OrdinalIgnoreCase);
+        var made = new Dictionary<string, string>(System.StringComparer.Ordinal);
         foreach (var v in All)
             if (!made.ContainsKey(v.Name)) made[v.Name] = v.Type;
         return made;
     }
 
     private static readonly HashSet<string> _names =
-        new(AllNames, System.StringComparer.OrdinalIgnoreCase);
+        new(AllNames, System.StringComparer.Ordinal);
 
     /// <summary>True if <paramref name="name"/> is a known vanilla GNV.</summary>
     public static bool Contains(string name) => !string.IsNullOrEmpty(name) && _names.Contains(name);

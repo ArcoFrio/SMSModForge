@@ -22,6 +22,19 @@ namespace SMSModForge.PackPlugin
         {
             public string Key = "";
             public string DisplayName = "";
+
+            /// <summary>Which of the game's characters this is, by the editor's
+            /// key, or "" for a character of the pack's own. What a new name a
+            /// pack gives the game's character is looked up by (<see cref="NewNames"/>).</summary>
+            public string CastKey = "";
+
+            /// <summary>The name over this speaker's lines: a pack's new name for
+            /// one of the game's characters, the display name otherwise.</summary>
+            public string ShownName
+            {
+                get { return NewNames.NameOf(CastKey) ?? DisplayName; }
+            }
+
             public string DefaultBustKey = "";
             public string CurrentBustKey = "";
 
@@ -80,6 +93,7 @@ namespace SMSModForge.PackPlugin
             {
                 Key = key,
                 DisplayName = (string)actor["displayName"] ?? key,
+                CastKey = NewNames.CastKeyOf(actor),
                 DefaultBustKey = defaultBust ?? "",
             };
             if (!string.IsNullOrEmpty(entry.DefaultBustKey)) entry.OutfitNames.Add(entry.DefaultBustKey);
@@ -144,6 +158,23 @@ namespace SMSModForge.PackPlugin
         /// The pack is asked FIRST and always wins: an author who edited Anna
         /// gets their Anna, and this only answers for the ones they left alone.
         /// </summary>
+        /// <summary>
+        /// Who a <c>{name:key}</c> in this pack names (1.9.0): the pack's own
+        /// character under that key in any capitals - as the editor reads the
+        /// token and Validate checks it, so a token the editor shows as Bella's
+        /// is Bella's in the game too - else <see cref="GetOrNull"/>. The exact
+        /// key first.
+        /// </summary>
+        public ActorEntry ForNameToken(string key)
+        {
+            if (string.IsNullOrEmpty(key)) return null;
+            ActorEntry exact;
+            if (_byKey.TryGetValue(key, out exact)) return exact;
+            foreach (var pair in _byKey)
+                if (string.Equals(pair.Key, key, System.StringComparison.OrdinalIgnoreCase)) return pair.Value;
+            return GetOrNull(key);
+        }
+
         public ActorEntry GetOrNull(string key)
         {
             ActorEntry declared;
@@ -185,6 +216,7 @@ namespace SMSModForge.PackPlugin
             {
                 Key = key,
                 DisplayName = name,
+                CastKey = SMSModForge.Shared.VanillaCastData.KeyFor(name),
                 // The plain one, which is the first for every character that
                 // has several - the same default the editor shows.
                 DefaultBustKey = outfits.Count > 0 ? outfits[0] : "",
@@ -559,9 +591,10 @@ namespace SMSModForge.PackPlugin
         /// The game's busts do not switch faces by name. Each character owns a
         /// number under the <c>Expressions</c> global-name variable asset —
         /// Adrian's is <c>B-Expression</c>, Alice's is <c>goth-expression</c>
-        /// — and every bust on screen carries a trigger that copies its own
-        /// character's number into <c>Currently-Chosen</c>, switches all four
-        /// expression children off and the matching one back on.
+        /// — and nearly every bust with faces carries a trigger that copies a
+        /// character's number (usually its own; see below) into
+        /// <c>Currently-Chosen</c>, switches all four expression children off
+        /// and the matching one back on.
         /// <para/>
         /// That trigger fires on ANY global-name variable change, by anything,
         /// anywhere. So a face switched on by hand lasts exactly until the next
@@ -584,8 +617,19 @@ namespace SMSModForge.PackPlugin
         {
             if (!SMSModForge.Shared.VanillaBustExpressions.Has(entry.CurrentBustKey)) return;
 
+            // The variable THIS bust follows, which is not always the speaker's
+            // (1.9.0): Chloe's busts copy Charlotte's number, Cerise's Anna's,
+            // Nadia's Emma's, and writing the speaker's - or, for Nadia, who has
+            // none, nothing - left the old face to come back at the next variable
+            // write. It moves that other character's face too, as the game's own
+            // lines do. Empty: a bust whose face follows no variable (Robert's,
+            // Clay's), where the caller's activation is all there is.
+            string watched = SMSModForge.Shared.VanillaBustWatches.VariableOf(entry.CurrentBustKey);
+            if (watched != null && watched.Length == 0) return;
+
             var speaker = SMSModForge.Shared.VanillaSpeech.For(entry.Key);
-            if (speaker == null || string.IsNullOrEmpty(speaker.ExpressionVariable)) return;
+            string variable = watched ?? speaker?.ExpressionVariable;
+            if (string.IsNullOrEmpty(variable)) return;
 
             // No expression asked for is the character's ordinary face, which
             // is what zero means — and so is a face the game does not have.
@@ -598,8 +642,29 @@ namespace SMSModForge.PackPlugin
             // the only thing showing. Leaving the number alone instead would
             // have the game paint its own face over the pack's on the next
             // global variable write.
-            int value = goName.Length == 0 ? 0 : speaker.ValueOf(goName);
-            GameVariableBridge.SetDouble(speaker.ExpressionVariable, value < 0 ? 0 : value);
+            //
+            // The numbers are the bust's: its Conditions show child 0 for 1, child
+            // 1 for 2 and so on, which every speaker's own numbers follow (Happy 1,
+            // Angry 2, Sad 3, Flirty 4). A speaker with none of its own (Nadia)
+            // takes those.
+            int value = goName.Length == 0 ? 0
+                      : speaker != null && speaker.ValueOf(goName) >= 0 ? speaker.ValueOf(goName)
+                      : StandardFaceNumber(goName);
+            GameVariableBridge.SetDouble(variable, value < 0 ? 0 : value);
+        }
+
+        /// <summary>The number a game bust shows each standard face by, when the
+        /// speaker table has none for the character.</summary>
+        private static int StandardFaceNumber(string face)
+        {
+            switch (face)
+            {
+                case "Happy": return 1;
+                case "Angry": return 2;
+                case "Sad": return 3;
+                case "Flirty": return 4;
+                default: return 0;
+            }
         }
     }
 }

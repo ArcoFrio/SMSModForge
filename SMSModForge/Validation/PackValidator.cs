@@ -69,6 +69,10 @@ public sealed record ValidationIssue(Severity Severity, string Where, string Mes
     /// the issue shows that language rather than the pack's own words. Empty
     /// for a problem in the pack's own words.</summary>
     public string Language { get; init; } = "";
+
+    /// <summary>A change the editor can make for the author, when they ask for it
+    /// from the issue (1.9.0); null for an issue that only says what is wrong.</summary>
+    public TextFix? Fix { get; init; }
 }
 
 /// <summary>
@@ -460,6 +464,17 @@ public static class PackValidator
             issues.Add(new(Severity.Warning, where, Loc.F(message, "name", value), code));
         }
 
+        // A Scene target is one of the pack's scenes by its key, or (1.9.0) one
+        // of the game's own by where it sits - the editor offers both. One the
+        // game never shows is not in the catalogue, and is warned about too.
+        void SceneRef(string value, string code, string where)
+        {
+            if (Deferred(value)) return;
+            string v = value.Trim();
+            if (scenes.Contains(v) || VanillaScenes.Find(v) != null) return;
+            issues.Add(new(Severity.Warning, where, Loc.F("validation.action.unknownScene", "name", value), code));
+        }
+
         void Action(NodeActionDef a, string where)
         {
             if (a == null) return;
@@ -487,7 +502,7 @@ public static class PackValidator
                 a.Params.TryGetValue("kind", out var kind) &&
                 string.Equals(kind, "Scene", System.StringComparison.OrdinalIgnoreCase) &&
                 a.Params.TryGetValue("target", out var scene))
-                Ref(scene, scenes, "validation.action.unknownScene", "action.unknownScene", aw);
+                SceneRef(scene, "action.unknownScene", aw);
 
             // Animation is a Scenes-category feature, and saying so here is
             // the whole point: the runtime refuses it elsewhere, and an author
@@ -528,6 +543,16 @@ public static class PackValidator
                     Action(n.ActionsOnFinish[i], $"{nw}.actionsOnFinish[{i}]");
             }
         }
+
+        // A condition asking whether a scene is showing names it the same way
+        // (1.9.0; before, nothing checked the scene a condition named at all).
+        foreach (var (c, at) in Services.PackWalk.ConditionsAt(pack))
+            if (c.Type == NodeConditionTypes.GameObjectActive &&
+                c.Params.TryGetValue("kind", out var ckind) &&
+                string.Equals(ckind, "Scene", System.StringComparison.OrdinalIgnoreCase) &&
+                c.Params.TryGetValue("target", out var cscene))
+                SceneRef(cscene, "condition.unknownScene",
+                         string.IsNullOrEmpty(at.Path) ? NodeConditionTypes.GameObjectActive : $"{at.Path}.{c.Type}");
 
         foreach (var r in pack.IntegrationRules)
         {
@@ -572,8 +597,15 @@ public static class PackValidator
         CheckKinWordsInText(issues, pack);
         CheckTextTokens(issues, pack);
         CheckUnitReferences(issues, pack);
-        try { TranslationValidation.Check(issues, pack, packRoot); }
+        // One writing-out of the pack, and one reading of each translation, for
+        // the checks below: each made its own, three of each per Validate (1.9.0).
+        var saved = new SavedPack(pack);
+        try { TranslationValidation.Check(issues, pack, packRoot, saved); }
         catch (System.Exception ex) when (ex is IOException or UnauthorizedAccessException) { /* a file that will not open is not a problem in the pack */ }
+        // The game's characters named in the pack's own words (1.9.0).
+        NameMentions.Check(issues, pack, saved);
+        // Changes to the game's own scenes (1.9.0).
+        GameSceneChecks.Check(issues, pack);
 
         if (string.IsNullOrWhiteSpace(pack.PackId))
             issues.Add(new(Severity.Error, "$.packId", Loc.T("validation.pack.idMissing"), "pack.idMissing"));
@@ -1545,7 +1577,7 @@ public static class PackValidator
             {
                 if (!VanillaGameVariables.Contains(n))
                     issues.Add(new(Severity.Warning, cWhere,
-                        Loc.F("validation.unknownVanillaVariable", "name", n), "condition.unknownVanillaVariable"));
+                        UnknownVanillaText(n), "condition.unknownVanillaVariable"));
             }
             else if (!IsTemplated(n) && !packVarNames.Contains(n))
                 issues.Add(new(Severity.Warning, cWhere,
@@ -1651,7 +1683,7 @@ public static class PackValidator
                 {
                     if (!VanillaGameVariables.Contains(pn))
                         issues.Add(new(Severity.Warning, cWhere,
-                            Loc.F("validation.unknownVanillaVariable", "name", pn), "condition.unknownVanillaVariable"));
+                            UnknownVanillaText(pn), "condition.unknownVanillaVariable"));
                 }
                 else if (!IsTemplated(pn) && !packVarNames.Contains(pn))
                     issues.Add(new(Severity.Warning, cWhere,
@@ -1820,7 +1852,7 @@ public static class PackValidator
                 {
                     if (!VanillaGameVariables.Contains(n))
                         issues.Add(new(Severity.Warning, aWhere,
-                            Loc.F("validation.unknownVanillaVariable", "name", n), "action.unknownVanillaVariable"));
+                            UnknownVanillaText(n), "action.unknownVanillaVariable"));
                 }
                 else if (!IsTemplated(n) && !packVarNames.Contains(n))
                     issues.Add(new(Severity.Warning, aWhere,
@@ -1871,6 +1903,21 @@ public static class PackValidator
     /// </summary>
     private static bool IsTemplated(string name)
         => !string.IsNullOrEmpty(name) && name.IndexOf('{') >= 0 && name.IndexOf('}') > name.IndexOf('{');
+
+    /// <summary>
+    /// What Validate says about a game variable it does not know. A name the
+    /// game has with other capitals gets told so (1.9.0): the game tells
+    /// capitals apart, so <c>Mei-Corrupted</c> reaches nothing, and an author
+    /// reading only "isn't in the catalog" would look for a typo that is not
+    /// there.
+    /// </summary>
+    internal static string UnknownVanillaText(string name)
+    {
+        string spelled = VanillaGameVariables.SpelledOtherwise(name);
+        return spelled.Length > 0
+            ? Loc.F("validation.vanillaVariableCapitals", "name", name, "game", spelled)
+            : Loc.F("validation.unknownVanillaVariable", "name", name);
+    }
 
     /// <summary>
     /// Every NPC placement in a GameObject tree, paired with the slash path of

@@ -181,21 +181,22 @@ public sealed class VanillaMaskPainterTests : IDisposable
                                                         .ButtonBase.ClickEvent));
                 WindowHarness.Pump();
 
-                var opened = Application.Current.Windows.OfType<MaskEditorWindow>().ToList();
-                _out.WriteLine($"painter windows open: {opened.Count}");
-                Assert.Single(opened);
+                // In the main window (1.9.0), on that row.
+                var studio = ((MainWindow)window).CurrentMaskStudio;
+                _out.WriteLine($"studio open: {studio != null}, on the row: {ReferenceEquals(studio?.Host, mask)}");
+                Assert.NotNull(studio);
+                Assert.Same(mask, studio!.Host);
 
-                // ...and a second click raises the one already up rather than
+                // ...and a second click keeps the one already up rather than
                 // starting a second painter on the same mask.
                 painter.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives
                                                        .ButtonBase.ClickEvent));
                 WindowHarness.Pump();
-                Assert.Single(Application.Current.Windows.OfType<MaskEditorWindow>());
+                Assert.Same(studio, ((MainWindow)window).CurrentMaskStudio);
             }
             finally
             {
-                foreach (var w in Application.Current.Windows.OfType<MaskEditorWindow>().ToList())
-                    try { w.Close(); } catch { /* closing is not the test */ }
+                ((MainWindow)window).CurrentMaskStudio?.TryClose();
                 WindowHarness.Pump();
             }
         });

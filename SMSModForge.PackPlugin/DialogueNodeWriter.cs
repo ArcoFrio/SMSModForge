@@ -45,7 +45,9 @@ namespace SMSModForge.PackPlugin
                 return false;
 
             var entry = ctx.Actors == null ? null : ctx.Actors.GetOrNull(actorKey);
-            string shown = entry == null ? null : entry.DisplayName;
+            // A new name another pack gave the game's character counts here too:
+            // every pack is read before any line is built (NewNames).
+            string shown = entry == null ? null : entry.ShownName;
             if (string.IsNullOrEmpty(shown)) shown = actorKey;
 
             var actor = ctx.ActorFactory.GetOrCreate(actorKey, shown);

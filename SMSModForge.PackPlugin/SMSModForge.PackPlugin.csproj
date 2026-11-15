@@ -14,9 +14,9 @@
          reports comes from Shared/ForgeVersion.cs. Kept in step, and listed
          here only so the next person to look for a version finds the note
          rather than believing these. -->
-    <Version>1.8.3</Version>
-    <AssemblyVersion>1.8.3.0</AssemblyVersion>
-    <FileVersion>1.8.3.0</FileVersion>
+    <Version>1.9.0</Version>
+    <AssemblyVersion>1.9.0.0</AssemblyVersion>
+    <FileVersion>1.9.0.0</FileVersion>
     <AssemblyName>SMSModForge.PackPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -68,12 +68,14 @@
       player's game folder. See ReleaseReadinessTests.
     -->
     <Compile Include="ScriptDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="VariableEvidence.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="QuestJournalDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="PhotoSystemDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="LayoutDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="DebugBridge.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="DebugBridgeWorld.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="DebugBridgeTimeline.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="DebugBridgeScenes.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="GameRoomTalks.cs" />
     <Compile Include="QuestRegistry.cs" />
     <Compile Include="QuestRuntime.cs" />
@@ -105,8 +107,11 @@
     <Compile Include="AnimatedSprite.cs" />
     <Compile Include="InputRuntime.cs" />
     <Compile Include="BustFactory.cs" />
+    <Compile Include="LoadedArt.cs" />
     <Compile Include="VanillaBustOverrides.cs" />
     <Compile Include="VanillaVoiceOverrides.cs" />
+    <Compile Include="NewNames.cs" />
+    <Compile Include="GameNameMentions.cs" />
     <Compile Include="MaskTextures.cs" />
     <Compile Include="NpcFactory.cs" />
     <Compile Include="PlaceFactory.cs" />
@@ -152,6 +157,7 @@
     <Compile Include="DialogueDispatcher.cs" />
     <Compile Include="SceneRegistry.cs" />
     <Compile Include="SceneFactory.cs" />
+    <Compile Include="VanillaSceneExtensions.cs" />
     <Compile Include="WallpaperRegistry.cs" />
     <Compile Include="WallpaperFactory.cs" />
     <Compile Include="WallpaperListFit.cs" />
@@ -318,7 +324,12 @@
     <Compile Include="..\Shared\VanillaDialogueKeys.cs" Link="Shared\VanillaDialogueKeys.cs" />
     <Compile Include="..\Shared\VanillaCastData.cs" Link="Shared\VanillaCastData.cs" />
     <Compile Include="..\Shared\VanillaBustExpressions.cs" Link="Shared\VanillaBustExpressions.cs" />
+    <Compile Include="..\Shared\VanillaBustWatches.cs" Link="Shared\VanillaBustWatches.cs" />
     <Compile Include="..\Shared\VanillaSpeech.cs" Link="Shared\VanillaSpeech.cs" />
+    <Compile Include="..\Shared\VanillaCastActors.cs" Link="Shared\VanillaCastActors.cs" />
+    <Compile Include="..\Shared\VanillaNameMentions.cs" Link="Shared\VanillaNameMentions.cs" />
+    <Compile Include="..\Shared\NameStutters.cs" Link="Shared\NameStutters.cs" />
+    <Compile Include="..\Shared\NameTokens.cs" Link="Shared\NameTokens.cs" />
     <Compile Include="..\Shared\PlayerLabel.cs" Link="Shared\PlayerLabel.cs" />
     <Compile Include="..\Shared\SpriteSlotNames.cs" Link="Shared\SpriteSlotNames.cs" />
     <Compile Include="..\Shared\AnimationClock.cs" Link="Shared\AnimationClock.cs" />

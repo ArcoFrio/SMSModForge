@@ -19,19 +19,26 @@ internal static class VariableChecks
 {
     public static void Check(ModPack pack, List<ValidationIssue> issues)
     {
-        var values = VariableValues.Of(pack);
-        Comparisons(pack, values, issues);
+        // One walk of the pack's actions and one of its conditions, shared by
+        // the checks below: each walked the whole pack by reflection, four
+        // walks where two do (1.9.0). The pack does not change while it is
+        // checked, so each check meets the same ones in the same order.
+        var actions = PackWalk.ActionsAt(pack).ToList();
+        var conditions = PackWalk.ConditionsAt(pack).ToList();
+        var values = VariableValues.Of(pack, actions.Select(h => h.Action));
+        Comparisons(pack, values, issues, conditions);
         OutfitBindings(pack, values, issues);
-        PlayDialogues(pack, issues);
-        Travels(pack, issues);
+        PlayDialogues(pack, issues, actions);
+        Travels(pack, issues, actions);
     }
 
     /// <summary>A Travel action naming no place: it goes nowhere, and the game
     /// says so only in its log. A place it names that does not exist is
     /// Validate's level check's, as for every level setting.</summary>
-    private static void Travels(ModPack pack, List<ValidationIssue> issues)
+    private static void Travels(ModPack pack, List<ValidationIssue> issues,
+                                List<(NodeActionDef Action, PackWalk.Spot At)> actions)
     {
-        foreach (var (a, at) in PackWalk.ActionsAt(pack))
+        foreach (var (a, at) in actions)
             if (a.Type == NodeActionTypes.Travel && Get(a.Params ?? new(), "target", "").Trim().Length == 0)
                 issues.Add(new(Severity.Warning, at.Path, Loc.T("validation.action.travel.none"), "action.travelNone"));
     }
@@ -42,12 +49,13 @@ internal static class VariableChecks
     /// game says so only in its log. A name built from a variable is read in
     /// the game, so it is left alone.
     /// </summary>
-    private static void PlayDialogues(ModPack pack, List<ValidationIssue> issues)
+    private static void PlayDialogues(ModPack pack, List<ValidationIssue> issues,
+                                      List<(NodeActionDef Action, PackWalk.Spot At)> actions)
     {
         var dialogues = new HashSet<string>(pack.Dialogues.Where(d => !d.IsVanillaBased).Select(d => d.Key),
                                             StringComparer.OrdinalIgnoreCase);
         HashSet<string>? conversations = null;
-        foreach (var (a, at) in PackWalk.ActionsAt(pack))
+        foreach (var (a, at) in actions)
         {
             if (a.Type != NodeActionTypes.PlayDialogue || a.Params == null) continue;
             bool game = string.Equals(Get(a.Params, "source", "pack"), "vanilla", StringComparison.OrdinalIgnoreCase);
@@ -78,10 +86,11 @@ internal static class VariableChecks
     /// and <c>Swim</c> while every action set it to <c>AnisBase</c>,
     /// <c>AnisSwim</c>... - the moment one ran, she was drawn in no room.
     /// </summary>
-    private static void Comparisons(ModPack pack, VariableValues values, List<ValidationIssue> issues)
+    private static void Comparisons(ModPack pack, VariableValues values, List<ValidationIssue> issues,
+                                    List<(NodeConditionDef Condition, PackWalk.Spot At)> conditions)
     {
         var said = new HashSet<(string, string, string)>();
-        foreach (var (c, at) in PackWalk.ConditionsAt(pack))
+        foreach (var (c, at) in conditions)
         {
             var p = c.Params;
             if (p == null || IsGameVariable(p, "source") || IsGameVariable(p, "valueSource")) continue;

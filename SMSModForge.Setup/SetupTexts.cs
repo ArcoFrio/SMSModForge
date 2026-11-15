@@ -71,6 +71,27 @@ public sealed class SetupTexts
         return Make(Read("en"), code == "en" ? null : Read(code), code);
     }
 
+    /// <summary>
+    /// From the setup itself (1.9.0): the setup.* lines of every language, put in when
+    /// it is built, so a setup that downloads what it installs speaks the player's
+    /// language before it has downloaded anything. Null in a build without them.
+    /// </summary>
+    public static SetupTexts? FromSelf(CultureInfo culture)
+    {
+        var self = typeof(SetupTexts).Assembly;
+        string? Read(string c)
+        {
+            using var stream = self.GetManifestResourceStream("setup.texts." + c + ".txt");
+            if (stream == null) return null;
+            using var reader = new StreamReader(stream);
+            return reader.ReadToEnd();
+        }
+        string? english = Read("en");
+        if (english == null) return null;
+        string code = Pick(culture);
+        return Make(english, code == "en" ? null : Read(code), code);
+    }
+
     /// <summary>From a Languages folder (the installed editor's, beside the
     /// uninstaller; the repository's, in tests).</summary>
     public static SetupTexts FromFolder(string folder, CultureInfo culture)

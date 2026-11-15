@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using SMSModForge.Validation;
@@ -19,8 +21,6 @@ namespace SMSModForge;
 public partial class MainWindow : Window
 {
     // Track mask editors by host (outfit or NPC) so we don't open two for the same one.
-    private readonly Dictionary<OutfitViewModel, MaskEditorWindow> _maskEditors = new();
-    private readonly Dictionary<NpcViewModel, MaskEditorWindow> _npcMaskEditors = new();
 
     public MainWindow()
     {
@@ -92,6 +92,8 @@ public partial class MainWindow : Window
             vm.ShowInfo = (title, message) => MessageBox.Show(this, message, title,
                 MessageBoxButton.OK, MessageBoxImage.Information);
             vm.ShowNotice = ShowNotice;
+            // Another pack, or a new one, asks the mask studio first.
+            vm.LeaveMaskStudio = () => _studio == null || _studio.TryClose();
             vm.CommitEditsInProgress = CommitPendingEdits;
             WatchRenamesThroughFocus();
             vm.ConfirmSave = (changes, packRoot) =>
@@ -158,6 +160,12 @@ public partial class MainWindow : Window
                 new RoutedEventHandler((_, _) => vm.Undo.Checkpoint()), handledEventsToo: true);
 
             WireUpdates(vm);
+
+            // "Load this pack on start" (1.9.0): once the window is up and idle,
+            // so whatever opening the pack has to say - a migration, a pack
+            // from a newer editor - is said over the editor, not before it.
+            Loaded += (_, _) => Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle,
+                                                       new Action(vm.OpenPackOnStart));
         }
         RestoreUiLayout();
 
@@ -932,6 +940,61 @@ public partial class MainWindow : Window
         return menu;
     }
 
+    private void NameToken_Click(object sender, RoutedEventArgs e)
+    {
+        if (NodeTextBox == null) return;
+        var menu = NameTokenMenu(NodeTextBox.InsertionPoint);
+        if (menu == null) return;
+        menu.PlacementTarget = (UIElement)sender;
+        menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+        menu.IsOpen = true;
+    }
+
+    /// <summary>
+    /// The list behind the name button (1.9.0): a character's <c>{name:key}</c>,
+    /// written into the line at <paramref name="at"/>. Who speaks here first, the
+    /// pack's own next, the game's whole cast last and folded away.
+    /// </summary>
+    internal ContextMenu? NameTokenMenu(int at)
+    {
+        if (DataContext is not MainViewModel vm || NodeTextBox == null) return null;
+        var (speaking, own, games) = vm.NameTokenOptions();
+        var menu = new ContextMenu();
+
+        MenuItem Row(MainViewModel.NameTokenOption option)
+        {
+            var row = new StackPanel { Orientation = Orientation.Horizontal };
+            row.Children.Add(new TextBlock { Text = option.Shown, FontWeight = FontWeights.SemiBold, VerticalAlignment = VerticalAlignment.Center });
+            row.Children.Add(new TextBlock { Text = option.Token, Opacity = 0.6, Margin = new Thickness(10, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center });
+            var item = new MenuItem { Header = row, ToolTip = Loc.F("dialogues.nameToken.item.tip", "name", option.Shown) };
+            string token = option.Token;
+            item.Click += (_, _) => NodeTextBox.Insert(token, at);
+            return item;
+        }
+        void Heading(string key)
+            => menu.Items.Add(new MenuItem { Header = Loc.T(key), IsEnabled = false, FontWeight = FontWeights.SemiBold });
+
+        if (speaking.Count > 0)
+        {
+            Heading("dialogues.nameToken.speaking");
+            foreach (var o in speaking) menu.Items.Add(Row(o));
+        }
+        if (own.Count > 0)
+        {
+            if (menu.Items.Count > 0) menu.Items.Add(new Separator());
+            Heading("dialogues.nameToken.own");
+            foreach (var o in own) menu.Items.Add(Row(o));
+        }
+        if (games.Count > 0)
+        {
+            if (menu.Items.Count > 0) menu.Items.Add(new Separator());
+            var all = new MenuItem { Header = Loc.T("dialogues.nameToken.games") };
+            foreach (var o in games) all.Items.Add(Row(o));
+            menu.Items.Add(all);
+        }
+        return menu;
+    }
+
     private void NodeTextBox_ContextMenuOpening(object sender, ContextMenuEventArgs e)
     {
         var box = NodeTextBox;
@@ -1573,6 +1636,10 @@ public partial class MainWindow : Window
     /// </summary>
     protected override void OnClosing(CancelEventArgs e)
     {
+        // An open mask studio is asked first: its strokes are saved, dropped, or
+        // the window stays (1.9.0).
+        if (_studio != null && !_studio.TryClose()) { e.Cancel = true; return; }
+
         // Under the harness, close and touch nothing. Both of the things below
         // reach out of the window and onto the machine of whoever is running
         // the tests: the layout write replaced their pane proportions with the
@@ -1838,6 +1905,22 @@ public partial class MainWindow : Window
         MenuIgnoreCode.ToolTip = issue.Code.Length > 0
             ? Loc.T("issues.ignoreKind.tip")
             : Loc.T("issues.noCode");
+
+        // Only on an issue that carries a change to make.
+        var fixVisibility = issue.Fix != null ? Visibility.Visible : Visibility.Collapsed;
+        MenuFixSeparator.Visibility = fixVisibility;
+        MenuFixIssue.Visibility = fixVisibility;
+        if (issue.Fix != null)
+            MenuFixIssue.Header = Loc.F("home.menuUseNameToken", "token", issue.Fix.Becomes);
+        // The line itself is changed, which means the pack's own words.
+        bool translating = DataContext is MainViewModel { IsEditingTranslation: true };
+        MenuFixIssue.IsEnabled = !translating;
+        MenuFixIssue.ToolTip = Loc.T(translating ? "home.menuUseNameToken.inTranslation" : "home.menuUseNameToken.tip");
+    }
+
+    private void FixIssue_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm && SelectedIssue is { } i) vm.FixIssue(i);
     }
 
     private void IgnoreIssue_Click(object sender, RoutedEventArgs e)
@@ -1882,68 +1965,25 @@ public partial class MainWindow : Window
         if (DataContext is not MainViewModel vm) return;
         var outfit = vm.SelectedOutfit;
         if (outfit is null) return;
-        if (string.IsNullOrWhiteSpace(vm.PackRoot))
-        {
-            MessageBox.Show(this,
-                Loc.T("mask.saveFirst.diffuse"),
-                Loc.T("mask.title"), MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
-        }
-
-        // If one is already open for this outfit, bring it forward.
-        if (_maskEditors.TryGetValue(outfit, out var existing))
-        {
-            existing.Activate();
-            return;
-        }
-
-        var win = new MaskEditorWindow(outfit, vm.PackRoot) { Owner = this };
-        View.WindowOwnership.ReturnFocusToOwner(win);
-        _maskEditors[outfit] = win;
-        win.Closed += (_, _) => _maskEditors.Remove(outfit);
-        win.Show();
+        string who = vm.SelectedCharacter?.Display ?? "";
+        OpenMaskStudio(outfit, Loc.F("maskStudio.title", "name", who.Length > 0 ? who + " - " + outfit.Key : outfit.Key),
+                       Loc.T("maskStudio.kind.bust"), () => BustPreviewFor(vm), "mask.saveFirst.diffuse");
     }
 
     /// <summary>
-    /// The same painter, opened on a jiggle mask a pack is replacing on one of
-    /// the GAME's busts.
-    /// <para/>
-    /// A separate handler rather than a branch inside <see cref="EditMask_Click"/>
-    /// because the host is a different object: the row itself, not the outfit.
-    /// The outfit here belongs to the game and carries none of the pack's art,
-    /// so there is no MaskSprite on it for the painter to read or write — the
-    /// path lives in the override row, which is what gets handed over.
+    /// The same studio, on a jiggle mask a pack is replacing on one of the GAME's
+    /// busts. The host is the override row itself, not the outfit: the outfit here
+    /// belongs to the game and carries none of the pack's art, so the path lives
+    /// in the row.
     /// </summary>
     private void EditOverrideMask_Click(object sender, RoutedEventArgs e)
     {
         if (DataContext is not MainViewModel vm) return;
         if (sender is not Button { DataContext: SpriteOverrideViewModel row }) return;
-        if (string.IsNullOrWhiteSpace(vm.PackRoot))
-        {
-            // Guarded: the harness clicks this button, and an unguarded modal
-            // does not fail a run, it stops one - on the screen of whoever is
-            // running it. See Services.TestMode.
-            if (!Services.TestMode.Active)
-                MessageBox.Show(this,
-                    Loc.T("mask.saveFirst"),
-                    Loc.T("mask.title"), MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
-        }
-
-        if (_overrideMaskEditors.TryGetValue(row, out var existing))
-        {
-            existing.Activate();
-            return;
-        }
-
-        var win = new MaskEditorWindow(row, vm.PackRoot) { Owner = this };
-        View.WindowOwnership.ReturnFocusToOwner(win);
-        _overrideMaskEditors[row] = win;
-        win.Closed += (_, _) => _overrideMaskEditors.Remove(row);
-        win.Show();
+        string who = vm.SelectedCharacter?.Display ?? "";
+        OpenMaskStudio(row, Loc.F("maskStudio.title", "name", who), Loc.T("maskStudio.kind.gameBust"),
+                       () => BustPreviewFor(vm), "mask.saveFirst");
     }
-
-    private readonly Dictionary<SpriteOverrideViewModel, MaskEditorWindow> _overrideMaskEditors = new();
 
     /// <summary>
     /// Put the breathing depth back to what it started at.
@@ -1967,68 +2007,166 @@ public partial class MainWindow : Window
 
     private void EditPlaceSecondaryMask_Click(object sender, RoutedEventArgs e) => OpenPlaceMask(secondary: true);
 
-    /// <summary>
-    /// Open the mask editor on one of the selected place's two masks.
-    /// <para/>
-    /// Keyed by (place, which) rather than by the host object, because the hosts
-    /// are lightweight adapters minted per call — keying on those would open a
-    /// second window every time instead of raising the one already up.
-    /// </summary>
+    /// <summary>The studio on one of the selected place's two masks: the front
+    /// layer's or the one behind it.</summary>
     private void OpenPlaceMask(bool secondary)
     {
         if (DataContext is not MainViewModel vm) return;
         var place = vm.SelectedPlace;
         if (place is null) return;
-        if (string.IsNullOrWhiteSpace(vm.PackRoot))
-        {
-            MessageBox.Show(this,
-                Loc.T("mask.saveFirst.level"),
-                Loc.T("mask.title"), MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
-        }
-
-        var key = (place, secondary);
-        if (_placeMaskEditors.TryGetValue(key, out var existing))
-        {
-            existing.Activate();
-            return;
-        }
-
         var host = secondary ? place.SecondaryMaskHost : place.BaseMaskHost;
-        var win = new MaskEditorWindow(host, vm.PackRoot) { Owner = this };
-        View.WindowOwnership.ReturnFocusToOwner(win);
-        _placeMaskEditors[key] = win;
-        win.Closed += (_, _) => _placeMaskEditors.Remove(key);
-        win.Show();
+        string name = place.DisplayName + " - " + Loc.T(secondary ? "maskStudio.layer.back" : "maskStudio.layer.front");
+        OpenMaskStudio(host, Loc.F("maskStudio.title", "name", name), Loc.T("maskStudio.kind.level"),
+                       () => PlacePreviewFor(vm, place), "mask.saveFirst.level");
     }
-
-    private readonly Dictionary<(PlaceViewModel Place, bool Secondary), MaskEditorWindow> _placeMaskEditors = new();
 
     private void EditNpcMask_Click(object sender, RoutedEventArgs e)
     {
         if (DataContext is not MainViewModel vm) return;
         var npc = vm.SelectedNpc;
         if (npc is null) return;
+        OpenMaskStudio(npc, Loc.F("maskStudio.title", "name", npc.Display), Loc.T("maskStudio.kind.bust"),
+                       () => NpcPreviewFor(vm), "mask.saveFirst.diffuse");
+    }
+
+    // ── The mask studio (1.9.0) ──────────────────────────────────────────
+    //
+    // One at a time, in place of the tabs. The tabs are collapsed while it is
+    // open, and every preview in them stops drawing on its own when it is no
+    // longer visible - the bust's, the NPC's and the place's - so the only live
+    // preview is the studio's.
+
+    private MaskStudio? _studio;
+    private Visibility _languageBarWas = Visibility.Visible;
+
+    /// <summary>The studio open now, or null - for tests.</summary>
+    internal MaskStudio? CurrentMaskStudio => _studio;
+
+    private void OpenMaskStudio(IMaskEditorHost host, string title, string subtitle,
+                                Func<FrameworkElement> preview, string saveFirstKey)
+    {
+        if (DataContext is not MainViewModel vm) return;
         if (string.IsNullOrWhiteSpace(vm.PackRoot))
         {
-            MessageBox.Show(this,
-                Loc.T("mask.saveFirst.diffuse"),
-                Loc.T("mask.title"), MessageBoxButton.OK, MessageBoxImage.Information);
+            if (!Services.TestMode.Active)
+                MessageBox.Show(this, Loc.T(saveFirstKey), Loc.T("mask.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
-
-        // If one is already open for this NPC, bring it forward.
-        if (_npcMaskEditors.TryGetValue(npc, out var existing))
+        if (_studio != null)
         {
-            existing.Activate();
-            return;
+            if (ReferenceEquals(_studio.Host, host)) { _studio.Focus(); return; }
+            if (!_studio.TryClose()) return;
         }
+        CommitPendingEdits();
 
-        var win = new MaskEditorWindow(npc, vm.PackRoot) { Owner = this };
-        View.WindowOwnership.ReturnFocusToOwner(win);
-        _npcMaskEditors[npc] = win;
-        win.Closed += (_, _) => _npcMaskEditors.Remove(npc);
-        win.Show();
+        var studio = new MaskStudio(host, vm.PackRoot!, title, subtitle, preview());
+        studio.Closed += (_, _) => PutTheTabsBack(studio);
+        _studio = studio;
+        _languageBarWas = EditingLanguageBar.Visibility;
+        EditingLanguageBar.Visibility = Visibility.Collapsed;
+        MainTabs.Visibility = Visibility.Collapsed;
+        MaskStudioHost.Content = studio;
+        MaskStudioHost.Visibility = Visibility.Visible;
+    }
+
+    private void PutTheTabsBack(MaskStudio studio)
+    {
+        if (!ReferenceEquals(_studio, studio)) return;
+        _studio = null;
+        LetGoOfThePreviews(studio);
+        MaskStudioHost.Content = null;
+        MaskStudioHost.Visibility = Visibility.Collapsed;
+        MainTabs.Visibility = Visibility.Visible;
+        EditingLanguageBar.Visibility = _languageBarWas;
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(KeepTabsClearOfLanguage));
+    }
+
+    /// <summary>
+    /// A closed studio's previews let go of what they showed. Each watches its
+    /// record - an outfit's paths, an NPC's, a place's buttons and NPCs - and a
+    /// studio is made anew every time, so one left watching would go on
+    /// reloading pictures for a preview nobody will see again, once more per
+    /// studio opened. Their bindings cleared, each is told its record is gone
+    /// and takes its handlers off it.
+    /// </summary>
+    private static void LetGoOfThePreviews(DependencyObject root)
+    {
+        var stack = new Stack<DependencyObject>();
+        stack.Push(root);
+        while (stack.Count > 0)
+        {
+            var at = stack.Pop();
+            if (at is JigglePreview or NpcPreview or PlacePreview)
+            {
+                BindingOperations.ClearAllBindings(at);
+                ((FrameworkElement)at).DataContext = null;
+                continue;
+            }
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(at); i++) stack.Push(VisualTreeHelper.GetChild(at, i));
+        }
+    }
+
+    /// <summary>A preview on the studio's dark plate, resizable from its corner
+    /// and remembered (its own size, not the tab's).</summary>
+    private static FrameworkElement Framed(FrameworkElement preview, string key)
+        => new PreviewFrame
+        {
+            Key = key,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Preview = new Border
+            {
+                Background = new SolidColorBrush(Color.FromRgb(0x22, 0x22, 0x22)),
+                Padding = new Thickness(4), ClipToBounds = true, Child = preview,
+                HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top,
+            },
+        };
+
+    private static Binding From(MainViewModel vm, string path) => new(path) { Source = vm, Mode = BindingMode.OneWay };
+
+    /// <summary>The bust as the Characters tab shows it, breathing and blinking so
+    /// the mask has something to move.</summary>
+    private FrameworkElement BustPreviewFor(MainViewModel vm)
+    {
+        var p = new JigglePreview { Breathing = true, Blinking = true, BreathingAmplitude = BreathingDepthDefault,
+                                    Margin = new Thickness(0, 12, 0, -20) };
+        p.SetBinding(JigglePreview.OutfitProperty, From(vm, nameof(MainViewModel.SelectedOutfit)));
+        p.SetBinding(JigglePreview.VanillaBustKeyProperty, From(vm, nameof(MainViewModel.VanillaPreviewBustKey)));
+        p.SetBinding(JigglePreview.PackRootProperty, From(vm, nameof(MainViewModel.PackRoot)));
+        return Framed(p, "maskStudio.bust");
+    }
+
+    private FrameworkElement NpcPreviewFor(MainViewModel vm)
+    {
+        var p = new NpcPreview();
+        p.SetBinding(NpcPreview.NpcProperty, From(vm, nameof(MainViewModel.SelectedNpc)));
+        p.SetBinding(NpcPreview.PackRootProperty, From(vm, nameof(MainViewModel.PackRoot)));
+        return Framed(p, "maskStudio.npc");
+    }
+
+    /// <summary>The place as the Places tab shows it, its shaders on: what a level
+    /// mask does is only seen through them.</summary>
+    private FrameworkElement PlacePreviewFor(MainViewModel vm, PlaceViewModel place)
+    {
+        var p = new PlacePreview { DataContext = place, Shaders = true, ParallaxPreview = false,
+                                   DimUnderInactiveParent = true, DimInactive = true };
+        void Bind(DependencyProperty dp, string path) => p.SetBinding(dp, new Binding(path) { Mode = BindingMode.OneWay });
+        p.SetBinding(PlacePreview.PackRootProperty, From(vm, nameof(MainViewModel.PackRoot)));
+        p.SetBinding(PlacePreview.NpcCatalogProperty, From(vm, nameof(MainViewModel.Npcs)));
+        Bind(PlacePreview.BaseSpriteProperty, nameof(PlaceViewModel.BaseSprite));
+        Bind(PlacePreview.SecondarySpriteProperty, nameof(PlaceViewModel.SecondarySprite));
+        Bind(PlacePreview.MaskSpriteProperty, nameof(PlaceViewModel.MaskSprite));
+        Bind(PlacePreview.SecondaryMaskSpriteProperty, nameof(PlaceViewModel.SecondaryMaskSprite));
+        Bind(PlacePreview.LiveMaskBgraProperty, nameof(PlaceViewModel.LiveBaseMask));
+        Bind(PlacePreview.LiveSecondaryMaskBgraProperty, nameof(PlaceViewModel.LiveSecondaryMask));
+        Bind(PlacePreview.ButtonsProperty, nameof(PlaceViewModel.NavigatorButtons));
+        Bind(PlacePreview.GameObjectsProperty, nameof(PlaceViewModel.GameObjects));
+        Bind(PlacePreview.LevelArtOrderProperty, nameof(PlaceViewModel.BaseSortingOrder));
+        Bind(PlacePreview.LevelArtSecondaryOrderProperty, nameof(PlaceViewModel.SecondarySortingOrder));
+        Bind(PlacePreview.LevelParallaxProperty, nameof(PlaceViewModel.ParallaxStrength));
+        Bind(PlacePreview.LevelParallaxSecondaryProperty, nameof(PlaceViewModel.ParallaxSecondaryStrength));
+        Bind(PlacePreview.LevelParallaxReversedProperty, nameof(PlaceViewModel.ParallaxReversed));
+        Bind(PlacePreview.LevelParallaxSecondaryReversedProperty, nameof(PlaceViewModel.ParallaxSecondaryReversed));
+        return p;
     }
 
     /// <summary>
@@ -2064,6 +2202,13 @@ public partial class MainWindow : Window
     /// speakers since the Actors tab was folded in, and the button never made
     /// the move — the Characters tab was left with a hex box and a swatch.
     /// </summary>
+    /// <summary>Leaving an emptied name box on one of the game's characters
+    /// shows their own name again: empty means no new name.</summary>
+    private void CharacterNameBox_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
+    {
+        if (sender is System.Windows.Controls.TextBox { DataContext: CharacterViewModel ch }) ch.ForgetTyping();
+    }
+
     private void PickCharacterColor_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not System.Windows.Controls.Button { DataContext: CharacterViewModel ch }) return;
@@ -2855,7 +3000,9 @@ public partial class MainWindow : Window
             }
             case "scenes":
                 MainTabs.SelectedIndex = TabScenes;
-                SelectUnit(vm.Scenes.FirstOrDefault(x => x.Key == inner), vm.SceneTree, v => vm.SelectedScene = v, field);
+                // A change to one of the game's scenes is in their own list, not the tree.
+                SelectUnit(vm.Scenes.FirstOrDefault(x => x.Key == inner), vm.SceneTree,
+                           v => { if (v.IsGameScene) vm.SelectedGameScene = v; else vm.SelectedScene = v; }, field);
                 break;
             case "npcs":
             {

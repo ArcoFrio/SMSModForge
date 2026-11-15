@@ -5,9 +5,9 @@
     <!-- One source of truth for the version. The About line and the title
          bar read it back off the assembly, so they cannot drift from what
          was actually built. -->
-    <Version>1.8.3</Version>
-    <AssemblyVersion>1.8.3.0</AssemblyVersion>
-    <FileVersion>1.8.3.0</FileVersion>
+    <Version>1.9.0</Version>
+    <AssemblyVersion>1.9.0.0</AssemblyVersion>
+    <FileVersion>1.9.0.0</FileVersion>
     <Product>SMSModForge</Product>
     <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>SMSModForge</RootNamespace>
@@ -248,6 +248,17 @@
       <Link>VanillaDialogues\Dialogues\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <!-- The game's scenes a pack can extend (1.9.0), each with a half-size
+         picture to know it by: Tools/Scenes/make_scene_catalog.py, from a dump
+         of the running game. Scenes the game never shows are not in it. -->
+    <Content Include="Resources\VanillaScenes\index.json">
+      <Link>VanillaScenes\index.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\VanillaScenes\Thumbs\*.jpg">
+      <Link>VanillaScenes\Thumbs\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -276,7 +287,13 @@
     <Compile Include="..\Shared\VanillaDialogueKeys.cs" Link="Shared\VanillaDialogueKeys.cs" />
     <Compile Include="..\Shared\VanillaCastData.cs" Link="Shared\VanillaCastData.cs" />
     <Compile Include="..\Shared\VanillaBustExpressions.cs" Link="Shared\VanillaBustExpressions.cs" />
+    <Compile Include="..\Shared\VanillaBustWatches.cs" Link="Shared\VanillaBustWatches.cs" />
     <Compile Include="..\Shared\VanillaSpeech.cs" Link="Shared\VanillaSpeech.cs" />
+    <Compile Include="..\Shared\VanillaCastActors.cs" Link="Shared\VanillaCastActors.cs" />
+    <Compile Include="..\Shared\VanillaNameMentions.cs" Link="Shared\VanillaNameMentions.cs" />
+    <Compile Include="..\Shared\VanillaNameWords.cs" Link="Shared\VanillaNameWords.cs" />
+    <Compile Include="..\Shared\NameStutters.cs" Link="Shared\NameStutters.cs" />
+    <Compile Include="..\Shared\NameTokens.cs" Link="Shared\NameTokens.cs" />
     <Compile Include="..\Shared\PlayerLabel.cs" Link="Shared\PlayerLabel.cs" />
     <Compile Include="..\Shared\SpriteSlotNames.cs" Link="Shared\SpriteSlotNames.cs" />
     <Compile Include="..\Shared\AnimationClock.cs" Link="Shared\AnimationClock.cs" />

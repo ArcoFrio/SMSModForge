@@ -28,6 +28,26 @@ public sealed class DialogueNodeViewModel : ObservableObject
     public ObservableCollection<NodeActionViewModel> ActionsOnFinish { get; }
     public ObservableCollection<NodeConditionViewModel> Conditions { get; }
 
+    /// <summary>
+    /// Names raised only right after the field they are drawn from, in that
+    /// field's own setter, with the model already changed: the field's own
+    /// notification has asked every question there is to ask again, so these
+    /// ask none (1.9.0: one keystroke in a line was re-asking whether the
+    /// conversation changed a dozen times). A name that is ever raised on its
+    /// own - Display, the speaker's, ShownPreview (a sound changed) - is not one.
+    /// </summary>
+    internal static bool AlwaysFollowsItsField(string? name) => name switch
+    {
+        nameof(TextPreview) or nameof(TextIsThePacks)          // Text
+            or nameof(IndentMargin)                           // Depth
+            or nameof(KindGlyph)                              // Kind, IsChoiceChild
+            or nameof(HasTag) or nameof(ShowsTag)             // Tag
+            or nameof(IsTimeout)                              // Duration
+            or nameof(IsJump)                                 // JumpMode
+            or nameof(OutfitFromVariable) or nameof(UsesOutfitVariable) => true,   // Outfit
+        _ => false,
+    };
+
     public DialogueNodeViewModel(DialogueNodeDef model)
     {
         Model = model;
@@ -42,7 +62,8 @@ public sealed class DialogueNodeViewModel : ObservableObject
                 || e.PropertyName == nameof(ChangedFieldsText)
                 || e.PropertyName == nameof(ResettableFields)
                 || e.PropertyName == nameof(IsAddedLine)
-                || e.PropertyName == nameof(ResetTooltip)) return;
+                || e.PropertyName == nameof(ResetTooltip)
+                || AlwaysFollowsItsField(e.PropertyName)) return;
             OnPropertyChanged(nameof(IsChangedFromVanilla));
             OnPropertyChanged(nameof(ChangedFieldsText));
             OnPropertyChanged(nameof(ResettableFields));

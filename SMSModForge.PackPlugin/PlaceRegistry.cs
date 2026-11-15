@@ -63,6 +63,23 @@ namespace SMSModForge.PackPlugin
                 if (kv.Key.StartsWith("pack:")) yield return kv.Value;
         }
 
+        private static Transform _level5;
+
+        /// <summary>
+        /// The game's <c>5_Levels</c>, kept while it is alive and active (1.9.0):
+        /// GameObject.Find walks the whole scene, and level conditions asked for
+        /// it every frame. Find only ever finds an active object, so one kept that
+        /// is gone or switched off is looked for again - the same answer as
+        /// asking each time, the game having one <c>5_Levels</c>.
+        /// </summary>
+        public static Transform Level5()
+        {
+            if (_level5 != null && _level5.gameObject.activeInHierarchy) return _level5;
+            var go = GameObject.Find("5_Levels");
+            _level5 = go != null ? go.transform : null;
+            return _level5;
+        }
+
         public static Entry Resolve(string token, string thisPackId, Transform level5Root)
         {
             if (string.IsNullOrEmpty(token)) return null;

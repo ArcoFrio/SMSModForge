@@ -86,23 +86,28 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         public static PackManifest TryLoadFromArchive(PackArchive archive, ManualLogSource logger)
         {
-            string text = archive.ReadText(PackArchive.ManifestEntryName);
-            if (text == null)
+            // Parsed already while the archive was opened, the same text the
+            // same way: taken rather than parsed twice (1.9.0).
+            JObject root = archive.TakeManifest();
+            if (root == null)
             {
-                logger?.LogError("[SMSModForge.PackPlugin] PackArchive '" + archive.SourcePath +
-                                 "' missing " + PackArchive.ManifestEntryName + ".");
-                archive.Dispose();
-                return null;
-            }
+                string text = archive.ReadText(PackArchive.ManifestEntryName);
+                if (text == null)
+                {
+                    logger?.LogError("[SMSModForge.PackPlugin] PackArchive '" + archive.SourcePath +
+                                     "' missing " + PackArchive.ManifestEntryName + ".");
+                    archive.Dispose();
+                    return null;
+                }
 
-            JObject root;
-            try { root = JObject.Parse(text); }
-            catch (System.Exception ex)
-            {
-                logger?.LogError("[SMSModForge.PackPlugin] Bad JSON in '" + archive.SourcePath +
-                                 "': " + ex.Message);
-                archive.Dispose();
-                return null;
+                try { root = JObject.Parse(text); }
+                catch (System.Exception ex)
+                {
+                    logger?.LogError("[SMSModForge.PackPlugin] Bad JSON in '" + archive.SourcePath +
+                                     "': " + ex.Message);
+                    archive.Dispose();
+                    return null;
+                }
             }
 
             string packId = (string)root["packId"] ?? archive.PackId;
@@ -116,7 +121,7 @@ namespace SMSModForge.PackPlugin
             // so a pack played in Chinese is scanned as Chinese — and asked of
             // the manifest rather than of the player's language, because what a
             // pack is written in has nothing to do with what the player set.
-            try { PluginFonts.AddForText(manifest.Root.ToString(), packId, logger); }
+            try { PluginFonts.AddForText(SMSModForge.Shared.TextScripts.WideLettersOf(manifest.Root), packId, logger); }
             catch (System.Exception ex)
             {
                 logger?.LogWarning("[SMSModForge.PackPlugin] Fonts: " + packId

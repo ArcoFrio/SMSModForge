@@ -51,13 +51,20 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
             PropertyChanged += (_, e) =>
             {
                 if (e.PropertyName == nameof(ChangedTag)
-                    || e.PropertyName == nameof(HasChangedTag)) return;
+                    || e.PropertyName == nameof(HasChangedTag)
+                    || ChangesNothingSaved(e.PropertyName)) return;
                 RefreshTag();
             };
             // A sprite path, a jiggle number, a replaced texture: all of them
             // are changes to the CHARACTER as far as the manifest is concerned,
             // and the modified tag sits on the character's row.
-            PropertyChanged += (_, _) => owner.RefreshModified();
+            PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(ChangedTag)
+                    || e.PropertyName == nameof(HasChangedTag)
+                    || ChangesNothingSaved(e.PropertyName)) return;
+                owner.RefreshModified();
+            };
         }
     }
 
@@ -425,7 +432,28 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
         OnPropertyChanged(nameof(CanCopyFromDefaultOutfit));
         OnPropertyChanged(nameof(CanBorrowFromGameDefault));
         OnPropertyChanged(nameof(CanUseDefaultParts));
+        // Once, rather than once for each name above (see ChangesNothingSaved).
+        RefreshTag();
     }
+
+    /// <summary>
+    /// Names that change nothing a pack saves, or only re-ask questions after
+    /// a change that has asked them already: whether the row is filtered in or
+    /// open, the painter's buffer, and the default outfit's buttons (re-asked
+    /// together by <see cref="RefreshDefaultOutfit"/>, which re-reads the tag
+    /// once, and the character the modified mark once). Each of them
+    /// re-compared the whole character with the game's, twice - per outfit, per
+    /// keystroke in the search box or in a new outfit's name, per brush stamp
+    /// (1.9.0).
+    /// </summary>
+    private static bool ChangesNothingSaved(string? name) => name switch
+    {
+        nameof(IsFilteredIn) or nameof(IsExpanded)
+            or nameof(LiveMaskBgra) or nameof(LiveMaskRevision)
+            or nameof(DefaultOutfit) or nameof(IsDefaultOutfit) or nameof(CanCopyFromDefaultOutfit)
+            or nameof(CanBorrowFromGameDefault) or nameof(CanUseDefaultParts) => true,
+        _ => false,
+    };
 
     public string GameObjectName
     {
@@ -676,7 +704,7 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
         set => MaskSprite = value;
     }
 
-    // ── Live mask under edit (shared with MaskEditorWindow)
+    // ── Live mask under edit (shared with the mask studio)
 
     private byte[]? _liveMaskBgra;
     /// <summary>

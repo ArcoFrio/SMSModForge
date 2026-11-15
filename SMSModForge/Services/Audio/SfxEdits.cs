@@ -314,16 +314,15 @@ public static class SfxEdits
         var stale = new List<string>();
         if (string.IsNullOrWhiteSpace(savedManifest)) return stale;
 
-        JObject saved;
-        try { saved = JObject.Parse(savedManifest); }
-        catch (JsonException) { return stale; }
+        var lists = SoundListsOf(savedManifest);
+        if (lists == null) return stale;
 
         var inUse = Sounds(pack).SelectMany(s => new[] { s.Path(), s.Edit?.Source ?? "" })
                         .Where(p => !string.IsNullOrEmpty(p))
                         .ToHashSet(StringComparer.OrdinalIgnoreCase);
-        foreach (string list in new[] { "sfx", "music" })
+        foreach (var listed in new[] { lists.Value.Sfx, lists.Value.Music })
         {
-            if (saved[list] is not JArray sounds) continue;
+            if (listed is not JArray sounds) continue;
             foreach (var s in sounds.OfType<JObject>())
             {
                 if (s["edit"] is not JObject edit) continue;
@@ -341,6 +340,48 @@ public static class SfxEdits
             }
         }
         return stale;
+    }
+
+    /// <summary>
+    /// The manifest's <c>sfx</c> and <c>music</c>, as <see cref="JObject.Parse(string)"/>
+    /// would give them - or null where it would fail - reading everything else
+    /// past rather than building it (1.9.0): every save parsed the whole saved
+    /// manifest, megabytes on a large pack, for these two lists. The same reader
+    /// reads every token either way, so a manifest it cannot read is one this
+    /// cannot either; a name given twice keeps its last, as Parse does.
+    /// </summary>
+    internal static (JToken? Sfx, JToken? Music)? SoundListsOf(string json)
+    {
+        JToken? sfx = null, music = null;
+        try
+        {
+            using var reader = new JsonTextReader(new StringReader(json));
+            if (!reader.Read()) return null;
+            while (reader.TokenType == JsonToken.Comment)
+                if (!reader.Read()) return null;
+            if (reader.TokenType != JsonToken.StartObject) return null;
+
+            while (true)
+            {
+                if (!reader.Read()) return null;                          // ended inside the object
+                if (reader.TokenType == JsonToken.EndObject) break;
+                if (reader.TokenType == JsonToken.Comment) continue;
+                if (reader.TokenType != JsonToken.PropertyName) return null;
+                string name = (string)reader.Value!;
+                if (!reader.Read()) return null;
+                while (reader.TokenType == JsonToken.Comment)
+                    if (!reader.Read()) return null;
+                if (name == "sfx") sfx = JToken.ReadFrom(reader);
+                else if (name == "music") music = JToken.ReadFrom(reader);
+                else reader.Skip();
+            }
+
+            // After the object only comments may follow, as Parse requires.
+            while (reader.Read())
+                if (reader.TokenType != JsonToken.Comment) return null;
+        }
+        catch (JsonException) { return null; }
+        return (sfx, music);
     }
 
     /// <summary>

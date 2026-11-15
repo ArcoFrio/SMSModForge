@@ -1,5 +1,314 @@
 # Changelog
 
+## 1.9.0
+
+Every one of the game's variables now says what it does, and yours show their
+descriptions the same way. You can change the game's own scenes and show or
+hide any of them from your actions, give the game's characters new names that
+follow them everywhere, and ModForge opens your last pack as it starts. The
+mask painter now sits inside the main window beside a live preview, with a
+soften brush, mirror painting and single-layer copying. Saving, Validate and
+opening a pack are faster, and in the game packs load faster and use less
+memory. The installer is about 1 MB now and downloads the rest.
+
+### Before you update
+
+- **Players need this version of the plugin for the game's scenes and
+  characters' new names.** Changing one of the game's scenes, showing, hiding
+  or asking about one from your actions and conditions, and giving one of the
+  game's characters a new name all need the 1.9.0 plugin. An older one leaves
+  the game's scene as it is (or, if you gave it a picture, adds it as a scene
+  of the pack's own), does nothing for an action aimed at one, and shows the
+  character's old name.
+
+### New
+
+- **Every one of the game's variables now says what it does.** Open the
+  variable list on a condition, an action or a quest counter set to the game's
+  variables, and under each name is a short note: what it means in the game,
+  when the game changes it, and what must happen first. Type a few words of
+  what you are after ("yacht", "first kiss", "money") and the list finds the
+  variables whose note says so, not only those whose name does. Each note was
+  researched in the game itself: every place that sets, reads or shows the
+  variable was taken from the running game, a second pass tried to prove each
+  note wrong, and what they disagreed on was settled from the game's files or
+  measured in the game. A note worked out with a step the files do not show
+  outright ends in "(inferred)". The 288 variables the game never uses say so.
+
+- **Your own variables show their description the same way.** Whatever you
+  wrote in a variable's Description on the Variables tab now appears under its
+  name in every list of your variables: a Variable condition or action, a list
+  to add to or pick from, "when it ends, set", a quest counter, a rule's
+  "Repeat for each", a line's outfit. Typing a few of its words finds it, as
+  with the game's. A variable with no description is just its name, and a
+  description longer than a few lines is cut short in the list (the Variables
+  tab keeps all of it). An edit shows up the next time a list opens.
+
+- **ModForge opens your last pack as it starts.** "Load this pack on start",
+  in the File menu and on the ModForge tab, is on once you have loaded a pack:
+  the next time ModForge starts, it opens the pack you last loaded. Untick it
+  and it stays off, for every pack, until you tick it again. It can only be
+  changed with a pack open. If the pack has moved, ModForge says so and starts
+  empty; and if ModForge ever closes while opening it at start, it does not
+  try that pack again on the next start, so you are never locked out.
+
+- **Hide the notes when you want a plain list.** Every open list of variables,
+  the game's or yours, now starts with a "Show notes" tick box. Untick it and
+  the list is names only, and typing matches names only; tick it again for
+  the notes and their search. The editor remembers your choice for every list
+  of variables.
+
+- **The game's art says why it looks softer than yours.** Under the Scenes
+  tab's preview of one of the game's scenes, the Characters tab's preview of
+  one of the game's busts, and the preview of one of the game's levels, a
+  small note says that the editor carries reduced copies of the game's art, at
+  what resolution, and why: to keep its download small and not hand out the
+  game's pictures. Your own art is always shown as it is.
+
+- **Give one of the game's characters a new name.** The name box on the
+  Characters tab now takes one for the game's characters too: type it over the
+  game's name, and it is shown over every line they speak, in the game's own
+  scenes and in every pack's, in their own name colour. Reset (or emptying the
+  box) gives them the game's name back. A character of a pack's own who happens
+  to share the name is somebody else, and keeps it. When two packs rename the
+  same character, the one loaded later is shown, as with name colours. An
+  editor or plugin older than this one ignores the new name and shows the
+  game's. Checked in the game.
+
+  The game's own words follow it too: its lines and choices, its quests'
+  titles, paragraphs and tasks, and the texts on its screens, wherever they
+  name that character (2,203 places across the game). Each place was found in
+  the game's texts and tied to one character; a name that is also a word or
+  another thing's (River, Clay, Ghost, Sakura...) was tied only where somebody
+  read the line and said so, and a description standing in for a name ("Cool
+  Guy") is never changed in a sentence. Only the full name is replaced:
+  "Doctor Frost" becomes the new name, "Dr. Frost" stays, and a stutter
+  follows it ("A-Anna" becomes "B-Bella"). A line a pack rewrote keeps the
+  pack's words, and so does a line of the game's that a pack shows in its
+  translation. A new name is the same in every language: the box is locked
+  while you edit a translation. Checked in the game, and that switching the
+  pack off on the main menu gives them the game's name back.
+
+- **Name a character in a line so the name stays right.** The new button with
+  a person on it, over a line's text, lists the characters (who speaks in this
+  conversation first, then the pack's own, then the game's) and writes
+  `{name:…}` for the one you pick. The player reads it as that character's name
+  as it is now, including a new name any pack gives one of the game's
+  characters - the key in any capitals, in the editor and the game alike. In
+  the editor the line shows the name on a chip in their colour. A
+  name you type out yourself stays exactly as typed, which is what keeps a
+  pack's own Sakura from ever being renamed with the game's Sakura. Works in
+  lines, choices, quests and the pack's other texts, and translations must keep
+  it as it is (Validate says so when one does not). Checked in the game.
+
+- **Validate lists the game's characters named in your own words.** Each name
+  of one of the game's characters typed out in the pack's lines, choices, quests
+  or screens is listed as a note, with the words around it, since it will not
+  follow a new name. On a line, right-click the note and pick "Write {name:…}
+  there instead" to switch that one mention to the token; Undo takes it back,
+  and nothing changes unless you ask. A name two of your characters share (your
+  own Sakura and the game's) is not listed, because it is nobody's in
+  particular; nor is the game's name inside a longer name of your own ("Anna
+  Smith"), nor a description the game uses for a character ("Cop"). A name
+  said with a stutter is listed with no change offered, as the token cannot
+  stutter. Validate also warns about a token that names nobody (the player
+  would read it as typed) and about a new name another character already has.
+  Two installed packs giving one character different names show on the game's
+  main menu with the other clashes between packs.
+
+- **Change the game's own scenes.** The Scenes tab has a second list, "The
+  game's scenes". Add one, pick a scene from the list of the game's (each with a
+  small picture; type part of its name, its group or a conversation that shows
+  it), then give it your own picture, another frame or another sound, or make
+  it count as a Starmaker photo. Whatever you leave empty stays the game's. The
+  scene keeps its name and everything on it, and the game goes on showing it
+  wherever it always did, now with your changes; your own actions can show it
+  by its runtime name as well. A new picture for one of the game's photos
+  shows in the Starmaker site's gallery too. Scenes the game never shows are
+  not offered.
+  Validate warns about one with no scene picked, counts the same scene
+  changed twice as an error (Publish asks before going on), and notes one
+  that changes nothing. Two installed packs
+  changing the same part of one scene show on the game's main menu with the
+  other clashes between packs; in the game the pack loaded later wins that
+  part (its still picture replaces an earlier pack's GIF or video), and a
+  scene both make a Starmaker photo is one photo, paid once and counted by
+  both. Packs' own scenes are made in the game from one of the game's
+  (Samanthabeach); a change to that scene changes it alone, never the own
+  scenes of packs loaded after it. A plugin older than this one leaves the game's
+  scenes as they are (a change with a picture becomes a scene of the pack's
+  own there, which only the pack's own actions show), and its main menu says
+  the pack needs this version. Checked in the game, with this version's plugin
+  and with 1.8.3's.
+
+- **Show, hide and ask about any of the game's scenes from your own actions.**
+  The Scene category of Set active, Set sprite and the "is it showing"
+  condition now lists every scene of the game after your own, under "The
+  game's own: Sexy", "...: Photos" and so on, each with the conversation that
+  shows it (type part of its name to find it). Under the target, the small
+  preview draws the game's picture in the game's frame, or your change to that
+  scene when you have one. Shown this way, a scene plays its own sound and,
+  for one of the game's photos, takes the photo, as when the game shows it;
+  "Hide every scene this pack showed" hides it again. Validate knows them, and
+  now also checks the scene a condition asks about. Checked in the game.
+
+- **A warning before an older ModForge loses a newer one's work.** Opening a
+  pack that a newer ModForge saved last now says so: this version cannot show
+  what the newer one added, and saving the pack here drops it for good. Saving
+  such a pack asks first. Worth knowing if you share a pack with somebody: a
+  ModForge older than this one gives no warning at all, and saving there
+  quietly loses what is new in this version (a change to one of the game's
+  scenes turns into a scene of the pack's own; a new name for one of the
+  game's characters is gone).
+
+- **The installer is now about 1 MB.** It used to carry the whole editor and
+  plugin inside it (84 MB, too big to post on Discord as ModForge grows).
+  Now it downloads them from this version's release on GitHub as it
+  installs: only the plugin when you only want to play packs, the editor too
+  when you want to make them (chosen already when the install it updates has
+  the editor). Each download is checked against the size and checksum the
+  release lists before anything is installed, and stopping it, losing the
+  connection or GitHub not answering installs nothing; the setup then says
+  what went wrong in your language and where to get the zips. What it
+  downloaded is deleted once it is installed. It still finds an earlier
+  install and updates it in place, and it still speaks your Windows language.
+  Without the internet, put the two zips from the release beside it and it
+  installs from them (only zips of its own version: an older plugin zip left
+  in your Downloads folder is not installed by mistake).
+
+- **The mask painter opens inside the main window now**, not in a window of
+  its own. Every Edit Mask button (characters, the game's busts, NPCs and
+  places) puts it in place of the tabs: the painter on the left and the live
+  preview, shader running, on the right, so you no longer need two windows
+  side by side to see what a stroke does. Drag the bar between them to share
+  the room; ModForge remembers it. Back (or Esc) returns to the tabs, and
+  strokes you have not saved are asked about first, also when you open
+  another pack or close ModForge. New in it:
+  - **Mirror** (M) paints both halves at once, about the middle.
+  - **A Soften brush** (S) beside Brush and Eraser: it smooths what it passes
+    over instead of painting, as far as Opacity says, for taking the hard
+    edge off one place without repainting it.
+  - **Invert** (I) swaps strong and faint on a layer, and **Soften all** blurs
+    the whole layer a little. Both undo.
+  - **Alt+click** takes the strength under the pointer as the opacity.
+  - **Copy layers from** another outfit can now copy a single layer (say,
+    only Wave) over the same layer here, leaving the others as they are.
+  - Zoom buttons, a fit-to-view button, and the position and strength under
+    the pointer at the bottom.
+- **Quality buttons beside every live preview.** The Characters, NPCs and
+  Places previews and the mask painter have Ultra / High / Medium / Low
+  above them, the same setting as Options > Preview quality, so you can
+  change it where you see the difference.
+
+### Faster
+
+Measured on a large pack (89 dialogues, 2,700 lines, 220 variables, eight
+translations); everything it saves, exports and reports came out byte for
+byte the same as before.
+
+- **Saving and Validate take about 40% less time** (2.5 s to 1.4 s, and 2.6 s
+  to 1.5 s). The checks wrote the whole pack out and read it back three times,
+  and read every translation three times; once is enough.
+- **Opening a pack is faster** (5.3 s to 4.4 s), and so is every undo and
+  change of language: the lists of names were rebuilt once per record instead
+  of once.
+- **Picking a dialogue is quicker**, the slowest ones nearly twice as fast:
+  each line in the list was drawn three or four times before it showed, and
+  is drawn once.
+- **Clicking a variable on the Variables tab** no longer writes the whole pack
+  out to look for it in texts that do not mention it.
+- **Typing in a line of a conversation that extends one of the game's** no
+  longer recounts the whole conversation a dozen times per key, and moving
+  lines around no longer makes it slower each time.
+- **Long sessions use less memory**: each undo step is kept at half the size.
+- **In the game, packs load faster and take less memory.** Each picture is
+  read once per load however many outfits, mouths and places use it - a large
+  pack read the same bust pictures nearly four times over - and masks are no
+  longer kept twice. The game also does less every frame for a pack's
+  conditions (game variables, lists, levels), which means fewer small
+  stutters while it plays.
+
+### Fixed
+
+- **A tutorial's Next and Finish button was in English in every language.**
+  It was translated, then written over in English as each step showed.
+
+- **Reset on a game quest stayed lit in every language but English**, even
+  with nothing changed: it read the quest's summary looking for the English
+  word "unchanged".
+
+- **In the game, reloading from the main menu kept every earlier load's copy
+  of a pack in memory**, for packs that add to the game's own conversations:
+  one more copy each time. Now the old ones are let go of.
+
+- **The Places preview's shaders kept running after you left the Places
+  tab**, using the processor for something nobody could see. They stop while
+  the preview is hidden now, and they follow Preview quality's speed instead
+  of always running at their own.
+
+- **Set sprite aimed at a scene now changes its picture.** It changed another,
+  invisible part of the scene instead, so the scene went on showing the
+  picture it had - for your own scenes as much as the game's. It now paints
+  the scene's picture, at the size every scene's picture is drawn, and stops a
+  GIF or video that was playing there first. Checked in the game.
+
+- **The main menu's clash warning now covers packs that change the game's
+  screens.** A pack that changed one of the game's screens was never marked
+  as clashing with anything, not even for the things it shares with another
+  pack elsewhere (a character's colour, a level's object, a line of the game's
+  conversations): reading its screen changes failed, and took every other
+  change of the pack with it. Each part is now read on its own, and two packs
+  changing the same object of the same screen are marked too.
+
+- **A pack's translation of the game's own lines now shows in the game.** A
+  pack that extends one of the game's conversations can translate the game's
+  lines in it too, and a player who reads the pack in that language should
+  see them translated. None ever was: the plugin compared each translation with
+  a line's words before the line had been shown, when the game has not filled
+  them in yet, so nothing matched and every line stayed in English, with no
+  sign of it. It now reads the words the line is made from, and the player is
+  told once, as the save loads, that the pack shows the game's lines in their
+  language (the note never came either). Checked in the game.
+
+- **Fewer wrong "this text is not in the pack's language" warnings.** Validate
+  no longer counts words in quotation marks (a Spanish line quoting an English
+  choice) or names written in the middle of a sentence ("Just Anna I") as
+  evidence of a language. Text really typed in the wrong language is still
+  caught as before.
+
+- **The mask painter's brush now paints like Paint.NET's.** A stroke was a
+  chain of round dabs, each moved to the nearest whole pixel: a soft stroke's
+  edge came out beaded, and a thin one wobbled as you drew. It is now painted as
+  one smooth band that follows the pointer between pixels, so its edge is as
+  soft (or as crisp) along its whole length as the brush itself. Hardness still
+  means the share of the brush painted fully, with a smooth fade outside it, but
+  a 100% brush now has a clean antialiased edge instead of stair-steps, and a
+  small brush at a high hardness keeps a soft rim instead of looking hard.
+
+- **A face your line gave Chloe or Nadia no longer snaps back.** Some of the
+  game's portraits show another character's face number: Chloe's follow
+  Charlotte's, and Nadia's follow Emma's. ModForge set the speaker's own number
+  (and Nadia has none), so the face lasted only until the next variable changed,
+  which is almost at once. It now sets the number each portrait actually
+  follows, as the game's own lines do, so Charlotte's or Emma's face changes
+  with it when they are on screen too. Checked in the game.
+
+- **Two of the game's variables could not be picked, and a name with the
+  wrong capitals passed Validate.** The game tells capital letters apart:
+  "Mei-corrupted" (her Japan star) and "mei-corrupted" (her first hotel visit)
+  are two variables with two meanings, and so are "Black-Lingerie" and
+  "black-lingerie". The variable list offered only one of each pair. And a
+  condition on, say, "Anna-Saved" instead of "anna-saved" passed Validate but
+  reached nothing in the game, so it never came true. The list now offers
+  both, and Validate names the game's own spelling.
+
+- **The list of the game's variables is now the game's own.** It offered 36
+  "game" variables that were never the game's: affection values another mod
+  made while it ran, which do not exist in a player's game, so a condition on
+  one could never come true. And it was missing 38 that the game does have, such
+  as the spirit fights, the pool invitations, the blackjack and lottery values,
+  and the newer cooldowns. It is now read from the game itself.
+
 ## 1.8.3
 
 The UI tab is rebuilt around what you came to do: a start page, a much bigger

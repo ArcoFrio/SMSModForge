@@ -22,8 +22,21 @@ public sealed class UndoService
 {
     private readonly Func<string> _serialize;
     private string _baseline = "";
-    private readonly Stack<string> _undo = new();
-    private readonly Stack<string> _redo = new();
+    // The steps kept as UTF-8 (1.9.0): each is the whole pack written out, and
+    // a long session held hundreds of them at two bytes a character. Strict
+    // UTF-8 gives back exactly the text it was given; a text it cannot hold
+    // (a lone half of a pair) is kept as it is.
+    private readonly Stack<object> _undo = new();
+    private readonly Stack<object> _redo = new();
+    private static readonly System.Text.UTF8Encoding Utf8 = new(false, throwOnInvalidBytes: true);
+
+    private static object Pack(string text)
+    {
+        try { return Utf8.GetBytes(text); }
+        catch (System.Text.EncoderFallbackException) { return text; }
+    }
+
+    private static string Unpack(object kept) => kept is byte[] bytes ? Utf8.GetString(bytes) : (string)kept;
 
     public UndoService(Func<string> serialize) => _serialize = serialize;
 
@@ -70,7 +83,7 @@ public sealed class UndoService
         if (Suspended) return;
         var current = _serialize();
         if (current == _baseline) return;
-        _undo.Push(_baseline);
+        _undo.Push(Pack(_baseline));
         _baseline = current;
         _redo.Clear();
         StateChanged?.Invoke();
@@ -79,9 +92,9 @@ public sealed class UndoService
     public void Undo()
     {
         if (_undo.Count == 0) return;
-        _redo.Push(_baseline);
+        _redo.Push(Pack(_baseline));
         Leaving = _baseline;
-        _baseline = _undo.Pop();
+        _baseline = Unpack(_undo.Pop());
         RestoreRequested?.Invoke(_baseline);
         StateChanged?.Invoke();
     }
@@ -89,9 +102,9 @@ public sealed class UndoService
     public void Redo()
     {
         if (_redo.Count == 0) return;
-        _undo.Push(_baseline);
+        _undo.Push(Pack(_baseline));
         Leaving = _baseline;
-        _baseline = _redo.Pop();
+        _baseline = Unpack(_redo.Pop());
         RestoreRequested?.Invoke(_baseline);
         StateChanged?.Invoke();
     }

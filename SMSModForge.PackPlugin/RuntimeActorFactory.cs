@@ -314,6 +314,29 @@ namespace SMSModForge.PackPlugin
 
         // ── Actor name wiring ─────────────────────────────────────────
 
+        /// <summary>
+        /// The name property an Actor speaks with, so it can be put back - or
+        /// null when the shape this reflects into is not the expected one. For
+        /// one of the game's own Actors (<see cref="NewNames"/>).
+        /// </summary>
+        internal static PropertyGetString ReadNameProperty(Actor actor)
+        {
+            if (actor == null || _fldActorActant == null || _fldActantName == null) return null;
+            var actant = _fldActorActant.GetValue(actor);
+            return actant == null ? null : _fldActantName.GetValue(actant) as PropertyGetString;
+        }
+
+        /// <summary>Give an Actor a name property. False when it cannot be
+        /// reached, which is worth saying: the line would show the old name.</summary>
+        internal static bool WriteNameProperty(Actor actor, PropertyGetString name)
+        {
+            if (actor == null || name == null || _fldActorActant == null || _fldActantName == null) return false;
+            var actant = _fldActorActant.GetValue(actor);
+            if (actant == null) return false;
+            _fldActantName.SetValue(actant, name);
+            return true;
+        }
+
         private void SetActorName(Actor actor, string displayName)
         {
             if (_fldActorActant == null || _fldActantName == null)

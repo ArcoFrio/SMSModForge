@@ -36,9 +36,14 @@ public static class TranslationValidation
     /// own words; the validator is run that way.
     /// </summary>
     public static void Check(List<ValidationIssue> issues, ModPack pack, string? packRoot)
+        => Check(issues, pack, packRoot, new SavedPack(pack));
+
+    /// <summary>The same, sharing one writing-out of the pack and one reading of
+    /// each translation file with the rest of a Validate.</summary>
+    internal static void Check(List<ValidationIssue> issues, ModPack pack, string? packRoot, SavedPack saved)
     {
         if (pack == null) return;
-        var json = JObject.Parse(PackRepository.SerializeAsSaved(pack));
+        var json = saved.Json;
         var sites = PackTexts.Of(json, withEmpty: true);
         var gameQuests = new HashSet<string>(
             (json["quests"] as JArray ?? new JArray()).OfType<JObject>()
@@ -47,9 +52,9 @@ public static class TranslationValidation
             StringComparer.OrdinalIgnoreCase);
 
         CheckLanguage(issues, pack, sites, gameQuests);
-        CheckOnlyInATranslation(issues, pack, packRoot, sites, gameQuests);
-        CheckFit(issues, pack, packRoot, sites, gameQuests);
-        CheckCodes(issues, pack, packRoot, sites, gameQuests);
+        CheckOnlyInATranslation(issues, pack, packRoot, sites, gameQuests, saved);
+        CheckFit(issues, pack, packRoot, sites, gameQuests, saved);
+        CheckCodes(issues, pack, packRoot, sites, gameQuests, saved);
     }
 
     public const string TranslationCodes = "translation.codes";
@@ -67,13 +72,13 @@ public static class TranslationValidation
     /// 2026-10-21). Going to one opens that translation.
     /// </summary>
     private static void CheckCodes(List<ValidationIssue> issues, ModPack pack, string? packRoot,
-                                   List<PackTexts.Site> sites, HashSet<string> gameQuests)
+                                   List<PackTexts.Site> sites, HashSet<string> gameQuests, SavedPack saved)
     {
         if (string.IsNullOrEmpty(packRoot)) return;
         var byKey = new Dictionary<string, PackTexts.Site>(StringComparer.OrdinalIgnoreCase);
         foreach (var site in sites) byKey.TryAdd(site.Key, site);
 
-        foreach (var translation in PackTranslations.CheckAll(pack, packRoot))
+        foreach (var translation in PackTranslations.CheckAll(pack, packRoot, saved))
         {
             string language = TranslationFiles.NativeName(translation.Code) ?? translation.Code;
             foreach (var found in translation.Result.Findings)
@@ -103,7 +108,7 @@ public static class TranslationValidation
     /// mistake nobody would make on purpose. See <see cref="Rendering.DialogueFit"/>.
     /// </summary>
     private static void CheckFit(List<ValidationIssue> issues, ModPack pack, string? packRoot,
-                                 List<PackTexts.Site> sites, HashSet<string> gameQuests)
+                                 List<PackTexts.Site> sites, HashSet<string> gameQuests, SavedPack saved)
     {
         if (!Rendering.VanillaUiLibrary.IsAvailable) return;
         var font = Rendering.VanillaUiLibrary.Assets.Font(Rendering.DialogueLook.FontName)?.Font;
@@ -113,7 +118,7 @@ public static class TranslationValidation
         if (!string.IsNullOrEmpty(packRoot) && Directory.Exists(PackTranslations.FolderOf(packRoot)))
             foreach (string code in Services.Translation.PackTranslationJob.Languages(packRoot))
             {
-                var file = Loc.Read(PackTranslations.PathOf(packRoot, code));
+                var file = saved.Read(PackTranslations.PathOf(packRoot, code));
                 if (file != null) files.Add((code, file));
             }
 
@@ -127,7 +132,7 @@ public static class TranslationValidation
             void Measure(string? words, string code)
             {
                 if (PackTexts.IsEmpty(words)) return;
-                if (Rendering.DialogueFit.Of(font, words).Verdict != Rendering.DialogueFit.Verdict.Spills) return;
+                if (!Rendering.DialogueFit.Spills(font, words)) return;
                 issues.Add(new ValidationIssue(Severity.Warning, Where(site, pack, gameQuests),
                     Loc.F("validation.dialogue.lineTooLong", "language", TranslationFiles.NativeName(code) ?? code),
                     LineTooLong)
@@ -192,7 +197,7 @@ public static class TranslationValidation
     /// <summary>Every text with no words of the pack's own that one of its
     /// translations has words for.</summary>
     private static void CheckOnlyInATranslation(List<ValidationIssue> issues, ModPack pack, string? packRoot,
-                                                List<PackTexts.Site> sites, HashSet<string> gameQuests)
+                                                List<PackTexts.Site> sites, HashSet<string> gameQuests, SavedPack saved)
     {
         if (string.IsNullOrEmpty(packRoot)) return;
         string folder = PackTranslations.FolderOf(packRoot);
@@ -202,7 +207,7 @@ public static class TranslationValidation
         var files = new List<(string Code, TextFile File)>();
         foreach (string code in Services.Translation.PackTranslationJob.Languages(packRoot))
         {
-            var file = Loc.Read(PackTranslations.PathOf(packRoot, code));
+            var file = saved.Read(PackTranslations.PathOf(packRoot, code));
             if (file != null) files.Add((code, file));
         }
         if (files.Count == 0) return;
@@ -245,7 +250,7 @@ public static class TranslationValidation
         return key => byKey.TryGetValue(key, out var site) ? IssuePlace.Describe(Where(site, pack, gameQuests), pack) : null;
     }
 
-    private static string Where(PackTexts.Site site, ModPack pack, HashSet<string> gameQuests)
+    internal static string Where(PackTexts.Site site, ModPack pack, HashSet<string> gameQuests)
     {
         switch (site.Kind)
         {

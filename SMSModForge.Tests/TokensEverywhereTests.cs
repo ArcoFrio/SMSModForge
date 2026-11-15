@@ -75,6 +75,62 @@ public sealed class TokensEverywhereTests
         Assert.Equal(where.Count, where.Distinct().Count());
     }
 
+    /// <summary>The packs to compare on: the one above, the checkout's sample
+    /// pack, and a real pack when SMSMODFORGE_PERF_PACK names a copy of one.</summary>
+    private static System.Collections.Generic.IEnumerable<(string Name, ModPack Pack)> Packs()
+    {
+        yield return ("tokens", Pack());
+        var dir = new DirectoryInfo(AppContext.BaseDirectory);
+        while (dir != null && !File.Exists(Path.Combine(dir.FullName, "SamplePack", "modpack.json"))) dir = dir.Parent;
+        if (dir != null) yield return ("SamplePack", PackRepository.Load(Path.Combine(dir.FullName, "SamplePack")));
+        string? real = Environment.GetEnvironmentVariable("SMSMODFORGE_PERF_PACK");
+        if (!string.IsNullOrWhiteSpace(real) && File.Exists(Path.Combine(real, "modpack.json")))
+            yield return ("real", PackRepository.Load(real));
+    }
+
+    [Fact]
+    public void TheQuickLookFindsExactlyWhatGatheringEveryTextFound()
+    {
+        // 1.9.0: a variable's uses only gather the pack's other texts (which
+        // writes the whole pack out) when one of them holds its token. The
+        // uses, the references and a rename must come out exactly as when they
+        // were always gathered - for every variable, and a name nobody uses.
+        foreach (var (label, pack) in Packs())
+        {
+            var names = pack.Variables.Select(v => v.Name).Append("nosuchvariable").ToList();
+            int shown = 0;
+            foreach (string name in names)
+            {
+                string Uses() => string.Join("\n", VariableRenamer.Uses(pack, name).Select(u => $"{u.Kind}|{u.Where}|{u.Path}"))
+                                 + "\n--\n" + string.Join("\n", VariableRenamer.FindReferences(pack, name));
+                string quick = Uses();
+                VariableRenamer.GatherOtherTextsAlways = true;
+                string full;
+                try { full = Uses(); }
+                finally { VariableRenamer.GatherOtherTextsAlways = false; }
+                Assert.Equal(full, quick);
+                if (quick.Contains(nameof(VariableRenamer.UseKind.Shows))) shown++;
+            }
+            _out.WriteLine($"{label}: {names.Count} names agree, {shown} shown in some text");
+        }
+
+        // A rename too, on two copies of the small pack.
+        var a = Pack();
+        var b = Pack();
+        int quickCount = VariableRenamer.RenameReferences(a, "coins", "money");
+        VariableRenamer.GatherOtherTextsAlways = true;
+        int fullCount;
+        try { fullCount = VariableRenamer.RenameReferences(b, "coins", "money"); }
+        finally { VariableRenamer.GatherOtherTextsAlways = false; }
+        Assert.Equal(fullCount, quickCount);
+        Assert.Equal(PackRepository.SerializeAsSaved(b), PackRepository.SerializeAsSaved(a));
+
+        // The control: a token in a text the quick look reads is found by it
+        // (the uses list a quest's text), so it is not skipping everything.
+        Assert.Contains(VariableRenamer.Uses(Pack(), "coins"), u => u.Kind == VariableRenamer.UseKind.Shows
+                                                                && u.Where == Localization.Loc.F("walk.quest", "name", "savings"));
+    }
+
     // ── The game plugin: every text it hands the game fills them in ─────
 
     private static string PluginSource(string name)

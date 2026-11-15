@@ -1,0 +1,400 @@
+# Core[Dayname]
+vhint.Core.Dayname = Name of the day shown in the top bar: Monday to Friday, set each night from Day, or 'Weekend' on the Japan, Frosty and Tropical Vacations.
+# Core[DaysPassed]
+vhint.Core.DaysPassed = Days since the game began: +1 each night, more with the skip button in your room. Many events wait until it reaches a set number of days.
+# Core[After-Talk-Transition]
+vhint.Core.After-Talk-Transition = Set true by a line that hands over to something else (a shop, a scene, a minigame); the place's talk script then stops instead of unlocking the game.
+# Core[talk-button]
+vhint.Core.talk-button = True while the on-screen Talk button is shown; a place's talk script turns it on, and travel, sleep and many talks turn it off.
+# Core[stored-talk]
+vhint.Core.stored-talk = The talk the Talk button opens: a place's talk script stores itself here. Cleared when you travel or sleep.
+# Core[Characters-stay-on-screen]
+vhint.Core.Characters-stay-on-screen = When true, travelling keeps the characters on screen instead of clearing them. Nothing in the game sets it, so it stays false.
+# Core[important-decision]
+vhint.Core.important-decision = Set true on lines that mark a big story decision; the change brings up black bars at the top and bottom of the screen. Never set back to false.
+# Core[active-menu]
+vhint.Core.active-menu = Which tab of the Starmaker website on the PC is open, set by the site's top bar buttons.
+# Core[active-store]
+vhint.Core.active-store = Which shop the shop window shows; a shopkeeper's line sets it just before the shop opens.
+# Core[random-1-of-10]
+vhint.Core.random-1-of-10 = A random roll many talks and places take to pick which variation plays. Each rolls its own range (2, 3, 4, 5 or 10 options); a few set a fixed number.
+# Core[temp-stored-very-short-term]
+vhint.Core.temp-stored-very-short-term = The scene or talk just picked (a studio shoot, an invite, a lab program), held for a moment so the place's script can play or show it next.
+# Core[Random-music]
+vhint.Core.Random-music = Which background track plays: rolled each time the music player starts. 1-5 pick one of five tracks; any other roll plays a sixth one.
+# Core[Auto-Skip-Very-Fast]
+vhint.Core.Auto-Skip-Very-Fast = A key press flips it (outside minigames), but nothing else reads it: the dialogue box's very fast skipping goes by its speed button instead.
+# Core[selected-car]
+vhint.Core.selected-car = Which car you drive, picked by clicking a car in the Garage; the inside-car view shows that car.
+# Core[end-of-the-week]
+vhint.Core.end-of-the-week = True after you sleep on a Friday (not when the All-Star perk spares your subscribers), so the payout screen shows the end-of-week notice; cleared as it closes.
+# Core[gamerestart]
+vhint.Core.gamerestart = Set true when you quit to the main menu or an ending plays; the main menu then resets the game when it starts.
+# Core[Active-Ending]
+vhint.Core.Active-Ending = Which ending plays when an ending starts; 2 and up also roll the credits. In 1.8E the game only ever sets 0, 1 and 5: ending 8's talk never plays.
+# Core[health-insurance-shark-cooldown]
+vhint.Core.health-insurance-shark-cooldown = True once Frank, the insurance man, has visited the garage this week; cleared when a new week starts, so he can come again.
+# Core[frank-count]
+vhint.Core.frank-count = Countdown of Frank, the insurance man: 4 at the start, minus 1 each time you tell him you don't have the money. At 0 he ends the game (ending 5).
+# Core[ken-talk]
+vhint.Core.ken-talk = How many of Ken's three talks at Ken's Home you have had, at most one a week. The third, where he asks for help with his love life, makes it 3.
+# Core[samantha-seduction]
+vhint.Core.samantha-seduction = Samantha's trust in you: +1 for a beach photo, the body oil and each photo at her house. Bolder options open at 3, her house scene at 4 on days Ken is out.
+# Core[no-more-shark-guy]
+vhint.Core.no-more-shark-guy = True once Frank, the insurance man, is gone for good: you paid him $200k, shot him, or Tristan scared him off. He stops coming to the garage.
+# Core[DialogueVariation]
+vhint.Core.DialogueVariation = A number many talks set at their start, mostly a random roll, to pick which variation plays (home chats upstairs, city chats, club, doctor). Some count it up.
+# Core[DialogueVariation-Subchoice]
+vhint.Core.DialogueVariation-Subchoice = A random roll (1-3) some city places take on entry to pick which lines their background chat uses: mall, downtown, library, harbor, casino, shrine and more.
+# Core[Inside-Dialogue-Variable-Short]
+vhint.Core.Inside-Dialogue-Variable-Short = Short-term number: many places roll it 1-3 on entry, and Kate's beach, bar and park talks count answers in it. Only a scene at Ken's Home reads it.
+# Core[Car-Dirt]
+vhint.Core.Car-Dirt = How dirty the car is: +1 each time you get in; dirt shows from 3 (more at 7, 13) unless you have the Car Service. A gas-station or charity wash sets 0.
+# Core[isabella-sexy-times]
+vhint.Core.isabella-sexy-times = How many times you have been intimate with Isabella at the hotel (alone or with Josef). At 3 or more, on a Thursday, she announces she is pregnant.
+# Core[screenmode]
+vhint.Core.screenmode = Flips between 0 and 1 each time the screen-mode button in the main menu's settings is pressed, together with a fullscreen switch.
+# Core[active-save-slot]
+vhint.Core.active-save-slot = Read by the last screen of the old start-up intro to pick save slot 1, 2 or 3. Nothing sets it, so it is always 1; the current intro saves to slot 1 itself.
+# Core[Wallpaper]
+vhint.Core.Wallpaper = Which wallpaper the PC desktop shows, as picked in the wallpaper menu.
+# Core[g-ach-unlocked]
+vhint.Core.g-ach-unlocked = Counts achievements: +1 each time the achievement pop-up appears. Nothing in the game reads it.
+# Core[Minigame-incoming]
+vhint.Core.Minigame-incoming = Set true by the bakery talk when the shift turns into the bakery minigame; after the talk the bakery starts the minigame instead of sending you home.
+# Core[Disable-Specific-RNGEvents]
+vhint.Core.Disable-Specific-RNGEvents = Switch in the Starmaker profile's extra settings (shown later in Anna's story). When on, Anna's Wednesday-morning wake-up scene does not play.
+# Core[total-playtime]
+vhint.Core.total-playtime = Play time stored with each save for its slot: +1 on every tick of the game's idle timer, the same timer that pays idle income.
+# Core[customsave-name2025]
+vhint.Core.customsave-name2025 = Name a save is stored under, typed in the save screen's name box. Autosaves set it to 'Auto Save' or 'Auto Save (Start of Week)' while saving, then restore it.
+# Core_2[grocery-service]
+vhint.Core_2.grocery-service = Grocery Service bought on the PC's Peak Service page ($125K): groceries are no longer needed, as the Friday-night grocery check is skipped.
+# Core_2[maid-service]
+vhint.Core_2.maid-service = Maid Service bought on the PC's Peak Service page ($250K): Anna no longer asks you to help with the dishes in the kitchen on Fridays.
+# Core_2[carwash-service]
+vhint.Core_2.carwash-service = Your car stays clean: Car Service on the PC's Peak Service page ($500K), or hiring Toni at her home once she is freed. No dirt shows in the car.
+# Core_2[celeste-quest-done]
+vhint.Core_2.celeste-quest-done = Celeste's story is done: in the scene at her home you make her stop stealing Anna's followers (convince or ruin her). Ends the Tuesday-night follower loss.
+# Core_2[dishes-done]
+vhint.Core_2.dishes-done = Set the first time you stack a clean plate in the dishwashing minigame (Anna's Friday dishes) and never cleared. Nothing in the game reads it.
+# Core_2[scifi-movie]
+vhint.Core_2.scifi-movie = Which part of the sci-fi film plays at the next movie night: the three parts in turn, +1 after each sci-fi showing and back to 0 after the third.
+# Core_2[fantasy-movie]
+vhint.Core_2.fantasy-movie = Which part of the fantasy film plays at the next movie night: the three parts in turn, +1 after each fantasy showing and back to 0 after the third.
+# Core_2[news-movie]
+vhint.Core_2.news-movie = Which news story plays at the next movie-night news: nine stories in turn (0 an actress's scandal ... 8 a ban on animal milk), back to 0 after the last.
+# Core_2[porn-movie]
+vhint.Core_2.porn-movie = Counts adult-film showings at movie night, 0-2 and around again, but the film itself never reads it: the same film plays every time.
+# Core_2[incoming-movie]
+vhint.Core_2.incoming-movie = Film picked at Thursday movie night in the living room, played right after; 0 if you skip. Game mistake: with Anna alone, the adult film sets 2 (news plays).
+# Core_2[river-outfitinwork]
+vhint.Core_2.river-outfitinwork = Outfit River is sewing for Anna, ordered at the suburbs park ($2000). River hands it over at a later meeting, then it goes back to 0.
+# Core_2[tiny-advert]
+vhint.Core_2.tiny-advert = Days left on the 'Ad Campaign' (Starmaker Profile tab, $2,500): 5 when bought, -1 every night. While 1 or more, each photo brings 20% more followers.
+# Core_2[small-advert]
+vhint.Core_2.small-advert = Days left on the 'Trial Campaign' (Starmaker Profile tab, $2,500): 5 when bought, -1 every night. While 1 or more, each photo brings 10% more subscribers.
+# Core_2[med-advert]
+vhint.Core_2.med-advert = Days left on 'LoveVibe Support' (Starmaker Profile tab, $2,500): 5 when bought, -1 every night. While 1 or more, each photo has a chance of 10 extra fans.
+# Core_2[big-advert]
+vhint.Core_2.big-advert = Days left on 'Overseas Ads' (Starmaker Profile tab, $2,500): 5 when bought, -1 every night. While 1 or more, each photo has a chance of $1000 cash.
+# Core_2[star-fans]
+vhint.Core_2.star-fans = Fans of Anna's Starmaker page: photos add them (more with Stardom perks). The nightly payout pays per fan; Fan Magnet perks may add 20 subscribers per fan.
+# Core_2[sub-dono-amount]
+vhint.Core_2.sub-dono-amount = Money each subscriber pays in the nightly Starmaker payout: $5 at the start, $10 once the Merch perk is bought.
+# Core_2[fan-dono-amount]
+vhint.Core_2.fan-dono-amount = Money each fan pays in the nightly Starmaker payout: $10 at the start; +5 for each of 12 shop outfits bought, +25 Bigger Pie I, +50 Bigger Pie II.
+# Core_2[adverts-active]
+vhint.Core_2.adverts-active = Only ever set to 0, when the Starmaker site opens and no ad campaign is running. Nothing reads it; the running-campaign count is 'campaigns-active'.
+# Core_2[followers-p-photo]
+vhint.Core_2.followers-p-photo = Followers each Starmaker photo brings before bonuses: 25 at the start; the Just Anna I, II and III perks add 30, 70 and 150.
+# Core_2[fans-p-photo]
+vhint.Core_2.fans-p-photo = Fans each Starmaker photo brings before bonuses: 1 at the start; the Stardom I, II and III perks add 2, 3 and 5.
+# Core_2[subs-p-photo]
+vhint.Core_2.subs-p-photo = Subscribers each Starmaker photo brings before bonuses: 5 at the start; the Marketing I, II and III perks add 10, 10 and 30.
+# Core_2[photos-taken-today]
+vhint.Core_2.photos-taken-today = Starmaker photos taken today, shown on the morning payout screen as 'Uploaded Photos': +1 per photo, back to 0 once that screen closes.
+# Core_2[photos-taken-alltime]
+vhint.Core_2.photos-taken-alltime = Starmaker photos taken in the whole game: +1 per photo, never lowered. Nothing in the game reads it.
+# Core_2[year-day]
+vhint.Core_2.year-day = Day of the season on the calendar: +1 each night (the room's skip button adds up to 3), back to 1 after day 20 as the season changes. Holidays fall on set days.
+# Core_2[year-season]
+vhint.Core_2.year-season = Season: moves on when the day of the season passes 20 at night, winter back to spring. Sets the holidays, spring/autumn/winter map looks and rain or snow.
+# Core_2[campaigns-active]
+vhint.Core_2.campaigns-active = How many Starmaker ad campaigns are running: +1 per campaign bought; at most 1, or 2 with the Favorite perk. Back to 0 only once every campaign has run out.
+# Core_2[rainy-day]
+vhint.Core_2.rainy-day = It rains today: rolled each night, only in spring and autumn. Rain shows outside, inside and driving; the beach empties and pool or beach talks say bad weather.
+# Core_2[snowy-day]
+vhint.Core_2.snowy-day = It snows today: rolled each night, only in winter. Snow shows outside, inside and driving; the beach empties and pool or beach talks say bad weather.
+# Core_2[frankmoneyrequest]
+vhint.Core_2.frankmoneyrequest = What Frank, the insurance man, wants on Mondays at the garage: $5000 at first, doubling each time you pay, up to $100,000. The pay answer shows the amount.
+# Core_2[2025dialoguespeed]
+vhint.Core_2.2025dialoguespeed = Dialogue speed button (dialogue box and top bar), stepped by each click: Manual, Auto (next line after 3 s), Skip, Skip Until Photo (back to Manual at a photo).
+# Core_2[2025starcon-totalvisits]
+vhint.Core_2.2025starcon-totalvisits = How many StarCon trips you have made: +1 as each starts. At 3 the 'Field Work' story trait (calling Anna out for photos) unlocks on the Services tab.
+# Core_2[anna-current-mood]
+vhint.Core_2.anna-current-mood = Anna's mood on the mood icon: talk answers and gifts move it. High brings more great photos, low more bad ones; at -2 she refuses kitchen photos and talks.
+# Core_2[tutorialsdisabled]
+vhint.Core_2.tutorialsdisabled = Never set; its only check is in a tutorial component nothing runs: it changes nothing. Tutorials follow the Menu's Tutorials switch, '2026-tutorialsenabled'.
+# Core_3[tutorial-firststeps]
+vhint.Core_3.tutorial-firststeps = The 'First Steps' (Help Anna become a star) tutorial has been shown: it opens once, as a new game's intro ends, if tutorials are on then; never later.
+# Core_3[tutorial-worldmap]
+vhint.Core_3.tutorial-worldmap = The 'World Map' (Welcome to Peak City) tutorial has been shown: it opens the first time you are in the car view while tutorials are on, then never again.
+# Core_3[tutorial-payout]
+vhint.Core_3.tutorial-payout = The 'Payout' (End of Day Report) tutorial has been shown: it opens the first time you sleep while tutorials are on, then never again.
+# Core_3[tutorial-newperk]
+vhint.Core_3.tutorial-newperk = The 'Perks' tutorial has been shown: it opens the first time you gain a Starmaker perk point while tutorials are on, then never again.
+# Core_3[tutorial-annamood]
+vhint.Core_3.tutorial-annamood = The 'Anna's Mood' tutorial has been shown: it opens the first time Anna's mood goes up or down while tutorials are on, then never again.
+# Core_3[tutorial-annastatus]
+vhint.Core_3.tutorial-annastatus = The Anna tutorial (Your choices shape Anna's story) has been shown, in the kitchen. The Menu tutorial's Continue sets it too; if that is first, it never shows.
+# Core_3[carradio-enabled]
+vhint.Core_3.carradio-enabled = The radio switch in the car view: each click flips it, and it applies when you get in. True turns the car's music off, false on. The switch icon follows it.
+# Core_3[SpiritCombat-JustDone26]
+vhint.Core_3.SpiritCombat-JustDone26 = Set when a spirit sword fight starts. A later Shrine visit may then play a random Kate or Himari talk (50%, if their fights are open), which clears it.
+# Core_3[LastPayout-Purelyvisual]
+vhint.Core_3.LastPayout-Purelyvisual = The last night's total Starmaker payout, copied when it is added to your cash. Shown as 'Last Payout' on the finances tooltip.
+# Core_3[Tutorial-BigMenuBar]
+vhint.Core_3.Tutorial-BigMenuBar = The 'Menu' tutorial (the menu bar at the top) has been shown: it opens the first time you click the My Room map button while tutorials are on.
+# Core_3[2026-tutorialsenabled]
+vhint.Core_3.2026-tutorialsenabled = The 'Tutorials' switch in the in-game Menu (on in a new game). While false, none of the tutorial pop-ups open.
+# Core_NoSave[Item-Received]
+vhint.Core_NoSave.Item-Received = Name of the item or cash you were just given ('Old Katana', 'Basement Key', '$2500'...). Each new value shows the 'You've received an item' pop-up with it.
+# Core_NoSave[enter-room-from-hallway]
+vhint.Core_NoSave.enter-room-from-hallway = True from entering the hallway until you next enter your room, which then runs its own events (like Anna's 'We need to talk') and clears it.
+# Core_NoSave[new-trait]
+vhint.Core_NoSave.new-trait = Name of the trait just earned: each new value gives 500 photo XP and checks the Master trophy. Only Hacker, Urban Linguist and Living Weapon show its pop-up.
+# Core_NoSave[speech-invisible]
+vhint.Core_NoSave.speech-invisible = Turned on as a line by the conversation speaker named 'Continue' starts and off when it ends. Nothing in the game reads it.
+# Core_NoSave[shop-name]
+vhint.Core_NoSave.shop-name = Name of the shop last opened (General Store, Boutique...), set as it opens and kept after it closes. Nothing in the game reads it.
+# Core_NoSave[guest-active]
+vhint.Core_NoSave.guest-active = Josef joined this studio session (Invite > Josef): the studio shows his scene list, hides Livestream, Invite and Anna's own. Cleared when the session ends.
+# Core_NoSave[D-there]
+vhint.Core_NoSave.D-there = Josef is in the basement studio this session (Invite > Josef): Anna's outfit photo talks add his remarks. Cleared when the session ends.
+# Core_NoSave[K-there]
+vhint.Core_NoSave.K-there = Never set true: only cleared when a studio session ends, and nothing reads it. Inviting Ken to the studio does not use it.
+# Core_NoSave[watching-porn]
+vhint.Core_NoSave.watching-porn = You picked 'Let's watch a porn.' at movie night in the living room (cleared as that talk starts). The after-movie talk with Anna picks its lines by it.
+# Core_NoSave[ken-not-at-home]
+vhint.Core_NoSave.ken-not-at-home = Ken is out, so Samantha is alone at Ken's Home: true on Tuesdays and Fridays. She then greets you there instead of Ken, and her scenes there can play.
+# Core_NoSave[Seed-home-max-30]
+vhint.Core_NoSave.Seed-home-max-30 = Rerolled at random each night once you have 2,000 or more followers. Nothing in the game reads it.
+# Core_NoSave[Seed-mall-max-20]
+vhint.Core_NoSave.Seed-mall-max-20 = Rerolled at random each night once you have 2,000 or more followers. Nothing in the game reads it.
+# Core_NoSave[Seed-downtown-max-20]
+vhint.Core_NoSave.Seed-downtown-max-20 = Rerolled at random each night once you have 2,000 or more followers. Nothing in the game reads it.
+# Core_NoSave[Seed-suburban-max-20]
+vhint.Core_NoSave.Seed-suburban-max-20 = Rerolled at random each night once you have 2,000 or more followers. Nothing in the game reads it.
+# Core_NoSave[Seed-beach-max-20]
+vhint.Core_NoSave.Seed-beach-max-20 = Rerolled at random each night once you have 2,000 or more followers. Nothing in the game reads it.
+# Core_NoSave[Code]
+vhint.Core_NoSave.Code = The code typed into the safe in Josef's office ('[Check the safe]' when he is out). 7172 opens it and gives you 'Le Gun'.
+# Core_NoSave[keyboard-map-transfer-button]
+vhint.Core_NoSave.keyboard-map-transfer-button = Which of the six travel buttons on the map bar you last triggered by its key (1-6), set as the key is pressed. Nothing in the game reads it.
+# Core_NoSave[Anna-Default-Outfit]
+vhint.Core_NoSave.Anna-Default-Outfit = The picture of Anna the kitchen shows for her talks: corrupt-path, romance-path or usual look (paths from her first time with you), picked each kitchen visit.
+# Core_NoSave[Anna-Default-Outfit-Leave]
+vhint.Core_NoSave.Anna-Default-Outfit-Leave = The 'Leave' part of the kitchen's Anna picture for her path (corrupt, romance or none; from her first time with you), set each kitchen visit. Nothing reads it.
+# Core_NoSave[dialogue-check-1]
+vhint.Core_NoSave.dialogue-check-1 = In Anna's '[Grope her]' kitchen scene on her corrupt path (from her first time with you): true if its random moment was her backside. Picks its ending.
+# Core_NoSave[downtown-npcs]
+vhint.Core_NoSave.downtown-npcs = Which of three groups of passers-by appear downtown, at the harbor, the trail, the public pool and the night district. Rolled anew each night.
+# Core_NoSave[mall-npcs]
+vhint.Core_NoSave.mall-npcs = Which of three groups of shoppers appear at the mall. Rolled anew each night.
+# Core_NoSave[park-npcs]
+vhint.Core_NoSave.park-npcs = Which of three groups of people appear in the park. Rolled anew each night.
+# Core_NoSave[beach-npcs]
+vhint.Core_NoSave.beach-npcs = Which of three groups of people appear at the beach, rolled anew each night. On rainy or snowy days no group appears, whatever its value.
+# Core_NoSave[Gallery-Active]
+vhint.Core_NoSave.Gallery-Active = On while a scene moves you to other places (holiday parties, Himari's dinners, some trips): places you enter meanwhile skip their own arrival events and talks.
+# Core_NoSave[worldmap-district]
+vhint.Core_NoSave.worldmap-district = The district you last clicked on the world map (Downtown, Seaside, Neon Row...): its map area changes shade while open and goes back on Return.
+# Core_NoSave[achivement-unlocked]
+vhint.Core_NoSave.achivement-unlocked = Name of the achievement just earned ('Rich', 'Heroic', 'Friend'...): the achievement pop-up shows it, and each new value gives 250 photo XP.
+# Core_NoSave[combat-dialogue-1]
+vhint.Core_NoSave.combat-dialogue-1 = Never set: the sword-fight minigame would open its speech box when it changes, but nothing changes it.
+# Core_NoSave[hospital-injury]
+vhint.Core_NoSave.hospital-injury = You were taken to hospital hurt (lost sword fight, shot at the shack, car crash). The patient room then bills 20% of your cash and clears it.
+# Core_NoSave[hospital-fee-paid]
+vhint.Core_NoSave.hospital-fee-paid = Briefly true after the hospital bills you for an injury: it shows the hospital bill pop-up, which sets it back to false at once.
+# Core_NoSave[hospital-fee]
+vhint.Core_NoSave.hospital-fee = The hospital bill for an injury: 20% of your cash, rounded, worked out and taken in the patient room. The bill pop-up shows it.
+# Core_NoSave[Mapbutton-fix1]
+vhint.Core_NoSave.Mapbutton-fix1 = True while the main screen's buttons and map bar are faded out. Changing places waits 0.7 seconds while it is on.
+# Core_NoSave[incoming-weekend-target]
+vhint.Core_NoSave.incoming-weekend-target = Your pick on the weekend screen (opens when you sleep on a Friday): Stay Home or a trip. Reset to 0 as it opens; a pick only goes through while it is 0.
+# Core_NoSave[incoming-vacation-map]
+vhint.Core_NoSave.incoming-vacation-map = On a vacation, the outing picked in the hotel room talk (1-4); the next transfer goes there. Reset to 0 at the outing, so the next leads to the hotel.
+# Core_NoSave[after-condition-number]
+vhint.Core_NoSave.after-condition-number = 1: Anna took your kitchen advance (corrupt path from her first time with you, after her first studio scene without a condom); her scene follows. 0 each visit.
+# Core_NoSave[Condition-Split]
+vhint.Core_NoSave.Condition-Split = Set when one of Anna's special kitchen talks plays on arrival (her Prisme talks, Celeste news, your birthday, her candles). Reset each visit; nothing reads it.
+# Core_NoSave[talkbutton-signal]
+vhint.Core_NoSave.talkbutton-signal = Set by the Talk button; Jack's Wednesday talks at the Badlands Parking Lot and Zhen's temple chat need it. Set back to false 3 seconds later.
+# Core_NoSave2[tashasex-incoming]
+vhint.Core_NoSave2.tashasex-incoming = You asked Tasha 'In the mood for... a distraction?' at her Comic Store and she agreed; her intimate scene there plays once the talk ends. Cleared on each visit.
+# Core_NoSave2[idlemoney-incoming]
+vhint.Core_NoSave2.idlemoney-incoming = On while your idle-income upgrades pay out (each minute), so that payout plays no cash-register sound and skips the $1,000,000 'Rich' trophy check.
+# Core_NoSave2[studio-first-loop]
+vhint.Core_NoSave2.studio-first-loop = Set on a plain studio visit as Anna's studio talk starts; the basement then plays the shoot or guest you pick, clears it, and sends you home with an autosave.
+# Core_NoSave2[adaptive-sex-inc]
+vhint.Core_NoSave2.adaptive-sex-inc = You asked for an intimate scene with Celeste ('In the mood for some fun?' at her home, 'Let's call Celeste.' to Anna in the convention hotel); it plays next.
+# Core_NoSave2[dishes-donetoday]
+vhint.Core_NoSave2.dishes-donetoday = You helped Anna with the Friday dishes today ('Of course, I’ll help.'), so she does not ask again before you sleep. Cleared each night.
+# Core_NoSave2[unique-responseid]
+vhint.Core_NoSave2.unique-responseid = Rolled each time you enter the kitchen to pick the kind of Anna's opening line: 1 by her hearts, 2 by the path her first time with you set, else a general one.
+# Core_NoSave2[unique-response]
+vhint.Core_NoSave2.unique-response = Scratch text: Anna's opening line in her kitchen talk (by mood and story), the password typed on Josef's or Adrian's PC, or a save name kept while autosaving.
+# Core_NoSave2[anna-at-flowerwork]
+vhint.Core_NoSave2.anna-at-flowerwork = Anna is at work in the Flower Store: set on Tuesday mornings once she has the job, until she quits. She is out of the house and the map shows the store.
+# Core_NoSave2[follower-collect-action]
+vhint.Core_NoSave2.follower-collect-action = Followers the photo just taken brings: per-photo base plus camera, lens, trait and gift bonuses, maybe doubled by a Critical Shot; then added to followers.
+# Core_NoSave2[subscriber-collect-action]
+vhint.Core_NoSave2.subscriber-collect-action = Subscribers the photo just taken brings: per-photo base plus lens and trait bonuses, maybe doubled by a Perfect Shot, +10% with an ad; added to subscribers.
+# Core_NoSave2[fans-collect-action]
+vhint.Core_NoSave2.fans-collect-action = Fans the photo just taken brings: the per-photo base, +50 with the third lens or a Viral roll, +1 with the Love Gum gift's buff; then added to your fans.
+# Core_NoSave2[quicktravel-disabled]
+vhint.Core_NoSave2.quicktravel-disabled = Turns off the top bar's quick trip home: set when the weekend-trip picker opens and in hotel Room 24; cleared on entering your room, the hallway, many places.
+# Core_NoSave2[anna-car-reflection]
+vhint.Core_NoSave2.anna-car-reflection = Anna is riding in your car, so the car shows her: set when you drive her (to the mall, home from the Flower Store), cleared on arrival. The park trip reuses it.
+# Core_NoSave2[travel-failsavecheckbool]
+vhint.Core_NoSave2.travel-failsavecheckbool = Set as a conversation box opens and cleared 3 seconds later; a trip started meanwhile is cancelled (after that, the open box itself blocks trips).
+# Core_NoSave2[holidayhallway-check]
+vhint.Core_NoSave2.holidayhallway-check = A holiday event (Halloween, Valentine's, Anna's birthday, anniversary, Christmas, New Year's Eve) began in the hallway, so its usual events are skipped.
+# Core_NoSave2[travellogic-2025-counter]
+vhint.Core_NoSave2.travellogic-2025-counter = Counts timer ticks from 0 each time the main screen comes back; at 10 it releases the game's input lock, as a fail-safe, and stops counting.
+# Core_NoSave2[2025-quicktra-cd]
+vhint.Core_NoSave2.2025-quicktra-cd = Brief lock on the top bar's quick trip home: set when you travel, change place or open a shop; a timer clears it about 2 seconds later.
+# Core_NoSave2[2025-fadein-travelblock]
+vhint.Core_NoSave2.2025-fadein-travelblock = On while the screen is black or the main screen is hidden (most talks); a trip is cancelled meanwhile. Cleared when they return, by PC log-outs or fail-safes.
+# Core_NoSave2[2025-shortgo-saveONE]
+vhint.Core_NoSave2.2025-shortgo-saveONE = First talk queued after the current one: the first milking talk of the girl you invite in the barn, or Kirby's repeat scene at the apple tree.
+# Core_NoSave2[2025-shortgo-saveTWO]
+vhint.Core_NoSave2.2025-shortgo-saveTWO = Second talk queued in the barn after you invite a girl to milk: her usual milking talk. Cleared to none before each barn visit and on '(Return)'.
+# Core_NoSave2[2025-shortgo-saveTHREE]
+vhint.Core_NoSave2.2025-shortgo-saveTHREE = Third talk queued in the barn: the cowprint-outfit photo shoot, set when you ask for it in the girl's usual milking talk. None otherwise.
+# Core_NoSave2[temp-2025-garageworldmaplock]
+vhint.Core_NoSave2.temp-2025-garageworldmaplock = From day 30 (not on Fridays) until the Hospital opens, entering the garage locks its 'Drive' button and the quick trip home. Entering the hospital clears it.
+# Core_NoSave2[lock-additionalkeyboard-controls]
+vhint.Core_NoSave2.lock-additionalkeyboard-controls = On while Josef's or Adrian's PC screen is open; cleared when you click 'Log Out'. Nothing in the game reads it.
+# Core_NoSave2[call-anna-dialogue]
+vhint.Core_NoSave2.call-anna-dialogue = The scene a call to Anna plays where you are (with 'Field Work'): downtown, mall, park restroom, suburbs, patient room, club, Gabriel's mansion. Else none.
+# Core_NoSave2[veryshortterm-numbervar]
+vhint.Core_NoSave2.veryshortterm-numbervar = Scratch number reused by several scenes: the gift you give Anna (1-5), how many answers Claudia at the bar liked, random variant picks in some talks.
+# Core_NoSave2[miniworld-talk-cd1]
+vhint.Core_NoSave2.miniworld-talk-cd1 = Daily lock on the chance background talks at the toy store and the casino: set when one plays, cleared each night.
+# Core_NoSave2[miniworld-talk-cd2]
+vhint.Core_NoSave2.miniworld-talk-cd2 = Daily lock on the chance background talks Downtown: set when one plays, cleared each night.
+# Core_NoSave2[miniworld-talk-cd3]
+vhint.Core_NoSave2.miniworld-talk-cd3 = Daily lock on the chance background talks at the Harbor and on Neon Street: set when one plays, cleared each night.
+# Core_NoSave2[custom-npc-greeting]
+vhint.Core_NoSave2.custom-npc-greeting = Anna's line right after a kitchen photo ('Okay… done.'), picked at random from a set chosen by her mood and story stage.
+# Core_NoSave2[custom-npc-goodbye]
+vhint.Core_NoSave2.custom-npc-goodbye = Anna's goodbye line when you leave her kitchen talk, picked at random as you enter the kitchen from a set chosen by her mood.
+# Core_NoSave2[bad-photo-active]
+vhint.Core_NoSave2.bad-photo-active = The photo just taken came out bad, so it brings no followers, subscribers or fans: a 50% chance when Anna is Stressed, 25% when Nervous. Reset for each photo.
+# Core_NoSave2[temp-no-bad-photos]
+vhint.Core_NoSave2.temp-no-bad-photos = Would stop photos from coming out bad, but nothing sets it, so it stays off and Anna's low moods can still spoil photos.
+# Core_NoSave2[skipuntilphoto-check]
+vhint.Core_NoSave2.skipuntilphoto-check = Set for 3 seconds when a photo stops 'Skip Until Photo' (the speed goes back to Manual); fast line skipping pauses meanwhile.
+# Core_NoSave2[adstoclickaway]
+vhint.Core_NoSave2.adstoclickaway = Lowered by 1 each time you close a spam ad on the PC desktop. Nothing reads it, and only loading a game puts it back to 0.
+# Core_NoSave2[miniworld-talk-cd4]
+vhint.Core_NoSave2.miniworld-talk-cd4 = Never set true: only cleared each night, and nothing reads it.
+# Core_NoSave2[miniworld-talk-cd5]
+vhint.Core_NoSave2.miniworld-talk-cd5 = Daily lock on the chance background talks at the Library: set when one plays, cleared each night.
+# Core_NoSave2[miniworld-talk-cd6]
+vhint.Core_NoSave2.miniworld-talk-cd6 = Daily lock on the chance background talks at the hiking trail's lake and the Public Pool: set when one plays, cleared each night.
+# Core_NoSave3[GOAboutToEnable]
+vhint.Core_NoSave3.GOAboutToEnable = Which of Evelyn's two experiment scenes plays after you ask 'Any experiments that require my help?' in her lab (picked at random). Emptied on each lab visit.
+# Core_NoSave3[Hallway-AfterMiniquestFadeIn]
+vhint.Core_NoSave3.Hallway-AfterMiniquestFadeIn = Only ever set to false: on entering the hallway and when a hallway event starts there. Nothing sets it true or reads it.
+# Core_NoSave3[scene-after-talk-tempbool]
+vhint.Core_NoSave3.scene-after-talk-tempbool = Only ever set to false, when Astrid's haunted-house win scene plays. Nothing sets it true or reads it.
+# Core_NoSave3[anna-redswimsuitdayactive]
+vhint.Core_NoSave3.anna-redswimsuitdayactive = 50/50 per home pool visit. If true, Anna's Monday pool talk (4+ hearts, no rain/snow) is in her red bikini, from the 2nd with Charlotte after their yacht scene.
+# Core_NoSave3[RESTART-GAME-INCOMING25]
+vhint.Core_NoSave3.RESTART-GAME-INCOMING25 = Set when you quit to the main menu (in-game menu, 'Main Menu') or the ending plays. The main menu then resets the game, so the next game starts clean.
+# Core_NoSave3[2026bool-veryshort]
+vhint.Core_NoSave3.2026bool-veryshort = Short-lived flag several scenes share: window cleaning, looking for Vanessa at church or Norah at the pool, club and casino pre-talks. Cleared each night.
+# Core_NoSave3[blackscreen-waittime26]
+vhint.Core_NoSave3.blackscreen-waittime26 = Would set how long a black screen stays up before fading, but nothing in the game's scripts switches that screen on, so it is never read. Always 1.
+# CoreFinalStates[Alice-SexOn]
+vhint.CoreFinalStates.Alice-SexOn = You slept with Alice in the nightclub's toilets (either route). Its only use: Alice's Halloween ghost-costume scene upstairs at home.
+# CoreFinalStates[CharlotteFinalStage]
+vhint.CoreFinalStates.CharlotteFinalStage = Set on a yacht visit with Charlotte after her first three yacht talks (either route). Adds her to the tabletop game's friends; opens a mall quest with Phoenix.
+# CoreFinalStates[cs-riverfinalstage]
+vhint.CoreFinalStates.cs-riverfinalstage = River's home visits reached his last stage (3rd visit on, romance or bolder route); set as it starts. Opens his park restroom scenes and a meeting with Phoenix.
+# Eve_NoSave1[Tasha-rageincoming]
+vhint.Eve_NoSave1.Tasha-rageincoming = Never set in play: the check that sets it (on every car ride) also needs a flag nothing sets. It would start Tasha's angry talk about Roxy at her store.
+# Eve_NoSave1[race-aftertalk]
+vhint.Eve_NoSave1.race-aftertalk = Set when a street race starts. Back at the Parking Lot on a Wednesday, the after-race talk with whoever rode with you plays and clears it.
+# Eve_NoSave1[annaonbike]
+vhint.Eve_NoSave1.annaonbike = Anna rides with you in this street race: true if you pick '(Call Anna)' after paying Jack $20,000 at the Parking Lot. The after-race talk then plays her lines.
+# Eve_NoSave1[adrian-gamingnight]
+vhint.Eve_NoSave1.adrian-gamingnight = You picked 'Maybe we should invite Adrian too?' at Samantha's gaming night (from the 2nd, once you asked Adrian to swim with you and her). Adrian joins.
+# Eve_NoSave1[deny-celeste]
+vhint.Eve_NoSave1.deny-celeste = Celeste's scene at her home, until you convince or ruin her: true if you give in at 'You can't deny me...', false if you tease her (1st time she sends you off).
+# Eve_NoSave1[Anna-bdpresentwaiting]
+vhint.Eve_NoSave1.Anna-bdpresentwaiting = On your birthday Anna asks you to meet her by the wardrobe for a present (kitchen, after her first studio scene without a condom). That meeting clears it.
+# Eve_NoSave1[anna-halloweenbathinc]
+vhint.Eve_NoSave1.anna-halloweenbathinc = At Charlotte's Halloween party you flirted back in Anna's costume talk (once she has given in at the penis-photo shoot). Adds a bathroom scene with her.
+# Eve_NoSave1[josef-cinema]
+vhint.Eve_NoSave1.josef-cinema = On Valentine's Day you accepted Josef's movie plan for the three of you. The cinema and coming-home scenes then include him. Cleared as the day's event starts.
+# Eve_NoSave1[bedroom-rumble]
+vhint.Eve_NoSave1.bedroom-rumble = After the Valentine's Day movie you agreed to go on to the bedroom (with Anna, or with Anna and Josef). The night then ends with that bedroom scene.
+# Eve_NoSave1[adrian-bathroompresent]
+vhint.Eve_NoSave1.adrian-bathroompresent = On Anna's birthday you got Adrian to come with you to surprise her in the bath. Her bath scene then includes him, and his invite talk stops.
+# Eve_NoSave1[halloweendemonevent]
+vhint.Eve_NoSave1.halloweendemonevent = Halloween demon summoning steps: 1 after opening the '???' guide on your PC, 2 after the bathroom chant, 3 at the shrine. At 3 your room's candle summons it.
+# Eve_NoSave1[demontype]
+vhint.Eve_NoSave1.demontype = Which demon you saw in the Halloween summoning in your room: 1 the succubus, 2 the large demon '(Start sharing route)'. Picks the demon scene that follows.
+# Eve_NoSave1[newyearseveguest]
+vhint.Eve_NoSave1.newyearseveguest = Who you invited to Anna's New Year's Eve party: 1 Kate, 2 Toni, 3 Himari, 4 Amelia, 0 nobody. Picks the guest's talk and your midnight kiss (Anna's if 0).
+# Eve_NoSave1[sofiapassengersceneinc]
+vhint.Eve_NoSave1.sofiapassengersceneinc = You told Sofia 'Let's do it.' at the gas station, sending her ahead to Mario's villa. On your next drive she changes outfits in the car, then it clears.
+# Eve_NoSave1[zuriwaitsinmotel]
+vhint.Eve_NoSave1.zuriwaitsinmotel = On a Wednesday at the bar (after a scene with her), Zuri alone waits at the Hotel after 'You need a refill?'. Clears when 'Room 41' plays her scene.
+# Eve_NoSave1[joandzuwaitinmotel]
+vhint.Eve_NoSave1.joandzuwaitinmotel = On a Wednesday at the bar, if Joey is with Zuri (1 in 2, after your restroom scene with both), both wait at the Hotel after 'You need a refill?' ('Room 41').
+# Eve_NoSave1[AnnaAdrianCooldown2025]
+vhint.Eve_NoSave1.AnnaAdrianCooldown2025 = Daily lock on the Friday step of Anna and Adrian's route in his room, before they get together: set when it plays, cleared each night.
+# Eve_NoSave1[phoenixyacht-active]
+vhint.Eve_NoSave1.phoenixyacht-active = Phoenix stays aboard on this visit to Charlotte's yacht (her first appearance, or you ask her to stay). Adds her to that visit's later scene; cleared per visit.
+# Eve_NoSave1[pcdrankameliamilk]
+vhint.Eve_NoSave1.pcdrankameliamilk = On Amelia's milk-coffee day at the bakery you took the third coffee choice, straight from her. Josef may then walk in on you (60%, once he is in on it).
+# Eve_NoSave1[nyxaramightappear]
+vhint.Eve_NoSave1.nyxaramightappear = Set on each spirit sword fight win. Back at the shrine Nyxara then appears after your 1st, 3rd, 5th, 7th and 8th+ wins, clearing it; the temple clears it too.
+# Eve_NoSave1[convention-outfit]
+vhint.Eve_NoSave1.convention-outfit = Anna's StarCon outfit and stage look (hotel talk): 0 usual, 1 sundress (romance path), 2 flashy outfit (corrupt path); paths from her first time with you.
+# Events[shower-photo-aftermath]
+vhint.Events.shower-photo-aftermath = Anna scolded you in the hallway for your secret shower photo (not Tuesdays; only before her 'We need to talk' scene). Asked later, she agrees after that scene.
+# Events[take-this-wardrobe-key]
+vhint.Events.take-this-wardrobe-key = Anna's hallway talk giving you the Wardrobe Key ('Here, take this....') has played: at 50+ subscribers. Set as it starts; nothing else reads it.
+# Events[wardrobe-scene]
+vhint.Events.wardrobe-scene = Anna's robe-reveal scene in the wardrobe (white-lingerie photo) has played; set as it starts. Then she poses there on Wednesdays until the studio opens.
+# Events[wine-gifted]
+vhint.Events.wine-gifted = You have given Anna Wine from her gift menu (never reset). Then she agrees to a topless photo in her repeat wardrobe sessions.
+# Events[D-car-key-event]
+vhint.Events.D-car-key-event = Josef's hallway talk handing you his Car Key ('I want you to have this.') has played: once 3+ days have passed. Set as it starts; nothing else reads it.
+# Events[first-time-swimming]
+vhint.Events.first-time-swimming = The first time Anna's Monday pool talk plays ('Did you decide to go for a swim too?'); every answer sets it. Then that talk offers 'So, what should we do?'.
+# Events[first-pool-photo]
+vhint.Events.first-pool-photo = Anna's first pool photo shoot is done ('How about we take a photo?', pick one of two poses). Then 'How about another Pool Photo?' comes in her Monday talks.
+# Events[adrian-josef-fight]
+vhint.Events.adrian-josef-fight = Josef and Adrian's upstairs fight over the cancelled Japan trip has played: once 8+ days have passed, while Josef still lives at home. Set as it starts.
+# Events[incoming-japan-talk-adrian]
+vhint.Events.incoming-japan-talk-adrian = Adrian's Japan-trip talk is waiting: set at the end of his fight with Josef. A later visit to his room plays it ('I'm not really in the mood') and clears it.
+# Events[adrian-japan-money-needed]
+vhint.Events.adrian-japan-money-needed = You asked Adrian what his Japan trip costs ('How much money do you need?'). Lets you give him $20,000 in his room later, unless he's in on it with Anna.
+# Events[adrian-will-stay-start]
+vhint.Events.adrian-will-stay-start = Set when you tell Adrian that you and Anna need him at home ('(Adrian stays route)') in his Japan-trip talk, but nothing in the game reads it.
+# Events[adrian-japan-money-given]
+vhint.Events.adrian-japan-money-given = You gave Adrian $20,000 for his Japan trip ('Here's the 20k for Japan.' in his room). It only hides that option afterwards; nothing else reads it.
+# Events[amelia-talks-max-5]
+vhint.Events.amelia-talks-max-5 = Which of Amelia's storage-room break talks after a bakery shift comes next: 0-3 play her four talks in turn (the 4th offers her route); at 4 only random lines.
+# Events[amelia-romance-start]
+vhint.Events.amelia-romance-start = You agreed to hang out with Amelia ('Sure, sounds fun. (Amelia Route)', her 4th bakery break talk). Then an 'Amelia' choice appears on Wednesday mornings.
+# Events[church-visits]
+vhint.Events.church-visits = Friday church trips Anna has started, +1 each, even if you stay home. The 3rd brings in Alice; from the 4th, other churchgoers may talk (a random roll).

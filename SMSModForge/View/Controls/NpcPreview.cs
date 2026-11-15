@@ -247,7 +247,10 @@ public sealed class NpcPreview : Grid
         _renderingHooked = false;
     }
 
-    private void OnRender(object? sender, EventArgs e) => RenderBody();
+    /// <summary>How many frame callbacks this preview has had - for tests.</summary>
+    internal int FrameCallbacks { get; private set; }
+
+    private void OnRender(object? sender, EventArgs e) { FrameCallbacks++; RenderBody(); }
 
     private void RenderBody()
     {

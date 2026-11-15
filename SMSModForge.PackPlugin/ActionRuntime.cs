@@ -206,7 +206,14 @@ namespace SMSModForge.PackPlugin
                             return false;
                         }
 
-                        var sr = go.GetComponent<SpriteRenderer>();
+                        // A scene draws its picture on Core/Art. The scene's own
+                        // renderer is something else (the game's FotoColBox, in
+                        // every one of its 1,335 scenes), and until 1.9.0 a swap
+                        // aimed at a scene changed that one: the picture never
+                        // changed (measured in the game, in-game check D6).
+                        bool isScene = (string)p["kind"] == "Scene";
+                        Transform sceneArt = isScene ? go.transform.Find("Core/Art") : null;
+                        var sr = sceneArt != null ? sceneArt.GetComponent<SpriteRenderer>() : go.GetComponent<SpriteRenderer>();
                         // A bust draws its body on its sprite root (MBase1,
                         // D1Base on some rigs), not on the bust object the
                         // Bust category names, which has no renderer at all -
@@ -247,6 +254,9 @@ namespace SMSModForge.PackPlugin
                                 return false;
                             }
 
+                            // At the size every scene's picture is (the art's own
+                            // scale back to 1, as a pack's change to the scene does).
+                            if (sceneArt != null) sceneArt.localScale = Vector3.one;
                             if (Animate(go, sr, spriteRel, p, ctx)) return false;
 
                             ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetSprite: '" + spriteRel
@@ -277,14 +287,28 @@ namespace SMSModForge.PackPlugin
                                 // was drawn at, the replacement matches, including for
                                 // vanilla sprites this pack never created.
                                 var old = sr.sprite;
-                                float ppu = old != null ? old.pixelsPerUnit : 100f;
-                                // Sprite.pivot is in pixels; Sprite.Create wants it
-                                // normalised to the rect.
-                                Vector2 pivot = old != null && old.rect.width > 0f && old.rect.height > 0f
-                                    ? new Vector2(old.pivot.x / old.rect.width, old.pivot.y / old.rect.height)
-                                    : new Vector2(0.5f, 0.5f);
-                                sr.sprite = Sprite.Create(
-                                    tex, new Rect(0, 0, tex.width, tex.height), pivot, ppu);
+                                if (isScene && sceneArt != null)
+                                {
+                                    // A scene's picture is fitted the way a scene is
+                                    // built (FittedSprite.CreateScene: 256 px at 100
+                                    // ppu, whatever its size), its art at scale 1; and
+                                    // an animation playing on it stops, or it would
+                                    // draw its next frame over the still.
+                                    StopAnimations(go);
+                                    sceneArt.localScale = Vector3.one;
+                                    sr.sprite = FittedSprite.CreateScene(tex);
+                                }
+                                else
+                                {
+                                    float ppu = old != null ? old.pixelsPerUnit : 100f;
+                                    // Sprite.pivot is in pixels; Sprite.Create wants it
+                                    // normalised to the rect.
+                                    Vector2 pivot = old != null && old.rect.width > 0f && old.rect.height > 0f
+                                        ? new Vector2(old.pivot.x / old.rect.width, old.pivot.y / old.rect.height)
+                                        : new Vector2(0.5f, 0.5f);
+                                    sr.sprite = Sprite.Create(
+                                        tex, new Rect(0, 0, tex.width, tex.height), pivot, ppu);
+                                }
 
                                 // An NPC's floor reflection is a copy of its
                                 // pose, hung one pose-height below it; left
@@ -713,6 +737,10 @@ namespace SMSModForge.PackPlugin
                         if (ctx.Scenes == null) return false;
                         foreach (var entry in ctx.Scenes.All)
                             if (entry.SceneGo != null) entry.SceneGo.SetActive(false);
+                        // ...and the game's own scenes this pack showed (1.9.0):
+                        // "every scene this pack showed" is what the editor says.
+                        foreach (var game in ctx.Scenes.GameScenesShown)
+                            game.SetActive(false);
                         return false;
                     }
 
@@ -1093,8 +1121,10 @@ namespace SMSModForge.PackPlugin
         /// <summary>Names inside a string, resolved against the pack's
         /// variables. The same routine everything else uses - see VarText.</summary>
         private static string Text(string raw, PackContext ctx)
-            => SMSModForge.Shared.VarText.Resolve(
-                raw, name => ctx?.Vars == null ? "" : ctx.Vars.GetString(name));
+            => string.IsNullOrEmpty(raw) || raw.IndexOf('$') < 0
+                ? raw   // what Resolve returns at once, without the lookup it would not call
+                : SMSModForge.Shared.VarText.Resolve(
+                    raw, name => ctx?.Vars == null ? "" : ctx.Vars.GetString(name));
 
         internal static System.Collections.Generic.List<string> ReadListParam(
             string spec, PackContext ctx, bool treatBareAsVarName = false)
@@ -1306,8 +1336,25 @@ namespace SMSModForge.PackPlugin
         private static GameObject ResolveSceneGo(string sceneKey, PackContext ctx)
         {
             if (ctx.Scenes != null && ctx.Scenes.TryGet(sceneKey, out var entry)) return entry.SceneGo;
-            return null;
+            return GameScene(sceneKey);
         }
+
+        /// <summary>
+        /// One of the game's own scenes named by a Scene-category target (1.9.0):
+        /// by where it sits, <c>4_CG_Manager-Sexy/Samanthabeach</c>, the way the
+        /// editor lists them. Null for anything else - a pack's key is looked up
+        /// in its registry first, and a key never has the game's root in it.
+        /// </summary>
+        internal static GameObject GameScene(string target)
+        {
+            if (string.IsNullOrEmpty(target)
+                || !target.StartsWith(GameSceneRootPrefix, System.StringComparison.Ordinal)
+                || target.IndexOf('/') < 0) return null;
+            return VanillaSceneExtensions.Find(target);
+        }
+
+        /// <summary>What every one of the game's scene roots is called before its group.</summary>
+        internal const string GameSceneRootPrefix = "4_CG_Manager-";
 
         /// <summary>
         /// Load a PNG out of the pack archive at its own dimensions. Null when
@@ -1341,19 +1388,7 @@ namespace SMSModForge.PackPlugin
         private static bool Animate(GameObject go, SpriteRenderer sr, string rel,
                                     JObject p, PackContext ctx)
         {
-            foreach (var running in go.GetComponents<AnimatedSprite>())
-                UnityEngine.Object.Destroy(running);
-
-            // The driver first: it owns the player and tears it down cleanly,
-            // and destroying the player out from under it would leave a
-            // component copying from a texture that no longer exists.
-            foreach (var running in go.GetComponents<VideoSprite>())
-                UnityEngine.Object.Destroy(running);
-            foreach (var running in go.GetComponents<UnityEngine.Video.VideoPlayer>())
-            {
-                running.Stop();
-                UnityEngine.Object.Destroy(running);
-            }
+            StopAnimations(go);
 
             bool loop = p["loop"] == null || (bool)p["loop"];
             int kind = SMSModForge.Shared.MediaKinds.KindOf(rel);
@@ -1390,6 +1425,26 @@ namespace SMSModForge.PackPlugin
             }
 
             return false;
+        }
+
+        /// <summary>Tear off every animation playing on <paramref name="go"/> - a
+        /// GIF's frames, a video and its player - so what is put there next is
+        /// what shows.</summary>
+        private static void StopAnimations(GameObject go)
+        {
+            foreach (var running in go.GetComponents<AnimatedSprite>())
+                UnityEngine.Object.Destroy(running);
+
+            // The driver first: it owns the player and tears it down cleanly,
+            // and destroying the player out from under it would leave a
+            // component copying from a texture that no longer exists.
+            foreach (var running in go.GetComponents<VideoSprite>())
+                UnityEngine.Object.Destroy(running);
+            foreach (var running in go.GetComponents<UnityEngine.Video.VideoPlayer>())
+            {
+                running.Stop();
+                UnityEngine.Object.Destroy(running);
+            }
         }
 
         private static GameObject ResolveByKind(JObject p, PackContext ctx)
@@ -1550,9 +1605,24 @@ namespace SMSModForge.PackPlugin
                 // showing it is taking it, hiding it is not un-taking it.
                 if (active && entry.StarmakerPhoto)
                     StarmakerPhotos.Taken(sceneKey, ctx, ctx.Log);
+                return;
             }
-            else ctx.Log?.LogWarning("[SMSModForge.PackPlugin] Scene '" + sceneKey +
-                                     "' not found in pack " + ctx.PackId);
+
+            // One of the game's own scenes, by where it sits (1.9.0). Switched on
+            // or off and nothing else: its own trigger, which runs as it comes on,
+            // plays its sound and - for one of the game's photos - takes the
+            // photo, exactly as when the game shows it. Changes a pack made to it
+            // are on the object already.
+            var game = GameScene(sceneKey);
+            if (game != null)
+            {
+                if (flip) active = !game.activeSelf;
+                game.SetActive(active);
+                if (active) ctx.Scenes?.ShowedGameScene(game);
+                return;
+            }
+            ctx.Log?.LogWarning("[SMSModForge.PackPlugin] Scene '" + sceneKey +
+                                "' not found in pack " + ctx.PackId + " or among the game's scenes");
         }
 
         private static void EmitGc2Signal(string signalName, PackContext ctx)

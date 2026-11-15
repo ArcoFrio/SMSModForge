@@ -84,6 +84,7 @@ public sealed class SceneViewModel : ObservableObject, IDerivesKey
             OnPropertyChanged(nameof(IsVideo));
             OnPropertyChanged(nameof(HasAudioTrack));
             OnPropertyChanged(nameof(MediaSummary));
+            OnPropertyChanged(nameof(ChangeSummary));
         }
     }
 
@@ -191,6 +192,7 @@ public sealed class SceneViewModel : ObservableObject, IDerivesKey
             if (Model.VanillaFrame == normalised) return;
             Model.VanillaFrame = normalised;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(ChangeSummary));
         }
     }
 
@@ -209,13 +211,14 @@ public sealed class SceneViewModel : ObservableObject, IDerivesKey
             if (Model.CustomFrameSprite == normalised) return;
             Model.CustomFrameSprite = normalised;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(ChangeSummary));
         }
     }
 
     public SceneSoundMode Sound
     {
         get => Model.Sound;
-        set { Model.Sound = value; OnPropertyChanged(); }
+        set { Model.Sound = value; OnPropertyChanged(); OnPropertyChanged(nameof(GameSound)); OnPropertyChanged(nameof(ChangeSummary)); }
     }
 
     /// <summary>Whether showing this scene counts as taking a Starmaker photo
@@ -223,8 +226,159 @@ public sealed class SceneViewModel : ObservableObject, IDerivesKey
     public bool StarmakerPhoto
     {
         get => Model.StarmakerPhoto;
-        set { if (Model.StarmakerPhoto == value) return; Model.StarmakerPhoto = value; OnPropertyChanged(); }
+        set { if (Model.StarmakerPhoto == value) return; Model.StarmakerPhoto = value; OnPropertyChanged(); OnPropertyChanged(nameof(ChangeSummary)); }
     }
 
     public string Display => ListNames.Of(DisplayName, Key);
+
+    // ── One of the game's scenes (1.9.0) ────────────────────────────
+    //
+    // The same panel as a scene of the pack's own, where what is left empty
+    // stays the game's: no picture keeps its picture, no frame its frame, and
+    // a sound of None its sound. See SceneDef.Source.
+
+    /// <summary>Whether this changes one of the game's scenes, chosen or not yet.</summary>
+    public bool IsGameScene => Model.IsGameScene;
+
+    /// <summary>The game's scene it changes, or null: none chosen yet, or one
+    /// the editor's catalogue does not have.</summary>
+    public VanillaScenes.Scene? Game => VanillaScenes.Find(Model.Source);
+
+    /// <summary>
+    /// The game's scene, as the picker sets it.
+    /// <para/>
+    /// The display name follows the scene picked while it is still the name of
+    /// the last one picked (or the name a new entry starts with), and the key
+    /// follows the display name as for any scene just added: what the list
+    /// shows is which of the game's scenes it is until the author names it.
+    /// </summary>
+    public VanillaScenes.Scene? GameSource
+    {
+        get => Game;
+        set
+        {
+            if (value == null || !IsGameScene || Model.Source == value.Path) return;
+            string? was = Game?.Name;
+            Model.Source = value.Path;
+            if (string.IsNullOrWhiteSpace(Model.DisplayName) || Model.DisplayName == was || Model.DisplayName == _startName)
+                DisplayName = value.Name;
+            RaiseGame();
+        }
+    }
+
+    /// <summary>The name a new one is added with, which a pick replaces.</summary>
+    private string? _startName;
+
+    /// <summary>Remember the name a new entry was added with, so the first pick
+    /// replaces it.</summary>
+    public void StartsAs(string name) => _startName = name;
+
+    /// <summary>The game's own picture of it, on disk, for the preview while the
+    /// pack's picture is empty; empty otherwise.</summary>
+    public string GamePicture => IsGameScene ? VanillaScenes.PictureOf(Game) : "";
+
+    /// <summary>The game's own frame of it (one of the editor's VanillaFrames),
+    /// for the preview while the pack names none; empty otherwise.</summary>
+    public string GameFrame => IsGameScene ? Game?.FrameFile ?? "" : "";
+
+    /// <summary>Whether it is one of the game's Starmaker photos, which pays out
+    /// already: the tick to make it one is not offered.</summary>
+    public bool IsGamePhoto => IsGameScene && Game?.Photo == true;
+
+    /// <summary>Whether the Starmaker photo tick applies.</summary>
+    public bool OffersStarmakerPhoto => !IsGamePhoto;
+
+    /// <summary>The game's scene's name, or a word saying none is chosen.</summary>
+    public string GameName => Game?.Name
+        ?? (string.IsNullOrEmpty(Model.Source) ? Loc.T("scenes.game.noneChosen") : Model.Source!);
+
+    /// <summary>What shows it in the game, for under the picker.</summary>
+    public string GameShownBy
+    {
+        get
+        {
+            var g = Game;
+            if (g == null) return string.IsNullOrEmpty(Model.Source) ? "" : Loc.T("scenes.game.unknown");
+            return g.ShownBy.Count == 0 ? "" : Loc.F("scenes.game.shownBy", "list", string.Join(", ", g.ShownBy));
+        }
+    }
+
+    /// <summary>The game's own sound for it, in words.</summary>
+    private string GameSoundWord => Game?.Signal switch
+    {
+        "kiss" => Loc.T("scenes.game.sound.kiss"),
+        "flash" => Loc.T("scenes.game.sound.flash"),
+        null => "",
+        _ => Loc.T("scenes.game.sound.none"),
+    };
+
+    /// <summary>One choice in a game scene's sound box.</summary>
+    public sealed record SoundChoice(SceneSoundMode Mode, string Label)
+    {
+        public override string ToString() => Label;
+    }
+
+    /// <summary>
+    /// The sound box for one of the game's scenes: keep the game's (saying
+    /// what that is), or one of the three a scene of the pack's own has.
+    /// </summary>
+    public System.Collections.Generic.IReadOnlyList<SoundChoice> GameSoundChoices => new[]
+    {
+        new SoundChoice(SceneSoundMode.None, GameSoundWord.Length == 0
+            ? Loc.T("scenes.game.soundKeepPlain")
+            : Loc.F("scenes.game.soundKeep", "sound", GameSoundWord)),
+        new SoundChoice(SceneSoundMode.Kiss, Loc.T("scenes.game.sound.kiss")),
+        new SoundChoice(SceneSoundMode.Flash, Loc.T("scenes.game.sound.flash")),
+        new SoundChoice(SceneSoundMode.Silent, Loc.T("scenes.game.sound.silent")),
+    };
+
+    /// <summary>
+    /// The sound box's choice. By the choice rather than by its value: the list is
+    /// made again whenever another scene is picked (the first choice names that
+    /// scene's sound), and a box selecting by value let go of its selection when
+    /// its list changed under it. A choice is a record, so the one in the new list
+    /// is equal to the one selected.
+    /// </summary>
+    public SoundChoice? GameSound
+    {
+        get => System.Linq.Enumerable.FirstOrDefault(GameSoundChoices, c => c.Mode == Model.Sound);
+        set { if (value != null && value.Mode != Model.Sound) Sound = value.Mode; }
+    }
+
+    /// <summary>
+    /// What this changes of the game's scene, in a few words for its row in the
+    /// list: "picture, frame", or "no change" - which still lets the pack show
+    /// it by its key.
+    /// </summary>
+    public string ChangeSummary
+    {
+        get
+        {
+            if (!IsGameScene) return "";
+            if (string.IsNullOrEmpty(Model.Source)) return Loc.T("scenes.game.change.notChosen");
+            var parts = new System.Collections.Generic.List<string>();
+            if (!string.IsNullOrWhiteSpace(Model.SceneSprite)) parts.Add(Loc.T("scenes.game.change.picture"));
+            if (!string.IsNullOrWhiteSpace(Model.CustomFrameSprite) || !string.IsNullOrWhiteSpace(Model.VanillaFrame))
+                parts.Add(Loc.T("scenes.game.change.frame"));
+            if (Model.Sound != SceneSoundMode.None) parts.Add(Loc.T("scenes.game.change.sound"));
+            if (Model.StarmakerPhoto && !IsGamePhoto) parts.Add(Loc.T("scenes.game.change.photo"));
+            return parts.Count == 0 ? Loc.T("scenes.game.change.none") : string.Join(", ", parts);
+        }
+    }
+
+    /// <summary>Everything that depends on which scene is chosen, asked again.</summary>
+    private void RaiseGame()
+    {
+        OnPropertyChanged(nameof(Game));
+        OnPropertyChanged(nameof(GameSource));
+        OnPropertyChanged(nameof(GamePicture));
+        OnPropertyChanged(nameof(GameFrame));
+        OnPropertyChanged(nameof(IsGamePhoto));
+        OnPropertyChanged(nameof(OffersStarmakerPhoto));
+        OnPropertyChanged(nameof(GameName));
+        OnPropertyChanged(nameof(GameShownBy));
+        OnPropertyChanged(nameof(GameSoundChoices));
+        OnPropertyChanged(nameof(GameSound));
+        OnPropertyChanged(nameof(ChangeSummary));
+    }
 }

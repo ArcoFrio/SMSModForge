@@ -19,8 +19,11 @@ public sealed class Payload
 
     public bool HasEditor { get { using var s = Editor(); return s != null; } }
 
-    /// <summary>Built into the setup at release; while developing, the two
-    /// zips beside it.</summary>
+    public bool HasPlugin { get { using var s = Plugin(); return s != null; } }
+
+    /// <summary>Built into the setup (the full one); otherwise the two zips beside
+    /// it - how a setup without them installs offline. A setup with neither
+    /// downloads them (<see cref="ReleaseSource"/>, <see cref="FromFiles"/>).</summary>
     public static Payload Here()
     {
         var self = Assembly.GetExecutingAssembly();
@@ -28,7 +31,9 @@ public sealed class Payload
         Stream? Embedded(string name) => self.GetManifestResourceStream(name);
         Stream? Zip(string kind)
         {
-            var found = Directory.EnumerateFiles(beside, $"Starmaker - ModForge {kind}*.zip").OrderByDescending(f => f).FirstOrDefault();
+            // Only this setup's own version: an older zip left in the same folder
+            // (Downloads, say) would otherwise be installed under this version's name.
+            string? found = Beside(beside, kind, SMSModForge.Shared.ForgeVersion.Current);
             return found == null ? null : File.OpenRead(found);
         }
         return new Payload
@@ -36,6 +41,38 @@ public sealed class Payload
             Editor = () => Embedded("payload.editor.zip") ?? Zip("Editor"),
             Plugin = () => Embedded("payload.plugin.zip") ?? Zip("Plugin"),
             Uninstaller = () => Embedded("payload.uninstall.exe"),
+        };
+    }
+
+    /// <summary>
+    /// "Starmaker - ModForge <paramref name="kind"/> x.y.z.zip" in a folder, as a release
+    /// names it - or as GitHub does once downloaded from it, with dots for the spaces
+    /// ("Starmaker.-.ModForge.Editor.1.9.0.zip"): the one of <paramref name="version"/>
+    /// when given, else the newest by its number (1.10.0 after 1.9.0).
+    /// </summary>
+    public static string? Beside(string folder, string kind, string? version = null)
+    {
+        if (!Directory.Exists(folder)) return null;
+        var named = new System.Text.RegularExpressions.Regex(
+            @"^Starmaker[ .]-[ .]ModForge[ .]" + System.Text.RegularExpressions.Regex.Escape(kind) + @"[ .](?<v>\d+\.\d+\.\d+)\.zip$",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        return Directory.EnumerateFiles(folder, "*.zip")
+            .Select(f => (File: f, Match: named.Match(Path.GetFileName(f))))
+            .Where(f => f.Match.Success && (version == null || f.Match.Groups["v"].Value == version))
+            .OrderByDescending(f => f.Match.Groups["v"].Value, Comparer<string>.Create(SMSModForge.Shared.ForgeVersion.Compare))
+            .Select(f => f.File)
+            .FirstOrDefault();
+    }
+
+    /// <summary>What a download fetched, with this setup's own uninstaller.</summary>
+    public Payload FromFiles(string? editorZip, string pluginZip)
+    {
+        var uninstaller = Uninstaller;
+        return new Payload
+        {
+            Editor = () => editorZip == null ? null : File.OpenRead(editorZip),
+            Plugin = () => File.OpenRead(pluginZip),
+            Uninstaller = uninstaller,
         };
     }
 }
@@ -101,7 +138,10 @@ public static class Installer
     /// <param name="Editor">Everything (true), to make mods - or only the
     /// plugin, to play them: then no editor, no shortcuts, and the install
     /// folder holds just the uninstaller and what it needs.</param>
-    public sealed record Options(string GameFolder, string InstallFolder, bool StartMenu, bool Desktop, bool Editor = true);
+    /// <param name="Version">The version being installed, for the Apps list: what a
+    /// download fetched, which may not be this setup's own; this setup's otherwise.</param>
+    public sealed record Options(string GameFolder, string InstallFolder, bool StartMenu, bool Desktop, bool Editor = true,
+                                 string? Version = null);
 
     public sealed record Result(bool BepInExWasThere, int EditorFiles, int PluginFiles);
 
@@ -126,7 +166,7 @@ public static class Installer
         Directory.CreateDirectory(install);
         var manifest = new Manifest
         {
-            Version = SMSModForge.Shared.ForgeVersion.Current,
+            Version = o.Version ?? SMSModForge.Shared.ForgeVersion.Current,
             GameFolder = game,
             FolderWasEmpty = wasEmpty,
         };

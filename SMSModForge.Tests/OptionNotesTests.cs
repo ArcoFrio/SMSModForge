@@ -81,4 +81,79 @@ public sealed class OptionNotesTests
         Assert.NotEqual(OptionNotes.NoteFor(OptionNotes.ActionType, "Variable"),
                         OptionNotes.NoteFor(OptionNotes.ConditionType, "Variable"));
     }
+
+    /// <summary>
+    /// A pack variable's note is its Description (the author, 1.9.0): found by
+    /// its name, exactly or in other capitals, or as the outfit picker lists it
+    /// ("$name"). Controls: none for a variable with no description, a name the
+    /// pack lacks, or the same name asked for as one of the game's variables.
+    /// </summary>
+    [Fact]
+    public void APacksVariableIsNotedWithItsDescription()
+    {
+        var vm = new MainViewModel();
+        const string said = "Set once the player has met Anna at the beach.";
+        vm.Variables.Add(new PackVariableViewModel(new PackVariableDef { Name = "metAnna", Type = PackVariableType.Bool, Description = said }));
+        vm.Variables.Add(new PackVariableViewModel(new PackVariableDef { Name = "plain", Type = PackVariableType.Int }));
+        vm.Variables.Add(new PackVariableViewModel(new PackVariableDef { Name = "spaced", Type = PackVariableType.String, Description = "  \r\n  " }));
+
+        Assert.Equal(said, OptionNotes.NoteFor(OptionNotes.PackVariable, "metAnna"));
+        Assert.Equal(said, OptionNotes.NoteFor(OptionNotes.PackVariable, "$metAnna"));
+        Assert.Equal(said, OptionNotes.NoteFor(OptionNotes.PackVariable, "METANNA"));
+        Assert.Equal("", OptionNotes.NoteFor(OptionNotes.PackVariable, "plain"));
+        Assert.Equal("", OptionNotes.NoteFor(OptionNotes.PackVariable, "spaced"));
+        Assert.Equal("", OptionNotes.NoteFor(OptionNotes.PackVariable, "nobody"));
+        Assert.Equal("", OptionNotes.NoteFor(OptionNotes.GameVariable, "metAnna"));
+    }
+
+    /// <summary>
+    /// A description of many paragraphs: blank lines are closed up, and past
+    /// <see cref="MainViewModel.PackVariableNoteLength"/> it is cut at a word
+    /// with an ellipsis. A short one comes back whole (the control).
+    /// </summary>
+    [Fact]
+    public void ALongDescriptionIsCutAtAWord_AndBlankLinesClosedUp()
+    {
+        var vm = new MainViewModel();
+        string essay = string.Join(" ", Enumerable.Range(1, 120).Select(i => "word" + i));
+        vm.Variables.Add(new PackVariableViewModel(new PackVariableDef { Name = "essay", Type = PackVariableType.Int, Description = essay }));
+        vm.Variables.Add(new PackVariableViewModel(new PackVariableDef { Name = "lines", Type = PackVariableType.Int,
+                                                                        Description = "First line.\r\n\r\n\r\nSecond line.\r\nThird." }));
+
+        string note = OptionNotes.NoteFor(OptionNotes.PackVariable, "essay");
+        _out.WriteLine(note);
+        Assert.True(note.Length <= MainViewModel.PackVariableNoteLength + 1, $"{note.Length} characters");
+        Assert.EndsWith("…", note);
+        string kept = note.TrimEnd('…');
+        Assert.StartsWith(kept, essay);
+        Assert.Equal(' ', essay[kept.Length]);     // cut between words, not inside one
+        Assert.Equal("First line.\nSecond line.\nThird.", OptionNotes.NoteFor(OptionNotes.PackVariable, "lines"));
+    }
+
+    /// <summary>
+    /// Every dropdown of the pack's variables in the window asks for their
+    /// descriptions, under the name: a box listing them that says nothing would
+    /// be the one place an author looks and finds no note. Read from
+    /// MainWindow.xaml, so a new box that forgets fails here.
+    /// </summary>
+    [Fact]
+    public void EveryListOfThePacksVariablesAsksForTheirDescriptions()
+    {
+        string xaml = System.IO.File.ReadAllText(System.IO.Path.Combine(GameRun.RepoRoot(), "SMSModForge", "MainWindow.xaml"));
+        var boxes = System.Text.RegularExpressions.Regex.Matches(xaml, @"<ComboBox\b[^>]*/>|<ComboBox\b.*?</ComboBox>",
+                                                                  System.Text.RegularExpressions.RegexOptions.Singleline)
+            .Select(m => m.Value)
+            .Where(b => b.Contains("VariableNameOptionsGrouped") || b.Contains("OutfitVariableOptions"))
+            .ToList();
+        _out.WriteLine($"{boxes.Count} dropdowns list the pack's variables");
+        Assert.True(boxes.Count >= 10, $"the scan found {boxes.Count} dropdowns, fewer than the window has");
+        foreach (string b in boxes)
+        {
+            bool asks = b.Contains("view:OptionNotes.Kind=\"packVariable\"")
+                        || b.Contains("<Setter Property=\"view:OptionNotes.Kind\" Value=\"packVariable\"/>");
+            bool under = b.Contains("ItemContainerStyle=\"{StaticResource HintedItem}\"")
+                         || b.Contains("<Setter Property=\"ItemContainerStyle\" Value=\"{StaticResource HintedItem}\"/>");
+            Assert.True(asks && under, "a dropdown of the pack's variables without their notes:\n" + b.Substring(0, System.Math.Min(400, b.Length)));
+        }
+    }
 }

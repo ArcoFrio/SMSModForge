@@ -55,7 +55,7 @@ public sealed class SmartSuggestionsWindowTests : IDisposable
         Settle(vm);
         window.UpdateLayout();
 
-        var target = Descendants<ComboBox>(window).Single(c => c.IsVisible && ReferenceEquals(c.ItemsSource, vm.SceneKeyOptionsGrouped)
+        var target = Descendants<ComboBox>(window).Single(c => c.IsVisible && ReferenceEquals(c.ItemsSource, vm.SceneTargetOptionsGrouped)
                                                                 && c.DataContext == action);
         Assert.Equal("", target.Text);
         return (vm, target);
@@ -136,13 +136,13 @@ public sealed class SmartSuggestionsWindowTests : IDisposable
         WindowHarness.Run(window =>
         {
             var (vm, target) = Opened(window);
-            var listBefore = vm.SceneKeyOptions.ToList();
+            var listBefore = vm.SceneTargetOptions.ToList();
 
             var rows = Open(target);
             Assert.Equal(MirasScenes, Names(rows.Take(3)));
             Assert.All(rows.Take(3), r => Assert.True(Starred(r), $"{r.DataContext} is not starred"));
             Assert.All(rows.Skip(3), r => Assert.False(Starred(r), $"{r.DataContext} is starred"));
-            Assert.Equal(vm.SceneKeyOptions.Count, rows.Count);   // nothing hidden
+            Assert.Equal(vm.SceneTargetOptions.Count, rows.Count);   // nothing hidden
 
             // A line under the suggestions, and between no other rows. It has
             // a gap of its own under the last suggestion, so no row - an EX row
@@ -161,7 +161,7 @@ public sealed class SmartSuggestionsWindowTests : IDisposable
 
             // Only on screen, only in this box: the list is as it was, and
             // the selection untouched.
-            Assert.Equal(listBefore, vm.SceneKeyOptions.ToList());
+            Assert.Equal(listBefore, vm.SceneTargetOptions.ToList());
             Assert.Null(target.SelectedItem);
             Assert.Equal("", target.Text);
 
@@ -177,7 +177,7 @@ public sealed class SmartSuggestionsWindowTests : IDisposable
         WindowHarness.Run(window =>
         {
             var (vm, target) = Opened(window);
-            var inOrder = Names(Open(target).OrderBy(r => vm.SceneKeyOptions.IndexOf((string)r.DataContext)));
+            var inOrder = Names(Open(target).OrderBy(r => vm.SceneTargetOptions.IndexOf((string)r.DataContext)));
             Assert.NotEqual(inOrder, Names(Open(target)));   // the control: suggestions do reorder
 
             target.Text = "JunoHarborScene01";
@@ -243,8 +243,11 @@ public sealed class SmartSuggestionsWindowTests : IDisposable
                 .OrderBy(g => g.TransformToAncestor(PopupContent(target)).Transform(new Point(0, 0)).Y)
                 .Select(g => ((System.Windows.Data.CollectionViewGroup)g.DataContext).Name?.ToString()).ToList();
             _out.WriteLine("headings: " + string.Join(", ", headings));
-            Assert.Equal("Mira", headings[0]);
-            Assert.Equal(new[] { "Juno", "Kai", "Lena" }, headings.Skip(1));   // the rest in their own order
+            // The pack's own headings, then the game's scenes' under theirs (1.9.0).
+            var packs = headings.TakeWhile(h => h == null || !h.StartsWith(OptionGroups.GamesOwn, StringComparison.Ordinal)).ToList();
+            Assert.Equal("Mira", packs[0]);
+            Assert.Equal(new[] { "Juno", "Kai", "Lena" }, packs.Skip(1));   // the rest in their own order
+            Assert.All(headings.Skip(packs.Count), h => Assert.StartsWith(OptionGroups.GamesOwn, h));
         });
     }
 

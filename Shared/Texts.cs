@@ -224,7 +224,12 @@ namespace SMSModForge.Shared
                 if (c == '{')
                 {
                     int close = text.IndexOf('}', i + 1);
-                    if (close > 0 && IsGapName(text.Substring(i + 1, close - i - 1))) end = close;
+                    // A gap, or a character's {name:key} (1.9.0), which names them
+                    // by their key and is no word to translate either.
+                    string key;
+                    if (close > 0 && (IsGapName(text.Substring(i + 1, close - i - 1))
+                                      || NameTokens.TryParse(text.Substring(i, close - i + 1), out key)))
+                        end = close;
                 }
                 else if (c == '<')
                 {

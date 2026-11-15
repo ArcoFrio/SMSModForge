@@ -590,7 +590,11 @@ internal static class QuestValidation
         {
             if (!VanillaGameVariables.Contains(name))
             {
-                issues.Add(new(Severity.Warning, where, Loc.F("validation.quest.counterUnknownVanillaVariable", "name", name), "quest.counterUnknownVariable"));
+                issues.Add(new(Severity.Warning, where,
+                    VanillaGameVariables.SpelledOtherwise(name).Length > 0
+                        ? PackValidator.UnknownVanillaText(name)
+                        : Loc.F("validation.quest.counterUnknownVanillaVariable", "name", name),
+                    "quest.counterUnknownVariable"));
                 return;
             }
             var kind = VariableTypes.OfVanilla(VanillaGameVariables.TypeOf(name));

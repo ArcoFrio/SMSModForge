@@ -164,6 +164,32 @@ public sealed class CharacterDef
     [JsonIgnore]
     public bool IsVanillaCharacter => !string.IsNullOrEmpty(VanillaCharacter);
 
+    /// <summary>
+    /// What this pack calls one of the game's characters instead of the game's
+    /// own name, or null for the game's name (1.9.0). The new name is drawn over
+    /// every line they speak - the game's scenes and every pack's.
+    /// <para/>
+    /// A field of its own rather than <see cref="DisplayName"/>, which on one of
+    /// the game's characters is always the game's name: every load puts it back
+    /// (<see cref="PackMigration"/>), because packs written before 1.3 carried
+    /// their own guesses there. Reading those as renames would have renamed
+    /// characters in packs nobody touched. Older plugins do not know the field,
+    /// and show the game's name.
+    /// <para/>
+    /// Ignored on a character of the pack's own, whose name is its display name.
+    /// </summary>
+    [JsonProperty("newName", Order = 6, NullValueHandling = NullValueHandling.Ignore)]
+    public string? NewName { get; set; }
+
+    public bool ShouldSerializeNewName() => IsVanillaCharacter && !string.IsNullOrWhiteSpace(NewName);
+
+    /// <summary>The name the player sees over this character's lines: the
+    /// pack's new name for one of the game's characters, the display name
+    /// otherwise.</summary>
+    [JsonIgnore]
+    public string ShownName
+        => IsVanillaCharacter && !string.IsNullOrWhiteSpace(NewName) ? NewName! : DisplayName;
+
     /// <summary>Named expressions a dialogue node can select.</summary>
     [JsonProperty("expressions", Order = 11)]
     public List<ActorExpressionDef> Expressions { get; set; } = new();

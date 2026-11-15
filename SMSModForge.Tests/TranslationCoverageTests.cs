@@ -176,8 +176,9 @@ internal static class XamlWords
 
     private static readonly Regex ElementText = new(@"<([\w:.]+)((?:\s[^>]*)?)>([^<]*[^\W\d_]{2}[^<]*)</\1>", RegexOptions.Compiled);
 
-    /// <summary>A dialogue token such as {PC}: syntax, not language.</summary>
-    private static readonly Regex Token = new(@"\{[A-Z]+\}", RegexOptions.Compiled);
+    /// <summary>A dialogue token such as {PC}, or a character's {name:…}: syntax,
+    /// not language.</summary>
+    private static readonly Regex Token = new(@"\{(?:[A-Z]+|name:[^}]*)\}", RegexOptions.Compiled);
 
     /// <summary>Letters, once the layout's escapes are read: <c>&amp;#x25CF;</c> is
     /// a dot, not the word "x25CF".</summary>

@@ -210,6 +210,11 @@ namespace SMSModForge.PackPlugin
         private BepInEx.Logging.ManualLogSource _log;
         private bool _running;
 
+        /// <summary>The player and the speaker this put on its object, for a later
+        /// picture that takes it off (VanillaSceneExtensions).</summary>
+        internal VideoPlayer Player => _player;
+        internal AudioSource Speaker { get; private set; }
+
         internal void Begin(SpriteRenderer target, string filePath, bool loop, float volume,
                             int frameSize, BepInEx.Logging.ManualLogSource log)
         {
@@ -237,6 +242,7 @@ namespace SMSModForge.PackPlugin
                 try
                 {
                     var speaker = gameObject.AddComponent<AudioSource>();
+                    Speaker = speaker;
                     speaker.playOnAwake = false;
                     speaker.volume = Mathf.Clamp01(volume);
                     _player.audioOutputMode = VideoAudioOutputMode.AudioSource;

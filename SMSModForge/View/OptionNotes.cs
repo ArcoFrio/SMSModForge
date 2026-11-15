@@ -38,8 +38,24 @@ public static class OptionNotes
     public const string GameQuest = "gameQuest";
 
     /// <summary>
+    /// One of the game's own variables: what the game does with it, from the
+    /// research behind <see cref="VanillaVariableHints"/> (1.9.0). Drawn UNDER
+    /// the name (the <c>HintedItem</c> item style), not beside it: a hint is a
+    /// sentence or two, where the other notes are a few words.
+    /// </summary>
+    public const string GameVariable = "gameVariable";
+
+    /// <summary>
+    /// One of the pack's own variables: its Description from the Variables
+    /// tab (the author, 1.9.0), drawn under the name as the game's hints are.
+    /// Empty for a variable with none, so its row is the name alone.
+    /// </summary>
+    public const string PackVariable = "packVariable";
+
+    /// <summary>
     /// The notes that depend on the pack open - whose bust a bust is, what a
-    /// scene is called. Set by the window's view model: (kind, value) to note.
+    /// scene is called, what a variable is for. Set by the window's view
+    /// model: (kind, value) to note.
     /// </summary>
     public static Func<string, string, string?>? FromPack { get; set; }
 
@@ -130,11 +146,18 @@ public static class OptionNotes
         [PackComponentType.BlinkingSprite] = "note.component.blinking",
     };
 
+    /// <summary>Whether this kind of list is one of variables, whose notes the
+    /// list's own toggle shows or hides (<see cref="VariableNotes"/>).</summary>
+    public static bool IsVariableKind(string? kind) => kind == GameVariable || kind == PackVariable;
+
     /// <summary>The note beside <paramref name="item"/> in a list of this
-    /// kind, or empty when it has none.</summary>
+    /// kind, or empty when it has none - or when it is a list of variables
+    /// and their notes are switched off there, so they are neither drawn nor
+    /// searched.</summary>
     public static string NoteFor(string? kind, object? item)
     {
         if (string.IsNullOrEmpty(kind) || item == null) return "";
+        if (IsVariableKind(kind) && !VariableNotes.Instance.Show) return "";
         string? text = item as string;
         switch (kind)
         {
@@ -151,7 +174,10 @@ public static class OptionNotes
                 return item is VanillaUiCatalog.Base screen ? screen.Summary : "";
             case GameQuest:
                 return Short(VanillaQuests.Find(item is ViewModel.NavigatorTargetOption q ? q.Token : text)?.Description);
+            case GameVariable:
+                return VanillaVariableHints.For(text);
             case Target:
+            case PackVariable:
                 return text == null ? "" : FromPack?.Invoke(kind, text) ?? "";
             default:
                 return "";
@@ -171,4 +197,33 @@ public static class OptionNotes
         if (stop > 0 && stop < 90) plain = plain.Substring(0, stop + 1);
         return plain.Length <= 90 ? plain : plain.Substring(0, 87).TrimEnd() + "...";
     }
+}
+
+/// <summary>
+/// The toggle at the top of every open list of variables (the author,
+/// 1.9.0): on, each variable's note is drawn under its name and typing
+/// finds its words; off, the list is names only and typing matches names.
+/// One setting for every such list, remembered (EditorPrefs). The lists
+/// bind to <see cref="Show"/>, so flipping it redraws and refilters every
+/// open one at once.
+/// </summary>
+public sealed class VariableNotes : System.ComponentModel.INotifyPropertyChanged
+{
+    public static VariableNotes Instance { get; } = new();
+
+    private bool? _show;
+
+    public bool Show
+    {
+        get => _show ??= Services.EditorPrefs.ShowVariableNotes;
+        set
+        {
+            if (value == Show) return;
+            _show = value;
+            Services.EditorPrefs.ShowVariableNotes = value;
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(nameof(Show)));
+        }
+    }
+
+    public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace SMSModForge.PackPlugin
@@ -99,24 +100,100 @@ namespace SMSModForge.PackPlugin
         }
 
         /// <summary>
-        /// Iterates every <c>NameVariableRuntime</c> in the manager's
-        /// <c>Values</c> dictionary and returns the first one that
-        /// contains <paramref name="name"/>.
+        /// One <c>NameVariableRuntime</c> found for a name, with its methods
+        /// bound to it: called directly rather than through
+        /// <see cref="MethodInfo.Invoke(object, object[])"/>, which allocates an
+        /// argument array and boxes on every call.
         /// </summary>
-        private static object FindRuntime(string name)
+        private sealed class Bound
+        {
+            public object Runtime;
+            public Func<string, object> Get;
+            public Action<string, object> Set;
+        }
+
+        /// <summary>
+        /// Which runtime holds each name, for the names found (1.9.0). Every
+        /// read used to walk the manager's runtimes asking each whether it had
+        /// the name - by reflection, every frame, for every game variable a
+        /// pack's conditions read: tens of lists per read.
+        /// <para/>
+        /// Exactly what the walk finds, by Game Creator 2's own code: the
+        /// <c>Values</c> dictionary is made once and only ever added to (a list
+        /// is created the first time it is asked for), and loading a save writes
+        /// the values in place - which runtime holds a name never changes. So the
+        /// first one holding it stays the first, until the dictionary grows or is
+        /// replaced, and then every answer is dropped and found again. A name not
+        /// found is not remembered: it is looked for again, as before. See
+        /// GAME_UPDATE_CHECKS.md.
+        /// </para>
+        /// </summary>
+        private static readonly Dictionary<string, Bound> _found = new Dictionary<string, Bound>(StringComparer.Ordinal);
+        private static object _foundIn;
+        private static int _foundCount;
+        private static Func<object, string, bool> _exists;
+
+        /// <summary>
+        /// The first <c>NameVariableRuntime</c> in the manager's <c>Values</c>
+        /// dictionary that contains <paramref name="name"/>, with its methods.
+        /// </summary>
+        private static Bound FindRuntime(string name)
         {
             if (_manager == null || _valuesProp == null || _nvrExists == null) return null;
             var values = _valuesProp.GetValue(_manager) as IDictionary;
             if (values == null) return null;
 
+            if (!ReferenceEquals(values, _foundIn) || values.Count != _foundCount)
+            {
+                _found.Clear();
+                _foundIn = values;
+                _foundCount = values.Count;
+            }
+            if (_found.TryGetValue(name, out var known)) return known;
+
             foreach (DictionaryEntry pair in values)
             {
                 var nvr = pair.Value;
                 if (nvr == null) continue;
-                bool exists = (bool)_nvrExists.Invoke(nvr, new object[] { name });
-                if (exists) return nvr;
+                bool exists = Exists(nvr, name);
+                if (!exists) continue;
+                var bound = Bind(nvr);
+                _found[name] = bound;
+                return bound;
             }
             return null;
+        }
+
+        private static bool Exists(object nvr, string name)
+        {
+            if (_exists == null)
+            {
+                // An open delegate over the instance method: one for every runtime.
+                try
+                {
+                    var open = typeof(GameVariableBridge).GetMethod(nameof(OpenExists), BindingFlags.NonPublic | BindingFlags.Static)
+                        .MakeGenericMethod(_nvrExists.DeclaringType);
+                    _exists = (Func<object, string, bool>)open.Invoke(null, new object[] { _nvrExists });
+                }
+                catch { _exists = (o, n) => (bool)_nvrExists.Invoke(o, new object[] { n }); }
+            }
+            return _exists(nvr, name);
+        }
+
+        private static Func<object, string, bool> OpenExists<T>(MethodInfo exists) where T : class
+        {
+            var typed = (Func<T, string, bool>)Delegate.CreateDelegate(typeof(Func<T, string, bool>), null, exists);
+            return (o, n) => typed((T)o, n);
+        }
+
+        private static Bound Bind(object nvr)
+        {
+            var bound = new Bound { Runtime = nvr };
+            try { bound.Get = (Func<string, object>)Delegate.CreateDelegate(typeof(Func<string, object>), nvr, _nvrGet); }
+            catch { bound.Get = n => _nvrGet.Invoke(nvr, new object[] { n }); }
+            try { bound.Set = (Action<string, object>)Delegate.CreateDelegate(typeof(Action<string, object>), nvr, _nvrSet); }
+            catch { bound.Set = (n, v) => _nvrSet.Invoke(nvr, new object[] { n, v }); }
+            return bound;
         }
 
         /// <summary>
@@ -131,7 +208,7 @@ namespace SMSModForge.PackPlugin
             {
                 var nvr = FindRuntime(name);
                 if (nvr == null) return null;
-                return _nvrGet.Invoke(nvr, new object[] { name });
+                return nvr.Get(name);
             }
             catch { return null; }
         }
@@ -225,7 +302,7 @@ namespace SMSModForge.PackPlugin
             {
                 var nvr = FindRuntime(name);
                 if (nvr == null) return;
-                _nvrSet.Invoke(nvr, new object[] { name, value });
+                nvr.Set(name, value);
             }
             catch { /* swallow — pack-side variable writes shouldn't crash the game */ }
         }

@@ -106,6 +106,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
             var parts = new List<string>();
             if (!string.Equals(Model.Key, one.Key, StringComparison.OrdinalIgnoreCase))
                 parts.Add(Loc.F("characters.changed.key", "key", Model.Key));
+            if (CanResetName) parts.Add(Loc.F("characters.changed.name", "name", Model.NewName!));
             if (Model.NameColor != null) parts.Add(Loc.T("characters.changed.nameColour"));
             if (Model.Typewriter != null) parts.Add(Loc.T("characters.changed.voice"));
             if (CanResetDefaultOutfit) parts.Add(Loc.T("characters.changed.defaultOutfit"));
@@ -143,6 +144,14 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     {
         switch (field)
         {
+            case nameof(NameBox):
+                if (InTranslation) break;   // a rename is every language's (CanResetName)
+                // Back to the game's name, which is stored as nothing at all.
+                Model.NewName = null;
+                _nameTyped = null;
+                RaiseName();
+                break;
+
             case nameof(DefaultOutfit):
                 // Back to the bust the game has them enter in, which is the one
                 // it lists first. The field is not editable on one of the
@@ -233,6 +242,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
             if (textures > 0)
                 parts.Add(Loc.P("characters.changed.textures", textures));
 
+            if (CanResetName) parts.Add(Loc.F("characters.loses.name", "name", Model.NewName!));
             if (Model.Typewriter != null) parts.Add(Loc.T("characters.loses.voice"));
             if (Model.NameColor != null) parts.Add(Loc.T("characters.loses.nameColour"));
 
@@ -264,6 +274,8 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
 
         Model.Name = fresh.Name;
         Model.DisplayName = fresh.DisplayName;
+        Model.NewName = null;
+        _nameTyped = null;
         Model.BustSource = fresh.BustSource;
         Model.DefaultOutfit = fresh.DefaultOutfit;
         Model.NameColor = null;
@@ -288,6 +300,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     private void RefreshEverything()
     {
         OnPropertyChanged(nameof(DisplayName));
+        OnPropertyChanged(nameof(NameBox));
         OnPropertyChanged(nameof(Display));
         OnPropertyChanged(nameof(Name));
         OnPropertyChanged(nameof(Pronouns));
@@ -392,6 +405,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
 
     private void RefreshResets()
     {
+        OnPropertyChanged(nameof(CanResetName));
         OnPropertyChanged(nameof(CanResetNameColor));
         OnPropertyChanged(nameof(CanResetKey));
         OnPropertyChanged(nameof(CanResetDefaultOutfit));
@@ -410,6 +424,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     private static readonly HashSet<string> ViewOnly = new(StringComparer.Ordinal)
     {
         nameof(IsModified), nameof(IsQuietVanilla), nameof(IsFilteredIn), nameof(IsExpanded),
+        nameof(CanResetName), nameof(RenameNote),
         nameof(CanResetNameColor), nameof(CanResetKey), nameof(CanResetDefaultOutfit),
         nameof(CanResetEverything), nameof(ResetEverythingSummary), nameof(ChangedFields),
         nameof(CanResetFrequency), nameof(CanResetPitchMin),
@@ -552,17 +567,114 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
 
     // ── Identity ──────────────────────────────────────────────────────────
 
+    /// <summary>
+    /// The name shown for this character: over their lines, in the lists, in
+    /// every preview. One of the game's characters shows the pack's new name
+    /// for them when it has one (<see cref="CharacterDef.NewName"/>).
+    /// </summary>
     public string DisplayName
     {
-        get => Model.DisplayName;
+        get => Model.ShownName;
         set
         {
+            if (CanRename) { NameBox = value; return; }
             Model.DisplayName = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(Display));
             if (_namesFollowDisplay) DeriveNames();
         }
     }
+
+    /// <summary>
+    /// What the name box holds. For a character of the pack's own, the display
+    /// name. For one of the game's, the pack's new name for them, starting as
+    /// the game's own: typing the game's name back, or emptying the box, is no
+    /// rename at all, and nothing is stored.
+    /// <para/>
+    /// An emptied box stays empty while the author types, rather than snapping
+    /// back to the game's name under the caret: what was typed is kept here
+    /// until the box is left (<see cref="ForgetTyping"/>).
+    /// </summary>
+    public string NameBox
+    {
+        get
+        {
+            if (!CanRename) return DisplayName;
+            // While it is being typed, the box shows what was typed - spaces
+            // included, so "Ann " can become "Ann Smith" - and the rename is kept
+            // trimmed, as the game shows it.
+            if (_nameTyped != null) return _nameTyped;
+            return Model.NewName ?? Model.DisplayName;
+        }
+        set
+        {
+            if (!CanRename) { DisplayName = value; return; }
+            if (InTranslation) return;      // a new name is not a translation's (CanEditName)
+            _nameTyped = value;
+            string trimmed = (value ?? "").Trim();
+            string? now = trimmed.Length == 0
+                       || string.Equals(trimmed, Model.DisplayName?.Trim(), StringComparison.Ordinal)
+                ? null : trimmed;
+            if (string.Equals(now, Model.NewName, StringComparison.Ordinal)) return;
+            Model.NewName = now;
+            RaiseName();
+        }
+    }
+
+    private string? _nameTyped;
+
+    /// <summary>The box was left, or another character chosen: an empty box
+    /// goes back to showing the game's name.</summary>
+    public void ForgetTyping()
+    {
+        if (_nameTyped == null) return;
+        _nameTyped = null;
+        OnPropertyChanged(nameof(NameBox));
+    }
+
+    private void RaiseName()
+    {
+        OnPropertyChanged(nameof(NameBox));
+        OnPropertyChanged(nameof(DisplayName));
+        OnPropertyChanged(nameof(Display));
+        OnPropertyChanged(nameof(RenameNote));
+        RefreshResets();
+    }
+
+    /// <summary>Whether this is one of the game's characters, whom a pack may
+    /// give a new name (1.9.0) though not a new identity.</summary>
+    public bool CanRename => Model.IsVanillaCharacter && !Model.IsPlayer;
+
+    /// <summary>Whether the name box can be typed in: a character of the
+    /// pack's own, or one of the game's being renamed - not while a translation
+    /// is edited, since a new name is one for every language, and the box there
+    /// compared what was typed with the translated name (typing the game's own
+    /// "Anna" against a translated "Ana" stored a rename to "Anna").</summary>
+    public bool CanEditName => CanEditIdentity || (CanRename && !InTranslation);
+
+    /// <summary>Whether this pack renamed one of the game's characters, and the
+    /// rename can be taken back here.</summary>
+    public bool CanResetName => CanRename && !InTranslation && !string.IsNullOrWhiteSpace(Model.NewName);
+
+    /// <summary>Whether a translation of the pack is being edited; the window
+    /// says (<see cref="RaiseTranslating"/>).</summary>
+    public Func<bool>? Translating { get; set; }
+
+    private bool InTranslation => Translating?.Invoke() == true;
+
+    /// <summary>A translation began or ended being edited.</summary>
+    public void RaiseTranslating()
+    {
+        OnPropertyChanged(nameof(CanEditName));
+        OnPropertyChanged(nameof(CanResetName));
+    }
+
+    /// <summary>What the box under the name says about a rename, or empty for
+    /// a character of the pack's own.</summary>
+    public string RenameNote
+        => !CanRename ? ""
+         : CanResetName ? Loc.F("characters.rename.renamed", "name", Model.DisplayName)
+         : Loc.T("characters.rename.note");
 
     /// <summary>
     /// How the character is spoken of: what the author chose for one of the
@@ -833,6 +945,9 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     public void RefreshOutfitDefaults()
     {
         foreach (var outfit in Outfits) outfit.RefreshDefaultOutfit();
+        // Once for all of them: the outfits' default-outfit names no longer ask
+        // it one by one (OutfitViewModel.ChangesNothingSaved, 1.9.0).
+        RefreshModified();
     }
 
     /// <summary>

@@ -75,7 +75,12 @@ public sealed class MarkupTextBox : RichTextBox
 
         // A token is drawn in its character's name colour, which can change
         // while the line is on screen. Asked only while showing.
-        Loaded += (_, _) => { DialogueMarkup.TokenColorsChanged -= TokenColorsChanged; DialogueMarkup.TokenColorsChanged += TokenColorsChanged; };
+        Loaded += (_, _) =>
+        {
+            DialogueMarkup.TokenColorsChanged -= TokenColorsChanged;
+            DialogueMarkup.TokenColorsChanged += TokenColorsChanged;
+            if (_drawWhenLoaded) { _drawWhenLoaded = false; Redraw(); }
+        };
         Unloaded += (_, _) => DialogueMarkup.TokenColorsChanged -= TokenColorsChanged;
 
         CommandBindings.Add(new System.Windows.Input.CommandBinding(
@@ -154,7 +159,7 @@ public sealed class MarkupTextBox : RichTextBox
             new FrameworkPropertyMetadata(false, (d, _) =>
             {
                 var box = (MarkupTextBox)d;
-                if (box.ReadableColours) ReadableInk.Watch(box, box.Redraw);
+                if (box.ReadableColours) ReadableInk.Watch(box, box.RedrawForInk);
                 box.Redraw();
             }));
 
@@ -177,12 +182,43 @@ public sealed class MarkupTextBox : RichTextBox
         Render(Text);
     }
 
+    /// <summary>A line drawn while loading and not yet drawn.</summary>
+    private bool _drawWhenLoaded;
+
+    /// <summary>What the readable colours were drawn against: the colour behind
+    /// the box, the theme's accent brush (the cue underline) and the font size.
+    /// Default (never equal) when the line was drawn any other way.</summary>
+    private (Color Behind, object? Accent, double Size) _inkDrawn;
+
+    private (Color Behind, object? Accent, double Size) InkNow(Color behind)
+        => (behind, TryFindResource(Services.ThemeManager.KeyAccent), FontSize);
+
+    /// <summary>
+    /// When what is behind the box may have changed (it was laid out, the theme
+    /// changed, its row was selected): drawn again only when something the
+    /// readable colours are made from did change. The same line against the
+    /// same colours draws the same document, so it is not rebuilt for nothing -
+    /// which a row was, once more, right after it first drew (1.9.0).
+    /// </summary>
+    private void RedrawForInk()
+    {
+        if (_rendered != null && _rendered == Text && !_drawWhenLoaded
+            && _inkDrawn.Equals(InkNow(ReadableInk.Behind(this))))
+            return;
+        Redraw();
+    }
+
+
     /// <summary>What marks a run whose colour is the game's, for
     /// <see cref="TextGlow"/> to light.</summary>
     internal static readonly object Glows = new object();
 
     /// <summary>The line has been drawn anew.</summary>
     public event Action? Rendered;
+
+    /// <summary>How many times a line (not an empty one) has been built into the
+    /// document - for tests: a node row draws its line once.</summary>
+    internal int Draws;
 
     /// <summary>Where the caret is, counted in characters of <see cref="Text"/>.</summary>
     public int CaretIndex
@@ -589,8 +625,18 @@ public sealed class MarkupTextBox : RichTextBox
         return built.ToString();
     }
 
-    /// <summary>The character offset a position in the document sits at.</summary>
-    private int OffsetOf(TextPointer at)
+    /// <summary>
+    /// The character offset a position in the document sits at.
+    /// <para/>
+    /// Inside a run it counts symbols, not the text of a range: a run holds
+    /// only characters, one symbol each, so the two agree (MarkupTextBoxTests
+    /// holds them to it at every position) - and a TextRange normalizes both
+    /// its ends, which in WPF looks up the inline types' attributes by
+    /// reflection, uncached, every time. That was most of the time a dialogue
+    /// took to show its lines (1.9.0).
+    /// </para>
+    /// </summary>
+    internal int OffsetOf(TextPointer at)
     {
         int offset = 0;
         foreach (var inline in Body.Inlines)
@@ -598,7 +644,7 @@ public sealed class MarkupTextBox : RichTextBox
             if (inline is Run run)
             {
                 if (at.CompareTo(run.ContentStart) >= 0 && at.CompareTo(run.ContentEnd) <= 0)
-                    return offset + new TextRange(run.ContentStart, at).Text.Length;
+                    return offset + run.ContentStart.GetOffsetToPosition(at);
                 offset += run.Text.Length;
             }
             else if (inline is LineBreak)
@@ -677,11 +723,25 @@ public sealed class MarkupTextBox : RichTextBox
     private void Render(string text)
     {
         if (_syncing) return;
+        // A box built from a template (a row of the node list) is drawn once it
+        // is loaded, with all its settings in place. They arrive one at a time
+        // while WPF builds the row - the line, then hiding its tags, then readable
+        // colours - and each rebuilt the document: three times for one line
+        // before anybody saw it, most of what showing a dialogue cost (1.9.0).
+        // Loaded comes after layout and before the first frame is drawn, and
+        // layout runs again, so the first frame already shows the line.
+        if (!IsLoaded && TemplatedParent != null) { _drawWhenLoaded = true; return; }
         if (text == _rendered && (HidesTags || PlainText() == text)) return;
 
-        int caret = CaretIndex;
-        int anchor = OffsetOf(Selection.Start);
-        int head = OffsetOf(Selection.End);
+        // A display-only box (a row of the node list) has no caret anybody can
+        // see and no selection anybody can make, so there is none to keep:
+        // putting a caret back costs WPF the same uncached reflection as
+        // OffsetOf did, once per row.
+        if (text.Length > 0) Draws++;
+        bool keepsCaret = !(HidesTags && !Focusable);
+        int caret = keepsCaret ? CaretIndex : 0;
+        int anchor = keepsCaret ? OffsetOf(Selection.Start) : 0;
+        int head = keepsCaret ? OffsetOf(Selection.End) : 0;
         bool hadSelection = head > anchor;
 
         _syncing = true;
@@ -695,11 +755,13 @@ public sealed class MarkupTextBox : RichTextBox
             {
                 var body = Body;
                 body.Inlines.Clear();
+                _inkDrawn = default;
                 if (HidesTags && ReadableColours)
                 {
                     // The pieces the game-look row draws from: the tags gone,
                     // the words in brackets marked as the game marks them.
                     var behind = ReadableInk.Behind(this);
+                    _inkDrawn = InkNow(behind);
                     foreach (var piece in DialogueLinePreview.Pieces(text))
                         foreach (var inline in BuildReadable(piece, behind))
                             body.Inlines.Add(inline);
@@ -723,7 +785,7 @@ public sealed class MarkupTextBox : RichTextBox
                 var to = PointerAt(head);
                 if (from != null && to != null) Selection.Select(from, to);
             }
-            else
+            else if (keepsCaret)
             {
                 var at = PointerAt(caret);
                 if (at != null) CaretPosition = at;
@@ -807,7 +869,7 @@ public sealed class MarkupTextBox : RichTextBox
             if (piece.Token)
             {
                 Apply(run, piece.Style);
-                var person = DialogueMarkup.TokenColor?.Invoke(lines[i]);
+                var person = DialogueMarkup.TokenColor?.Invoke(piece.Source ?? lines[i]);
                 var chip = (Color)ColorConverter.ConvertFromString(DialogueLook.TokenChipHex)!;
                 run.Background = new SolidColorBrush(chip);
                 run.Foreground = new SolidColorBrush(person is { } c

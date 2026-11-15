@@ -72,8 +72,8 @@ namespace SMSModForge.Shared
         /// </summary>
         public static int TaskId(string packId, string questKey, string taskKey)
         {
-            return FromHash(Sha1("smsmodforge/task/" + (packId ?? "") + "/" + (questKey ?? "") + "/"
-                                 + (taskKey ?? "")));
+            return IdOf("smsmodforge/task/" + (packId ?? "") + "/" + (questKey ?? "") + "/"
+                        + (taskKey ?? ""));
         }
 
         private static int FromHash(byte[] hash)
@@ -106,8 +106,26 @@ namespace SMSModForge.Shared
         /// ids.
         /// </summary>
         public static int AddedTaskId(string packId, string gameQuest, string taskKey)
-            => FromHash(Sha1("smsmodforge/added-task/" + (packId ?? "") + "/" + (gameQuest ?? "") + "/"
-                             + (taskKey ?? "")));
+            => IdOf("smsmodforge/added-task/" + (packId ?? "") + "/" + (gameQuest ?? "") + "/"
+                    + (taskKey ?? ""));
+
+        /// <summary>
+        /// The id a text hashes to, remembered (1.9.0): the plugin asks for the
+        /// ids of the tasks it watches every frame, and each was a fresh SHA-1.
+        /// The same text always hashes to the same id.
+        /// </summary>
+        private static int IdOf(string text)
+        {
+            lock (_ids)
+                if (_ids.TryGetValue(text, out int known)) return known;
+            int id = FromHash(Sha1(text));
+            lock (_ids)
+                if (_ids.Count < 100000) _ids[text] = id;
+            return id;
+        }
+
+        private static readonly System.Collections.Generic.Dictionary<string, int> _ids =
+            new System.Collections.Generic.Dictionary<string, int>(System.StringComparer.Ordinal);
 
         private static byte[] Sha1(string text)
         {

@@ -114,9 +114,11 @@ public static class PackTranslations
     }
 
     /// <summary>The pack's texts to translate, from one writing-out of the pack.</summary>
-    public static SourceSnapshot Snapshot(ModPack pack)
+    public static SourceSnapshot Snapshot(ModPack pack) => Snapshot(pack, JObject.Parse(PackRepository.SerializeAsSaved(pack)));
+
+    /// <summary>The same, from a writing-out of the pack already parsed (read, never changed).</summary>
+    internal static SourceSnapshot Snapshot(ModPack pack, JObject json)
     {
-        var json = JObject.Parse(PackRepository.SerializeAsSaved(pack));
         var names = new Names(json);
         var entries = new List<(TextFile.Entry, bool)>();
         var letters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -228,16 +230,20 @@ public static class PackTranslations
 
     /// <summary>Every translation in the pack's folder, checked against the
     /// pack as it stands.</summary>
-    public static List<Checked> CheckAll(ModPack pack, string packRoot)
+    public static List<Checked> CheckAll(ModPack pack, string packRoot) => CheckAll(pack, packRoot, null);
+
+    /// <summary>The same, sharing a Validate's writing-out of the pack and its
+    /// reading of each file.</summary>
+    internal static List<Checked> CheckAll(ModPack pack, string packRoot, Validation.SavedPack? saved)
     {
         var list = new List<Checked>();
         string folder = FolderOf(packRoot);
         if (!Directory.Exists(folder)) return list;
-        var snapshot = Snapshot(pack);
+        var snapshot = saved != null ? Snapshot(pack, saved.Json) : Snapshot(pack);
         foreach (string path in Files(packRoot))
         {
             string code = System.IO.Path.GetFileNameWithoutExtension(path);
-            var file = Loc.Read(path);
+            var file = saved != null ? saved.Read(path) : Loc.Read(path);
             if (file == null) continue;
             list.Add(new Checked(code, path, Check(snapshot, code, file)));
         }

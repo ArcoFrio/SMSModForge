@@ -78,6 +78,10 @@ public sealed class InGameCheckPacksTests : IDisposable
         pack.Sfx.Add(new SfxDef { Key = "Buzz", DisplayName = "Buzz", AudioPath = "Audio/buzz.wav", TextPatterns = new() { "*buzz*" } });
         pack.Characters.Add(new CharacterDef { Key = "tester", DisplayName = "Tester", Pronouns = Pronouns.Neutral, NameColor = "#FF8800" });
         pack.Characters.Add(Anna("#FF00FF"));
+        // K8: the game's Josef renamed here and again in gameorder, which loads
+        // later; and a character of this pack's own who is also called Josef.
+        pack.Characters.Add(Josef("Joe"));
+        pack.Characters.Add(new CharacterDef { Key = "neighbourjosef", DisplayName = "Josef", Pronouns = Pronouns.Male });
         pack.Variables.Add(new PackVariableDef { Name = "step", Type = PackVariableType.Int, DefaultValue = "0", Persisted = false });
 
         static DialogueNodeDef Line(int id, string text, float seconds, params SoundCueDef[] cues)
@@ -141,9 +145,19 @@ public sealed class InGameCheckPacksTests : IDisposable
         Chain(music);
         pack.Dialogues.Add(music);
 
+        // K8: a line of the game's Josef's, then one of this pack's own Josef's.
+        // K9: the first names both by token, and a key that is nobody's.
+        var names = new DialogueDef { Key = "names", DisplayName = "Names" };
+        names.Nodes.Add(new DialogueNodeDef { Id = 1, Actor = "josef", Text = NamesLine,
+                                              Duration = NodeDurationMode.Timeout, Timeout = 3f });
+        names.Nodes.Add(new DialogueNodeDef { Id = 2, Actor = "neighbourjosef", Text = "And a Josef of this pack's own.",
+                                              Duration = NodeDurationMode.Timeout, Timeout = 3f });
+        Chain(names);
+        pack.Dialogues.Add(names);
+
         // Only ever started by the bridge: a conversation with nothing to wait
         // for starts itself, and took over another check's.
-        foreach (var d in new[] { sounds, timing, music })
+        foreach (var d in new[] { sounds, timing, music, names })
             d.StartConditions.Add(new NodeConditionDef { Type = "VariableEquals", Params = { ["name"] = "step", ["value"] = "99" } });
 
         // One of the game's conversations, with a line of the pack's in it.
@@ -166,15 +180,51 @@ public sealed class InGameCheckPacksTests : IDisposable
         annas.Duration = NodeDurationMode.Timeout;
         annas.Timeout = 3f;
         pack.Dialogues.Add(dishes.Model);
+
+        // K10's control: one of the game's lines naming Josef, rewritten in this
+        // pack's words - which are the pack's, and keep the name as written.
+        var prism = new DialogueViewModel(new DialogueDef()) { WantsVanilla = true };
+        prism.VanillaSource = VanillaDialogueCatalog.Find(RewrittenConversation);
+        prism.Model.Nodes.Single(n => n.Id == RewrittenNode).Text = RewrittenLine;
+        pack.Dialogues.Add(prism.Model);
         return pack;
     }
+
+    /// <summary>K10: the game's line gamecheck rewrites (it said "What if Josef or Adrian
+    /// sees the magazine?").</summary>
+    internal const string RewrittenConversation = "8_Room_Talk/Kitchen/Anna_Prisme_1";
+    internal const int RewrittenNode = -1363237702;
+    internal const string RewrittenLine = "What if Josef sees it? gamecheck wrote this.";
 
     internal static ModPack GameOrder()
     {
         var pack = PackRepository.CreateEmpty("gameorder");
         pack.PackId = "gameorder";
         pack.Characters.Add(Anna("#00C000"));
+        pack.Characters.Add(Josef("Joseph"));
+        // K10: a character named on one of the game's screens.
+        var celeste = VanillaCastSeed.Make(VanillaCharacters.Find("Celeste")!);
+        celeste.NewName = "Celestia";
+        pack.Characters.Add(celeste);
         return pack;
+    }
+
+    /// <summary>K9's line, as written: the game's Josef, gamecheck's own Josef, and
+    /// a key nobody has.</summary>
+    internal const string NamesLine = "I am {name:josef}; he is {name:neighbourjosef}, or {name:NeighbourJosef}; {name:nobodyatall} stays.";
+
+    /// <summary>...and as the player should read it, gameorder's name for the game's Josef shown.</summary>
+    internal const string NamesLineShown = "I am Joseph; he is Josef, or Josef; {name:nobodyatall} stays.";
+
+    /// <summary>One of the game's conversations, opening with a line of Josef's (K8).</summary>
+    internal const string JosefTalks = "8_Room_Talk/Kitchen/Pre_events/AnnaJosefOutfitWhat";
+
+    /// <summary>The game's Josef as the editor adopts him, with a new name.</summary>
+    private static CharacterDef Josef(string newName)
+    {
+        var josef = VanillaCastSeed.Make(VanillaCharacters.Find("Josef")!);
+        josef.NewName = newName;
+        return josef;
     }
 
     /// <summary>The game's Anna as the editor adopts her, in a colour of

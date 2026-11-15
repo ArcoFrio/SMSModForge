@@ -44,14 +44,38 @@ namespace SMSModForge.PackPlugin
             => GameTextTokens.Resolve(Resolve(text, vars));
 
         /// <summary>Substitute every <c>[PV:name]</c> token from
-        /// <paramref name="vars"/>. Null store leaves tokens verbatim.</summary>
+        /// <paramref name="vars"/>, then every <c>{name:key}</c> with that
+        /// character's name as it is shown now (1.9.0). Null store leaves tokens
+        /// verbatim.</summary>
         public static string Resolve(string text, PackVariableStore vars)
         {
-            if (string.IsNullOrEmpty(text) || text.IndexOf('[') < 0) return text;
-            return Rx.Replace(text, m =>
+            if (string.IsNullOrEmpty(text)) return text;
+            if (text.IndexOf('[') >= 0)
+                text = Rx.Replace(text, m =>
+                {
+                    string name = m.Groups[1].Value.Trim();
+                    return vars != null ? vars.GetString(name) : m.Value;
+                });
+            return vars == null ? text : ResolveNames(text, vars.PackId);
+        }
+
+        /// <summary>
+        /// Every <c>{name:key}</c> in a pack's text, as the name its character is
+        /// shown by: the pack's own character under that key, or the game's, with
+        /// a new name some pack gave them (<see cref="NewNames"/>). A key that is
+        /// nobody's stays as written, so the typo shows.
+        /// </summary>
+        public static string ResolveNames(string text, string packId)
+        {
+            if (!SMSModForge.Shared.NameTokens.MayHave(text)) return text;
+            var actors = string.IsNullOrEmpty(packId) ? null : Plugin.TryGetPackActors(packId);
+            return SMSModForge.Shared.NameTokens.Resolve(text, key =>
             {
-                string name = m.Groups[1].Value.Trim();
-                return vars != null ? vars.GetString(name) : m.Value;
+                var entry = actors != null ? actors.ForNameToken(key) : null;
+                if (entry != null) return entry.ShownName;
+                // No pack to ask (or it has nobody by that key): the game's cast.
+                string cast = SMSModForge.Shared.VanillaCastData.NameOfKey(key);
+                return cast == null ? null : NewNames.NameOf(key) ?? cast;
             });
         }
     }

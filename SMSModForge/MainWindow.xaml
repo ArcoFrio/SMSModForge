@@ -371,6 +371,74 @@
             </Setter>
         </Style>
 
+        <!-- The same, with the note UNDER the item (1.9.0): what one of the game's
+             own variables does, from the research behind VanillaVariableHints, or
+             the description of one of the pack's own (view:OptionNotes.Kind
+             "packVariable"). A hint is a sentence or two, so it wraps at a reading
+             width instead of stretching the list as wide as its longest hint.
+             PackNotesVersion only says WHEN to read the note again: a description
+             edited after a list was first opened, under a name that did not change. -->
+        <Style x:Key="HintedItem" TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+            <!-- The app's own search, asked again when the list's notes toggle
+                 flips (VariableNotes): off, typing matches the names only. -->
+            <Setter Property="Visibility">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static conv:SearchMatchConverter.Instance}">
+                        <Binding Path="."/>
+                        <Binding Path="(view:ComboBoxSearch.Typed)"
+                                 RelativeSource="{RelativeSource AncestorType=ComboBox}"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=ComboBox}"/>
+                        <Binding Path="Show" Source="{x:Static view:VariableNotes.Instance}"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="mark" Style="{StaticResource SuggestionMark}"/>
+                                </StackPanel>
+                                <TextBlock x:Name="hint" Foreground="{DynamicResource Theme.TextMuted}" FontSize="11"
+                                           TextWrapping="Wrap" MaxWidth="440" HorizontalAlignment="Left" Margin="8,0,0,2">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{x:Static conv:OptionNoteConverter.Instance}">
+                                            <Binding Path="."/>
+                                            <Binding Path="(view:OptionNotes.Kind)"
+                                                     RelativeSource="{RelativeSource AncestorType=ComboBox}"/>
+                                            <Binding Path="DataContext.PackNotesVersion"
+                                                     RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                            <Binding Path="Show" Source="{x:Static view:VariableNotes.Instance}"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Style.Triggers>
+                                                <Trigger Property="Text" Value="">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.Accent}"/>
+                                <Setter TargetName="mark" Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+                                <!-- Muted text on the accent is hard to read. -->
+                                <Setter TargetName="hint" Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <DataTemplate DataType="{x:Type vm:GamePathOption}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Value}"/>
@@ -880,6 +948,7 @@
                     <ComboBox view:KnownValue.Check="True" Style="{StaticResource GroupedComboBox}"
                            ItemsSource="{Binding DataContext.VariableNameOptionsGrouped,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
+                           view:OptionNotes.Kind="packVariable" ItemContainerStyle="{StaticResource HintedItem}"
                            IsEditable="True"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                            ToolTip="{Binding Tooltip}">
@@ -917,6 +986,7 @@
                     <ComboBox view:KnownValue.Check="True" Style="{StaticResource GroupedComboBox}"
                            ItemsSource="{Binding DataContext.ListVariableNameOptionsGrouped,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
+                           view:OptionNotes.Kind="packVariable" ItemContainerStyle="{StaticResource HintedItem}"
                            IsEditable="True"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                            ToolTip="{Binding Tooltip}">
@@ -969,6 +1039,7 @@
                     <ComboBox view:KnownValue.Check="True" Style="{StaticResource GroupedComboBox}"
                           ItemsSource="{Binding DataContext.VariableNameOptionsGrouped,
                                         RelativeSource={RelativeSource AncestorType=Window}}"
+                          view:OptionNotes.Kind="packVariable" ItemContainerStyle="{StaticResource HintedItem}"
                           IsEditable="True"
                           Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                           ToolTip="{Binding Tooltip}">
@@ -1417,6 +1488,8 @@
                                   SceneSprite="{Binding PreviewScene.SceneSprite, FallbackValue=''}"
                                   VanillaFrame="{Binding PreviewScene.VanillaFrame, FallbackValue=''}"
                                   CustomFrameSprite="{Binding PreviewScene.CustomFrameSprite, FallbackValue=''}"
+                                  GamePicture="{Binding PreviewScene.GamePicture, FallbackValue=''}"
+                                  GameFrame="{Binding PreviewScene.GameFrame, FallbackValue=''}"
                                   Visibility="{Binding ShowsScenePreview, Converter={StaticResource BoolToVisibility}}"/>
                 <ctl:ArtThumb BoxSize="{Binding PreviewBoxSize}"
                               ToolTip="{l:T action.preview.before.tip}"
@@ -1432,6 +1505,7 @@
                                   SceneSprite="{Binding SceneAfterSprite}"
                                   VanillaFrame="{Binding PreviewScene.VanillaFrame, FallbackValue=''}"
                                   CustomFrameSprite="{Binding PreviewScene.CustomFrameSprite, FallbackValue=''}"
+                                  GameFrame="{Binding PreviewScene.GameFrame, FallbackValue=''}"
                                   Visibility="{Binding ShowsSceneAfter, Converter={StaticResource BoolToVisibility}}"/>
                 <ctl:ArtThumb BoxSize="{Binding PreviewBoxSize}"
                               ToolTip="{l:T action.preview.after.tip}"
@@ -1763,7 +1837,7 @@
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="Scene">
                                             <Setter Property="ItemsSource"
-                                                    Value="{Binding DataContext.SceneKeyOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.SceneTargetOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -1870,10 +1944,15 @@
                                 <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="ItemsSource"
                                             Value="{Binding DataContext.VariableNameOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                    <!-- The pack's own: each one's description, under its name (1.9.0). -->
+                                    <Setter Property="view:OptionNotes.Kind" Value="packVariable"/>
+                                    <Setter Property="ItemContainerStyle" Value="{StaticResource HintedItem}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsVanillaSource}" Value="True">
                                             <Setter Property="ItemsSource"
                                                     Value="{Binding DataContext.VanillaGameVariableOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            <!-- What the game does with each, under its name (1.9.0). -->
+                                            <Setter Property="view:OptionNotes.Kind" Value="gameVariable"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -2504,10 +2583,15 @@
                                 <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="ItemsSource"
                                             Value="{Binding DataContext.VariableNameOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                    <!-- The pack's own: each one's description, under its name (1.9.0). -->
+                                    <Setter Property="view:OptionNotes.Kind" Value="packVariable"/>
+                                    <Setter Property="ItemContainerStyle" Value="{StaticResource HintedItem}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsVanillaSource}" Value="True">
                                             <Setter Property="ItemsSource"
                                                     Value="{Binding DataContext.VanillaGameVariableOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            <!-- What the game does with each, under its name (1.9.0). -->
+                                            <Setter Property="view:OptionNotes.Kind" Value="gameVariable"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -2595,6 +2679,7 @@
                         <ComboBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,2" Style="{StaticResource GroupedComboBox}"
                                   IsEditable="True"
                                   ItemsSource="{Binding DataContext.ListVariableNameOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  view:OptionNotes.Kind="packVariable" ItemContainerStyle="{StaticResource HintedItem}"
                                   Text="{Binding VarFromList, UpdateSourceTrigger=PropertyChanged}"
                                   Visibility="{Binding IsRandomFromList, Converter={StaticResource BoolToVisibility}}"
                                   ToolTip="{l:T action.listVariablePickRandom.tip}">
@@ -2610,6 +2695,7 @@
                         <ComboBox Grid.Row="5" Grid.Column="1" Margin="0,0,0,2" Style="{StaticResource GroupedComboBox}"
                                   IsEditable="True"
                                   ItemsSource="{Binding DataContext.ListVariableNameOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  view:OptionNotes.Kind="packVariable" ItemContainerStyle="{StaticResource HintedItem}"
                                   Text="{Binding VarExcluding, UpdateSourceTrigger=PropertyChanged}"
                                   Visibility="{Binding IsPickRandomOnly, Converter={StaticResource BoolToVisibility}}"
                                   ToolTip="{l:T action.optionalEntriesRemovedList.tip}">
@@ -2791,7 +2877,7 @@
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Category}" Value="Scene">
                                             <Setter Property="ItemsSource"
-                                                    Value="{Binding DataContext.SceneKeyOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.SceneTargetOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                         <!-- A screen of the pack's own, by id -
                                              which is what makes one screen open
@@ -4053,6 +4139,13 @@
                         </Style>
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
+                <!-- One setting, on until unticked (the author, 1.9.0); only with a
+                     pack in a folder, the one it would open. The same as the box on
+                     the ModForge tab. -->
+                <MenuItem x:Name="LoadPackOnStartMenu" Header="{l:T menu.loadPackOnStart}" IsCheckable="True"
+                          IsChecked="{Binding LoadPackOnStart, Mode=TwoWay}"
+                          IsEnabled="{Binding CanChooseLoadPackOnStart}"
+                          ToolTip="{l:T menu.loadPackOnStart.tip}"/>
                 <Separator/>
                 <MenuItem Header="{l:T menu.savePack}"          Command="{Binding SavePackCommand}"    InputGestureText="{l:T menu.savePack.keys}"/>
                 <MenuItem Header="{l:T menu.savePackAs}"     Command="{Binding SavePackAsCommand}" InputGestureText="{l:T menu.savePackAs.keys}"/>
@@ -4326,6 +4419,11 @@
                                     <TextBlock Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" Margin="60,2,0,0" TextWrapping="Wrap"
                                                Text="{l:T home.packLanguage.note}"/>
                                 </StackPanel>
+                                <!-- File > Load this pack on start, here too (the author, 1.9.0). -->
+                                <CheckBox x:Name="LoadPackOnStartBox" Margin="0,8,0,0" Content="{l:T menu.loadPackOnStart}"
+                                          IsChecked="{Binding LoadPackOnStart, Mode=TwoWay}"
+                                          IsEnabled="{Binding CanChooseLoadPackOnStart}"
+                                          ToolTip="{l:T menu.loadPackOnStart.tip}"/>
                             </StackPanel>
                         </GroupBox>
 
@@ -4464,6 +4562,11 @@
                                         <Separator/>
                                         <MenuItem x:Name="MenuUnignoreIssue" Header="{l:T home.menuUnignoreIssue}" Click="UnignoreIssue_Click"
                                                   ToolTip="{l:T home.menuUnignoreIssue.tip}"/>
+                                        <!-- An issue that can be put right for the author (1.9.0): a
+                                             game character's name typed out, switched to the token. -->
+                                        <Separator x:Name="MenuFixSeparator"/>
+                                        <MenuItem x:Name="MenuFixIssue" Header="{l:T home.menuUseNameToken.none}" Click="FixIssue_Click"
+                                                  ToolTip="{l:T home.menuUseNameToken.tip}"/>
                                     </ContextMenu>
                                 </ListBox.ContextMenu>
                                 <ListBox.ItemTemplate>
@@ -4938,12 +5041,28 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <TextBlock Text="{l:T characters.characterName}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                        <TextBox view:TutorialAnchor.Id="field:characterName"
-                                                 Grid.Row="0" Grid.Column="1" Margin="0,2"
-                                                 Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}"
-                                                 IsEnabled="{Binding CanEditIdentity}"
-                                                 ToolTip="{l:T characters.characterName.tip}"/>
+                                        <TextBlock Text="{l:T characters.characterName}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" Margin="0,5,0,0"/>
+                                        <!-- One of the game's characters can be given a new name (1.9.0):
+                                             the box starts with the game's, a Reset beside it puts that
+                                             back, and the line under it says what a new name reaches. -->
+                                        <StackPanel Grid.Row="0" Grid.Column="1">
+                                            <DockPanel Margin="0,2">
+                                                <Button x:Name="ResetNameButton" DockPanel.Dock="Right"
+                                                        Content="{l:T characters.resetField}" Margin="6,0,0,0" Padding="8,0"
+                                                        Command="{Binding ResetFieldCommand}" CommandParameter="NameBox"
+                                                        IsEnabled="{Binding CanResetName}"
+                                                        Visibility="{Binding CanRename, Converter={StaticResource BoolToVisibility}}"
+                                                        ToolTip="{l:T characters.rename.reset.tip}"/>
+                                                <TextBox x:Name="CharacterNameBox" view:TutorialAnchor.Id="field:characterName"
+                                                         Text="{Binding NameBox, UpdateSourceTrigger=PropertyChanged}"
+                                                         IsEnabled="{Binding CanEditName}"
+                                                         LostKeyboardFocus="CharacterNameBox_LostKeyboardFocus"
+                                                         ToolTip="{l:T characters.characterName.tip}"/>
+                                            </DockPanel>
+                                            <TextBlock x:Name="RenameNoteText" Text="{Binding RenameNote}" FontSize="11" TextWrapping="Wrap"
+                                                       Foreground="{DynamicResource Theme.TextMuted}" Margin="0,0,0,4"
+                                                       Visibility="{Binding CanRename, Converter={StaticResource BoolToVisibility}}"/>
+                                        </StackPanel>
 
                                         <!-- Right under the name: who the character is, and what a
                                              translation has to know about them. Greyed on the player and
@@ -5389,7 +5508,7 @@
                                                        Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="{l:T characters.mask}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                     <DockPanel Grid.Row="1" Grid.Column="1">
-                                        <Button view:TutorialAnchor.Id="btn:editMask" DockPanel.Dock="Right" Content="{l:T characters.editOverrideMask}"
+                                        <Button x:Name="EditMaskButton" view:TutorialAnchor.Id="btn:editMask" DockPanel.Dock="Right" Content="{l:T characters.editOverrideMask}"
                                                 Margin="4,0,0,0" Padding="6,0"
                                                 Click="EditMask_Click"/>
                                         <!-- Same FILE as the default outfit, not a copy of it, which
@@ -5611,6 +5730,26 @@
                                                BreathingAmplitude="{Binding ElementName=BreathingDepth, Path=Value, Mode=OneWay}"/>
                         </Border>
                         </ctl:PreviewFrame>
+                        <!-- Why one of the game's busts is drawn softer than the pack's own
+                             (the author, 1.9.0): only while it is the game's bust. -->
+                        <TextBlock x:Name="BustGameArtNote" DockPanel.Dock="Top" Text="{l:T preview.gameArt.bust}" TextWrapping="Wrap"
+                                   FontSize="10" Foreground="{DynamicResource Theme.TextMuted}" Margin="2,4,2,0"
+                                   MaxWidth="{Binding ActualWidth, ElementName=BustPreviewResizer}" HorizontalAlignment="Left">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding VanillaBustKey, ElementName=PreviewControl}" Value="">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding VanillaBustKey, ElementName=PreviewControl}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <!-- The live previews' quality, on the preview (1.9.0). -->
+                        <ctl:PreviewQualityBar x:Name="BustQualityBar" DockPanel.Dock="Top" Margin="0,6,0,0" HorizontalAlignment="Left"/>
                         <Grid x:Name="BustPreviewOptions" DockPanel.Dock="Top" Margin="0,8,0,0"
                               SizeChanged="BustPreviewRoom_Changed">
                             <Grid.ColumnDefinitions>
@@ -5789,7 +5928,7 @@
                                                        ToolTip="{l:T npcs.posePNGAnyResolution.tip}"/>
                                     <TextBlock Text="{l:T npcs.jiggleMask}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                     <DockPanel Grid.Row="1" Grid.Column="1">
-                                        <Button view:TutorialAnchor.Id="btn:editMaskNpc" DockPanel.Dock="Right" Content="{l:T npcs.editNpcMask}"
+                                        <Button x:Name="EditNpcMaskButton" view:TutorialAnchor.Id="btn:editMaskNpc" DockPanel.Dock="Right" Content="{l:T npcs.editNpcMask}"
                                                 Margin="4,0,0,0" Padding="6,0"
                                                 Click="EditNpcMask_Click"
                                                 ToolTip="{l:T npcs.editNpcMask.tip}"/>
@@ -5975,6 +6114,7 @@
                                                            RelativeSource={RelativeSource AncestorType=Window}}"/>
                             </Border>
                         </ctl:PreviewFrame>
+                        <ctl:PreviewQualityBar x:Name="NpcQualityBar" DockPanel.Dock="Top" Margin="0,6,0,0" HorizontalAlignment="Left"/>
                         <TextBlock DockPanel.Dock="Top" Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" Margin="0,8,0,0"
                                    TextWrapping="Wrap"
                                    Text="{l:T npcs.bodyJiggleShadowBlink}"/>
@@ -6101,6 +6241,24 @@
                                                           GameObjects="{Binding GameObjects}"
                                                           NpcCatalog="{Binding DataContext.Npcs,
                                                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                        <!-- Why the game's level is soft (the author, 1.9.0): only while
+                                             its art is drawn. -->
+                                        <TextBlock x:Name="LevelGameArtNote" Text="{l:T preview.gameArt.level}" TextWrapping="Wrap"
+                                                   FontSize="10" Foreground="{DynamicResource Theme.TextMuted}" Margin="2,4,2,0"
+                                                   MaxWidth="{Binding ActualWidth, ElementName=ExtPreview}" HorizontalAlignment="Left">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding BaseSprite, ElementName=ExtPreview}" Value="">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding BaseSprite, ElementName=ExtPreview}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
                                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                                             <CheckBox x:Name="ExtDimParent" IsChecked="True" Content="{l:T places.extDimParent}"
                                                       ToolTip="{l:T places.extDimParent.tip}"/>
@@ -6111,6 +6269,7 @@
                                             <CheckBox x:Name="ExtShaders" IsChecked="False" Content="{l:T places.extShaders}" Margin="12,0,0,0"
                                                       ToolTip="{l:T places.extShaders.tip}"/>
                                         </StackPanel>
+                                        <ctl:PreviewQualityBar x:Name="ExtQualityBar" Margin="0,4,0,0" HorizontalAlignment="Left"/>
                                         <TextBlock Text="{Binding CatalogSummary}" Foreground="{DynamicResource Theme.TextMuted}"
                                                    FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0"/>
                                     </StackPanel>
@@ -6215,6 +6374,7 @@
                                         <CheckBox x:Name="PlaceShaders" IsChecked="False" Content="{l:T places.extShaders}" Margin="12,0,0,0"
                                                   ToolTip="{l:T places.extShaders.tip2}"/>
                                     </StackPanel>
+                                    <ctl:PreviewQualityBar x:Name="PlaceQualityBar" Margin="0,4,0,0" HorizontalAlignment="Left"/>
                                 </StackPanel>
                             </GroupBox>
 
@@ -6322,7 +6482,7 @@
                                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                        Grid.Row="2" Grid.Column="1"
                                                        ToolTip="{l:T places.optionalBoundMasktexBACK.tip}"/>
-                                    <Button Content="{l:T places.editPlaceSecondaryMask}" Grid.Row="2" Grid.Column="2" Margin="4,0,0,0" Padding="8,0"
+                                    <Button x:Name="EditPlaceSecondaryMaskButton" Content="{l:T places.editPlaceSecondaryMask}" Grid.Row="2" Grid.Column="2" Margin="4,0,0,0" Padding="8,0"
                                             Click="EditPlaceSecondaryMask_Click"
                                             ToolTip="{l:T places.editPlaceSecondaryMask.tip}"/>
                                     <TextBlock Text="{l:T places.frontMask256143}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
@@ -6331,7 +6491,7 @@
                                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                        Grid.Row="3" Grid.Column="1"
                                                        ToolTip="{l:T places.boundMasktexFRONTSprite.tip}"/>
-                                    <Button Content="{l:T places.editPlaceSecondaryMask}" Grid.Row="3" Grid.Column="2" Margin="4,0,0,0" Padding="8,0"
+                                    <Button x:Name="EditPlaceMaskButton" Content="{l:T places.editPlaceSecondaryMask}" Grid.Row="3" Grid.Column="2" Margin="4,0,0,0" Padding="8,0"
                                             Click="EditPlaceMask_Click"
                                             ToolTip="{l:T places.editPlaceSecondaryMask.tip2}"/>
                                     <ctl:HelpText Key="places.modClonesBeachLevel" Grid.Row="4" Grid.Column="1" Text="{l:T places.modClonesBeachLevel}"/>
@@ -6706,6 +6866,19 @@
                                     </Grid>
                                     <TextBlock Text="{l:T dialogues.playersChooseAllThese}"
                                                FontSize="9" Opacity="0.7" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                                    <!-- A character's name as a token (1.9.0): the editor's, not the
+                                         game's - written by the person button over the Text box. -->
+                                    <Grid Margin="0,6,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{}{name:…}"
+                                                   FontFamily="Consolas" FontSize="11" Margin="0,0,8,1"/>
+                                        <TextBlock Grid.Column="1" Text="{l:T dialogues.nameToken.cheat}"
+                                                   FontSize="10" Opacity="0.85" VerticalAlignment="Center"
+                                                   TextWrapping="Wrap" Margin="0,0,0,1"/>
+                                    </Grid>
                                     <!-- What the game does to a line by itself (1.8.0): its bracket
                                          colour, read from its own highlighter, and the sounds a pack's
                                          patterns play. Both shown as the Game look draws them. -->
@@ -7391,7 +7564,11 @@
                                                                        RelativeSource={RelativeSource AncestorType=Window},
                                                                        Converter={StaticResource BoolToVisibility}}">
                                                         <ctl:TextGlow Target="{Binding ElementName=NodeRowText}"/>
-                                                        <ctl:MarkupTextBox x:Name="NodeRowText" Text="{Binding TextPreview, Mode=OneWay}"
+                                                        <!-- Text LAST: every setting before it is in place
+                                                             when the line arrives, so the row draws it once
+                                                             (it drew it three times: with its tags, without,
+                                                             then in readable colours - 1.9.0). -->
+                                                        <ctl:MarkupTextBox x:Name="NodeRowText"
                                                                  HidesTags="True" ReadableColours="True"
                                                                  ToolTip="{Binding Display}"
                                                                  Focusable="False" IsHitTestVisible="False"
@@ -7401,7 +7578,8 @@
                                                                  VerticalContentAlignment="Center"
                                                                  Language="{Binding DataContext.TextLanguage, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                  SpellCheck.IsEnabled="{Binding DataContext.SpellCheckNodeText,
-                                                                                        RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                                                        RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                 Text="{Binding TextPreview, Mode=OneWay}"/>
                                                     </Grid>
                                                     <!--
                                                         The same line, drawn the way the game draws it:
@@ -7639,6 +7817,7 @@
                                                       Visibility="{Binding UsesOutfitVariable, Converter={StaticResource BoolToVisibility}}"
                                                       ItemsSource="{Binding DataContext.OutfitVariableOptions, RelativeSource={RelativeSource AncestorType=Window}}"
                                                       SelectedItem="{Binding DataContext.SelectedNodeOutfitVariable, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                      view:OptionNotes.Kind="packVariable" ItemContainerStyle="{StaticResource HintedItem}"
                                                       ToolTip="{l:T dialogues.switchActorOneTheir.tip}"/>
                                         </StackPanel>
                                     </StackPanel>
@@ -7743,6 +7922,14 @@
                                                     Click="SfxPattern_Click"
                                                     ToolTip="{l:T dialogues.sfxPattern.tip}">
                                                 <TextBlock Text="&#x266A;" FontSize="14" Margin="0,-2,0,0"/>
+                                            </Button>
+                                            <!-- A character's name as a {name:key} (1.9.0): it follows a new
+                                                 name any pack gives them, where the name typed out does not. -->
+                                            <Button x:Name="NameTokenButton"
+                                                    Style="{StaticResource Theme.MarkupButton}"
+                                                    Click="NameToken_Click"
+                                                    ToolTip="{l:T dialogues.nameToken.tip}">
+                                                <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets" FontSize="12"/>
                                             </Button>
                                         </StackPanel>
                                     <!-- How the line is translated: exactly as written everywhere,
@@ -8041,7 +8228,13 @@
                         <ColumnDefinition Width="8*"/>
                     </Grid.ColumnDefinitions>
 
-                    <DockPanel Grid.Column="0">
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*" MinHeight="120"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="2*" MinHeight="90"/>
+                        </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0">
                         <TextBlock DockPanel.Dock="Top" Text="{l:T scenes.scenes}"
                                    FontWeight="Bold" Margin="6,4,0,2"/>
                         <ctl:NavigatorBar Style="{StaticResource ListNavigator}" List="{Binding ElementName=SceneTreeView}"
@@ -8057,6 +8250,41 @@
                                  AllowDrop="True"
                                  ToolTip="{l:T scenes.sceneTreeView.tip}"/>
                     </DockPanel>
+
+                    <GridSplitter Grid.Row="1" Height="4" HorizontalAlignment="Stretch"/>
+
+                    <!-- Changes to scenes the game already has (1.9.0). Listed
+                         apart from the pack's own, as the Dialogues tab lists
+                         changes to the game's conversations: these are the
+                         game's, found by where they sit, and folders mean
+                         nothing to them. -->
+                    <DockPanel Grid.Row="2">
+                        <TextBlock DockPanel.Dock="Top" Text="{l:T scenes.game.list}"
+                                   FontWeight="Bold" Margin="6,4,0,2"
+                                   ToolTip="{l:T scenes.game.list.tip}"/>
+                        <ctl:NavigatorBar Style="{StaticResource Navigator}" List="{Binding ElementName=GameSceneList}"
+                                          AddText="{l:T scenes.game.add}" AddCommand="{Binding AddGameSceneCommand}" AddTip="{l:T scenes.game.add.tip}"
+                                          DeleteText="{l:T scenes.removeScene}" DeleteCommand="{Binding RemoveGameSceneCommand}" DeleteTip="{l:T scenes.game.remove.tip}"/>
+                        <ListBox x:Name="GameSceneList" ItemsSource="{Binding GameScenes}"
+                                 SelectedItem="{Binding SelectedGameScene, Mode=TwoWay}"
+                                 HorizontalContentAlignment="Stretch">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:SceneViewModel}">
+                                    <DockPanel ToolTip="{Binding ChangeSummary}">
+                                        <Image DockPanel.Dock="Left" Width="24" Height="24" Margin="0,1,6,1"
+                                               Source="{Binding GamePicture, Converter={x:Static conv:GameScenePictureConverter.Instance}}"
+                                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                                        <TextBlock DockPanel.Dock="Right" Text="{Binding ChangeSummary}"
+                                                   Foreground="{DynamicResource Theme.TextMuted}" FontSize="10"
+                                                   VerticalAlignment="Center" Margin="4,0,0,0"/>
+                                        <TextBlock Text="{Binding Display}" VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                    </Grid>
                     <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
 
                     <ScrollViewer view:TutorialAnchor.Id="panel:sceneDetail" Grid.Column="2" VerticalScrollBarVisibility="Auto"
@@ -8069,13 +8297,84 @@
                                  The same on every tab with a preview. -->
                             <!-- Centred, and as large as its corner is dragged to (1.8.0). -->
                             <GroupBox Header="{l:T scenes.preview}" HorizontalAlignment="Center">
+                                <StackPanel>
                                 <ctl:PreviewFrame Key="scene">
-                                    <ctl:ScenePreview PackRoot="{Binding DataContext.PackRoot,
+                                    <ctl:ScenePreview x:Name="ScenesTabPreview"
+                                                      PackRoot="{Binding DataContext.PackRoot,
                                                                  RelativeSource={RelativeSource AncestorType=Window}}"
                                                       SceneSprite="{Binding SceneSprite}"
                                                       VanillaFrame="{Binding VanillaFrame}"
-                                                      CustomFrameSprite="{Binding CustomFrameSprite}"/>
+                                                      CustomFrameSprite="{Binding CustomFrameSprite}"
+                                                      GamePicture="{Binding GamePicture}"
+                                                      GameFrame="{Binding GameFrame}"/>
                                 </ctl:PreviewFrame>
+                                <!-- Why the game's picture is small (the author, 1.9.0). Only
+                                     while it is the game's that is drawn. -->
+                                <TextBlock x:Name="SceneGameArtNote" Text="{l:T preview.gameArt.scene}" TextWrapping="Wrap"
+                                           FontSize="10" Foreground="{DynamicResource Theme.TextMuted}" Margin="2,4,2,0"
+                                           MaxWidth="{Binding ActualWidth, ElementName=ScenesTabPreview}" HorizontalAlignment="Left"
+                                           Visibility="{Binding ShowsGameArt, ElementName=ScenesTabPreview, Converter={StaticResource BoolToVisibility}}"/>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <!-- Only for a change to one of the game's scenes (1.9.0):
+                                 which one. Collapsed otherwise, so a scene of the
+                                 pack's own is never asked a question with no answer. -->
+                            <GroupBox x:Name="GameSceneBox" Header="{l:T scenes.game.box}"
+                                      Visibility="{Binding IsGameScene, Converter={StaticResource BoolToVisibility}}">
+                                <StackPanel>
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock Text="{l:T scenes.game.scene}" Width="140" VerticalAlignment="Center"/>
+                                        <TextBlock x:Name="GameSceneName" Text="{Binding GameName}" FontWeight="SemiBold" VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                    </DockPanel>
+                                    <Grid Margin="140,0,0,4" MaxWidth="500">
+                                        <TextBox x:Name="GameSceneSearchBox"
+                                                 Text="{Binding DataContext.GameSceneSearch, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged, Delay=150}"
+                                                 ToolTip="{l:T scenes.game.search.tip}"/>
+                                        <TextBlock Text="{l:T sidebarSearch.search}" Foreground="{DynamicResource Theme.TextMuted}" Margin="4,0,0,0"
+                                                   IsHitTestVisible="False" VerticalAlignment="Center"
+                                                   Visibility="{Binding DataContext.HasGameSceneSearch, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                    </Grid>
+                                    <ListBox x:Name="GameScenePicker" Margin="140,0,0,4" MaxWidth="500" Height="230" HorizontalAlignment="Stretch"
+                                             ItemsSource="{Binding DataContext.GameSceneChoices, RelativeSource={RelativeSource AncestorType=Window}}"
+                                             SelectedItem="{Binding GameSource, Mode=TwoWay}"
+                                             IsSynchronizedWithCurrentItem="False"
+                                             VirtualizingPanel.IsVirtualizing="True"
+                                             VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                                             VirtualizingPanel.VirtualizationMode="Recycling"
+                                             ScrollViewer.CanContentScroll="True"
+                                             HorizontalContentAlignment="Stretch"
+                                             ToolTip="{l:T scenes.game.picker.tip}">
+                                        <ListBox.GroupStyle>
+                                            <GroupStyle>
+                                                <GroupStyle.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="2,6,0,2"
+                                                                   Foreground="{DynamicResource Theme.TextMuted}"/>
+                                                    </DataTemplate>
+                                                </GroupStyle.HeaderTemplate>
+                                            </GroupStyle>
+                                        </ListBox.GroupStyle>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <DockPanel>
+                                                    <Image DockPanel.Dock="Left" Width="40" Height="40" Margin="0,1,8,1"
+                                                           Source="{Binding PictureFile, Converter={x:Static conv:GameScenePictureConverter.Instance}}"
+                                                           RenderOptions.BitmapScalingMode="HighQuality"/>
+                                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                </DockPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <TextBlock Text="{Binding GameShownBy}" Margin="140,0,0,4" TextWrapping="Wrap" FontSize="10"
+                                               Foreground="{DynamicResource Theme.TextMuted}"/>
+                                    <TextBlock Text="{l:T scenes.game.keeps}" Margin="0,2,0,0" TextWrapping="Wrap" FontSize="10"
+                                               Foreground="{DynamicResource Theme.TextMuted}"/>
+                                    <TextBlock Text="{l:T scenes.game.noCatalog}" Margin="0,4,0,0" TextWrapping="Wrap"
+                                               Foreground="{DynamicResource Theme.Warning}"
+                                               Visibility="{Binding DataContext.HasGameSceneCatalog, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                </StackPanel>
                             </GroupBox>
 
                             <GroupBox Header="{l:T scenes.identity}">
@@ -8121,6 +8420,11 @@
                                                            Filter="{x:Static view:PickerFilters.SceneArt}"
                                                            ToolTip="{l:T scenes.pathRelativePackRoot.tip}"/>
                                     </Grid>
+
+                                    <!-- One of the game's scenes keeps its picture while this is empty. -->
+                                    <TextBlock Text="{l:T scenes.game.pictureKeeps}" Foreground="{DynamicResource Theme.TextMuted}"
+                                               FontSize="10" Margin="144,2,0,0" TextWrapping="Wrap"
+                                               Visibility="{Binding IsGameScene, Converter={StaticResource BoolToVisibility}}"/>
 
                                     <!-- What the picked file turned out to be. Read from the
                                          file rather than asked of the author, so it appears as
@@ -8186,9 +8490,16 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" Margin="0,0,0,4" TextWrapping="Wrap"
-                                               Text="{l:T scenes.pickVanillaFrameShipped}"/>
+                                    <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,4">
+                                        <TextBlock Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" TextWrapping="Wrap"
+                                                   Text="{l:T scenes.pickVanillaFrameShipped}"/>
+                                        <!-- And on one of the game's scenes, leaving both empty keeps the game's. -->
+                                        <TextBlock Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" TextWrapping="Wrap" Margin="0,2,0,0"
+                                                   Text="{l:T scenes.game.frameKeeps}"
+                                                   Visibility="{Binding IsGameScene, Converter={StaticResource BoolToVisibility}}"/>
+                                    </StackPanel>
                                     <TextBlock Text="{l:T scenes.vanillaFrame}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                     <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,4"
                                               ItemsSource="{Binding DataContext.VanillaFrameOptions,
@@ -8208,14 +8519,29 @@
                                               ItemsSource="{Binding DataContext.SceneSoundModes,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               SelectedItem="{Binding Sound, UpdateSourceTrigger=PropertyChanged}"
-                                              ToolTip="{l:T scenes.silentStripsPrototypeS.tip}"/>
+                                              ToolTip="{l:T scenes.silentStripsPrototypeS.tip}"
+                                              Visibility="{Binding IsGameScene, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                    <!-- One of the game's scenes: its own sound first, saying what it is. -->
+                                    <ComboBox x:Name="GameSceneSound" Grid.Row="3" Grid.Column="1" Margin="0,10,0,0"
+                                              ItemsSource="{Binding GameSoundChoices}"
+                                              DisplayMemberPath="Label"
+                                              SelectedItem="{Binding GameSound, UpdateSourceTrigger=PropertyChanged}"
+                                              ToolTip="{l:T scenes.game.sound.tip}"
+                                              Visibility="{Binding IsGameScene, Converter={StaticResource BoolToVisibility}}"/>
                                     <CheckBox Grid.Row="4" Grid.ColumnSpan="2" Margin="0,12,0,0"
                                               Content="{l:T scenes.starmakerPhoto}"
                                               IsChecked="{Binding StarmakerPhoto, UpdateSourceTrigger=PropertyChanged}"
-                                              ToolTip="{l:T scenes.starmakerPhoto.tip}"/>
+                                              ToolTip="{l:T scenes.starmakerPhoto.tip}"
+                                              Visibility="{Binding OffersStarmakerPhoto, Converter={StaticResource BoolToVisibility}}"/>
                                     <TextBlock Grid.Row="5" Grid.ColumnSpan="2" Text="{l:T scenes.starmakerPhoto.note}"
                                                Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" TextWrapping="Wrap"
-                                               Margin="20,4,4,0"/>
+                                               Margin="20,4,4,0"
+                                               Visibility="{Binding OffersStarmakerPhoto, Converter={StaticResource BoolToVisibility}}"/>
+                                    <!-- The game's own photos pay out already. -->
+                                    <TextBlock Grid.Row="6" Grid.ColumnSpan="2" Text="{l:T scenes.game.isPhoto}"
+                                               Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" TextWrapping="Wrap"
+                                               Margin="0,12,4,0"
+                                               Visibility="{Binding IsGamePhoto, Converter={StaticResource BoolToVisibility}}"/>
                                 </Grid>
                             </GroupBox>
                         </StackPanel>
@@ -10364,10 +10690,13 @@
                                                 <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                                     <Setter Property="ItemsSource"
                                                             Value="{Binding DataContext.VariableNameOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    <Setter Property="view:OptionNotes.Kind" Value="packVariable"/>
+                                                    <Setter Property="ItemContainerStyle" Value="{StaticResource HintedItem}"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsCountVariableVanilla}" Value="True">
                                                             <Setter Property="ItemsSource"
                                                                     Value="{Binding DataContext.VanillaGameVariableOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                            <Setter Property="view:OptionNotes.Kind" Value="gameVariable"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -10950,6 +11279,7 @@
                                         <ComboBox Grid.Row="0" Grid.Column="1" Style="{StaticResource GroupedComboBox}"
                                                   ItemsSource="{Binding DataContext.ListVariableNameOptionsGrouped,
                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  view:OptionNotes.Kind="packVariable" ItemContainerStyle="{StaticResource HintedItem}"
                                                   IsEditable="True"
                                                   Text="{Binding ForEach, UpdateSourceTrigger=PropertyChanged}"
                                                   ToolTip="{l:T integration.listVariableNameLiteral.tip}">
@@ -11100,6 +11430,12 @@
                         ToolTipService.ShowOnDisabled="True"
                         Command="{Binding OpenPackFolderCommand}"/>
             </StackPanel>
+            <!-- The mask studio (1.9.0): the painter and the live preview of what it
+                 paints, in place of the tabs while a mask is open. The tabs are
+                 collapsed meanwhile (MainWindow.OpenMaskStudio), so their previews
+                 stop drawing. -->
+            <ContentControl x:Name="MaskStudioHost" Visibility="Collapsed" Focusable="False"
+                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
         </Grid>
     </DockPanel>
 

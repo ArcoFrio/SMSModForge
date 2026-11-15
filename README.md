@@ -1,4 +1,4 @@
-﻿# SMSModForge 1.8.3
+﻿# SMSModForge 1.9.0
 
 A toolkit for making mod content for **Starmaker Story 1.8E**, in two parts:
 
@@ -34,7 +34,13 @@ and puts the editor in the folder you choose - by default
 for you alone; inside the game folder works but is not recommended. It adds a
 Start menu shortcut, and an entry in Settings > Apps to uninstall it from.
 Uninstalling leaves your packs, the Mods folder, BepInEx and the editor's
-settings.
+settings. Run it again over an earlier install to update it in place.
+
+From 1.9.0 the setup is small: it downloads the editor's and the plugin's
+zips from this version's GitHub release (only the plugin's, when you only
+want to play packs) and checks each against the release before installing.
+Without the internet, download the two zips yourself, put them beside the
+setup, and run it: it installs from them.
 
 **By hand**, from the two zips - the plugin into your game folder:
 
@@ -109,7 +115,7 @@ loaded in the game.
 | **Places** | New rooms, or your own additions to the game's existing ones |
 | **Map Buttons** | Entries on the world map so players can reach your places |
 | **Dialogues** | Branching conversations, with actions and conditions per line |
-| **Scenes** | Full-screen CGs, with a frame and a sound |
+| **Scenes** | Full-screen CGs, with a frame and a sound — or a new picture, frame or sound for one of the game's own |
 | **Music** | Background tracks |
 | **SFX** | Sound effects, fired by an action or by words in a line |
 | **Wallpapers** | Images the player unlocks and can set in-game |
@@ -224,6 +230,15 @@ identical to shipping full-resolution art and only sharpness differs.
 
 The generator ships art **only for busts in the catalog**. Drop one from
 `VanillaBusts.cs` and its artwork stops shipping too — the two cannot drift.
+
+**The game's scenes** — `SMSModForge/Resources/VanillaScenes/`: `index.json` (each scene a pack can change, by where it sits under the six `4_CG_Manager-*` roots, with its frame, its trigger's signal and whether it is one of the game's photos) and one 102 px JPEG per picture (the game's are 256), about 5 MB. Read out of a **running** test copy, not the game's files:
+
+```pwsh
+powershell -File Tools\Scenes\dump-scenes.ps1 -Out <a folder outside the repository>
+python Tools\Scenes\make_scene_catalog.py <that folder> <a research run's game folder> <SMSGallery's UnusedContent.base.txt>
+```
+
+Like the busts, it leaves out every scene the game never shows - no entry and no picture - and it checks the Gallery's list of those against its own scan of what the game switches on, stopping if the two disagree. The dump is the game's art at full size: it never goes in the repository.
 
 **Which busts can pull a face** — `Shared/VanillaBustExpressions.cs`, generated
 by `Tools/regen_vanilla_expressions.py` from the bust art extraction, where every

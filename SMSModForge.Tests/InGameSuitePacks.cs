@@ -78,6 +78,27 @@ internal static class InGameSuitePacks
         return rel;
     }
 
+    /// <summary>A GIF whose frames are each one colour, written into the pack (no delays
+    /// of its own: it plays at the default 0.1 s a frame). Saving the pack decodes it.</summary>
+    public static string Gif(string packFolder, string rel, int w, int h, params Color[] frames)
+    {
+        var gif = new GifBitmapEncoder();
+        foreach (var colour in frames)
+        {
+            var pixels = new byte[w * h * 4];
+            for (int i = 0; i < pixels.Length; i += 4)
+            {
+                pixels[i] = colour.B; pixels[i + 1] = colour.G; pixels[i + 2] = colour.R; pixels[i + 3] = 255;
+            }
+            gif.Frames.Add(BitmapFrame.Create(BitmapSource.Create(w, h, 96, 96, PixelFormats.Bgra32, null, pixels, w * 4)));
+        }
+        string path = Path.Combine(packFolder, rel.Replace('/', Path.DirectorySeparatorChar));
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        using var file = File.Create(path);
+        gif.Save(file);
+        return rel;
+    }
+
     public static NodeConditionDef Is(string variable, string value) => new()
     {
         Type = NodeConditionTypes.VariableCompare,
@@ -357,6 +378,50 @@ internal static class InGameSuitePacks
     {
         public const string Id = "suitestory";
 
+        // The game's scenes the pack changes (1.9.0), all ones the game shows.
+        /// <summary>Picture, frame and sound (kiss to flash).</summary>
+        public const string GameSceneKiss = "4_CG_Manager-Sexy/AmeliaStretching";
+        /// <summary>Sound only: silent.</summary>
+        public const string GameSceneQuiet = "4_CG_Manager-Sexy/ameliajog";
+        /// <summary>Nobody changes it: the control.</summary>
+        public const string GameSceneControl = "4_CG_Manager-Sexy/ameliastrip";
+        /// <summary>One of the game's photos whose trigger raises no signal: given a kiss.</summary>
+        public const string GameSceneNoSignal = "4_CG_Manager-Photos/01_MSmile";
+        /// <summary>Made a Starmaker photo.</summary>
+        public const string GameScenePhoto = "4_CG_Manager-Sexy/ameliablow";
+        /// <summary>The one scene whose art is drawn at half its size: a picture of the
+        /// common size must come out the common size.</summary>
+        public const string GameSceneBig = "4_CG_Manager-Photos/17_M1Poolpose5";
+        /// <summary>Its row in the Starmaker site's gallery (shown by Gallery[16], which
+        /// the photo sets), and a row nobody changes (B1_AnnaDowntown (1)'s).</summary>
+        public const string GameSceneBigRow = "9_MainCanvas/Starmaker/Starmaker_Core/Gallery/Scrollarea/CoreGallery/Image (15)";
+        public const string GalleryControlRow = "9_MainCanvas/Starmaker/Starmaker_Core/Gallery/Scrollarea/CoreGallery/Image (193)";
+        /// <summary>Shown by the first line of one of the game's own conversations.</summary>
+        public const string GameSceneClean = "4_CG_Manager-Sexy_Two/AnnaCleaning";
+        public const string CleanTalk = "8_Core_Events/SmallTalks/Annacleansfloor/GameObject";
+        /// <summary>Given a two-frame GIF.</summary>
+        public const string GameSceneGif = "4_CG_Manager-Sexy/ameliastrip (1)";
+        /// <summary>Given a frame of the pack's own (300x320).</summary>
+        public const string GameSceneFrame = "4_CG_Manager-Sexy/ameliastrip (2)";
+        /// <summary>Changed by this pack (picture, photo frame, kiss) and by the Talk pack, loaded
+        /// later (another picture, silent).</summary>
+        public const string GameSceneShared = "4_CG_Manager-Sexy/ameliablow (1)";
+        /// <summary>Given a GIF and made a Starmaker photo by this pack, then a still and made a
+        /// photo by the Talk pack (D5): the still shows, and both packs record the one photo.</summary>
+        public const string GameSceneMoving = "4_CG_Manager-Sexy/ameliablow (2)";
+        /// <summary>The scene every pack scene is cloned from, changed by this pack (D5): the
+        /// Talk pack's own scene, built after, must not take the change.</summary>
+        public const string GameScenePrototype = "4_CG_Manager-Sexy/Samanthabeach";
+        /// <summary>Not a photo, but drawn with the picture of one (08_MPark's "Park1"), whose
+        /// gallery row must keep the game's picture when this scene is given another (D5).</summary>
+        public const string GameSceneSharesPhotoArt = "4_CG_Manager-Sexy/gropepark";
+        public const string SharedArtRow = "9_MainCanvas/Starmaker/Starmaker_Core/Gallery/Scrollarea/CoreGallery/Image (7)";
+        /// <summary>Nobody changes it: the pack shows it, repaints it and hides it again by where
+        /// it sits, in the Scene category (D6), and a condition asks whether it is showing.</summary>
+        public const string GameSceneByPath = "4_CG_Manager-Sexy_Four/EmmaXBigfoot (0)";
+        /// <summary>The colour a sprite swap paints on a scene (D6).</summary>
+        public const string SwapColour = "#55CC22";
+
         public static ModPack Make(string folder)
         {
             var pack = PackRepository.CreateEmpty(Id);
@@ -373,6 +438,36 @@ internal static class InGameSuitePacks
             pack.Scenes.Add(new SceneDef { Key = "still", DisplayName = "Check Still",
                                            SceneSprite = Png(folder, "Scenes/still.png", 256, 256, Color.FromRgb(0x44, 0xCC, 0x88)) });
 
+            // Changes to the game's own scenes (1.9.0), each of one kind, beside
+            // GameSceneControl, which nobody changes.
+            pack.Scenes.Add(new SceneDef { Source = GameSceneKiss, Key = "gkiss", DisplayName = "Check Game Kiss",
+                                           SceneSprite = Png(folder, "Scenes/gkiss.png", 256, 256, Color.FromRgb(0xCC, 0x44, 0x88)),
+                                           VanillaFrame = "PhotoFrame.png", Sound = SceneSoundMode.Flash });
+            pack.Scenes.Add(new SceneDef { Source = GameSceneQuiet, Key = "gquiet", Sound = SceneSoundMode.Silent });
+            pack.Scenes.Add(new SceneDef { Source = GameSceneNoSignal, Key = "gnosig", Sound = SceneSoundMode.Kiss });
+            pack.Scenes.Add(new SceneDef { Source = GameScenePhoto, Key = "gphoto", Sound = SceneSoundMode.None, StarmakerPhoto = true });
+            pack.Scenes.Add(new SceneDef { Source = GameSceneBig, Key = "gbig", Sound = SceneSoundMode.None,
+                                           SceneSprite = Png(folder, "Scenes/gbig.png", 256, 256, Color.FromRgb(0x22, 0x88, 0xCC)) });
+            // The rest of what a change can be (D4): shown by one of the game's own
+            // conversations, an animated picture, a frame of the pack's own, and one
+            // scene the Talk pack (loaded later) changes too.
+            pack.Scenes.Add(new SceneDef { Source = GameSceneClean, Key = "gclean", Sound = SceneSoundMode.Flash,
+                                           SceneSprite = Png(folder, "Scenes/gclean.png", 256, 256, Color.FromRgb(0x44, 0xAA, 0x22)) });
+            pack.Scenes.Add(new SceneDef { Source = GameSceneGif, Key = "ggif", Sound = SceneSoundMode.None,
+                                           SceneSprite = Gif(folder, "Scenes/ggif.gif", 64, 64, Color.FromRgb(0xDD, 0x22, 0x22), Color.FromRgb(0x22, 0x22, 0xDD)) });
+            pack.Scenes.Add(new SceneDef { Source = GameSceneFrame, Key = "gframe", Sound = SceneSoundMode.None,
+                                           CustomFrameSprite = Png(folder, "Scenes/frame.png", 300, 320, Color.FromRgb(0x80, 0x80, 0x80)) });
+            pack.Scenes.Add(new SceneDef { Source = GameSceneShared, Key = "gshared", Sound = SceneSoundMode.Kiss, VanillaFrame = "PhotoFrame.png",
+                                           SceneSprite = Png(folder, "Scenes/gshared.png", 256, 256, Color.FromRgb(0xAA, 0x66, 0x00)) });
+            // What the 1.9.0 review found (D5).
+            pack.Scenes.Add(new SceneDef { Source = GameSceneMoving, Key = "gmoving", Sound = SceneSoundMode.None, StarmakerPhoto = true,
+                                           SceneSprite = Gif(folder, "Scenes/gmoving.gif", 64, 64, Color.FromRgb(0xAA, 0x22, 0x88), Color.FromRgb(0x22, 0x88, 0xAA)) });
+            pack.Scenes.Add(new SceneDef { Source = GameScenePrototype, Key = "gsam", Sound = SceneSoundMode.Flash, StarmakerPhoto = true,
+                                           SceneSprite = Png(folder, "Scenes/gsam.png", 256, 256, Color.FromRgb(0x77, 0x33, 0xAA)),
+                                           CustomFrameSprite = Png(folder, "Scenes/gsamframe.png", 310, 330, Color.FromRgb(0x60, 0x60, 0x60)) });
+            pack.Scenes.Add(new SceneDef { Source = GameSceneSharesPhotoArt, Key = "ggrope", Sound = SceneSoundMode.None,
+                                           SceneSprite = Png(folder, "Scenes/ggrope.png", 256, 256, Color.FromRgb(0x33, 0x55, 0xDD)) });
+
             pack.Wallpapers.Add(new WallpaperDef
             {
                 Key = "sunset", DisplayName = "Check Sunset",
@@ -385,6 +480,15 @@ internal static class InGameSuitePacks
             pack.Dialogues.Add(Script("showphoto", "The photo.", Show("Scene", "photo", true)));
             pack.Dialogues.Add(Script("showstill", "The still.", Show("Scene", "still", true)));
             pack.Dialogues.Add(Script("hidescenes", "No scenes.", Act(NodeActionTypes.DeactivateAllScenes)));
+            pack.Dialogues.Add(Script("showgkiss", "The game's scene.", Show("Scene", "gkiss", true)));
+            // One of the game's scenes by where it sits (1.9.0, D6), and a sprite swap on
+            // it and on one of the pack's own.
+            pack.Dialogues.Add(Script("showgamepath", "The game's scene by where it sits.", Show("Scene", GameSceneByPath, true)));
+            string swap = Png(folder, "Scenes/swap.png", 256, 256, Color.FromRgb(0x55, 0xCC, 0x22));
+            pack.Dialogues.Add(Script("swapgamepath", "Repainted.",
+                Act(NodeActionTypes.SetSprite, ("kind", "Scene"), ("target", GameSceneByPath), ("sprite", swap))));
+            pack.Dialogues.Add(Script("swapstill", "Repainted too.",
+                Act(NodeActionTypes.SetSprite, ("kind", "Scene"), ("target", "still"), ("sprite", swap))));
             pack.Dialogues.Add(Script("openpanel", "The panel.", Show("UI", "checkpanel", true)));
             pack.Dialogues.Add(Script("closepanel", "No panel.", Show("UI", "checkpanel", false)));
 
@@ -411,6 +515,14 @@ internal static class InGameSuitePacks
                             {
                                 Name = "Badge", Rect = { Position = new[] { 0f, -60f }, Size = new[] { 80f, 80f } },
                                 Image = new UiImageDef { Sprite = "Ui/panel.png", Tint = "#FF0000FF" }, ActiveConditions = { Is("badgeOn", "true") },
+                            },
+                            // In while the game's scene GameSceneByPath is showing (D6).
+                            new UiNodeDef
+                            {
+                                Name = "SceneBadge", Rect = { Position = new[] { 100f, -60f }, Size = new[] { 40f, 40f } },
+                                Image = new UiImageDef { Sprite = "Ui/panel.png", Tint = "#00FF00FF" },
+                                ActiveConditions = { new NodeConditionDef { Type = NodeConditionTypes.GameObjectActive,
+                                                                            Params = { ["kind"] = "Scene", ["target"] = GameSceneByPath } } },
                             },
                         },
                     },
@@ -602,7 +714,8 @@ internal static class InGameSuitePacks
     // ── Quests ──────────────────────────────────────────────────────────
 
     /// <summary>
-    /// <c>suitequest</c>: quest <c>chase</c> ("Check Chase"), starting once
+    /// <c>suitequest</c>: quest <c>chase</c> ("Check Chase for {name:josef}" - the
+    /// game's Josef, renamed by gameorder: K9), starting once
     /// <c>questGo</c> is true and back to not started while <c>questReset</c> is.
     /// Its tasks in order: <c>first</c>, done once <c>firstDone</c> is true,
     /// adding 1 to <c>rewards</c> as it is; <c>count</c>, counting to 3 with
@@ -617,6 +730,10 @@ internal static class InGameSuitePacks
         /// <summary>The game's quest the pack adds <c>extra</c> to.</summary>
         public const string GameQuest = "Explore The City";
 
+        /// <summary>The quest's title as written, and as the journal should read it.</summary>
+        public const string ChaseTitle = "Check Chase for {name:josef}";
+        public const string ChaseTitleShown = "Check Chase for Joseph";
+
         public static ModPack Make()
         {
             var pack = PackRepository.CreateEmpty(Id);
@@ -630,7 +747,7 @@ internal static class InGameSuitePacks
 
             pack.Quests.Add(new QuestDef
             {
-                Key = "chase", Title = "Check Chase", Description = "Chase it down.",
+                Key = "chase", Title = ChaseTitle, Description = "Chase it down.",
                 StartConditions = { Is("questGo", "true") },
                 ResetConditions = { Is("questReset", "true") },
                 Tasks =
@@ -749,6 +866,17 @@ internal static class InGameSuitePacks
         {
             var pack = PackRepository.CreateEmpty(Id);
             pack.PackId = Id;
+            // Two of the game's scenes the Story pack changes too (D4): this pack loads
+            // later, so where both set something, this one's shows.
+            pack.Scenes.Add(new SceneDef { Source = Story.GameSceneShared, Key = "tshared", Sound = SceneSoundMode.Silent,
+                                           SceneSprite = Png(folder, "Scenes/tshared.png", 256, 256, Color.FromRgb(0x00, 0x66, 0xAA)) });
+            pack.Scenes.Add(new SceneDef { Source = Story.GameSceneNoSignal, Key = "tnosig", Sound = SceneSoundMode.Flash });
+            // D5: a still over the Story pack's GIF, both a photo; and a scene of this pack's
+            // own, cloned after the Story pack changed the scene pack scenes are cloned from.
+            pack.Scenes.Add(new SceneDef { Source = Story.GameSceneMoving, Key = "tmoving", Sound = SceneSoundMode.None, StarmakerPhoto = true,
+                                           SceneSprite = Png(folder, "Scenes/tmoving.png", 256, 256, Color.FromRgb(0x55, 0xAA, 0x33)) });
+            pack.Scenes.Add(new SceneDef { Key = "tstill", DisplayName = "Check Talk Still",
+                                           SceneSprite = Png(folder, "Scenes/tstill.png", 256, 256, Color.FromRgb(0x33, 0xAA, 0x77)) });
             foreach (var (name, type, value) in new[]
             {
                 ("never", PackVariableType.Bool, "false"), ("gateOk", PackVariableType.Bool, "false"),
@@ -757,6 +885,9 @@ internal static class InGameSuitePacks
                 ("jumped", PackVariableType.Bool, "false"), ("rolledA", PackVariableType.Int, "0"),
                 ("rolledB", PackVariableType.Int, "0"), ("autoGo", PackVariableType.Bool, "false"),
                 ("autoRan", PackVariableType.Bool, "false"),
+                ("kidA", PackVariableType.Bool, "false"), ("kidB", PackVariableType.Bool, "false"),
+                ("exitA", PackVariableType.Bool, "false"), ("exitB", PackVariableType.Bool, "false"),
+                ("rootExit", PackVariableType.Bool, "false"), ("rootAfter", PackVariableType.Bool, "false"),
             })
                 pack.Variables.Add(Var(name, type, value));
 
@@ -806,6 +937,33 @@ internal static class InGameSuitePacks
             jumpy.RootNodeIds.AddRange(new[] { 1, 3 });
             pack.Dialogues.Add(jumpy);
 
+            // How Game Creator plays a line's children, which the research into the
+            // game's variables rests on (Tools/Research/Variables): both children of
+            // a plain line, in order? An Exit in the first, does it stop the second?
+            // And an Exit in a first root, the second root?
+            var kids = new DialogueDef { Key = "kids", DisplayName = "kids", StartConditions = { Is("never", "true") } };
+            var parent = Node(1, "Parent.");
+            parent.Children.AddRange(new[] { 2, 3 });
+            kids.Nodes.AddRange(new[] { parent, Node(2, "First child.", Set("kidA", "true")), Node(3, "Second child.", Set("kidB", "true")) });
+            kids.RootNodeIds.Add(1);
+            pack.Dialogues.Add(kids);
+
+            var kidExit = new DialogueDef { Key = "kidexit", DisplayName = "kidexit", StartConditions = { Is("never", "true") } };
+            var exitParent = Node(1, "Parent.");
+            exitParent.Children.AddRange(new[] { 2, 3 });
+            var leaving = Node(2, "Leaving.", Set("exitA", "true"));
+            leaving.Jump = new JumpDef { Mode = JumpMode.Exit };
+            kidExit.Nodes.AddRange(new[] { exitParent, leaving, Node(3, "After the exit.", Set("exitB", "true")) });
+            kidExit.RootNodeIds.Add(1);
+            pack.Dialogues.Add(kidExit);
+
+            var rootExit = new DialogueDef { Key = "rootexit", DisplayName = "rootexit", StartConditions = { Is("never", "true") } };
+            var firstRoot = Node(1, "First root.", Set("rootExit", "true"));
+            firstRoot.Jump = new JumpDef { Mode = JumpMode.Exit };
+            rootExit.Nodes.AddRange(new[] { firstRoot, Node(2, "Second root.", Set("rootAfter", "true")) });
+            rootExit.RootNodeIds.AddRange(new[] { 1, 2 });
+            pack.Dialogues.Add(rootExit);
+
             var dice = new DialogueDef { Key = "dice", DisplayName = "dice", StartConditions = { Is("never", "true") } };
             // A random line is a line like any other - said, then one of its
             // own picked - as the game's are; this one goes on by itself.
@@ -850,6 +1008,19 @@ internal static class InGameSuitePacks
             dress.Nodes.AddRange(new[] { day, night });
             dress.RootNodeIds.Add(1);
             pack.Dialogues.Add(dress);
+            // One of the game's characters whose portrait follows ANOTHER
+            // character's face number: Chloe's busts copy Charlotte's (found by the
+            // variable research, 1.9.0; Shared/VanillaBustWatches.cs).
+            var chloe = VanillaCastSeed.Make(VanillaCharacters.Find(Follower) ?? throw new InvalidOperationException("No " + Follower + " among the game's characters."));
+            var chloeBust = chloe.Outfits.FirstOrDefault(o => o.GameObjectName == FollowerBust)
+                            ?? throw new InvalidOperationException(Follower + " has no outfit on " + FollowerBust + ".");
+            pack.Characters.Add(chloe);
+            var smile = new DialogueDef { Key = "face", DisplayName = "face", StartConditions = { Is("never", "true") } };
+            // A line's Outfit names the bust's object, as Bea's lines do.
+            smile.Nodes.Add(new DialogueNodeDef { Id = 1, Actor = chloe.Key, Outfit = chloeBust.GameObjectName, Expression = "Happy", Text = "Smiling." });
+            smile.RootNodeIds.Add(1);
+            pack.Dialogues.Add(smile);
+
             // The same speaker in a dialogue that leaves its busts at the end.
             var bow = new DialogueDef { Key = "bow", DisplayName = "bow", LeaveBustsAtEnd = true, StartConditions = { Is("never", "true") } };
             bow.Nodes.Add(new DialogueNodeDef { Id = 1, Actor = "bea", Outfit = BeaDay, Text = "Goodbye.", Duration = NodeDurationMode.Timeout, Timeout = 0.5f });
@@ -888,8 +1059,25 @@ internal static class InGameSuitePacks
             pack.Dialogues.Add(Script("callgame", "Calling the game.",
                 Act(NodeActionTypes.PlayDialogue, ("source", "vanilla"), ("conversation", GameConversation),
                     ("afterName", "afterGame"), ("afterValue", "done"))));
+
+            // Z5: one of the game's conversations, extended by one change (a line's
+            // timeout), so its lines go into the translation file too.
+            var gameLines = new SMSModForge.ViewModel.DialogueViewModel(new DialogueDef()) { WantsVanilla = true };
+            gameLines.VanillaSource = VanillaDialogueCatalog.Find(GameLinesConversation);
+            var timed = gameLines.Model.Nodes.Single(n => n.Id == GameLineTimed);
+            timed.Duration = NodeDurationMode.Timeout;
+            timed.Timeout = 2f;
+            pack.Dialogues.Add(gameLines.Model);
             return pack;
         }
+
+        /// <summary>Z5: the game's conversation the pack extends; its line the pack's
+        /// translation has, in it; a line it does not; the line it changed.</summary>
+        public const string GameLinesConversation = "8_Room_Talk/Kitchen/AnnaGropeLove";
+        public const int GameLineTranslated = -1831575103;   // "T-Thank you, hun..."
+        public const int GameLineLeft = 1550987397;          // "Maybe next time."
+        public const int GameLineTimed = -1215123634;
+        public const string GameLineInPortuguese = "O-Obrigada, querido...";
 
         /// <summary>The language the pack carries a translation into, and its
         /// one translated line: <c>flow</c>'s after Right.</summary>
@@ -897,6 +1085,8 @@ internal static class InGameSuitePacks
 
         /// <summary>Bea's two outfits' bust objects.</summary>
         public const string BeaDay = "SuiteBeaDay", BeaNight = "SuiteBeaNight";
+        /// <summary>A game character whose portrait follows another's face number, and that portrait.</summary>
+        public const string Follower = "Chloe", FollowerBust = "Choe_Base";
 
         /// <summary>Where <c>arrive</c> waits: the gas station, whose room talk
         /// starts a car-wash conversation of the game's on arrival when the car
@@ -913,11 +1103,17 @@ internal static class InGameSuitePacks
         {
             var (path, _) = PackTranslations.CreateOrUpdate(pack, folder, TranslatedInto);
             string key = PackTexts.LineKey("flow", "6");
+            // Z5: and one of the game's lines in the conversation it extends.
+            string gameKey = PackTexts.LineKey(pack.Dialogues.Single(d => d.Source != null && d.Source.EndsWith(GameLinesConversation, StringComparison.Ordinal)).Key,
+                                               GameLineTranslated.ToString(System.Globalization.CultureInfo.InvariantCulture));
             var lines = File.ReadAllLines(path)
                             .Select(l => l.StartsWith(key + " ", StringComparison.Ordinal) || l.StartsWith(key + "=", StringComparison.Ordinal)
-                                         ? key + " = " + TranslatedLine : l)
+                                         ? key + " = " + TranslatedLine
+                                         : l.StartsWith(gameKey + " ", StringComparison.Ordinal) || l.StartsWith(gameKey + "=", StringComparison.Ordinal)
+                                         ? gameKey + " = " + GameLineInPortuguese : l)
                             .ToArray();
             if (!lines.Contains(key + " = " + TranslatedLine)) throw new InvalidOperationException("No " + key + " in " + path);
+            if (!lines.Contains(gameKey + " = " + GameLineInPortuguese)) throw new InvalidOperationException("No " + gameKey + " in " + path);
             File.WriteAllLines(path, lines, new System.Text.UTF8Encoding(false));
         }
     }

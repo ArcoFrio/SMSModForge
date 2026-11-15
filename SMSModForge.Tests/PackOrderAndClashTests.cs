@@ -173,6 +173,46 @@ public sealed class PackOrderAndClashTests
                              ("b", Binding("vanilla:14_Beach", "Lamp", false, 5))));
     }
 
+    /// <summary>A pack rewriting a text of one of the game's screens - the object
+    /// named by its path from the screen, as the editor saves it - and giving Anna a
+    /// colour.</summary>
+    private static ModPack Retitling(string text, string colour = "#FF0000")
+    {
+        var pack = WithAnna(colour);
+        pack.Uis.Add(new UiDef
+        {
+            Id = "payout", Source = "9_MainCanvas/Payout",
+            Nodes =
+            {
+                new UiNodeDef
+                {
+                    Name = "Payout", Bind = ".",
+                    Children = { new UiNodeDef { Name = "Title", Bind = "Header/Title", OverrideText = true, Text = new UiTextDef { Value = text } } },
+                },
+            },
+        });
+        return pack;
+    }
+
+    [Fact]
+    public void TwoPacksRewritingOneTextOfTheGamesScreensClash_AndTheirOtherChangesAreStillFound()
+    {
+        // Until 1.9.0 a screen's binding was read as true/false, threw on its path, and
+        // took every other change of the pack with it: these two clashed over nothing.
+        var clashes = Clashes(("first", Retitling("Paid!")), ("second", Retitling("Payday", "#00FF00")));
+        foreach (var c in clashes) _out.WriteLine($"{c.Earlier} / {c.Later}: {c.LaterChange.Thing} {c.LaterChange.Field}");
+        var text = Assert.Single(clashes, c => c.LaterChange.Field == "text");
+        Assert.Equal("Header/Title in screen 9_MainCanvas/Payout", text.LaterChange.Thing);
+        Assert.Single(clashes, c => c.LaterChange.Field == "nameColor");
+
+        // Controls: the same words agree; a screen object a pack only hangs something
+        // off is no change; another screen's object of the same path is another thing.
+        Assert.DoesNotContain(Clashes(("first", Retitling("Paid!")), ("second", Retitling("Paid!"))), c => c.LaterChange.Field == "text");
+        var elsewhere = Retitling("Payday");
+        elsewhere.Uis[0].Source = "9_MainCanvas/Shop";
+        Assert.DoesNotContain(Clashes(("first", Retitling("Paid!")), ("second", elsewhere)), c => c.LaterChange.Field == "text");
+    }
+
     [Fact]
     public void SwitchingTheSameObjectAndDrivingItByConditionsClash()
     {

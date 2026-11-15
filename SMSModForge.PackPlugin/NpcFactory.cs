@@ -140,7 +140,7 @@ namespace SMSModForge.PackPlugin
             ApplyTransform(go.transform, pl["body"] as JObject);
 
             var sr = go.AddComponent<SpriteRenderer>();
-            sr.sprite = MakeSprite(pack, spriteRel);
+            sr.sprite = LoadedArt.Sprite(pack, spriteRel, "npc", () => MakeSprite(pack, spriteRel));
             // The PLACEMENT's order wins over the NPC's own: depth belongs to
             // the room, and the same NPC stands behind one level's furniture and
             // in front of another's. Absent on placements authored before the
@@ -152,7 +152,11 @@ namespace SMSModForge.PackPlugin
             {
                 var mat = new Material(jiggleProto);
                 string maskRel = (string)def["mask"];
-                if (pack.Has(maskRel)) mat.SetTexture("_MaskTex", LoadTex(pack, maskRel, linear: true));
+                // One per mask while the packs load (LoadedArt), and not readable:
+                // only the shader reads a mask (1.9.0).
+                if (pack.Has(maskRel))
+                    mat.SetTexture("_MaskTex", LoadedArt.Texture(pack, maskRel, "npc-mask",
+                        () => LoadTex(pack, maskRel, linear: true, readable: false)));
                 if (def["jiggle"] is JObject j) BustFactory.ApplyJiggle(mat, j);
                 sr.material = mat;
             }
@@ -392,11 +396,11 @@ namespace SMSModForge.PackPlugin
         /// <param name="linear">True for a data texture (a jiggle mask, whose
         /// channels are displacement amounts). Colour sprites stay sRGB. See
         /// BustFactory.LoadTexture for why this matters.</param>
-        private static Texture2D LoadTex(PackManifest pack, string rel, bool linear = false)
+        private static Texture2D LoadTex(PackManifest pack, string rel, bool linear = false, bool readable = true)
         {
             var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false, linear);
             byte[] bytes = pack.ReadBytes(rel);
-            if (bytes != null) tex.LoadImage(bytes);   // resizes to the PNG's real dimensions
+            if (bytes != null) tex.LoadImage(bytes, !readable);   // resizes to the PNG's real dimensions
             tex.filterMode = FilterMode.Point;
             return tex;
         }

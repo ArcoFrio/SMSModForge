@@ -433,6 +433,13 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         internal static void SetHidden(GcTask task, bool hidden) => Set(task, "m_IsHidden", hidden);
 
+        /// <summary>A text property of a quest or task - <c>m_Title</c>, <c>m_Description</c>,
+        /// <c>m_Name</c> - for <see cref="GameNameMentions"/>, which wraps it.</summary>
+        internal static object TextOf(object target, string field) => Get(target, field);
+
+        /// <summary>Put a text property in its place.</summary>
+        internal static void SetText(object target, string field, object property) => Set(target, field, property);
+
         // ── Reflection, kept to private fields whose names and types were read
         //    off the game's metadata ────────────────────────────────────────
 

@@ -258,9 +258,11 @@ public sealed class NodeTextToolbarTests
 
             var buttons = bar.Children.OfType<Button>().ToList();
             _out.WriteLine($"{buttons.Count} button(s) over the line");
-            // Bold, italic, colour, size - and the sound cue (1.7.0).
-            Assert.Equal(5, buttons.Count);
+            // Bold, italic, colour, size - the sound cue (1.7.0) - and a
+            // character's name (1.9.0).
+            Assert.Equal(6, buttons.Count);
             Assert.Contains(buttons, b => b.Name == "SfxPatternButton");
+            Assert.Contains(buttons, b => b.Name == "NameTokenButton");
 
             // Not focusable, every one of them: see the class doc.
             foreach (var button in buttons)

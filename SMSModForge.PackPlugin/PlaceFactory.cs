@@ -246,7 +246,8 @@ namespace SMSModForge.PackPlugin
             // levels that share the Beach material.
             var sr = newLevel.GetComponent<SpriteRenderer>();
             Material mat = new Material(sr.material);
-            sr.sprite = LoadLevelSprite(pack, baseRel, 2048, 1136, FilterMode.Bilinear);
+            sr.sprite = LoadedArt.Sprite(pack, baseRel, "level|2048x1136|Bilinear",
+                () => LoadLevelSprite(pack, baseRel, 2048, 1136, FilterMode.Bilinear));
             // Absent = keep the prototype's own order, so a place that never
             // asked keeps the -10 / -12 it has always had.
             if (baseOrder.HasValue) sr.sortingOrder = baseOrder.Value;
@@ -255,7 +256,8 @@ namespace SMSModForge.PackPlugin
                 var sr2 = newLevel.transform.GetChild(1).GetComponent<SpriteRenderer>();
                 if (sr2 != null)
                 {
-                    sr2.sprite = LoadLevelSprite(pack, secondRel, 2048, 1136, FilterMode.Point);
+                    sr2.sprite = LoadedArt.Sprite(pack, secondRel, "level|2048x1136|Point",
+                        () => LoadLevelSprite(pack, secondRel, 2048, 1136, FilterMode.Point));
                     if (secondOrder.HasValue) sr2.sortingOrder = secondOrder.Value;
 
                     // Vanilla leaves the backdrop on plain Sprite-Lit-Default,
@@ -439,7 +441,7 @@ namespace SMSModForge.PackPlugin
                 var sr = asFound ? null : go.GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
-                    sr.sprite = LoadOverlaySprite(pack, spriteRel);
+                    sr.sprite = LoadedArt.Sprite(pack, spriteRel, "overlay", () => LoadOverlaySprite(pack, spriteRel));
                     sr.sortingOrder = (int?)ov["sortingOrder"] ?? 0;
                     float alpha = (float?)ov["startAlpha"] ?? 1f;
                     var c = sr.color; c.a = alpha; sr.color = c;
@@ -449,10 +451,16 @@ namespace SMSModForge.PackPlugin
                     {
                         // Own material so the mask doesn't bleed to siblings.
                         Material mat = new Material(sr.material);
-                        var maskTex = new Texture2D(2, 2, TextureFormat.RGBA32, false, true);   // linear: data, not colour
-                        byte[] mb = pack.ReadBytes(maskRel);
-                        if (mb != null) maskTex.LoadImage(mb);
-                        maskTex.filterMode = FilterMode.Point;
+                        // One per mask while the packs load (LoadedArt), and not
+                        // readable: only the shader reads a mask (1.9.0).
+                        var maskTex = LoadedArt.Texture(pack, maskRel, "overlay-mask", () =>
+                        {
+                            var t = new Texture2D(2, 2, TextureFormat.RGBA32, false, true);   // linear: data, not colour
+                            byte[] mb = pack.ReadBytes(maskRel);
+                            if (mb != null) t.LoadImage(mb, true);
+                            t.filterMode = FilterMode.Point;
+                            return t;
+                        });
                         mat.SetTexture("_MaskTex", maskTex);
                         sr.material = mat;
                     }
@@ -626,13 +634,19 @@ namespace SMSModForge.PackPlugin
             // whose contents are undefined.
             if (!MaskTextures.IsAuthored(pack, rel)) return MaskTextures.None();
 
-            // The 256x143 is a placeholder — LoadImage resizes to the PNG's own
-            // dimensions, so a mask may be authored at any resolution.
-            var tex = new Texture2D(256, 143, TextureFormat.RGBA32, false, true);
-            byte[] bytes = pack.ReadBytes(rel);
-            if (bytes != null) tex.LoadImage(bytes);
-            tex.filterMode = FilterMode.Point;
-            return tex;
+            // One per mask while the packs load - see LoadedArt.
+            return LoadedArt.Texture(pack, rel, "level-mask", () =>
+            {
+                // The 256x143 is a placeholder — LoadImage resizes to the PNG's own
+                // dimensions, so a mask may be authored at any resolution.
+                var tex = new Texture2D(256, 143, TextureFormat.RGBA32, false, true);
+                byte[] bytes = pack.ReadBytes(rel);
+                // Not readable: a mask is only ever drawn by the shader, so the
+                // copy in memory beside the graphics card's was never read (1.9.0).
+                if (bytes != null) tex.LoadImage(bytes, true);
+                tex.filterMode = FilterMode.Point;
+                return tex;
+            });
         }
 
         private static void SetParallax(GameObject go, float? strength, bool? reversed, bool? isUI)

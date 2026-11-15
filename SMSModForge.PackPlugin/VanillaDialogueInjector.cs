@@ -2,6 +2,7 @@
 using GameCreator.Runtime.Dialogue;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -473,6 +474,31 @@ namespace SMSModForge.PackPlugin
         private static string PackLine(JObject node, PackVariableStore vars)
             => TextPlaceholders.Resolve((string)node["text"] ?? "", vars);
 
+        private static readonly FieldInfo _fldNodeTextWords
+            = typeof(NodeText).GetField("m_Text", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        /// <summary>
+        /// A line's words as written - the game's braced words left in - or null when
+        /// they cannot be read.
+        /// <para/>
+        /// Not <c>Node.Text</c>: that is <c>NodeText.Value</c>, filled in only when the
+        /// line plays (<c>Node.Run</c> calls <c>Init</c>), so it is null for every line
+        /// of a conversation that has not been shown yet - which, at load, is all of
+        /// them (measured in the game, 2026-11-14). Reading it there made a pack's
+        /// translation of the game's lines never match anything.
+        /// </summary>
+        internal static string RawText(Node node)
+        {
+            if (node == null || _fldText == null || _fldNodeTextWords == null) return null;
+            try
+            {
+                var words = _fldText.GetValue(node);
+                var property = words == null ? null : _fldNodeTextWords.GetValue(words) as GameCreator.Runtime.Common.PropertyGetString;
+                return property == null ? null : property.Get(GameCreator.Runtime.Common.Args.EMPTY);
+            }
+            catch (System.Exception) { return null; }
+        }
+
         internal static bool SetText(Node target, string text)
         {
             if (_fldText == null) return false;
@@ -573,6 +599,17 @@ namespace SMSModForge.PackPlugin
             {
                 run.Ctx = ctx;              // a reload brings a new context
                 return run;
+            }
+
+            // Conversations destroyed with a scene left are let go of, and the
+            // pack context each held with them (1.9.0): kept for ever, every
+            // reload from the menu kept one more of each pack's. A destroyed
+            // one raises nothing, so nothing is lost.
+            if (Hooked.Count > 0 && Hooked.Keys.Any(d => d == null))
+            {
+                var alive = Hooked.Where(kv => kv.Key != null).ToList();
+                Hooked.Clear();
+                foreach (var kv in alive) Hooked[kv.Key] = kv.Value;
             }
 
             run = new Run { Ctx = ctx };

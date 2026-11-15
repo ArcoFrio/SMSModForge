@@ -488,7 +488,7 @@ public sealed class CharacterPanelFollowsTests
             var slider = new Slider { Minimum = unit >= 1 ? 1 : 0, Maximum = unit >= 1 ? 80 : 1, Value = from };
             var mods = shift ? System.Windows.Input.ModifierKeys.Shift : System.Windows.Input.ModifierKeys.None;
 
-            Assert.True(SMSModForge.View.MaskEditorWindow.NudgeSlider(slider, key, mods, unit));
+            Assert.True(SMSModForge.View.MaskStudio.NudgeSlider(slider, key, mods, unit));
             _out.WriteLine($"{from} {key}{(shift ? "+Shift" : "")} -> {slider.Value}");
             Assert.Equal(expected, slider.Value, 6);
         });
@@ -500,7 +500,7 @@ public sealed class CharacterPanelFollowsTests
         WindowHarness.Run(_ =>
         {
             var slider = new Slider { Minimum = 0, Maximum = 1, Value = 0.5 };
-            Assert.False(SMSModForge.View.MaskEditorWindow.NudgeSlider(
+            Assert.False(SMSModForge.View.MaskStudio.NudgeSlider(
                 slider, System.Windows.Input.Key.Up, System.Windows.Input.ModifierKeys.None, 0.01));
             Assert.Equal(0.5, slider.Value);
         });
@@ -514,8 +514,10 @@ public sealed class CharacterPanelFollowsTests
         WindowHarness.Run(_ =>
         {
             var outfit = new OutfitViewModel(new OutfitDef { Key = "o", GameObjectName = "O" });
-            var editor = new SMSModForge.View.MaskEditorWindow(outfit, System.IO.Path.GetTempPath())
+            var studio = new SMSModForge.View.MaskStudio(outfit, System.IO.Path.GetTempPath(), "t", "s", null);
+            var editor = new Window
             {
+                Content = studio, Width = 1300, Height = 820,
                 Left = -10000, Top = -10000, ShowInTaskbar = false, ShowActivated = false,
             };
             try
@@ -525,7 +527,7 @@ public sealed class CharacterPanelFollowsTests
 
                 foreach (var (name, unit) in new[] { ("SizeSlider", 1.0), ("HardnessSlider", 0.01), ("OpacitySlider", 0.01) })
                 {
-                    var slider = (Slider)editor.FindName(name);
+                    var slider = (Slider)studio.FindName(name);
                     double before = slider.Value;
                     var source = PresentationSource.FromVisual(slider);
                     var args = new System.Windows.Input.KeyEventArgs(
@@ -541,6 +543,7 @@ public sealed class CharacterPanelFollowsTests
             }
             finally
             {
+                studio.TryClose();
                 editor.Close();
                 WindowHarness.Pump();
             }

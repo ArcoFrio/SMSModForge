@@ -128,6 +128,81 @@ public sealed class MarkupTextBoxTests
         });
     }
 
+    [Theory]
+    [InlineData("A plain line.")]
+    [InlineData("<b>bold</b> and <i>italic</i>")]
+    [InlineData("<b>over\ntwo lines</b>\n")]
+    [InlineData("{PC} said [PV:gold] <color=#f66>in red</color> 😀 emoji")]
+    [InlineData("\n<size=70%>quiet\n\nafter a blank line")]
+    [InlineData("Café <i>naïve</i> 👩‍💻 and 🇯🇵 flags")]
+    public void OffsetsCountTheSameAsTheTextOfARange(string text)
+    {
+        // 1.9.0 counts a position inside a run in symbols instead of taking the
+        // text of a range to it (which made WPF normalize the range by reflection
+        // on every count). The old count, the new one and the caret must agree
+        // at every position OffsetOf is ever handed: the caret's, a selection's
+        // ends, a spelling error's and a hit test's are all insertion positions -
+        // never inside a character's two halves.
+        WindowHarness.Run(_ =>
+        {
+            var box = Box(text);
+            int checkedAt = 0, between = 0;
+            foreach (var run in Runs(box))
+                for (int k = 0; k <= run.Text.Length; k++)
+                {
+                    var at = run.ContentStart.GetPositionAtOffset(k);
+                    int old = new TextRange(run.ContentStart, at).Text.Length;
+                    int now = run.ContentStart.GetOffsetToPosition(at);
+                    if (at.IsAtInsertionPosition) { Assert.Equal(old, now); checkedAt++; }
+                    else
+                    {
+                        // The control: inside a pair of halves the two counts DO
+                        // differ, so the comparison can see a difference.
+                        if (k > 0 && char.IsHighSurrogate(run.Text[k - 1])) Assert.NotEqual(old, now);
+                        between++;
+                    }
+                }
+            if (text.Contains("😀")) Assert.True(between > 0, "no position inside an emoji was tried");
+            for (int i = 0; i <= text.Length; i++)
+            {
+                box.CaretIndex = i;
+                var caret = box.CaretPosition;
+                int old = OldOffsetOf(box, caret);
+                Assert.Equal(old, box.OffsetOf(caret));
+                checkedAt++;
+            }
+            _out.WriteLine($"'{text}': {checkedAt} positions agree, {between} inside a character skipped");
+
+            // The control: across the whole paragraph the two measures are NOT the
+            // same (each run's edges are symbols, and no characters) - so their
+            // agreement inside a run above is a fact about runs, not a tautology.
+            var para = (Paragraph)box.Document.Blocks.FirstBlock;
+            Assert.NotEqual(new TextRange(para.ContentStart, para.ContentEnd).Text.Length,
+                            para.ContentStart.GetOffsetToPosition(para.ContentEnd));
+        });
+    }
+
+    /// <summary>How OffsetOf counted until 1.9.0, for the comparison.</summary>
+    private static int OldOffsetOf(MarkupTextBox box, TextPointer at)
+    {
+        int offset = 0;
+        foreach (var inline in ((Paragraph)box.Document.Blocks.FirstBlock).Inlines)
+        {
+            if (inline is Run run)
+            {
+                if (at.CompareTo(run.ContentStart) >= 0 && at.CompareTo(run.ContentEnd) <= 0)
+                    return offset + new TextRange(run.ContentStart, at).Text.Length;
+                offset += run.Text.Length;
+            }
+            else if (inline is LineBreak)
+            {
+                if (at.CompareTo(inline.ContentStart) <= 0) return offset;
+                offset++;
+            }
+        }
+        return offset;
+    }
+
     // ── What it actually shows ────────────────────────────────────────
 
     [Fact]

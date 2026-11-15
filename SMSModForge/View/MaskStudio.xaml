@@ -1,0 +1,342 @@
+<UserControl x:Class="SMSModForge.View.MaskStudio"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:l="clr-namespace:SMSModForge.Localization"
+             xmlns:ctl="clr-namespace:SMSModForge.View.Controls"
+             Focusable="False"
+             Loaded="Studio_Loaded"
+             KeyDown="Studio_KeyDown"
+             Background="{DynamicResource Theme.Window}"
+             Foreground="{DynamicResource Theme.Text}">
+    <!--
+        The mask editor, inside the main window (the author, 1.9.0): painting on
+        the left, the live preview of the shader on the right, one beside the
+        other instead of a window of its own over the editor whose preview had
+        to be looked at behind it. Everything behind it - the tabs and their
+        previews - is collapsed while it is open, so nothing else renders.
+    -->
+    <UserControl.Resources>
+        <!-- A layer's eye: its channel's dot in a ring, on the row's own dark
+             fill - bright while the layer shows, faint while it is hidden. -->
+        <Style x:Key="LayerEye" TargetType="ToggleButton">
+            <Setter Property="Width" Value="22"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="ring" Background="Transparent" BorderBrush="#77FFFFFF"
+                                BorderThickness="1" CornerRadius="11" SnapsToDevicePixels="True">
+                            <ContentPresenter x:Name="dot" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="dot" Property="Opacity" Value="0.3"/>
+                                <Setter TargetName="ring" Property="BorderBrush" Value="#33FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ring" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="ring" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- A small square button over the canvas (zoom). -->
+        <Style x:Key="CanvasButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="2,0,0,0"/>
+            <Setter Property="Focusable" Value="False"/>
+        </Style>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Undo" Executed="Undo_Executed" CanExecute="UndoRedo_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Redo" Executed="Redo_Executed" CanExecute="UndoRedo_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Save" Executed="Save_Executed"/>
+    </UserControl.CommandBindings>
+
+    <DockPanel>
+        <!-- ── Header: what is being painted, and the way back ── -->
+        <Border x:Name="StudioHeader" DockPanel.Dock="Top" Style="{DynamicResource Theme.MaskStudio.Header}">
+            <DockPanel>
+                <Button x:Name="BackButton" DockPanel.Dock="Left" Padding="10,3" Margin="0,0,12,0"
+                        VerticalAlignment="Center" Click="CloseBtn_Click"
+                        ToolTip="{l:T maskStudio.back.tip}">
+                    <TextBlock>
+                        <Run Text="&#xE72B;" FontFamily="Segoe MDL2 Assets" FontSize="11"/>
+                        <Run Text="{l:T maskStudio.back}"/>
+                    </TextBlock>
+                </Button>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="UnsavedMark" Text="{l:T maskStudio.unsaved}" Foreground="{DynamicResource Theme.Danger}"
+                               VerticalAlignment="Center" Margin="0,0,10,0" Visibility="Collapsed"/>
+                    <Button x:Name="SaveButton" Content="{l:T maskEditor.saveBtn}" Click="SaveBtn_Click" Padding="14,3"
+                            FontWeight="Bold" ToolTip="{l:T maskStudio.save.tip}"/>
+                    <Button x:Name="CloseButton" Content="{l:T maskEditor.closeBtn}" Click="CloseBtn_Click" Padding="12,3" Margin="6,0,0,0"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock x:Name="TitleText" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource Theme.Heading}"
+                               TextTrimming="CharacterEllipsis"/>
+                    <TextBlock x:Name="SubtitleText" FontSize="11" Foreground="{DynamicResource Theme.TextMuted}"
+                               TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- ── Status line: tool, layer, where the pointer is and what is there ── -->
+        <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Theme.Border}" BorderThickness="0,1,0,0"
+                Padding="10,3" Background="{DynamicResource Theme.Chrome}">
+            <DockPanel>
+                <TextBlock x:Name="CursorText" DockPanel.Dock="Right" Foreground="{DynamicResource Theme.ChromeText}" FontSize="11"
+                           Margin="12,0,0,0"/>
+                <TextBlock x:Name="StatusText" Foreground="{DynamicResource Theme.ChromeText}" FontSize="11"
+                           TextTrimming="CharacterEllipsis"/>
+            </DockPanel>
+        </Border>
+
+        <Grid x:Name="Body">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="248"/>
+                <ColumnDefinition x:Name="CanvasColumn" Width="*" MinWidth="240"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition x:Name="PreviewColumn" Width="*" MinWidth="220"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ── LEFT: layers and tools ── -->
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                          Focusable="False">
+                <StackPanel Margin="8">
+                    <GroupBox Header="{l:T maskEditor.layers}">
+                        <StackPanel>
+                            <Border BorderBrush="#555" BorderThickness="1" Margin="0,0,0,4" Padding="4" Background="#222">
+                                <StackPanel Orientation="Horizontal">
+                                    <ToggleButton x:Name="ShowDiffuseToggle" IsChecked="True" Style="{StaticResource LayerEye}"
+                                                  Click="ShowDiffuse_Click" ToolTip="{l:T maskEditor.showDiffuseToggle.tip}">
+                                        <TextBlock Text="●" FontSize="14" Foreground="LightGray"/>
+                                    </ToggleButton>
+                                    <TextBlock Text="{l:T maskEditor.referenceLocked}" Margin="6,0,0,0"
+                                               VerticalAlignment="Center" Foreground="LightGray"/>
+                                </StackPanel>
+                            </Border>
+                            <Border BorderBrush="#A33" BorderThickness="1" Margin="0,0,0,4" Padding="4"
+                                    x:Name="LayerR" Background="#331100">
+                                <StackPanel Orientation="Horizontal">
+                                    <ToggleButton x:Name="ShowRToggle" IsChecked="True" Style="{StaticResource LayerEye}"
+                                                  Click="ShowR_Click" ToolTip="{l:T maskEditor.showRToggle.tip}">
+                                        <TextBlock x:Name="ShowRDot" Text="●" FontSize="14" Foreground="#F66"/>
+                                    </ToggleButton>
+                                    <RadioButton GroupName="ActiveChannel" x:Name="ActiveR" IsChecked="True"
+                                                 Margin="8,0,0,0" VerticalAlignment="Center"
+                                                 Checked="ActiveR_Checked" Background="#F0F0F0" BorderBrush="#FFFFFF">
+                                        <TextBlock x:Name="ActiveRLabel" Text="{l:T maskEditor.bounceR}" FontSize="13" FontWeight="Bold" Foreground="#FF6666"/>
+                                    </RadioButton>
+                                </StackPanel>
+                            </Border>
+                            <Border BorderBrush="#3A3" BorderThickness="1" Margin="0,0,0,4" Padding="4"
+                                    x:Name="LayerG" Background="#113300">
+                                <StackPanel Orientation="Horizontal">
+                                    <ToggleButton x:Name="ShowGToggle" IsChecked="True" Style="{StaticResource LayerEye}"
+                                                  Click="ShowG_Click" ToolTip="{l:T maskEditor.showGToggle.tip}">
+                                        <TextBlock Text="●" FontSize="14" Foreground="#6F6"/>
+                                    </ToggleButton>
+                                    <RadioButton GroupName="ActiveChannel" x:Name="ActiveG"
+                                                 Margin="8,0,0,0" VerticalAlignment="Center"
+                                                 Checked="ActiveG_Checked" Background="#F0F0F0" BorderBrush="#FFFFFF">
+                                        <TextBlock Text="{l:T maskEditor.waveG}" FontSize="13" FontWeight="Bold" Foreground="#66FF66"/>
+                                    </RadioButton>
+                                </StackPanel>
+                            </Border>
+                            <Border BorderBrush="#36A" BorderThickness="1" Margin="0,0,0,4" Padding="4"
+                                    x:Name="LayerB" Background="#110033">
+                                <StackPanel Orientation="Horizontal">
+                                    <ToggleButton x:Name="ShowBToggle" IsChecked="True" Style="{StaticResource LayerEye}"
+                                                  Click="ShowB_Click" ToolTip="{l:T maskEditor.showBToggle.tip}">
+                                        <TextBlock Text="●" FontSize="14" Foreground="#69F"/>
+                                    </ToggleButton>
+                                    <RadioButton GroupName="ActiveChannel" x:Name="ActiveB"
+                                                 Margin="8,0,0,0" VerticalAlignment="Center"
+                                                 Checked="ActiveB_Checked" Background="#F0F0F0" BorderBrush="#FFFFFF">
+                                        <TextBlock Text="{l:T maskEditor.noiseB}" FontSize="13" FontWeight="Bold" Foreground="#6699FF"/>
+                                    </RadioButton>
+                                </StackPanel>
+                            </Border>
+                            <!-- What can be done to the whole of the layer being painted. -->
+                            <UniformGrid Columns="2" Margin="0,4,0,0">
+                                <Button x:Name="ClearButton" Content="{l:T maskStudio.clear}" Click="ClearChannel_Click" Margin="0,0,2,2"
+                                        ToolTip="{l:T maskStudio.clear.tip}"/>
+                                <Button x:Name="FillButton" Content="{l:T maskStudio.fill}" Click="FillChannel_Click" Margin="2,0,0,2"
+                                        ToolTip="{l:T maskStudio.fill.tip}"/>
+                                <Button x:Name="InvertButton" Content="{l:T maskStudio.invert}" Click="Invert_Click" Margin="0,2,2,0"
+                                        ToolTip="{l:T maskStudio.invert.tip}"/>
+                                <Button x:Name="SoftenButton" Content="{l:T maskStudio.soften}" Click="Soften_Click" Margin="2,2,0,0"
+                                        ToolTip="{l:T maskStudio.soften.tip}"/>
+                            </UniformGrid>
+                            <!-- Start from another outfit's layers. Hidden where there is
+                                 nothing to copy from (every place). -->
+                            <StackPanel x:Name="CopyFromPanel" Visibility="Collapsed" Margin="0,10,0,0">
+                                <TextBlock x:Name="CopyFromLabel" Text="{l:T maskEditor.copyLayers}" Margin="0,0,0,3"/>
+                                <ComboBox x:Name="CopyFromList" SelectionChanged="CopyFrom_SelectionChanged"
+                                          ToolTip="{l:T maskEditor.copyFromList.tip}"/>
+                                <!-- Every layer, or one of them over the same layer here
+                                     (the author, 1.9.0). -->
+                                <ComboBox x:Name="CopyLayerList" Margin="0,4,0,0"
+                                          ToolTip="{l:T maskStudio.copyLayer.tip}"/>
+                                <Button x:Name="CopyFromButton" Content="{l:T maskEditor.copyFrom}" Margin="0,4,0,0"
+                                        Click="CopyFrom_Click" IsEnabled="False" ToolTip="{l:T maskEditor.copyFrom.tip}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="{l:T maskEditor.tools}" Margin="0,8,0,0">
+                        <StackPanel>
+                            <!-- Brush and eraser side by side; the soften brush under
+                                 both (the author, 1.9.0), so no name is cut short. -->
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <ToggleButton x:Name="ToolBrushBtn" IsChecked="True" Content="{l:T maskEditor.toolBrush}"
+                                              Click="ToolBrush_Click" Margin="0,0,2,0" Height="30"/>
+                                <ToggleButton x:Name="ToolEraserBtn" Grid.Column="1" Content="{l:T maskEditor.toolEraser}"
+                                              Click="ToolEraser_Click" Margin="2,0,0,0" Height="30"/>
+                                <ToggleButton x:Name="ToolSoftenBtn" Grid.Row="1" Grid.ColumnSpan="2" Content="{l:T maskStudio.toolSoften}"
+                                              Click="ToolSoften_Click" Margin="0,4,0,0" Height="30"
+                                              ToolTip="{l:T maskStudio.toolSoften.tip}"/>
+                            </Grid>
+
+                            <TextBlock Text="{l:T maskEditor.size}"/>
+                            <DockPanel Margin="0,2,0,0">
+                                <TextBlock DockPanel.Dock="Right" Width="42" Margin="6,0,0,0" TextAlignment="Right"
+                                           Text="{Binding ElementName=SizeSlider, Path=Value, StringFormat=F0}"/>
+                                <Slider x:Name="SizeSlider" Minimum="1" Maximum="80" Value="20" SmallChange="1" LargeChange="5"
+                                        PreviewKeyDown="Slider_PreviewKeyDown" ValueChanged="BrushParamChanged"/>
+                            </DockPanel>
+
+                            <TextBlock Text="{l:T maskEditor.hardness}" Margin="0,6,0,0"/>
+                            <DockPanel Margin="0,2,0,0">
+                                <TextBlock DockPanel.Dock="Right" Width="42" Margin="6,0,0,0" TextAlignment="Right"
+                                           Text="{Binding ElementName=HardnessSlider, Path=Value, StringFormat=P0}"/>
+                                <Slider x:Name="HardnessSlider" Minimum="0" Maximum="1" Value="0.8" SmallChange="0.01"
+                                        PreviewKeyDown="Slider_PreviewKeyDown" ValueChanged="BrushParamChanged"/>
+                            </DockPanel>
+
+                            <TextBlock Text="{l:T maskEditor.opacity}" Margin="0,6,0,0"/>
+                            <DockPanel Margin="0,2,0,0">
+                                <TextBlock DockPanel.Dock="Right" Width="42" Margin="6,0,0,0" TextAlignment="Right"
+                                           Text="{Binding ElementName=OpacitySlider, Path=Value, StringFormat=P0}"/>
+                                <Slider x:Name="OpacitySlider" Minimum="0.01" Maximum="1" Value="0.2" SmallChange="0.01"
+                                        PreviewKeyDown="Slider_PreviewKeyDown"/>
+                            </DockPanel>
+
+                            <CheckBox x:Name="CapToggle" Content="{l:T maskEditor.capToggle}" Margin="0,8,0,0"
+                                      ToolTip="{l:T maskEditor.capToggle.tip}"/>
+                            <CheckBox x:Name="MirrorToggle" Content="{l:T maskStudio.mirror}" Margin="0,4,0,0"
+                                      ToolTip="{l:T maskStudio.mirror.tip}" Click="Mirror_Click"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <Expander x:Name="KeysExpander" Header="{l:T maskEditor.hotkeys}" Margin="0,8,0,0">
+                        <TextBlock Foreground="{DynamicResource Theme.TextMuted}" FontSize="11" TextWrapping="Wrap" LineHeight="16" Margin="4,4,0,0">
+                            <Run Text="{l:T maskEditor.keys.brush}"/><LineBreak/>
+                            <Run Text="{l:T maskStudio.keys.soften}"/><LineBreak/>
+                            <Run Text="{l:T maskEditor.keys.channel}"/><LineBreak/>
+                            <Run Text="{l:T maskEditor.keys.toggle}"/><LineBreak/>
+                            <Run Text="{l:T maskEditor.keys.brushSize}"/><LineBreak/>
+                            <Run Text="{l:T maskEditor.keys.opacity}"/><LineBreak/>
+                            <Run Text="{l:T maskEditor.keys.clearFill}"/><LineBreak/>
+                            <Run Text="{l:T maskStudio.keys.mirror}"/><LineBreak/>
+                            <Run Text="{l:T maskStudio.keys.sample}"/><LineBreak/>
+                            <Run Text="{l:T maskEditor.keys.undo}"/><LineBreak/>
+                            <Run Text="{l:T maskEditor.keys.save}"/><LineBreak/>
+                            <Run Text="{l:T maskEditor.keys.zoom}"/><LineBreak/>
+                            <Run Text="{l:T maskEditor.keys.panCanvas}"/><LineBreak/>
+                            <Run Text="{l:T maskEditor.keys.resetView}"/><LineBreak/>
+                            <Run Text="{l:T maskStudio.keys.close}"/>
+                        </TextBlock>
+                    </Expander>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ── CENTRE: the canvas. Holding the middle button anywhere on the dark
+                 area pans; the wheel zooms about the pointer. ── -->
+            <Border x:Name="CanvasArea" Grid.Column="1" Background="#1a1a1a" ClipToBounds="True"
+                    MouseDown="CanvasArea_MouseDown" MouseMove="CanvasArea_MouseMove"
+                    MouseUp="CanvasArea_MouseUp" LostMouseCapture="CanvasArea_LostMouseCapture"
+                    SizeChanged="CanvasArea_SizeChanged">
+                <Grid>
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
+                          x:Name="CanvasHost" Width="512" Height="512"
+                          RenderTransformOrigin="0.5,0.5"
+                          Background="Transparent" Focusable="True"
+                          MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove"
+                          MouseUp="Canvas_MouseUp" MouseLeave="Canvas_MouseLeave"
+                          MouseEnter="Canvas_MouseEnter" MouseWheel="Canvas_MouseWheel"
+                          Cursor="None">
+                        <!-- Zoom and pan are render transforms, never layout changes:
+                             a layout size past the arrange slot is clipped to it,
+                             and GetPosition against this grid stays in canvas space
+                             at any zoom. -->
+                        <Grid.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform x:Name="ZoomTransform"/>
+                                <TranslateTransform x:Name="PanTransform"/>
+                            </TransformGroup>
+                        </Grid.RenderTransform>
+                        <Image x:Name="MaskImage" Stretch="Fill" SnapsToDevicePixels="True"
+                               RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                        <Canvas x:Name="OverlayCanvas" IsHitTestVisible="False">
+                            <!-- Where a mirrored stroke lands: the canvas's middle. -->
+                            <Line x:Name="MirrorAxis" Stroke="#66FFFFFF" StrokeThickness="1" StrokeDashArray="4,4"
+                                  Visibility="Collapsed" SnapsToDevicePixels="True"/>
+                            <Ellipse x:Name="BrushCursor" Width="0" Height="0" Stroke="White" StrokeThickness="1" Visibility="Hidden"/>
+                            <Ellipse x:Name="BrushCursorHard" Width="0" Height="0" Stroke="White" StrokeThickness="1"
+                                     StrokeDashArray="2,2" Opacity="0.6" Visibility="Hidden"/>
+                            <Ellipse x:Name="MirrorCursor" Width="0" Height="0" Stroke="#AAFFFFFF" StrokeThickness="1"
+                                     StrokeDashArray="3,3" Visibility="Hidden"/>
+                        </Canvas>
+                    </Grid>
+                    <!-- Zoom, by the button as well as the wheel. -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,6,6,0">
+                        <TextBlock x:Name="ZoomDisplay" Text="100%" Foreground="#CCFFFFFF" FontSize="11"
+                                   VerticalAlignment="Center" Margin="0,0,6,0" MinWidth="40" TextAlignment="Right"/>
+                        <Button x:Name="ZoomOutButton" Style="{StaticResource CanvasButton}" Click="ZoomOut_Click"
+                                Content="&#xE71F;" FontFamily="Segoe MDL2 Assets" ToolTip="{l:T maskStudio.zoomOut.tip}"/>
+                        <Button x:Name="ZoomFitButton" Style="{StaticResource CanvasButton}" Click="ZoomFit_Click"
+                                Content="&#xE9A6;" FontFamily="Segoe MDL2 Assets" ToolTip="{l:T maskStudio.zoomFit.tip}"/>
+                        <Button x:Name="ZoomInButton" Style="{StaticResource CanvasButton}" Click="ZoomIn_Click"
+                                Content="&#xE8A3;" FontFamily="Segoe MDL2 Assets" ToolTip="{l:T maskStudio.zoomIn.tip}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <GridSplitter x:Name="StudioSplitter" Grid.Column="2" Width="6" HorizontalAlignment="Stretch"
+                          Background="{DynamicResource Theme.Border}" ResizeBehavior="PreviousAndNext"
+                          DragCompleted="Splitter_DragCompleted" ToolTip="{l:T maskStudio.splitter.tip}"/>
+
+            <!-- ── RIGHT: the live preview, the shader with every stroke as it lands ── -->
+            <DockPanel Grid.Column="3" Margin="8">
+                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,6">
+                    <ctl:PreviewQualityBar x:Name="QualityBar" DockPanel.Dock="Right"/>
+                    <TextBlock Text="{l:T maskStudio.livePreview}" FontWeight="Bold" VerticalAlignment="Center"
+                               Foreground="{DynamicResource Theme.Heading}"/>
+                </DockPanel>
+                <TextBlock x:Name="PreviewNote" DockPanel.Dock="Bottom" Text="{l:T maskStudio.livePreview.note}" TextWrapping="Wrap"
+                           FontSize="10" Foreground="{DynamicResource Theme.TextMuted}" Margin="0,6,0,0"/>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Focusable="False">
+                    <ContentPresenter x:Name="PreviewSlot" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                </ScrollViewer>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
+</UserControl>

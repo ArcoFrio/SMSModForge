@@ -152,6 +152,24 @@ public static class DialogueMarkup
     public static void RaiseTokenColorsChanged() => TokenColorsChanged?.Invoke();
 
     /// <summary>
+    /// The name a <c>{name:key}</c> stands for in the pack being edited, or null
+    /// for a key that is nobody's (1.9.0). Set by the window's view model, which
+    /// knows the pack's characters; without one, the game's cast answers.
+    /// </summary>
+    public static Func<string, string?>? NameOf { get; set; }
+
+    /// <summary>
+    /// What a braced token shows when it is a <c>{name:key}</c> for somebody: their
+    /// name as it is shown now. Null for anything else, a key that is nobody's
+    /// included - that one stays words, so the typo shows.
+    /// </summary>
+    public static string? NameIn(string braced)
+    {
+        if (!SMSModForge.Shared.NameTokens.TryParse(braced, out string key)) return null;
+        return NameOf != null ? NameOf(key) : SMSModForge.Shared.VanillaCastData.NameOfKey(key);
+    }
+
+    /// <summary>
     /// Split a line into tags and the styled text between them.
     /// <para/>
     /// Every character of the input lands in exactly one span and the spans are
@@ -269,14 +287,14 @@ public static class DialogueMarkup
         if (from < end) spans.Add(new Span(from, end - from, Kind.Text, style));
     }
 
-    /// <summary>Whether a braced word is one the game resolves. Case-sensitive:
-    /// the game's own lines write them in capitals, and nothing here has seen
-    /// <c>{pc}</c> work.</summary>
+    /// <summary>Whether a braced word is one the game resolves, or a
+    /// <c>{name:key}</c> naming somebody. Case-sensitive: the game's own lines
+    /// write them in capitals, and nothing here has seen <c>{pc}</c> work.</summary>
     private static bool IsToken(string braced)
     {
         foreach (string known in Tokens)
             if (string.Equals(braced, known, StringComparison.Ordinal)) return true;
-        return false;
+        return NameIn(braced) != null;
     }
 
     /// <summary>

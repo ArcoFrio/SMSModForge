@@ -124,13 +124,14 @@ namespace SMSModForge.PackPlugin
             // PackManifest.TryLoad below; that's cheap and keeps the
             // archive layer JSON-agnostic.
             string packId;
+            Newtonsoft.Json.Linq.JObject parsed;
             try
             {
                 using (var stream = manifestEntry.Open())
                 using (var reader = new StreamReader(stream, Encoding.UTF8))
                 {
                     string text = reader.ReadToEnd();
-                    var parsed = Newtonsoft.Json.Linq.JObject.Parse(text);
+                    parsed = Newtonsoft.Json.Linq.JObject.Parse(text);
                     packId = (string)parsed["packId"] ?? Path.GetFileNameWithoutExtension(smspackPath);
                 }
             }
@@ -142,7 +143,26 @@ namespace SMSModForge.PackPlugin
                 return null;
             }
 
-            return new PackArchive(smspackPath, zip, packId, entries);
+            return new PackArchive(smspackPath, zip, packId, entries) { _manifest = parsed };
+        }
+
+        /// <summary>The manifest as parsed while opening, until it is taken.</summary>
+        private Newtonsoft.Json.Linq.JObject _manifest;
+
+        /// <summary>
+        /// The manifest as parsed while opening - to the first caller only; null
+        /// after, and each later reader parses its own, as every reader did
+        /// before (1.9.0). Opening parsed the whole manifest for its pack id and
+        /// the first reader then parsed the same text again: a large pack's is
+        /// megabytes, twice per load and twice per pack every time the main
+        /// menu's pack list was drawn. Handed over once because the taker may
+        /// change it (a translation is written into it).
+        /// </summary>
+        internal Newtonsoft.Json.Linq.JObject TakeManifest()
+        {
+            var taken = _manifest;
+            _manifest = null;
+            return taken;
         }
 
         /// <summary>
@@ -231,6 +251,7 @@ namespace SMSModForge.PackPlugin
 
         public void Dispose()
         {
+            _manifest = null;
             try { _zip?.Dispose(); } catch { /* swallow — disposing twice is benign */ }
         }
 

@@ -442,6 +442,31 @@ namespace SMSModForge.Shared
             return grouped ?? "";
         }
 
+        private static System.Collections.Generic.Dictionary<string, string> _byKey;
+
+        /// <summary>
+        /// The name of the game's character whose key is <paramref name="key"/>
+        /// (any capitals), or null for a key that is nobody's - what a
+        /// <c>{name:key}</c> naming one of the game's characters reads.
+        /// </summary>
+        public static string NameOfKey(string key)
+        {
+            if (string.IsNullOrEmpty(key)) return null;
+            if (_byKey == null)
+            {
+                var built = new System.Collections.Generic.Dictionary<string, string>(System.StringComparer.OrdinalIgnoreCase);
+                foreach (var bust in Busts)
+                {
+                    string name = SpokenName(bust.Character);
+                    string k = KeyFor(name);
+                    if (k.Length > 0 && !built.ContainsKey(k)) built[k] = name;
+                }
+                _byKey = built;
+            }
+            string said;
+            return _byKey.TryGetValue(key, out said) ? said : null;
+        }
+
         /// <summary>
         /// A character's key, from its name. Lower case, letters and digits
         /// only - "Doctor Frost" and "Himari (Father)" are display names, not
