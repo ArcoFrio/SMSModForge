@@ -25,6 +25,8 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        ApplyBustPreviewSplit();
+        ApplyNpcPreviewSplit();
 
         // Clicking the picture selects what is under the pointer. Without it a
         // full-screen object's box covers the pane and nothing beneath it can
@@ -1680,61 +1682,34 @@ public partial class MainWindow : Window
     /// selecting a character is a no-op (the user can expand it).
     /// </summary>
     /// <summary>
-    /// How much room the bust preview has, handed to the view model, which
-    /// shows it at the largest offered size that fits (see
-    /// <see cref="MainViewModel.BustPreviewShownZoom"/>).
-    /// <para/>
-    /// Tall: the pane's height, less everything in it but the picture - the
-    /// header over it, the frame around it and the options under it. Wide: the
-    /// tab, less the sidebar at its narrowest, the splitter, and a working
-    /// width for the outfit's fields beside it.
-    /// <para/>
-    /// Neither depends on the size the preview is shown at, so showing it
-    /// smaller cannot make the room it is measured against change, and the
-    /// two cannot chase each other.
+    /// The split between the outfit's fields and the bust preview, as its
+    /// splitter was left (1.9.1: the preview scales to fit its column, as the
+    /// mask painter's does): the share of the two the preview takes.
     /// </summary>
-    private void BustPreviewRoom_Changed(object sender, SizeChangedEventArgs e)
+    private void ApplyBustPreviewSplit()
     {
-        if (DataContext is not MainViewModel vm || !BustPreviewPane.IsLoaded) return;
-
-        double around = BustPreviewHeader.ActualHeight + BustPreviewHeader.Margin.Top + BustPreviewHeader.Margin.Bottom
-                      + BustPreviewFrame.Padding.Top + BustPreviewFrame.Padding.Bottom
-                      + BustPreviewFrame.BorderThickness.Top + BustPreviewFrame.BorderThickness.Bottom
-                      + PreviewControl.Margin.Top + PreviewControl.Margin.Bottom
-                      + NaturalHeight(BustPreviewOptions) + BustPreviewOptions.Margin.Top + BustPreviewOptions.Margin.Bottom;
-        double tall = BustPreviewPane.ActualHeight - around;
-
-        double wide = CharactersGrid.ActualWidth
-                    - CharacterSidebarColumn.MinWidth
-                    - CharacterSplitterColumn.ActualWidth
-                    - OutfitFieldsWorkingWidth
-                    - MainViewModel.BustPreviewChrome;
-
-        vm.SetBustPreviewRoom(Math.Max(0, wide), Math.Max(0, tall));
+        double share = Services.EditorPrefs.CharactersPreviewSplit;
+        OutfitFieldsColumn.Width = new GridLength(7 * (1 - share), GridUnitType.Star);
+        BustPreviewColumn.Width = new GridLength(7 * share, GridUnitType.Star);
     }
 
-    /// <summary>What the outfit's fields keep, at the least, beside the preview
-    /// when the window is narrow: enough for a label and a path to be read.</summary>
-    private const double OutfitFieldsWorkingWidth = 220;
-
-    /// <summary>
-    /// How tall the options under the preview need to be, rather than how tall
-    /// they were left: squeezed under a preview too big for the window, the
-    /// grid reports the few pixels it was given. Its columns are stacks, and a
-    /// stack measures what it holds at full height whatever it is given, so
-    /// the tallest column's sum is what the options take.
-    /// </summary>
-    private static double NaturalHeight(Grid options)
+    private void BustPreviewSplitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
     {
-        double tallest = 0;
-        foreach (UIElement column in options.Children)
-        {
-            double h = column is StackPanel stack
-                ? stack.Children.Cast<UIElement>().Sum(c => c.DesiredSize.Height)
-                : column.DesiredSize.Height;
-            tallest = Math.Max(tallest, h);
-        }
-        return tallest;
+        double fields = OutfitFieldsColumn.ActualWidth, preview = BustPreviewColumn.ActualWidth;
+        if (fields + preview > 0) Services.EditorPrefs.CharactersPreviewSplit = preview / (fields + preview);
+    }
+
+    private void ApplyNpcPreviewSplit()
+    {
+        double share = Services.EditorPrefs.NpcsPreviewSplit;
+        NpcFieldsColumn.Width = new GridLength(7 * (1 - share), GridUnitType.Star);
+        NpcPreviewColumn.Width = new GridLength(7 * share, GridUnitType.Star);
+    }
+
+    private void NpcPreviewSplitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+    {
+        double fields = NpcFieldsColumn.ActualWidth, preview = NpcPreviewColumn.ActualWidth;
+        if (fields + preview > 0) Services.EditorPrefs.NpcsPreviewSplit = preview / (fields + preview);
     }
 
     /// <summary>The row standing for a particular object, anywhere in the
@@ -2001,7 +1976,9 @@ public partial class MainWindow : Window
 
     /// <summary>The depth a freshly opened preview breathes at. Matches the
     /// slider's Value in MainWindow.xaml.</summary>
-    private const double BreathingDepthDefault = 4;
+    // The game's: SpriteManager's breathingAmplitude, 0.1 world units, is 5
+    // screen pixels at the preview's scale (the game's 960x540; 1.9.1, measured).
+    private const double BreathingDepthDefault = 5;
 
     private void EditPlaceMask_Click(object sender, RoutedEventArgs e) => OpenPlaceMask(secondary: false);
 

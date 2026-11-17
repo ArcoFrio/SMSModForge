@@ -40,6 +40,11 @@ public partial class App : Application
         // Restore the saved live-preview quality preset (frame cap + AA) so
         // the Busts tab honours it from the first frame.
         PreviewQualityManager.ApplySaved();
+        // And what the bust preview draws a bust over (1.9.1), loading it now.
+        PreviewBackdropManager.ApplySaved();
+        // And what draws them (1.9.1): the graphics card or the processor -
+        // Automatic times both in the background now.
+        PreviewRendererManager.ApplySaved();
         base.OnStartup(e);
 
         // The window is opened HERE rather than by StartupUri in App.xaml, and

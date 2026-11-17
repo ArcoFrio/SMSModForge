@@ -21,10 +21,13 @@ namespace SMSModForge.Tests;
 /// shares nothing with it.
 /// <para/>
 /// It comes up for every run, from the first test, on the author's leftmost
-/// monitor and on top of it, and never takes focus (the author, 2026-10-21:
-/// the tests run while they work on the other monitors, and the window had
-/// stopped appearing at all - every run in the 1.7.0 work had it switched off,
-/// and short runs never reached the half minute it used to wait). It stays
+/// monitor, and never takes focus (the author, 2026-10-21: the tests run while
+/// they work on the other monitors, and the window had stopped appearing at
+/// all - every run in the 1.7.0 work had it switched off, and short runs never
+/// reached the half minute it used to wait). It opens BEHIND their windows,
+/// not on top of them (the author, 2026-11-16: "It's getting a bit annoying to
+/// have it pop in front of whatever I'm doing every time"): its taskbar button
+/// and bar say how the run goes, and Keep on top brings it forward. It stays
 /// away only where nobody could see it (no interactive session), and the old
 /// SMSMODFORGE_TEST_PROGRESS switch no longer turns it off.
 /// </summary>
@@ -114,7 +117,7 @@ internal sealed class RunProgressWindow : Form
         _onTop.Dock = DockStyle.Bottom;
         _onTop.Height = 26;
         _onTop.Text = "Keep on top";
-        _onTop.Checked = true;
+        _onTop.Checked = false;
         _onTop.CheckedChanged += (_, _) => KeepOnTop(_onTop.Checked);
 
         // Docking goes from the last added outwards: the list fills what the
@@ -139,27 +142,35 @@ internal sealed class RunProgressWindow : Form
         Tick();
     }
 
-    // Up beside whatever the author is doing, not in front of it.
+    // Never in front of what the author is doing, and never taking it from
+    // them: shown without activation (on the author's machine an activation
+    // takes the foreground), and put under every other window before it is
+    // shown - a window that is merely not activated still opens on top.
     protected override bool ShowWithoutActivation => true;
 
-    // On top from the moment it exists. Form.TopMost would get there through
-    // a SetWindowPos that also activates the window, and on the author's
-    // machine an activation takes the foreground from whatever they are in.
-    protected override CreateParams CreateParams
+    protected override void OnHandleCreated(EventArgs e)
     {
-        get
+        base.OnHandleCreated(e);
+        ToBottom();
+    }
+
+    // Form.TopMost would get there through a SetWindowPos that also activates
+    // the window; these never do.
+    private void KeepOnTop(bool onTop)
+    {
+        if (!IsHandleCreated) return;
+        if (onTop) SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        else
         {
-            var p = base.CreateParams;
-            if (_onTop.Checked) p.ExStyle |= WS_EX_TOPMOST;
-            return p;
+            SetWindowPos(Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            ToBottom();
         }
     }
 
-    private void KeepOnTop(bool onTop)
+    private void ToBottom()
     {
-        if (IsHandleCreated)
-            SetWindowPos(Handle, onTop ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0,
-                         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        if (IsHandleCreated && !_onTop.Checked)
+            SetWindowPos(Handle, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
     }
 
     /// <summary>The author's leftmost monitor: the one they keep for things
@@ -177,6 +188,7 @@ internal sealed class RunProgressWindow : Form
     protected override void OnShown(EventArgs e)
     {
         base.OnShown(e);
+        ToBottom();   // and again, in case showing it raised it
         try
         {
             _taskbar = (ITaskbarList3)new TaskbarList();
@@ -258,7 +270,7 @@ internal sealed class RunProgressWindow : Form
 
     // ── The taskbar button's own bar, and the red one ─────────────────────
 
-    private const int WS_EX_TOPMOST = 0x00000008;
+    private static readonly IntPtr HWND_BOTTOM = new(1);
     private static readonly IntPtr HWND_TOPMOST = new(-1);
     private static readonly IntPtr HWND_NOTOPMOST = new(-2);
     private const uint SWP_NOSIZE = 0x0001, SWP_NOMOVE = 0x0002, SWP_NOACTIVATE = 0x0010;

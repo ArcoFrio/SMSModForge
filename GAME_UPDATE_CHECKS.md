@@ -103,6 +103,26 @@ Each is a snapshot; a new game version needs each one re-made and diffed.
       `BranchList.m_Branches`, `Journal.m_Tasks`, `QuestsList.m_QuestsLut/m_TasksLut`,
       `TwoCateCode.ConditionChance.m_Threshold` (a game-specific condition).
       Unity: `AudioClip.GetData/SetData` (float[] overloads, by reflection).
+      URP (1.9.1, `ShadowShapes.cs`): `ShadowCaster2D.m_ShadowMesh`,
+      `ShadowMesh2D.m_Mesh`, `ShadowCaster2D.m_ForceShadowMeshRebuild`,
+      `m_ShadowCastingSource` (ShapeEditor = 1, ShapeProvider = 2) and
+      `m_ShapePath` - a pack bust's caster gets `Shared/ShadowOutline`'s
+      outline of its art, in a mesh of its own. Renamed, the BepInEx log warns
+      once and pack busts throw the cloned game bust's shadow again; in-game
+      check S5 fails either way (it compares the caster's points with the
+      outline's).
+- [ ] **The preview's room lamp and shadow** (1.9.1, `GameLamp`, `BustShadow`,
+      checks S3 and S6): URP 2D's point light, light texture (the screen at the
+      2D renderer's Light Render Texture Scale, 0.4, B10G11R11, truncated),
+      ShadowProjected2D's vertex program, the falloff and light lookup
+      textures (Light2DLookupTexture), the light shader's
+      `col * (1 - k) + col * L2DShadowIntensity * k`, the light volume added
+      after the top-most layer it lights, and the fake GI's background copied
+      from one pixel of every 4x4 (the one at (1, 1)). A URP update can change
+      any of these; S6 compares the room and that background with the game's.
+      The lamp's numbers and the room's captures come from S4
+      (`Tools/Game/backdrop-from-game.py`), as does the GPU's sRGB decode table
+      (`lookupDecode`) the preview reads bust art with.
 - [ ] **Which list holds a game variable is remembered** (1.9.0,
       `GameVariableBridge.FindRuntime`): assumes GC2's
       `GlobalNameVariablesManager.Values` is only ever ADDED to (a list made
@@ -210,6 +230,12 @@ Each is a snapshot; a new game version needs each one re-made and diffed.
 - [ ] Unity's top-level window class `UnityWndClass` (used by `-Visible`), and
       that Unity activates its window while starting (why the game runs on a
       desktop of its own).
+- [ ] `rt-save _CameraTarget` (1.9.1) reads URP's `Renderer2D.m_CurrentColorHandle`
+      (static) to pick `_CameraTargetAttachmentA` or `B`: the 2D renderer takes
+      turns between them, every frame while post-processing runs, so a fixed
+      name read a stale frame about half the time. Renamed, `rt-save` falls
+      back to A and HDR captures can be stale again (S6's control would then
+      pass for the shadow: check it fails).
 - [ ] Rendering works on that desktop: `shot` gives a real picture once the
       load's fade-in is over (the first second is black).
 - [ ] `UnityEngine.ScreenCapture` in `UnityEngine.ScreenCaptureModule`

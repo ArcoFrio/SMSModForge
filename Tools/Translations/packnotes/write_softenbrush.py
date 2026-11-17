@@ -118,11 +118,14 @@ T = {
 ],
 }
 
+REWORDED = {"maskStudio.soften.tip", "maskStudio.toolSoften.tip", "docs.maskPainter.brushEraserSizeHardness"}
+
 for code, texts in T.items():
     assert len(texts) == len(KEYS), (code, len(texts))
     folder = os.path.join(HERE, code)
     os.makedirs(folder, exist_ok=True)
     with io.open(os.path.join(folder, "softenbrush.txt"), "w", encoding="utf-8", newline="\n") as f:
         for key, text in zip(KEYS, texts):
+            if key in REWORDED: continue   # reworded in 1.9.1: written by write_softenedge.py
             f.write(key + " = " + text + "\n")
     print(code, len(texts))

@@ -96,4 +96,79 @@ public sealed class BrushEngineTests
         Assert.Equal(At(corner, 51, 60), At(corner, 50, 61));
         Assert.True(At(corner, 51, 61) > At(corner, 53, 61));
     }
+
+    // ───────────────────────── the soften brush (1.9.1)
+
+    /// <summary>A hard edge softened to N comes out a fade N pixels wide, from 2%
+    /// to 98%, for every N on the slider's way. A softness of 1 is the control
+    /// at the other end: next to nothing changes.</summary>
+    [Theory]
+    [InlineData(2)]
+    [InlineData(4)]
+    [InlineData(8)]
+    [InlineData(16)]
+    [InlineData(32)]
+    public void ASoftenedHardEdgeFadesAcrossTheWidthAsked(int width)
+    {
+        int size = MaskBuffer.Size;
+        var layer = new byte[size * size];
+        for (int y = 0; y < size; y++)
+            for (int x = 0; x < size / 2; x++)
+                layer[y * size + x] = 255;
+
+        var softened = BrushEngine.Softened(layer, size, width);
+        var row = Enumerable.Range(0, size).Select(x => softened[128 * size + x]).ToArray();
+        int fade = row.Count(v => v > 0.02f * 255 && v < 0.98f * 255);
+        _out.WriteLine($"{width}: {fade} part way - " + string.Join(" ", row.Skip(size / 2 - 6).Take(12).Select(v => v.ToString("0"))));
+        Assert.Equal(width, fade);
+        // Mirror-even about the edge, and no row differs from another.
+        Assert.Equal(255.0 - row[size / 2 - 1], (double)row[size / 2], 3);
+        Assert.Equal((double)row[size / 2 - 3], (double)softened[5 * size + size / 2 - 3], 3);
+
+        var barely = BrushEngine.Softened(layer, size, 1);
+        Assert.Equal(0, Enumerable.Range(0, size).Count(x => barely[128 * size + x] > 0.02f * 255 && barely[128 * size + x] < 0.98f * 255));
+    }
+
+    /// <summary>Softening leaves a layer of one strength as it was, right up to
+    /// the mask's border - only the pixels that exist are counted there. The
+    /// control: one strong pixel is spread out, and keeps its total.</summary>
+    [Fact]
+    public void SofteningLeavesAnEvenLayerAlone_EvenAtTheBorder()
+    {
+        int size = MaskBuffer.Size;
+        var even = Enumerable.Repeat((byte)200, size * size).ToArray();
+        var softened = BrushEngine.Softened(even, size, 12);
+        Assert.All(new[] { 0, size - 1, 3 * size + 2, size * size - 1, size * (size - 1) }, i => Assert.Equal(200.0, (double)softened[i], 3));
+
+        var dot = new byte[size * size];
+        dot[100 * size + 100] = 255;
+        var spread = BrushEngine.Softened(dot, size, 12);
+        Assert.True(spread[100 * size + 100] < 255 && spread[100 * size + 103] > 0);
+        Assert.Equal(255.0, spread.Sum(v => (double)v), 1);
+    }
+
+    /// <summary>Where the brush covers fully a pixel lands on the softened layer,
+    /// and a second pass from there changes nothing; half-covered it goes half
+    /// way. The control: a pixel the stroke does not reach stays as it was.</summary>
+    [Fact]
+    public void TheSoftenStepLandsOnItsTarget_AndStaysThere()
+    {
+        int size = MaskBuffer.Size;
+        var original = new byte[size * size];
+        original[0] = 0; original[1] = 200; original[2] = 100; original[3] = 50;
+        var target = new float[size * size];
+        target[0] = 100.4f; target[1] = 100.6f; target[2] = 200f; target[3] = 0f;
+        var stroke = new float[size * size];
+        stroke[0] = 1f; stroke[1] = 1f; stroke[2] = 0.5f;   // pixel 3 not reached
+
+        var channel = (byte[])original.Clone();
+        BrushEngine.ApplySoften(channel, original, target, stroke, 0, 0, 3, 0);
+        Assert.Equal(new byte[] { 100, 101, 150, 50 }, channel.Take(4).ToArray());
+
+        var again = (byte[])channel.Clone();
+        var second = (byte[])channel.Clone();
+        stroke[2] = 1f;
+        BrushEngine.ApplySoften(second, again, target, stroke, 0, 0, 1, 0);
+        Assert.Equal(new byte[] { 100, 101 }, second.Take(2).ToArray());
+    }
 }

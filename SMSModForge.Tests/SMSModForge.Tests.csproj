@@ -12,6 +12,7 @@
          why that one is not WPF. -->
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IsPackable>false</IsPackable>
     <!-- The editor's warnings are the editor's business. -->
     <NoWarn>$(NoWarn);CS8600;CS8602;CS8604;CS8625</NoWarn>
@@ -37,6 +38,7 @@
   <ItemGroup>
     <!-- Real UI rectangles out of the game, with the answers Unity gave. -->
     <None Include="Fixtures\**\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Fixtures\**\*.bin" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

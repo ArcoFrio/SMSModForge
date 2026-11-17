@@ -442,6 +442,7 @@ namespace SMSModForge.PackPlugin
             if (sr == null) return;
             var theirs = from != null ? from.GetComponent<SpriteRenderer>() : null;
             sr.sprite = theirs != null ? theirs.sprite : null;
+            if (sr.sprite != null) ShadowShapes.Refresh(sr);
         }
 
         /// <summary>
@@ -485,6 +486,8 @@ namespace SMSModForge.PackPlugin
             // frame the rest of the bust rig is built around. One per picture
             // while the packs load - see LoadedArt.
             sr.sprite = LoadedArt.Sprite(pack, rel, "bust", () => FittedSprite.CreateBust(LoadTexture(pack, rel)));
+            // Its shadow the shape of this art, not the cloned bust's.
+            ShadowShapes.Refresh(sr);
         }
 
         /// <param name="linear">
@@ -508,6 +511,11 @@ namespace SMSModForge.PackPlugin
             byte[] bytes = pack.ReadBytes(rel);
             if (bytes != null) tex.LoadImage(bytes);
             tex.filterMode = FilterMode.Point;
+            // As the game's own bust art is (measured: Anna_YellowSexy and its
+            // parts, Clamp). Unity's default, Repeat, had a read the jiggle moves
+            // past an edge take the opposite edge: a bust bouncing up showed its
+            // empty top row along its bottom edge. The editor's previews clamp.
+            tex.wrapMode = TextureWrapMode.Clamp;
             return tex;
         }
 

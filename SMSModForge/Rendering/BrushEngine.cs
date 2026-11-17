@@ -152,59 +152,79 @@ public static class BrushEngine
         }
     }
 
-    /// <summary>How far the soften brush reaches: it pulls towards the average
-    /// of the 5x5 around each pixel.</summary>
-    public const int SoftenRadius = 2;
+    /// <summary>The edge softness the soften brush starts at, in mask pixels.</summary>
+    public const float DefaultEdgeSoftness = 8f;
 
     /// <summary>
-    /// A copy of <paramref name="channel"/> in which each pixel is the average of
-    /// the square of side <c>2 × radius + 1</c> around it - of the pixels that
-    /// exist, at an edge - rounded to the nearest. What the soften brush pulls
-    /// towards (1.9.0); taken once when its stroke begins.
+    /// <paramref name="layer"/> with every edge softened to
+    /// <paramref name="edgeWidth"/> mask pixels: a hard edge comes out as a fade
+    /// from nothing to full across about that many pixels (2% to 98%; a
+    /// Gaussian blur of sigma <c>width / 4</c>, measured from the pixels that
+    /// exist at the mask's border). What the soften brush pulls towards (1.9.1),
+    /// taken from the layer as it was before any soften stroke - so going over
+    /// an edge again can never take it past this.
     /// </summary>
-    public static byte[] Blurred(byte[] channel, int size, int radius)
+    public static float[] Softened(byte[] layer, int size, float edgeWidth)
     {
-        // A box is the same as rows then columns: the rows' sums first, then the
-        // sum of those down each column, divided by how many pixels were in it.
-        var rowSums = new int[size * size];
-        var rowCounts = new int[size];
-        for (int x = 0; x < size; x++)
-            rowCounts[x] = Math.Min(size - 1, x + radius) - Math.Max(0, x - radius) + 1;
+        var result = new float[size * size];
+        float sigma = edgeWidth / 4f;
+        if (sigma < 0.05f)
+        {
+            for (int i = 0; i < result.Length; i++) result[i] = layer[i];
+            return result;
+        }
+
+        int reach = Math.Max(1, (int)MathF.Ceiling(3f * sigma));
+        var kernel = new float[2 * reach + 1];
+        for (int d = -reach; d <= reach; d++)
+            kernel[d + reach] = MathF.Exp(-(d * d) / (2f * sigma * sigma));
+
+        // Rows, then columns: a Gaussian is the same either way round. At the
+        // border only the pixels that exist count, so a full layer stays full.
+        var rows = new float[size * size];
         for (int y = 0; y < size; y++)
         {
             int row = y * size;
             for (int x = 0; x < size; x++)
             {
-                int sum = 0;
-                for (int xx = Math.Max(0, x - radius), end = Math.Min(size - 1, x + radius); xx <= end; xx++)
-                    sum += channel[row + xx];
-                rowSums[row + x] = sum;
+                float sum = 0f, weight = 0f;
+                for (int xx = Math.Max(0, x - reach), end = Math.Min(size - 1, x + reach); xx <= end; xx++)
+                {
+                    float k = kernel[xx - x + reach];
+                    sum += layer[row + xx] * k;
+                    weight += k;
+                }
+                rows[row + x] = sum / weight;
             }
         }
-        var blurred = new byte[size * size];
         for (int y = 0; y < size; y++)
         {
-            int top = Math.Max(0, y - radius), bottom = Math.Min(size - 1, y + radius);
-            int rows = bottom - top + 1;
+            int top = Math.Max(0, y - reach), bottom = Math.Min(size - 1, y + reach);
             for (int x = 0; x < size; x++)
             {
-                int sum = 0;
-                for (int yy = top; yy <= bottom; yy++) sum += rowSums[yy * size + x];
-                int n = rows * rowCounts[x];
-                blurred[y * size + x] = (byte)((sum + n / 2) / n);
+                float sum = 0f, weight = 0f;
+                for (int yy = top; yy <= bottom; yy++)
+                {
+                    float k = kernel[yy - y + reach];
+                    sum += rows[yy * size + x] * k;
+                    weight += k;
+                }
+                result[y * size + x] = sum / weight;
             }
         }
-        return blurred;
+        return result;
     }
 
     /// <summary>
     /// The soften brush: within the dirty rect, each pixel the stroke reached
     /// moves from what it was when the stroke began towards
-    /// <paramref name="blurred"/>, by the stroke's contribution there (the
-    /// brush's falloff times its opacity). Like the brush, no build-up within a
-    /// stroke: going over a place again in a new stroke softens it further.
+    /// <paramref name="target"/> (0 to 255), by the stroke's contribution there
+    /// (the brush's falloff). Where the brush covers fully it lands on the
+    /// target, and since the target does not move, going over a place again
+    /// leaves it as it is: an edge is softened to the softness asked for and
+    /// never past it.
     /// </summary>
-    public static void ApplySoften(byte[] channel, byte[] original, byte[] blurred,
+    public static void ApplySoften(byte[] channel, byte[] original, float[] target,
         float[] strokeBuffer, int x0, int y0, int x1, int y1)
     {
         int size = MaskBuffer.Size;
@@ -221,9 +241,9 @@ public static class BrushEngine
                 int idx = row + x;
                 float contribution = strokeBuffer[idx];
                 if (contribution <= 0f) continue;
-                float cur = original[idx] / 255f;
-                float result = cur + (blurred[idx] / 255f - cur) * contribution;
-                channel[idx] = (byte)(Math.Clamp(result, 0f, 1f) * 255f + 0.5f);
+                float cur = original[idx];
+                float result = cur + (target[idx] - cur) * Math.Min(contribution, 1f);
+                channel[idx] = (byte)(Math.Clamp(result, 0f, 255f) + 0.5f);
             }
         }
     }

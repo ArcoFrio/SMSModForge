@@ -40,7 +40,7 @@ public sealed class UiTabLanguageFitTests
 
     /// <summary>Words that do not all reach the screen. A text that trims says so
     /// with its own ellipsis and is not one of them.</summary>
-    private static IEnumerable<string> CutWords(FrameworkElement root)
+    internal static IEnumerable<string> CutWords(FrameworkElement root)
     {
         foreach (var label in Descendants<TextBlock>(root).ToList())
         {

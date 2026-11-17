@@ -130,10 +130,17 @@ public sealed class PreviewFrame : Grid
             switch (Scaling)
             {
                 case PreviewScaling.Transform when _transform != null:
-                    // Its own size, measured unscaled.
-                    double own = Natural(preview).Width;
-                    if (own > 0 && !double.IsInfinity(room)) shown = Math.Min(chosen, room / own);
-                    shown = Math.Max(shown, Math.Min(MinScale, chosen));
+                    // Its own size, measured unscaled; no wider than the room, and
+                    // no taller where the room has a height (the Characters tab,
+                    // 1.9.1: the bust fits the pane above its options).
+                    var own = Natural(preview);
+                    if (own.Width > 0 && !double.IsInfinity(room)) shown = Math.Min(chosen, room / own.Width);
+                    bool tall = own.Height > 0 && !double.IsInfinity(available.Height);
+                    if (tall) shown = Math.Min(shown, available.Height / own.Height);
+                    // Where only a width limits it (the mask painter's, in a scroller)
+                    // never under half its size; where a height does too it fits
+                    // whatever it is, or it would be drawn over what is under it.
+                    shown = tall ? Math.Max(shown, 0.1) : Math.Max(shown, Math.Min(MinScale, chosen));
                     if (Math.Abs(_transform.ScaleX - shown) > 1e-6) { _transform.ScaleX = shown; _transform.ScaleY = shown; }
                     break;
             }

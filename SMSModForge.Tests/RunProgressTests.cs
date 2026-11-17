@@ -201,4 +201,58 @@ public sealed class RunProgressTests
         thread.Join();
         if (failure != null) throw new Exception("in the window: " + failure.Message, failure);
     }
+
+    private sealed class QuietForm : System.Windows.Forms.Form
+    {
+        protected override bool ShowWithoutActivation => true;
+    }
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    private static extern IntPtr GetWindow(IntPtr hWnd, uint cmd);
+
+    /// <summary>
+    /// The window opens behind the author's windows (the author, 2026-11-16:
+    /// "It's getting a bit annoying to have it pop in front of whatever I'm
+    /// doing every time"), on the run's own desktop here. Control: a window
+    /// that is only shown without activation still opens over one already
+    /// open, so the order is being read.
+    /// </summary>
+    [Fact]
+    public void TheWindowOpensBehindTheWindowsAlreadyOpen()
+    {
+        var run = new RunProgress(Cases("a"), new Dictionary<string, double>(), new FakeClock().Read);
+        Exception? failure = null;
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                TestDesktop.Enter();
+                using var before = new QuietForm { Text = "before", StartPosition = System.Windows.Forms.FormStartPosition.Manual, Location = new System.Drawing.Point(40, 40) };
+                before.Show();
+                System.Windows.Forms.Application.DoEvents();
+                using var w = new RunProgressWindow(run);
+                w.Show();
+                System.Windows.Forms.Application.DoEvents();
+                using var after = new QuietForm { Text = "after", StartPosition = System.Windows.Forms.FormStartPosition.Manual, Location = new System.Drawing.Point(80, 80) };
+                after.Show();
+                System.Windows.Forms.Application.DoEvents();
+                const uint GW_HWNDNEXT = 2;
+                bool Below(IntPtr upper, IntPtr lower)
+                {
+                    for (var h = GetWindow(upper, GW_HWNDNEXT); h != IntPtr.Zero; h = GetWindow(h, GW_HWNDNEXT))
+                        if (h == lower) return true;
+                    return false;
+                }
+                _out.WriteLine($"after over before: {Below(after.Handle, before.Handle)}; progress under before: {Below(before.Handle, w.Handle)}; under after: {Below(after.Handle, w.Handle)}");
+                Assert.True(Below(after.Handle, before.Handle), "a window shown later without activation did not open over an earlier one - the order is not being read");
+                Assert.True(Below(before.Handle, w.Handle), "the progress window opened over a window already open");
+                Assert.True(Below(after.Handle, w.Handle), "the progress window is over a window opened after it");
+            }
+            catch (Exception ex) { failure = ex; }
+        });
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.Start();
+        thread.Join();
+        if (failure != null) throw new Exception("in the window: " + failure.Message, failure);
+    }
 }

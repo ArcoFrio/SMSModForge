@@ -60,18 +60,43 @@ namespace SMSModForge.PackPlugin
         /// Cut the whole texture, at the pixels-per-unit that keeps it the size
         /// the frame expects.
         /// </summary>
-        public static Sprite Create(Texture2D tex, float frameW, float frameH, float framePpu)
+        public static Sprite Create(Texture2D tex, float frameW, float frameH, float framePpu,
+                                    SpriteMeshType mesh = SpriteMeshType.Tight)
         {
             if (tex == null) return null;
             float ppu = framePpu * ScaleOf(tex, frameW, frameH);
             // Sprite.Create rejects a non-positive pixelsPerUnit outright.
             if (ppu <= 0f) ppu = framePpu;
             return Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height),
-                                 new Vector2(0.5f, 0.5f), ppu);
+                                 new Vector2(0.5f, 0.5f), ppu, 0, mesh);
         }
 
+        /// <summary>
+        /// A bust: drawn over its whole picture (<see cref="MovingMesh"/>).
+        /// </summary>
         public static Sprite CreateBust(Texture2D tex)
-            => Create(tex, BustPixels, BustPixels, BustPpu);
+            => Create(tex, BustPixels, BustPixels, BustPpu, MovingMesh(tex));
+
+        /// <summary>
+        /// The mesh of a sprite whose shader moves the picture inside it (a
+        /// bust's, an NPC's jiggle): the whole picture (1.9.1).
+        /// <para/>
+        /// Unity draws a sprite only inside the mesh it is given, and
+        /// Sprite.Create's own (Tight) is a coarse outline about two texels
+        /// outside the art's opaque pixels. The jiggle moves the picture, not
+        /// the mesh, so wherever it carried the art out past that outline the
+        /// art was cut off - by a shape nobody could see or predict, and which
+        /// the editor's previews, drawing the whole picture, never cut.
+        /// Measured 2026-11-16 (in-game suite S3, the noise outfit): the art's
+        /// edge moved out of the mesh vanished in the game over a band
+        /// beside the bust while the preview drew it. A sprite's bounds are its
+        /// rect either way (measured: the figure bust's renderer spans its full
+        /// 2.56 units with a 13-point tight mesh), so nothing placed by them
+        /// moves. Art whose pixels cannot be read keeps Unity's mesh: its shadow
+        /// is cast from that mesh (<see cref="ShadowShapes"/>).
+        /// </summary>
+        public static SpriteMeshType MovingMesh(Texture2D tex)
+            => tex != null && tex.isReadable ? SpriteMeshType.FullRect : SpriteMeshType.Tight;
 
         public static Sprite CreateLevel(Texture2D tex)
             => Create(tex, LevelWidth, LevelHeight, LevelPpu);

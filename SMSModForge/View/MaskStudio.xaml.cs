@@ -46,9 +46,18 @@ public partial class MaskStudio : UserControl
     internal enum Tool { Brush, Eraser, Soften }
     private Tool _tool;
 
-    /// <summary>The layer blurred, taken when a soften stroke begins: what it
-    /// pulls towards.</summary>
-    private byte[]? _strokeBlurred;
+    /// <summary>The tool the stroke under way began with: a key pressed mid-stroke
+    /// changes the next stroke, not this one.</summary>
+    private Tool _strokeTool;
+
+    /// <summary>What a soften stroke pulls towards (0 to 255): the layer as it was
+    /// before any soften stroke, softened to the edge softness asked for, taken
+    /// as the stroke begins.</summary>
+    private float[]? _strokeTarget;
+
+    /// <summary>The layer before the soften brush as a brush or eraser stroke
+    /// began, when it has been softened: the stroke is painted on it too.</summary>
+    private byte[]? _strokeUnsoftened;
     private bool _mirror;
 
     // Zoom state
@@ -92,12 +101,18 @@ public partial class MaskStudio : UserControl
     {
         InitializeComponent();
         PointerOnArea = e => e.GetPosition(CanvasArea);
+        PointerOnCanvas = e => e.GetPosition(CanvasHost);
+        LeftHeld = e => e.LeftButton == MouseButtonState.Pressed;
+        SoftnessSlider.Value = BrushEngine.DefaultEdgeSoftness;
         _host = host;
         _packRoot = packRoot;
         Title = title;
         TitleText.Text = title;
         SubtitleText.Text = subtitle;
         PreviewSlot.Content = preview;
+        // A bust's preview draws over a backdrop: its buttons under it.
+        if (preview is View.Controls.PreviewFrame { Preview: Border { Child: View.Controls.JigglePreview } })
+            BackdropBar.Visibility = Visibility.Visible;
         _mask = new MaskBuffer(host.MaskKind);
         if (_mask.ChannelCount == 1)
         {
@@ -280,10 +295,11 @@ public partial class MaskStudio : UserControl
             // One layer: read the other mask the way this one was read, and take
             // that layer alone. The others stay as they are; the layer copied is
             // the one being painted next.
-            _history.Snapshot(only, _mask.Channel(only), _mask.A);
+            _history.Snapshot(_mask, only);
             var other = new MaskBuffer(_mask.Kind);
             other.FromBgra(BustComposer.LoadPng(path));
             Buffer.BlockCopy(other.Channel(only), 0, _mask.Channel(only), 0, _mask.Channel(only).Length);
+            _mask.SetUnsoftened(only, null);
             (only switch { 0 => ActiveR, 1 => ActiveG, _ => ActiveB }).IsChecked = true;
             _mask.ToBgra(_liveBgra);
             _host.LiveMaskRevision++;
@@ -295,7 +311,7 @@ public partial class MaskStudio : UserControl
 
         // Every channel snapshotted first, so one Ctrl+Z undoes the whole load.
         for (int channel = 0; channel < _mask.ChannelCount; channel++)
-            _history.Snapshot(channel, _mask.Channel(channel), _mask.A);
+            _history.Snapshot(_mask, channel);
 
         _mask.FromBgra(BustComposer.LoadPng(path));
         _mask.ToBgra(_liveBgra);
@@ -366,7 +382,7 @@ public partial class MaskStudio : UserControl
     private void Slider_PreviewKeyDown(object sender, KeyEventArgs e)
     {
         if (sender is not Slider slider) return;
-        double unit = ReferenceEquals(slider, SizeSlider) ? 1 : 0.01;
+        double unit = ReferenceEquals(slider, SizeSlider) || ReferenceEquals(slider, SoftnessSlider) ? 1 : 0.01;
         if (NudgeSlider(slider, e.Key, Keyboard.Modifiers, unit)) e.Handled = true;
     }
 
@@ -392,23 +408,26 @@ public partial class MaskStudio : UserControl
 
     // ───────────────────────── whole-layer actions (each undoable)
 
-    private void ClearActiveChannel() => ChangeActiveChannel(ch => Array.Clear(ch));
+    private void ClearActiveChannel() => ChangeActiveChannel(ch => Array.Clear(ch), keepsSoftening: false);
 
-    private void FillActiveChannel() => ChangeActiveChannel(ch => Array.Fill(ch, (byte)255));
+    private void FillActiveChannel() => ChangeActiveChannel(ch => Array.Fill(ch, (byte)255), keepsSoftening: false);
 
-    /// <summary>Strong where it was faint and faint where it was strong.</summary>
+    /// <summary>Strong where it was faint and faint where it was strong. An edge
+    /// the soften brush softened stays softened as far as it was, the other way
+    /// up.</summary>
     internal void InvertActiveChannel() => ChangeActiveChannel(ch =>
     {
         for (int i = 0; i < ch.Length; i++) ch[i] = (byte)(255 - ch[i]);
-    });
+    }, keepsSoftening: true);
 
     /// <summary>
     /// Smooths the layer being painted: each pixel becomes the average of the 3x3
     /// around it (edge pixels of the ones that exist). A mask's edges are where a
     /// shader tears - a hard step from moving to still reads as a crease - and
-    /// this is the quick way to take one off without repainting it.
+    /// this is the quick way to take one off without repainting it. What it
+    /// blurs becomes the layer: the soften brush softens on from there.
     /// </summary>
-    internal void SoftenActiveChannel() => ChangeActiveChannel(ch => Soften(ch, MaskBuffer.Size));
+    internal void SoftenActiveChannel() => ChangeActiveChannel(ch => Soften(ch, MaskBuffer.Size), keepsSoftening: false);
 
     internal static void Soften(byte[] ch, int size)
     {
@@ -433,11 +452,16 @@ public partial class MaskStudio : UserControl
             }
     }
 
-    private void ChangeActiveChannel(Action<byte[]> change)
+    /// <summary>A change to the whole of the layer being painted, undoable.
+    /// <paramref name="keepsSoftening"/>: the layer before the soften brush takes
+    /// the same change; otherwise what the change leaves becomes it.</summary>
+    private void ChangeActiveChannel(Action<byte[]> change, bool keepsSoftening)
     {
         var ch = _mask.Channel(_activeChannel);
-        _history.Snapshot(_activeChannel, ch, _mask.A);
+        _history.Snapshot(_mask, _activeChannel);
         change(ch);
+        if (keepsSoftening && _mask.Unsoftened(_activeChannel) is { } unsoftened) change(unsoftened);
+        else _mask.SetUnsoftened(_activeChannel, null);
         UpdateLiveAndView(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1);
         MarkDirty();
     }
@@ -463,6 +487,13 @@ public partial class MaskStudio : UserControl
         ToolBrushBtn.IsChecked = tool == Tool.Brush;
         ToolEraserBtn.IsChecked = tool == Tool.Eraser;
         ToolSoftenBtn.IsChecked = tool == Tool.Soften;
+        // The soften brush has no strength of its own: where it covers fully it
+        // takes an edge to the softness asked for (1.9.1). So Opacity, and the
+        // cap on it, give way to Edge softness while it is the tool.
+        bool soften = tool == Tool.Soften;
+        OpacityLabel.Visibility = OpacityRow.Visibility = soften ? Visibility.Collapsed : Visibility.Visible;
+        SoftnessLabel.Visibility = SoftnessRow.Visibility = soften ? Visibility.Visible : Visibility.Collapsed;
+        CapToggle.IsEnabled = !soften;
         UpdateStatus();
     }
 
@@ -471,16 +502,28 @@ public partial class MaskStudio : UserControl
     private void ToolSoften_Click(object sender, RoutedEventArgs e) => SetTool(Tool.Soften);
 
     /// <summary>The stroke so far, onto the layer: painted, erased, or softened
-    /// towards the layer's blur.</summary>
+    /// towards the layer's softened self.</summary>
     private void ApplyStroke(byte[] channel, int x0, int y0, int x1, int y1)
     {
         if (_strokeBuffer == null || _strokeOriginal == null) return;
-        if (_tool == Tool.Soften && _strokeBlurred != null)
-            BrushEngine.ApplySoften(channel, _strokeOriginal, _strokeBlurred, _strokeBuffer, x0, y0, x1, y1);
-        else
-            BrushEngine.ApplyStrokeBuffer(channel, _strokeOriginal, _strokeBuffer, x0, y0, x1, y1,
-                                          CapToggle.IsChecked == true, _tool == Tool.Eraser);
+        if (_strokeTool == Tool.Soften)
+        {
+            if (_strokeTarget != null)
+                BrushEngine.ApplySoften(channel, _strokeOriginal, _strokeTarget, _strokeBuffer, x0, y0, x1, y1);
+            return;
+        }
+        bool cap = CapToggle.IsChecked == true, erase = _strokeTool == Tool.Eraser;
+        BrushEngine.ApplyStrokeBuffer(channel, _strokeOriginal, _strokeBuffer, x0, y0, x1, y1, cap, erase);
+        // Painted on the layer before the soften brush too, so what is painted
+        // over a softened edge is softened from the painting, not on top of the
+        // softening.
+        if (_strokeUnsoftened != null && _mask.Unsoftened(_activeChannel) is { } unsoftened)
+            BrushEngine.ApplyStrokeBuffer(unsoftened, _strokeUnsoftened, _strokeBuffer, x0, y0, x1, y1, cap, erase);
     }
+
+    /// <summary>How strongly the stroke reaches where it covers fully: Opacity
+    /// for the brush and eraser, all the way for the soften brush.</summary>
+    private float StrokeOpacity => _strokeTool == Tool.Soften ? 1f : (float)OpacitySlider.Value;
 
     /// <summary>Paint both halves at once, mirrored about the canvas's middle - a
     /// bust is nearly always symmetrical, and a mask painted twice by hand never
@@ -588,10 +631,10 @@ public partial class MaskStudio : UserControl
     private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
     {
         if (e.ChangedButton != MouseButton.Left || _panning) return;
-        if (e.LeftButton != MouseButtonState.Pressed) return;
+        if (!LeftHeld(e)) return;
         CanvasHost.Focus();
 
-        var (fx, fy) = ScreenToTex(e.GetPosition(CanvasHost));
+        var (fx, fy) = ScreenToTex(PointerOnCanvas(e));
 
         // Alt-click takes the strength under the pointer as the brush's opacity,
         // to carry on a gradient at the level it has reached.
@@ -602,21 +645,19 @@ public partial class MaskStudio : UserControl
             return;
         }
 
-        var ch = _mask.Channel(_activeChannel);
-        _history.Snapshot(_activeChannel, ch, _mask.A);
-
-        int bufLen = MaskBuffer.Size * MaskBuffer.Size;
-        _strokeBuffer = new float[bufLen];
-        _strokeOriginal = new byte[bufLen];
-        Buffer.BlockCopy(ch, 0, _strokeOriginal, 0, bufLen);
-
-        _drawing = true;
-        _lastX = fx; _lastY = fy;
+        // The one way a stroke begins, for the pointer and for tests alike: until
+        // 1.9.1 this handler began strokes by a copy of its own that never set
+        // the soften brush up, so with the mouse it painted like the brush, and
+        // the tests, which began strokes the other way, passed.
+        BeginStrokeAt(fx, fy);
         CanvasHost.CaptureMouse();
-
-        StampPoint(ch, fx, fy);
-        MarkDirty();
     }
+
+    /// <summary>Where the pointer is over the canvas, and whether the left button
+    /// is held. Seams for tests, which cannot move the real pointer or press
+    /// the real button: the mouse handlers themselves run.</summary>
+    internal Func<MouseEventArgs, Point> PointerOnCanvas;
+    internal Func<MouseEventArgs, bool> LeftHeld;
 
     /// <summary>The strength of the layer being painted at a texture point, as the
     /// brush's opacity.</summary>
@@ -632,16 +673,17 @@ public partial class MaskStudio : UserControl
     {
         if (_panning) return;
 
-        var p = e.GetPosition(CanvasHost);
+        var p = PointerOnCanvas(e);
         UpdateBrushCursor(p);
         var (fx, fy) = ScreenToTex(p);
         ShowCursorValue(fx, fy);
 
-        if (_drawing && e.LeftButton == MouseButtonState.Pressed && _strokeBuffer != null && _strokeOriginal != null)
+        bool held = LeftHeld(e);
+        if (_drawing && held && _strokeBuffer != null && _strokeOriginal != null)
         {
             StrokeTo(fx, fy);
         }
-        else if (_drawing && e.LeftButton != MouseButtonState.Pressed)
+        else if (_drawing && !held)
         {
             EndStroke();
         }
@@ -653,12 +695,12 @@ public partial class MaskStudio : UserControl
         if (_strokeBuffer == null || _strokeOriginal == null) return;
         var ch = _mask.Channel(_activeChannel);
         var rect = BrushEngine.StampLine(_strokeBuffer, (float)_lastX, (float)_lastY, (float)fx, (float)fy,
-            (float)SizeSlider.Value, (float)HardnessSlider.Value, (float)OpacitySlider.Value);
+            (float)SizeSlider.Value, (float)HardnessSlider.Value, StrokeOpacity);
         int x0 = rect.x0, y0 = rect.y0, x1 = rect.x1, y1 = rect.y1;
         if (_mirror)
         {
             var twin = BrushEngine.StampLine(_strokeBuffer, (float)MirrorX(_lastX), (float)_lastY, (float)MirrorX(fx), (float)fy,
-                (float)SizeSlider.Value, (float)HardnessSlider.Value, (float)OpacitySlider.Value);
+                (float)SizeSlider.Value, (float)HardnessSlider.Value, StrokeOpacity);
             x0 = Math.Min(x0, twin.x0); y0 = Math.Min(y0, twin.y0);
             x1 = Math.Max(x1, twin.x1); y1 = Math.Max(y1, twin.y1);
         }
@@ -667,19 +709,32 @@ public partial class MaskStudio : UserControl
         _lastX = fx; _lastY = fy;
     }
 
-    /// <summary>Begin a stroke at a texture point without a pointer - for tests,
-    /// which cannot press the real button.</summary>
+    /// <summary>Begin a stroke at a texture point: the pointer's way in, and the
+    /// tests'.</summary>
     internal void BeginStrokeAt(double fx, double fy)
     {
-        var ch = _mask.Channel(_activeChannel);
-        _history.Snapshot(_activeChannel, ch, _mask.A);
-        int bufLen = MaskBuffer.Size * MaskBuffer.Size;
-        _strokeBuffer = new float[bufLen];
-        _strokeOriginal = new byte[bufLen];
-        Buffer.BlockCopy(ch, 0, _strokeOriginal, 0, bufLen);
-        _strokeBlurred = _tool == Tool.Soften
-            ? BrushEngine.Blurred(_strokeOriginal, MaskBuffer.Size, BrushEngine.SoftenRadius)
-            : null;
+        int layer = _activeChannel;
+        var ch = _mask.Channel(layer);
+        _history.Snapshot(_mask, layer);
+        _strokeTool = _tool;
+        _strokeBuffer = new float[MaskBuffer.Size * MaskBuffer.Size];
+        _strokeOriginal = (byte[])ch.Clone();
+
+        var unsoftened = _mask.Unsoftened(layer);
+        if (_strokeTool == Tool.Soften)
+        {
+            // Softened from the layer as it was before any soften stroke, so a
+            // second pass lands where the first did.
+            if (unsoftened == null) _mask.SetUnsoftened(layer, unsoftened = (byte[])ch.Clone());
+            _strokeTarget = BrushEngine.Softened(unsoftened, MaskBuffer.Size, (float)SoftnessSlider.Value);
+            _strokeUnsoftened = null;
+        }
+        else
+        {
+            _strokeTarget = null;
+            _strokeUnsoftened = (byte[]?)unsoftened?.Clone();
+        }
+
         _drawing = true;
         _lastX = fx; _lastY = fy;
         StampPoint(ch, fx, fy);
@@ -691,7 +746,8 @@ public partial class MaskStudio : UserControl
         _drawing = false;
         _strokeBuffer = null;
         _strokeOriginal = null;
-        _strokeBlurred = null;
+        _strokeTarget = null;
+        _strokeUnsoftened = null;
         if (CanvasHost.IsMouseCaptured) CanvasHost.ReleaseMouseCapture();
         UpdateStatus();
     }
@@ -715,11 +771,11 @@ public partial class MaskStudio : UserControl
     {
         if (_strokeBuffer == null || _strokeOriginal == null) return;
         var (x0, y0, x1, y1) = BrushEngine.Stamp(_strokeBuffer, (float)fx, (float)fy,
-            (float)SizeSlider.Value, (float)HardnessSlider.Value, (float)OpacitySlider.Value);
+            (float)SizeSlider.Value, (float)HardnessSlider.Value, StrokeOpacity);
         if (_mirror)
         {
             var twin = BrushEngine.Stamp(_strokeBuffer, (float)MirrorX(fx), (float)fy,
-                (float)SizeSlider.Value, (float)HardnessSlider.Value, (float)OpacitySlider.Value);
+                (float)SizeSlider.Value, (float)HardnessSlider.Value, StrokeOpacity);
             x0 = Math.Min(x0, twin.x0); y0 = Math.Min(y0, twin.y0);
             x1 = Math.Max(x1, twin.x1); y1 = Math.Max(y1, twin.y1);
         }

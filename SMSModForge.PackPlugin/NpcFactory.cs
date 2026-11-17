@@ -388,9 +388,10 @@ namespace SMSModForge.PackPlugin
         {
             var tex = LoadTex(pack, rel);
             // Full-texture rect, centre pivot, 100 px/unit — matches the
-            // reference NPC/blink sprites (variable resolution, centred).
+            // reference NPC/blink sprites (variable resolution, centred). Drawn
+            // over the whole picture, as its jiggle moves it (FittedSprite.MovingMesh).
             return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height),
-                                 new Vector2(0.5f, 0.5f), 100f);
+                                 new Vector2(0.5f, 0.5f), 100f, 0, FittedSprite.MovingMesh(tex));
         }
 
         /// <param name="linear">True for a data texture (a jiggle mask, whose
@@ -402,6 +403,7 @@ namespace SMSModForge.PackPlugin
             byte[] bytes = pack.ReadBytes(rel);
             if (bytes != null) tex.LoadImage(bytes, !readable);   // resizes to the PNG's real dimensions
             tex.filterMode = FilterMode.Point;
+            tex.wrapMode = TextureWrapMode.Clamp;   // as a bust's art: see BustFactory.DecodeTexture
             return tex;
         }
 
@@ -424,6 +426,7 @@ namespace SMSModForge.PackPlugin
             tex.SetPixels32(px);
             tex.Apply();
             tex.filterMode = FilterMode.Bilinear;
+            tex.wrapMode = TextureWrapMode.Clamp;   // bilinear at an edge would blend in the opposite one
             _circle = Sprite.Create(tex, new Rect(0, 0, R * 2, R * 2), new Vector2(0.5f, 0.5f), 100f);
             return _circle;
         }

@@ -4261,6 +4261,37 @@
                         </Style>
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
+                <MenuItem Header="{l:T menu.previewBackdrop}" ItemsSource="{Binding PreviewBackdrops}"
+                          ToolTip="{l:T menu.previewBackdrop.tip}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                            <Setter Property="Header" Value="{Binding DisplayName}"/>
+                            <Setter Property="ToolTip" Value="{Binding Description}"/>
+                            <Setter Property="IsCheckable" Value="True"/>
+                            <Setter Property="IsChecked" Value="{Binding IsCurrent, Mode=OneWay}"/>
+                            <Setter Property="Command" Value="{Binding DataContext.ApplyPreviewBackdropCommand,
+                                                                       RelativeSource={RelativeSource AncestorType=Window}}"/>
+                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+                <MenuItem Header="{l:T menu.showPreviewFps}" IsCheckable="True"
+                          IsChecked="{Binding ShowPreviewFps, Mode=TwoWay}"
+                          ToolTip="{l:T menu.showPreviewFps.tip}"/>
+                <MenuItem Header="{l:T menu.previewRenderer}" ItemsSource="{Binding PreviewRenderers}"
+                          ToolTip="{l:T menu.previewRenderer.tip}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                            <Setter Property="Header" Value="{Binding DisplayName}"/>
+                            <Setter Property="ToolTip" Value="{Binding Description}"/>
+                            <Setter Property="IsCheckable" Value="True"/>
+                            <Setter Property="IsChecked" Value="{Binding IsCurrent, Mode=OneWay}"/>
+                            <Setter Property="Command" Value="{Binding DataContext.ApplyPreviewRendererCommand,
+                                                                       RelativeSource={RelativeSource AncestorType=Window}}"/>
+                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
                 <Separator/>
                 <MenuItem Header="{l:T menu.heading.writing}" Style="{StaticResource Theme.MenuHeadingItem}"/>
                 <MenuItem Header="{l:T menu.spellCheckNodeText}" IsCheckable="True"
@@ -4766,7 +4797,7 @@
                  BUSTS TAB
                  ════════════════════════════════════════════════════ -->
             <TabItem view:TabIcon.Glyph="&#xE77B;" view:TabIcon.Count="{Binding OwnCharacterCount}" Header="{l:T characters.characters}">
-                <Grid x:Name="CharactersGrid" SizeChanged="BustPreviewRoom_Changed">
+                <Grid x:Name="CharactersGrid">
                     <Grid.Resources>
                         <!-- Pack-authored and vanilla-borrowed characters read
                              very differently, so the tree groups by source
@@ -4793,14 +4824,10 @@
                         </CollectionViewSource>
                     </Grid.Resources>
                     <!--
-                        Column 4 (the live-preview side panel) has no
-                        GridSplitter, and should not get one: the preview is
-                        pinned to its own size, so a column an author could drag
-                        narrower than that would clip it rather than shrink it.
-                        What the author drags instead is the ZOOM picker under
-                        the preview, and the column is sized FROM that — the
-                        panel grows with the picture rather than the picture
-                        growing inside a panel that stays put.
+                        The live-preview side panel (column 4) is the share of the
+                        tab its splitter leaves it, remembered; the bust scales to
+                        fit it (1.9.1). Until then it was sized from a Preview
+                        size picker and could not be dragged.
                     -->
                     <Grid.ColumnDefinitions>
                         <!--
@@ -4813,8 +4840,9 @@
                         -->
                         <ColumnDefinition x:Name="CharacterSidebarColumn" Width="2*" MinWidth="180"/>
                         <ColumnDefinition x:Name="CharacterSplitterColumn" Width="Auto"/>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="{Binding BustPreviewColumnWidth}"/>
+                        <ColumnDefinition x:Name="OutfitFieldsColumn" Width="4*" MinWidth="260"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition x:Name="BustPreviewColumn" Width="3*" MinWidth="200"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- LEFT: character/outfit tree -->
@@ -5689,146 +5717,133 @@
                         </StackPanel>
                     </ScrollViewer>
 
-                    <!-- RIGHT: live preview + issues. No GridSplitter between
-                         columns 2 and 3 — this panel is intentionally fixed
-                         (see the columns block above for why). -->
-                    <!-- Sized so nothing in it ever leaves the window: see
-                         BustPreviewRoom_Changed and BustPreviewShownZoom. The
-                         options do not fill what is left, so what they measure
-                         is what they take. -->
-                    <DockPanel x:Name="BustPreviewPane" view:TutorialAnchor.Id="panel:bustPreviewPane" Grid.Column="3" Margin="8"
-                               LastChildFill="False" SizeChanged="BustPreviewRoom_Changed">
+                    <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext"
+                                  Background="{DynamicResource Theme.Border}" DragCompleted="BustPreviewSplitter_DragCompleted"
+                                  ToolTip="{l:T characters.previewSplitter.tip}"/>
+                    <!-- RIGHT: live preview. -->
+                    <!-- The options, the quality and the backdrop at the bottom,
+                         the preview over them in what is left, scaled to fit it
+                         as the mask painter's is (1.9.1, the author: "remove the
+                         'Preview size' field ... and instead make it scale just
+                         like the preview on the mask editor"). -->
+                    <DockPanel x:Name="BustPreviewPane" view:TutorialAnchor.Id="panel:bustPreviewPane" Grid.Column="4" Margin="8"
+                               LastChildFill="True">
                         <TextBlock x:Name="BustPreviewHeader" DockPanel.Dock="Top" FontWeight="Bold" Margin="0,0,0,4"
                                    Text="{Binding SelectedOutfit.ShowsPackArt,
                                           Converter={x:Static conv:PreviewHeaderConverter.Instance}}"/>
-                        <!-- The corner drags through the sizes the picker offers
-                             (the author, 1.8.0): the bust sizes itself from the one
-                             chosen, so the frame only says it. -->
-                        <ctl:PreviewFrame x:Name="BustPreviewResizer" DockPanel.Dock="Top" Scaling="Bound" HorizontalAlignment="Left"
-                                          Steps="{x:Static svc:EditorPrefs.ZoomSteps}"
-                                          Scale="{Binding DataContext.BustPreviewZoom, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}">
-                        <Border x:Name="BustPreviewFrame" Background="#222" Padding="4" ClipToBounds="True">
-                            <!-- One preview for both kinds. A borrowed bust feeds
-                                 the same control from the shipped vanilla art, so
-                                 it sits in the same place and blinks, mouths and
-                                 breathes the same way; only the jiggle is absent,
-                                 since no mask is exported for those. -->
-                            <ctl:JigglePreview x:Name="PreviewControl"
-                                               view:TutorialAnchor.Id="panel:characterPreview"
-                                               Margin="0,12,0,-20"
-                                               Zoom="{Binding DataContext.BustPreviewShownZoom,
-                                                      RelativeSource={RelativeSource AncestorType=Window},
-                                                      Mode=OneWay}"
-                                               VanillaBustKey="{Binding VanillaPreviewBustKey}"
-                                               Outfit="{Binding SelectedOutfit}"
-                                               PackRoot="{Binding PackRoot}"
-                                               SelectedExpression="{Binding ElementName=ExpressionPicker, Path=SelectedValue, Mode=OneWay, TargetNullValue=''}"
-                                               SelectedMouthFrame="{Binding ElementName=MouthPicker, Path=SelectedIndex, Mode=OneWay}"
-                                               Blinking="{Binding ElementName=BlinkToggle, Path=IsChecked, Mode=OneWay}"
-                                               Yapping="{Binding ElementName=YappingToggle, Path=IsChecked, Mode=OneWay}"
-                                               Breathing="{Binding ElementName=BreathingToggle, Path=IsChecked, Mode=OneWay}"
-                                               BreathingAmplitude="{Binding ElementName=BreathingDepth, Path=Value, Mode=OneWay}"/>
-                        </Border>
-                        </ctl:PreviewFrame>
-                        <!-- Why one of the game's busts is drawn softer than the pack's own
-                             (the author, 1.9.0): only while it is the game's bust. -->
-                        <TextBlock x:Name="BustGameArtNote" DockPanel.Dock="Top" Text="{l:T preview.gameArt.bust}" TextWrapping="Wrap"
-                                   FontSize="10" Foreground="{DynamicResource Theme.TextMuted}" Margin="2,4,2,0"
-                                   MaxWidth="{Binding ActualWidth, ElementName=BustPreviewResizer}" HorizontalAlignment="Left">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding VanillaBustKey, ElementName=PreviewControl}" Value="">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding VanillaBustKey, ElementName=PreviewControl}" Value="{x:Null}">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <!-- The live previews' quality, on the preview (1.9.0). -->
-                        <ctl:PreviewQualityBar x:Name="BustQualityBar" DockPanel.Dock="Top" Margin="0,6,0,0" HorizontalAlignment="Left"/>
-                        <Grid x:Name="BustPreviewOptions" DockPanel.Dock="Top" Margin="0,8,0,0"
-                              SizeChanged="BustPreviewRoom_Changed">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel>
-                                <!-- Size, first, because it changes the whole panel:
-                                     the column is bound to it, so the preview and the
-                                     room around it grow together. -->
-                                <TextBlock Text="{l:T characters.previewSize}"/>
-                                <ComboBox ItemsSource="{Binding DataContext.BustPreviewZoomSteps,
-                                                        RelativeSource={RelativeSource AncestorType=Window}}"
-                                          SelectedItem="{Binding DataContext.BustPreviewZoom,
-                                                         RelativeSource={RelativeSource AncestorType=Window},
-                                                         Mode=TwoWay}"
-                                          x:Name="BustPreviewSizePicker"
-                                          Margin="0,0,0,6"
-                                          ToolTip="{l:T characters.previewSize.tip}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding StringFormat={}{0}×}"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                                <!-- Only when the window is too small for the size picked:
-                                     the picker keeps saying what was chosen, and this says
-                                     what is shown instead, and why. -->
-                                <TextBlock x:Name="BustPreviewShrunkText" Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" TextWrapping="Wrap" Margin="0,-4,0,6"
-                                           Text="{Binding DataContext.BustPreviewShrunkNote, RelativeSource={RelativeSource AncestorType=Window}}"
-                                           Visibility="{Binding DataContext.BustPreviewShrunk, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
-                                <TextBlock Text="{l:T characters.mouthFrame}"/>
-                                <ComboBox x:Name="MouthPicker" SelectedIndex="0"
-                                          ToolTip="{l:T characters.mouthPicker.tip}">
-                                    <ComboBoxItem Content="{l:T characters.mouthClosed}"/>
-                                    <ComboBoxItem>1</ComboBoxItem>
-                                    <ComboBoxItem>2</ComboBoxItem>
-                                    <ComboBoxItem>3</ComboBoxItem>
-                                    <ComboBoxItem>4</ComboBoxItem>
-                                </ComboBox>
-                                <CheckBox ToolTip="{l:T characters.yappingToggle.tip}" x:Name="YappingToggle" Content="{l:T characters.yappingToggle}" Margin="2,6,0,0"/>
-                                <CheckBox x:Name="BlinkToggle" Content="{l:T characters.blinkToggle}" IsChecked="True" Margin="2,6,0,0"/>
-                                <CheckBox ToolTip="{l:T characters.breathingToggle.tip}" x:Name="BreathingToggle" Content="{l:T characters.breathingToggle}" IsChecked="True" Margin="2,6,0,0"/>
-                                <!-- Depth is a preview-only calibration: in game the
-                                     offset moves the busts' parent, so its on-screen
-                                     size depends on scene scale the editor can't see. -->
-                                <StackPanel Orientation="Horizontal" Margin="2,2,0,0"
-                                            IsEnabled="{Binding ElementName=BreathingToggle, Path=IsChecked}">
-                                    <TextBlock Text="{l:T characters.depth}" Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" VerticalAlignment="Center"/>
-                                    <Slider x:Name="BreathingDepth" Width="80" Margin="4,0,0,0"
-                                            Minimum="0" Maximum="20" Value="4" VerticalAlignment="Center"
-                                            ToolTip="{l:T characters.breathingDepth.tip}"/>
-                                    <TextBlock Text="{Binding ElementName=BreathingDepth, Path=Value, StringFormat=F1}"
-                                               Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" Margin="4,0,0,0" VerticalAlignment="Center"/>
-                                    <!-- Back to 4. A calibration slider is one an author
-                                         moves to see what it does, and getting a fiddly
-                                         value back by dragging is guesswork. -->
-                                    <Button Content="↺" Click="ResetBreathingDepth_Click"
-                                            Width="18" Height="18" Padding="0" Margin="4,0,0,0"
-                                            FontSize="10" VerticalAlignment="Center"
-                                            ToolTip="{l:T characters.resetBreathingDepth.tip}"/>
+                        <!-- What the bust is drawn over, at the bottom (1.9.1, the
+                             author: few will change it). The same setting as
+                             Options > Preview backdrop. -->
+                        <ctl:PreviewBackdropBar x:Name="BustBackdropBar" DockPanel.Dock="Bottom" Margin="0,10,0,0" HorizontalAlignment="Left"/>
+                        <!-- The bust, and directly under it what goes with it, as before
+                             1.9.1; only the backdrop buttons sit at the pane's bottom. -->
+                        <ctl:PreviewStack>
+                            <!-- Scaled as the mask painter's preview is: no bigger than
+                                 the room above the options, and no bigger than the size
+                                 its corner is dragged to (remembered, 1 the bust's own). -->
+                            <ctl:PreviewFrame x:Name="BustPreviewResizer" Scaling="Transform" Key="characters.bust"
+                                              HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Border x:Name="BustPreviewFrame" Background="#222" Padding="4" ClipToBounds="True">
+                                <!-- One preview for both kinds. A borrowed bust feeds
+                                     the same control from the shipped vanilla art, so
+                                     it sits in the same place and blinks, mouths and
+                                     breathes the same way; only the jiggle is absent,
+                                     since no mask is exported for those. -->
+                                <ctl:JigglePreview x:Name="PreviewControl"
+                                                   view:TutorialAnchor.Id="panel:characterPreview"
+                                                   Margin="0,12,0,-20"
+                                                   VanillaBustKey="{Binding VanillaPreviewBustKey}"
+                                                   Outfit="{Binding SelectedOutfit}"
+                                                   PackRoot="{Binding PackRoot}"
+                                                   SelectedExpression="{Binding ElementName=ExpressionPicker, Path=SelectedValue, Mode=OneWay, TargetNullValue=''}"
+                                                   SelectedMouthFrame="{Binding ElementName=MouthPicker, Path=SelectedIndex, Mode=OneWay}"
+                                                   Blinking="{Binding ElementName=BlinkToggle, Path=IsChecked, Mode=OneWay}"
+                                                   Yapping="{Binding ElementName=YappingToggle, Path=IsChecked, Mode=OneWay}"
+                                                   Breathing="{Binding ElementName=BreathingToggle, Path=IsChecked, Mode=OneWay}"
+                                                   FadesIn="{Binding ElementName=FadeInToggle, Path=IsChecked, Mode=OneWay}"
+                                                   BreathingAmplitude="{Binding ElementName=BreathingDepth, Path=Value, Mode=OneWay}"/>
+                            </Border>
+                            </ctl:PreviewFrame>
+                            <!-- Why one of the game's busts is drawn softer than the pack's own
+                                 (the author, 1.9.0): only while it is the game's bust. -->
+                            <TextBlock x:Name="BustGameArtNote" Text="{l:T preview.gameArt.bust}" TextWrapping="Wrap"
+                                       FontSize="10" Foreground="{DynamicResource Theme.TextMuted}" Margin="2,4,2,0"
+                                       MaxWidth="{Binding ActualWidth, ElementName=BustPreviewResizer}" HorizontalAlignment="Left">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding VanillaBustKey, ElementName=PreviewControl}" Value="">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding VanillaBustKey, ElementName=PreviewControl}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <!-- The live previews' quality, on the preview (1.9.0). -->
+                            <ctl:PreviewQualityBar x:Name="BustQualityBar" Margin="0,6,0,0" HorizontalAlignment="Left"/>
+                            <Grid x:Name="BustPreviewOptions" Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="{l:T characters.mouthFrame}"/>
+                                    <ComboBox x:Name="MouthPicker" SelectedIndex="0"
+                                              ToolTip="{l:T characters.mouthPicker.tip}">
+                                        <ComboBoxItem Content="{l:T characters.mouthClosed}"/>
+                                        <ComboBoxItem>1</ComboBoxItem>
+                                        <ComboBoxItem>2</ComboBoxItem>
+                                        <ComboBoxItem>3</ComboBoxItem>
+                                        <ComboBoxItem>4</ComboBoxItem>
+                                    </ComboBox>
+                                    <CheckBox ToolTip="{l:T characters.yappingToggle.tip}" x:Name="YappingToggle" Content="{l:T characters.yappingToggle}" Margin="2,6,0,0"/>
+                                    <CheckBox x:Name="BlinkToggle" Content="{l:T characters.blinkToggle}" IsChecked="True" Margin="2,6,0,0"/>
+                                    <CheckBox ToolTip="{l:T characters.breathingToggle.tip}" x:Name="BreathingToggle" Content="{l:T characters.breathingToggle}" IsChecked="True" Margin="2,6,0,0"/>
+                                    <!-- Depth is a preview-only calibration: in game the
+                                         offset moves the busts' parent, so its on-screen
+                                         size depends on scene scale the editor can't see. -->
+                                    <StackPanel Orientation="Horizontal" Margin="2,2,0,0"
+                                                IsEnabled="{Binding ElementName=BreathingToggle, Path=IsChecked}">
+                                        <TextBlock Text="{l:T characters.depth}" Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" VerticalAlignment="Center"/>
+                                        <Slider x:Name="BreathingDepth" Width="80" Margin="4,0,0,0"
+                                                Minimum="0" Maximum="20" Value="5" VerticalAlignment="Center"
+                                                ToolTip="{l:T characters.breathingDepth.tip}"/>
+                                        <TextBlock Text="{Binding ElementName=BreathingDepth, Path=Value, StringFormat=F1}"
+                                                   Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                                        <!-- Back to 4. A calibration slider is one an author
+                                             moves to see what it does, and getting a fiddly
+                                             value back by dragging is guesswork. -->
+                                        <Button Content="↺" Click="ResetBreathingDepth_Click"
+                                                Width="18" Height="18" Padding="0" Margin="4,0,0,0"
+                                                FontSize="10" VerticalAlignment="Center"
+                                                ToolTip="{l:T characters.resetBreathingDepth.tip}"/>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                            <StackPanel Grid.Column="1">
-                                <TextBlock Text="{l:T characters.expression}"/>
-                                <!-- The faces THIS bust has, published by the preview
-                                     from the textures it actually loaded. It used to be
-                                     five fixed entries here, which offered four faces on
-                                     busts that have none and handed the preview the
-                                     translated LABEL to look sprites up by - so every
-                                     expression stopped working in any language but
-                                     English. SelectedValue carries the game's name. -->
-                                <ComboBox x:Name="ExpressionPicker"
-                                          ItemsSource="{Binding ElementName=PreviewControl, Path=ExpressionChoices}"
-                                          DisplayMemberPath="Label" SelectedValuePath="Key"
-                                          IsSynchronizedWithCurrentItem="True"
-                                          ToolTip="{l:T characters.expressionPicker.tip}"/>
-                            </StackPanel>
-                        </Grid>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="{l:T characters.expression}"/>
+                                    <!-- The faces THIS bust has, published by the preview
+                                         from the textures it actually loaded. It used to be
+                                         five fixed entries here, which offered four faces on
+                                         busts that have none and handed the preview the
+                                         translated LABEL to look sprites up by - so every
+                                         expression stopped working in any language but
+                                         English. SelectedValue carries the game's name. -->
+                                    <ComboBox x:Name="ExpressionPicker"
+                                              ItemsSource="{Binding ElementName=PreviewControl, Path=ExpressionChoices}"
+                                              DisplayMemberPath="Label" SelectedValuePath="Key"
+                                              IsSynchronizedWithCurrentItem="True"
+                                              ToolTip="{l:T characters.expressionPicker.tip}"/>
+                                    <!-- The game's bust fade-in (1.9.1, the author): on by
+                                         default, played each time an outfit is shown and
+                                         when switched back on. -->
+                                    <CheckBox x:Name="FadeInToggle" Content="{l:T characters.fadeInToggle}" IsChecked="True"
+                                              Margin="2,8,0,0" ToolTip="{l:T characters.fadeInToggle.tip}"/>
+                                </StackPanel>
+                            </Grid>
+                        </ctl:PreviewStack>
 
                         <!-- (The validation Issues list moved to the ModForge tab.) -->
                     </DockPanel>
@@ -5849,14 +5864,16 @@
                  ════════════════════════════════════════════════════ -->
             <TabItem view:TabIcon.Glyph="&#xE716;" view:TabIcon.Count="{Binding Npcs.Count}" Header="{l:T npcs.npcs}">
                 <Grid>
-                    <!-- Column 4 (the live-preview side panel) is fixed like the
-                         Busts tab: no GridSplitter, width sized to the 600px
-                         NpcPreview. -->
+                    <!-- The live preview beside the fields, split as the Characters
+                         tab's is (1.9.1, the author: "the NPC preview should get the
+                         same treatment as the Character one"): the splitter is
+                         remembered and the NPC scales to the room it is given. -->
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*" MinWidth="180"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="620"/>
+                        <ColumnDefinition x:Name="NpcFieldsColumn" Width="4*" MinWidth="260"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition x:Name="NpcPreviewColumn" Width="3*" MinWidth="200"/>
                     </Grid.ColumnDefinitions>
 
                     <DockPanel Grid.Column="0">
@@ -6098,27 +6115,37 @@
                         </StackPanel>
                     </ScrollViewer>
 
-                    <!-- RIGHT: live preview. Fixed column (no splitter), same as
-                         the Busts tab — sized to the 600px NpcPreview. -->
-                    <DockPanel Grid.Column="3" Margin="8" DataContext="{Binding SelectedNpc}"
+                    <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext"
+                                  Background="{DynamicResource Theme.Border}" DragCompleted="NpcPreviewSplitter_DragCompleted"
+                                  ToolTip="{l:T npcs.previewSplitter.tip}"/>
+                    <!-- RIGHT: live preview. The note, the quality and the backdrop
+                         at the bottom, the preview filling what is left. -->
+                    <DockPanel x:Name="NpcPreviewPane" Grid.Column="4" Margin="8" DataContext="{Binding SelectedNpc}"
                     Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <TextBlock DockPanel.Dock="Top" Text="{l:T npcs.previewLiveJiggleShadow}"
                                    FontWeight="Bold" Margin="0,0,0,4"/>
-                        <!-- Resizable from its corner, and where it was: a jiggle
-                             preview is not centred (the author, 1.8.0). -->
-                        <ctl:PreviewFrame DockPanel.Dock="Top" Key="npc" HorizontalAlignment="Left">
-                            <Border Background="#222" Padding="4" ClipToBounds="True"
-                                    VerticalAlignment="Top" HorizontalAlignment="Left">
-                                <ctl:NpcPreview Npc="{Binding}"
-                                                PackRoot="{Binding DataContext.PackRoot,
-                                                           RelativeSource={RelativeSource AncestorType=Window}}"/>
-                            </Border>
-                        </ctl:PreviewFrame>
-                        <ctl:PreviewQualityBar x:Name="NpcQualityBar" DockPanel.Dock="Top" Margin="0,6,0,0" HorizontalAlignment="Left"/>
-                        <TextBlock DockPanel.Dock="Top" Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" Margin="0,8,0,0"
-                                   TextWrapping="Wrap"
-                                   Text="{l:T npcs.bodyJiggleShadowBlink}"/>
-                        <Grid/>
+                        <!-- The same setting as the Characters tab's (1.9.1): the NPC
+                             drawn in that place as the game draws it there. -->
+                        <ctl:PreviewBackdropBar x:Name="NpcBackdropBar" DockPanel.Dock="Bottom" Margin="0,6,0,0" HorizontalAlignment="Left"/>
+                        <!-- The NPC, its quality and note directly under it, as before 1.9.1. -->
+                        <ctl:PreviewStack>
+                            <!-- Scaled as the Characters tab's preview is: no bigger than
+                                 the room above the options, and no bigger than the size
+                                 its corner is dragged to (remembered). -->
+                            <ctl:PreviewFrame x:Name="NpcPreviewResizer" Scaling="Transform" Key="npc"
+                                              HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <Border Background="#222" Padding="4" ClipToBounds="True"
+                                        VerticalAlignment="Top" HorizontalAlignment="Left">
+                                    <ctl:NpcPreview x:Name="NpcPreviewControl" Npc="{Binding}"
+                                                    PackRoot="{Binding DataContext.PackRoot,
+                                                               RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                </Border>
+                            </ctl:PreviewFrame>
+                            <ctl:PreviewQualityBar x:Name="NpcQualityBar" Margin="0,6,0,0" HorizontalAlignment="Left"/>
+                            <TextBlock x:Name="NpcPreviewNote" Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" Margin="0,8,0,0"
+                                       TextWrapping="Wrap"
+                                       Text="{l:T npcs.bodyJiggleShadowBlink}"/>
+                        </ctl:PreviewStack>
                     </DockPanel>
                 </Grid>
             </TabItem>
@@ -6234,6 +6261,9 @@
                                                           LevelParallaxSecondaryReversed="{Binding PreviewLevelParallaxSecondaryReversed}"
                                                           ParallaxPreview="{Binding IsChecked, ElementName=ExtParallaxPreview}"
                                                           Shaders="{Binding IsChecked, ElementName=ExtShaders}"
+                                                          LookBloom="{Binding IsChecked, ElementName=ExtLookBloom}"
+                                                          LookFlares="{Binding IsChecked, ElementName=ExtLookFlares}"
+                                                          LookColour="{Binding IsChecked, ElementName=ExtLookColour}"
                                                           LevelArtPpu="{Binding PreviewArtPpu}"
                                                           LevelScale="{Binding PreviewLevelScale}"
                                                           DimUnderInactiveParent="{Binding IsChecked, ElementName=ExtDimParent}"
@@ -6268,6 +6298,18 @@
                                                       ToolTip="{l:T places.extParallaxPreview.tip}"/>
                                             <CheckBox x:Name="ExtShaders" IsChecked="False" Content="{l:T places.extShaders}" Margin="12,0,0,0"
                                                       ToolTip="{l:T places.extShaders.tip}"/>
+                                        </StackPanel>
+                                        <!-- The game's look over the place (1.9.1, the author): each part
+                                             on unless unticked, drawn when the preview quality draws it. -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                            <TextBlock Text="{l:T places.look}" ToolTip="{l:T places.look.tip}" VerticalAlignment="Center"
+                                                       Foreground="{DynamicResource Theme.TextMuted}" Margin="0,0,8,0"/>
+                                            <CheckBox x:Name="ExtLookBloom" IsChecked="True" Content="{l:T places.lookBloom}"
+                                                      ToolTip="{l:T places.lookBloom.tip}"/>
+                                            <CheckBox x:Name="ExtLookFlares" IsChecked="True" Content="{l:T places.lookFlares}" Margin="12,0,0,0"
+                                                      ToolTip="{l:T places.lookFlares.tip}"/>
+                                            <CheckBox x:Name="ExtLookColour" IsChecked="True" Content="{l:T places.lookColour}" Margin="12,0,0,0"
+                                                      ToolTip="{l:T places.lookColour.tip}"/>
                                         </StackPanel>
                                         <ctl:PreviewQualityBar x:Name="ExtQualityBar" Margin="0,4,0,0" HorizontalAlignment="Left"/>
                                         <TextBlock Text="{Binding CatalogSummary}" Foreground="{DynamicResource Theme.TextMuted}"
@@ -6362,6 +6404,9 @@
                                                       LevelParallaxSecondaryReversed="{Binding ParallaxSecondaryReversed}"
                                                       ParallaxPreview="{Binding IsChecked, ElementName=PlaceParallaxPreview}"
                                                       Shaders="{Binding IsChecked, ElementName=PlaceShaders}"
+                                                      LookBloom="{Binding IsChecked, ElementName=PlaceLookBloom}"
+                                                      LookFlares="{Binding IsChecked, ElementName=PlaceLookFlares}"
+                                                      LookColour="{Binding IsChecked, ElementName=PlaceLookColour}"
                                                       NpcCatalog="{Binding DataContext.Npcs,
                                                                  RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
@@ -6373,6 +6418,18 @@
                                                   ToolTip="{l:T places.extParallaxPreview.tip2}"/>
                                         <CheckBox x:Name="PlaceShaders" IsChecked="False" Content="{l:T places.extShaders}" Margin="12,0,0,0"
                                                   ToolTip="{l:T places.extShaders.tip2}"/>
+                                    </StackPanel>
+                                    <!-- The game's look over the place (1.9.1, the author): each part
+                                         on unless unticked, drawn when the preview quality draws it. -->
+                                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                        <TextBlock Text="{l:T places.look}" ToolTip="{l:T places.look.tip}" VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource Theme.TextMuted}" Margin="0,0,8,0"/>
+                                        <CheckBox x:Name="PlaceLookBloom" IsChecked="True" Content="{l:T places.lookBloom}"
+                                                  ToolTip="{l:T places.lookBloom.tip}"/>
+                                        <CheckBox x:Name="PlaceLookFlares" IsChecked="True" Content="{l:T places.lookFlares}" Margin="12,0,0,0"
+                                                  ToolTip="{l:T places.lookFlares.tip}"/>
+                                        <CheckBox x:Name="PlaceLookColour" IsChecked="True" Content="{l:T places.lookColour}" Margin="12,0,0,0"
+                                                  ToolTip="{l:T places.lookColour.tip}"/>
                                     </StackPanel>
                                     <ctl:PreviewQualityBar x:Name="PlaceQualityBar" Margin="0,4,0,0" HorizontalAlignment="Left"/>
                                 </StackPanel>

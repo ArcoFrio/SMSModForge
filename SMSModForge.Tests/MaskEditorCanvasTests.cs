@@ -191,62 +191,261 @@ public sealed class MaskEditorCanvasTests
         });
     }
 
+    // ───────────────────────── the soften brush (1.9.0; capped 1.9.1)
+
+    /// <summary>Strong on the left of column 100, nothing on its right.</summary>
+    private static void HardEdge(MaskStudio studio)
+    {
+        int size = MaskBuffer.Size;
+        var ch = studio.ActiveChannelBytes;
+        for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+                ch[y * size + x] = (byte)(x < 100 ? 255 : 0);
+    }
+
+    /// <summary>How many pixels of a row are part way, between 2% and 98%:
+    /// the width of its fade, as the canvas shows it.</summary>
+    private static int FadeWidth(MaskStudio studio, int row)
+    {
+        var ch = studio.ActiveChannelBytes;
+        int n = 0;
+        for (int x = 0; x < MaskBuffer.Size; x++)
+        {
+            byte v = ch[row * MaskBuffer.Size + x];
+            if (v > 0.02 * 255 && v < 0.98 * 255) n++;
+        }
+        return n;
+    }
+
+    private string Row(MaskStudio studio, int row)
+        => string.Join(" ", Enumerable.Range(88, 24).Select(x => studio.ActiveChannelBytes[row * MaskBuffer.Size + x]));
+
+    private static void SoftenDownTheEdge(MaskStudio studio, double fromY = 60.5, double toY = 140.5)
+    {
+        studio.BeginStrokeAt(100, fromY);
+        studio.StrokeTo(100, toY);
+        studio.EndStroke();
+    }
+
     /// <summary>
-    /// The soften brush (the author, 1.9.0): across a hard edge it leaves what it
-    /// fully covers at the 5x5 average, what it does not reach untouched, and
-    /// undoes in one step. The control is the brush along the same stroke, which
-    /// paints the edge's dark side full instead.
+    /// Softened again, and no further: where the brush covers fully (rows 62 to
+    /// 138 of the stroke down the edge) not one pixel differs from
+    /// <paramref name="once"/>, and nowhere is softer than that fully covered
+    /// fade - each pixel lies between the hard edge and row 100 at its column.
+    /// The pixels at the round ends of the stroke, which the brush covers only
+    /// in part, may still move towards that fade, never past it.
+    /// </summary>
+    private static void AssertSoftenedNoFurther(MaskStudio studio, byte[] once)
+    {
+        int size = MaskBuffer.Size;
+        var now = studio.ActiveChannelBytes;
+        for (int y = 62; y <= 138; y++)
+            for (int x = 0; x < size; x++)
+                Assert.True(once[y * size + x] == now[y * size + x],
+                    $"({x},{y}) was {once[y * size + x]} after the first pass, is {now[y * size + x]}");
+        for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                int hard = x < 100 ? 255 : 0, fade = once[100 * size + x], v = now[y * size + x];
+                Assert.True(v >= Math.Min(hard, fade) && v <= Math.Max(hard, fade),
+                    $"({x},{y}) is {v}, past the fade's {fade} from {hard}");
+            }
+    }
+
+    private static void SetUpSoftening(MaskStudio studio, double softness)
+    {
+        ((Slider)studio.FindName("SizeSlider")).Value = 12;
+        ((Slider)studio.FindName("HardnessSlider")).Value = 1;
+        ((Slider)studio.FindName("SoftnessSlider")).Value = softness;
+        studio.SetTool(MaskStudio.Tool.Soften);
+    }
+
+    /// <summary>
+    /// The soften brush (the author, 1.9.1: "making the edges of the painted
+    /// areas look smoother, to a max edge softness allowed in the slider").
+    /// Across a hard edge it leaves a fade as wide as Edge softness; going over
+    /// it again softens it no further; what it does not reach is untouched.
+    /// The controls: a wider Edge softness on the same stroke DOES change it (so
+    /// the second stroke ran), a narrower one tightens it back, and the brush on
+    /// the same stroke paints instead.
     /// </summary>
     [Fact]
-    public void TheSoftenBrushSmoothsWhereItPasses_AndNowhereElse()
+    public void TheSoftenBrushSoftensAnEdgeToTheSoftnessSet_AndNeverPast()
     {
         WithStudio(studio =>
         {
             int size = MaskBuffer.Size;
-            var ch = studio.ActiveChannelBytes;
-            // Strong on the left of column 100, nothing on its right.
-            for (int y = 0; y < size; y++)
-                for (int x = 0; x < size; x++)
-                    ch[y * size + x] = (byte)(x < 100 ? 255 : 0);
-            var before = (byte[])ch.Clone();
-            var blurred = BrushEngine.Blurred(before, size, BrushEngine.SoftenRadius);
-
-            ((Slider)studio.FindName("SizeSlider")).Value = 8;
-            ((Slider)studio.FindName("HardnessSlider")).Value = 1;
-            ((Slider)studio.FindName("OpacitySlider")).Value = 1;
-            studio.SetTool(MaskStudio.Tool.Soften);
+            HardEdge(studio);
+            Assert.Equal(0, FadeWidth(studio, 100));
+            SetUpSoftening(studio, 8);
             Assert.True(((System.Windows.Controls.Primitives.ToggleButton)studio.FindName("ToolSoftenBtn")).IsChecked);
             Assert.False(((System.Windows.Controls.Primitives.ToggleButton)studio.FindName("ToolBrushBtn")).IsChecked);
 
-            studio.BeginStrokeAt(100, 60.5);
-            studio.StrokeTo(100, 140.5);
-            studio.EndStroke();
-            ch = studio.ActiveChannelBytes;
-            byte At(int x, int y) => ch[y * size + x];
-            _out.WriteLine($"across the edge at row 100: {At(97, 100)} {At(98, 100)} {At(99, 100)} | {At(100, 100)} {At(101, 100)} {At(102, 100)}");
-
-            // Fully covered: exactly the average of the 5x5 around.
-            for (int x = 96; x <= 103; x++)
-                Assert.Equal(blurred[100 * size + x], At(x, 100));
-            Assert.Equal(153, At(99, 100));        // 3 of 5 columns strong: 255 * 15 / 25
-            Assert.Equal(102, At(100, 100));       // 2 of 5
+            SoftenDownTheEdge(studio);
+            _out.WriteLine("softness 8:  " + Row(studio, 100));
+            Assert.Equal(8, FadeWidth(studio, 100));
+            var once = (byte[])studio.ActiveChannelBytes.Clone();
             // Out of reach - above the stroke, and far along the row - untouched.
+            byte At(int x, int y) => studio.ActiveChannelBytes[y * size + x];
             Assert.Equal(255, At(99, 20));
             Assert.Equal(0, At(100, 20));
-            Assert.Equal(before[100 * size + 50], At(50, 100));
+            Assert.Equal(255, At(50, 100));
             Assert.True(studio.IsDirty);
 
-            // One Ctrl+Z puts the edge back.
+            // Again, and again, either way: no further.
+            SoftenDownTheEdge(studio);
+            SoftenDownTheEdge(studio, 140.5, 60.5);
+            AssertSoftenedNoFurther(studio, once);
+            Assert.Equal(8, FadeWidth(studio, 100));
+            var settled = (byte[])studio.ActiveChannelBytes.Clone();
+
+            // The control: more softness on the same stroke softens it further...
+            ((Slider)studio.FindName("SoftnessSlider")).Value = 16;
+            SoftenDownTheEdge(studio);
+            _out.WriteLine("softness 16: " + Row(studio, 100));
+            Assert.Equal(16, FadeWidth(studio, 100));
+            // ...and less tightens it back, to that softness from the hard edge.
+            ((Slider)studio.FindName("SoftnessSlider")).Value = 4;
+            SoftenDownTheEdge(studio);
+            _out.WriteLine("softness 4:  " + Row(studio, 100));
+            Assert.Equal(4, FadeWidth(studio, 100));
+
+            // Ctrl+Z goes back a stroke at a time, to the hard edge.
             ApplicationCommands.Undo.Execute(null, studio);
-            Assert.Equal(255, studio.ActiveChannelBytes[100 * size + 99]);
-            Assert.Equal(0, studio.ActiveChannelBytes[100 * size + 100]);
+            Assert.Equal(16, FadeWidth(studio, 100));
+            ApplicationCommands.Undo.Execute(null, studio);
+            Assert.Equal(settled, studio.ActiveChannelBytes);
+            for (int i = 0; i < 3; i++) ApplicationCommands.Undo.Execute(null, studio);
+            Assert.Equal(255, At(99, 100));
+            Assert.Equal(0, At(100, 100));
 
             // The control: the brush along the same stroke paints, it does not soften.
             studio.SetTool(MaskStudio.Tool.Brush);
-            studio.BeginStrokeAt(100, 60.5);
-            studio.StrokeTo(100, 140.5);
-            studio.EndStroke();
+            ((Slider)studio.FindName("OpacitySlider")).Value = 1;
+            SoftenDownTheEdge(studio);
+            Assert.Equal(255, At(100, 100));
+        });
+    }
+
+    /// <summary>
+    /// The bug of 1.9.0, through the canvas's own mouse handlers: picked with its
+    /// button and dragged down the edge with the left button held, the soften
+    /// brush softens it. In 1.9.0 the mouse began strokes by a copy of its own
+    /// that never set the soften brush up, and painted with the brush; the
+    /// tests began them the other way, and passed. The control is the brush by
+    /// the same handlers, which paints.
+    /// </summary>
+    [Fact]
+    public void TheSoftenBrushSoftensWhenDraggedWithTheMouse()
+    {
+        WithStudio(studio =>
+        {
+            int size = MaskBuffer.Size;
+            var canvas = (FrameworkElement)studio.FindName("CanvasHost");
+            double scale = (canvas.ActualWidth > 0 ? canvas.ActualWidth : canvas.Width) / size;
+            _out.WriteLine($"canvas {canvas.ActualWidth} wide: {scale} per mask pixel");
+            var at = new Point(100 * scale, 60.5 * scale);
+            bool held = false;
+            studio.PointerOnCanvas = _ => at;
+            studio.LeftHeld = _ => held;
+
+            void Drag()
+            {
+                at = new Point(100 * scale, 60.5 * scale);
+                held = true;
+                canvas.RaiseEvent(Button(MouseButton.Left, UIElement.MouseDownEvent));
+                at = new Point(100 * scale, 100.5 * scale);
+                canvas.RaiseEvent(Move());
+                at = new Point(100 * scale, 140.5 * scale);
+                canvas.RaiseEvent(Move());
+                held = false;
+                canvas.RaiseEvent(Button(MouseButton.Left, UIElement.MouseUpEvent));
+            }
+
+            HardEdge(studio);
+            ((Slider)studio.FindName("SizeSlider")).Value = 12;
+            ((Slider)studio.FindName("HardnessSlider")).Value = 1;
+            ((Slider)studio.FindName("SoftnessSlider")).Value = 8;
+            var softenButton = (System.Windows.Controls.Primitives.ToggleButton)studio.FindName("ToolSoftenBtn");
+            softenButton.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+            Assert.Equal(Visibility.Visible, ((FrameworkElement)studio.FindName("SoftnessRow")).Visibility);
+            Assert.Equal(Visibility.Collapsed, ((FrameworkElement)studio.FindName("OpacityRow")).Visibility);
+
+            Drag();
+            _out.WriteLine("soften by mouse: " + Row(studio, 100));
+            Assert.Equal(8, FadeWidth(studio, 100));
+            Assert.True(studio.ActiveChannelBytes[100 * size + 99] < 200, "the strong side of the edge was not softened");
+            Assert.True(studio.IsDirty);
+
+            // The control: the brush by the same handlers paints the edge's dark side.
+            ApplicationCommands.Undo.Execute(null, studio);
+            var brushButton = (System.Windows.Controls.Primitives.ToggleButton)studio.FindName("ToolBrushBtn");
+            brushButton.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+            Assert.Equal(Visibility.Visible, ((FrameworkElement)studio.FindName("OpacityRow")).Visibility);
+            ((Slider)studio.FindName("OpacitySlider")).Value = 1;
+            Drag();
+            _out.WriteLine("brush by mouse:  " + Row(studio, 100));
+            Assert.Equal(255, studio.ActiveChannelBytes[100 * size + 99]);
             Assert.Equal(255, studio.ActiveChannelBytes[100 * size + 100]);
+        });
+    }
+
+    /// <summary>
+    /// Painting between two passes of the soften brush does not let the second
+    /// pass soften further: rows the paint did not reach come out exactly as the
+    /// first pass left them, and where the paint crossed the edge the second
+    /// pass softens the painting. Ctrl+Z on both puts the first pass back
+    /// exactly, and softening again from there goes no further. The control
+    /// is "Soften all" in between instead, which is meant to become the layer -
+    /// the second pass then softens on from it, and those rows do change.
+    /// </summary>
+    [Fact]
+    public void PaintingBetweenTwoPassesOfTheSoftenBrushDoesNotSoftenFurther()
+    {
+        WithStudio(studio =>
+        {
+            int size = MaskBuffer.Size;
+            byte At(int x, int y) => studio.ActiveChannelBytes[y * size + x];
+            HardEdge(studio);
+            SetUpSoftening(studio, 8);
+            SoftenDownTheEdge(studio);
+            var once = (byte[])studio.ActiveChannelBytes.Clone();
+            int[] farRows = { 66, 75, 125, 134 };
+
+            // A hard line of paint across the softened edge at row 100.
+            studio.SetTool(MaskStudio.Tool.Brush);
+            ((Slider)studio.FindName("OpacitySlider")).Value = 1;
+            ((Slider)studio.FindName("SizeSlider")).Value = 8;
+            studio.BeginStrokeAt(80.5, 100.5);
+            studio.StrokeTo(120.5, 100.5);
+            studio.EndStroke();
+            _out.WriteLine("painted across: " + Row(studio, 100));
+            Assert.Equal(255, At(100, 100));
+
+            SetUpSoftening(studio, 8);
+            SoftenDownTheEdge(studio);
+            _out.WriteLine("softened again: " + Row(studio, 100));
+            foreach (int y in farRows)
+                for (int x = 0; x < size; x++)
+                    Assert.True(once[y * size + x] == At(x, y), $"({x},{y}) was {once[y * size + x]}, is {At(x, y)}");
+            // The painting itself is what was softened: solid where it was painted.
+            Assert.Equal(255, At(100, 100));
+
+            // Ctrl+Z on both strokes, then softening: the first pass's result exactly.
+            ApplicationCommands.Undo.Execute(null, studio);
+            ApplicationCommands.Undo.Execute(null, studio);
+            Assert.Equal(once, studio.ActiveChannelBytes);
+            SoftenDownTheEdge(studio);
+            AssertSoftenedNoFurther(studio, once);
+
+            // The control: Soften all in between becomes the layer, and the second
+            // pass softens on from it.
+            studio.SoftenActiveChannel();
+            var afterAll = (byte[])studio.ActiveChannelBytes.Clone();
+            SoftenDownTheEdge(studio);
+            _out.WriteLine("after Soften all, softened again: " + Row(studio, 75));
+            Assert.NotEqual(afterAll[75 * size + 98], At(98, 75));
+            Assert.True(FadeWidth(studio, 75) > 8, "Soften all and the brush did not add up");
         });
     }
 

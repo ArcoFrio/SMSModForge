@@ -251,7 +251,8 @@ public static class DocTopics
                     new DocBullet("docs.previews.previewsComposeArtWay"),
                     new DocBullet("docs.previews.theyDoNotRun"),
                     new DocBullet("docs.previews.previewsResolveImagePaths"),
-                    new DocBullet("docs.previews.previewQualityOptionsMenu")))),
+                    new DocBullet("docs.previews.previewQualityOptionsMenu"),
+                    new DocBullet("docs.previews.placesGameLook")))),
 
         new DocPart("docs.part.workspace",
 
@@ -292,7 +293,9 @@ public static class DocTopics
                     new DocBullet("docs.optionsMenu.listEverythingSaveWill.term", "docs.optionsMenu.listEverythingSaveWill"),
                     new DocBullet("docs.optionsMenu.underlineMisspellingsNodeS.term", "docs.optionsMenu.underlineMisspellingsNodeS"),
                     new DocBullet("docs.optionsMenu.addEveryCharacterPlace.term", "docs.optionsMenu.addEveryCharacterPlace"),
-                    new DocBullet("docs.optionsMenu.tradePreviewSmoothnessAgainst.term", "docs.optionsMenu.tradePreviewSmoothnessAgainst")),
+                    new DocBullet("docs.optionsMenu.tradePreviewSmoothnessAgainst.term", "docs.optionsMenu.tradePreviewSmoothnessAgainst"),
+                    new DocBullet("docs.optionsMenu.previewBackdrop.term", "docs.optionsMenu.previewBackdrop"),
+                    new DocBullet("docs.optionsMenu.previewRenderer.term", "docs.optionsMenu.previewRenderer")),
                 new DocSection("docs.optionsMenu.heading.worthKnowing",
                     new DocBullet("docs.optionsMenu.windowsDictionarySharedRest"))),
 

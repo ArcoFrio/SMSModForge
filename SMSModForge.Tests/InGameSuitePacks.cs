@@ -25,7 +25,7 @@ internal static class InGameSuitePacks
 {
     /// <summary>The pack ids the suite installs, and nothing else is left in
     /// the test copy's Mods.</summary>
-    public static readonly string[] Ids = { "gamecheck", "gameorder", World.Id, Story.Id, Quests.Id, Rules.Id, Saving.Id, Talk.Id };
+    public static readonly string[] Ids = { "gamecheck", "gameorder", World.Id, Story.Id, Quests.Id, Rules.Id, Saving.Id, Talk.Id, Looks.Id };
 
     /// <summary>Exports every pack into the test copy's Mods folder, which the
     /// suite owns: a pack left there by anything else is taken out.</summary>
@@ -55,6 +55,7 @@ internal static class InGameSuitePacks
         Export(Rules.Make(), Folder(Rules.Id));
         Export(Saving.Make(), Folder(Saving.Id));
         Export(Talk.Make(Folder(Talk.Id)), Folder(Talk.Id), Talk.Translate);
+        Export(Looks.Make(Folder(Looks.Id)), Folder(Looks.Id));
         return said;
     }
 
@@ -68,6 +69,28 @@ internal static class InGameSuitePacks
         {
             pixels[i] = colour.B; pixels[i + 1] = colour.G; pixels[i + 2] = colour.R; pixels[i + 3] = colour.A;
         }
+        var bitmap = BitmapSource.Create(w, h, 96, 96, PixelFormats.Bgra32, null, pixels, w * 4);
+        string path = Path.Combine(packFolder, rel.Replace('/', Path.DirectorySeparatorChar));
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        var png = new PngBitmapEncoder();
+        png.Frames.Add(BitmapFrame.Create(bitmap));
+        using var file = File.Create(path);
+        png.Save(file);
+        return rel;
+    }
+
+    /// <summary>A picture written into the pack from a colour for each pixel
+    /// (x right, y down, as the file lies), straight alpha.</summary>
+    public static string PngOf(string packFolder, string rel, int w, int h, Func<int, int, Color> at)
+    {
+        var pixels = new byte[w * h * 4];
+        for (int y = 0; y < h; y++)
+            for (int x = 0; x < w; x++)
+            {
+                var c = at(x, y);
+                int i = (y * w + x) * 4;
+                pixels[i] = c.B; pixels[i + 1] = c.G; pixels[i + 2] = c.R; pixels[i + 3] = c.A;
+            }
         var bitmap = BitmapSource.Create(w, h, 96, 96, PixelFormats.Bgra32, null, pixels, w * 4);
         string path = Path.Combine(packFolder, rel.Replace('/', Path.DirectorySeparatorChar));
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
@@ -1125,6 +1148,191 @@ internal static class InGameSuitePacks
     /// are kept by a save; <c>lostNumber</c> is not. <c>dailyCount</c> goes back
     /// to 0 each morning; rule <c>newday</c> sets <c>dayTurned</c> as a day turns.
     /// </summary>
+    /// <summary>
+    /// The bust shader check (1.9.1, S areas): a character whose art says where
+    /// each of its texels is, so every pixel the game draws says which texel it
+    /// read, and the editor's port must name the same one. Coded with gaps,
+    /// because the game draws through an HDR buffer that gives some 8-bit values
+    /// back one lower (measured: red 147, 154, 191... never came back as
+    /// themselves): red is x mod 64 and green the row from the top mod 64, each
+    /// x4 + 2; blue says which 64-texel block, x16 + 8. A rounding of one level
+    /// cannot turn one texel into another. One outfit a channel of the mask, one with all
+    /// three, one with none. Blink, mouth and expressions off; an empty border
+    /// eight texels wide, as a bust's edges are. And one more outfit,
+    /// <see cref="PartsBust"/>, for how the art is loaded: the same art and a
+    /// blink of the pack's own (S2).
+    /// </summary>
+    public static class Looks
+    {
+        public const string Id = "suitelook";
+        public static readonly (string Key, string Bust, Color Mask)[] Outfits =
+        {
+            ("noise", "SuiteLookNoise", Color.FromArgb(255, 0, 0, 255)),
+            ("wave", "SuiteLookWave", Color.FromArgb(255, 0, 255, 0)),
+            ("bounce", "SuiteLookBounce", Color.FromArgb(255, 255, 0, 0)),
+            ("all", "SuiteLookAll", Color.FromArgb(255, 255, 255, 255)),
+            ("still", "SuiteLookStill", Color.FromArgb(0, 0, 0, 0)),
+        };
+        public const int Size = 256, Border = 8;
+        public const string PartsBust = "SuiteLookParts";
+
+        /// <summary>Two flat grey busts, opaque edge to edge (no border, so no
+        /// rim): what the game draws over them is what its lights do to a bust,
+        /// a multiply and an add per screen pixel (S4).</summary>
+        public static readonly (string Key, string Bust, byte Grey)[] Greys =
+        {
+            ("grey-dark", "SuiteLookGreyDark", 64),
+            ("grey-light", "SuiteLookGreyLight", 160),
+        };
+
+        /// <summary>A bust shaped like a person - head, neck, shoulders and a
+        /// torso cut off by the frame - with see-through space around it and
+        /// smooth edges, as a pack's art has: what a bust's shadow and its edge
+        /// glow are measured on (S6). Still (no mask), coloured as the art.</summary>
+        public const string FigureBust = "SuiteLookFigure";
+
+        public static Color FigureAt(int x, int y)
+        {
+            int hits = 0;
+            for (int sy = 0; sy < 4; sy++)
+                for (int sx = 0; sx < 4; sx++)
+                    if (InFigure(x + (sx + 0.5) / 4, y + (sy + 0.5) / 4)) hits++;
+            if (hits == 0) return Color.FromArgb(0, 0, 0, 0);
+            var c = ArtAt(Math.Clamp(x, Border, Size - Border - 1), Math.Clamp(y, Border, Size - Border - 1));
+            return Color.FromArgb((byte)(hits * 255 / 16), c.R, c.G, c.B);
+        }
+
+        /// <summary>Texel space, rows from the top.</summary>
+        private static bool InFigure(double x, double y)
+        {
+            double dx = x - 128;
+            if (dx * dx + (y - 82) * (y - 82) < 40 * 40) return true;              // head
+            if (Math.Abs(dx) < 18 && y >= 110 && y <= 140) return true;             // neck
+            if (y >= 182) return Math.Abs(dx) < 100 + (y - 182) * 0.15;            // torso
+            return y >= 130 && dx * dx / (100.0 * 100) + (y - 182) * (y - 182) / (52.0 * 52) < 1; // shoulders
+        }
+
+        public static Color ArtAt(int x, int y)
+            => x < Border || y < Border || x >= Size - Border || y >= Size - Border
+                ? Color.FromArgb(0, 0, 0, 0)
+                : Color.FromArgb(255, (byte)(x % 64 * 4 + 2), (byte)(y % 64 * 4 + 2), (byte)(((x / 64) * 4 + y / 64) * 16 + 8));
+
+        /// <summary>The texel (x, row from the top) a drawn colour names, or null
+        /// for a colour that is not one of the art's (the game's interface over it).</summary>
+        public static (int x, int y)? TexelOf(byte r, byte g, byte b)
+        {
+            int xr = (int)Math.Round((r - 2) / 4.0), yr = (int)Math.Round((g - 2) / 4.0), block = (int)Math.Round((b - 8) / 16.0);
+            if (xr < 0 || xr > 63 || yr < 0 || yr > 63 || block < 0 || block > 15) return null;
+            if (Math.Abs(r - (xr * 4 + 2)) > 1 || Math.Abs(g - (yr * 4 + 2)) > 1 || Math.Abs(b - (block * 16 + 8)) > 3) return null;
+            return ((block / 4) * 64 + xr, (block % 4) * 64 + yr);
+        }
+
+        public static ModPack Make(string folder)
+        {
+            var pack = PackRepository.CreateEmpty(Id);
+            pack.PackId = Id;
+            string art = PngOf(folder, "Busts/look.png", Size, Size, ArtAt);
+            var look = new CharacterDef { Key = "look", Name = "SuiteLook", DisplayName = "Look", Pronouns = Pronouns.Neutral, BustSource = BustSource.Pack };
+            foreach (var (key, bust, mask) in Outfits)
+            {
+                var outfit = new OutfitDef
+                {
+                    Key = key, GameObjectName = bust, BlinkEnabled = false, BaseSprite = art,
+                    MaskSprite = PngOf(folder, "Busts/" + key + "-mask.png", Size, Size, (_, _) => mask),
+                    Mouth = { Enabled = false }, Expression = { Enabled = false },
+                };
+                outfit.Particles.Clear();
+                look.Outfits.Add(outfit);
+            }
+            var parts = new OutfitDef
+            {
+                Key = "parts", GameObjectName = PartsBust, BaseSprite = art,
+                BlinkSprite = PngOf(folder, "Busts/parts-blink.png", Size, Size, (x, y) => x is >= 100 and < 156 && y is >= 90 and < 100 ? Color.FromRgb(0x20, 0x10, 0x10) : Color.FromArgb(0, 0, 0, 0)),
+                Mouth = { Enabled = false }, Expression = { Enabled = false },
+            };
+            parts.Particles.Clear();
+            look.Outfits.Add(parts);
+            var figure = new OutfitDef
+            {
+                Key = "figure", GameObjectName = FigureBust, BlinkEnabled = false,
+                BaseSprite = PngOf(folder, "Busts/figure.png", Size, Size, FigureAt),
+                Mouth = { Enabled = false }, Expression = { Enabled = false },
+            };
+            figure.Particles.Clear();
+            look.Outfits.Add(figure);
+            foreach (var (key, bust, grey) in Greys)
+            {
+                var flat = new OutfitDef
+                {
+                    Key = key, GameObjectName = bust, BlinkEnabled = false,
+                    BaseSprite = PngOf(folder, "Busts/" + key + ".png", Size, Size, (_, _) => Color.FromRgb(grey, grey, grey)),
+                    Mouth = { Enabled = false }, Expression = { Enabled = false },
+                };
+                flat.Particles.Clear();
+                look.Outfits.Add(flat);
+            }
+            pack.Characters.Add(look);
+
+            // An NPC of the pack's own, shaped as the figure and moved by noise,
+            // standing in the PC's room - off until a check turns it on: how the
+            // game draws a pack NPC (S9; 1.9.1, the author: "the NPC preview
+            // should match the Character one because I assume they behave very
+            // similarly. We might need to confirm"). No shadow: the NPC alone.
+            pack.Npcs.Add(new NpcDef
+            {
+                Key = "looknpc", DisplayName = "Look NPC",
+                Sprite = PngOf(folder, "Npcs/figure.png", Size, Size, FigureAt),
+                Mask = PngOf(folder, "Npcs/figure-mask.png", Size, Size, (_, _) => Color.FromArgb(255, 0, 0, 255)),
+                Shadow = { Enabled = false },
+            });
+            pack.VanillaExtensions.Add(new VanillaPlaceExtensionDef
+            {
+                Source = "vanilla:" + NpcLevel,
+                GameObjects =
+                {
+                    new GameObjectDef
+                    {
+                        Name = "NPCs", Role = GameObjectDef.RoleNpcRoot,
+                        Npcs = { new NpcPlacementDef { Npc = "looknpc", Name = NpcName, StartActive = false, SortingOrder = 5,
+                                                       Body = new NpcTransform { ScaleX = 2f, ScaleY = 2f } } },
+                    },
+                },
+            });
+
+            // A place of the pack's own: coded art that changes smoothly (red across,
+            // green down, in rising and falling ramps), moved by its mask's left half
+            // only - the right half is the control: how the game moves a pack place's
+            // art (S10; 1.9.1, the author's "full shader check").
+            pack.Places.Add(new PlaceDef
+            {
+                Key = PlaceKey, InternalName = PlaceObject, DisplayName = "Look Place",
+                BaseSprite = PngOf(folder, "Places/look.png", PlaceW, PlaceH, PlaceArtAt),
+                // A place has both layers (PlaceFactory skips one without); the far one
+                // behind the opaque front, flat.
+                SecondarySprite = PngOf(folder, "Places/look-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x30, 0x30, 0x30)),
+                MaskSprite = PngOf(folder, "Places/look-mask.png", PlaceMaskW, PlaceMaskH,
+                                   (x, _) => x < PlaceMaskW / 2 ? Color.FromArgb(255, 255, 255, 255) : Color.FromArgb(0, 0, 0, 0)),
+            });
+            return pack;
+        }
+
+        /// <summary>The look place (<see cref="Make"/>): its key, object, art and mask.</summary>
+        public const string PlaceKey = "lookplace", PlaceObject = "LookPlace";
+        public const int PlaceW = 1024, PlaceH = 576, PlaceMaskW = 256, PlaceMaskH = 144;
+
+        public static Color PlaceArtAt(int x, int y) => Color.FromRgb(Ramp(x, 64), Ramp(y, 48), 128);
+
+        private static byte Ramp(int p, int period)
+        {
+            int k = p % period, half = period / 2;
+            return (byte)((k < half ? k : period - k) * 255 / half);
+        }
+
+        /// <summary>The look NPC (<see cref="Make"/>): its object, the level it stands in, its path.</summary>
+        public const string NpcName = "SuiteLookNpc", NpcLevel = "5_MyRoom";
+        public static string NpcPath => "5_Levels/" + NpcLevel + "/NPCs/" + NpcName;
+    }
+
     public static class Saving
     {
         public const string Id = "suitesave";

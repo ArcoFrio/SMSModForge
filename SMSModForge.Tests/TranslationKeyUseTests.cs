@@ -208,6 +208,8 @@ public class TranslationKeyUseTests
             foreach (string where in new[] { "first", "then", "listed" })
                 used.Add("game.change." + part + "." + where);
         foreach (var q in PreviewQualityManager.All) { used.Add(q.NameKey); used.Add(q.NameKey + ".tip"); }
+        foreach (var b in PreviewBackdropManager.All) { used.Add(b.NameKey); used.Add(b.NameKey + ".tip"); }
+        foreach (var r in PreviewRendererManager.All) { used.Add(r.NameKey); used.Add(r.NameKey + ".tip"); }
         foreach (string version in ForgeNotice.VersionsWithNews) used.Add(ForgeNotice.NewsKey(version));
         foreach (var v in SMSModForge.Model.VanillaGameVariables.All)
             used.Add(SMSModForge.Model.VanillaVariableHints.TextKeyOf(v.List, v.Name));

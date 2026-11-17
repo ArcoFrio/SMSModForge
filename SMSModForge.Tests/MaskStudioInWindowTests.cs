@@ -188,6 +188,96 @@ public sealed class MaskStudioInWindowTests : IDisposable
         });
     }
 
+    /// <summary>
+    /// The soften brush's Edge softness (1.9.1) takes Opacity's place: with the
+    /// soften brush it shows where Opacity was and Opacity goes, and every word
+    /// on the tools panel reaches the screen whole, in every language. The
+    /// control: back on the brush, Opacity is there again and Edge softness gone.
+    /// </summary>
+    [Theory]
+    [InlineData("en")]
+    [InlineData("de")]
+    [InlineData("es")]
+    [InlineData("fr")]
+    [InlineData("ja")]
+    [InlineData("ko")]
+    [InlineData("pt-BR")]
+    [InlineData("ru")]
+    [InlineData("zh-Hans")]
+    public void EdgeSoftnessTakesOpacitysPlace_AndNothingOnTheToolsIsCut(string language)
+    {
+        // A window reads its words as it is built, so the language comes first.
+        SMSModForge.Localization.Loc.Use(language);
+        try
+        {
+            WindowHarness.Run(window =>
+            {
+                var vm = APack(window, "");
+                ((TabControl)window.FindName("MainTabs")).SelectedIndex = MainTab.Characters;
+                WindowHarness.Pump();
+                vm.SelectedCharacter = vm.Characters.First(c => c.Model.Key == "anna");
+                vm.SelectedOutfit = vm.SelectedCharacter.Outfits.First();
+                WindowHarness.Pump();
+                Click(window, "EditMaskButton");
+                var studio = ((MainWindow)window).CurrentMaskStudio!;
+                var tools = (FrameworkElement)studio.FindName("ToolsGroup");
+                FrameworkElement Named(string name) => (FrameworkElement)studio.FindName(name);
+                double Top(string name) => Named(name).TranslatePoint(new Point(0, 0), tools).Y;
+
+                WindowHarness.Pump();
+                window.UpdateLayout();
+                Assert.True(Named("OpacityLabel").IsVisible && Named("OpacityRow").IsVisible);
+                Assert.False(Named("SoftnessLabel").IsVisible || Named("SoftnessRow").IsVisible);
+                double opacityAt = Top("OpacityLabel"), opacityRowAt = Top("OpacityRow");
+                var cutWithBrush = UiTabLanguageFitTests.CutWords(tools).ToList();
+
+                ((System.Windows.Controls.Primitives.ToggleButton)studio.FindName("ToolSoftenBtn"))
+                    .RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                WindowHarness.Pump();
+                window.UpdateLayout();
+                _out.WriteLine($"{language}: Opacity at {opacityAt:0.#}/{opacityRowAt:0.#}, Edge softness at {Top("SoftnessLabel"):0.#}/{Top("SoftnessRow"):0.#}");
+                Assert.True(Named("SoftnessLabel").IsVisible && Named("SoftnessRow").IsVisible);
+                Assert.False(Named("OpacityLabel").IsVisible || Named("OpacityRow").IsVisible);
+                Assert.Equal(opacityAt, Top("SoftnessLabel"), 1);
+                Assert.Equal(opacityRowAt, Top("SoftnessRow"), 1);
+                Assert.False(((CheckBox)studio.FindName("CapToggle")).IsEnabled);
+                var cut = cutWithBrush.Concat(UiTabLanguageFitTests.CutWords(tools)).ToList();
+                Assert.True(cut.Count == 0, language + ":\n" + string.Join("\n", cut));
+
+                // The tools panel as drawn, for a person to look at when asked for.
+                string? shots = Environment.GetEnvironmentVariable("SMSMODFORGE_SNAPSHOTS");
+                if (!string.IsNullOrWhiteSpace(shots) && window.Content is FrameworkElement root)
+                {
+                    // The whole window, cut to the panel: a nested element rendered
+                    // on its own lands at its offset in the window, off the picture.
+                    Directory.CreateDirectory(shots);
+                    var bmp = new System.Windows.Media.Imaging.RenderTargetBitmap(
+                        (int)Math.Ceiling(root.ActualWidth), (int)Math.Ceiling(root.ActualHeight), 96, 96, PixelFormats.Pbgra32);
+                    bmp.Render(root);
+                    var at = tools.TransformToAncestor(root).TransformBounds(new Rect(0, 0, tools.ActualWidth, tools.ActualHeight));
+                    var panel = new System.Windows.Media.Imaging.CroppedBitmap(bmp,
+                        new Int32Rect((int)at.X, (int)at.Y, (int)Math.Ceiling(at.Width), (int)Math.Ceiling(at.Height)));
+                    ThemeSnapshotTests.Save(panel, Path.Combine(shots, $"mask-soften-tools-{language}-" +
+                        (Environment.GetEnvironmentVariable("SMSMODFORGE_TEST_THEME") ?? "Light") + ".png"));
+                }
+
+                // The control: back on the brush.
+                ((System.Windows.Controls.Primitives.ToggleButton)studio.FindName("ToolBrushBtn"))
+                    .RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                WindowHarness.Pump();
+                window.UpdateLayout();
+                Assert.True(Named("OpacityRow").IsVisible);
+                Assert.False(Named("SoftnessRow").IsVisible);
+                Assert.True(((CheckBox)studio.FindName("CapToggle")).IsEnabled);
+
+                studio.AnswerUnsaved = () => MessageBoxResult.No;
+                studio.TryClose();
+                WindowHarness.Pump();
+            });
+        }
+        finally { SMSModForge.Localization.Loc.Use(SMSModForge.Localization.Loc.EnglishCode); }
+    }
+
     [Fact]
     public void OneLayerCanBeCopiedFromAnotherOutfit_TheOthersStay()
     {
@@ -326,5 +416,72 @@ public sealed class MaskStudioInWindowTests : IDisposable
             }
             finally { PreviewQualityManager.Apply(was); }
         });
+    }
+
+    /// <summary>
+    /// The mask painter's bust preview draws over the backdrop as the tab's does
+    /// (1.9.1, the author: "we still want the changes here to affect the mask
+    /// editor previews"): with the player's room chosen, its top row - above the
+    /// bust, which the game's screen cuts 11 pixels under its bottom - is the
+    /// room's own pixels; with none chosen (the control), the whole bust shows
+    /// and that row is the art's own colour.
+    /// </summary>
+    [Fact]
+    public void ThePaintersPreviewDrawsOverTheBackdrop_AsTheTabsDoes()
+    {
+        var room = PreviewBackdropManager.All.First(d => d.Name == "MyRoom");
+        var scene = room.SceneWaited();
+        Assert.NotNull(scene);
+        byte[] TopRow(JigglePreview p)
+        {
+            var px = new byte[JiggleShader.RenderStride];
+            ((System.Windows.Media.Imaging.WriteableBitmap)p.Source).CopyPixels(new Int32Rect(0, 0, JiggleShader.RenderSize, 1), px, JiggleShader.RenderStride, 0);
+            return px;
+        }
+        BustFadeInTests.WithBackdrop("MyRoom", () => WindowHarness.Run(window =>
+        {
+            var vm = APack(window, "Characters");
+            vm.SelectedCharacter = vm.Characters.First(c => c.Model.Key == "anna");
+            vm.SelectedOutfit = vm.SelectedCharacter.Outfits.First();
+            WindowHarness.Pump();
+            // The tab's own preview, still (no breathing), past the fade-in: what
+            // the room behind the bust looks like there - with the bust's shadow
+            // in it since 1.9.1, so not the bare room.
+            var tab = (JigglePreview)window.FindName("PreviewControl");
+            tab.Breathing = false;
+            tab.IntroNow = () => 100;
+            WindowHarness.Wait(TimeSpan.FromMilliseconds(600));
+            Assert.True(tab.OverBackdrop, "the tab's preview does not draw over the backdrop");
+            var tabTop = TopRow(tab);
+            Click(window, "EditMaskButton");
+            var studio = ((MainWindow)window).CurrentMaskStudio!;
+            var preview = Descendants<JigglePreview>(studio).Single();
+            preview.Breathing = false;
+            preview.IntroNow = () => 100;                     // past the fade-in
+            WindowHarness.Wait(TimeSpan.FromMilliseconds(600));
+            Assert.True(preview.OverBackdrop, "the painter's preview does not draw over the backdrop");
+            var top = TopRow(preview);
+            int same = 0, room = 0;
+            for (int x = 0; x < JiggleShader.RenderSize; x++)
+            {
+                int i = x * 4;
+                if (top[i] == tabTop[i] && top[i + 1] == tabTop[i + 1] && top[i + 2] == tabTop[i + 2] && top[i + 3] == 255) same++;
+                if (top[i] != 0x60 || top[i + 1] != 0x80 || top[i + 2] != 0xC0) room++;
+            }
+            _out.WriteLine($"the painter's preview, top row: {same} of {JiggleShader.RenderSize} pixels as the tab's, {room} not the art's own colour");
+            Assert.Equal(JiggleShader.RenderSize, same);
+            Assert.Equal(JiggleShader.RenderSize, room);
+
+            // The control: no backdrop, the bust alone - its art opaque to the top.
+            PreviewBackdropManager.Apply(PreviewBackdropManager.All.First(d => d.IsNone));
+            WindowHarness.Wait(TimeSpan.FromMilliseconds(600));
+            Assert.False(preview.OverBackdrop);
+            var bare = TopRow(preview);
+            Assert.True(Enumerable.Range(0, JiggleShader.RenderSize).All(x => bare[x * 4] == 0x60 && bare[x * 4 + 1] == 0x80 && bare[x * 4 + 2] == 0xC0),
+                        "with no backdrop the top row is not the art's own colour");
+            studio.AnswerUnsaved = () => MessageBoxResult.No;
+            studio.TryClose();
+            WindowHarness.Pump();
+        }));
     }
 }

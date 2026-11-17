@@ -378,7 +378,7 @@ namespace SMSModForge.PackPlugin
                     Application.Quit();
                     break;
                 default:
-                    if (!RunWorld(verb, a, rest)) Say("error unknown command: " + command);
+                    if (!RunWorld(verb, a, rest) && !RunShaders(verb, a, rest)) Say("error unknown command: " + command);
                     break;
             }
         }

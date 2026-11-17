@@ -9,15 +9,20 @@ using SMSModForge.Localization;
 namespace SMSModForge.Services;
 
 /// <summary>
-/// One live-preview quality preset. Two knobs drive cost:
-/// <list type="bullet">
-///   <item><see cref="MaxFps"/> — how often the CPU shader pass runs. This is
-///   the dominant lever: the preview renders back-to-back as fast as the cap
-///   allows, so halving the cap roughly halves CPU use.</item>
-///   <item><see cref="SuperSample"/> — 4× sub-pixel anti-aliasing on the
-///   jiggle shader. Off quarters the per-frame work but lets motion-boundary
-///   "tearing" show on fast jiggle.</item>
-/// </list>
+/// One live-preview quality preset: how much of the game's look the previews
+/// draw, every one of them as often as the display shows a frame (1.9.1, the
+/// author: "we'd want them all to capped at display refresh rate, just
+/// reducing how much of a load it puts on the pc in general"; "Ultra should be
+/// the 1:1 comparison to what we see in the game, while the other options
+/// scale down or remove its components").
+/// <para/>
+/// Until then (1.9.1's first take) a preset was a frame rate - 60, 30, 20 and
+/// 15 a second - and drew the same picture at each. Before that, Ultra and
+/// High supersampled the jiggle shader 4x, a smoothing the game does not do.
+/// <para/>
+/// Measure processor use with QueryProcessCycleTime, not TotalProcessorTime:
+/// Windows charges the latter a whole 15.6 ms tick to whatever runs at each
+/// tick, and a short pass started just after one is barely charged at all.
 /// </summary>
 public sealed class PreviewQualityDef : ObservableObject
 {
@@ -32,11 +37,29 @@ public sealed class PreviewQualityDef : ObservableObject
 
     public string Description => Loc.T(NameKey + ".tip");
 
-    /// <summary>Upper bound on shader passes per second.</summary>
-    public int MaxFps { get; init; }
+    /// <summary>The edge glow a bust takes from what is behind it (the game's fake GI).</summary>
+    public bool EdgeGlow { get; init; }
 
-    /// <summary>True → 4× sub-pixel supersampling in <c>JiggleShader</c>.</summary>
-    public bool SuperSample { get; init; }
+    /// <summary>The edge glow's blur worked out at every pixel from the room as
+    /// a bust's shadow leaves it, as the game does - rather than from a table
+    /// made once from the room without the shadow.</summary>
+    public bool EdgeGlowExact { get; init; }
+
+    /// <summary>The post-processing's bloom.</summary>
+    public bool Bloom { get; init; }
+
+    /// <summary>The post-processing's anamorphic flares - the light streaks.</summary>
+    public bool Flares { get; init; }
+
+    /// <summary>The post-processing's colour: tonemapping, vignette, URP's grading.</summary>
+    public bool Colour { get; init; }
+
+    /// <summary>How finely a bust or an NPC with no backdrop is sampled (1.9.1, the
+    /// author: "we still want the graphics options to affect the performance on no
+    /// backdrops"): the game's own at Ultra - two by two samples in each preview
+    /// pixel, as the game draws on a 1920x1080 screen - fewer below. Over a
+    /// backdrop every quality keeps the game's; the parts above are what it saves there.</summary>
+    public Rendering.JiggleShader.Sampling Sampling { get; init; } = Rendering.JiggleShader.Sampling.Game;
 
     private bool _isCurrent;
     /// <summary>True for the active preset — drives the menu checkmark.</summary>
@@ -54,15 +77,20 @@ public sealed class PreviewQualityDef : ObservableObject
 /// </summary>
 public static class PreviewQualityManager
 {
-    // Catalogue, best → cheapest. "Ultra" reproduces the original uncapped-ish
-    // 60 Hz + 4× behaviour; "Medium" is the default — a lighter baseline now
-    // that the NPC preview can render much larger surfaces than the bust one.
+    // Catalogue, best -> cheapest. Ultra is the game's own picture; each level
+    // below leaves out the costliest part left (measured on the author's
+    // machine, a frame of the bust over the room: the flares 12 ms, the bloom
+    // 5, the exact edge glow 5 more than its table, the colour 5).
     public static IReadOnlyList<PreviewQualityDef> All { get; } = new[]
     {
-        new PreviewQualityDef { Name = "Ultra",  MaxFps = 60, SuperSample = true },
-        new PreviewQualityDef { Name = "High",   MaxFps = 30, SuperSample = true },
-        new PreviewQualityDef { Name = "Medium", MaxFps = 30, SuperSample = false },
-        new PreviewQualityDef { Name = "Low",    MaxFps = 20, SuperSample = false },
+        // With no backdrop (Sampling): Ultra the game's 2x2 samples a pixel; High keeps the two
+        // rows (which keep a wave's steps the game's size), one across; Medium one a pixel;
+        // Low one per 2x2 pixels - a bust's own texels.
+        new PreviewQualityDef { Name = "Ultra",  EdgeGlow = true, EdgeGlowExact = true, Bloom = true, Flares = true, Colour = true,
+                                Sampling = new(2, 2, 1) },
+        new PreviewQualityDef { Name = "High",   EdgeGlow = true, Bloom = true, Colour = true, Sampling = new(1, 2, 1) },
+        new PreviewQualityDef { Name = "Medium", EdgeGlow = true, Colour = true, Sampling = new(1, 1, 1) },
+        new PreviewQualityDef { Name = "Low",    Colour = true, Sampling = new(1, 1, 2) },
     };
 
     // Index 2 ("Medium") is the default + fallback.

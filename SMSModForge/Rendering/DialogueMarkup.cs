@@ -133,8 +133,15 @@ public static class DialogueMarkup
     /// The colour a token is drawn in: the name colour of whoever it stands in
     /// for, or null for the token mark. Set by the editor, which knows the
     /// pack's cast - and so each pack's own colour for them.
+    /// <para/>
+    /// One per thread (1.9.1): set by the view model and read by the rows and
+    /// controls on its thread. A view model made on another thread - a test's,
+    /// beside a window drawing on the harness's - took over the window's, which
+    /// then walked that model's characters while it was filling them and
+    /// stopped the test process.
     /// </summary>
-    public static Func<string, UiColor?>? TokenColor { get; set; }
+    public static Func<string, UiColor?>? TokenColor { get => _tokenColor; set => _tokenColor = value; }
+    [ThreadStatic] private static Func<string, UiColor?>? _tokenColor;
 
     /// <summary>Said when one of those colours may have changed, so a line on
     /// screen draws its tokens again.</summary>

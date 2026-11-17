@@ -67,8 +67,12 @@ public sealed class MenuLayoutTests
             Assert.Contains(Loc.T("menu.confirmChangesSave"), groups[Loc.T("menu.heading.saving")]);
             Assert.Contains(Loc.T("menu.setGameFolder"), groups[Loc.T("menu.heading.game")]);
             Assert.Contains(Loc.T("menu.checkForUpdates"), groups[Loc.T("menu.heading.updates")]);
-            // The fourteen it had, none lost, and Themes.
-            Assert.Equal(15, groups.Values.Sum(g => g.Count));
+            // The previews' three of 1.9.1 with the look's.
+            Assert.Contains(Loc.T("menu.previewBackdrop"), groups[Loc.T("menu.heading.look")]);
+            Assert.Contains(Loc.T("menu.previewRenderer"), groups[Loc.T("menu.heading.look")]);
+            Assert.Contains(Loc.T("menu.showPreviewFps"), groups[Loc.T("menu.heading.look")]);
+            // The fourteen it had, none lost, Themes, and those three.
+            Assert.Equal(18, groups.Values.Sum(g => g.Count));
         });
     }
 

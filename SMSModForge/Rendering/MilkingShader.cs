@@ -82,80 +82,137 @@ public static class MilkingShader
         // dir = normalize(_MilkingDirection), falling back to (0,1) when the
         // vector is degenerate — the bytecode's own length < 0.1 guard.
         float dx = s.DirX, dy = s.DirY;
-        float len = MathF.Sqrt(dx * dx + dy * dy);
-        if (len < 0.1f) { dx = 0f; dy = 1f; }
-        else { dx /= len; dy /= len; }
-        float px = -dy, py = dx;                 // perpendicular
+        float len2 = dx * dx + dy * dy;
+        if (MathF.Sqrt(len2) < 0.1f) { dx = 0f; dy = 1f; }
+        else { float inv = 1f / MathF.Sqrt(len2); dx *= inv; dy *= inv; }   // rsq
 
         // Copied out of the `in` parameter: a lambda can't close over one.
         float variation = s.AmplitudeVariation, strength = s.Strength;
         float waveCount = s.WaveCount, compressionRatio = s.CompressionRatio;
 
-        // Every wave term depends on the pixel ONLY through t = dot(uv, dir),
-        // so they are tabulated once per frame instead of evaluated per pixel.
-        // Level art is millions of pixels and this collapses six sines each into
-        // a lookup; t spans [0, |dx|+|dy|] for uv in the unit square.
-        float tMax = Math.Abs(dx) + Math.Abs(dy);
-        var slideT = new float[WaveTable];
-        var crossT = new float[WaveTable];
-        for (int i = 0; i < WaveTable; i++)
+        // The wave terms depend on the pixel only through t = dot(uv, dir), in
+        // the game's uv: v runs UP. Until 1.9.1 this used v running down, which
+        // mirrored the motion - a pack place's wave ran the other way from the
+        // game's (LevelShaderTests holds it to the game's program now). Worked
+        // out once a row for an upright direction (a pack place's, Beach's),
+        // once a column for a level one, and at every pixel otherwise - exactly,
+        // where a table used to interpolate them.
+        bool byRow = dx == 0f, byColumn = !byRow && dy == 0f;
+        float[]? rowWaves = null, colWaves = null;
+        if (byRow)
         {
-            float t = tMax * i / (WaveTable - 1);
-            float waveArg = t * waveCount * Pi - 2f * timePhase;
-            slideT[i] = 0.5f * MathF.Sin(t * waveCount + timePhase);
-            crossT[i] = MathF.Sin(waveArg) * compressionRatio
-                      + 0.4f * MathF.Sin(waveArg * 1.7f + timePhase * 0.8f);
+            rowWaves = new float[outH * 3];
+            for (int oy = 0; oy < outH; oy++)
+                Waves(1f - (oy + 0.5f) / outH, 0f, dx, dy, timePhase, waveCount, rowWaves, oy * 3, true);
         }
-        float tScale = tMax > 0 ? (WaveTable - 1) / tMax : 0f;
+        else if (byColumn)
+        {
+            colWaves = new float[outW * 3];
+            for (int ox = 0; ox < outW; ox++)
+                Waves((ox + 0.5f) / outW, 0f, dx, dy, timePhase, waveCount, colWaves, ox * 3, false);
+        }
 
         Parallel.For(0, outH, oy =>
         {
-            // Output pixel centres in UV, so a reduced-size pass samples the
-            // same field the full-size one would.
-            float v = (oy + 0.5f) / outH;
+            // Output pixel centres in the game's uv (v up), so a reduced-size
+            // pass samples the same field the full-size one would.
+            float v = 1f - (oy + 0.5f) / outH;
             int outRow = oy * outStride;
+            Span<float> w = stackalloc float[3];
             for (int ox = 0; ox < outW; ox++)
             {
                 float u = (ox + 0.5f) / outW;
-
-                // amp = (1 + variation*sin(u*PI)) * mask.a * strength
-                int mx = Math.Min(maskW - 1, (int)(u * maskW));
-                int my = Math.Min(maskH - 1, (int)(v * maskH));
-                float maskA = maskTex[my * maskStride + mx * 4 + 3] / 255f;
-                float ampVar = variation == 0f ? 1f : 1f + variation * MathF.Sin(u * Pi);
-                float amp = ampVar * maskA * strength;
-
-                // Interpolated so the wave stays smooth between table entries —
-                // the whole displacement is only a few pixels, and quantising it
-                // would show up as banding rather than motion.
-                float ft = (u * dx + v * dy) * tScale;
-                int i0 = (int)ft; if (i0 < 0) i0 = 0;
-                if (i0 > WaveTable - 2) i0 = WaveTable - 2;
-                float fr = ft - i0;
-                float slide = amp * (slideT[i0] + (slideT[i0 + 1] - slideT[i0]) * fr);
-                float cross = amp * (crossT[i0] + (crossT[i0 + 1] - crossT[i0]) * fr);
-
-                float offU = slide * dx + cross * px;
-                float offV = slide * dy + cross * py;
-
-                // add_sat: the displaced UV is saturated, not wrapped, so the
-                // edges smear rather than showing the opposite side.
-                float su = Math.Clamp(u + offU, 0f, 1f);
-                float sv = Math.Clamp(v + offV, 0f, 1f);
-
-                // Bilinear, because the game imports level art with
-                // FilterMode.Bilinear and because the displacement peaks at a
-                // few pixels: point sampling quantises that to whole texels and
-                // the art reads as juddering rather than drifting.
-                SampleBilinear(baseTex, srcW, srcH, srcStride, su, sv, output, outRow + ox * 4);
+                float sinSlide, sinCross1, sinCross2;
+                if (byRow) { sinSlide = rowWaves![oy * 3]; sinCross1 = rowWaves[oy * 3 + 1]; sinCross2 = rowWaves[oy * 3 + 2]; }
+                else if (byColumn) { sinSlide = colWaves![ox * 3]; sinCross1 = colWaves[ox * 3 + 1]; sinCross2 = colWaves[ox * 3 + 2]; }
+                else
+                {
+                    WavesAt(u * dx + v * dy, timePhase, waveCount, w);
+                    sinSlide = w[0]; sinCross1 = w[1]; sinCross2 = w[2];
+                }
+                Shade(baseTex, srcW, srcH, maskTex, maskW, maskH, u, v, variation, strength, compressionRatio, dx, dy,
+                      sinSlide, sinCross1, sinCross2, output, outRow + ox * 4);
             }
         });
     }
 
-    /// <summary>Table resolution for the wave terms. The wave repeats every
-    /// <c>2/waveCount</c> in t, so a few thousand entries put many samples in
-    /// every cycle at any sane wave count.</summary>
-    private const int WaveTable = 4096;
+    /// <summary>
+    /// The colour the program draws at one point of the art - uv (<paramref name="u"/>,
+    /// <paramref name="v"/>), v up - into <paramref name="output"/> at
+    /// <paramref name="at"/> (BGRA): what <see cref="Render"/> writes at an output
+    /// pixel's centre, for any point - a pixel of the game's screen over the art,
+    /// wherever its quad lands (InGameSuiteTests.S10).
+    /// </summary>
+    public static void At(byte[] baseTex, int srcW, int srcH, byte[] maskTex, int maskW, int maskH,
+                          in Settings s, float time, float u, float v, byte[] output, int at)
+    {
+        float timePhase = time * s.Speed + s.PhaseOffset;
+        float dx = s.DirX, dy = s.DirY;
+        float len2 = dx * dx + dy * dy;
+        if (MathF.Sqrt(len2) < 0.1f) { dx = 0f; dy = 1f; }
+        else { float inv = 1f / MathF.Sqrt(len2); dx *= inv; dy *= inv; }
+        Span<float> w = stackalloc float[3];
+        WavesAt(u * dx + v * dy, timePhase, s.WaveCount, w);
+        Shade(baseTex, srcW, srcH, maskTex, maskW, maskH, u, v, s.AmplitudeVariation, s.Strength, s.CompressionRatio, dx, dy,
+              w[0], w[1], w[2], output, at);
+    }
+
+    /// <summary>One pixel, its three sines worked out: the amplitude from the
+    /// mask, the displacement, the art read there.</summary>
+    private static void Shade(byte[] baseTex, int srcW, int srcH, byte[] maskTex, int maskW, int maskH, float u, float v,
+                              float variation, float strength, float compressionRatio, float dx, float dy,
+                              float sinSlide, float sinCross1, float sinCross2, byte[] output, int at)
+    {
+        // amp = (1 + variation*sin(u*PI)) * (mask.a * strength), the mask
+        // point-sampled where the pixel is.
+        int mx = Math.Clamp((int)MathF.Floor(u * maskW), 0, maskW - 1);
+        int my = Math.Clamp((int)MathF.Floor(v * maskH), 0, maskH - 1);
+        float maskA = maskTex[(maskH - 1 - my) * maskW * 4 + mx * 4 + 3] / 255f;
+        float amp = (variation * MathF.Sin(u * Pi) + 1f) * (maskA * strength);
+
+        // As compiled: c1 = amp*sin(waveArg)*compression, slide =
+        // amp*sin(t*waves + phase)*0.5, then perp*c1 + slide*dir, then
+        // perp*(0.4*sin(waveArg*1.7 + phase*0.8))*amp on top.
+        float c1 = amp * sinCross1 * compressionRatio;
+        float slide = amp * sinSlide * 0.5f;
+        float offU = -dy * c1 + slide * dx;
+        float offV = dx * c1 + slide * dy;
+        float c2 = sinCross2 * 0.4f;
+        offU = -dy * c2 * amp + offU;
+        offV = dx * c2 * amp + offV;
+
+        // add_sat: the displaced UV is saturated, not wrapped, so the
+        // edges smear rather than showing the opposite side.
+        float su = Math.Clamp(u + offU, 0f, 1f);
+        float sv = Math.Clamp(v + offV, 0f, 1f);
+
+        // Bilinear, because the game imports level art with
+        // FilterMode.Bilinear and because the displacement peaks at a
+        // few pixels: point sampling quantises that to whole texels and
+        // the art reads as juddering rather than drifting. (Rows here are
+        // top-down, so the game's v is turned over to read them.)
+        SampleBilinear(baseTex, srcW, srcH, srcW * 4, su, 1f - sv, output, at);
+    }
+
+    /// <summary>The three sines at t = dot(uv, dir): the slide, and the two cross
+    /// waves, as the program computes their arguments.</summary>
+    private static void WavesAt(float t, float timePhase, float waveCount, Span<float> into)
+    {
+        float waveArg = t * waveCount * Pi + -(timePhase + timePhase);
+        into[0] = MathF.Sin(t * waveCount + timePhase);
+        into[1] = MathF.Sin(waveArg);
+        into[2] = MathF.Sin(waveArg * 1.7f + timePhase * 0.8f);
+    }
+
+    private static void Waves(float a, float b, float dx, float dy, float timePhase, float waveCount,
+                              float[] into, int at, bool aIsV)
+    {
+        // t = dot(uv, dir) = u*dx + v*dy with the other coordinate's term zero.
+        float t = aIsV ? b * dx + a * dy : a * dx + b * dy;
+        Span<float> w = stackalloc float[3];
+        WavesAt(t, timePhase, waveCount, w);
+        into[at] = w[0]; into[at + 1] = w[1]; into[at + 2] = w[2];
+    }
 
     private static void SampleBilinear(byte[] src, int w, int h, int stride,
                                        float u, float v, byte[] dst, int di)

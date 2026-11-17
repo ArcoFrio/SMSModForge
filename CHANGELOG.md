@@ -1,5 +1,231 @@
 # Changelog
 
+## 1.9.1
+
+The previews now draw what the game draws. The bust and NPC previews show a
+character in the PC's room or in four of the game's places, lit and finished
+the way the game does it there, with the room's shadow, the glow at the edges
+and the game's own fade-in. The place previews show the game's bloom, light
+streaks and colour, and stay sharp when zoomed in. The previews can draw on
+your graphics card, and preview quality now decides how much of the game's
+look is drawn instead of capping the frame rate. In the game, pack busts cast
+their own shadows and their movement is no longer cut off. The mask painter's
+Soften brush works, and stops at the softness you set.
+
+### Before you update
+
+- **In the game, a pack bust's shadow takes its own shape.** Until now a pack
+  bust threw the shadow of the game's bust it is built from. If your pack's
+  look relied on that shadow, look at it again in the game after updating.
+- **Preview quality means something else.** It no longer caps the frame rate:
+  every level draws as often as your screen refreshes, and the level decides
+  how much of the game's look is drawn (see below). The level you had stays
+  chosen.
+- **The Characters tab's Preview size field is gone.** Drag the preview's
+  corner instead; your old size is where it starts.
+
+### New
+
+- **The bust preview fades a bust in the way the game does.** When a bust
+  appears in the game, a dark silhouette of it fades in over a second, then
+  the character fades in from that silhouette over three seconds, with its
+  blink and expression coming on as it does. The preview now plays the same
+  thing each time you pick an outfit. A **Fade in** tick box under the
+  preview turns it off, and ticking it again plays it again. It starts on.
+
+- **The bust preview shows the bust in the PC's room, as the game draws
+  it there.** The room is behind it, the room's lamps light it, and its edges
+  take on the glow the game gives them from what is behind them. It breathes
+  over the room as in the game, and its lowest rows are off the bottom of the
+  picture, as they are off the game's screen. The mask painter's preview does
+  the same. **None**, in the **Backdrop** buttons at the bottom of the
+  Characters tab or in **Options > Preview backdrop**, shows the bust alone,
+  as before. At Low preview quality the edge glow is left out.
+
+- **Four more of the game's places to see a bust in.** Besides the PC's
+  room, the **Backdrop** buttons now offer the **Beach**, the **Forest**, the
+  **Villa** (inside) and the **Temple** (inside), each as the game draws it
+  behind a bust: its colours, its light and the glow it gives the bust's
+  edges. They were picked from all of the game's places to be as different
+  from each other as possible, and each was checked against the game itself.
+  On the Beach, the bust also throws a shadow across the place, from its
+  light behind the bust, as it does there in the game.
+
+- **The NPC preview shows the NPC in the place, as the game draws it there.**
+  With a backdrop chosen (the same **Backdrop** buttons, now under the NPC's
+  preview too), the NPC stands in the middle of the place at the size the
+  game draws it there. The place's lights fall on it: in the PC's room the
+  lamp warms it, as it does in the game, where a bust is lit by the room's
+  general light alone. Its edges take the place's glow, and the game's
+  post-processing goes over it all. **None** shows the NPC alone, at the same
+  size and in the same place, so switching backdrops never changes how big it
+  looks. It was checked against an NPC in the game itself, pixel by pixel, on
+  the processor and on the graphics card.
+- **The NPC preview scales like the bust preview.** It fills the room it is
+  given, no bigger than the size its corner is dragged to, and the divider
+  beside it can be dragged to give it more or less of the tab (remembered).
+
+- **The previews can draw on your graphics card.** A new setting,
+  **Options > Draw previews on**, chooses what draws the live previews:
+  **Automatic** (the default), **Graphics card** or **Processor**. Automatic
+  times both when the editor starts and uses whichever is faster on your PC.
+  On the graphics card, the bust preview over the room runs the game's own
+  programs, the way the game draws it there: the bust's shader with its
+  movement and edge glow, the room's lamp, the bloom, the light streaks and
+  the colour. It was checked against the game itself, pixel by pixel, and
+  matches it as closely as the processor's preview does.
+  - On the PC it was measured on, a frame at Ultra takes about 5 ms on the
+    graphics card, against about 45 ms on the processor, and leaves the
+    processor almost free.
+  - The first time, the editor takes a few seconds to prepare the graphics
+    card's programs. After that they are kept and load at once.
+  - The NPC preview, with a backdrop or none, the bust with no backdrop,
+    and the place previews (their art's movement, their NPCs and the game's
+    look over them) draw on the graphics card too.
+
+- **See how fast the previews draw.** **Options > Show preview frame rate**
+  puts the frame rate each live preview is drawing at in its corner. It
+  starts off.
+
+- **The mask painter's preview can change its backdrop too.** The same
+  **Backdrop** buttons as under the Characters tab's preview, the same
+  setting.
+
+- **Place previews show the game's look.** The game puts a soft glow around
+  the bright parts of every place (bloom), long upright light streaks from
+  the brightest ones, and its own colour over all of it. The Places tab's
+  preview and the scene extensions' preview now draw these too. Each has a
+  tick box under the preview, **Bloom**, **Light streaks** and **Colour**,
+  all on to start with. Untick one to see the place without it. What is drawn
+  also depends on the preview quality (see below). Zoomed in, the look is
+  worked out for every pixel of the view, so the place's art keeps its fine
+  detail under it, and it carries on past the edge of the game's screen
+  rather than stopping there.
+
+- **The bust preview shows the bust's shadow on the room.** The room's lamp
+  throws a bust's shadow across the wall behind it, and the preview now draws
+  it where the game does, with its soft edges, moving as the bust breathes.
+  The lamp's glow over the bust and the room in the shadow are drawn the way
+  the game draws them too, and the edge glow picks up the darker room. It was
+  checked against the game itself, pixel by pixel.
+
+- **The bust preview over the room shows the game's colours exactly.** The
+  preview used the textbook way of turning a picture's colours into light,
+  and the game's graphics card does it very slightly differently, enough to
+  put about half of a bust's pixels one shade off. It now uses the game's
+  own.
+
+### Fixed
+
+- **The bust preview breathes with no backdrop too.** With **None**, the bust
+  could stand still. It now breathes inside its picture, a whole pixel at a
+  time, the way it does over the room and in the game.
+
+- **Moving busts and NPCs showed scanlines in the previews.** On a
+  1920x1080 screen or larger, the game draws a bust with twice as many rows
+  as the preview did. The preview's Wave (green) movement therefore shifted
+  its rows in steps twice the size of the game's, which read as scanlines,
+  at every preview quality. The previews now work out the movement at the
+  game's own density and show it at their size, so the steps are the game's.
+  This was hidden in 1.9.0 at Ultra and High only.
+
+- **The bust preview's breathing was shallower than the game's.** The Depth
+  slider now starts at 5, the game's own depth (it was 4, set by eye).
+
+- **The previews' Noise movement now matches the game's.** The bust and NPC
+  previews drew the Noise (blue) channel with a different noise from the one
+  the game uses: a smooth wobble where the game has a finer, layered
+  shimmer, at a different speed (the game's also follows Bounce Speed), and
+  without the sideways sway the game adds. In places the art sat up to about
+  24 preview pixels from where the game draws it. The preview now does the
+  game's own noise. It was checked pixel for pixel against the game's shader
+  and against a bust drawn by the game itself. Bounce and Wave were already
+  right.
+
+- **In the game, a pack bust's or NPC's movement could pull in art from the
+  opposite edge.** Where Bounce, Wave or Noise moved art that reaches the
+  edge of its image, the game took the missing strip from the far side of
+  the image, often an empty line, where its own busts repeat the edge. Pack
+  art is now loaded the way the game's own bust art is, which is also how the
+  editor's preview has always drawn it.
+
+- **In the game, a pack bust cast the shadow of a different character.**
+  The room's lamps throw a bust's shadow on the wall behind it. A pack bust
+  threw the shadow of the game's bust it is built from (Anna's, for most),
+  whatever its own art looked like, and a pack's art put over one of the
+  game's busts kept that bust's old shadow. Each now casts the shadow of its
+  own art, the same shape the editor's preview shows, and the game's own
+  busts keep theirs.
+
+- **In the game, a pack bust's or NPC's movement could be cut off.** The game
+  drew pack art only inside a rough outline it makes around the art's
+  visible pixels. Where Bounce, Wave or Noise moved the art out past that
+  outline, the part outside vanished. The editor's previews draw the whole
+  picture, so they never showed that cut. The game now draws the whole picture
+  too, and the art moves the same in both. Nothing moves to a new place.
+
+- **NPCs in the Places preview looked blurry when zoomed in.** An NPC with
+  movement in a place was drawn as a small picture, no more than 384 pixels
+  tall, and enlarged with the view, so zoomed in it lost the detail of its
+  art. It is now drawn at the size it covers on your screen, up to its art's
+  own, and redrawn at the new size a moment after you stop zooming.
+
+- **A place's jiggle moved the wrong way in the preview.** The wave on a
+  place's art was drawn upside down, so it travelled in the opposite
+  direction from the game's. It now runs as in the game, checked against the
+  game's shader.
+
+- **The mask painter's Soften brush painted like the ordinary brush.** In
+  1.9.0, a stroke made with the mouse added paint instead of smoothing. Only
+  the button's highlight said Soften, and the stroke underneath was the plain
+  brush at the same opacity. It now softens.
+
+### Changed
+
+- **The Characters tab's bust preview scales to fit, like the mask
+  painter's.** The **Preview size** field is gone. The preview grows into the
+  room the tab has for it, with its options directly under it as before, and
+  no bigger than the size its corner is dragged to (your old Preview size is
+  where it starts). A divider between
+  the outfit's fields and the preview gives the preview more or less of the
+  tab, and is remembered. In a small window nothing under the preview is
+  pushed off the screen.
+
+- **Preview quality now sets how much of the game's look the previews draw.
+  At every level they run at your screen's refresh rate.** Before, each level
+  capped the frame rate (Ultra 60 frames a second, High 30, Medium 20,
+  Low 15). With a bust over the room, every level ended up about as slow as
+  the others anyway. Now the previews draw as often as your screen refreshes,
+  at any quality. The level decides how much work each picture takes:
+  - **Ultra** draws all of the game's look: a bust's edge glow, the bloom,
+    the light streaks and the game's colour, each worked out the way the game
+    does it. Use it to compare with the game.
+  - **High** leaves out the light streaks. On the processor it also works
+    out the edge glow a little more roughly; on the graphics card it is
+    exact.
+  - **Medium** (the default) also leaves out the bloom.
+  - **Low** draws the game's colour only, with no edge glow.
+  - With no backdrop the levels save work too, for the bust and the NPC
+    previews alike: **Ultra** draws them as finely as the game does on a
+    large screen, **High** with half the work (the rows as fine as the
+    game's), **Medium** with a quarter, and **Low** one point for every four
+    pixels. Before, a preview with no backdrop asked the same of the computer
+    at every level.
+  - The work behind each picture is also much lighter. On the machine this
+    was measured on, a 60 Hz screen, the bust preview over the room now draws
+    about 53 pictures a second at Ultra and 55 at Low.
+  - The place, NPC and mask painter previews follow the same levels.
+
+- **The Soften brush softens edges to a softness you set, and never past it.**
+  While Soften is the tool, an **Edge softness** slider takes Opacity's place.
+  It sets how many pixels a hard edge the brush passes over fades across.
+  Going over an edge again leaves it as it is, so you can work along an
+  outline without blurring it away. To soften an edge further, raise the
+  slider. To tighten an edge back up, lower the slider and go over the edge.
+  Painting or erasing across a softened edge and softening it again gives the
+  same softness, not more. Undo brings back the edge and what the brush had
+  softened it from.
+
 ## 1.9.0
 
 Every one of the game's variables now says what it does, and yours show their

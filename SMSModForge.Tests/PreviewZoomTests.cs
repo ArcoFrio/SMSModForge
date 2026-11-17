@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using SMSModForge.Services;
 using SMSModForge.View.Controls;
 using SMSModForge.ViewModel;
 using Xunit;
@@ -12,27 +13,29 @@ using Xunit.Abstractions;
 namespace SMSModForge.Tests;
 
 /// <summary>
-/// Making the bust preview bigger, and the panel around it with it.
-/// <para/>
-/// The preview is pinned to its own size — it has to be, or a parent layout
-/// negotiates it into whatever is left and the shader output gets resampled by
-/// accident. So "bigger" means moving the pin AND the column it sits in
-/// together; moving only one of them is how a preview ends up with more
-/// backdrop around the same small bust.
-/// <para/>
-/// Measured on the control and on the column, not on the preference: the
-/// preference is the easy half.
+/// The Characters tab's bust preview scales as the mask painter's does (1.9.1,
+/// the author: "remove the 'Preview size' field on the Characters tab and
+/// instead make it scale just like the preview on the mask editor"): no bigger
+/// than the size its corner is dragged to, and no bigger than the room above
+/// its options - so in a short or narrow window every option stays inside, and
+/// given room again it grows back. The share of the tab it has is its
+/// splitter's, remembered. Measured where the picture is drawn, not on a
+/// preference.
 /// </summary>
 [Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class PreviewZoomTests : IDisposable
 {
     private readonly ITestOutputHelper _out;
-    private readonly double _was = SMSModForge.Services.EditorPrefs.BustPreviewZoom;
+    private readonly double _scaleWas = EditorPrefs.GetPreviewScale("characters.bust");
+    private readonly double _splitWas = EditorPrefs.CharactersPreviewSplit;
 
     public PreviewZoomTests(ITestOutputHelper o) => _out = o;
 
-    /// <summary>Somebody is running this with their own size set.</summary>
-    public void Dispose() => SMSModForge.Services.EditorPrefs.BustPreviewZoom = _was;
+    public void Dispose()
+    {
+        EditorPrefs.SetPreviewScale("characters.bust", _scaleWas);
+        EditorPrefs.CharactersPreviewSplit = _splitWas;
+    }
 
     private static IEnumerable<T> Descendants<T>(DependencyObject root) where T : DependencyObject
     {
@@ -45,16 +48,6 @@ public sealed class PreviewZoomTests : IDisposable
         }
     }
 
-    /// <summary>A window with room for the biggest size, so the size shown is
-    /// the size picked. A smaller window shows a smaller one on purpose - see
-    /// the tests at the end.</summary>
-    private static void Roomy(MainWindow window)
-    {
-        window.Width = 2600;
-        window.Height = 1800;
-        WindowHarness.Pump();
-    }
-
     private static void ShowTab(MainWindow window, string header)
     {
         var tabs = (TabControl)window.FindName("MainTabs");
@@ -63,86 +56,12 @@ public sealed class PreviewZoomTests : IDisposable
         WindowHarness.Pump();
     }
 
-    [Theory]
-    [InlineData(1.0)]
-    [InlineData(1.5)]
-    [InlineData(2.0)]
-    [InlineData(0.5)]
-    public void ThePictureGrows_AndSoDoesTheColumnHoldingIt(double zoom)
-    {
-        WindowHarness.Run(window =>
-        {
-            var vm = (MainViewModel)window.DataContext;
-            Roomy(window);
-            ShowTab(window, "Characters");
-            vm.BustPreviewZoom = zoom;
-            WindowHarness.Pump();
-            window.UpdateLayout();
-            WindowHarness.Pump();
-
-            var preview = Descendants<JigglePreview>(window).FirstOrDefault();
-            Assert.True(preview != null, "the bust preview is not in the window");
-
-            double want = JigglePreview.FixedSize * zoom;
-            _out.WriteLine($"{zoom}×: preview {preview!.Width:0}, column {vm.BustPreviewColumnWidth.Value:0}");
-
-            // The picture itself, not the panel behind it.
-            Assert.Equal(want, preview.Width);
-            Assert.Equal(want, preview.Height);
-            // Pinned there, so no parent can negotiate it back.
-            Assert.Equal(want, preview.MinWidth);
-            Assert.Equal(want, preview.MaxWidth);
-
-            // And the column is wide enough to hold it, or it would be clipped
-            // rather than shown bigger.
-            Assert.True(vm.BustPreviewColumnWidth.Value >= want,
-                        "the column is narrower than the preview it holds");
-        });
-    }
-
-    [Fact]
-    public void EnlargedTheBustIsDrawnPixelByPixel_AndShrunkItIsSmoothed()
-    {
-        // Pixel by pixel whenever it is made bigger - at a half step too. A
-        // half step was smoothed until 1.8.0, to keep every pixel the same
-        // size, and the author found it blurry: in a pixel game a pixel a
-        // shade wider than its neighbour reads crisp, a smoothed one soft.
-        // Made smaller, nearest neighbour would drop whole rows: smoothed.
-        WindowHarness.Run(window =>
-        {
-            var vm = (MainViewModel)window.DataContext;
-            Roomy(window);
-            ShowTab(window, "Characters");
-            var preview = Descendants<JigglePreview>(window).First();
-
-            foreach (double zoom in new[] { 2, 1.5 })
-            {
-                vm.BustPreviewZoom = zoom;
-                WindowHarness.Pump();
-                _out.WriteLine($"{zoom}×: " + RenderOptions.GetBitmapScalingMode(preview) + ", " + preview.Stretch);
-                Assert.Equal(BitmapScalingMode.NearestNeighbor, RenderOptions.GetBitmapScalingMode(preview));
-            }
-
-            // The control: below life size it is not.
-            vm.BustPreviewZoom = 0.5;
-            WindowHarness.Pump();
-            Assert.Equal(BitmapScalingMode.HighQuality, RenderOptions.GetBitmapScalingMode(preview));
-        });
-    }
-
-    // ── A window too small for the size picked (the author, 1.6.3) ──────
-    //
-    // A 2x preview in a short window pushed the options under it - the size
-    // picker first of all - off the bottom, where nothing could be reached to
-    // make it smaller again.
-
     /// <summary>Where <paramref name="element"/> is drawn, in the window's own
-    /// coordinates.</summary>
+    /// coordinates - its transforms included.</summary>
     private static Rect Drawn(MainWindow window, FrameworkElement element)
     {
         var content = (FrameworkElement)window.Content;
-        var at = element.TranslatePoint(new Point(0, 0), content);
-        return new Rect(at, new Size(element.ActualWidth, element.ActualHeight));
+        return element.TransformToVisual(content).TransformBounds(new Rect(0, 0, element.ActualWidth, element.ActualHeight));
     }
 
     /// <summary>Every option under the preview that can be seen, with where it is.</summary>
@@ -157,114 +76,148 @@ public sealed class PreviewZoomTests : IDisposable
 
     private static void Settle(MainWindow window)
     {
-        WindowHarness.Pump();
-        window.UpdateLayout();
-        WindowHarness.Pump();
-        window.UpdateLayout();
+        for (int i = 0; i < 3; i++) { WindowHarness.Pump(); window.UpdateLayout(); }
         WindowHarness.Pump();
     }
 
+    private static (PreviewFrame frame, JigglePreview preview) Bust(MainWindow window)
+        => ((PreviewFrame)window.FindName("BustPreviewResizer"), (JigglePreview)window.FindName("PreviewControl"));
+
     [Fact]
-    public void InAShortWindow_EveryOptionStaysInside_AndThePreviewSaysItIsSmaller()
+    public void InAShortWindow_EveryOptionStaysInside_AndTheBustShrinksToFit()
     {
         WindowHarness.Run(window =>
         {
-            var vm = (MainViewModel)window.DataContext;
             window.Width = 1400;
             window.Height = 700;
             ShowTab(window, "Characters");
-            vm.BustPreviewZoom = 2;
+            var (frame, preview) = Bust(window);
+            frame.Scale = 2;
             Settle(window);
 
             var content = (FrameworkElement)window.Content;
-            var preview = Descendants<JigglePreview>(window).First();
+            var drawn = Drawn(window, preview);
             var options = Options(window);
-            _out.WriteLine($"window content {content.ActualWidth:0}x{content.ActualHeight:0}, preview {preview.ActualWidth:0}, shown {vm.BustPreviewShownZoom}x");
+            _out.WriteLine($"window content {content.ActualWidth:0}x{content.ActualHeight:0}; the bust drawn at {drawn} (shown {frame.ShownScale:0.00}x of 2x)");
             foreach (var (name, at) in options) _out.WriteLine($"  {name}: {at}");
-
+            foreach (var n in new[] { "BustPreviewPane", "BustPreviewHeader", "BustPreviewOptions", "BustQualityBar", "BustBackdropBar", "BustPreviewResizer", "BustPreviewFrame" })
+            {
+                var el = (FrameworkElement)window.FindName(n);
+                _out.WriteLine($"  [{n}] {Drawn(window, el)} visible {el.IsVisible} desired {el.DesiredSize}");
+            }
             Assert.NotEmpty(options);
             Assert.All(options, o => Assert.True(o.At.Bottom <= content.ActualHeight + 0.5 && o.At.Right <= content.ActualWidth + 0.5,
                                                  $"{o.Name} is drawn at {o.At}, outside a window {content.ActualWidth:0}x{content.ActualHeight:0}"));
-
-            // Smaller, but still one of the sizes offered and pinned there.
-            Assert.True(preview.ActualWidth < JigglePreview.FixedSize * 2);
-            Assert.Contains(preview.ActualWidth / JigglePreview.FixedSize, SMSModForge.Services.EditorPrefs.ZoomSteps);
-            Assert.Equal(preview.Width, preview.MinWidth);
-
-            // The picker still says what was picked, and a line says what is shown.
-            var picker = (ComboBox)window.FindName("BustPreviewSizePicker");
-            Assert.Equal(2.0, picker.SelectedItem);
-            var note = (TextBlock)window.FindName("BustPreviewShrunkText");
-            _out.WriteLine("note: " + note.Text);
-            Assert.True(note.IsVisible, "nothing says the preview is smaller than the size picked");
+            Assert.True(drawn.Width < JigglePreview.FixedSize * 2 - 1, "the bust is drawn at the size dragged to, in a window too short for it");
+            var below = Options(window).Min(o => o.At.Top);
+            Assert.True(drawn.Bottom <= below + 0.5, $"the bust ({drawn.Bottom:0}) is drawn over the options ({below:0})");
         });
     }
 
     [Fact]
-    public void GivenRoomAgain_ItGoesBackToTheSizePicked()
+    public void GivenRoomAgain_ItGrowsBackToTheSizeDragged()
     {
         WindowHarness.Run(window =>
         {
-            var vm = (MainViewModel)window.DataContext;
             window.Width = 1400;
             window.Height = 700;
             ShowTab(window, "Characters");
-            vm.BustPreviewZoom = 2;
+            var (frame, preview) = Bust(window);
+            frame.Scale = 0.8;
             Settle(window);
-            var preview = Descendants<JigglePreview>(window).First();
-            Assert.True(preview.ActualWidth < JigglePreview.FixedSize * 2);
+            double small = Drawn(window, preview).Width;
 
-            Roomy(window);
+            window.Width = 3000;
+            window.Height = 1900;
             Settle(window);
-            _out.WriteLine($"roomy: preview {preview.ActualWidth:0}");
-            Assert.Equal(JigglePreview.FixedSize * 2, preview.ActualWidth);
-            Assert.False(((TextBlock)window.FindName("BustPreviewShrunkText")).IsVisible);
+            double big = Drawn(window, preview).Width;
+            _out.WriteLine($"short window: {small:0} wide; roomy: {big:0} wide (the bust's own {JigglePreview.FixedSize})");
+            Assert.True(small < JigglePreview.FixedSize * 0.8 - 1, "control: in the short window the bust was not smaller");
+            Assert.InRange(big, JigglePreview.FixedSize * 0.8 - 1, JigglePreview.FixedSize * 0.8 + 1);
         });
     }
 
     [Fact]
-    public void InANarrowWindow_TheOptionsStayInsideToo()
+    public void InANarrowWindow_TheOptionsAndTheBustStayInsideToo()
     {
         WindowHarness.Run(window =>
         {
-            var vm = (MainViewModel)window.DataContext;
             window.Width = window.MinWidth;
             window.Height = 1800;
             ShowTab(window, "Characters");
-            vm.BustPreviewZoom = 2;
+            Bust(window).frame.Scale = 2;
             Settle(window);
 
             var content = (FrameworkElement)window.Content;
             var options = Options(window);
-            _out.WriteLine($"window content {content.ActualWidth:0} wide, shown {vm.BustPreviewShownZoom}x");
+            _out.WriteLine($"window content {content.ActualWidth:0} wide");
             Assert.All(options, o => Assert.True(o.At.Right <= content.ActualWidth + 0.5,
                                                  $"{o.Name} ends at {o.At.Right:0}, past a window {content.ActualWidth:0} wide"));
-            var preview = Descendants<JigglePreview>(window).First();
-            var drawn = Drawn(window, preview);
-            Assert.True(drawn.Right <= content.ActualWidth + 0.5, $"the preview ends at {drawn.Right:0}, past the window");
+            var drawn = Drawn(window, Bust(window).preview);
+            Assert.True(drawn.Right <= content.ActualWidth + 0.5, $"the bust ends at {drawn.Right:0}, past the window");
         });
     }
 
-    [Theory]
-    [InlineData(2.0, 5000, 5000, 2.0)]    // room for it: as picked
-    [InlineData(2.0, 5000, 800, 1.5)]     // 1024 does not fit 800 tall; 768 does
-    [InlineData(2.0, 600, 5000, 1.0)]     // 512 is the widest that fits 600
-    [InlineData(1.0, 5000, 5000, 1.0)]    // never bigger than picked
-    [InlineData(2.0, 100, 100, 0.5)]      // nothing fits: the smallest
-    public void TheSizeShownIsTheLargestOfferedThatFits(double chosen, double wide, double tall, double shown)
+    [Fact]
+    public void EnlargedTheBustIsDrawnPixelByPixel_AndShrunkItIsSmoothed()
     {
-        Assert.Equal(shown, MainViewModel.FitBustPreviewZoom(chosen, SMSModForge.Services.EditorPrefs.ZoomSteps, wide, tall));
+        // Pixel by pixel whenever it is made bigger; made smaller, nearest
+        // neighbour would drop whole rows, so smoothed - by the frame, which the
+        // bust at its own size no longer overrules (it pinned nearest neighbour
+        // on itself until 1.9.1).
+        WindowHarness.Run(window =>
+        {
+            window.Width = 3000;
+            window.Height = 1900;
+            ShowTab(window, "Characters");
+            var (frame, preview) = Bust(window);
+            frame.Scale = 2;
+            Settle(window);
+            _out.WriteLine($"2x: frame {RenderOptions.GetBitmapScalingMode(frame)}, the bust's own {preview.ReadLocalValue(RenderOptions.BitmapScalingModeProperty)}");
+            Assert.Equal(BitmapScalingMode.NearestNeighbor, RenderOptions.GetBitmapScalingMode(frame));
+            Assert.Equal(DependencyProperty.UnsetValue, preview.ReadLocalValue(RenderOptions.BitmapScalingModeProperty));
+            frame.Scale = 0.5;
+            Settle(window);
+            Assert.Equal(BitmapScalingMode.HighQuality, RenderOptions.GetBitmapScalingMode(frame));
+        });
     }
 
     [Fact]
-    public void TheSizeIsRememberedAndOnlyEverOneThatWasOffered()
+    public void TheSplitterSharesTheTab_AndTheBustFollowsIt()
     {
-        SMSModForge.Services.EditorPrefs.BustPreviewZoom = 2;
-        Assert.Equal(2, SMSModForge.Services.EditorPrefs.BustPreviewZoom);
+        // A larger share for the preview: its column wider, the bust drawn bigger
+        // up to the size dragged to. Control: a smaller share draws it smaller.
+        double DrawnAt(double share)
+        {
+            EditorPrefs.CharactersPreviewSplit = share;
+            double width = 0;
+            WindowHarness.Run(window =>
+            {
+                window.Width = 1600;
+                window.Height = 1900;
+                ShowTab(window, "Characters");
+                Bust(window).frame.Scale = 2;
+                Settle(window);
+                width = Drawn(window, Bust(window).preview).Width;
+                _out.WriteLine($"share {share}: the bust drawn {width:0} wide");
+            });
+            return width;
+        }
+        double wide = DrawnAt(0.7), narrow = DrawnAt(0.3);
+        Assert.True(wide > narrow + 50, $"a larger share for the preview did not draw the bust larger ({wide:0} against {narrow:0})");
+    }
 
-        // A hand-edited file cannot make the preview a size nothing checked.
-        SMSModForge.Services.EditorPrefs.BustPreviewZoom = 7.3;
-        _out.WriteLine("after 7.3: " + SMSModForge.Services.EditorPrefs.BustPreviewZoom);
-        Assert.Equal(1, SMSModForge.Services.EditorPrefs.BustPreviewZoom);
+    [Fact]
+    public void TheSizeDraggedToIsRemembered_StartingFromTheOldPreviewSize()
+    {
+        // A preference file from before 1.9.1: the picker's size, nothing dragged.
+        EditorPrefs.SetPreviewScale("characters.bust", double.NaN);
+        var raw = typeof(EditorPrefs).GetMethod("SetDouble", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)!;
+        raw.Invoke(null, new object[] { "bustPreviewZoom", 1.5 });
+        Assert.Equal(1.5, EditorPrefs.GetPreviewScale("characters.bust"));
+        EditorPrefs.SetPreviewScale("characters.bust", 2);
+        Assert.Equal(2, EditorPrefs.GetPreviewScale("characters.bust"));
+        // Control: another preview does not take the old picker's size.
+        Assert.Equal(1, EditorPrefs.GetPreviewScale("maskStudio.npc-never-dragged"));
     }
 }

@@ -91,6 +91,16 @@ public static class EditorPrefs
         set => SetBool(KeyVariableNotes, value);
     }
 
+    private const string KeyShowPreviewFps = "showPreviewFps";
+
+    /// <summary>Whether the live previews show the frame rate they draw at
+    /// (1.9.1, Options; off by default).</summary>
+    public static bool ShowPreviewFps
+    {
+        get => GetBool(KeyShowPreviewFps, defaultValue: false);
+        set => SetBool(KeyShowPreviewFps, value);
+    }
+
     /// <summary>
     /// Whether Save shows the change list for confirmation first. On by
     /// default: the whole point is that an author who doesn't know the feature
@@ -454,26 +464,38 @@ public static class EditorPrefs
         SetString(KeyTutorialsDone, string.Join(",", all));
     }
 
+    /// <summary>The Characters tab's bust preview was sized from a picker
+    /// until 1.9.1 (a multiple of its own size, in the steps below); its frame
+    /// starts from what was picked there (<see cref="GetPreviewScale"/>).</summary>
     private const string KeyBustPreviewZoom = "bustPreviewZoom";
 
-    /// <summary>
-    /// How big the bust preview is drawn, as a multiple of its own size.
-    /// <para/>
-    /// One by default, which is the size it was fixed at before this and the
-    /// only one that puts a bitmap pixel on a screen pixel. Remembered because
-    /// an author who wants a closer look at a mask wants it on every outfit,
-    /// not once. Read back through the same steps it is offered in, so a hand-
-    /// edited file cannot produce a size the preview was never checked at.
-    /// </summary>
-    public static double BustPreviewZoom
+    private const string KeyCharactersPreviewSplit = "charactersPreviewSplit";
+
+    /// <summary>The share of the outfit's fields and the bust preview the
+    /// preview takes on the Characters tab (1.9.1), as its splitter was last
+    /// left; three sevenths by default.</summary>
+    public static double CharactersPreviewSplit
     {
         get
         {
-            double saved = GetDouble(KeyBustPreviewZoom, 1);
-            foreach (double step in ZoomSteps) if (Math.Abs(step - saved) < 0.001) return step;
-            return 1;
+            double v = GetDouble(KeyCharactersPreviewSplit, 3.0 / 7.0);
+            return double.IsNaN(v) || v < 0.15 || v > 0.85 ? 3.0 / 7.0 : v;
         }
-        set => SetDouble(KeyBustPreviewZoom, value);
+        set => SetDouble(KeyCharactersPreviewSplit, Math.Clamp(value, 0.15, 0.85));
+    }
+
+    private const string KeyNpcsPreviewSplit = "npcsPreviewSplit";
+
+    /// <summary>The same on the NPCs tab (1.9.1): the share of the NPC's fields
+    /// and its preview the preview takes; three sevenths by default.</summary>
+    public static double NpcsPreviewSplit
+    {
+        get
+        {
+            double v = GetDouble(KeyNpcsPreviewSplit, 3.0 / 7.0);
+            return double.IsNaN(v) || v < 0.15 || v > 0.85 ? 3.0 / 7.0 : v;
+        }
+        set => SetDouble(KeyNpcsPreviewSplit, Math.Clamp(value, 0.15, 0.85));
     }
 
     /// <summary>The sizes the preview is offered at. Whole steps are exact;
@@ -494,6 +516,8 @@ public static class EditorPrefs
     /// preview's name; 1 for its own size.</summary>
     public static double GetPreviewScale(string preview, double unset = 1)
     {
+        // The Characters tab's bust, never dragged yet: from its old Preview size.
+        if (preview == "characters.bust") unset = GetDouble(KeyBustPreviewZoom, unset);
         double scale = GetDouble("previewScale." + preview, unset);
         return double.IsNaN(scale) || scale <= 0 ? unset : scale;
     }

@@ -309,6 +309,10 @@ game.notice.news.1.8.2 = La conversation d'un pack ne démarre plus par-dessus c
 # en: Screens from packs now sit where their authors put them, and their changes to the game's own screens all show up.\nA pack's place no longer plays its arrival in the room you are still in when the game refuses the trip.
 game.notice.news.1.8.3 = Les écrans des packs apparaissent désormais là où leurs auteurs les ont placés, et leurs changements sur les écrans du jeu s'affichent en entier.\nUn lieu d'un pack ne joue plus son arrivée dans la pièce où vous êtes encore quand le jeu refuse le trajet.
 
+# What ModForge 1.9.1 changes for players, one line each (\n starts the next)
+# en: Characters from packs now cast their own shadows, and their movement is no longer cut off at the edges of their art.
+game.notice.news.1.9.1 = Les personnages des packs projettent désormais leur propre ombre, et leur mouvement n'est plus coupé aux bords de leur image.
+
 [Where an NPC stands]
 
 # Text
@@ -2783,6 +2787,10 @@ menu.checkForUpdates = Chercher les mises à jour _maintenant
 # en: _Preview quality
 menu.previewQuality = _Qualité de l'aperçu
 
+# Menu item
+# en: Preview _backdrop
+menu.previewBackdrop = _Fond de l'aperçu
+
 # Tooltip on a text
 # en: The game build this ModForge version targets. Saved packs are stamped with it; the in-game Mods banner flags packs whose stamp doesn't match the running game.
 menu.gameBuildModforgeVersion.tip = La build du jeu que vise cette version de ModForge. Les packs enregistrés portent cette marque ; la bannière Mods en jeu signale les packs dont la marque ne correspond pas au jeu lancé.
@@ -2916,48 +2924,152 @@ menu.dialogueRowsLookLike.tip = Dessiner chaque réplique de la liste des nœuds
 menu.checkForUpdates.tip = Demander tout de suite, et répondre dans les deux cas.
 
 # Tooltip on "_Preview quality"
-# en: Trade live-preview smoothness for CPU. Your choice is remembered between sessions.
-menu.previewQuality.tip = Échanger la fluidité de l'aperçu en direct contre du processeur. Votre choix est mémorisé d'une session à l'autre.
+# en: How much of the game's look the live previews draw: less asks less of the computer. Your choice is remembered between sessions.
+menu.previewQuality.tip = Quelle part du rendu du jeu les aperçus en direct dessinent : moins en demande moins à l'ordinateur. Votre choix est conservé d'une session à l'autre.
+
+# Tooltip on "Preview _backdrop"
+# en: What the bust preview draws a bust over. Your choice is remembered between sessions.
+menu.previewBackdrop.tip = Sur quoi l'aperçu du buste dessine un buste. Votre choix est conservé d'une session à l'autre.
+
+# Options menu, a tick: each live preview shows the frame rate it draws at
+# en: Show preview _frame rate
+menu.showPreviewFps = Affic_her les images par seconde des aperçus
+
+# Tooltip on that menu item
+# en: Show, in a corner of each live preview, how many pictures a second it is drawing. Off by default; your choice is remembered between sessions.
+menu.showPreviewFps.tip = Affiche, dans un coin de chaque aperçu en direct, combien d'images par seconde il dessine. Désactivé par défaut ; votre choix est mémorisé d'une session à l'autre.
+
+# In a corner of a live preview: the frame rate it is drawing at ({rate}: a whole number)
+# en: {rate} fps
+preview.fps = {rate} i/s
+
+# Options menu: what draws the live previews (a submenu: Automatic, Graphics card, Processor)
+# en: D_raw previews on
+menu.previewRenderer = _Dessiner les aperçus avec
+
+# Tooltip on that menu item
+# en: What draws the live previews: the graphics card or the processor. Automatic times both when the editor starts and takes the faster. Your choice is remembered between sessions.
+menu.previewRenderer.tip = Ce qui dessine les aperçus en direct : la carte graphique ou le processeur. Automatique chronomètre les deux au démarrage de l'éditeur et prend le plus rapide. Votre choix est conservé d'une session à l'autre.
+
+# Under Draw previews on: let the editor choose
+# en: Automatic
+previewRenderer.automatic = Automatique
+
+# Tooltip on that choice
+# en: Times the graphics card and the processor when the editor starts, and draws the previews on whichever is faster on this PC.
+previewRenderer.automatic.tip = Chronomètre la carte graphique et le processeur au démarrage de l'éditeur, et dessine les aperçus sur le plus rapide des deux sur ce PC.
+
+# Under Draw previews on: the graphics card
+# en: Graphics card
+previewRenderer.card = Carte graphique
+
+# Tooltip on that choice
+# en: Draws the previews on the graphics card, running the game's own programs as the game does. On a PC without a card that can, the processor draws them.
+previewRenderer.card.tip = Dessine les aperçus sur la carte graphique, en exécutant les propres programmes du jeu comme le fait le jeu. Sur un PC sans carte qui en soit capable, c'est le processeur qui les dessine.
+
+# Under Draw previews on: the processor
+# en: Processor
+previewRenderer.processor = Processeur
+
+# Tooltip on that choice
+# en: Draws the previews on the processor.
+previewRenderer.processor.tip = Dessine les aperçus sur le processeur.
+
+# Before the preview backdrop buttons, at the bottom of the bust preview's options
+# en: Backdrop
+previewBackdrop.bar = Fond
+
+# Tooltip on that word
+# en: What the bust preview draws the bust over. One setting, the same as Options > Preview backdrop.
+previewBackdrop.bar.tip = Sur quoi l'aperçu du buste dessine le buste. Un seul réglage, le même que Options > Fond de l'aperçu.
+
+# A preview backdrop, in the menu: the PC's room in the game (PC: the player character, whose room it is)
+# en: PC's room
+previewBackdrop.room = Chambre du PJ
+
+# Tooltip on that preview backdrop
+# en: The bust in the PC's room (the player character's), as the game draws it there: the room behind it, its lamps' light on the bust, and the glow the bust's edges take from what is behind them. The preview shows the part of the game's screen the bust is in, so its lowest rows are off the bottom, as in the game.
+previewBackdrop.room.tip = Le buste dans la chambre du PJ (le personnage joueur), comme le jeu l'y dessine : la chambre derrière, la lumière de ses lampes sur le buste, et la lueur que les bords du buste prennent à ce qui est derrière eux. L'aperçu montre la partie de l'écran du jeu où se trouve le buste, donc ses rangées les plus basses sortent par le bas, comme dans le jeu.
+
+# A preview backdrop, in the menu: the Beach, one of the game's places (the game's own name for it)
+# en: Beach
+previewBackdrop.beach = Plage
+
+# Tooltip on that preview backdrop
+# en: The bust on the Beach, one of the game's places, as the game draws it there: the beach behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.beach.tip = Le buste sur la Plage (« Beach » dans le jeu), l'un des lieux du jeu, comme le jeu l'y dessine : la plage derrière, et la lueur que les bords du buste prennent à ce qui est derrière eux. Ses parties mobiles restent immobiles.
+
+# A preview backdrop, in the menu: the Forest, one of the game's places (the game's own name for it)
+# en: Forest
+previewBackdrop.forest = Forêt
+
+# Tooltip on that preview backdrop
+# en: The bust in the Forest, one of the game's places, as the game draws it there: the forest behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.forest.tip = Le buste dans la Forêt (« Forest » dans le jeu), l'un des lieux du jeu, comme le jeu l'y dessine : la forêt derrière, et la lueur que les bords du buste prennent à ce qui est derrière eux. Ses parties mobiles restent immobiles.
+
+# A preview backdrop, in the menu: the inside of the Villa, one of the game's places (the game calls it "Villa (Inside)")
+# en: Villa
+previewBackdrop.villa = Villa
+
+# Tooltip on that preview backdrop
+# en: The bust inside the Villa, one of the game's places, as the game draws it there: the room behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.villa.tip = Le buste à l'intérieur de la Villa (« Villa (Inside) » dans le jeu), l'un des lieux du jeu, comme le jeu l'y dessine : la pièce derrière, et la lueur que les bords du buste prennent à ce qui est derrière eux. Ses parties mobiles restent immobiles.
+
+# A preview backdrop, in the menu: the inside of the Temple, one of the game's places (the game calls it "Temple (Inside)")
+# en: Temple
+previewBackdrop.temple = Temple
+
+# Tooltip on that preview backdrop
+# en: The bust inside the Temple, one of the game's places, as the game draws it there: the temple behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.temple.tip = Le buste à l'intérieur du Temple (« Temple (Inside) » dans le jeu), l'un des lieux du jeu, comme le jeu l'y dessine : le temple derrière, et la lueur que les bords du buste prennent à ce qui est derrière eux. Ses parties mobiles restent immobiles.
+
+# A preview backdrop, in the menu: no backdrop at all
+# en: None
+previewBackdrop.none = Aucun
+
+# Tooltip on that preview backdrop
+# en: The bust alone, all of its picture, with nothing behind it.
+previewBackdrop.none.tip = Le buste seul, toute son image, sans rien derrière.
 
 # A preview quality, in the menu
 # en: Ultra
 previewQuality.ultra = Ultra
 
 # Tooltip on that preview quality
-# en: 60 fps, 4× anti-aliasing. Smoothest motion, highest CPU.
-previewQuality.ultra.tip = 60 i/s, anticrénelage 4×. Le mouvement le plus fluide, le plus de processeur.
+# en: The game's look in full, as the game draws it: the edge glow, the bloom, the light streaks and the colour. The most work for the computer. With no backdrop, a bust or an NPC is drawn as finely as the game draws it on a large screen.
+previewQuality.ultra.tip = Le rendu du jeu au complet, tel que le jeu le dessine : la lueur des bords, le bloom, les traînées de lumière et la couleur. Le plus de travail pour l'ordinateur. Sans fond, un buste ou un PNJ est dessiné aussi finement que le jeu le dessine sur un grand écran.
 
 # A preview quality, in the menu
 # en: High
 previewQuality.high = Élevée
 
 # Tooltip on that preview quality
-# en: 30 fps, 4× anti-aliasing. Same fidelity as Ultra at ~half the CPU.
-previewQuality.high.tip = 30 i/s, anticrénelage 4×. Même fidélité qu'Ultra pour environ la moitié du processeur.
+# en: Everything but the light streaks. On the processor, the edge glow is worked out more quickly, leaving the bust's shadow out of it. With no backdrop, half the work: the rows stay as fine as the game's.
+previewQuality.high.tip = Tout sauf les traînées de lumière. Sur le processeur, la lueur des bords est calculée plus vite, sans l'ombre du buste. Sans fond, la moitié du travail : les rangées restent aussi fines que dans le jeu.
 
 # A preview quality, in the menu
 # en: Medium
 previewQuality.medium = Moyenne
 
 # Tooltip on that preview quality
-# en: 30 fps, no anti-aliasing. Slight motion-edge shimmer; much lighter.
-previewQuality.medium.tip = 30 i/s, sans anticrénelage. Léger scintillement sur les bords en mouvement ; beaucoup plus léger.
+# en: The default: also without the bloom. Light on the computer, and close to the game. With no backdrop, a quarter of the work: moving rows step a little more coarsely than in the game.
+previewQuality.medium.tip = Par défaut : en plus, sans le bloom. Légère pour l'ordinateur, et proche du jeu. Sans fond, un quart du travail : les rangées qui bougent avancent par pas un peu plus grossiers que dans le jeu.
 
 # A preview quality, in the menu
 # en: Low
 previewQuality.low = Basse
 
 # Tooltip on that preview quality
-# en: 20 fps, no anti-aliasing. Lightest; choppier motion.
-previewQuality.low.tip = 20 i/s, sans anticrénelage. Le plus léger ; mouvement plus saccadé.
+# en: The lightest: also without the glow a bust's edges take from the backdrop. The colour and the bust's shadow stay. With no backdrop, one point for every four pixels.
+previewQuality.low.tip = La plus légère : en plus, sans la lueur que les bords d'un buste prennent au fond. La couleur et l'ombre du buste restent. Sans fond, un point pour quatre pixels.
 
 # Before the preview quality buttons under a live preview
 # en: Quality
 previewQuality.bar = Qualité
 
 # Tooltip on that word
-# en: How smoothly the live previews are drawn: higher is smoother and asks more of the computer. One setting for every preview, the same as Options > Preview quality.
-previewQuality.bar.tip = La fluidité des aperçus en direct : plus haut est plus fluide et demande plus à l'ordinateur. Un seul réglage pour tous les aperçus, le même qu'Options > Qualité de l'aperçu.
+# en: How much of the game's look the live previews draw: higher is closer to the game and asks more of the computer. They move as smoothly as your display at every quality. One setting for every preview, the same as Options > Preview quality.
+previewQuality.bar.tip = Quelle part du rendu du jeu les aperçus en direct dessinent : plus haut est plus proche du jeu et en demande plus à l'ordinateur. Ils bougent aussi fluidement que votre écran à chaque qualité. Un seul réglage pour tous les aperçus, le même que Options > Qualité de l'aperçu.
 
 # A colour theme, in the Themes menu
 # en: Light
@@ -3813,10 +3925,6 @@ characters.wetParticleActiveSpawn = Particules mouillées actives à l'apparitio
 # en: (The Wet preset is always attached — this controls whether it starts playing.)
 characters.wetPresetAlwaysAttached = (Le modèle Mouillé est toujours attaché – ceci décide s'il commence à jouer.)
 
-# Label over the preview's size picker
-# en: Preview size
-characters.previewSize = Taille de l'aperçu
-
 # Text
 # en: Mouth frame
 characters.mouthFrame = Image de bouche
@@ -3833,9 +3941,21 @@ characters.yappingToggle = Bavardage
 # en: Blinking
 characters.blinkToggle = Clignement
 
+# Tooltip on the divider between the outfit's fields and the bust preview
+# en: Drag to give the preview more or less of the tab: the bust scales to fit, no bigger than the size its corner is dragged to. Remembered.
+characters.previewSplitter.tip = Faites glisser pour donner à l'aperçu plus ou moins de place dans l'onglet : le buste est mis à l'échelle pour tenir, sans dépasser la taille à laquelle son coin a été tiré. Mémorisé.
+
 # Tick box
 # en: Breathing
 characters.breathingToggle = Respiration
+
+# Tick box under the bust preview: play the game's fade-in when a bust appears
+# en: Fade in
+characters.fadeInToggle = Fondu d'entrée
+
+# Tooltip on that tick box
+# en: Show the bust appearing as the game shows it: a dark silhouette fades in over a second, then the character fades in from it over three. Plays each time an outfit is shown, and when this is ticked. Preview only.
+characters.fadeInToggle.tip = Montrer le buste qui apparaît comme le jeu le montre : une silhouette sombre apparaît en fondu en une seconde, puis le personnage en émerge en trois. Se joue chaque fois qu'une tenue est affichée, et quand ceci est coché. Aperçu seulement.
 
 # Text
 # en: Depth
@@ -4101,14 +4221,6 @@ characters.resetJiggle.tip = Remettre la valeur avec laquelle commence une nouve
 # en: When checked, the Wet particle system (cloned from Anna_Towel) starts active. Typically enabled only for swim/wet outfit variants.
 characters.wetParticleActiveSpawn.tip = Coché, le système de particules Mouillé (cloné depuis Anna_Towel) démarre actif. En général activé seulement pour les variantes de tenue de baignade ou mouillées.
 
-# Under the preview's size picker, only when the window is too small for the size picked. {shown} and {chosen} are sizes, like 1× and 2×
-# en: Shown at {shown}: the window is too small for {chosen}. It goes back to {chosen} when there is room.
-characters.previewSize.shrunk = Affiché à {shown} : la fenêtre est trop petite pour {chosen}. Il revient à {chosen} dès qu'il y a la place.
-
-# Tooltip on the preview's size picker
-# en: How big the bust is drawn. 1× puts one of the preview's pixels on one of the screen's, which is the sharpest it gets; 2× doubles every pixel and is just as exact. The half steps in between have to be resampled, so they look a little softer. The panel grows with it, and the choice is remembered.
-characters.previewSize.tip = La taille à laquelle le buste est dessiné. 1× met un pixel de l'aperçu sur un pixel de l'écran, le plus net possible ; 2× double chaque pixel et reste tout aussi exact. Les demi-crans entre les deux doivent être rééchantillonnés, ils paraissent donc un peu plus doux. Le panneau grandit avec, et le choix est mémorisé.
-
 # Tooltip on a dropdown
 # en: Show the bust holding one particular mouth frame. Preview only - it changes nothing in the pack.
 characters.mouthPicker.tip = Montrer le buste avec une image de bouche précise. Aperçu seulement – rien ne change dans le pack.
@@ -4122,12 +4234,12 @@ characters.yappingToggle.tip = Animer la bouche dans l'aperçu, comme elle bouge
 characters.breathingToggle.tip = Jouer le mouvement de respiration au repos dans l'aperçu. Aperçu seulement.
 
 # Tooltip on a slider
-# en: Preview-only: how far the bust bobs, in preview pixels. Match it to the game by eye.
-characters.breathingDepth.tip = Aperçu seulement : de combien le buste monte et descend, en pixels d'aperçu. Ajustez à l'œil sur le jeu.
+# en: Preview-only: how far the bust bobs, in preview pixels. The game's is 5; it gives each bust up to a tenth less.
+characters.breathingDepth.tip = Aperçu seulement : de combien le buste monte et descend, en pixels d'aperçu. Celle du jeu est 5 ; il donne à chaque buste jusqu'à un dixième de moins.
 
 # Tooltip on a button
-# en: Put the depth back to its default (4).
-characters.resetBreathingDepth.tip = Remettre l'amplitude à sa valeur par défaut (4).
+# en: Put the depth back to the game's (5).
+characters.resetBreathingDepth.tip = Remettre la profondeur à celle du jeu (5).
 
 # Tooltip on a dropdown
 # en: Show the bust in one particular expression. Preview only - it changes nothing in the pack.
@@ -4302,6 +4414,10 @@ npcs.startActive = Actif au départ
 # Text
 # en: Emitter offset / rotation / scale are per-placement — edit the Wet transform on the Places tab.
 npcs.emitterOffsetRotationScale = Décalage / rotation / échelle de l'émetteur sont par placement – modifiez la transformation Mouillé dans l'onglet Lieux.
+
+# Tooltip on the divider between the NPC's fields and its preview
+# en: Drag to give the preview more or less of the tab: the NPC scales to fit, no bigger than the size its corner is dragged to. Remembered.
+npcs.previewSplitter.tip = Faites glisser pour donner à l'aperçu plus ou moins de place dans l'onglet : le PNJ est mis à l'échelle pour tenir, sans dépasser la taille à laquelle son coin a été tiré. Mémorisé.
 
 # Heading
 # en: Preview (live jiggle + shadow + blink)
@@ -4492,6 +4608,38 @@ places.extParallaxPreview = Parallaxe dans l'aperçu
 # Tick box
 # en: Apply shaders
 places.extShaders = Appliquer les shaders
+
+# Before the game look tick boxes under a place preview
+# en: Game look:
+places.look = Rendu du jeu :
+
+# Tooltip on that word
+# en: The post-processing the game draws over every place, as it draws it. Each part is drawn while ticked and the preview quality draws it: Ultra all three, High without the light streaks, Medium and Low the colour only.
+places.look.tip = Le post-traitement que le jeu dessine sur chaque lieu, tel qu'il le dessine. Chaque partie est dessinée tant qu'elle est cochée et que la qualité de l'aperçu la dessine : Ultra les trois, Élevée sans les traînées de lumière, Moyenne et Basse la couleur seulement.
+
+# Tick box under a place preview: the game's bloom
+# en: Bloom
+places.lookBloom = Bloom
+
+# Tooltip on that tick box
+# en: The soft glow the game spreads around bright parts of the picture. Drawn at High preview quality and up.
+places.lookBloom.tip = La douce lueur que le jeu répand autour des parties claires de l'image. Dessinée à partir de la qualité d'aperçu Élevée.
+
+# Tick box under a place preview: the game's anamorphic flares
+# en: Light streaks
+places.lookFlares = Traînées de lumière
+
+# Tooltip on that tick box
+# en: The long upright streaks the game draws from the brightest parts of the picture. Drawn at Ultra preview quality.
+places.lookFlares.tip = Les longues traînées verticales que le jeu dessine depuis les parties les plus lumineuses de l'image. Dessinées à la qualité d'aperçu Ultra.
+
+# Tick box under a place preview: the game's colour grading
+# en: Colour
+places.lookColour = Couleur
+
+# Tooltip on that tick box
+# en: The game's colour: its tonemapping, the darkened corners and its grading, which every place on screen goes through.
+places.lookColour.tip = La couleur du jeu : son mappage des tons, les coins assombris et son étalonnage, par lesquels passe chaque lieu à l'écran.
 
 # Box heading
 # en: Vanilla source
@@ -9166,8 +9314,8 @@ maskStudio.invert.tip = Échange fort et faible sur le calque en cours (I) : ce 
 maskStudio.soften = Tout adoucir
 
 # Tooltip on that button
-# en: Blur the whole layer being painted a little, smoothing hard edges where the effect would tear. Press it again for more; the Soften brush does the same only where you paint.
-maskStudio.soften.tip = Floute un peu tout le calque en cours et lisse les bords durs où l'effet se déchirerait. Appuyez encore pour davantage ; le pinceau Adoucir fait de même seulement là où vous peignez.
+# en: Blur the whole layer being painted a little, smoothing hard edges where the effect would tear. Press it again for more. To soften only some edges, and never past a softness you set, use the Soften brush.
+maskStudio.soften.tip = Floute un peu tout le calque en cours et lisse les bords durs où l'effet se déchirerait. Appuyez encore pour davantage. Pour n'adoucir que certains bords, et jamais au-delà d'une douceur que vous réglez, utilisez le pinceau adoucissant.
 
 # A tick: paint both halves at once
 # en: Mirror
@@ -9238,8 +9386,16 @@ maskStudio.status.soften = Pinceau adoucissant sur {layer}
 maskStudio.toolSoften = Adoucir (S)
 
 # Tooltip
-# en: A brush that smooths what it passes over instead of painting: each stroke pulls the layer towards a blur of itself, as far as Opacity says. Go over a place again for more.
-maskStudio.toolSoften.tip = Un pinceau qui lisse ce qu'il traverse au lieu de peindre : chaque trait rapproche le calque d'une version floutée de lui-même, autant que le dit l'opacité. Repassez au même endroit pour davantage.
+# en: A brush that smooths the edges it passes over instead of painting, to the Edge softness set for it. Going over an edge again never softens it further: raise Edge softness for a softer edge, or lower it and go over the edge to tighten it again.
+maskStudio.toolSoften.tip = Un pinceau qui lisse les bords qu'il traverse au lieu de peindre, jusqu'à la Douceur des bords réglée pour lui. Repasser sur un bord ne l'adoucit jamais davantage : augmentez la Douceur des bords pour un bord plus doux, ou baissez-la et repassez sur le bord pour le resserrer.
+
+# Text: the slider that takes Opacity's place while the soften brush is the tool
+# en: Edge softness
+maskStudio.softness = Douceur des bords
+
+# Tooltip on that slider
+# en: How soft an edge the Soften brush leaves, in pixels of the mask: a hard edge it passes over fades from nothing to full across about this many pixels. Going over it again never takes it further.
+maskStudio.softness.tip = La douceur du bord que laisse le pinceau adoucissant, en pixels du masque : un bord dur qu'il traverse passe de rien à plein sur environ ce nombre de pixels. Repasser dessus ne va jamais plus loin.
 
 # One line of the hotkeys list: the key, two spaces, what it does
 # en: S  soften brush
@@ -9894,8 +10050,8 @@ docs.maskPainter.realArtUnderneathThere = Le vrai visuel en dessous, là pour d�
 docs.maskPainter.brushEraserSizeHardness.term = Outils
 
 # Docs: a point in the topic
-# en: A brush, an eraser and a soften brush, with Size, Hardness and Opacity. The soften brush smooths what it passes over instead of painting, as far as Opacity says. Zoom changes how close you are working, not what is painted.
-docs.maskPainter.brushEraserSizeHardness = Un pinceau, une gomme et un pinceau adoucissant, avec Taille, Dureté et Opacité. Le pinceau adoucissant lisse ce qu'il traverse au lieu de peindre, autant que le dit l'opacité. Le zoom change la distance à laquelle vous travaillez, pas ce qui est peint.
+# en: A brush, an eraser and a soften brush, with Size and Hardness. The brush and eraser have Opacity; the soften brush has Edge softness in its place: it smooths the edges it passes over to that softness and never past it, however often you go over them. Zoom changes how close you are working, not what is painted.
+docs.maskPainter.brushEraserSizeHardness = Un pinceau, une gomme et un pinceau adoucissant, avec Taille et Dureté. Le pinceau et la gomme ont l'Opacité ; le pinceau adoucissant a la Douceur des bords à sa place : il lisse les bords qu'il traverse jusqu'à cette douceur et jamais au-delà, quel que soit le nombre de passages. Le zoom change la distance à laquelle vous travaillez, pas ce qui est peint.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Cap at opacity
@@ -10140,8 +10296,12 @@ docs.previews.theyDoNotRun = Ils n'exécutent pas la logique du jeu. Les conditi
 docs.previews.previewsResolveImagePaths = Les aperçus résolvent les chemins d'images par rapport au dossier du pack, ils restent donc vides tant que le pack n'a pas été enregistré.
 
 # Docs: a point in the topic
-# en: Preview quality on the Options menu trades smoothness against processor load. The Quality buttons above each live preview are the same setting.
-docs.previews.previewQualityOptionsMenu = Qualité de l'aperçu, dans le menu Options, arbitre entre fluidité et charge du processeur. Les boutons Qualité au-dessus de chaque aperçu en direct sont le même réglage.
+# en: Preview quality on the Options menu chooses how much of the game's look the previews draw, against processor load. The Quality buttons above each live preview are the same setting.
+docs.previews.previewQualityOptionsMenu = La qualité de l'aperçu dans le menu Options choisit quelle part du rendu du jeu les aperçus dessinent, contre la charge du processeur. Les boutons Qualité au-dessus de chaque aperçu en direct sont le même réglage.
+
+# Docs: a point in the topic
+# en: The place previews draw the game's look over the place, as the game does over every place: its bloom, its light streaks and its colour. Each has a tick box under the preview, and each is drawn only when its box is ticked and the preview quality draws it.
+docs.previews.placesGameLook = Les aperçus des lieux dessinent le rendu du jeu par-dessus le lieu, comme le jeu le fait sur chaque lieu : son bloom, ses traînées de lumière et sa couleur. Chacun a une case sous l'aperçu, et n'est dessiné que si sa case est cochée et que la qualité de l'aperçu le dessine.
 
 [Docs: File menu]
 
@@ -10354,8 +10514,24 @@ docs.optionsMenu.addEveryCharacterPlace = Ajouter d'un coup à votre dictionnair
 docs.optionsMenu.tradePreviewSmoothnessAgainst.term = Qualité de l'aperçu
 
 # Docs: a point in the topic
-# en: Trade preview smoothness against processor load: Ultra (60 fps, anti-aliased), High (30 fps, anti-aliased), Medium (30 fps, no anti-aliasing), Low (20 fps, no anti-aliasing).
-docs.optionsMenu.tradePreviewSmoothnessAgainst = Arbitrer entre fluidité de l'aperçu et charge du processeur : Ultra (60 fps, anticrénelé), Élevée (30 fps, anticrénelé), Moyenne (30 fps, sans anticrénelage), Basse (20 fps, sans anticrénelage).
+# en: Choose how much of the game's look the previews draw, against processor load. Every quality draws as many frames as your display shows. Ultra is the game's own picture: the edge glow, bloom, light streaks and colour. High leaves out the light streaks, and on the processor works the edge glow out more quickly, without the bust's shadow in it; Medium leaves out the bloom too; Low the edge glow as well. With no backdrop the qualities save work too: Ultra draws a bust or an NPC as finely as the game does on a large screen, High with half the work, Medium a quarter, and Low one point for every four pixels.
+docs.optionsMenu.tradePreviewSmoothnessAgainst = Choisissez quelle part du rendu du jeu les aperçus dessinent, contre la charge du processeur. Chaque qualité dessine autant d'images que votre écran en affiche. Ultra est l'image même du jeu : la lueur des bords, le bloom, les traînées de lumière et la couleur. Élevée laisse de côté les traînées de lumière et, sur le processeur, calcule la lueur des bords plus vite, sans l'ombre du buste ; Moyenne laisse aussi de côté le bloom ; Basse, en plus, la lueur des bords. Sans fond, les qualités économisent aussi du travail : Ultra dessine un buste ou un PNJ aussi finement que le jeu sur un grand écran, Élevée avec la moitié du travail, Moyenne un quart, et Basse un point pour quatre pixels.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Preview backdrop
+docs.optionsMenu.previewBackdrop.term = Fond de l'aperçu
+
+# Docs: a point in the topic
+# en: What the bust preview draws a bust over. The PC's room, the default, shows it as the game does there: the room behind, the light of its lamps, the glow its edges take from the room, and its breathing moving it over the room. The Beach, the Forest, the Villa and the Temple do the same in four more of the game's places, each with its own look. None shows the bust alone. The Backdrop buttons at the bottom of the Characters tab are the same setting, and the mask painter's preview follows it too.
+docs.optionsMenu.previewBackdrop = Sur quoi l'aperçu du buste dessine un buste. La chambre du PJ, par défaut, le montre comme le jeu le fait là : la chambre derrière, la lumière de ses lampes, la lueur que ses bords prennent à la chambre, et sa respiration qui le déplace au-dessus de la chambre. Plage, Forêt, Villa et Temple font de même dans quatre autres lieux du jeu, chacun avec son propre rendu. Aucun montre le buste seul. Les boutons Fond en bas de l'onglet Personnages sont le même réglage, et l'aperçu du peintre de masques le suit aussi.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Draw previews on
+docs.optionsMenu.previewRenderer.term = Dessiner les aperçus avec
+
+# Docs: a point in the topic
+# en: What draws the live previews. Automatic, the default, times the graphics card and the processor when the editor starts and uses the faster. On the graphics card the previews run the game's own programs; the first time, it takes a few seconds to prepare them.
+docs.optionsMenu.previewRenderer = Ce qui dessine les aperçus en direct. Automatique, par défaut, chronomètre la carte graphique et le processeur au démarrage de l'éditeur et prend le plus rapide. Sur la carte graphique, les aperçus exécutent les propres programmes du jeu ; la première fois, il faut quelques secondes pour les préparer.
 
 # Docs: a heading inside the topic
 # en: Worth knowing
@@ -27411,6 +27587,21 @@ vhint.Cooldown3.tonygarage-cd = Verrou quotidien sur la discussion du mercredi d
 vhint.Cooldown3.evelyn-dailysmollexperi = Verrou quotidien sur 'Any experiments that require my help?' dans le labo d'Evelyn : mis quand elle choisit une expérience, réinitialisé chaque nuit.
 
 [Not used by this version]
+
+# en: Haunted House
+previewBackdrop.hauntedHouse = Maison hantée
+
+# en: The bust in the Haunted House by the Harbor, one of the game's places, as the game draws it there: the house behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.hauntedHouse.tip = Le buste dans la Maison hantée du port (« Harbor Haunted House » dans le jeu), l'un des lieux du jeu, comme le jeu l'y dessine : la maison derrière, et la lueur que les bords du buste prennent à ce qui est derrière eux. Ses parties mobiles restent immobiles.
+
+# en: Preview size
+characters.previewSize = Taille de l'aperçu
+
+# en: Shown at {shown}: the window is too small for {chosen}. It goes back to {chosen} when there is room.
+characters.previewSize.shrunk = Affiché à {shown} : la fenêtre est trop petite pour {chosen}. Il revient à {chosen} dès qu'il y a la place.
+
+# en: How big the bust is drawn. 1× puts one of the preview's pixels on one of the screen's, which is the sharpest it gets; 2× doubles every pixel and is just as exact. The half steps in between have to be resampled, so they look a little softer. The panel grows with it, and the choice is remembered.
+characters.previewSize.tip = La taille à laquelle le buste est dessiné. 1× met un pixel de l'aperçu sur un pixel de l'écran, le plus net possible ; 2× double chaque pixel et reste tout aussi exact. Les demi-crans entre les deux doivent être rééchantillonnés, ils paraissent donc un peu plus doux. Le panneau grandit avec, et le choix est mémorisé.
 
 # en: Only {layer}
 maskStudio.copyLayer.one = {layer} seulement

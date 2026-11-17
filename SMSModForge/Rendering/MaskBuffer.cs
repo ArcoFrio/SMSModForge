@@ -116,6 +116,7 @@ public sealed class MaskBuffer
     public void FromBgra(byte[] src)
     {
         if (src.Length != Size * Size * 4) throw new ArgumentException("size mismatch", nameof(src));
+        ForgetSoftening();
         if (Kind == MaskKind.LevelAlpha)
         {
             // Alpha straight in, no premultiply: it is the payload, not a
@@ -133,5 +134,38 @@ public sealed class MaskBuffer
         }
     }
 
-    public void ClearChannel(int idx) => Array.Clear(Channel(idx));
+    public void ClearChannel(int idx)
+    {
+        Array.Clear(Channel(idx));
+        _unsoftened[idx] = null;
+    }
+
+    // ───────────────────────── before the soften brush (1.9.1)
+
+    /// <summary>
+    /// Each layer as it would be had no soften stroke touched it: what the
+    /// soften brush softens, so that going over an edge again never takes it
+    /// past the softness asked for. A brush or eraser stroke is painted on it
+    /// too, so softening after painting starts from what was painted. Null for a
+    /// layer no soften stroke has touched since it was last changed as a whole -
+    /// it is then the layer itself.
+    /// </summary>
+    private readonly byte[]?[] _unsoftened = new byte[]?[3];
+
+    /// <summary>The layer before the soften brush, or null when it is the layer itself.</summary>
+    public byte[]? Unsoftened(int idx)
+    {
+        Channel(idx);
+        return _unsoftened[idx];
+    }
+
+    public void SetUnsoftened(int idx, byte[]? layer)
+    {
+        if (layer != null && layer.Length != Size * Size) throw new ArgumentException("size mismatch", nameof(layer));
+        Channel(idx);
+        _unsoftened[idx] = layer;
+    }
+
+    /// <summary>Every layer read afresh: nothing on it was softened by the brush.</summary>
+    private void ForgetSoftening() => Array.Clear(_unsoftened);
 }

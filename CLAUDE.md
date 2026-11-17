@@ -179,6 +179,11 @@ and stays until the last tester is done. Measured on the author's machine
 the sum of its parts: a long-lived test process slows itself down, and the same
 tests take 17 minutes added up when spread over short ones.
 
+A test that times something (frames a second, the processor's cycles a frame)
+carries `[Trait("Timing", "Alone")]`: the runner runs those after the others,
+by one tester alone (1.9.1). Beside eleven other testers it measured their
+load instead - the bust preview drew 30 frames a second at Low there, 70 alone.
+
 What made running several at once safe, and must stay true:
 
 - **A test run keeps its own settings folder**, one per process
@@ -229,7 +234,11 @@ bar. Time left comes from what each test took last time, kept in
 See `RunProgress`.
 
 It is the author's standard (2026-10-21) and there is no switch to turn it
-off: it opens on their **leftmost monitor**, on top, and never takes focus.
+off: it opens on their **leftmost monitor**, **behind** their windows, and
+never takes focus. Behind, not on top, since 2026-11-16 ("It's getting a bit
+annoying to have it pop in front of whatever I'm doing every time"): its
+taskbar button carries the bar, and its Keep on top box brings it forward.
+`RunProgressTests.TheWindowOpensBehindTheWindowsAlreadyOpen` holds it there.
 
 ### Nothing a test does may reach the author's screen
 

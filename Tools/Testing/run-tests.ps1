@@ -13,6 +13,10 @@
 # leftmost monitor, open until the last tester is done. The testers' output is
 # kept in the run's folder, printed at the end on a failure.
 #
+# Tests that time themselves (Trait Timing=Alone: frames a second, cycles a frame)
+# run after the others, by one tester alone, so they measure the editor and not
+# eleven other testers' load.
+#
 # EX (1.8.0): the EX themes draw every control with templates of their own, so
 # the tests that build a window run a second time with an EX theme on
 # (SMSMODFORGE_TEST_THEME, read by WindowHarness). The same tests - the theme
@@ -50,13 +54,13 @@ if (-not $NoBuild) {
 if (-not (Test-Path $dll)) { Write-Host "No test build at $dll"; exit 1 }
 
 # One pass: every tester started, waited for, and their results added up.
-function Invoke-Pass([string]$passTheme, [string]$passFilter, [string]$label) {
+function Invoke-Pass([string]$passTheme, [string]$passFilter, [string]$label, [int]$count = $Testers) {
     $run = Join-Path ([IO.Path]::GetTempPath()) ("SMSModForge-tests\run-" + (Get-Date -Format "yyyyMMdd-HHmmss") + $label)
     New-Item -ItemType Directory -Force -Path $run | Out-Null
 
     $started = Get-Date
     $procs = @()
-    for ($k = 1; $k -le $Testers; $k++) {
+    for ($k = 1; $k -le $count; $k++) {
         $log = Join-Path $run "tester-$k.log"
         $arguments = "test `"$dll`" --nologo"
         if ($passFilter) { $arguments += " --filter `"$passFilter`"" }
@@ -66,19 +70,19 @@ function Invoke-Pass([string]$passTheme, [string]$passFilter, [string]$label) {
         $psi.UseShellExecute = $false
         $psi.CreateNoWindow = $true            # nothing of a tester reaches the screen
         $psi.WorkingDirectory = $repo
-        $psi.EnvironmentVariables["SMSMODFORGE_SHARD"] = "$k/$Testers"
+        $psi.EnvironmentVariables["SMSMODFORGE_SHARD"] = "$k/$count"
         $psi.EnvironmentVariables["SMSMODFORGE_SHARD_DIR"] = $run
         if ($passTheme) { $psi.EnvironmentVariables["SMSMODFORGE_TEST_THEME"] = $passTheme }
         $procs += [System.Diagnostics.Process]::Start($psi)
     }
     $what = if ($passTheme) { " in $passTheme" } else { "" }
-    Write-Host "$Testers testers started$what; notes and output in $run"
+    Write-Host "$count testers started$what; notes and output in $run"
     foreach ($p in $procs) { $p.WaitForExit() }
     $wall = (Get-Date) - $started
 
     $summary = '^\s*(Passed|Failed)!\s+-\s+Failed:\s+(\d+),\s+Passed:\s+(\d+),\s+Skipped:\s+(\d+),\s+Total:\s+(\d+),\s+Duration:\s+(.+?)\s+-'
-    $r = [ordered]@{ Failed = 0; Passed = 0; Skipped = 0; Total = 0; Missing = @(); Crashed = @(); Failures = @(); Wall = $wall; Theme = $passTheme }
-    for ($k = 1; $k -le $Testers; $k++) {
+    $r = [ordered]@{ Failed = 0; Passed = 0; Skipped = 0; Total = 0; Missing = @(); Crashed = @(); Failures = @(); Wall = $wall; Theme = $passTheme; Count = $count }
+    for ($k = 1; $k -le $count; $k++) {
         $log = Join-Path $run "tester-$k.log"
         $lines = if (Test-Path $log) { Get-Content $log -Encoding UTF8 } else { @() }
         $line = $lines | Where-Object { $_ -match $summary } | Select-Object -Last 1
@@ -115,11 +119,23 @@ function Invoke-Pass([string]$passTheme, [string]$passFilter, [string]$label) {
     return $r
 }
 
-$passes = @(Invoke-Pass $Theme $Filter "")
+# What a test times (frames a second, cycles a frame) runs after the rest, by a
+# tester alone (Trait Timing=Alone, 1.9.1): beside eleven others it measured the
+# others' load - the bust preview drew 30 a second at Low there, 70 alone.
+function Both([string]$f) {
+    $parallel = if ($f) { "($f)&Timing!=Alone" } else { "Timing!=Alone" }
+    $alone = if ($f) { "($f)&Timing=Alone" } else { "Timing=Alone" }
+    return @($parallel, $alone)
+}
+$f = Both $Filter
+$passes = @(Invoke-Pass $Theme $f[0] "")
+$passes += Invoke-Pass $Theme $f[1] "-alone" 1
 if ($WithEx) {
     $exFilter = if ($Filter) { "($Filter)&Speed=Slow" } else { "Speed=Slow" }
+    $f = Both $exFilter
     Write-Host ""
-    $passes += Invoke-Pass $ExTheme $exFilter "-ex"
+    $passes += Invoke-Pass $ExTheme $f[0] "-ex"
+    $passes += Invoke-Pass $ExTheme $f[1] "-ex-alone" 1
 }
 
 # ── One result for the lot ──
@@ -132,7 +148,7 @@ foreach ($r in $passes) {
     $verdict = if ($r.Failed -eq 0 -and $r.Missing.Count -eq 0 -and $r.Crashed.Count -eq 0) { "Passed!" } else { "Failed!" }
     $in = if ($r.Theme) { " in " + $r.Theme } else { "" }
     Write-Host ("{0}  Failed: {1}, Passed: {2}, Skipped: {3}, Total: {4}, Wall time: {5}:{6:00} ({7} testers){8}" -f `
-        $verdict, $r.Failed, $r.Passed, $r.Skipped, $r.Total, [int][math]::Floor($r.Wall.TotalMinutes), $r.Wall.Seconds, $Testers, $in)
+        $verdict, $r.Failed, $r.Passed, $r.Skipped, $r.Total, [int][math]::Floor($r.Wall.TotalMinutes), $r.Wall.Seconds, $r.Count, $in)
     if ($r.Missing.Count -gt 0) { Write-Host ("Testers with no result: " + ($r.Missing -join ", ")) }
     if ($r.Crashed.Count -gt 0) { Write-Host ("Testers that crashed, the rest of their share not run: " + ($r.Crashed -join ", ")) }
     $failed += $r.Failed; $missing += $r.Missing.Count + $r.Crashed.Count

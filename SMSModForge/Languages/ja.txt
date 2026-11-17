@@ -294,6 +294,10 @@ game.notice.news.1.8.2 = どこかに着いたとき、パックの会話がゲ�
 # en: Screens from packs now sit where their authors put them, and their changes to the game's own screens all show up.\nA pack's place no longer plays its arrival in the room you are still in when the game refuses the trip.
 game.notice.news.1.8.3 = パックの画面が作者の置いた位置に表示され、ゲーム本来の画面への変更もすべて反映されるようになりました。\nゲームが移動を断ったとき、パックの場所の到着シーンが今いる部屋で再生されなくなりました。
 
+# What ModForge 1.9.1 changes for players, one line each (\n starts the next)
+# en: Characters from packs now cast their own shadows, and their movement is no longer cut off at the edges of their art.
+game.notice.news.1.9.1 = パックのキャラクターが自分の影を落とすようになり、動きが絵の端で切れなくなりました。
+
 [Where an NPC stands]
 
 # Text
@@ -2765,6 +2769,10 @@ menu.checkForUpdates = 今すぐ更新を確認(_N)
 # en: _Preview quality
 menu.previewQuality = プレビューの品質(_P)
 
+# Menu item
+# en: Preview _backdrop
+menu.previewBackdrop = プレビューの背景(_A)
+
 # Tooltip on a text
 # en: The game build this ModForge version targets. Saved packs are stamped with it; the in-game Mods banner flags packs whose stamp doesn't match the running game.
 menu.gameBuildModforgeVersion.tip = この ModForge のバージョンが対象とするゲームのビルドです。保存したパックにはこれが記録され、ゲーム内の Mods バナーは、記録が起動中のゲームと合わないパックに印を付けます。
@@ -2898,48 +2906,152 @@ menu.dialogueRowsLookLike.tip = ノード一覧の各セリフを、ゲームと
 menu.checkForUpdates.tip = 今すぐ確認し、結果がどうであれ知らせます。
 
 # Tooltip on "_Preview quality"
-# en: Trade live-preview smoothness for CPU. Your choice is remembered between sessions.
-menu.previewQuality.tip = ライブプレビューのなめらかさと CPU 負荷を引き換えにします。選択はセッションをまたいで記憶されます。
+# en: How much of the game's look the live previews draw: less asks less of the computer. Your choice is remembered between sessions.
+menu.previewQuality.tip = ゲームの見た目をライブプレビューがどこまで描くか。少ないほどコンピューターの負担が減ります。選んだ内容は次回も引き継がれます。
+
+# Tooltip on "Preview _backdrop"
+# en: What the bust preview draws a bust over. Your choice is remembered between sessions.
+menu.previewBackdrop.tip = 立ち絵のプレビューが立ち絵を何の上に描くか。選んだ内容は次回も引き継がれます。
+
+# Options menu, a tick: each live preview shows the frame rate it draws at
+# en: Show preview _frame rate
+menu.showPreviewFps = プレビューのフレームレートを表示(_F)
+
+# Tooltip on that menu item
+# en: Show, in a corner of each live preview, how many pictures a second it is drawing. Off by default; your choice is remembered between sessions.
+menu.showPreviewFps.tip = 各ライブプレビューの隅に、1秒に何枚描いているかを表示します。既定ではオフで、選択はセッションをまたいで記憶されます。
+
+# In a corner of a live preview: the frame rate it is drawing at ({rate}: a whole number)
+# en: {rate} fps
+preview.fps = {rate} fps
+
+# Options menu: what draws the live previews (a submenu: Automatic, Graphics card, Processor)
+# en: D_raw previews on
+menu.previewRenderer = プレビューの描画(_R)
+
+# Tooltip on that menu item
+# en: What draws the live previews: the graphics card or the processor. Automatic times both when the editor starts and takes the faster. Your choice is remembered between sessions.
+menu.previewRenderer.tip = ライブプレビューを何で描くか：グラフィックカードか CPU か。「自動」はエディターの起動時に両方の速さを測り、速いほうを使います。選んだ内容は次回も引き継がれます。
+
+# Under Draw previews on: let the editor choose
+# en: Automatic
+previewRenderer.automatic = 自動
+
+# Tooltip on that choice
+# en: Times the graphics card and the processor when the editor starts, and draws the previews on whichever is faster on this PC.
+previewRenderer.automatic.tip = エディターの起動時にグラフィックカードと CPU の速さを測り、この PC で速いほうでプレビューを描きます。
+
+# Under Draw previews on: the graphics card
+# en: Graphics card
+previewRenderer.card = グラフィックカード
+
+# Tooltip on that choice
+# en: Draws the previews on the graphics card, running the game's own programs as the game does. On a PC without a card that can, the processor draws them.
+previewRenderer.card.tip = グラフィックカードでプレビューを描き、ゲーム自身のプログラムをゲームと同じように実行します。対応するカードがない PC では CPU が描きます。
+
+# Under Draw previews on: the processor
+# en: Processor
+previewRenderer.processor = CPU
+
+# Tooltip on that choice
+# en: Draws the previews on the processor.
+previewRenderer.processor.tip = CPU でプレビューを描きます。
+
+# Before the preview backdrop buttons, at the bottom of the bust preview's options
+# en: Backdrop
+previewBackdrop.bar = 背景
+
+# Tooltip on that word
+# en: What the bust preview draws the bust over. One setting, the same as Options > Preview backdrop.
+previewBackdrop.bar.tip = 立ち絵のプレビューが立ち絵を何の上に描くか。オプション > プレビューの背景と同じ、ひとつの設定です。
+
+# A preview backdrop, in the menu: the PC's room in the game (PC: the player character, whose room it is)
+# en: PC's room
+previewBackdrop.room = 主人公の部屋
+
+# Tooltip on that preview backdrop
+# en: The bust in the PC's room (the player character's), as the game draws it there: the room behind it, its lamps' light on the bust, and the glow the bust's edges take from what is behind them. The preview shows the part of the game's screen the bust is in, so its lowest rows are off the bottom, as in the game.
+previewBackdrop.room.tip = 主人公（プレイヤーのキャラクター）の部屋にいる立ち絵を、ゲームがそこで描くとおりに表示します。後ろの部屋、立ち絵に当たるランプの光、そして立ち絵の縁が後ろのものから受ける光です。プレビューはゲーム画面のうち立ち絵がある部分を表示するので、ゲームと同じく、いちばん下の行は画面の下にはみ出します。
+
+# A preview backdrop, in the menu: the Beach, one of the game's places (the game's own name for it)
+# en: Beach
+previewBackdrop.beach = ビーチ
+
+# Tooltip on that preview backdrop
+# en: The bust on the Beach, one of the game's places, as the game draws it there: the beach behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.beach.tip = ゲームの場所の一つ、ビーチ（ゲーム内では「Beach」）にいる立ち絵を、ゲームがそこで描くとおりに表示します。後ろのビーチと、立ち絵の縁が後ろのものから受ける光です。動く部分は止まっています。
+
+# A preview backdrop, in the menu: the Forest, one of the game's places (the game's own name for it)
+# en: Forest
+previewBackdrop.forest = 森
+
+# Tooltip on that preview backdrop
+# en: The bust in the Forest, one of the game's places, as the game draws it there: the forest behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.forest.tip = ゲームの場所の一つ、森（ゲーム内では「Forest」）にいる立ち絵を、ゲームがそこで描くとおりに表示します。後ろの森と、立ち絵の縁が後ろのものから受ける光です。動く部分は止まっています。
+
+# A preview backdrop, in the menu: the inside of the Villa, one of the game's places (the game calls it "Villa (Inside)")
+# en: Villa
+previewBackdrop.villa = ヴィラ
+
+# Tooltip on that preview backdrop
+# en: The bust inside the Villa, one of the game's places, as the game draws it there: the room behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.villa.tip = ゲームの場所の一つ、ヴィラの中（ゲーム内では「Villa (Inside)」）にいる立ち絵を、ゲームがそこで描くとおりに表示します。後ろの部屋と、立ち絵の縁が後ろのものから受ける光です。動く部分は止まっています。
+
+# A preview backdrop, in the menu: the inside of the Temple, one of the game's places (the game calls it "Temple (Inside)")
+# en: Temple
+previewBackdrop.temple = 寺院
+
+# Tooltip on that preview backdrop
+# en: The bust inside the Temple, one of the game's places, as the game draws it there: the temple behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.temple.tip = ゲームの場所の一つ、寺院の中（ゲーム内では「Temple (Inside)」）にいる立ち絵を、ゲームがそこで描くとおりに表示します。後ろの寺院と、立ち絵の縁が後ろのものから受ける光です。動く部分は止まっています。
+
+# A preview backdrop, in the menu: no backdrop at all
+# en: None
+previewBackdrop.none = なし
+
+# Tooltip on that preview backdrop
+# en: The bust alone, all of its picture, with nothing behind it.
+previewBackdrop.none.tip = 立ち絵だけを、絵全体を、後ろに何もない状態で表示します。
 
 # A preview quality, in the menu
 # en: Ultra
 previewQuality.ultra = 最高
 
 # Tooltip on that preview quality
-# en: 60 fps, 4× anti-aliasing. Smoothest motion, highest CPU.
-previewQuality.ultra.tip = 60 fps、4× アンチエイリアス。最もなめらかな動きで、CPU 負荷も最大です。
+# en: The game's look in full, as the game draws it: the edge glow, the bloom, the light streaks and the colour. The most work for the computer. With no backdrop, a bust or an NPC is drawn as finely as the game draws it on a large screen.
+previewQuality.ultra.tip = ゲームの見た目をすべて、ゲームが描くとおりに：縁の光、ブルーム、光の筋、色。コンピューターの負担がいちばん大きくなります。背景なしでは、立ち絵や NPC を大きな画面でゲームが描くのと同じ細かさで描きます。
 
 # A preview quality, in the menu
 # en: High
 previewQuality.high = 高
 
 # Tooltip on that preview quality
-# en: 30 fps, 4× anti-aliasing. Same fidelity as Ultra at ~half the CPU.
-previewQuality.high.tip = 30 fps、4× アンチエイリアス。最高と同じ見た目で、CPU 負荷は約半分です。
+# en: Everything but the light streaks. On the processor, the edge glow is worked out more quickly, leaving the bust's shadow out of it. With no backdrop, half the work: the rows stay as fine as the game's.
+previewQuality.high.tip = 光の筋以外すべて。CPU では縁の光を速く計算し、立ち絵の影は含めません。背景なしでは仕事量が半分になり、行の細かさはゲームと同じままです。
 
 # A preview quality, in the menu
 # en: Medium
 previewQuality.medium = 中
 
 # Tooltip on that preview quality
-# en: 30 fps, no anti-aliasing. Slight motion-edge shimmer; much lighter.
-previewQuality.medium.tip = 30 fps、アンチエイリアスなし。動く縁が少しちらつきますが、ずっと軽くなります。
+# en: The default: also without the bloom. Light on the computer, and close to the game. With no backdrop, a quarter of the work: moving rows step a little more coarsely than in the game.
+previewQuality.medium.tip = 既定：さらにブルームなし。コンピューターに軽く、ゲームに近い見た目です。背景なしでは仕事量が4分の1になり、動く行の段差がゲームより少し粗くなります。
 
 # A preview quality, in the menu
 # en: Low
 previewQuality.low = 低
 
 # Tooltip on that preview quality
-# en: 20 fps, no anti-aliasing. Lightest; choppier motion.
-previewQuality.low.tip = 20 fps、アンチエイリアスなし。最も軽く、動きはぎこちなくなります。
+# en: The lightest: also without the glow a bust's edges take from the backdrop. The colour and the bust's shadow stay. With no backdrop, one point for every four pixels.
+previewQuality.low.tip = いちばん軽い：さらに、立ち絵の縁が背景から受ける光もなし。色と立ち絵の影は残ります。背景なしでは、4ピクセルごとに1点で描きます。
 
 # Before the preview quality buttons under a live preview
 # en: Quality
 previewQuality.bar = 品質
 
 # Tooltip on that word
-# en: How smoothly the live previews are drawn: higher is smoother and asks more of the computer. One setting for every preview, the same as Options > Preview quality.
-previewQuality.bar.tip = ライブプレビューをどれだけなめらかに描くか。高いほどなめらかで、コンピューターへの負荷も大きくなります。すべてのプレビュー共通の設定で、オプション > プレビューの品質 と同じです。
+# en: How much of the game's look the live previews draw: higher is closer to the game and asks more of the computer. They move as smoothly as your display at every quality. One setting for every preview, the same as Options > Preview quality.
+previewQuality.bar.tip = ゲームの見た目をライブプレビューがどこまで描くか。高いほどゲームに近く、コンピューターの負担が増えます。どの品質でも画面と同じなめらかさで動きます。すべてのプレビュー共通の設定で、オプション > プレビューの品質と同じです。
 
 # A colour theme, in the Themes menu
 # en: Light
@@ -3781,10 +3893,6 @@ characters.wetParticleActiveSpawn = 登場時に濡れパーティクルを有�
 # en: (The Wet preset is always attached — this controls whether it starts playing.)
 characters.wetPresetAlwaysAttached = （濡れプリセットは常に付いています。これは再生を始めるかどうかを決めます。）
 
-# Label over the preview's size picker
-# en: Preview size
-characters.previewSize = プレビューの大きさ
-
 # Text
 # en: Mouth frame
 characters.mouthFrame = 口の絵
@@ -3801,9 +3909,21 @@ characters.yappingToggle = おしゃべり
 # en: Blinking
 characters.blinkToggle = まばたき
 
+# Tooltip on the divider between the outfit's fields and the bust preview
+# en: Drag to give the preview more or less of the tab: the bust scales to fit, no bigger than the size its corner is dragged to. Remembered.
+characters.previewSplitter.tip = ドラッグして、タブのうちプレビューに使う広さを変えます。立ち絵は収まるように拡大縮小され、角をドラッグした大きさより大きくはなりません。記憶されます。
+
 # Tick box
 # en: Breathing
 characters.breathingToggle = 呼吸
+
+# Tick box under the bust preview: play the game's fade-in when a bust appears
+# en: Fade in
+characters.fadeInToggle = フェードイン
+
+# Tooltip on that tick box
+# en: Show the bust appearing as the game shows it: a dark silhouette fades in over a second, then the character fades in from it over three. Plays each time an outfit is shown, and when this is ticked. Preview only.
+characters.fadeInToggle.tip = ゲームと同じようにバストが現れる様子を表示します。暗いシルエットが 1 秒かけて現れ、そこから 3 秒かけてキャラクターが現れます。衣装を表示するたびと、これにチェックを入れたときに再生されます。プレビューのみ。
 
 # Text
 # en: Depth
@@ -4069,14 +4189,6 @@ characters.resetJiggle.tip = 新しい衣装の最初の値に戻します。行
 # en: When checked, the Wet particle system (cloned from Anna_Towel) starts active. Typically enabled only for swim/wet outfit variants.
 characters.wetParticleActiveSpawn.tip = チェックすると、濡れパーティクル（Anna_Towel からの複製）が有効な状態で始まります。ふつうは水着や濡れた衣装のバリエーションだけで有効にします。
 
-# Under the preview's size picker, only when the window is too small for the size picked. {shown} and {chosen} are sizes, like 1× and 2×
-# en: Shown at {shown}: the window is too small for {chosen}. It goes back to {chosen} when there is room.
-characters.previewSize.shrunk = {shown} で表示中：ウィンドウが {chosen} には小さすぎます。広さが足りれば {chosen} に戻ります。
-
-# Tooltip on the preview's size picker
-# en: How big the bust is drawn. 1× puts one of the preview's pixels on one of the screen's, which is the sharpest it gets; 2× doubles every pixel and is just as exact. The half steps in between have to be resampled, so they look a little softer. The panel grows with it, and the choice is remembered.
-characters.previewSize.tip = 立ち絵を描く大きさです。1× はプレビューの1ピクセルを画面の1ピクセルに置き、最もくっきりします。2× はすべてのピクセルを2倍にし、同じく正確です。その間の半分の段階は再サンプリングが必要なので、少しやわらかく見えます。パネルも一緒に大きくなり、選択は記憶されます。
-
 # Tooltip on a dropdown
 # en: Show the bust holding one particular mouth frame. Preview only - it changes nothing in the pack.
 characters.mouthPicker.tip = 特定の口の絵で立ち絵を表示します。プレビューのみで、パックは何も変わりません。
@@ -4090,12 +4202,12 @@ characters.yappingToggle.tip = セリフの表示中と同じように、プレ�
 characters.breathingToggle.tip = プレビューで待機中の呼吸の動きを再生します。プレビューのみです。
 
 # Tooltip on a slider
-# en: Preview-only: how far the bust bobs, in preview pixels. Match it to the game by eye.
-characters.breathingDepth.tip = プレビューのみ：立ち絵が上下する幅（プレビューのピクセル単位）。目で見てゲームに合わせてください。
+# en: Preview-only: how far the bust bobs, in preview pixels. The game's is 5; it gives each bust up to a tenth less.
+characters.breathingDepth.tip = プレビューのみ：立ち絵が上下する幅（プレビューのピクセル単位）。ゲームでは 5 で、立ち絵ごとに最大 1 割ほど小さくなります。
 
 # Tooltip on a button
-# en: Put the depth back to its default (4).
-characters.resetBreathingDepth.tip = 深さを既定値（4）に戻します。
+# en: Put the depth back to the game's (5).
+characters.resetBreathingDepth.tip = 幅をゲームの値（5）に戻します。
 
 # Tooltip on a dropdown
 # en: Show the bust in one particular expression. Preview only - it changes nothing in the pack.
@@ -4270,6 +4382,10 @@ npcs.startActive = 最初から有効
 # Text
 # en: Emitter offset / rotation / scale are per-placement — edit the Wet transform on the Places tab.
 npcs.emitterOffsetRotationScale = 発生源の位置 / 回転 / 拡大は配置ごとです。場所タブで濡れのトランスフォームを編集してください。
+
+# Tooltip on the divider between the NPC's fields and its preview
+# en: Drag to give the preview more or less of the tab: the NPC scales to fit, no bigger than the size its corner is dragged to. Remembered.
+npcs.previewSplitter.tip = ドラッグして、タブのうちプレビューに使う広さを変えます。NPC は収まるように拡大縮小され、角をドラッグした大きさより大きくはなりません。記憶されます。
 
 # Heading
 # en: Preview (live jiggle + shadow + blink)
@@ -4460,6 +4576,38 @@ places.extParallaxPreview = 視差をプレビュー
 # Tick box
 # en: Apply shaders
 places.extShaders = シェーダーを適用
+
+# Before the game look tick boxes under a place preview
+# en: Game look:
+places.look = ゲームの見た目：
+
+# Tooltip on that word
+# en: The post-processing the game draws over every place, as it draws it. Each part is drawn while ticked and the preview quality draws it: Ultra all three, High without the light streaks, Medium and Low the colour only.
+places.look.tip = ゲームがすべての場所にかけるポストプロセスを、ゲームと同じように描きます。各部分はチェックが入っていて、かつプレビューの品質がそれを描くときに描かれます。最高は 3 つすべて、高は光の筋なし、中と低は色だけです。
+
+# Tick box under a place preview: the game's bloom
+# en: Bloom
+places.lookBloom = ブルーム
+
+# Tooltip on that tick box
+# en: The soft glow the game spreads around bright parts of the picture. Drawn at High preview quality and up.
+places.lookBloom.tip = 画面の明るい部分の周りにゲームが広げる柔らかな光。プレビューの品質が高以上のときに描かれます。
+
+# Tick box under a place preview: the game's anamorphic flares
+# en: Light streaks
+places.lookFlares = 光の筋
+
+# Tooltip on that tick box
+# en: The long upright streaks the game draws from the brightest parts of the picture. Drawn at Ultra preview quality.
+places.lookFlares.tip = 画面のいちばん明るい部分からゲームが描く、長い縦の筋。プレビューの品質が最高のときに描かれます。
+
+# Tick box under a place preview: the game's colour grading
+# en: Colour
+places.lookColour = 色
+
+# Tooltip on that tick box
+# en: The game's colour: its tonemapping, the darkened corners and its grading, which every place on screen goes through.
+places.lookColour.tip = ゲームの色：トーンマッピング、暗くした四隅、カラーグレーディング。画面上のすべての場所がこれを通ります。
 
 # Box heading
 # en: Vanilla source
@@ -9085,8 +9233,8 @@ maskStudio.invert.tip = 塗っているレイヤーの強弱を入れ替えま�
 maskStudio.soften = 全体をぼかす
 
 # Tooltip on that button
-# en: Blur the whole layer being painted a little, smoothing hard edges where the effect would tear. Press it again for more; the Soften brush does the same only where you paint.
-maskStudio.soften.tip = 塗っているレイヤー全体を少しぼかし、効果が裂けそうな硬い境目をなめらかにします。もう一度押すとさらにぼけます。ぼかしブラシは、塗った所だけに同じことをします。
+# en: Blur the whole layer being painted a little, smoothing hard edges where the effect would tear. Press it again for more. To soften only some edges, and never past a softness you set, use the Soften brush.
+maskStudio.soften.tip = 塗っているレイヤー全体を少しぼかし、効果が裂けそうな硬い境目をなめらかにします。もう一度押すとさらにぼけます。一部の境目だけを、決めたぼかし幅を超えずにぼかすには、ぼかしブラシを使います。
 
 # A tick: paint both halves at once
 # en: Mirror
@@ -9157,8 +9305,16 @@ maskStudio.status.soften = ぼかしブラシ: {layer}
 maskStudio.toolSoften = ぼかし (S)
 
 # Tooltip
-# en: A brush that smooths what it passes over instead of painting: each stroke pulls the layer towards a blur of itself, as far as Opacity says. Go over a place again for more.
-maskStudio.toolSoften.tip = 塗る代わりに、通った所をなめらかにするブラシです。ストロークごとに、不透明度の分だけレイヤーをぼかした自分自身に近づけます。同じ所をもう一度なぞるとさらにぼけます。
+# en: A brush that smooths the edges it passes over instead of painting, to the Edge softness set for it. Going over an edge again never softens it further: raise Edge softness for a softer edge, or lower it and go over the edge to tighten it again.
+maskStudio.toolSoften.tip = 塗る代わりに、通った境目を設定した「境目のぼかし幅」までなめらかにするブラシです。同じ境目をもう一度なぞっても、それ以上はぼけません。もっとぼかすには「境目のぼかし幅」を上げ、引き締め直すには下げてから境目をなぞります。
+
+# Text: the slider that takes Opacity's place while the soften brush is the tool
+# en: Edge softness
+maskStudio.softness = 境目のぼかし幅
+
+# Tooltip on that slider
+# en: How soft an edge the Soften brush leaves, in pixels of the mask: a hard edge it passes over fades from nothing to full across about this many pixels. Going over it again never takes it further.
+maskStudio.softness.tip = ぼかしブラシが境目をどれだけぼかすかを、マスクのピクセル数で表します。通った硬い境目は、およそこのピクセル数をかけて、ゼロから最大まで変わるようになります。もう一度なぞっても、それ以上は進みません。
 
 # One line of the hotkeys list: the key, two spaces, what it does
 # en: S  soften brush
@@ -9813,8 +9969,8 @@ docs.maskPainter.realArtUnderneathThere = 下にある本物の絵です。な�
 docs.maskPainter.brushEraserSizeHardness.term = ツール
 
 # Docs: a point in the topic
-# en: A brush, an eraser and a soften brush, with Size, Hardness and Opacity. The soften brush smooths what it passes over instead of painting, as far as Opacity says. Zoom changes how close you are working, not what is painted.
-docs.maskPainter.brushEraserSizeHardness = ブラシ、消しゴム、ぼかしブラシで、サイズ、硬さ、不透明度を設定できます。ぼかしブラシは塗る代わりに、通った所を不透明度の分だけなめらかにします。ズームは作業の近さを変えるだけで、塗られるものは変えません。
+# en: A brush, an eraser and a soften brush, with Size and Hardness. The brush and eraser have Opacity; the soften brush has Edge softness in its place: it smooths the edges it passes over to that softness and never past it, however often you go over them. Zoom changes how close you are working, not what is painted.
+docs.maskPainter.brushEraserSizeHardness = ブラシ、消しゴム、ぼかしブラシで、サイズと硬さを設定できます。ブラシと消しゴムには不透明度があり、ぼかしブラシには代わりに「境目のぼかし幅」があります。ぼかしブラシは通った境目をその幅までなめらかにし、何度なぞってもそれ以上はぼかしません。ズームは作業の近さを変えるだけで、塗られるものは変えません。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Cap at opacity
@@ -10059,8 +10215,12 @@ docs.previews.theyDoNotRun = ゲームの仕組みは動かしません。条件
 docs.previews.previewsResolveImagePaths = プレビューはパックのフォルダーを基準に画像のパスを解決するので、パックを保存するまでは空のままです。
 
 # Docs: a point in the topic
-# en: Preview quality on the Options menu trades smoothness against processor load. The Quality buttons above each live preview are the same setting.
-docs.previews.previewQualityOptionsMenu = オプションメニューの「プレビューの品質」で、なめらかさとプロセッサーの負荷のバランスを選べます。各ライブプレビューの上にある品質ボタンも同じ設定です。
+# en: Preview quality on the Options menu chooses how much of the game's look the previews draw, against processor load. The Quality buttons above each live preview are the same setting.
+docs.previews.previewQualityOptionsMenu = オプションメニューのプレビューの品質は、ゲームの見た目をプレビューがどこまで描くかを、CPU の負荷と引き換えに選びます。各ライブプレビューの上にある品質のボタンも同じ設定です。
+
+# Docs: a point in the topic
+# en: The place previews draw the game's look over the place, as the game does over every place: its bloom, its light streaks and its colour. Each has a tick box under the preview, and each is drawn only when its box is ticked and the preview quality draws it.
+docs.previews.placesGameLook = 場所のプレビューは、ゲームがすべての場所にかけるのと同じように、ゲームの見た目を場所の上に描きます。ブルーム、光の筋、色です。それぞれにプレビューの下のチェックボックスがあり、チェックが入っていて、かつプレビューの品質がそれを描くときだけ描かれます。
 
 [Docs: File menu]
 
@@ -10273,8 +10433,24 @@ docs.optionsMenu.addEveryCharacterPlace = パックが作ったキャラクタ�
 docs.optionsMenu.tradePreviewSmoothnessAgainst.term = プレビューの品質
 
 # Docs: a point in the topic
-# en: Trade preview smoothness against processor load: Ultra (60 fps, anti-aliased), High (30 fps, anti-aliased), Medium (30 fps, no anti-aliasing), Low (20 fps, no anti-aliasing).
-docs.optionsMenu.tradePreviewSmoothnessAgainst = プレビューのなめらかさとプロセッサーの負荷のバランスを選びます。最高（60 fps、アンチエイリアスあり）、高（30 fps、アンチエイリアスあり）、中（30 fps、アンチエイリアスなし）、低（20 fps、アンチエイリアスなし）。
+# en: Choose how much of the game's look the previews draw, against processor load. Every quality draws as many frames as your display shows. Ultra is the game's own picture: the edge glow, bloom, light streaks and colour. High leaves out the light streaks, and on the processor works the edge glow out more quickly, without the bust's shadow in it; Medium leaves out the bloom too; Low the edge glow as well. With no backdrop the qualities save work too: Ultra draws a bust or an NPC as finely as the game does on a large screen, High with half the work, Medium a quarter, and Low one point for every four pixels.
+docs.optionsMenu.tradePreviewSmoothnessAgainst = ゲームの見た目をプレビューがどこまで描くかを、CPU の負荷と引き換えに選びます。どの品質でも画面の表示と同じ数のフレームを描きます。最高はゲームそのものの画面です。縁の光、ブルーム、光の筋、色です。高は光の筋を省き、CPU では縁の光を速く計算します（立ち絵の影は含みません）。中はさらにブルームを、低はさらに縁の光を省きます。背景なしでも品質で負荷が変わります。最高は立ち絵や NPC を大きな画面でのゲームと同じ細かさで描き、高はその半分、中は4分の1の仕事量で、低は4ピクセルごとに1点で描きます。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Preview backdrop
+docs.optionsMenu.previewBackdrop.term = プレビューの背景
+
+# Docs: a point in the topic
+# en: What the bust preview draws a bust over. The PC's room, the default, shows it as the game does there: the room behind, the light of its lamps, the glow its edges take from the room, and its breathing moving it over the room. The Beach, the Forest, the Villa and the Temple do the same in four more of the game's places, each with its own look. None shows the bust alone. The Backdrop buttons at the bottom of the Characters tab are the same setting, and the mask painter's preview follows it too.
+docs.optionsMenu.previewBackdrop = 立ち絵のプレビューが立ち絵を何の上に描くか。既定の主人公の部屋では、ゲームがそこで見せるとおりに表示します。後ろの部屋、ランプの光、縁が部屋から受ける光、そして部屋の上で立ち絵を動かす呼吸です。ビーチ、森、ヴィラ、寺院は、ゲームのほかの4つの場所で同じことをし、それぞれに独自の見た目があります。「なし」は立ち絵だけを表示します。キャラクタータブの下にある背景のボタンも同じ設定で、マスクペインターのプレビューもこれに従います。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Draw previews on
+docs.optionsMenu.previewRenderer.term = プレビューの描画
+
+# Docs: a point in the topic
+# en: What draws the live previews. Automatic, the default, times the graphics card and the processor when the editor starts and uses the faster. On the graphics card the previews run the game's own programs; the first time, it takes a few seconds to prepare them.
+docs.optionsMenu.previewRenderer = ライブプレビューを何で描くか。既定の「自動」は、エディターの起動時にグラフィックカードと CPU の速さを測り、速いほうを使います。グラフィックカードでは、プレビューがゲーム自身のプログラムを実行します。初回はその準備に数秒かかります。
 
 # Docs: a heading inside the topic
 # en: Worth knowing
@@ -27166,6 +27342,21 @@ vhint.Cooldown3.tonygarage-cd = ガレージでの Toni の水曜日の会話（
 vhint.Cooldown3.evelyn-dailysmollexperi = Evelyn のラボでの「Any experiments that require my help?」の 1 日 1 回の制限。彼女が実験を選ぶと真になり、毎晩偽に戻ります。
 
 [Not used by this version]
+
+# en: Haunted House
+previewBackdrop.hauntedHouse = お化け屋敷
+
+# en: The bust in the Haunted House by the Harbor, one of the game's places, as the game draws it there: the house behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.hauntedHouse.tip = ゲームの場所の一つ、港のお化け屋敷（ゲーム内では「Harbor Haunted House」）にいる立ち絵を、ゲームがそこで描くとおりに表示します。後ろの屋敷と、立ち絵の縁が後ろのものから受ける光です。動く部分は止まっています。
+
+# en: Preview size
+characters.previewSize = プレビューの大きさ
+
+# en: Shown at {shown}: the window is too small for {chosen}. It goes back to {chosen} when there is room.
+characters.previewSize.shrunk = {shown} で表示中：ウィンドウが {chosen} には小さすぎます。広さが足りれば {chosen} に戻ります。
+
+# en: How big the bust is drawn. 1× puts one of the preview's pixels on one of the screen's, which is the sharpest it gets; 2× doubles every pixel and is just as exact. The half steps in between have to be resampled, so they look a little softer. The panel grows with it, and the choice is remembered.
+characters.previewSize.tip = 立ち絵を描く大きさです。1× はプレビューの1ピクセルを画面の1ピクセルに置き、最もくっきりします。2× はすべてのピクセルを2倍にし、同じく正確です。その間の半分の段階は再サンプリングが必要なので、少しやわらかく見えます。パネルも一緒に大きくなり、選択は記憶されます。
 
 # en: Only {layer}
 maskStudio.copyLayer.other = Only {layer}

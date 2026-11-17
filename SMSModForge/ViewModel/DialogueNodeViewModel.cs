@@ -175,16 +175,22 @@ public sealed class DialogueNodeViewModel : ObservableObject
     /// when the actor has none / isn't found. Set once by the MainViewModel —
     /// the node VM has only the actor KEY, and reaching the actor list from
     /// here would couple every node to the whole pack.
+    /// <para/>
+    /// One per thread (1.9.1): set by the view model and read by the rows and
+    /// controls on its thread. A view model made on another thread - a test's,
+    /// beside a window drawing on the harness's - took over the window's, which
+    /// then walked that model's characters while it was filling them and
+    /// stopped the test process.
     /// </summary>
-    public static System.Func<string, System.Windows.Media.Color?>? ActorColorProvider;
+    [System.ThreadStatic] public static System.Func<string, System.Windows.Media.Color?>? ActorColorProvider;
 
     /// <summary>
     /// Resolves a speaker key to the character's display name. Same reasoning as
     /// <see cref="ActorColorProvider"/>: the node holds only the key, and the
     /// key is what the pack ships, but it is not what an author wants to read
-    /// down a list of lines.
+    /// down a list of lines. One per thread, as <see cref="ActorColorProvider"/>.
     /// </summary>
-    public static System.Func<string, string>? ActorDisplayNameProvider;
+    [System.ThreadStatic] public static System.Func<string, string>? ActorDisplayNameProvider;
 
     /// <summary>Re-read the tint. Called by the MainViewModel when an actor's
     /// colour changes — pushed rather than a static event the nodes subscribe

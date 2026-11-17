@@ -40,7 +40,7 @@ namespace SMSModForge.View.Controls;
 ///         label override (Curse Casual font).</item>
 /// </list>
 /// </summary>
-public sealed class PlacePreview : Grid
+public sealed partial class PlacePreview : Grid
 {
     // ── Layout constants ────────────────────────────────────────────────
     //
@@ -353,6 +353,10 @@ public sealed class PlacePreview : Grid
         // chrome and always sit on top. The gizmo layer sits above everything so
         // its handles are always grabbable.
         _canvas.Children.Add(_worldLayer);
+        // The game's look over the scene, under the interface (PlacePreview.Look):
+        // one of its pixels a screen pixel, so never smoothed.
+        RenderOptions.SetBitmapScalingMode(_lookImage, BitmapScalingMode.NearestNeighbor);
+        _canvas.Children.Add(_lookImage);
         _canvas.Children.Add(_overlayImage);
         _canvas.Children.Add(_buttonLayer);
         _canvas.Children.Add(_gizmoLayer);
@@ -394,6 +398,7 @@ public sealed class PlacePreview : Grid
 
         // The Wet droplet markers animate only while the control is actually
         // visible (not on a hidden/unselected tab).
+        FpsBadge.Attach(this, () => FramesShown);
         IsVisibleChanged += (_, _) =>
         {
             _isLoaded = IsVisible;
@@ -401,8 +406,9 @@ public sealed class PlacePreview : Grid
             // The shaders' clock too (1.9.0): it ticked on behind another tab or
             // the mask studio, waking the editor 30 times a second to draw
             // nothing. Back on screen, it starts again where the shaders are.
-            if (!IsVisible) _shaderTimer?.Stop();
+            if (!IsVisible) StopShaders();
             else if (_shaderTargets.Count > 0) SyncShaderTimer();
+            SyncLook();
         };
 
         Refresh();
@@ -550,6 +556,10 @@ public sealed class PlacePreview : Grid
         double s = _fitScale * _zoom;
         _displayScale = s;
         _extentScale.ScaleX = _extentScale.ScaleY = s;
+        // A new view: the game's look worked out for it at once, and the NPCs'
+        // pictures sized for it (TrackShader) once the zoom settles.
+        _lookSame = 0;
+        ScheduleShaderResize();
     }
 
     // ── Zoom / pan ──────────────────────────────────────────────────────
@@ -615,6 +625,7 @@ public sealed class PlacePreview : Grid
         var now = e.GetPosition(_viewport);
         _viewPan.X = _panStartX + (now.X - _panStart.X);
         _viewPan.Y = _panStartY + (now.Y - _panStart.Y);
+        _lookSame = 0;
     }
 
     /// <summary>Cursor gone: settle back to the neutral, authored position
@@ -816,6 +827,8 @@ public sealed class PlacePreview : Grid
 
         _viewport.Visibility = Visibility.Visible;
         _placeholder.Visibility = Visibility.Collapsed;
+        _lookSame = 0;
+        SyncLook();
     }
 
     /// <summary>Chooses the standard or extended HUD frame based on the
@@ -1049,6 +1062,7 @@ public sealed class PlacePreview : Grid
         _viewport.Visibility = Visibility.Collapsed;
         _placeholder.Text = message;
         _placeholder.Visibility = Visibility.Visible;
+        SyncLook();
     }
 
     // ── GameObjects layer ─────────────────────────────────────────
@@ -1704,30 +1718,25 @@ public sealed class PlacePreview : Grid
     // in game — not an impression of it.
     //
     // Cost is governed by the OUTPUT grid, not the source: the pass walks output
-    // pixels and samples the pose. Poses are authored large, so the pass renders
-    // into a small buffer and lets WPF scale it — an NPC occupies a few hundred
-    // pixels of the preview, and paying for 1024² per frame per character to
-    // show that would be absurd.
-
-    /// <summary>Longest edge of a shader pass. A placed NPC is drawn far smaller
-    /// than its authored pose, and the cost is per output pixel.</summary>
-    private const int ShaderMaxEdge = 384;
+    // pixels and samples the pose. An NPC's pass renders the screen pixels it
+    // covers at the view's scale (NpcPictureSize) - a few hundred at the fitted
+    // view, its art's own when zoomed in that far - and WPF places it.
 
     /// <summary>Ceiling for the LEVEL pass, which renders at its source
     /// resolution. Base art is 2048×1136, so this is a guard against an
     /// unusually large sprite rather than a reduction in the normal case.</summary>
     private const int LevelShaderMaxEdge = 2048;
 
-    /// <summary>Refresh rate for the animated passes. The jiggle is a slow
-    /// wobble — a third of a display refresh reads as continuous and leaves the
-    /// UI thread alone for everything else.</summary>
-    /// <summary>How often the level's shaders are drawn: the preview quality's
-    /// frame cap (1.9.0; Medium, the default, is the 30 a second it always was).</summary>
-    private static TimeSpan ShaderTick
-        => TimeSpan.FromMilliseconds(1000.0 / Math.Max(1, Services.PreviewQualityManager.Current.MaxFps));
-
     /// <summary>Whether the shaders' clock is running - for tests.</summary>
-    internal bool ShaderClockRunning => _shaderTimer?.IsEnabled == true;
+    internal bool ShaderClockRunning => _shaderClockOn;
+
+    /// <summary>How many times the shaders have been drawn - for tests, to
+    /// measure the frame rate a quality preset really gives.</summary>
+    internal int ShaderSteps { get; private set; }
+
+    /// <summary>Pictures put on screen: the shaders' and the game's look's
+    /// (Options ▸ Show preview frame rate).</summary>
+    internal int FramesShown => ShaderSteps + LookPasses;
 
     private sealed class ShaderTarget
     {
@@ -1746,20 +1755,40 @@ public sealed class PlacePreview : Grid
         /// family — the two use genuinely different shaders.</summary>
         public JiggleParams? Params;
         public MilkingShader.Settings Milking;
+        /// <summary>An NPC's pass on the graphics card, made on first use there.</summary>
+        public Rendering.Gpu.GpuAlone? Card;
+        /// <summary>A level layer's pass on the graphics card, made on first use there.</summary>
+        public Rendering.Gpu.GpuMilking? Milk;
         public (float r, float g, float b, float a) Tint;
         public WriteableBitmap Bitmap = null!;
+        /// <summary>An NPC's canvas units per pixel of its art, each way: what its
+        /// picture is sized from, at the view's scale (1.9.1).</summary>
+        public double CanvasPerArtX, CanvasPerArtY;
     }
 
     private readonly List<ShaderTarget> _shaderTargets = new();
-    private DispatcherTimer? _shaderTimer;
     private readonly System.Diagnostics.Stopwatch _shaderClock = new();
+
+    // The shaders' clock (1.9.1): the display's own frames, as the bust
+    // preview's - CompositionTarget.Rendering, with the FramePacer choosing the
+    // frames to draw on at the rate of the monitor the window is on - and the
+    // drawing itself on a worker thread, so a frame costs the interface's
+    // thread only the copy onto the screen. Until 1.9.1 it was a
+    // Background-priority timer drawing on the interface's thread: its ticks
+    // fall on the system's 15.6 ms clock, so it never drew more than 64 frames
+    // a second whatever the display, and hooking Rendering then (with the
+    // drawing still on that thread) kept the work waiting - Medium drew 8.
+    private bool _shaderClockOn, _shaderInFlight;
+    private int _shaderGeneration;
+    private System.Threading.Tasks.TaskScheduler? _shaderUi;
+    private readonly FramePacer _shaderPacer = new();
 
     /// <summary>
     /// Put an NPC's pose through the jiggle shader, if it has a mask to drive
     /// one. Returns false when there is nothing to animate, leaving the caller's
     /// flat bitmap in place.
     /// </summary>
-    private bool TrackShader(Image img, string poseAbs, string maskAbs, JiggleParams p)
+    private bool TrackShader(Image img, string poseAbs, string maskAbs, JiggleParams p, Matrix toCanvas)
     {
         var basePx = LoadBgraAtNative(poseAbs, out int w, out int h);
         if (basePx == null || w <= 0 || h <= 0) return false;
@@ -1768,21 +1797,72 @@ public sealed class PlacePreview : Grid
         var maskPx = LoadBgraScaled(maskAbs, w, h);
         if (maskPx == null) return false;
 
-        double k = (double)ShaderMaxEdge / Math.Max(w, h);
-        int outW = Math.Max(1, (int)Math.Round(w * Math.Min(1.0, k)));
-        int outH = Math.Max(1, (int)Math.Round(h * Math.Min(1.0, k)));
-
-        var bmp = new WriteableBitmap(outW, outH, 96, 96, PixelFormats.Pbgra32, null);
-        img.Source = bmp;
         var (tr, tg, tb, ta) = BustComposer.ParseTint(p.Tint);
-
-        _shaderTargets.Add(new ShaderTarget
+        var target = new ShaderTarget
         {
             Image = img, Base = basePx, Mask = maskPx, SrcW = w, SrcH = h,
-            OutW = outW, OutH = outH, Output = new byte[outW * 4 * outH],
-            Params = p, Tint = (tr, tg, tb, ta), Bitmap = bmp,
-        });
+            Params = p, Tint = (tr, tg, tb, ta),
+            CanvasPerArtX = Math.Sqrt(toCanvas.M11 * toCanvas.M11 + toCanvas.M12 * toCanvas.M12),
+            CanvasPerArtY = Math.Sqrt(toCanvas.M21 * toCanvas.M21 + toCanvas.M22 * toCanvas.M22),
+        };
+        var (outW, outH) = NpcPictureSize(target);
+        SizeNpcPicture(target, outW, outH);
+        _shaderTargets.Add(target);
         return true;
+    }
+
+    /// <summary>
+    /// The size an NPC's moving picture is drawn at: the screen pixels it covers
+    /// at the view's scale - so zoomed in it keeps its art's detail (1.9.1, the
+    /// author: "even some art from the pack itself looks low res when zoomed in";
+    /// it was drawn at no more than 384 pixels and enlarged) - no more than the
+    /// art's own, no fewer than 16.
+    /// </summary>
+    private (int w, int h) NpcPictureSize(ShaderTarget t)
+    {
+        var dpi = VisualTreeHelper.GetDpi(this);
+        double sw = t.SrcW * t.CanvasPerArtX * _displayScale * dpi.DpiScaleX, sh = t.SrcH * t.CanvasPerArtY * _displayScale * dpi.DpiScaleY;
+        int w = Math.Clamp((int)Math.Ceiling(sw), Math.Min(16, t.SrcW), t.SrcW);
+        int h = Math.Clamp((int)Math.Ceiling(sh), Math.Min(16, t.SrcH), t.SrcH);
+        return (w, h);
+    }
+
+    private static void SizeNpcPicture(ShaderTarget t, int w, int h)
+    {
+        t.OutW = w; t.OutH = h;
+        t.Output = new byte[w * 4 * h];
+        t.Bitmap = new WriteableBitmap(w, h, 96, 96, PixelFormats.Pbgra32, null);
+        t.Image.Source = t.Bitmap;
+    }
+
+    private System.Windows.Threading.DispatcherTimer? _shaderResize;
+
+    /// <summary>The NPCs' pictures sized for the view once the zoom settles.</summary>
+    private void ScheduleShaderResize()
+    {
+        if (_shaderTargets.Count == 0) return;
+        _shaderResize ??= new System.Windows.Threading.DispatcherTimer(TimeSpan.FromMilliseconds(200), System.Windows.Threading.DispatcherPriority.Background,
+                                                                        (_, _) => ResizeNpcPictures(), Dispatcher) { IsEnabled = false };
+        _shaderResize.Stop();
+        _shaderResize.Start();
+    }
+
+    private void ResizeNpcPictures()
+    {
+        // A pass drawing into the old buffers lands first.
+        if (_shaderInFlight) return;
+        _shaderResize?.Stop();
+        bool any = false;
+        foreach (var t in _shaderTargets)
+        {
+            if (t.Params == null) continue;
+            var (w, h) = NpcPictureSize(t);
+            // Only for a real change: each one costs a new buffer.
+            if (Math.Abs(w - t.OutW) <= Math.Max(2, t.OutW / 8) && Math.Abs(h - t.OutH) <= Math.Max(2, t.OutH / 8)) continue;
+            SizeNpcPicture(t, w, h);
+            any = true;
+        }
+        if (any) { _shaderGeneration++; StepShaders(); }
     }
 
     /// <summary>
@@ -1842,44 +1922,96 @@ public sealed class PlacePreview : Grid
     /// <summary>Start or stop the animation loop to match what was just built.</summary>
     private void SyncShaderTimer()
     {
+        // A pass still drawing belongs to what was there before.
+        _shaderGeneration++;
         if (_shaderTargets.Count == 0)
         {
-            _shaderTimer?.Stop();
+            StopShaders();
             _shaderClock.Reset();
             return;
         }
         if (!_shaderClock.IsRunning) _shaderClock.Restart();
-        if (_shaderTimer == null)
-        {
-            _shaderTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = ShaderTick };
-            _shaderTimer.Tick += (_, _) => StepShaders();
-        }
-        _shaderTimer.Interval = ShaderTick;
         // Built while off screen: started when it comes on (IsVisibleChanged).
-        if (!IsVisible) { _shaderTimer.Stop(); return; }
-        _shaderTimer.Start();
-        StepShaders();          // draw once now rather than after the first tick
+        if (!IsVisible) { StopShaders(); return; }
+        if (!_shaderClockOn)
+        {
+            CompositionTarget.Rendering += OnShaderFrame;
+            _shaderClockOn = true;
+        }
+        _shaderPacer.Restart();
+        _shaderPacer.Due(Rendering.DisplayRefresh.RateOf(this));
+        StepShaders();          // draw once now rather than on the next frame
     }
 
+    /// <summary>The shaders' clock off: off screen, or nothing to animate.</summary>
+    private void StopShaders()
+    {
+        if (!_shaderClockOn) return;
+        CompositionTarget.Rendering -= OnShaderFrame;
+        _shaderClockOn = false;
+    }
+
+    /// <summary>A display frame: the shaders are drawn for it, off the
+    /// interface's thread, when the pacer says so and the last pass is in.</summary>
+    private void OnShaderFrame(object? sender, EventArgs e)
+    {
+        if (_shaderInFlight || !IsVisible || _shaderTargets.Count == 0) return;
+        if (!_shaderPacer.Due(Rendering.DisplayRefresh.RateOf(this))) return;
+        var targets = _shaderTargets.ToArray();
+        int generation = _shaderGeneration;
+        float t = (float)_shaderClock.Elapsed.TotalSeconds;
+        bool useCard = Services.PreviewRendererManager.UseCard;
+        var sampling = Services.PreviewQualityManager.Current.Sampling;
+        _shaderInFlight = true;
+        _shaderUi ??= System.Threading.Tasks.TaskScheduler.FromCurrentSynchronizationContext();
+        System.Threading.Tasks.Task.Run(() => { foreach (var target in targets) Draw(target, t, useCard, sampling); })
+            .ContinueWith(task =>
+            {
+                _shaderInFlight = false;
+                if (!task.IsCompletedSuccessfully || generation != _shaderGeneration || !IsVisible) return;
+                ShaderSteps++;
+                foreach (var target in targets) Show(target);
+            }, _shaderUi);
+    }
+
+    /// <summary>Draw every shader now, on this thread (the first frame of what
+    /// was just built).</summary>
     private void StepShaders()
     {
         // Nothing to show while the control is off screen, and a background
-        // tab should not be burning a core on invisible pixels.
-        if (!IsVisible) return;
-        // A quality changed while the shaders run takes effect at once.
-        if (_shaderTimer != null && _shaderTimer.Interval != ShaderTick) _shaderTimer.Interval = ShaderTick;
+        // tab should not be burning a core on invisible pixels. A pass in
+        // flight draws into the same buffers and lands next.
+        if (!IsVisible || _shaderInFlight) return;
+        ShaderSteps++;
         float t = (float)_shaderClock.Elapsed.TotalSeconds;
-        foreach (var s in _shaderTargets)
+        bool useCard = Services.PreviewRendererManager.UseCard;
+        var sampling = Services.PreviewQualityManager.Current.Sampling;
+        foreach (var target in _shaderTargets)
         {
-            if (s.Params != null)
-                JiggleShader.Render(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params, s.Tint, t,
-                                    s.Output, s.OutW, s.OutH, superSample: false);
-            else
-                MilkingShader.Render(s.Base, s.SrcW, s.SrcH, s.Mask, s.MaskW, s.MaskH,
-                                     s.Milking, t, s.Output, s.OutW, s.OutH);
-            s.Bitmap.WritePixels(new Int32Rect(0, 0, s.OutW, s.OutH), s.Output, s.OutW * 4, 0);
+            Draw(target, t, useCard, sampling);
+            Show(target);
         }
     }
+
+    /// <summary>One shader's picture: an NPC's sampled as the quality says (as the
+    /// NPC tab's with no backdrop), a level layer's at its art's own grid.</summary>
+    private static void Draw(ShaderTarget s, float t, bool useCard, JiggleShader.Sampling sampling)
+    {
+        var card = s.Params != null && useCard ? (s.Card ??= Rendering.Gpu.GpuAlone.TryCreate()) : null;
+        if (card != null)
+            card.Draw(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params!, s.Tint, t, s.Output, s.OutW, s.OutH, sampling);
+        else if (s.Params != null)
+            JiggleShader.Render(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params, s.Tint, t,
+                                s.Output, s.OutW, s.OutH, sampling);
+        else if (useCard && (s.Milk ??= Rendering.Gpu.GpuMilking.TryCreate()) is { } milk)
+            milk.Draw(s.Base, s.SrcW, s.SrcH, s.Mask, s.MaskW, s.MaskH, s.Milking, t, s.Output, s.OutW, s.OutH);
+        else
+            MilkingShader.Render(s.Base, s.SrcW, s.SrcH, s.Mask, s.MaskW, s.MaskH,
+                                 s.Milking, t, s.Output, s.OutW, s.OutH);
+    }
+
+    private static void Show(ShaderTarget s)
+        => s.Bitmap.WritePixels(new Int32Rect(0, 0, s.OutW, s.OutH), s.Output, s.OutW * 4, 0);
 
     /// <summary>Register an element to drift, unless it has no reason to.</summary>
     private void TrackParallax(UIElement element, double gain)
@@ -2214,7 +2346,7 @@ public sealed class PlacePreview : Grid
                 // object stays exactly where and how big it was.
                 if (Shaders && !string.IsNullOrWhiteSpace(def.Mask))
                     TrackShader(img, Path.Combine(root, Normalize(def.Sprite)),
-                                Path.Combine(root, Normalize(def.Mask)), def.Model.Jiggle);
+                                Path.Combine(root, Normalize(def.Mask)), def.Model.Jiggle, mBody);
                 var plForClick = pl;
                 var plPathForClick = entry.Path;
                 img.MouseLeftButtonDown += (_, e) => { SelectPlacement(plForClick, plPathForClick); e.Handled = true; };

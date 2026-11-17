@@ -319,6 +319,10 @@ game.notice.news.1.8.2 = Разговор из пака больше не нач
 # en: Screens from packs now sit where their authors put them, and their changes to the game's own screens all show up.\nA pack's place no longer plays its arrival in the room you are still in when the game refuses the trip.
 game.notice.news.1.8.3 = Экраны из паков теперь стоят там, где их поставили авторы, а изменения в экранах самой игры видны полностью.\nМесто из пака больше не проигрывает прибытие в комнате, где вы ещё находитесь, если игра отказала в переходе.
 
+# What ModForge 1.9.1 changes for players, one line each (\n starts the next)
+# en: Characters from packs now cast their own shadows, and their movement is no longer cut off at the edges of their art.
+game.notice.news.1.9.1 = Персонажи из паков теперь отбрасывают собственные тени, и их движение больше не обрезается по краям их изображения.
+
 [Where an NPC stands]
 
 # Text
@@ -2795,6 +2799,10 @@ menu.checkForUpdates = Проверить обновления _сейчас
 # en: _Preview quality
 menu.previewQuality = _Качество предпросмотра
 
+# Menu item
+# en: Preview _backdrop
+menu.previewBackdrop = _Фон предпросмотра
+
 # Tooltip on a text
 # en: The game build this ModForge version targets. Saved packs are stamped with it; the in-game Mods banner flags packs whose stamp doesn't match the running game.
 menu.gameBuildModforgeVersion.tip = Сборка игры, для которой сделана эта версия ModForge. Сохранённые паки получают её отметку; баннер Mods в игре отмечает паки, чья отметка не совпадает с запущенной игрой.
@@ -2928,48 +2936,152 @@ menu.dialogueRowsLookLike.tip = Рисовать каждую реплику в 
 menu.checkForUpdates.tip = Спросить прямо сейчас и ответить в любом случае.
 
 # Tooltip on "_Preview quality"
-# en: Trade live-preview smoothness for CPU. Your choice is remembered between sessions.
-menu.previewQuality.tip = Выбрать между плавностью живого предпросмотра и нагрузкой на процессор. Ваш выбор запоминается между сеансами.
+# en: How much of the game's look the live previews draw: less asks less of the computer. Your choice is remembered between sessions.
+menu.previewQuality.tip = Сколько от вида игры рисуют живые предпросмотры: меньше — меньше нагрузки на компьютер. Ваш выбор сохраняется между сеансами.
+
+# Tooltip on "Preview _backdrop"
+# en: What the bust preview draws a bust over. Your choice is remembered between sessions.
+menu.previewBackdrop.tip = На чём предпросмотр бюста рисует бюст. Ваш выбор сохраняется между сеансами.
+
+# Options menu, a tick: each live preview shows the frame rate it draws at
+# en: Show preview _frame rate
+menu.showPreviewFps = Показывать _частоту кадров предпросмотра
+
+# Tooltip on that menu item
+# en: Show, in a corner of each live preview, how many pictures a second it is drawing. Off by default; your choice is remembered between sessions.
+menu.showPreviewFps.tip = Показывать в углу каждого живого предпросмотра, сколько кадров в секунду он рисует. По умолчанию выключено; ваш выбор запоминается между сеансами.
+
+# In a corner of a live preview: the frame rate it is drawing at ({rate}: a whole number)
+# en: {rate} fps
+preview.fps = {rate} к/с
+
+# Options menu: what draws the live previews (a submenu: Automatic, Graphics card, Processor)
+# en: D_raw previews on
+menu.previewRenderer = _Рисовать предпросмотр на
+
+# Tooltip on that menu item
+# en: What draws the live previews: the graphics card or the processor. Automatic times both when the editor starts and takes the faster. Your choice is remembered between sessions.
+menu.previewRenderer.tip = Что рисует живые предпросмотры: видеокарта или процессор. Автоматически при запуске редактора замеряет оба и берёт более быстрое. Ваш выбор сохраняется между сеансами.
+
+# Under Draw previews on: let the editor choose
+# en: Automatic
+previewRenderer.automatic = Автоматически
+
+# Tooltip on that choice
+# en: Times the graphics card and the processor when the editor starts, and draws the previews on whichever is faster on this PC.
+previewRenderer.automatic.tip = При запуске редактора замеряет видеокарту и процессор и рисует предпросмотры на том, что быстрее на этом ПК.
+
+# Under Draw previews on: the graphics card
+# en: Graphics card
+previewRenderer.card = Видеокарта
+
+# Tooltip on that choice
+# en: Draws the previews on the graphics card, running the game's own programs as the game does. On a PC without a card that can, the processor draws them.
+previewRenderer.card.tip = Рисует предпросмотры на видеокарте, выполняя собственные программы игры так же, как игра. На ПК без подходящей видеокарты их рисует процессор.
+
+# Under Draw previews on: the processor
+# en: Processor
+previewRenderer.processor = Процессор
+
+# Tooltip on that choice
+# en: Draws the previews on the processor.
+previewRenderer.processor.tip = Рисует предпросмотры на процессоре.
+
+# Before the preview backdrop buttons, at the bottom of the bust preview's options
+# en: Backdrop
+previewBackdrop.bar = Фон
+
+# Tooltip on that word
+# en: What the bust preview draws the bust over. One setting, the same as Options > Preview backdrop.
+previewBackdrop.bar.tip = На чём предпросмотр бюста рисует бюст. Одна настройка, та же, что «Параметры > Фон предпросмотра».
+
+# A preview backdrop, in the menu: the PC's room in the game (PC: the player character, whose room it is)
+# en: PC's room
+previewBackdrop.room = Комната персонажа игрока
+
+# Tooltip on that preview backdrop
+# en: The bust in the PC's room (the player character's), as the game draws it there: the room behind it, its lamps' light on the bust, and the glow the bust's edges take from what is behind them. The preview shows the part of the game's screen the bust is in, so its lowest rows are off the bottom, as in the game.
+previewBackdrop.room.tip = Бюст в комнате персонажа игрока, как игра рисует его там: комната позади, свет её ламп на бюсте и свечение, которое края бюста берут от того, что за ними. Предпросмотр показывает ту часть экрана игры, где стоит бюст, поэтому его нижние строки уходят за нижний край, как в игре.
+
+# A preview backdrop, in the menu: the Beach, one of the game's places (the game's own name for it)
+# en: Beach
+previewBackdrop.beach = Пляж
+
+# Tooltip on that preview backdrop
+# en: The bust on the Beach, one of the game's places, as the game draws it there: the beach behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.beach.tip = Бюст на Пляже (в игре — «Beach»), одном из мест игры, как игра рисует его там: пляж позади и свечение, которое края бюста берут от того, что за ними. Его движущиеся части стоят на месте.
+
+# A preview backdrop, in the menu: the Forest, one of the game's places (the game's own name for it)
+# en: Forest
+previewBackdrop.forest = Лес
+
+# Tooltip on that preview backdrop
+# en: The bust in the Forest, one of the game's places, as the game draws it there: the forest behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.forest.tip = Бюст в Лесу (в игре — «Forest»), одном из мест игры, как игра рисует его там: лес позади и свечение, которое края бюста берут от того, что за ними. Его движущиеся части стоят на месте.
+
+# A preview backdrop, in the menu: the inside of the Villa, one of the game's places (the game calls it "Villa (Inside)")
+# en: Villa
+previewBackdrop.villa = Вилла
+
+# Tooltip on that preview backdrop
+# en: The bust inside the Villa, one of the game's places, as the game draws it there: the room behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.villa.tip = Бюст внутри Виллы (в игре — «Villa (Inside)»), одного из мест игры, как игра рисует его там: комната позади и свечение, которое края бюста берут от того, что за ними. Её движущиеся части стоят на месте.
+
+# A preview backdrop, in the menu: the inside of the Temple, one of the game's places (the game calls it "Temple (Inside)")
+# en: Temple
+previewBackdrop.temple = Храм
+
+# Tooltip on that preview backdrop
+# en: The bust inside the Temple, one of the game's places, as the game draws it there: the temple behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.temple.tip = Бюст внутри Храма (в игре — «Temple (Inside)»), одного из мест игры, как игра рисует его там: храм позади и свечение, которое края бюста берут от того, что за ними. Его движущиеся части стоят на месте.
+
+# A preview backdrop, in the menu: no backdrop at all
+# en: None
+previewBackdrop.none = Нет
+
+# Tooltip on that preview backdrop
+# en: The bust alone, all of its picture, with nothing behind it.
+previewBackdrop.none.tip = Бюст отдельно, вся его картинка, ничего позади.
 
 # A preview quality, in the menu
 # en: Ultra
 previewQuality.ultra = Ультра
 
 # Tooltip on that preview quality
-# en: 60 fps, 4× anti-aliasing. Smoothest motion, highest CPU.
-previewQuality.ultra.tip = 60 кадров/с, сглаживание 4×. Самое плавное движение, самая высокая нагрузка на процессор.
+# en: The game's look in full, as the game draws it: the edge glow, the bloom, the light streaks and the colour. The most work for the computer. With no backdrop, a bust or an NPC is drawn as finely as the game draws it on a large screen.
+previewQuality.ultra.tip = Вид игры полностью, как его рисует игра: свечение краёв, Bloom, световые полосы и цвет. Больше всего работы для компьютера. Без фона бюст или NPC рисуется так же мелко, как игра рисует его на большом экране.
 
 # A preview quality, in the menu
 # en: High
 previewQuality.high = Высокое
 
 # Tooltip on that preview quality
-# en: 30 fps, 4× anti-aliasing. Same fidelity as Ultra at ~half the CPU.
-previewQuality.high.tip = 30 кадров/с, сглаживание 4×. То же качество, что и Ультра, примерно при половине нагрузки.
+# en: Everything but the light streaks. On the processor, the edge glow is worked out more quickly, leaving the bust's shadow out of it. With no backdrop, half the work: the rows stay as fine as the game's.
+previewQuality.high.tip = Всё, кроме световых полос. На процессоре свечение краёв считается быстрее и без тени бюста. Без фона — половина работы: строки остаются такими же мелкими, как в игре.
 
 # A preview quality, in the menu
 # en: Medium
 previewQuality.medium = Среднее
 
 # Tooltip on that preview quality
-# en: 30 fps, no anti-aliasing. Slight motion-edge shimmer; much lighter.
-previewQuality.medium.tip = 30 кадров/с, без сглаживания. Лёгкое мерцание на краях при движении; намного легче.
+# en: The default: also without the bloom. Light on the computer, and close to the game. With no backdrop, a quarter of the work: moving rows step a little more coarsely than in the game.
+previewQuality.medium.tip = По умолчанию: ещё и без Bloom. Легко для компьютера и близко к игре. Без фона — четверть работы: движущиеся строки сдвигаются чуть грубее, чем в игре.
 
 # A preview quality, in the menu
 # en: Low
 previewQuality.low = Низкое
 
 # Tooltip on that preview quality
-# en: 20 fps, no anti-aliasing. Lightest; choppier motion.
-previewQuality.low.tip = 20 кадров/с, без сглаживания. Самое лёгкое; движение прерывистее.
+# en: The lightest: also without the glow a bust's edges take from the backdrop. The colour and the bust's shadow stay. With no backdrop, one point for every four pixels.
+previewQuality.low.tip = Самое лёгкое: ещё и без свечения, которое края бюста берут от фона. Цвет и тень бюста остаются. Без фона — одна точка на каждые четыре пикселя.
 
 # Before the preview quality buttons under a live preview
 # en: Quality
 previewQuality.bar = Качество
 
 # Tooltip on that word
-# en: How smoothly the live previews are drawn: higher is smoother and asks more of the computer. One setting for every preview, the same as Options > Preview quality.
-previewQuality.bar.tip = Насколько плавно рисуются живые предпросмотры: выше — плавнее и больше нагрузки на компьютер. Одна настройка для всех предпросмотров, та же, что Параметры > Качество предпросмотра.
+# en: How much of the game's look the live previews draw: higher is closer to the game and asks more of the computer. They move as smoothly as your display at every quality. One setting for every preview, the same as Options > Preview quality.
+previewQuality.bar.tip = Сколько от вида игры рисуют живые предпросмотры: выше — ближе к игре и больше нагрузки на компьютер. При любом качестве они двигаются так же плавно, как ваш экран. Одна настройка для всех предпросмотров, та же, что «Параметры > Качество предпросмотра».
 
 # A colour theme, in the Themes menu
 # en: Light
@@ -3821,10 +3933,6 @@ characters.wetParticleActiveSpawn = Частицы «мокрый» активн
 # en: (The Wet preset is always attached — this controls whether it starts playing.)
 characters.wetPresetAlwaysAttached = (Шаблон «Мокрый» прикреплён всегда – здесь решается, начинает ли он проигрываться.)
 
-# Label over the preview's size picker
-# en: Preview size
-characters.previewSize = Размер предпросмотра
-
 # Text
 # en: Mouth frame
 characters.mouthFrame = Кадр рта
@@ -3841,9 +3949,21 @@ characters.yappingToggle = Болтовня
 # en: Blinking
 characters.blinkToggle = Моргание
 
+# Tooltip on the divider between the outfit's fields and the bust preview
+# en: Drag to give the preview more or less of the tab: the bust scales to fit, no bigger than the size its corner is dragged to. Remembered.
+characters.previewSplitter.tip = Перетащите, чтобы отдать предпросмотру больше или меньше места во вкладке: бюст масштабируется по размеру, но не больше того, до которого растянут его угол. Запоминается.
+
 # Tick box
 # en: Breathing
 characters.breathingToggle = Дыхание
+
+# Tick box under the bust preview: play the game's fade-in when a bust appears
+# en: Fade in
+characters.fadeInToggle = Плавное появление
+
+# Tooltip on that tick box
+# en: Show the bust appearing as the game shows it: a dark silhouette fades in over a second, then the character fades in from it over three. Plays each time an outfit is shown, and when this is ticked. Preview only.
+characters.fadeInToggle.tip = Показывать появление бюста так же, как в игре: тёмный силуэт проявляется за секунду, затем из него за три секунды проявляется персонаж. Воспроизводится каждый раз, когда показывается наряд, и при включении этого флажка. Только предпросмотр.
 
 # Text
 # en: Depth
@@ -4109,14 +4229,6 @@ characters.resetJiggle.tip = Вернуть значение, с которым 
 # en: When checked, the Wet particle system (cloned from Anna_Towel) starts active. Typically enabled only for swim/wet outfit variants.
 characters.wetParticleActiveSpawn.tip = Если отмечено, система частиц «Мокрый» (клон из Anna_Towel) запускается активной. Обычно включают только для купальных или мокрых вариантов наряда.
 
-# Under the preview's size picker, only when the window is too small for the size picked. {shown} and {chosen} are sizes, like 1× and 2×
-# en: Shown at {shown}: the window is too small for {chosen}. It goes back to {chosen} when there is room.
-characters.previewSize.shrunk = Показано в размере {shown}: окно слишком мало для {chosen}. Как только места хватит, размер вернётся к {chosen}.
-
-# Tooltip on the preview's size picker
-# en: How big the bust is drawn. 1× puts one of the preview's pixels on one of the screen's, which is the sharpest it gets; 2× doubles every pixel and is just as exact. The half steps in between have to be resampled, so they look a little softer. The panel grows with it, and the choice is remembered.
-characters.previewSize.tip = Насколько крупно рисуется портрет. 1× кладёт пиксель предпросмотра на пиксель экрана – чётче не бывает; 2× удваивает каждый пиксель и так же точно. Промежуточные полушаги приходится пересчитывать, поэтому они выглядят чуть мягче. Панель растёт вместе с ним, и выбор запоминается.
-
 # Tooltip on a dropdown
 # en: Show the bust holding one particular mouth frame. Preview only - it changes nothing in the pack.
 characters.mouthPicker.tip = Показать портрет с определённым кадром рта. Только предпросмотр – в паке ничего не меняется.
@@ -4130,12 +4242,12 @@ characters.yappingToggle.tip = Двигать рот в предпросмотр
 characters.breathingToggle.tip = Включить в предпросмотре дыхание в покое. Только предпросмотр.
 
 # Tooltip on a slider
-# en: Preview-only: how far the bust bobs, in preview pixels. Match it to the game by eye.
-characters.breathingDepth.tip = Только предпросмотр: насколько портрет покачивается вверх-вниз, в пикселях предпросмотра. Подберите на глаз под игру.
+# en: Preview-only: how far the bust bobs, in preview pixels. The game's is 5; it gives each bust up to a tenth less.
+characters.breathingDepth.tip = Только предпросмотр: насколько бюст покачивается вверх-вниз, в пикселях предпросмотра. В игре это 5; каждому бюсту она даёт до десятой доли меньше.
 
 # Tooltip on a button
-# en: Put the depth back to its default (4).
-characters.resetBreathingDepth.tip = Вернуть глубину по умолчанию (4).
+# en: Put the depth back to the game's (5).
+characters.resetBreathingDepth.tip = Вернуть глубину к значению игры (5).
 
 # Tooltip on a dropdown
 # en: Show the bust in one particular expression. Preview only - it changes nothing in the pack.
@@ -4310,6 +4422,10 @@ npcs.startActive = Активен в начале
 # Text
 # en: Emitter offset / rotation / scale are per-placement — edit the Wet transform on the Places tab.
 npcs.emitterOffsetRotationScale = Смещение / поворот / масштаб излучателя задаются для каждого размещения – измените трансформ Мокрый на вкладке Локации.
+
+# Tooltip on the divider between the NPC's fields and its preview
+# en: Drag to give the preview more or less of the tab: the NPC scales to fit, no bigger than the size its corner is dragged to. Remembered.
+npcs.previewSplitter.tip = Перетащите, чтобы отдать предпросмотру больше или меньше места во вкладке: NPC масштабируется по размеру, но не больше того, до которого растянут его угол. Запоминается.
 
 # Heading
 # en: Preview (live jiggle + shadow + blink)
@@ -4500,6 +4616,38 @@ places.extParallaxPreview = Параллакс в предпросмотре
 # Tick box
 # en: Apply shaders
 places.extShaders = Применять шейдеры
+
+# Before the game look tick boxes under a place preview
+# en: Game look:
+places.look = Вид игры:
+
+# Tooltip on that word
+# en: The post-processing the game draws over every place, as it draws it. Each part is drawn while ticked and the preview quality draws it: Ultra all three, High without the light streaks, Medium and Low the colour only.
+places.look.tip = Постобработка, которую игра рисует поверх каждого места, так, как она её рисует. Каждая часть рисуется, пока она отмечена и качество предпросмотра её рисует: Ультра — все три, Высокое — без световых полос, Среднее и Низкое — только цвет.
+
+# Tick box under a place preview: the game's bloom
+# en: Bloom
+places.lookBloom = Bloom
+
+# Tooltip on that tick box
+# en: The soft glow the game spreads around bright parts of the picture. Drawn at High preview quality and up.
+places.lookBloom.tip = Мягкое свечение, которое игра разливает вокруг светлых частей картинки. Рисуется при качестве предпросмотра Высокое и выше.
+
+# Tick box under a place preview: the game's anamorphic flares
+# en: Light streaks
+places.lookFlares = Световые полосы
+
+# Tooltip on that tick box
+# en: The long upright streaks the game draws from the brightest parts of the picture. Drawn at Ultra preview quality.
+places.lookFlares.tip = Длинные вертикальные полосы, которые игра рисует от самых ярких частей картинки. Рисуются при качестве предпросмотра Ультра.
+
+# Tick box under a place preview: the game's colour grading
+# en: Colour
+places.lookColour = Цвет
+
+# Tooltip on that tick box
+# en: The game's colour: its tonemapping, the darkened corners and its grading, which every place on screen goes through.
+places.lookColour.tip = Цвет игры: её тональная компрессия, затемнённые углы и цветокоррекция, через которые проходит каждое место на экране.
 
 # Box heading
 # en: Vanilla source
@@ -9180,8 +9328,8 @@ maskStudio.invert.tip = Меняет сильное и слабое местам
 maskStudio.soften = Смягчить всё
 
 # Tooltip on that button
-# en: Blur the whole layer being painted a little, smoothing hard edges where the effect would tear. Press it again for more; the Soften brush does the same only where you paint.
-maskStudio.soften.tip = Немного размывает весь рисуемый слой, сглаживая резкие края, где эффект рвался бы. Нажмите ещё раз, чтобы сильнее; кисть «Смягчение» делает то же только там, где вы рисуете.
+# en: Blur the whole layer being painted a little, smoothing hard edges where the effect would tear. Press it again for more. To soften only some edges, and never past a softness you set, use the Soften brush.
+maskStudio.soften.tip = Немного размывает весь рисуемый слой, сглаживая резкие края, где эффект рвался бы. Нажмите ещё раз, чтобы сильнее. Чтобы смягчить лишь некоторые края и никогда не сильнее заданной мягкости, используйте кисть смягчения.
 
 # A tick: paint both halves at once
 # en: Mirror
@@ -9252,8 +9400,16 @@ maskStudio.status.soften = Кисть смягчения на слое «{layer}
 maskStudio.toolSoften = Смягчение (S)
 
 # Tooltip
-# en: A brush that smooths what it passes over instead of painting: each stroke pulls the layer towards a blur of itself, as far as Opacity says. Go over a place again for more.
-maskStudio.toolSoften.tip = Кисть, которая сглаживает то, по чему проходит, вместо рисования: каждый мазок приближает слой к его размытой версии настолько, насколько велика непрозрачность. Пройдите по месту ещё раз, чтобы сильнее.
+# en: A brush that smooths the edges it passes over instead of painting, to the Edge softness set for it. Going over an edge again never softens it further: raise Edge softness for a softer edge, or lower it and go over the edge to tighten it again.
+maskStudio.toolSoften.tip = Кисть, которая вместо рисования сглаживает края, по которым проходит, до заданной для неё мягкости края. Повторный проход по краю никогда не смягчает его сильнее: увеличьте «Мягкость края», чтобы край стал мягче, или уменьшите её и пройдите по краю, чтобы снова сделать его чётче.
+
+# Text: the slider that takes Opacity's place while the soften brush is the tool
+# en: Edge softness
+maskStudio.softness = Мягкость края
+
+# Tooltip on that slider
+# en: How soft an edge the Soften brush leaves, in pixels of the mask: a hard edge it passes over fades from nothing to full across about this many pixels. Going over it again never takes it further.
+maskStudio.softness.tip = Насколько мягкий край оставляет кисть смягчения, в пикселях маски: резкий край, по которому она проходит, переходит от нуля до полного примерно за столько пикселей. Повторный проход никогда не смягчает его дальше.
 
 # One line of the hotkeys list: the key, two spaces, what it does
 # en: S  soften brush
@@ -9908,8 +10064,8 @@ docs.maskPainter.realArtUnderneathThere = Настоящая графика по
 docs.maskPainter.brushEraserSizeHardness.term = Инструменты
 
 # Docs: a point in the topic
-# en: A brush, an eraser and a soften brush, with Size, Hardness and Opacity. The soften brush smooths what it passes over instead of painting, as far as Opacity says. Zoom changes how close you are working, not what is painted.
-docs.maskPainter.brushEraserSizeHardness = Кисть, ластик и кисть смягчения, с размером, жёсткостью и непрозрачностью. Кисть смягчения сглаживает то, по чему проходит, вместо рисования, настолько, насколько велика непрозрачность. Масштаб меняет то, насколько близко вы работаете, а не то, что рисуется.
+# en: A brush, an eraser and a soften brush, with Size and Hardness. The brush and eraser have Opacity; the soften brush has Edge softness in its place: it smooths the edges it passes over to that softness and never past it, however often you go over them. Zoom changes how close you are working, not what is painted.
+docs.maskPainter.brushEraserSizeHardness = Кисть, ластик и кисть смягчения, с размером и жёсткостью. У кисти и ластика есть непрозрачность; у кисти смягчения вместо неё — мягкость края: она сглаживает края, по которым проходит, до этой мягкости и никогда сильнее, сколько бы раз вы по ним ни проходили. Масштаб меняет то, насколько близко вы работаете, а не то, что рисуется.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Cap at opacity
@@ -10154,8 +10310,12 @@ docs.previews.theyDoNotRun = Они не выполняют логику игр�
 docs.previews.previewsResolveImagePaths = Предпросмотры определяют пути к изображениям относительно папки пака, так что они пусты, пока пак не сохранён.
 
 # Docs: a point in the topic
-# en: Preview quality on the Options menu trades smoothness against processor load. The Quality buttons above each live preview are the same setting.
-docs.previews.previewQualityOptionsMenu = Качество предпросмотра в меню Параметры выбирает между плавностью и нагрузкой на процессор. Кнопки качества над каждым живым предпросмотром – та же настройка.
+# en: Preview quality on the Options menu chooses how much of the game's look the previews draw, against processor load. The Quality buttons above each live preview are the same setting.
+docs.previews.previewQualityOptionsMenu = Качество предпросмотра в меню «Параметры» выбирает, сколько от вида игры рисуют предпросмотры, в обмен на нагрузку на процессор. Кнопки «Качество» над каждым живым предпросмотром — та же настройка.
+
+# Docs: a point in the topic
+# en: The place previews draw the game's look over the place, as the game does over every place: its bloom, its light streaks and its colour. Each has a tick box under the preview, and each is drawn only when its box is ticked and the preview quality draws it.
+docs.previews.placesGameLook = Предпросмотры мест рисуют вид игры поверх места, как игра делает это над каждым местом: его Bloom, его световые полосы и его цвет. У каждого есть флажок под предпросмотром, и он рисуется, только когда флажок отмечен и качество предпросмотра его рисует.
 
 [Docs: File menu]
 
@@ -10368,8 +10528,24 @@ docs.optionsMenu.addEveryCharacterPlace = Разом добавить в сло�
 docs.optionsMenu.tradePreviewSmoothnessAgainst.term = Качество предпросмотра
 
 # Docs: a point in the topic
-# en: Trade preview smoothness against processor load: Ultra (60 fps, anti-aliased), High (30 fps, anti-aliased), Medium (30 fps, no anti-aliasing), Low (20 fps, no anti-aliasing).
-docs.optionsMenu.tradePreviewSmoothnessAgainst = Выбор между плавностью предпросмотра и нагрузкой на процессор: Ультра (60 кадр/с, со сглаживанием), Высокое (30 кадр/с, со сглаживанием), Среднее (30 кадр/с, без сглаживания), Низкое (20 кадр/с, без сглаживания).
+# en: Choose how much of the game's look the previews draw, against processor load. Every quality draws as many frames as your display shows. Ultra is the game's own picture: the edge glow, bloom, light streaks and colour. High leaves out the light streaks, and on the processor works the edge glow out more quickly, without the bust's shadow in it; Medium leaves out the bloom too; Low the edge glow as well. With no backdrop the qualities save work too: Ultra draws a bust or an NPC as finely as the game does on a large screen, High with half the work, Medium a quarter, and Low one point for every four pixels.
+docs.optionsMenu.tradePreviewSmoothnessAgainst = Выберите, сколько от вида игры рисуют предпросмотры, в обмен на нагрузку на процессор. Каждое качество рисует столько кадров, сколько показывает ваш экран. Ультра — собственная картинка игры: свечение краёв, Bloom, световые полосы и цвет. Высокое убирает световые полосы и на процессоре считает свечение краёв быстрее, без тени бюста в нём; Среднее убирает ещё и Bloom; Низкое — также свечение краёв. Без фона качества тоже экономят работу: Ультра рисует бюст или NPC так же мелко, как игра на большом экране, Высокое — с половиной работы, Среднее — с четвертью, а Низкое — одной точкой на каждые четыре пикселя.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Preview backdrop
+docs.optionsMenu.previewBackdrop.term = Фон предпросмотра
+
+# Docs: a point in the topic
+# en: What the bust preview draws a bust over. The PC's room, the default, shows it as the game does there: the room behind, the light of its lamps, the glow its edges take from the room, and its breathing moving it over the room. The Beach, the Forest, the Villa and the Temple do the same in four more of the game's places, each with its own look. None shows the bust alone. The Backdrop buttons at the bottom of the Characters tab are the same setting, and the mask painter's preview follows it too.
+docs.optionsMenu.previewBackdrop = На чём предпросмотр бюста рисует бюст. Комната персонажа игрока, значение по умолчанию, показывает его так, как игра показывает его там: комнату позади, свет её ламп, свечение, которое края бюста берут от комнаты, и дыхание, двигающее его над комнатой. Пляж, Лес, Вилла и Храм делают то же самое в четырёх других местах игры, у каждого свой вид. Нет показывает бюст отдельно. Кнопки «Фон» внизу вкладки «Персонажи» — та же настройка, и предпросмотр рисования маски тоже следует ей.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Draw previews on
+docs.optionsMenu.previewRenderer.term = Рисовать предпросмотр на
+
+# Docs: a point in the topic
+# en: What draws the live previews. Automatic, the default, times the graphics card and the processor when the editor starts and uses the faster. On the graphics card the previews run the game's own programs; the first time, it takes a few seconds to prepare them.
+docs.optionsMenu.previewRenderer = Что рисует живые предпросмотры. Автоматически, значение по умолчанию, при запуске редактора замеряет видеокарту и процессор и берёт более быстрое. На видеокарте предпросмотры выполняют собственные программы игры; в первый раз нужно несколько секунд, чтобы их подготовить.
 
 # Docs: a heading inside the topic
 # en: Worth knowing
@@ -27536,6 +27712,21 @@ vhint.Cooldown3.tonygarage-cd = Дневная блокировка разгов
 vhint.Cooldown3.evelyn-dailysmollexperi = Дневная блокировка 'Any experiments that require my help?' в лаборатории Evelyn: задаётся, когда она выбирает эксперимент, сбрасывается каждую ночь.
 
 [Not used by this version]
+
+# en: Haunted House
+previewBackdrop.hauntedHouse = Дом с привидениями
+
+# en: The bust in the Haunted House by the Harbor, one of the game's places, as the game draws it there: the house behind it, and the glow the bust's edges take from what is behind them. Its moving parts stand still.
+previewBackdrop.hauntedHouse.tip = Бюст в Доме с привидениями у гавани (в игре — «Harbor Haunted House»), одном из мест игры, как игра рисует его там: дом позади и свечение, которое края бюста берут от того, что за ними. Его движущиеся части стоят на месте.
+
+# en: Preview size
+characters.previewSize = Размер предпросмотра
+
+# en: Shown at {shown}: the window is too small for {chosen}. It goes back to {chosen} when there is room.
+characters.previewSize.shrunk = Показано в размере {shown}: окно слишком мало для {chosen}. Как только места хватит, размер вернётся к {chosen}.
+
+# en: How big the bust is drawn. 1× puts one of the preview's pixels on one of the screen's, which is the sharpest it gets; 2× doubles every pixel and is just as exact. The half steps in between have to be resampled, so they look a little softer. The panel grows with it, and the choice is remembered.
+characters.previewSize.tip = Насколько крупно рисуется портрет. 1× кладёт пиксель предпросмотра на пиксель экрана – чётче не бывает; 2× удваивает каждый пиксель и так же точно. Промежуточные полушаги приходится пересчитывать, поэтому они выглядят чуть мягче. Панель растёт вместе с ним, и выбор запоминается.
 
 # en: Only {layer}
 maskStudio.copyLayer.one = Только {layer}

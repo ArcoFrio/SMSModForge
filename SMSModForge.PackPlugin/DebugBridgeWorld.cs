@@ -62,6 +62,16 @@ namespace SMSModForge.PackPlugin
                     StartCoroutine(FindAsDrawn(all));
                     return true;
                 }
+                case "children":
+                {
+                    // children <path>: the full paths of its children that are on -
+                    // the busts a place shows besides a check's own (1.9.1, S7).
+                    var parent = FindPath(all);
+                    if (parent == null) { Say("error children: no " + all); return true; }
+                    var on = parent.transform.Cast<Transform>().Where(t => t.gameObject.activeSelf).Select(FullPath).ToArray();
+                    Say("ok children " + all + ": " + (on.Length == 0 ? "(none)" : string.Join(" | ", on)));
+                    return true;
+                }
                 case "find-all":
                 {
                     var paths = SceneRoots().SelectMany(r => r.GetComponentsInChildren<Transform>(true))
@@ -912,6 +922,7 @@ namespace SMSModForge.PackPlugin
             if (v is Color c) return Hex(c) + " a" + N(c.a, "0.##");
             if (v is UnityEngine.Object o) return o == null ? "null" : o.name + " (" + o.GetType().Name + ")";
             if (v is string s) return "'" + s + "'";
+            if (v is int[] ints && ints.Length <= 32) return "int[" + string.Join(",", ints.Select(i => i.ToString(CultureInfo.InvariantCulture)).ToArray()) + "]";
             if (v is System.Collections.ICollection list) return v.GetType().Name + "[" + list.Count + "]";
             return Convert.ToString(v, CultureInfo.InvariantCulture);
         }

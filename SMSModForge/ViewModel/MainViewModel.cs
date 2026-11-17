@@ -3825,109 +3825,6 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// <summary>Bound by Options ▸ Check for updates on start. Two-way, and
     /// written straight through to the stored preference — there is no in-memory
     /// copy to fall out of step with it.</summary>
-    /// <summary>
-    /// How big the bust preview is drawn, remembered between sessions.
-    /// <para/>
-    /// The column it sits in is sized from this too, so the panel around the
-    /// preview grows with it rather than the preview growing inside a panel
-    /// that stays put — which is the version where only the backdrop moves.
-    /// </summary>
-    public double BustPreviewZoom
-    {
-        get => Services.EditorPrefs.BustPreviewZoom;
-        set
-        {
-            Services.EditorPrefs.BustPreviewZoom = value;
-            OnPropertyChanged();
-            RaiseBustPreviewShown();
-        }
-    }
-
-    // ── The size the preview is actually shown at ───────────────────────
-    //
-    // The size an author picks is kept, and shown whenever it fits. When the
-    // window is too small for it, the preview drops to the largest offered size
-    // that does - still one of the steps, so still pinned and pixel-exact -
-    // and comes back up by itself when the window grows. Before, a 2x preview
-    // in a short window pushed the size picker itself off the bottom, where it
-    // could not be reached to make the preview smaller again (the author,
-    // 1.6.3).
-
-    private double _bustPreviewRoomWidth = double.NaN;
-    private double _bustPreviewRoomHeight = double.NaN;
-
-    /// <summary>
-    /// The largest box the preview can be drawn in without pushing anything
-    /// out of the window, as the window measures it. Called whenever the
-    /// window or the panel around the preview changes size.
-    /// </summary>
-    public void SetBustPreviewRoom(double width, double height)
-    {
-        if (width.Equals(_bustPreviewRoomWidth) && height.Equals(_bustPreviewRoomHeight)) return;
-        double before = BustPreviewShownZoom;
-        _bustPreviewRoomWidth = width;
-        _bustPreviewRoomHeight = height;
-        if (!BustPreviewShownZoom.Equals(before)) RaiseBustPreviewShown();
-    }
-
-    /// <summary>The size the preview is drawn at: the chosen one, or the largest
-    /// offered size below it that fits. See <see cref="FitBustPreviewZoom"/>.</summary>
-    public double BustPreviewShownZoom
-        => FitBustPreviewZoom(BustPreviewZoom, Services.EditorPrefs.ZoomSteps,
-                              _bustPreviewRoomWidth, _bustPreviewRoomHeight);
-
-    /// <summary>
-    /// The largest of <paramref name="steps"/>, no bigger than
-    /// <paramref name="chosen"/>, whose preview fits the room; the smallest step
-    /// when none does. The chosen size itself while the room is not known yet.
-    /// </summary>
-    public static double FitBustPreviewZoom(double chosen, System.Collections.Generic.IReadOnlyList<double> steps,
-                                            double roomWidth, double roomHeight)
-    {
-        if (double.IsNaN(roomWidth) || double.IsNaN(roomHeight) || steps.Count == 0) return chosen;
-        double fit = steps.Min();
-        foreach (double step in steps.OrderBy(s => s))
-        {
-            if (step > chosen) break;
-            double side = View.Controls.JigglePreview.FixedSize * step;
-            if (side <= roomWidth && side <= roomHeight) fit = step;
-        }
-        return Math.Min(fit, chosen);
-    }
-
-    /// <summary>Whether the preview is shown smaller than the size picked.</summary>
-    public bool BustPreviewShrunk => BustPreviewShownZoom < BustPreviewZoom;
-
-    /// <summary>The line under the size picker saying so, and why.</summary>
-    public string BustPreviewShrunkNote
-        => Loc.F("characters.previewSize.shrunk",
-                 "shown", BustPreviewShownZoom.ToString(System.Globalization.CultureInfo.CurrentCulture) + "×",
-                 "chosen", BustPreviewZoom.ToString(System.Globalization.CultureInfo.CurrentCulture) + "×");
-
-    private void RaiseBustPreviewShown()
-    {
-        OnPropertyChanged(nameof(BustPreviewShownZoom));
-        OnPropertyChanged(nameof(BustPreviewColumnWidth));
-        OnPropertyChanged(nameof(BustPreviewShrunk));
-        OnPropertyChanged(nameof(BustPreviewShrunkNote));
-    }
-
-    /// <summary>The sizes offered, for the picker.</summary>
-    public System.Collections.Generic.IReadOnlyList<double> BustPreviewZoomSteps
-        => Services.EditorPrefs.ZoomSteps;
-
-    /// <summary>
-    /// What the preview column has to be for the preview to fit in it, chrome
-    /// included. Bound rather than typed, because the preview is pinned to its
-    /// own size and a column narrower than that clips it.
-    /// </summary>
-    public System.Windows.GridLength BustPreviewColumnWidth
-        => new(View.Controls.JigglePreview.FixedSize * BustPreviewShownZoom + BustPreviewChrome);
-
-    /// <summary>Margins, the border's padding, and the scrollbar the panel
-    /// keeps room for. Measured once off the 540 the column was fixed at when
-    /// the preview was 512 wide.</summary>
-    internal const double BustPreviewChrome = 28;
 
     /// <summary>Whether node rows are drawn the way the game draws a line. See
     /// EditorPrefs for why this starts off.</summary>
@@ -3975,6 +3872,23 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// the live bust preview runs its CPU shader (and whether it supersamples),
     /// trading smoothness for CPU. See <see cref="Services.PreviewQualityManager"/>.</summary>
     public IReadOnlyList<Services.PreviewQualityDef> PreviewQualities => Services.PreviewQualityManager.All;
+
+    /// <summary>Bound by Options ▸ Preview backdrop: what the bust preview draws a
+    /// bust over (<see cref="Services.PreviewBackdropManager"/>).</summary>
+    public IReadOnlyList<Services.PreviewBackdropDef> PreviewBackdrops => Services.PreviewBackdropManager.All;
+    public RelayCommand ApplyPreviewBackdropCommand { get; }
+
+    /// <summary>Bound by Options ▸ Draw previews on: the graphics card or the
+    /// processor (<see cref="Services.PreviewRendererManager"/>).</summary>
+    public IReadOnlyList<Services.PreviewRendererDef> PreviewRenderers => Services.PreviewRendererManager.All;
+    public RelayCommand ApplyPreviewRendererCommand { get; }
+
+    /// <summary>Bound by Options ▸ Show preview frame rate (1.9.1).</summary>
+    public bool ShowPreviewFps
+    {
+        get => View.Controls.FpsBadge.Shown;
+        set { View.Controls.FpsBadge.Shown = value; OnPropertyChanged(); }
+    }
 
     /// <summary>The guided tutorials offered on the ModForge tab, each paired
     /// with whether this author has finished it.</summary>
@@ -4454,6 +4368,14 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         ApplyPreviewQualityCommand    = new RelayCommand(p =>
         {
             if (p is Services.PreviewQualityDef q) Services.PreviewQualityManager.Apply(q);
+        });
+        ApplyPreviewBackdropCommand   = new RelayCommand(p =>
+        {
+            if (p is Services.PreviewBackdropDef d) Services.PreviewBackdropManager.Apply(d);
+        });
+        ApplyPreviewRendererCommand   = new RelayCommand(p =>
+        {
+            if (p is Services.PreviewRendererDef d) Services.PreviewRendererManager.Apply(d);
         });
 
         // Alphabetical display order for every tab's left-hand record list.

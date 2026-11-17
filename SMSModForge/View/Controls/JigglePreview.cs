@@ -58,6 +58,58 @@ public sealed class JigglePreview : Image
         set => SetValue(VanillaBustKeyProperty, value);
     }
 
+    /// <summary>
+    /// Show the bust appearing the way the game shows it (1.9.1, asked by
+    /// ArcoFrio): each time an outfit is shown, and when this is switched on, a
+    /// black silhouette fades in over a second and the character fades in from
+    /// it over three (<see cref="IntroFade"/>). Off by default; the Characters
+    /// tab's toggle starts it on.
+    /// </summary>
+    public static readonly DependencyProperty FadesInProperty =
+        DependencyProperty.Register(nameof(FadesIn), typeof(bool), typeof(JigglePreview),
+            new PropertyMetadata(false, (d, e) =>
+            {
+                var preview = (JigglePreview)d;
+                if ((bool)e.NewValue) preview.StartIntro();
+                else preview._introStart = null;
+            }));
+
+    public bool FadesIn
+    {
+        get => (bool)GetValue(FadesInProperty);
+        set => SetValue(FadesInProperty, value);
+    }
+
+    // When the fade-in under way began, on IntroNow's clock; null for none.
+    private double? _introStart;
+    private readonly System.Diagnostics.Stopwatch _introClock = System.Diagnostics.Stopwatch.StartNew();
+
+    /// <summary>The fade-in's clock, in seconds. A seam for tests, which hold
+    /// the moment still to read the picture at it.</summary>
+    internal Func<double> IntroNow;
+
+    /// <summary>The body's alpha as displaced, kept for the silhouette.</summary>
+    private byte[]? _bodyAlpha;
+
+    private void StartIntro()
+    {
+        if (FadesIn && Outfit != null) _introStart = IntroNow();
+    }
+
+    /// <summary>Where the fade-in under way stands: whether the body shows, and
+    /// the silhouette's opacity. (true, 0) when none is.</summary>
+    private (bool BodyShows, float Silhouette) IntroPhase()
+    {
+        if (!FadesIn || _introStart == null) return (true, 0f);
+        double t = IntroNow() - _introStart.Value;
+        if (t >= IntroFade.TotalSeconds)
+        {
+            _introStart = null;
+            return (true, 0f);
+        }
+        return IntroFade.At(t);
+    }
+
     public static readonly DependencyProperty SelectedExpressionProperty =
         DependencyProperty.Register(nameof(SelectedExpression), typeof(string), typeof(JigglePreview),
             new PropertyMetadata(""));
@@ -209,10 +261,38 @@ public sealed class JigglePreview : Image
         get => (double)GetValue(BreathingAmplitudeProperty);
         set => SetValue(BreathingAmplitudeProperty, value);
     }
-    private readonly TranslateTransform _breathingTransform = new();
 
     private readonly WriteableBitmap _bitmap;
     private readonly byte[] _jiggleOutput = new byte[JiggleShader.RenderStride * JiggleShader.RenderSize];
+
+    // Over a backdrop (1.9.1): the frame in linear light, the intro's
+    // silhouette beside it, and the body's alpha as the fake GI reads it.
+    private float[]? _linear, _linearSilhouette, _coverage;
+    private Rendering.GamePost.Target? _scene;
+    private Rendering.BackdropScene? _sceneOf;
+    // The bust's shadow from the room's lamp: what its art casts, the shadow
+    // texture, and the fake GI's background as the shadow leaves it.
+    private Rendering.BustShadow.Caster? _caster;
+    private byte[]? _casterOf;
+    private float[]? _shadowTexture, _shadowBackground;
+    // The post-processing's bloom and flare buffers, kept frame to frame.
+    private readonly Rendering.GamePost.Work _postWork = new();
+    // The body on the graphics card (Services.PreviewRendererManager), made on first use.
+    private Rendering.Gpu.GpuBody? _gpuBody;
+    private Rendering.Gpu.GpuPost? _gpuPost;
+    private Rendering.Gpu.GpuFrame? _gpuFrame;
+    private Rendering.Gpu.GpuAlone? _gpuAlone;
+    /// <summary>Whether the last frame's body was drawn on the graphics card - for tests.</summary>
+    internal bool DrewOnCard { get; private set; }
+    /// <summary>Pictures put on screen (Options ▸ Show preview frame rate).</summary>
+    internal int FramesShown { get; private set; }
+    private Rendering.FakeGi.Art? _giArt;
+    private byte[]? _giArtOf;
+    private int _giArtReach;
+    /// <summary>Whether the last frame was drawn over a backdrop - then the bust
+    /// breathes inside the picture, a whole screen pixel at a time, and the
+    /// picture itself stays still.</summary>
+    internal bool OverBackdrop { get; private set; }
     private bool _renderingHooked;
 
     // Off-thread render plumbing. The shader pass + alpha composites take far
@@ -226,13 +306,13 @@ public sealed class JigglePreview : Image
     private bool _renderInFlight;
     private TaskScheduler? _uiScheduler;
 
-    // Frame-rate cap. CompositionTarget.Rendering fires at the display refresh
-    // (~60 Hz), but the shader pass is the expensive part — rendering it every
-    // vsync keeps a chunk of every core busy back-to-back. We gate the shader
-    // to the active preview-quality preset's MaxFps (the breathing transform
-    // below stays at full vsync — it's a cheap GPU-side translate). Tracked in
-    // wall-clock ms via the monotonic tick counter.
-    private long _lastShaderTickMs;
+    // At most the display's own rate, at every quality (1.9.1, the author: all
+    // "capped at display refresh rate"): a frame is drawn on a Rendering tick
+    // when the last one is done and the pacer says the display is due one -
+    // Rendering alone can fire faster than the display (108 a second on the
+    // test suite's desktop). What a quality saves is the work in a frame - see
+    // PreviewQualityDef.
+    private readonly FramePacer _pacer = new();
 
     // Cached textures keyed by absolute path. Reloaded when PackRoot / outfit paths change.
     private byte[]? _base, _mask, _blink;
@@ -280,6 +360,7 @@ public sealed class JigglePreview : Image
         // The list of faces names them in the language on screen.
         Localization.LocText.Follow(this, PublishExpressionChoices);
 
+        IntroNow = () => _introClock.Elapsed.TotalSeconds;
         _bitmap = new WriteableBitmap(JiggleShader.RenderSize, JiggleShader.RenderSize, 96, 96, PixelFormats.Pbgra32, null);
         Source = _bitmap;
         // Stretch.None displays the bitmap at its natural pixel size. Combined
@@ -291,7 +372,6 @@ public sealed class JigglePreview : Image
         SnapsToDevicePixels = true;
         UseLayoutRounding = true;
         RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.NearestNeighbor);
-        RenderTransform = _breathingTransform;
 
         // Drive the animation off WPF's compositor instead of a
         // DispatcherTimer. CompositionTarget.Rendering fires once per
@@ -310,6 +390,7 @@ public sealed class JigglePreview : Image
         // content loaded-but-hidden, and we don't want the shader running for a
         // preview nobody can see.
         IsVisibleChanged += (_, _) => { if (IsVisible) HookRendering(); else UnhookRendering(); };
+        FpsBadge.Attach(this, () => FramesShown);
 
         ApplyZoom();
         HorizontalAlignment = HorizontalAlignment.Left;
@@ -363,8 +444,11 @@ public sealed class JigglePreview : Image
         // found it blurry (1.8.0): the game is pixel art, and a pixel a shade
         // wider than its neighbour reads as crisp where a smoothed one reads
         // as out of focus. Made smaller, it is smoothed, or whole rows go.
-        RenderOptions.SetBitmapScalingMode(
-            this, zoom >= 1 ? BitmapScalingMode.NearestNeighbor : BitmapScalingMode.HighQuality);
+        // At its own size it takes what the frame around it says (a frame that
+        // scales it, as the Characters tab's and the mask painter's do, 1.9.1).
+        if (zoom == 1) ClearValue(RenderOptions.BitmapScalingModeProperty);
+        else RenderOptions.SetBitmapScalingMode(
+            this, zoom > 1 ? BitmapScalingMode.NearestNeighbor : BitmapScalingMode.HighQuality);
     }
 
     /// <summary>
@@ -431,6 +515,8 @@ public sealed class JigglePreview : Image
             Outfit.PropertyChanged += _watching;
         }
         ReloadTextures();
+        // A bust shown is a bust switched on, in the game's terms: it fades in.
+        StartIntro();
     }
 
     /// <summary>Bumped whenever the inputs change, so a shader pass started
@@ -833,13 +919,10 @@ public sealed class JigglePreview : Image
         // keeps the UI thread free even when the shader runs slower than vsync.
         if (_renderInFlight) return;
 
-        // Respect the preview-quality frame cap (read live, so switching
-        // presets takes effect on the next tick). Below the cap interval we
-        // simply skip the shader pass for this vsync.
+        // The quality, read live, so switching presets takes effect at once.
         var quality = Services.PreviewQualityManager.Current;
+        if (!_pacer.Due(Rendering.DisplayRefresh.RateOf(this))) return;
         long nowMs = Environment.TickCount64;
-        if (nowMs - _lastShaderTickMs < 1000L / quality.MaxFps) return;
-        _lastShaderTickMs = nowMs;
 
         // The mask editor publishes its in-progress buffer through the VM —
         // prefer it when set so unsaved brush strokes appear immediately.
@@ -876,15 +959,83 @@ public sealed class JigglePreview : Image
         // Empty is no face. "None" is still honoured because the picker used
         // to store that word, and a layout file from before this change can
         // hand it back on the first render after an update.
-        byte[]? expression = (!string.IsNullOrEmpty(SelectedExpression) && SelectedExpression != "None"
+        // The fade-in (1.9.1): until the silhouette is in, the body, its blink
+        // and its expression are off - blink then starts its cycle afresh, as the
+        // game's BlinkingSprite does when switched on. The mouth stays.
+        var (bodyShows, silhouette) = IntroPhase();
+        byte[]? expression = (bodyShows && !string.IsNullOrEmpty(SelectedExpression) && SelectedExpression != "None"
                               && _expressions.TryGetValue(SelectedExpression, out var exp)) ? exp : null;
-        byte[]? blink = BlinkOverlayForThisFrame(nowMs / 1000.0);
+        if (!bodyShows) _blinkActive = false;
+        byte[]? blink = bodyShows ? BlinkOverlayForThisFrame(nowMs / 1000.0) : null;
         byte[]? mouth = MouthOverlayForThisFrame(nowMs / 1000.0);
+        byte[]? bodyAlpha = bodyShows && silhouette <= 0f
+            ? null
+            : _bodyAlpha ??= new byte[JiggleShader.RenderSize * JiggleShader.RenderSize];
         var output = _jiggleOutput;
-        bool superSample = quality.SuperSample;
+
+        // Over a backdrop: the game's screen around the bust, the room behind,
+        // breathing moving the bust over it (whole pixels: the Pixel Perfect
+        // Camera), its fake GI - but not at Low, the cheapest that still shows
+        // the bust as it is.
+        var scene = Services.PreviewBackdropManager.Current.Scene;
+        OverBackdrop = scene != null;
+        int bustBottom = 0;
+        float shadowY = 0f;
+        Rendering.GameLamp? lamp = null;
+        Rendering.FakeGi? gi = null;
+        Rendering.FakeGi.Art? giArt = null;
+        if (scene != null)
+        {
+            double breath = Breathing ? Math.Sin(time * BreathingSpeed) * BreathingAmplitude : 0.0;
+            int bob = (int)Math.Round(breath);
+            bustBottom = scene.Backdrop.BustRestBottom + bob;
+            // The shadow follows the bust's own place, not the whole pixel the
+            // Pixel Perfect Camera draws it at: the caster's transform.
+            shadowY = (float)(scene.Backdrop.BustRestBottom + breath) + Rendering.BackdropRender.FrameSize / 2f;
+            lamp = scene.Lamp;
+            if (lamp != null)
+            {
+                if (!ReferenceEquals(_casterOf, baseSnap)) { _caster = new Rendering.BustShadow.Caster(baseSnap, JiggleShader.Size, JiggleShader.Size, 100f); _casterOf = baseSnap; }
+                _shadowTexture ??= new float[lamp.Shadow.W * lamp.Shadow.H];
+                _shadowBackground ??= new float[scene.Backdrop.BackgroundWidth * scene.Backdrop.BackgroundHeight * 4];
+            }
+            gi = quality.EdgeGlow ? scene.Gi : null;
+            if (gi != null)
+            {
+                if (!ReferenceEquals(_giArtOf, baseSnap) || _giArtReach != gi.Reach)
+                {
+                    _giArt = new Rendering.FakeGi.Art(baseSnap, JiggleShader.Size, JiggleShader.Size, gi.Reach);
+                    _giArtOf = baseSnap; _giArtReach = gi.Reach;
+                }
+                giArt = _giArt;
+            }
+            _linear ??= new float[Rendering.BackdropRender.FrameSize * Rendering.BackdropRender.FrameSize * 4];
+            _coverage ??= new float[Rendering.BackdropRender.FrameSize * Rendering.BackdropRender.FrameSize];
+            if (silhouette > 0f) _linearSilhouette ??= new float[_linear.Length];
+            if (!ReferenceEquals(_sceneOf, scene)) { _scene = Rendering.BackdropRender.Scene(scene); _sceneOf = scene; }
+        }
+        var linear = _linear;
+        var linearSilhouette = silhouette > 0f ? _linearSilhouette : null;
+        var coverage = _coverage;
+        var sceneTarget = _scene;
+        var caster = _caster;
+        var shadowTexture = _shadowTexture;
+        var shadowBackground = _shadowBackground;
+        // The body's renderer while the intro hides it is at alpha 0, and its
+        // shadow on itself with it; the cast shadow is there from the start.
+        float rendererAlpha = bodyShows ? tint.a : 0f;
+        // What the game's post-processing adds, by quality (PreviewQualityDef).
+        var parts = new Rendering.BackdropRender.PostParts(quality.Bloom, quality.Flares, quality.Colour);
+        bool exactGlow = quality.EdgeGlowExact;
+        var sampling = quality.Sampling;
+
+        bool useCard = Services.PreviewRendererManager.UseCard;
+        // The breathing's whole pixels for a bust drawn alone (over a backdrop it is bustBottom's).
+        int bobAlone = scene == null && Breathing ? (int)Math.Round(Math.Sin(time * BreathingSpeed) * BreathingAmplitude) : 0;
 
         _uiScheduler ??= TaskScheduler.FromCurrentSynchronizationContext();
         _renderInFlight = true;
+        ShaderPasses++;
         // Which outfit this pass belongs to. A shader pass outlives a fast
         // outfit switch, and without this its result would land on screen after
         // the switch — the old bust reappearing over the new one.
@@ -892,6 +1043,64 @@ public sealed class JigglePreview : Image
 
         Task.Run(() =>
         {
+            if (scene != null)
+            {
+                // On the graphics card when that draws the previews: the whole
+                // frame there after the shadow (Rendering.Gpu.GpuFrame), only the
+                // preview's bytes coming back.
+                var wholeOnCard = useCard ? (_gpuFrame ??= Rendering.Gpu.GpuFrame.TryCreate()) : null;
+                if (wholeOnCard != null)
+                {
+                    if (lamp != null)
+                    {
+                        lamp.Shadow.Draw(caster!, scene.Left + Rendering.BackdropRender.FrameSize / 2f, shadowY, 2f, rendererAlpha, shadowTexture!);
+                        wholeOnCard.Draw(lamp, shadowTexture!, scene, baseSnap, maskSnap, jiggle, tint, time, gi != null, bustBottom, bodyShows, silhouette,
+                                         expression, mouth, blink, parts, JiggleShader.GameZoom, output);
+                    }
+                    else
+                        wholeOnCard.DrawNoLamp(scene, baseSnap, maskSnap, jiggle, tint, time, gi != null, bustBottom, bodyShows, silhouette,
+                                               expression, mouth, blink, parts, JiggleShader.GameZoom, output);
+                    DrewOnCard = true;
+                    return;
+                }
+                // The room first, through the bust's shadow from its lamp - and
+                // the background the fake GI reads, copied from it.
+                if (lamp != null)
+                {
+                    lamp.Shadow.Draw(caster!, scene.Left + Rendering.BackdropRender.FrameSize / 2f, shadowY, 2f, rendererAlpha, shadowTexture!);
+                    lamp.Room(shadowTexture, sceneTarget!, shadowBackground!, scene.Backdrop.BackgroundWidth, scene.Backdrop.BackgroundHeight);
+                    gi?.UseBackground(shadowBackground!);
+                }
+                // As the game blends: in linear light, the face over the body,
+                // the silhouette over that, the lights, the room behind. The body
+                // on the graphics card when that draws the previews (the game's
+                // own program, its edge glow exact at every quality that has it).
+                var card = useCard ? (_gpuBody ??= Rendering.Gpu.GpuBody.TryCreate()) : null;
+                if (card != null)
+                    card.Draw(baseSnap, maskSnap, jiggle, tint, time, scene.Gi, gi != null, scene.Left, scene.FrameBottom, bustBottom,
+                              linear!, bodyShows, linearSilhouette, silhouette, scene.Decode, JiggleShader.GameZoom);
+                else
+                    Rendering.BackdropRender.Body(baseSnap, maskSnap, jiggle, tint, time, gi, giArt, scene.Left, scene.FrameBottom, bustBottom,
+                                                  linear!, bodyShows, linearSilhouette, silhouette, exactGlow, scene.Decode, JiggleShader.GameZoom);
+                DrewOnCard = card != null;
+                // Into the camera's target as the game draws them, each blend kept
+                // as the target keeps it: body, face, silhouette, then the lamps.
+                if (lamp == null) Rendering.BackdropRender.ResetFrame(sceneTarget!, scene);
+                Array.Clear(coverage!);
+                Rendering.BackdropRender.Layer(sceneTarget!, scene, linear!, coverage!);
+                if (expression != null) Rendering.BackdropRender.OverlayLayer(sceneTarget!, scene, expression, bustBottom, coverage!);
+                if (mouth != null) Rendering.BackdropRender.OverlayLayer(sceneTarget!, scene, mouth, bustBottom, coverage!);
+                if (blink != null) Rendering.BackdropRender.OverlayLayer(sceneTarget!, scene, blink, bustBottom, coverage!);
+                if (linearSilhouette != null) Rendering.BackdropRender.Layer(sceneTarget!, scene, linearSilhouette, coverage!);
+                if (lamp != null) lamp.Glow(sceneTarget!, shadowTexture, Rendering.BackdropRender.Covered(scene, coverage!));
+                else Rendering.BackdropRender.Lamps(sceneTarget!, scene, coverage!);
+                // The game's post-processing: on the card too when it draws.
+                var cardPost = useCard ? (_gpuPost ??= Rendering.Gpu.GpuPost.TryCreate()) : null;
+                if (cardPost != null) cardPost.Present(sceneTarget!, scene, parts, output);
+                else Rendering.BackdropRender.Present(sceneTarget!, scene, parts, output, _postWork);
+                return;
+            }
+
             // Body first, displaced per pixel — then each overlay composited on
             // top with its OWN rigid offset.
             //
@@ -907,12 +1116,38 @@ public sealed class JigglePreview : Image
             // the lot in one pass, which matched the old share-the-material
             // build. Against the current runtime that overstates the motion — it
             // deforms overlays per pixel where the game translates them whole.
-            JiggleShader.Render(baseSnap, maskSnap, jiggle, tint, time, output, superSample);
+            // On the graphics card when that draws the previews (the game's program, its fake GI off).
+            // Sampled as the quality says (Ultra the game's 2x2 a pixel, fewer below).
+            var alone = useCard ? (_gpuAlone ??= Rendering.Gpu.GpuAlone.TryCreate()) : null;
+            if (alone != null)
+                alone.Draw(baseSnap, maskSnap, JiggleShader.Size, JiggleShader.Size, jiggle, tint, time, output,
+                           JiggleShader.RenderSize, JiggleShader.RenderSize, sampling);
+            else
+                JiggleShader.Render(baseSnap, maskSnap, JiggleShader.Size, JiggleShader.Size, jiggle, tint, time, output,
+                                    JiggleShader.RenderSize, JiggleShader.RenderSize, sampling);
+            DrewOnCard = alone != null;
 
-            // Expression composites first (below blink and mouth).
+            // During the fade-in the silhouette takes the displaced body's shape,
+            // so the body's alpha is kept before anything is drawn over it.
+            if (bodyAlpha != null)
+            {
+                for (int p = 0, i = 3; p < bodyAlpha.Length; p++, i += 4) bodyAlpha[p] = output[i];
+                if (!bodyShows) Array.Clear(output);
+            }
+
+            // In the game's sorting order: expressions 3, mouth 4, blink 5.
             CompositeOverlay(output, expression, maskSnap, jiggle, time);
-            CompositeOverlay(output, blink, maskSnap, jiggle, time);
             CompositeOverlay(output, mouth, maskSnap, jiggle, time);
+            CompositeOverlay(output, blink, maskSnap, jiggle, time);
+
+            // The silhouette is drawn above all of them (the body's order + 8 to 16).
+            if (bodyAlpha != null) IntroFade.DrawSilhouette(output, bodyAlpha, silhouette);
+
+            // Breathing, inside the picture as over a backdrop: the whole bust a
+            // whole pixel at a time (the game's Pixel Perfect Camera), up by bob.
+            // It was a WPF transform sliding the image until 1.9.1 (the author:
+            // "if I put None as the backdrop I get no breathing").
+            BreatheRows(output, bobAlone);
         }).ContinueWith(t =>
         {
             try
@@ -928,6 +1163,7 @@ public sealed class JigglePreview : Image
                     }
                     finally { _bitmap.Unlock(); }
                     _bitmapCleared = false;
+                    FramesShown++;
                 }
             }
             finally { _renderInFlight = false; }
@@ -957,19 +1193,37 @@ public sealed class JigglePreview : Image
     /// prove one that cannot be seen is not drawing (1.9.0, the mask studio).</summary>
     internal int FrameCallbacks { get; private set; }
 
+    /// <summary>How many shader passes this preview has begun - for tests, to
+    /// measure the frame rate a quality preset really gives.</summary>
+    internal int ShaderPasses { get; private set; }
+
     private void OnCompositionRendering(object? sender, EventArgs e)
     {
         FrameCallbacks++;
         if (!IsVisible) return;
-        if (Breathing)
-        {
-            double t = (DateTime.Now - _startTime).TotalSeconds;
-            _breathingTransform.Y = -Math.Sin(t * BreathingSpeed) * BreathingAmplitude;
-        }
-        else if (_breathingTransform.Y != 0)
-        {
-            _breathingTransform.Y = 0;
-        }
         Render();
+    }
+
+    /// <summary>
+    /// The bust drawn alone moved up by <paramref name="bob"/> whole pixels
+    /// (down when negative) inside its own picture, as the game's camera moves
+    /// it: rows that leave the picture are gone, rows that open are clear.
+    /// </summary>
+    internal static void BreatheRows(byte[] output, int bob)
+    {
+        const int N = JiggleShader.RenderSize, stride = JiggleShader.RenderStride;
+        if (bob == 0) return;
+        bob = Math.Clamp(bob, -N, N);
+        if (bob > 0)
+        {
+            Buffer.BlockCopy(output, bob * stride, output, 0, (N - bob) * stride);
+            Array.Clear(output, (N - bob) * stride, bob * stride);
+        }
+        else
+        {
+            int down = -bob;
+            Buffer.BlockCopy(output, 0, output, down * stride, (N - down) * stride);
+            Array.Clear(output, 0, down * stride);
+        }
     }
 }
