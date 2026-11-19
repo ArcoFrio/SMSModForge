@@ -292,7 +292,7 @@ public sealed partial class PlacePreview
     /// <summary>
     /// The place as this preview draws it, over the whole of the game's screen (1920x1080), put through the game's
     /// look in full (bloom, light streaks, colour) on the processor, now - for the place pictures export (1.9.2,
-    /// <see cref="Services.PlaceExport"/>). The same captures and the same passes as the look over the view
+    /// <c>Services.PlaceExport</c>, Debug builds only). The same captures and the same passes as the look over the view
     /// (<see cref="LookTick"/>), with the view being the whole screen. Straight BGRA, rows from the top; null while
     /// the game's look is still loading. <paramref name="look"/> false: the scene as drawn, without the look.
     /// </summary>

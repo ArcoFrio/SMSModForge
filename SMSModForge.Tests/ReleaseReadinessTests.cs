@@ -31,6 +31,7 @@ namespace SMSModForge.Tests;
 /// English (see <see cref="Every_language_has_this_versions_texts"/>):
 /// <code>
 ///   set SMSMODFORGE_RELEASE_PLUGIN=...\Starmaker - ModForge Plugin 1.3.0.zip
+///   set SMSMODFORGE_RELEASE_EDITOR=...\Starmaker - ModForge Editor 1.3.0.zip
 ///   git show v1.6.0:SMSModForge/Languages/en.txt > last-en.txt
 ///   set SMSMODFORGE_LAST_RELEASE_EN=last-en.txt
 ///   dotnet test --filter ReleaseReadinessTests
@@ -240,6 +241,65 @@ public sealed class ReleaseReadinessTests
         Assert.True(problems.Count == 0,
             $"Texts a language is missing or has out of date: {problems.Count} - see the output. "
             + "Translate them, bring the files in with SMSMODFORGE_REFRESH_TRANSLATIONS, and run this again.");
+    }
+
+    /// <summary>
+    /// What a Release editor must not contain: the place pictures export (1.9.2), its command-line words and its
+    /// class. It draws every one of the game's levels into pictures at the game's screen size, which in a download
+    /// anyone has would be handing out the game's art; the first upload of 1.9.2 shipped it. It is compiled only
+    /// under <c>#if DEBUG</c> now, and this reads the bytes of the editor about to ship, as the plugin check does:
+    /// <code>
+    ///   set SMSMODFORGE_RELEASE_EDITOR=...\Starmaker - ModForge Editor 1.9.2.zip
+    /// </code>
+    /// </summary>
+    private static readonly string[] EditorMustNotShip = { "--export-places", "--level-art", "PlaceExport" };
+
+    /// <summary>The editor DLL's bytes, from a DLL or from the root of the editor's zip.</summary>
+    private static byte[]? EditorBytes(string path)
+    {
+        if (path.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+            return File.ReadAllBytes(path);
+
+        using var zip = ZipFile.OpenRead(path);
+        var entry = zip.Entries.FirstOrDefault(e => e.FullName.Equals("SMSModForge.dll", StringComparison.OrdinalIgnoreCase));
+        if (entry == null) return null;
+
+        using var stream = entry.Open();
+        using var copy = new MemoryStream();
+        stream.CopyTo(copy);
+        return copy.ToArray();
+    }
+
+    [Fact]
+    public void The_editor_about_to_ship_cannot_draw_the_games_levels_into_pictures()
+    {
+        // The control, every run: the editor these tests run against is a Debug build and has the export. Were these
+        // the wrong names (the export renamed, its argument changed), the check below would find nothing in any
+        // editor and pass forever.
+        var debug = File.ReadAllBytes(typeof(SMSModForge.App).Assembly.Location);
+        foreach (string s in EditorMustNotShip)
+            Assert.True(Holds(debug, s), $"the Debug editor has no {s}: this check looks for the wrong names");
+
+        string? path = Environment.GetEnvironmentVariable("SMSMODFORGE_RELEASE_EDITOR");
+        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+        {
+            Assert.True(string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("SMSMODFORGE_RELEASE_PLUGIN")),
+                "a release is being checked (SMSMODFORGE_RELEASE_PLUGIN is set): set SMSMODFORGE_RELEASE_EDITOR to the editor's zip too");
+            _out.WriteLine("SMSMODFORGE_RELEASE_EDITOR not set; nothing to check.");
+            return;
+        }
+
+        var bytes = EditorBytes(path);
+        Assert.True(bytes != null, $"no SMSModForge.dll at the root of {path}");
+        _out.WriteLine($"{Path.GetFileName(path)} -> {bytes!.Length:N0} bytes");
+
+        var found = EditorMustNotShip.Where(s => Holds(bytes, s)).ToList();
+        foreach (string s in EditorMustNotShip)
+            _out.WriteLine($"   {(found.Contains(s) ? "PRESENT" : "absent ")}  {s}");
+
+        Assert.True(found.Count == 0,
+            "this editor can draw the game's levels into pictures (the place pictures export), which must not ship. "
+            + "Build it with -c Release from current source. Found: " + string.Join(", ", found));
     }
 
     [Fact]

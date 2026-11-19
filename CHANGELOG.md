@@ -2,14 +2,12 @@
 
 ## 1.9.2
 
-The game's places, drawn as the game draws them. ModForge can now draw every place into a folder of pictures
-for other tools, and the place previews show the levels' own lamps and videos. Along the way, many of the game's
+The game's places, drawn as the game draws them. The place previews show the levels' own lamps and videos.
+Along the way, many of the game's
 levels turned out to be drawn too small, too high or with objects out of place, and each now matches the game's own
 pictures. In the game, a picture a pack adds to one of the game's levels now always shows.
 
 ### New
-- **Place pictures, for other tools.** ModForge can draw every place into a folder, each as its place preview draws it with the game's look (bloom, light streaks, colour) at the game's screen size, 1920x1080: every one of the game's levels, and a pack's places with its NPCs when a pack is given. It draws a place as you find it on arrival: what starts switched off, sits under something switched off, or waits on conditions (an NPC waiting for her character to be there, an outfit's copy of one) is left out rather than drawn faint. Each of a place's NPC groups is drawn once more on its own over it, as the game draws it once switched on: the game's crowds (a level's NPCs object shows one of its groups at a time, like the Beach's three sets of beachgoers) and a pack's NPCs at their spots in each outfit, so a tool can show any of them over the place without the overlaps of showing them all. Where a spot shows one of its NPCs at random (the "random child" component: one NPC in several poses), each pose is a group of its own, never drawn with another, as the game never shows two. A `places.json` beside the pictures lists them, and each place's groups with how many figures, which pack NPCs, and whether the game shows them on arrival, on conditions, or one of a set. It runs with no window: `SMSModForge.exe --export-places "<folder>" ["<pack folder>"] [--level-art "<full-size level art>"]`. ModForge itself carries the levels' art small, so pointing `--level-art` at the extraction's full-size art (`SMSModForge\Resources\VanillaLevelArt` in the repository) draws them sharp. All 176 places of a large pack take about a minute.
-
 - **Place previews show the places' own lamps.** Each of the game's levels is lit by its own lamps as the game lights it: a lamp brightens what is around it and adds its soft glow, before the bloom and the colour take over, so a bright lamp blooms as it does in the game. A pack's place is lit by the Beach's lamp, which every pack place keeps in the game. A **Lights** tick box, beside Bloom, Light streaks and Colour, turns them off. What the game draws without lighting (the own picture of 56 of its levels, Tasha's store among them) is not brightened, only glowed over, as in the game. Checked against the game's own pictures of five places: with their lamps, the PC's room and the Beach match the game as closely as a place with no lamps does. Lamps' shadows are not drawn yet; only five of the game's places have anything that casts one.
 - **The game's videos show in place previews.** The Inside Car's sunset through its windows and the Japanese Subway Train's tunnel were black: the game plays a video behind them. A still from each video is now drawn where the game shows it.
 

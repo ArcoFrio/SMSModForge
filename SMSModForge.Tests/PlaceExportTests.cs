@@ -1,3 +1,4 @@
+#if DEBUG   // the export is compiled only in Debug (see PlaceExport)
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -685,3 +686,4 @@ public sealed class PlaceExportTests : IDisposable
         Assert.False(PlaceExport.WasAsked(new[] { "--other" }, out _, out _, out _));
     }
 }
+#endif

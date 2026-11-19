@@ -31,7 +31,9 @@ public partial class App : Application
         // The place pictures export (1.9.2): no window either. Every place is
         // drawn into the folder asked for, as the Places tab's preview draws it,
         // a line for each in export.log beside them, and the process ends (exit
-        // code 1 when it failed).
+        // code 1 when it failed). Debug builds only: it draws the game's own
+        // levels, which a release must not hand out (see PlaceExport).
+#if DEBUG
         if (PlaceExport.WasAsked(e.Args, out var placesFolder, out var placesPack, out var levelArt))
         {
             var lines = new System.Text.StringBuilder();
@@ -43,6 +45,7 @@ public partial class App : Application
             Shutdown(code);
             return;
         }
+#endif
 
         // Restore the persisted colour theme before the main window builds,
         // so its DynamicResource bindings resolve to the chosen palette.

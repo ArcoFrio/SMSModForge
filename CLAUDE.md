@@ -98,13 +98,23 @@ dumps, and the 745 lines of reflection behind them — are compiled only under
 accident that write megabytes into their game folder, and every release up to
 and including 1.2.0 did exactly that.
 
-The editor's own debug features are not conditional and are meant to ship.
+The editor's own debug features are not conditional and are meant to ship,
+with one exception: **anything that writes the game's own art out of the
+editor stays Debug-only.** The place pictures export (`--export-places`,
+1.9.2) draws every one of the game's levels at the game's screen size; in a
+download anyone has, that is handing out the game's art (the author,
+2026-11-19). The first upload of 1.9.2 shipped it (re-cut the same day,
+after 3 downloads); since then it is `#if DEBUG`, for our own tools built
+from the repository (DialogueForge's places), and
+`ReleaseReadinessTests` reads the editor's bytes to hold it there. The editor shows the
+game's art in its previews; it does not write it out.
 
 `#if DEBUG` makes a Release build clean by construction; it does not stop
 somebody packaging a Debug one. Check the artefact itself:
 
 ```
 set SMSMODFORGE_RELEASE_PLUGIN=...\Starmaker - ModForge Plugin 1.3.0.zip
+set SMSMODFORGE_RELEASE_EDITOR=...\Starmaker - ModForge Editor 1.3.0.zip
 git show v<last>:SMSModForge/Languages/en.txt > last-en.txt
 set SMSMODFORGE_LAST_RELEASE_EN=last-en.txt
 dotnet test --filter ReleaseReadinessTests

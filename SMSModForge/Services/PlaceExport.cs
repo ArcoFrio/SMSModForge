@@ -1,3 +1,7 @@
+// Debug builds only, and never in a release: the export draws the game's own levels into pictures anyone could
+// pass around, which would be handing out the game's art. It is ours (DialogueForge's places, built from the
+// repository), not the editor's. ReleaseReadinessTests reads the shipped editor's bytes to hold that.
+#if DEBUG
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -335,3 +339,4 @@ public static class PlaceExport
         }
     }
 }
+#endif
