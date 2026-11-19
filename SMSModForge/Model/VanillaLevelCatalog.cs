@@ -55,6 +55,15 @@ public static class VanillaLevelCatalog
         [JsonProperty("enabled")] public bool Enabled { get; set; } = true;
         [JsonProperty("pixelsPerUnit")] public float PixelsPerUnit { get; set; } = 100f;
 
+        /// <summary>The sprite's pivot as a share of its rect, (0,0) its bottom-left (Unity's <c>sprite.pivot /
+        /// sprite.rect.size</c>), when it is not the centre (1.9.2). The extracted art is the sprite's rect alone, so
+        /// one cut out of a whole level's canvas but pivoted on that canvas's centre (the Beach's water: 1.108,
+        /// 2.387) drew a long way from where the game draws it when centred on its own rect. Absent: the centre.</summary>
+        [JsonProperty("pivot")] public float[]? Pivot { get; set; }
+
+        public float PivotX => Pivot is { Length: >= 2 } ? Pivot[0] : 0.5f;
+        public float PivotY => Pivot is { Length: >= 2 } ? Pivot[1] : 0.5f;
+
         /// <summary>Renderer tint as RGBA hex. Its alpha is half the story of how
         /// solid the object looks.</summary>
         [JsonProperty("color")] public string Color { get; set; } = "FFFFFFFF";
@@ -120,7 +129,55 @@ public static class VanillaLevelCatalog
         [JsonProperty("siblingIndex")] public int SiblingIndex { get; set; }
         [JsonProperty("activeSelf")] public bool ActiveSelf { get; set; }
         [JsonProperty("hierarchy")] public Node? Hierarchy { get; set; }
+
+        /// <summary>Where the level shows a video, when it does (1.9.2; Tools/Scenes/level-video-stills.py).</summary>
+        [JsonProperty("videoScreen")] public VideoScreen? VideoScreen { get; set; }
+
+        /// <summary>Where the level stands from the game's camera, in world units:
+        /// its parent's place (<see cref="LevelsX"/>, <see cref="LevelsY"/>) plus its
+        /// own (1.9.2).</summary>
+        [JsonIgnore] public float LevelPositionX => LevelsX + (Hierarchy?.X ?? 0f);
+        [JsonIgnore] public float LevelPositionY => LevelsY + (Hierarchy?.Y ?? 0f);
     }
+
+    /// <summary>
+    /// Where a level shows a video (1.9.2): a VideoPlayer renders its clip into a
+    /// render texture, and a camera-space canvas's Image, whose material samples
+    /// it, shows it behind the level - the Inside Car's sunset through its windows,
+    /// the Subway Train's tunnel. Read from the game's scene by
+    /// Tools/Scenes/level-video-stills.py, with a still of the clip beside the
+    /// level's art. The Image's centre and size are in the canvas's units (its
+    /// scaler's reference resolution over the screen), y up from the centre.
+    /// </summary>
+    public sealed class VideoScreen
+    {
+        [JsonProperty("still")] public string Still { get; set; } = "Video.PNG";
+        [JsonProperty("clip")] public string Clip { get; set; } = "";
+        [JsonProperty("x")] public double X { get; set; }
+        [JsonProperty("y")] public double Y { get; set; }
+        [JsonProperty("width")] public double Width { get; set; } = 1920;
+        [JsonProperty("height")] public double Height { get; set; } = 1080;
+        [JsonProperty("scale")] public double Scale { get; set; } = 1;
+        [JsonProperty("sortingLayer")] public string SortingLayer { get; set; } = "Default";
+        [JsonProperty("sortingOrder")] public int SortingOrder { get; set; }
+        [JsonProperty("referenceWidth")] public double ReferenceWidth { get; set; } = 1920;
+        [JsonProperty("referenceHeight")] public double ReferenceHeight { get; set; } = 1080;
+    }
+
+    /// <summary>
+    /// Where the game keeps its levels' parent, <c>5_Levels</c>, from its camera
+    /// (at the origin): measured in the game (1.8E, 2026-11-19; scale 1). The
+    /// extraction has each level's place under it, not the parent's own, so a
+    /// level drawn at the camera's centre sat 13 game pixels above where the game
+    /// shows it - and one placed at x -0.94 13 pixels right of it. Listed in
+    /// GAME_UPDATE_CHECKS.md.
+    /// </summary>
+    public const float LevelsX = 0.685f, LevelsY = -0.2f;
+
+    /// <summary>The game's level every pack place is built from (the plugin's
+    /// PlaceFactory clones it): its "Light 2D" stays, so a pack's place is lit by
+    /// the Beach's lamp (1.9.2).</summary>
+    public const string PackPlacePrototype = "14_Beach";
 
     /// <summary>One component on a node, with the serialized values the
     /// extractor read off it. Keys are Unity's own property paths.</summary>
@@ -244,16 +301,24 @@ public static class VanillaLevelCatalog
     /// keyed by the object's path below the level — deterministic, so this
     /// reconstructs it rather than needing another field in the catalog.
     /// <para/>
-    /// Because the two level-art sprites are deliberately NOT in <c>_extra</c>,
-    /// the root and secondary nodes simply resolve to nothing here, which is
-    /// what keeps the preview from drawing the backdrop a second time on top of
-    /// itself.
+    /// The level's own sprite is not in <c>_extra</c> (it is Base.PNG, the
+    /// level layer), so the root resolves to nothing here. The level's second
+    /// child is not either: the extractor wrote its sprite as Secondary.PNG, so
+    /// this resolves it to that file and the preview draws it as the object it
+    /// is, where it stands (1.9.2). It was drawn as a back layer, centred and
+    /// fitted to the level's frame, which is right for nothing: in 30 levels the
+    /// second child is no backdrop at all (an NPC, a potted plant, a dining
+    /// table, drawn screen-sized behind the level), and the backdrops among them
+    /// sit off the centre, scaled or flipped (the Pool, the Harbor District).
     /// </summary>
     public static string FindNodeArt(Level? level, Node? node)
     {
         if (level == null || node?.SpriteRenderer == null) return "";
         var root = ArtRoot();
         if (root == null) return "";
+        var second = level.Hierarchy?.Children is { Count: > 1 } kids ? kids[1] : null;
+        if (second != null && (ReferenceEquals(node, second) || node.Path == second.Path))
+            return FindArt(level.GoName, "Secondary.PNG");
 
         // node.Path starts with the level's own name; the extractor keyed the
         // file by the remainder.

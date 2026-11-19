@@ -106,8 +106,11 @@ public sealed partial class InGameSuiteTests
     /// its own texel - decodes more than two texels from its own, which is the
     /// game's buttons and bars over the bust, not the bust.
     /// The controls: the still outfit tests the screen mapping alone; on the noise
-    /// and all outfits the unsnapped corners must agree visibly less, and on the
-    /// noise outfit 1.9.0's noise must miss.
+    /// and all outfits the bust taken half a pixel off (a quarter texel) must
+    /// agree visibly less, and on the noise outfit 1.9.0's noise must miss. The
+    /// unsnapped corners' share is printed too, but is no control: how far they
+    /// lie from the snapped ones goes with the bust's breathing at the moment
+    /// caught, and once (2026-11-18) it was a hair, agreeing 98.5%.
     /// </summary>
     [Fact]
     public void S1_The_bust_preview_moves_a_pack_bust_as_the_game_draws_it()
@@ -156,7 +159,7 @@ public sealed partial class InGameSuiteTests
                     }
             }
 
-            int inside = 0, compared = 0, same = 0, ties = 0, rawSame = 0, oldSame = 0, underInterface = 0;
+            int inside = 0, compared = 0, same = 0, ties = 0, rawSame = 0, halfOffSame = 0, oldSame = 0, underInterface = 0;
             float widestTie = 0f;
             var misses = new Dictionary<(int, int), int>();
             float margin = 32f / size;
@@ -191,11 +194,16 @@ public sealed partial class InGameSuiteTests
                             misses[d] = misses.GetValueOrDefault(d) + 1;
                         }
                     }
-                    // The control: where the transform alone puts the bust.
+                    // Where the transform alone puts the bust, for the record.
                     float ru = (x + 0.5f - raw[0].x) / (raw[1].x - raw[0].x), rv = (y + 0.5f - raw[0].y) / (raw[2].y - raw[0].y);
                     var (rdu, rdv) = frame.Offset(r, g, b, a, ru, rv);
                     if (drawnX == Math.Clamp((int)MathF.Floor((ru + rdu) * size), 0, size - 1)
                         && drawnY == size - 1 - Math.Clamp((int)MathF.Floor((rv + rdv) * size), 0, size - 1)) rawSame++;
+                    // The control: the bust drawn half a pixel off, right and up.
+                    float hu = (x - x0) / (x1 - x0), hv = (y - y0) / (y1 - y0);
+                    var (hdu, hdv) = frame.Offset(r, g, b, a, hu, hv);
+                    if (drawnX == Math.Clamp((int)MathF.Floor((hu + hdu) * size), 0, size - 1)
+                        && drawnY == size - 1 - Math.Clamp((int)MathF.Floor((hv + hdv) * size), 0, size - 1)) halfOffSame++;
                     if (key == "noise")
                     {
                         // 1.9.0's noise: the level shader's gradient noise, timed by Noise Speed alone.
@@ -210,13 +218,13 @@ public sealed partial class InGameSuiteTests
             double agree = Share(same + ties);
             _out.WriteLine($"{key}: {same + ties} of {compared} pixels read the texel the port names ({agree:P2}): {same} exactly, {ties} ties within {widestTie:0.0000} texel of an edge;"
                            + $" {inside - compared} of {inside} covered by the game's interface ({underInterface} where the still outfit found it);"
-                           + $" from the unsnapped corners {Share(rawSame):P2}"
+                           + $" from the unsnapped corners {Share(rawSame):P2}, half a pixel off {Share(halfOffSame):P2}"
                            + (key == "noise" ? $"; 1.9.0's noise names {oldSame} ({Share(oldSame):P2})" : ""));
             _out.WriteLine("   misses by (drawn - port) texels: " + string.Join(", ", misses.OrderByDescending(m => m.Value).Take(8).Select(m => $"{m.Key}x{m.Value}")));
             if (compared <= inside / 2) failures.Add($"{key}: only {compared} of {inside} pixels are the bust's own colours - lights or the rim still change them, or the bust is not where the check looked");
             if (agree < 0.999) failures.Add($"{key}: the game read another texel than the port at {compared - same - ties} of {compared} pixels");
-            if (key is "noise" or "all" && Share(rawSame) > 0.95)
-                failures.Add($"{key}: the unsnapped corners agree as well ({Share(rawSame):P2}) - the check no longer shows where the bust is drawn");
+            if (key is "noise" or "all" && Share(halfOffSame) > 0.95)
+                failures.Add($"{key}: the bust half a pixel off agrees as well ({Share(halfOffSame):P2}) - the check no longer shows where the bust is drawn");
             if (key == "noise" && Share(oldSame) >= 0.5) failures.Add("1.9.0's noise lands on the game's - the check cannot tell them apart");
         }
         Assert.True(failures.Count == 0, string.Join(Environment.NewLine, failures));

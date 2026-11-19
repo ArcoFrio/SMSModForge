@@ -142,6 +142,15 @@ public sealed class GameObjectDef
     [JsonIgnore]
     public float SpritePpu { get; set; } = 70.32f;
 
+    /// <summary>Where the sprite is pivoted, as a share of its rect, (0,0) its bottom-left: the centre for the
+    /// pack's own art (the runtime builds its sprites pivoted on their centre), and for a bound object the vanilla
+    /// sprite's, seeded from the catalog (<see cref="VanillaLevelCatalog.RendererInfo.Pivot"/>). Preview only.</summary>
+    [JsonIgnore]
+    public float SpritePivotX { get; set; } = 0.5f;
+
+    [JsonIgnore]
+    public float SpritePivotY { get; set; } = 0.5f;
+
     /// <summary>Optional relative path to a mask PNG. When set, the object gets
     /// its own material with this mask bound to <c>_MaskTex</c> (the Solid
     /// cameo's shader trick). Blank = no mask.</summary>

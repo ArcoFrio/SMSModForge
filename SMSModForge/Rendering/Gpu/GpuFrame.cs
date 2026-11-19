@@ -164,7 +164,7 @@ internal sealed class GpuFrame : IDisposable
             _frameCb.Upload(_gpu, new[]
             {
                 I(_w), I(_h), I(_tw), I(_th), I(scene.Left), I(scene.FrameBottom), I(bustBottom), I(1),
-                gr, gg, gb, lamp.Intensity, lamp.VolumeIntensity, I(_bw), I(_bh), 0f,
+                gr, gg, gb, lamp.Intensity, lamp.VolumeIntensity, I(_bw), I(_bh), I(lamp.GlowWithTheRoom ? 1 : 0),
             });
             ctx.CSSetConstantBuffer(0, _frameCb.Buffer);
             ctx.CSSetShaderResource(0, _shadowRead!); ctx.CSSetShaderResource(1, _lampTexelsRead!); ctx.CSSetShaderResource(2, _albedoRead!);
@@ -331,7 +331,8 @@ internal sealed class GpuFrame : IDisposable
                 _frameCb.Upload(_gpu, new[]
                 {
                     I(_w), I(_h), I(_tw), I(_th), I(scene.Left), I(scene.FrameBottom), I(0), I(1),
-                    gr, gg, gb, lamp.Intensity, lamp.VolumeIntensity, I(_bw), I(_bh), 0f,
+                    // the NPC stands on the room's layer: under the lamp's glow however it is drawn
+                    gr, gg, gb, lamp.Intensity, lamp.VolumeIntensity, I(_bw), I(_bh), I((lamp.GlowWithTheRoom ? 1 : 0) | 2),
                 });
                 ctx.CSSetConstantBuffer(0, _frameCb.Buffer);
                 ctx.CSSetShaderResource(0, _shadowRead!); ctx.CSSetShaderResource(1, _lampTexelsRead!); ctx.CSSetShaderResource(2, _albedoRead!);

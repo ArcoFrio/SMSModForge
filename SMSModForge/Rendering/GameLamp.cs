@@ -24,6 +24,10 @@ namespace SMSModForge.Rendering;
 /// every screen pixel, times its volume opacity) is added over everything,
 /// through the shadow at its own shadow intensity.</item>
 /// </list>
+/// A lamp that lights only the room's layer (<see cref="LampSettings.GlowWithTheRoom"/>,
+/// 1.9.2, the Beach's) adds its glow to the room before the busts instead:
+/// the edge glow's background is copied with it, and a bust is not under it.
+/// What stands on the room's layer itself (a pack NPC) is under it either way.
 /// Where the shadow changes nothing the room is the game's own capture, to the
 /// bit; elsewhere it is worked out as above from the room's colour, which the
 /// captures with the lamp off and without its glow pin down.
@@ -44,7 +48,11 @@ internal sealed class GameLamp
     /// <summary>The room as captured: without the glow, and as seen. RGB.</summary>
     private readonly float[] _noGlow, _room;
 
-    public GameLamp(PreviewBackdrop backdrop)
+    public GameLamp(PreviewBackdrop backdrop) : this(backdrop, null) { }
+
+    /// <param name="glowWithTheRoom">The lamp drawn the other way than the
+    /// backdrop says: a test's control. Null: as the backdrop says.</param>
+    internal GameLamp(PreviewBackdrop backdrop, bool? glowWithTheRoom)
     {
         var lamp = backdrop.Lamp ?? throw new InvalidOperationException(backdrop.Name + " has no lamp");
         ScreenWidth = backdrop.ScreenWidth; ScreenHeight = backdrop.ScreenHeight;
@@ -55,6 +63,7 @@ internal sealed class GameLamp
         (_gr, _gg, _gb) = lamp.Global;
         _intensity = lamp.ShadowIntensity; _volumeIntensity = lamp.ShadowVolumeIntensity;
         _noGlow = backdrop.RoomNoGlowHdr; _room = backdrop.RoomHdr;
+        GlowWithTheRoom = glowWithTheRoom ?? lamp.GlowWithTheRoom;
 
         // URP's light lookup texture (half floats) and its falloff curve.
         var look = new float[256 * 256];
@@ -191,10 +200,15 @@ internal sealed class GameLamp
     internal float Intensity => _intensity;
     internal float VolumeIntensity => _volumeIntensity;
 
+    /// <summary>The lamp's glow is drawn with the room, before the busts (see
+    /// <see cref="LampSettings.GlowWithTheRoom"/>).</summary>
+    public bool GlowWithTheRoom { get; }
+
     /// <summary>
     /// The room, lit through <paramref name="shadow"/> (the lamp's shadow
-    /// texture, or null for none), without the lamp's glow - what the camera's
-    /// target holds before the busts - over the whole screen; and the edge
+    /// texture, or null for none) - what the camera's target holds before the
+    /// busts: without the lamp's glow, or with it through the shadow when the
+    /// glow is drawn with the room - over the whole screen; and the edge
     /// glow's background copied from it (RGBA, rows from the bottom).
     /// </summary>
     public void Room(float[]? shadow, GamePost.Target target, float[] background, int bw, int bh)
@@ -218,9 +232,10 @@ internal sealed class GameLamp
                     int k = j * _tw + i;
                     shaded = shadow[k] > 0f || shadow[k + 1] > 0f || shadow[k + _tw] > 0f || shadow[k + _tw + 1] > 0f;
                 }
+                var seen = GlowWithTheRoom ? _room : _noGlow;
                 if (!shaded)
                 {
-                    target.Px[t] = _noGlow[p]; target.Px[t + 1] = _noGlow[p + 1]; target.Px[t + 2] = _noGlow[p + 2]; target.Px[t + 3] = 1f;
+                    target.Px[t] = seen[p]; target.Px[t + 1] = seen[p + 1]; target.Px[t + 2] = seen[p + 2]; target.Px[t + 3] = 1f;
                     continue;
                 }
                 var (lr, lg, lb) = Between(texel, x, y);
@@ -228,6 +243,7 @@ internal sealed class GameLamp
                 target.Px[t + 1] = GamePost.Small(_albedo[p + 1] * lg, 6);
                 target.Px[t + 2] = GamePost.Small(_albedo[p + 2] * lb, 5);
                 target.Px[t + 3] = 1f;
+                if (GlowWithTheRoom) AddGlow(target, Shadow.At(shadow!, x, y), p, t);
             }
         });
         for (int j = 0; j < bh; j++)
@@ -238,14 +254,28 @@ internal sealed class GameLamp
             }
     }
 
+    /// <summary>The glow added at one pixel through a shadow of <paramref name="s"/>,
+    /// the target truncating it.</summary>
+    private void AddGlow(GamePost.Target target, float s, int p, int t)
+    {
+        float keep = 1f - s, dim = (1f - _volumeIntensity) * s;
+        target.Px[t] = GamePost.Small(target.Px[t] + (_glow[p] * keep + _glow[p] * dim), 6);
+        target.Px[t + 1] = GamePost.Small(target.Px[t + 1] + (_glow[p + 1] * keep + _glow[p + 1] * dim), 6);
+        target.Px[t + 2] = GamePost.Small(target.Px[t + 2] + (_glow[p + 2] * keep + _glow[p + 2] * dim), 5);
+    }
+
     /// <summary>
     /// The lamp's glow over everything drawn, through <paramref name="shadow"/>.
     /// A pixel nothing was drawn over and the shadow does not reach is the
-    /// game's own capture of the room. <paramref name="drawnOver"/>: whether a
-    /// bust covers a screen pixel (rows from the bottom).
+    /// game's own capture of the room. <paramref name="drawnOver"/>: whether
+    /// something covers a screen pixel (rows from the bottom) - a bust, or with
+    /// <paramref name="onTheRoomsLayer"/> something on the room's layer (a pack
+    /// NPC). A glow drawn with the room (<see cref="GlowWithTheRoom"/>) is in
+    /// the room already and goes over only what is on the room's layer.
     /// </summary>
-    public void Glow(GamePost.Target target, float[]? shadow, Func<int, int, bool> drawnOver)
+    public void Glow(GamePost.Target target, float[]? shadow, Func<int, int, bool> drawnOver, bool onTheRoomsLayer = false)
     {
+        if (GlowWithTheRoom && !onTheRoomsLayer) return;
         int w = ScreenWidth;
         Parallel.For(0, ScreenHeight, y =>
         {
@@ -253,15 +283,14 @@ internal sealed class GameLamp
             {
                 int o = y * w + x, p = o * 3, t = o * 4;
                 float s = shadow == null ? 0f : Shadow.At(shadow, x, y);
-                if (s == 0f && !drawnOver(x, y))
+                bool over = drawnOver(x, y);
+                if (GlowWithTheRoom && !over) continue;
+                if (s == 0f && !over)
                 {
                     target.Px[t] = _room[p]; target.Px[t + 1] = _room[p + 1]; target.Px[t + 2] = _room[p + 2];
                     continue;
                 }
-                float keep = 1f - s, dim = (1f - _volumeIntensity) * s;
-                target.Px[t] = GamePost.Small(target.Px[t] + (_glow[p] * keep + _glow[p] * dim), 6);
-                target.Px[t + 1] = GamePost.Small(target.Px[t + 1] + (_glow[p + 1] * keep + _glow[p + 1] * dim), 6);
-                target.Px[t + 2] = GamePost.Small(target.Px[t + 2] + (_glow[p + 2] * keep + _glow[p + 2] * dim), 5);
+                AddGlow(target, s, p, t);
             }
         });
     }

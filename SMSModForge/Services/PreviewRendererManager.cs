@@ -61,10 +61,10 @@ public static class PreviewRendererManager
 
     /// <summary>Automatic's answer: true for the card, false for the
     /// processor, null until measured.</summary>
-    internal static bool? MeasuredCard { get; private set; }
+    internal static bool? MeasuredCard { get; set; }
 
     /// <summary>What was measured, for the record (milliseconds a frame).</summary>
-    internal static string? Measurement { get; private set; }
+    internal static string? Measurement { get; set; }
 
     /// <summary>Whether the previews draw on the card now.</summary>
     public static bool UseCard => Current.Name switch

@@ -195,7 +195,8 @@ public sealed class PreviewBackdrop
             lamp = new LampSettings((float)l["x"]!, (float)l["y"]!, (float)l["radius"]!, (float)colour[0], (float)colour[1], (float)colour[2],
                                     (float)l["falloff"]!, (float)l["volumeOpacity"]!, (float)l["shadowIntensity"]!, (float)l["shadowVolumeIntensity"]!,
                                     (float)l["shadowSoftness"]!, (float)l["shadowSoftnessFalloff"]!, (float)l["textureScale"]!,
-                                    ((float)global[0], (float)global[1], (float)global[2]));
+                                    ((float)global[0], (float)global[1], (float)global[2]),
+                                    l["layers"] is JArray layers && layers.Count > 0 && layers.All(n => (string?)n == "Default"));
         }
         var decode = json["lookupDecode"] is JArray d ? d.Select(v => (float)v).ToArray() : null;
         return new PreviewBackdrop((string?)json["name"] ?? Path.GetFileName(folder), w, h, room, settings, (JObject)json["bust"]!,
@@ -222,10 +223,19 @@ public sealed class PreviewBackdrop
 /// intensity), its falloff and glow, its shadow's numbers, the light texture
 /// scale and the global light under it - all as the game's Light2D and 2D
 /// renderer hold them.
+/// <para><see cref="GlowWithTheRoom"/> (1.9.2): the lamp lights only the
+/// room's layer (Default), the case for most of the game's level lamps. URP
+/// draws a light's glow with the layer batch that ends at the highest layer
+/// it lights (DrawLight2DPass: <c>endLayerValue == GetTopMostLitLayer()</c>),
+/// and copies the edge glow's background right after that batch's glow
+/// (Renderer2D's render graph), so such a lamp's glow is in the room before
+/// the busts are drawn and in that background, and never over a bust. A lamp
+/// that also lights a layer above (the PC's room's: Photos) glows over them.
+/// The backdrop's "layers"; none listed is the second kind, as before.</para>
 /// </summary>
 public sealed record LampSettings(float X, float Y, float Radius, float R, float G, float B, float Falloff, float VolumeOpacity,
                                   float ShadowIntensity, float ShadowVolumeIntensity, float Softness, float SoftnessFalloff,
-                                  float TextureScale, (float r, float g, float b) Global);
+                                  float TextureScale, (float r, float g, float b) Global, bool GlowWithTheRoom = false);
 
 /// <summary>The bust shader's fake GI settings: FakeGIManager's globals
 /// (_Global_GI*, _Global_Rim*), as the game sets them in a scene.</summary>

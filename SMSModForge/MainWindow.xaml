@@ -6252,19 +6252,24 @@
                                                           PackRoot="{Binding DataContext.PackRoot,
                                                                      RelativeSource={RelativeSource AncestorType=Window}}"
                                                           BaseSprite="{Binding PreviewBaseSprite}"
-                                                          SecondarySprite="{Binding PreviewSecondarySprite}"
                                                           LevelArtOrder="{Binding PreviewArtOrder}"
-                                                          LevelArtSecondaryOrder="{Binding PreviewArtSecondaryOrder}"
                                                           LevelParallax="{Binding PreviewLevelParallax}"
-                                                          LevelParallaxSecondary="{Binding PreviewLevelParallaxSecondary}"
                                                           LevelParallaxReversed="{Binding PreviewLevelParallaxReversed}"
-                                                          LevelParallaxSecondaryReversed="{Binding PreviewLevelParallaxSecondaryReversed}"
                                                           ParallaxPreview="{Binding IsChecked, ElementName=ExtParallaxPreview}"
                                                           Shaders="{Binding IsChecked, ElementName=ExtShaders}"
                                                           LookBloom="{Binding IsChecked, ElementName=ExtLookBloom}"
                                                           LookFlares="{Binding IsChecked, ElementName=ExtLookFlares}"
                                                           LookColour="{Binding IsChecked, ElementName=ExtLookColour}"
+                                                          LookLights="{Binding IsChecked, ElementName=ExtLookLights}"
                                                           LevelArtPpu="{Binding PreviewArtPpu}"
+                                                          LevelArtIsTheGames="True"
+                                                          LevelArtPivotX="{Binding PreviewArtPivotX}"
+                                                          LevelArtPivotY="{Binding PreviewArtPivotY}"
+                                                          LevelPositionX="{Binding PreviewLevelPositionX}"
+                                                          LevelPositionY="{Binding PreviewLevelPositionY}"
+                                                          LevelVideoScreen="{Binding PreviewVideoScreen}"
+                                                          LevelVideoStill="{Binding PreviewVideoStill}"
+                                                          LevelArtUnlit="{Binding PreviewArtUnlit}"
                                                           LevelScale="{Binding PreviewLevelScale}"
                                                           DimUnderInactiveParent="{Binding IsChecked, ElementName=ExtDimParent}"
                                                           DimInactive="{Binding IsChecked, ElementName=ExtDimSelf}"
@@ -6304,6 +6309,8 @@
                                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                                             <TextBlock Text="{l:T places.look}" ToolTip="{l:T places.look.tip}" VerticalAlignment="Center"
                                                        Foreground="{DynamicResource Theme.TextMuted}" Margin="0,0,8,0"/>
+                                            <CheckBox x:Name="ExtLookLights" IsChecked="True" Content="{l:T places.lookLights}"
+                                                      ToolTip="{l:T places.lookLights.tip}" Margin="0,0,12,0"/>
                                             <CheckBox x:Name="ExtLookBloom" IsChecked="True" Content="{l:T places.lookBloom}"
                                                       ToolTip="{l:T places.lookBloom.tip}"/>
                                             <CheckBox x:Name="ExtLookFlares" IsChecked="True" Content="{l:T places.lookFlares}" Margin="12,0,0,0"
@@ -6407,6 +6414,8 @@
                                                       LookBloom="{Binding IsChecked, ElementName=PlaceLookBloom}"
                                                       LookFlares="{Binding IsChecked, ElementName=PlaceLookFlares}"
                                                       LookColour="{Binding IsChecked, ElementName=PlaceLookColour}"
+                                                      LookLights="{Binding IsChecked, ElementName=PlaceLookLights}"
+                                                      LightsOfLevel="{x:Static model:VanillaLevelCatalog.PackPlacePrototype}"
                                                       NpcCatalog="{Binding DataContext.Npcs,
                                                                  RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
@@ -6424,6 +6433,8 @@
                                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                                         <TextBlock Text="{l:T places.look}" ToolTip="{l:T places.look.tip}" VerticalAlignment="Center"
                                                    Foreground="{DynamicResource Theme.TextMuted}" Margin="0,0,8,0"/>
+                                        <CheckBox x:Name="PlaceLookLights" IsChecked="True" Content="{l:T places.lookLights}"
+                                                  ToolTip="{l:T places.lookLights.tip}" Margin="0,0,12,0"/>
                                         <CheckBox x:Name="PlaceLookBloom" IsChecked="True" Content="{l:T places.lookBloom}"
                                                   ToolTip="{l:T places.lookBloom.tip}"/>
                                         <CheckBox x:Name="PlaceLookFlares" IsChecked="True" Content="{l:T places.lookFlares}" Margin="12,0,0,0"

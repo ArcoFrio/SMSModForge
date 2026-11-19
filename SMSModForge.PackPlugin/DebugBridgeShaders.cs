@@ -24,6 +24,8 @@ namespace SMSModForge.PackPlugin
     /// <item><c>sprite-textures &lt;path&gt;</c>: every sprite renderer at and under
     /// the object, active or not, with its texture's name (quoted; a pack's own art
     /// has none), size, filter and wrap.</item>
+    /// <item><c>parallax rest|follow</c>: the game's levels held where they rest,
+    /// not following the mouse (see ParallaxTick), or let go again.</item>
     /// <item><c>screen-look &lt;name&gt;</c>: at the end of the frame, the screen
     /// as drawn, and in info.txt every 2D light that is on (whether it lights
     /// the Bust layer) and what each sorting layer draws on screen.</item>
@@ -33,10 +35,51 @@ namespace SMSModForge.PackPlugin
     {
         private float _timeScaleBefore = 1f;
 
+        // parallax rest: every level held where it rests, whatever the mouse does (1.9.2).
+        private bool _parallaxRest;
+        private float _parallaxScanAt;
+        private readonly List<Behaviour> _parallaxHeld = new List<Behaviour>();
+
+        /// <summary>
+        /// Holds the game's levels where they rest while <c>parallax rest</c> is on.
+        /// A level follows the mouse (the game's ParallaxMouseEffect: half its
+        /// strength in local units at the screen's edge), and on the run's desktop
+        /// the mouse is wherever the author's is: the backdrops were captured with
+        /// every room 19 game pixels right of where it rests. Each effect found on
+        /// is switched off and its level put back to where it started; one not
+        /// started yet never moved. Looked for twice a second, as levels come up.
+        /// </summary>
+        private void ParallaxTick()
+        {
+            if (!_parallaxRest || Time.unscaledTime < _parallaxScanAt) return;
+            _parallaxScanAt = Time.unscaledTime + 0.5f;
+            foreach (var b in Resources.FindObjectsOfTypeAll<Behaviour>())
+            {
+                if (b == null || !b.enabled || b.GetType().Name != "ParallaxMouseEffect" || !b.gameObject.scene.IsValid()) continue;
+                var start = b.GetType().GetField("startPosition", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                b.enabled = false;
+                _parallaxHeld.Add(b);
+                if (start != null && (Vector3)start.GetValue(b) != Vector3.zero)
+                    b.GetType().GetMethod("ResetToStartPosition")?.Invoke(b, null);
+            }
+        }
+
         private bool RunShaders(string verb, string a, string rest)
         {
             switch (verb)
             {
+                case "parallax":
+                {
+                    if (a == "rest") { _parallaxRest = true; _parallaxScanAt = 0f; ParallaxTick(); }
+                    else
+                    {
+                        _parallaxRest = false;
+                        foreach (var b in _parallaxHeld) if (b != null) b.enabled = true;
+                        _parallaxHeld.Clear();
+                    }
+                    Say("ok parallax " + a + " held=" + _parallaxHeld.Count.ToString(CultureInfo.InvariantCulture));
+                    return true;
+                }
                 case "freeze":
                 {
                     if (a == "on")

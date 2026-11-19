@@ -1,7 +1,7 @@
 // The bust preview's frame over a backdrop with a lamp, on the graphics card (1.9.1): the room lit
 // through the bust's shadow and the edge glow's background (GameLamp.Room), a bust layer or a face
 // blended into the camera's target (BackdropRender.Layer, OverlayLayer), and the lamp's glow over
-// everything (GameLamp.Glow) - each the processor's, operation for operation. GpuFrameTests holds
+// everything (GameLamp.Glow; or with the room, GlowMode) - each the processor's, operation for operation. GpuFrameTests holds
 // the frame to the processor's.
 //
 // Screen images are rows from the bottom; the preview's frame (its layers, coverage) rows from the
@@ -24,7 +24,8 @@ cbuffer FrameBuf : register(b0)
     float VolumeIntensity;
     int BackgroundW;
     int BackgroundH;
-    uint Unused;
+    uint GlowMode;       // 1: the lamp's glow is drawn with the room, before the busts (GameLamp.GlowWithTheRoom);
+                         // 2: what is drawn over the room is on the room's layer (a pack NPC), under that glow either way
 };
 
 StructuredBuffer<float> Shadow : register(t0);       // TexW x TexH, rows from the bottom
@@ -93,7 +94,31 @@ float3 Between(int sx, int sy)
     return r;
 }
 
-// GameLamp.Room: the room lit through the shadow, without the glow.
+// BustShadow.At: the shadow at a screen pixel, between its four nearest texels.
+float ShadowAt(int sx, int sy)
+{
+    precise float u = ((float)sx + 0.5f) / (float)ScreenW * (float)TexW - 0.5f;
+    precise float v = ((float)sy + 0.5f) / (float)ScreenH * (float)TexH - 0.5f;
+    u = clamp(u, 0.0f, (float)(TexW - 1)); v = clamp(v, 0.0f, (float)(TexH - 1));
+    int i = min((int)u, TexW - 2), j = min((int)v, TexH - 2);
+    precise float fu = u - (float)i, fv = v - (float)j;
+    float a = Shadow[j * TexW + i], b = Shadow[j * TexW + i + 1], c = Shadow[(j + 1) * TexW + i], d = Shadow[(j + 1) * TexW + i + 1];
+    precise float r = (a + (b - a) * fu) * (1.0f - fv) + (c + (d - c) * fu) * fv;
+    return r;
+}
+
+// GameLamp.AddGlow: the glow at a pixel through a shadow of s, the target truncating it.
+float3 WithGlow(float3 t, float s, uint p)
+{
+    precise float keep = 1.0f - s;
+    precise float dim = (1.0f - VolumeIntensity) * s;
+    precise float r = t.x + (Glow[p] * keep + Glow[p] * dim);
+    precise float g = t.y + (Glow[p + 1u] * keep + Glow[p + 1u] * dim);
+    precise float b = t.z + (Glow[p + 2u] * keep + Glow[p + 2u] * dim);
+    return float3(Small(r, 6), Small(g, 6), Small(b, 5));
+}
+
+// GameLamp.Room: the room lit through the shadow, without the glow - or with it, when it is drawn with the room.
 [numthreads(16, 16, 1)]
 void RoomPass(uint3 id : SV_DispatchThreadID)
 {
@@ -110,14 +135,18 @@ void RoomPass(uint3 id : SV_DispatchThreadID)
         int k = j * TexW + i;
         shaded = Shadow[k] > 0.0f || Shadow[k + 1] > 0.0f || Shadow[k + TexW] > 0.0f || Shadow[k + TexW + 1] > 0.0f;
     }
+    bool withRoom = (GlowMode & 1u) != 0u;
     if (!shaded)
     {
-        Target[y * ScreenW + x] = float4(NoGlow[p], NoGlow[p + 1u], NoGlow[p + 2u], 1.0f);
+        Target[y * ScreenW + x] = withRoom ? float4(Room[p], Room[p + 1u], Room[p + 2u], 1.0f)
+                                           : float4(NoGlow[p], NoGlow[p + 1u], NoGlow[p + 2u], 1.0f);
         return;
     }
     float3 l = Between(x, y);
     precise float r = Albedo[p] * l.x, g = Albedo[p + 1u] * l.y, b = Albedo[p + 2u] * l.z;
-    Target[y * ScreenW + x] = float4(Small(r, 6), Small(g, 6), Small(b, 5), 1.0f);
+    float3 c = float3(Small(r, 6), Small(g, 6), Small(b, 5));
+    if (withRoom) c = WithGlow(c, ShadowAt(x, y), p);
+    Target[y * ScreenW + x] = float4(c, 1.0f);
 }
 
 // GameLamp.Room's copy for the edge glow: one pixel of every 4x4, the one at (1, 1).
@@ -180,29 +209,20 @@ void OverlayPass(uint3 id : SV_DispatchThreadID)
     Coverage[i] = cov;
 }
 
-// BustShadow.At: the shadow at a screen pixel, between its four nearest texels.
-float ShadowAt(int sx, int sy)
-{
-    precise float u = ((float)sx + 0.5f) / (float)ScreenW * (float)TexW - 0.5f;
-    precise float v = ((float)sy + 0.5f) / (float)ScreenH * (float)TexH - 0.5f;
-    u = clamp(u, 0.0f, (float)(TexW - 1)); v = clamp(v, 0.0f, (float)(TexH - 1));
-    int i = min((int)u, TexW - 2), j = min((int)v, TexH - 2);
-    precise float fu = u - (float)i, fv = v - (float)j;
-    float a = Shadow[j * TexW + i], b = Shadow[j * TexW + i + 1], c = Shadow[(j + 1) * TexW + i], d = Shadow[(j + 1) * TexW + i + 1];
-    precise float r = (a + (b - a) * fu) * (1.0f - fv) + (c + (d - c) * fu) * fv;
-    return r;
-}
-
-// GameLamp.Glow: the lamp's glow over everything drawn, through the shadow.
+// GameLamp.Glow: the lamp's glow over everything drawn, through the shadow; a glow drawn with the
+// room only over what is on the room's layer.
 [numthreads(16, 16, 1)]
 void GlowPass(uint3 id : SV_DispatchThreadID)
 {
     int x = (int)id.x, y = (int)id.y;
     if (x >= ScreenW || y >= ScreenH) return;
+    bool withRoom = (GlowMode & 1u) != 0u;
+    if (withRoom && (GlowMode & 2u) == 0u) return;
     uint p = (uint)(y * ScreenW + x) * 3u;
     float s = WithShadow != 0u ? ShadowAt(x, y) : 0.0f;
     int fx = x - Left, fy = N - 1 - (y - FrameBottom);
     bool drawnOver = fx >= 0 && fx < N && fy >= 0 && fy < N && Coverage[fy * N + fx] > 0.0f;
+    if (withRoom && !drawnOver) return;
     int o = y * ScreenW + x;
     float4 t = Target[o];
     if (s == 0.0f && !drawnOver)
@@ -210,12 +230,7 @@ void GlowPass(uint3 id : SV_DispatchThreadID)
         Target[o] = float4(Room[p], Room[p + 1u], Room[p + 2u], t.w);
         return;
     }
-    precise float keep = 1.0f - s;
-    precise float dim = (1.0f - VolumeIntensity) * s;
-    precise float r = t.x + (Glow[p] * keep + Glow[p] * dim);
-    precise float g = t.y + (Glow[p + 1u] * keep + Glow[p + 1u] * dim);
-    precise float b = t.z + (Glow[p + 2u] * keep + Glow[p + 2u] * dim);
-    Target[o] = float4(Small(r, 6), Small(g, 6), Small(b, 5), t.w);
+    Target[o] = float4(WithGlow(t.xyz, s, p), t.w);
 }
 
 // The target into the texture the post-processing reads.

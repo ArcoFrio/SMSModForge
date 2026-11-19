@@ -27,7 +27,7 @@ Writes SMSModForge/Resources/Backdrops/<name>:
   post.json      what the game's Beautify and URP post passes run with (their materials' values).
   lights.png     what the room's lights add to a bust, in linear light, per 4x4 screen pixels over the bust's rect,
                  16-bit: value / 65535 * lightScale. The game multiplies a bust by 1 (measured, S4), so this is all.
-  backdrop.json  the lamp a bust's shadow is cast from (where it is, its colour, falloff, glow and shadow, the light
+  backdrop.json  the lamp a bust's shadow is cast from (where it is, its colour, falloff, glow and shadow, the layers it lights, the light
                  texture scale and the global light: Light2D's and the 2D renderer's own numbers), how this GPU
                  decodes an sRGB lookup's bytes (from URP's falloff lookup read back), the screen, the lights' region,
                  the fake GI's settings (FakeGIManager's globals, live), and where a
@@ -185,6 +185,9 @@ def lamp_of(room):
         "shadowSoftness": float(field("m_ShadowSoftness")), "shadowSoftnessFalloff": float(field("m_ShadowSoftnessFalloffIntensity")),
         "textureScale": float(re.search(r"m_LightRenderTextureScale=([\d.]+)", renderer).group(1)),
         "global": [round(c * gint * gcol[3], 7) for c in gcol[:3]],
+        # The sorting layers it lights: a lamp lighting only Default draws its glow with the room, before the busts
+        # (URP draws a light's glow with the batch that ends at its highest lit layer) - PreviewBackdrop.LampSettings.
+        "layers": re.search(r" layers (\S+)", me).group(1).split(","),
     }
 
 

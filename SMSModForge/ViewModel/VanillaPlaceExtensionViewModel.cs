@@ -46,7 +46,18 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
             OnPropertyChanged();
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(PreviewBaseSprite));
-            OnPropertyChanged(nameof(PreviewSecondarySprite));
+            // The new level's own size, scale and order with its art (1.9.2): a
+            // level picked over another kept the other's px-per-unit.
+            OnPropertyChanged(nameof(PreviewArtPpu));
+            OnPropertyChanged(nameof(PreviewArtPivotX));
+            OnPropertyChanged(nameof(PreviewArtPivotY));
+            OnPropertyChanged(nameof(PreviewLevelPositionX));
+            OnPropertyChanged(nameof(PreviewLevelPositionY));
+            OnPropertyChanged(nameof(PreviewVideoScreen));
+            OnPropertyChanged(nameof(PreviewArtUnlit));
+            OnPropertyChanged(nameof(PreviewVideoStill));
+            OnPropertyChanged(nameof(PreviewLevelScale));
+            OnPropertyChanged(nameof(PreviewArtOrder));
             OnPropertyChanged(nameof(HasCatalogEntry));
             OnPropertyChanged(nameof(CatalogSummary));
             // Picking a source is what makes a hierarchy knowable, so fill it in
@@ -66,10 +77,13 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
 
     /// <summary>Absolute path to the level's extracted base sprite (blank when
     /// the extraction hasn't been run). Absolute so the shared PlacePreview,
-    /// which combines pack root + path, resolves it unchanged.</summary>
+    /// which combines pack root + path, resolves it unchanged.
+    /// <para/>
+    /// No back layer: the level's second child (its Secondary.PNG) is one of
+    /// its objects, drawn where it stands like the rest (see
+    /// <see cref="VanillaLevelCatalog.FindNodeArt"/>), not a backdrop centred on
+    /// the screen.</summary>
     public string PreviewBaseSprite => VanillaLevelCatalog.FindArt(CatalogLevel?.GoName, "Base.PNG");
-
-    public string PreviewSecondarySprite => VanillaLevelCatalog.FindArt(CatalogLevel?.GoName, "Secondary.PNG");
 
     /// <summary>
     /// Sorting order of this level's own art, from the extraction.
@@ -104,48 +118,30 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
         }
     }
 
-    /// <summary>The lowest order any of the level's own art draws at — the far
-    /// layer, when it has one.</summary>
-    public int PreviewArtSecondaryOrder
-    {
-        get
-        {
-            var lv = CatalogLevel;
-            if (lv?.Hierarchy == null) return -5;
-            int lowest = PreviewArtOrder;
-            foreach (var c in lv.Hierarchy.Children)
-            {
-                var sr = c.SpriteRenderer;
-                if (sr != null && sr.SortingOrder < lowest) lowest = sr.SortingOrder;
-            }
-            return lowest;
-        }
-    }
+    /// <summary>Where this level's own sprite is pivoted, as a share of it from
+    /// its bottom-left: the centre for all but two levels (1.9.2).</summary>
+    public double PreviewArtPivotX => CatalogLevel?.Hierarchy?.SpriteRenderer?.PivotX ?? 0.5f;
+    public double PreviewArtPivotY => CatalogLevel?.Hierarchy?.SpriteRenderer?.PivotY ?? 0.5f;
+
+    /// <summary>Whether this level's own picture is drawn with the game's unlit material, which its lamps leave as it
+    /// is (1.9.2).</summary>
+    public bool PreviewArtUnlit => string.Equals(CatalogLevel?.Hierarchy?.SpriteRenderer?.Material,
+                                                 View.Controls.PlacePreview.UnlitMaterial, System.StringComparison.Ordinal);
+
+    /// <summary>Where this level stands from the game's camera (1.9.2).</summary>
+    public double PreviewLevelPositionX => CatalogLevel?.LevelPositionX ?? 0f;
+    public double PreviewLevelPositionY => CatalogLevel?.LevelPositionY ?? 0f;
+
+    /// <summary>Where this level shows a video, and the still the preview draws there (1.9.2).</summary>
+    public VanillaLevelCatalog.VideoScreen? PreviewVideoScreen => CatalogLevel?.VideoScreen;
+    public string PreviewVideoStill => CatalogLevel?.VideoScreen is { } screen
+        ? VanillaLevelCatalog.FindArt(CatalogLevel.GoName, screen.Still) : "";
 
     /// <summary>The level's own parallax, read off its extracted component so
     /// the preview drifts a vanilla room exactly as the game does rather than
     /// at some pack-shaped default.</summary>
     public double PreviewLevelParallax => ParallaxOf(CatalogLevel?.Hierarchy)?.Strength ?? 0.75;
     public bool PreviewLevelParallaxReversed => ParallaxOf(CatalogLevel?.Hierarchy)?.Reversed ?? false;
-
-    /// <summary>Same for the far layer — the node the preview draws as the
-    /// backdrop, i.e. the one holding <see cref="PreviewArtSecondaryOrder"/>.</summary>
-    public double PreviewLevelParallaxSecondary => SecondaryParallax()?.Strength ?? PreviewLevelParallax;
-    public bool PreviewLevelParallaxSecondaryReversed => SecondaryParallax()?.Reversed ?? false;
-
-    private (double Strength, bool Reversed)? SecondaryParallax()
-    {
-        var lv = CatalogLevel;
-        if (lv?.Hierarchy == null) return null;
-        Model.VanillaLevelCatalog.Node? far = null;
-        int lowest = PreviewArtOrder;
-        foreach (var c in lv.Hierarchy.Children)
-        {
-            var sr = c.SpriteRenderer;
-            if (sr != null && sr.SortingOrder < lowest) { lowest = sr.SortingOrder; far = c; }
-        }
-        return ParallaxOf(far);
-    }
 
     private static (double Strength, bool Reversed)? ParallaxOf(Model.VanillaLevelCatalog.Node? n)
     {

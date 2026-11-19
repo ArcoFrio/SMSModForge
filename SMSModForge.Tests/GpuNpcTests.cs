@@ -28,6 +28,7 @@ public sealed class GpuNpcTests
     [Theory]
     [InlineData("MyRoom", true)]
     [InlineData("Forest", false)]
+    [InlineData("Beach", false)]   // a lamp whose glow is drawn with the room (1.9.2): still over the NPC
     public void TheCardsNpcFrameIsTheProcessors(string backdropName, bool withBlink)
     {
         using var card = GpuFrame.TryCreate();

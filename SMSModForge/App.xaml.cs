@@ -28,6 +28,22 @@ public partial class App : Application
             return;
         }
 
+        // The place pictures export (1.9.2): no window either. Every place is
+        // drawn into the folder asked for, as the Places tab's preview draws it,
+        // a line for each in export.log beside them, and the process ends (exit
+        // code 1 when it failed).
+        if (PlaceExport.WasAsked(e.Args, out var placesFolder, out var placesPack, out var levelArt))
+        {
+            var lines = new System.Text.StringBuilder();
+            int code = 0;
+            try { PlaceExport.Run(placesFolder, placesPack, line => lines.AppendLine(line), levelArt: levelArt); }
+            catch (System.Exception ex) { lines.AppendLine(ex.ToString()); code = 1; }
+            try { System.IO.Directory.CreateDirectory(placesFolder); System.IO.File.WriteAllText(System.IO.Path.Combine(placesFolder, "export.log"), lines.ToString()); }
+            catch (System.IO.IOException) { code = 1; }
+            Shutdown(code);
+            return;
+        }
+
         // Restore the persisted colour theme before the main window builds,
         // so its DynamicResource bindings resolve to the chosen palette.
         // Not under the test harness, whose Application runs this too, AFTER

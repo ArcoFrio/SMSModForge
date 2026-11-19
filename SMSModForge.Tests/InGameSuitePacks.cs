@@ -156,10 +156,13 @@ internal static class InGameSuitePacks
     ///   true). Arriving adds 1 to <c>entered</c>, leaving 1 to <c>left</c>.
     ///   Its buttons: to the Storage Room, and one shown only while
     ///   <c>navOk</c> is true.</item>
-    ///   <item>The Beach, never visited: <c>BeachMark</c> made on it at 2,1;
-    ///   its own <c>Light 2D</c> moved to 0.25,0.5 (a bound node that asks
+    ///   <item>The Hiking Path's start, never visited: <c>HikeMark</c> made on it
+    ///   at 2,1; its own <c>Light 2D</c> moved to 0.25,0.5 (a bound node that asks
     ///   to); its own <c>NPCs</c> bound with nothing asked of it but a child,
-    ///   <c>NpcsMark</c> - so it must stay exactly where the game has it.</item>
+    ///   <c>NpcsMark</c> - so it must stay exactly where the game has it. Not the
+    ///   Beach (1.9.2): the Beach is a bust preview's backdrop, captured in this
+    ///   test copy, and its lamp was captured where this pack had moved it.</item>
+    ///   <item>The Beach: a button to the room, <c>Check Room</c>.</item>
     ///   <item>The Storage Room (quiet: nobody talks as you arrive): a button
     ///   back to the room.</item>
     ///   <item>The World Map: <c>Map Room</c> in the Seaside district, to the
@@ -176,6 +179,9 @@ internal static class InGameSuitePacks
         public const string Id = "suiteworld";
         public const string Room = "checkroom", RoomObject = "CheckRoom";
         public const string Store = "32_StorageRoom", Town = "26_Downtown";
+        /// <summary>The game's level the pack's bound objects are checked on (B4): one with a Light 2D and NPCs of
+        /// its own, and no bust preview's backdrop (1.9.2).</summary>
+        public const string Hike = "138_HikingPath_Start";
 
         /// <summary>The room's copies of the game's objects, and the game's
         /// effect the second is a copy of.</summary>
@@ -321,9 +327,14 @@ internal static class InGameSuitePacks
             {
                 Source = "vanilla:14_Beach",
                 NavigatorButtons = { new NavigatorButtonDef { Target = "self:" + Room, Label = "Check Room" } },
+            });
+            // A level that is no backdrop (1.9.2): the Beach is one, captured in this copy of the game.
+            pack.VanillaExtensions.Add(new VanillaPlaceExtensionDef
+            {
+                Source = "vanilla:" + World.Hike,
                 GameObjects =
                 {
-                    new GameObjectDef { Name = "BeachMark", Sprite = sign, X = 2f, Y = 1f },
+                    new GameObjectDef { Name = "HikeMark", Sprite = sign, X = 2f, Y = 1f },
                     new GameObjectDef { Name = "Light 2D", Bind = true, OverrideTransform = true, X = 0.25f, Y = 0.5f },
                     new GameObjectDef
                     {

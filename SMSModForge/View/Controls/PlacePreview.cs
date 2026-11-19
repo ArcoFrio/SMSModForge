@@ -141,8 +141,13 @@ public sealed partial class PlacePreview : Grid
     /// out while still looking plausible.
     /// </summary>
     private const double PixelsPerUnit = 100.0;
-    private const double WorldOriginX = CanvasWidth / 2.0;
-    private const double WorldOriginY = CanvasHeight / 2.0;
+
+    /// <summary>Where the level's own origin is on the canvas: the camera's
+    /// centre, moved by where the level stands from the camera
+    /// (<see cref="LevelPositionX"/>, <see cref="LevelPositionY"/>; 1.9.2).
+    /// Everything on the level is drawn from it; the camera's screen is not.</summary>
+    private double WorldOriginX => CanvasWidth / 2.0 + LevelPositionX * PixelsPerUnit;
+    private double WorldOriginY => CanvasHeight / 2.0 - LevelPositionY * PixelsPerUnit;
 
     // ── Dependency properties ──────────────────────────────────────────
 
@@ -230,6 +235,9 @@ public sealed partial class PlacePreview : Grid
     };
     private readonly Image _secondaryImage = NewLayerImage();
     private readonly Image _baseImage = NewLayerImage();
+
+    /// <summary>A game level's video screen, as a still (<see cref="LevelVideoScreen"/>; 1.9.2).</summary>
+    private readonly Image _videoImage = NewLayerImage();
 
     /// <summary>
     /// The level art + every GameObject, z-ordered by sorting order.
@@ -671,27 +679,77 @@ public sealed partial class PlacePreview : Grid
     {
         if (img.Source is not BitmapSource bmp) return;
         double ppu = spritePpu > 0 ? spritePpu : LevelArtPpu;
+        double pivotX = 0.5, pivotY = 0.5;
 
-        // A layer authored at some other resolution is fitted to the level
-        // frame, exactly as the runtime fits it, so the room fills the same
-        // screen either way. Without this the preview scaled with the file:
-        // art at twice the resolution drew twice the size here and the same
-        // size in game. Art at 2048x1136 comes through untouched, the factor
-        // being 1.
-        //
-        // Only pack layers reach this method -- both sources are built from
-        // paths under the pack root -- which matters, because vanilla art is
-        // already in the scene and the runtime never refits it.
-        ppu *= Rendering.ArtFit.LevelScale(bmp.PixelWidth, bmp.PixelHeight);
+        if (LevelArtIsTheGames)
+        {
+            // The game's own art, as the game draws it: its pixels (a shipped
+            // thumbnail is back at its own size by now, VanillaArtSizes) over
+            // its own px-per-unit, placed by its pivot (1.9.2). It was fitted
+            // to the level frame below as well, on top of its own ppu - scaled
+            // twice: 1% small for most levels, and to 70% for the seven drawn
+            // from 2912x1632 art at 100 a unit (the PC's room, the Kitchen),
+            // which came out framed in black.
+            pivotX = LevelArtPivotX;
+            pivotY = LevelArtPivotY;
+        }
+        else
+        {
+            // A pack's layer, authored at whatever resolution, is fitted to the
+            // level frame, exactly as the runtime fits it (centred), so the room
+            // fills the same screen either way. Without this the preview scaled
+            // with the file: art at twice the resolution drew twice the size
+            // here and the same size in game. Art at 2048x1136 comes through
+            // untouched, the factor being 1.
+            ppu *= Rendering.ArtFit.LevelScale(bmp.PixelWidth, bmp.PixelHeight);
+        }
         // Same WorldPpu the objects use, so art and props stay locked together
         // whatever the level's scale.
         double w = bmp.PixelWidth / ppu * WorldPpu;
         double h = bmp.PixelHeight / ppu * WorldPpu;
         img.Width = w;
         img.Height = h;
-        // Centred on the world origin, which is where the camera sits.
-        Canvas.SetLeft(img, WorldOriginX - w / 2.0);
-        Canvas.SetTop(img, WorldOriginY - h / 2.0);
+        // Pivoted on the world origin, which is where the camera sits: the
+        // pivot is a share of the art from its bottom-left (Unity's), the
+        // centre for all but two of the game's levels.
+        Canvas.SetLeft(img, WorldOriginX - w * pivotX);
+        Canvas.SetTop(img, WorldOriginY - h * (1.0 - pivotY));
+    }
+
+    /// <summary>
+    /// A game level's video screen, drawn as its still where the game shows the
+    /// video (1.9.2): a camera-space canvas's Image, sized in the canvas's units
+    /// (its reference resolution over the screen), fixed to the camera - it does
+    /// not move with the level - and sorted with the level's art (behind it, at
+    /// -25). The Inside Car's windows and the Subway Train's were black.
+    /// False when the level has none, or its still is not there.
+    /// </summary>
+    private bool PlaceVideoStill(string root)
+    {
+        var screen = LevelVideoScreen;
+        string? path = string.IsNullOrWhiteSpace(LevelVideoStill) ? null : Path.Combine(root ?? "", Normalize(LevelVideoStill));
+        var bmp = screen == null || path == null || !File.Exists(path) ? null : LoadCachedBitmap(path);
+        _videoImage.Source = bmp;
+        if (bmp == null || screen == null) return false;
+        double k = screen.ReferenceWidth > 0 ? CanvasWidth / screen.ReferenceWidth : 1.0;
+        double w = screen.Width * screen.Scale * k, h = screen.Height * screen.Scale * k;
+        _videoImage.Width = w;
+        _videoImage.Height = h;
+        _videoImage.Stretch = Stretch.Fill;
+        Canvas.SetLeft(_videoImage, CanvasWidth / 2.0 + screen.X * k - w / 2.0);
+        Canvas.SetTop(_videoImage, CanvasHeight / 2.0 - screen.Y * k - h / 2.0);
+        return true;
+    }
+
+    /// <summary>Whether any object in the tree is bound to one of the game's own with art (a vanilla level's).</summary>
+    private static bool HasVanillaArt(IEnumerable? nodes)
+    {
+        if (nodes == null) return false;
+        foreach (var n in nodes)
+            if (n is GameObjectViewModel g
+                && (!string.IsNullOrWhiteSpace(g.Model.VanillaArtPath) || HasVanillaArt(g.Children)))
+                return true;
+        return false;
     }
 
     private static Image NewLayerImage()
@@ -778,7 +836,10 @@ public sealed partial class PlacePreview : Grid
         string frontPath = BaseSprite ?? "";
         string backPath = SecondarySprite ?? "";
 
-        if (string.IsNullOrWhiteSpace(frontPath) && string.IsNullOrWhiteSpace(backPath))
+        // A level can be all objects: the game's Bath has no art of its own, its room is its second child (1.9.2).
+        bool objectsOnly = string.IsNullOrWhiteSpace(frontPath) && string.IsNullOrWhiteSpace(backPath)
+                           && HasVanillaArt(GameObjects);
+        if (string.IsNullOrWhiteSpace(frontPath) && string.IsNullOrWhiteSpace(backPath) && !objectsOnly)
         {
             ShowPlaceholder(string.IsNullOrEmpty(root)
                 ? Loc.T("preview.place.saveAndSet")
@@ -807,7 +868,7 @@ public sealed partial class PlacePreview : Grid
         _baseImage.Source = absFront != null && File.Exists(absFront) ? TryLoad(absFront) : null;
         _baseImage.Visibility = _baseImage.Source != null ? Visibility.Visible : Visibility.Collapsed;
 
-        if (_baseImage.Source == null && _secondaryImage.Source == null)
+        if (_baseImage.Source == null && _secondaryImage.Source == null && !objectsOnly)
         {
             // Every path that was given failed to load, so name one.
             ShowPlaceholder(absFront != null && !File.Exists(absFront)
@@ -1057,6 +1118,7 @@ public sealed partial class PlacePreview : Grid
     {
         _secondaryImage.Source = null;
         _baseImage.Source = null;
+        _videoImage.Source = null;
         _buttonLayer.Children.Clear();
         _worldLayer.Children.Clear();
         _viewport.Visibility = Visibility.Collapsed;
@@ -1075,6 +1137,9 @@ public sealed partial class PlacePreview : Grid
         if (e.NewValue is INotifyCollectionChanged newCc)
             newCc.CollectionChanged += self.OnOverlayTreeChanged;
         self.RebuildOverlayGos();
+        // Without level art, whether there is anything to draw is the objects' to say (a level that is all objects).
+        if (string.IsNullOrWhiteSpace(self.BaseSprite) && string.IsNullOrWhiteSpace(self.SecondarySprite))
+            self.Refresh();
     }
 
     private void OnOverlayTreeChanged(object? sender, NotifyCollectionChangedEventArgs e) => RebuildOverlayGos();
@@ -1189,6 +1254,57 @@ public sealed partial class PlacePreview : Grid
     {
         get => (bool)GetValue(DimInactiveProperty);
         set => SetValue(DimInactiveProperty, value);
+    }
+
+    /// <summary>
+    /// The place as the game shows it on arrival (1.9.2, the place pictures export): what starts switched off, sits
+    /// under a switched-off parent or is shown only when its conditions hold (an NPC waiting for its character to be
+    /// there, an outfit's copy of one) is left out, not drawn faint - the editing view's dimming is for finding them.
+    /// </summary>
+    public static readonly DependencyProperty AsTheGameShowsProperty =
+        DependencyProperty.Register(nameof(AsTheGameShows), typeof(bool), typeof(PlacePreview),
+            new PropertyMetadata(false, OnInputChanged));
+
+    public bool AsTheGameShows
+    {
+        get => (bool)GetValue(AsTheGameShowsProperty);
+        set => SetValue(AsTheGameShowsProperty, value);
+    }
+
+    /// <summary>
+    /// With <see cref="AsTheGameShows"/>: the objects (by their path in the place's tree, "NPCs/Group_2") drawn as the
+    /// game draws them once switched on or once their conditions hold - a crowd the game picks, an NPC at her spot -
+    /// with what is under them; what is switched off inside them stays off (1.9.2, the export's NPC groups).
+    /// </summary>
+    public static readonly DependencyProperty ShowAlsoProperty =
+        DependencyProperty.Register(nameof(ShowAlso), typeof(IReadOnlyCollection<string>), typeof(PlacePreview),
+            new PropertyMetadata(null, OnInputChanged));
+
+    public IReadOnlyCollection<string>? ShowAlso
+    {
+        get => (IReadOnlyCollection<string>?)GetValue(ShowAlsoProperty);
+        set => SetValue(ShowAlsoProperty, value);
+    }
+
+    /// <summary>Whether a scene entry is left out of what the place shows by itself (<see cref="AsTheGameShows"/>).</summary>
+    private bool LeftOutOnArrival(SceneEntry e, bool ownStartActive)
+    {
+        if (!AsTheGameShows) return false;
+        var also = ShowAlso;
+        // One of a set the game picks from at random each time it switches on (RandomChildActivator: a spot's poses
+        // of one NPC in one outfit): drawn only when asked for itself, never with the rest of its set.
+        if (e.Choice != null && (also == null || !also.Contains(e.Choice))) return true;
+        if (also != null && also.Any(p => e.Path == p || e.Path.StartsWith(p + "/", StringComparison.Ordinal)))
+        {
+            // The object asked for, and its own NPC placements: those start off as often as not and are switched on
+            // by their conditions or by an action (the plugin builds them as authored, NpcFactory) - they are what
+            // the group is for. Anything deeper keeps its own state.
+            if (also.Contains(e.Path)) return false;
+            int cut = e.Path.LastIndexOf('/');
+            if (e.Npc != null && cut > 0 && also.Contains(e.Path[..cut])) return false;
+            return !ownStartActive;
+        }
+        return e.ParentInactive || e.Conditional || !ownStartActive;
     }
 
     /// <summary>Parallax strength of the level's MAIN sprite — the baseline every
@@ -1365,6 +1481,98 @@ public sealed partial class PlacePreview : Grid
     }
 
     /// <summary>
+    /// The level's art is the game's own (a vanilla level, 1.9.2): drawn at its
+    /// own size, over <see cref="LevelArtPpu"/>, and placed by
+    /// <see cref="LevelArtPivotX"/>/<see cref="LevelArtPivotY"/>, as the game draws
+    /// it. Otherwise (a pack's place) it is fitted to the level frame and
+    /// centred, as the runtime fits a pack's art. See SizeLevelLayer.
+    /// </summary>
+    public static readonly DependencyProperty LevelArtIsTheGamesProperty =
+        DependencyProperty.Register(nameof(LevelArtIsTheGames), typeof(bool), typeof(PlacePreview),
+            new PropertyMetadata(false, OnInputChanged));
+
+    public bool LevelArtIsTheGames
+    {
+        get => (bool)GetValue(LevelArtIsTheGamesProperty);
+        set => SetValue(LevelArtIsTheGamesProperty, value);
+    }
+
+    /// <summary>Where the game's level art is pivoted, as a share of it from its
+    /// bottom-left: the centre, but for two levels whose art sits a little off it
+    /// (104_WinterHotspring, 110_BadlandsParkingLot). Only with
+    /// <see cref="LevelArtIsTheGames"/>.</summary>
+    public static readonly DependencyProperty LevelArtPivotXProperty =
+        DependencyProperty.Register(nameof(LevelArtPivotX), typeof(double), typeof(PlacePreview),
+            new PropertyMetadata(0.5, OnInputChanged));
+
+    public double LevelArtPivotX
+    {
+        get => (double)GetValue(LevelArtPivotXProperty);
+        set => SetValue(LevelArtPivotXProperty, value);
+    }
+
+    public static readonly DependencyProperty LevelArtPivotYProperty =
+        DependencyProperty.Register(nameof(LevelArtPivotY), typeof(double), typeof(PlacePreview),
+            new PropertyMetadata(0.5, OnInputChanged));
+
+    public double LevelArtPivotY
+    {
+        get => (double)GetValue(LevelArtPivotYProperty);
+        set => SetValue(LevelArtPivotYProperty, value);
+    }
+
+    /// <summary>
+    /// Where the level stands from the camera, in world units (1.9.2): a pack's
+    /// place at the camera's centre (the runtime puts it there, (0, 0)); one of
+    /// the game's levels where the game keeps it - its parent's place plus its
+    /// own (<see cref="Model.VanillaLevelCatalog.LevelPositionX"/>). Drawn at the
+    /// centre, the game's levels sat 13 game pixels above where the game shows
+    /// them, and those placed further left (x -0.94) 13 to the right.
+    /// </summary>
+    public static readonly DependencyProperty LevelPositionXProperty =
+        DependencyProperty.Register(nameof(LevelPositionX), typeof(double), typeof(PlacePreview),
+            new PropertyMetadata(0.0, OnInputChanged));
+
+    public double LevelPositionX
+    {
+        get => (double)GetValue(LevelPositionXProperty);
+        set => SetValue(LevelPositionXProperty, value);
+    }
+
+    /// <summary>A game level's video screen, from the catalog (1.9.2): where the
+    /// game shows its video, which the preview draws as <see cref="LevelVideoStill"/>.</summary>
+    public static readonly DependencyProperty LevelVideoScreenProperty =
+        DependencyProperty.Register(nameof(LevelVideoScreen), typeof(Model.VanillaLevelCatalog.VideoScreen), typeof(PlacePreview),
+            new PropertyMetadata(null, OnInputChanged));
+
+    public Model.VanillaLevelCatalog.VideoScreen? LevelVideoScreen
+    {
+        get => (Model.VanillaLevelCatalog.VideoScreen?)GetValue(LevelVideoScreenProperty);
+        set => SetValue(LevelVideoScreenProperty, value);
+    }
+
+    /// <summary>The still of that video (a path, absolute or under the pack root).</summary>
+    public static readonly DependencyProperty LevelVideoStillProperty =
+        DependencyProperty.Register(nameof(LevelVideoStill), typeof(string), typeof(PlacePreview),
+            new PropertyMetadata("", OnInputChanged));
+
+    public string LevelVideoStill
+    {
+        get => (string)GetValue(LevelVideoStillProperty);
+        set => SetValue(LevelVideoStillProperty, value);
+    }
+
+    public static readonly DependencyProperty LevelPositionYProperty =
+        DependencyProperty.Register(nameof(LevelPositionY), typeof(double), typeof(PlacePreview),
+            new PropertyMetadata(0.0, OnInputChanged));
+
+    public double LevelPositionY
+    {
+        get => (double)GetValue(LevelPositionYProperty);
+        set => SetValue(LevelPositionYProperty, value);
+    }
+
+    /// <summary>
     /// The level root's own scale. Almost every vanilla level ships at 0.79,
     /// and everything authored under it — art, props, NPCs — inherits that.
     /// <para/>
@@ -1401,6 +1609,9 @@ public sealed partial class PlacePreview : Grid
 
         string root = PackRoot ?? "";
         _scene = BuildScene();
+        // The place's own lights, from what it shows on arrival (1.9.2).
+        UpdateLights();
+        SyncLook();
 
         // One ordered list of everything that lives in the level's sorting
         // layer. Ties keep the level sprites underneath the overlays, matching
@@ -1409,6 +1620,7 @@ public sealed partial class PlacePreview : Grid
         var drawables = new System.Collections.Generic.List<(int Order, int Tie, UIElement Element)>();
 
         _parallaxTargets.Clear();
+        _unlitElements.Clear();
         _shaderTargets.Clear();
 
         double baseGain = ParallaxGain(LevelParallax, LevelParallaxReversed, PixelsPerUnit);
@@ -1434,6 +1646,8 @@ public sealed partial class PlacePreview : Grid
         }
         drawables.Add((LevelArtOrder, 0, _baseImage));
         TrackParallax(_baseImage, baseGain);
+        if (LevelArtUnlit) _unlitElements.Add(_baseImage);
+        if (PlaceVideoStill(root)) drawables.Add((LevelVideoScreen!.SortingOrder, -1, _videoImage));
         // Unlike the NPC images, this one outlives the rebuild, so switching the
         // shader off has to hand its flat bitmap back — otherwise the level
         // stays frozen on the last frame the pass drew.
@@ -1451,6 +1665,8 @@ public sealed partial class PlacePreview : Grid
             foreach (var entry in _scene)
             {
                 if (entry.Hidden) continue;   // hidden from the preview only
+                if (entry.Node != null && LeftOutOnArrival(entry, entry.Node.StartActive))
+                    continue;                 // what the place shows by itself: nothing switched off or waiting on conditions
                 var o = entry.Node;
                 // PreviewSprite is the pack's own sprite, or — for a node bound
                 // to an existing vanilla object — that object's extracted art,
@@ -1466,7 +1682,7 @@ public sealed partial class PlacePreview : Grid
                 // creates, the vanilla sprite's for one it binds to. A constant
                 // here drew every vanilla sprite as though it were 100 ppu, so a
                 // 512px NPC imported at 51.98 came out at less than half size.
-                var m = LeafMatrix(entry.World, w, h, o.SpritePpu);
+                var m = LeafMatrix(entry.World, w, h, o.SpritePpu, o.Model.SpritePivotX, o.Model.SpritePivotY);
 
                 var img = new Image
                 {
@@ -1495,6 +1711,8 @@ public sealed partial class PlacePreview : Grid
                 var oForClick = o;
                 img.MouseLeftButtonDown += (_, e) => { SelectNode(oForClick, pathForClick); e.Handled = true; };
                 drawables.Add((o.SortingOrder, 1, img));
+                // Drawn with the game's unlit material: the level's lamps leave it as it is (1.9.2).
+                if (string.Equals(o.Model.Baseline?.SpriteRenderer?.Material, UnlitMaterial, StringComparison.Ordinal)) _unlitElements.Add(img);
                 TrackParallax(img, entry.ParallaxGain);
 
                 // Renderer tint, for a vanilla object that has one. Same masked
@@ -1647,6 +1865,14 @@ public sealed partial class PlacePreview : Grid
         /// node has to be judged on the whole chain — reading its own flag alone
         /// drew every member of a switched-off group at full strength.</summary>
         public bool ParentInactive;
+
+        /// <summary>Whether it, or an ancestor, is shown only when its conditions hold (1.9.2): what the place
+        /// shows by itself leaves it out (<see cref="AsTheGameShows"/>).</summary>
+        public bool Conditional;
+
+        /// <summary>When it is, or is under, one of the children of an object that switches on one of its children at
+        /// random (<see cref="PicksAtRandom"/>): that child's path, the choice it belongs to (1.9.2). Null otherwise.</summary>
+        public string? Choice;
 
         /// <summary>For each ancestor level, whether that ancestor still has
         /// siblings below it — i.e. whether the tree needs a vertical line
@@ -2159,9 +2385,16 @@ public sealed partial class PlacePreview : Grid
     /// </summary>
     private readonly HashSet<string> _hidden = new();
 
+    /// <summary>Whether a node switches on one of its children at random each time it switches on, its NPC placements
+    /// among them: the pack's RandomChildActivator, or the game's own component of that name on one of its objects.</summary>
+    internal static bool PicksAtRandom(GameObjectDef node)
+        => node.Components.Any(c => c.Type == "RandomChildActivator")
+           || (node.Baseline?.Components?.Contains("RandomChildActivator") ?? false);
+
     private static void WalkScene(IEnumerable? items, string prefix, int depth,
                                   Aff parentWorld, bool inNpcSubtree, bool parentInactive,
-                                  List<bool> ancestorHasMore, List<SceneEntry> into)
+                                  List<bool> ancestorHasMore, List<SceneEntry> into, bool parentConditional = false,
+                                  string? parentChoice = null, bool parentPicks = false)
     {
         if (items == null) return;
         // Materialised so each row knows whether it is its parent's last child —
@@ -2188,11 +2421,14 @@ public sealed partial class PlacePreview : Grid
             Aff frameParent = composed ? parentWorld : Aff.Identity;
             bool npc = composed;
 
+            bool conditional = parentConditional || o.Model.ActiveConditions.Count > 0;
+            string? choice = parentPicks ? path : parentChoice;
+            bool picks = PicksAtRandom(o.Model);
             into.Add(new SceneEntry
             {
                 Node = o, Path = path, Depth = depth,
                 InNpcSubtree = npc, World = world, ParentWorld = frameParent,
-                ParentInactive = parentInactive,
+                ParentInactive = parentInactive, Conditional = conditional, Choice = choice,
                 Guides = ancestorHasMore.ToArray(), IsLast = isLast,
             });
 
@@ -2210,11 +2446,13 @@ public sealed partial class PlacePreview : Grid
                 string label = string.IsNullOrWhiteSpace(pl.Name) ? pl.Npc : pl.Name;
                 if (string.IsNullOrWhiteSpace(label)) label = "(unset)";
                 string npcPath = path + "/" + label;
+                bool npcConditional = conditional || pl.Model.ActiveConditions.Count > 0;
+                string? npcChoice = picks ? npcPath : choice;
                 into.Add(new SceneEntry
                 {
                     Npc = pl, Path = npcPath, Depth = depth + 1,
                     InNpcSubtree = npc, World = world, ParentWorld = world,
-                    ParentInactive = childrenInactive,
+                    ParentInactive = childrenInactive, Conditional = npcConditional, Choice = npcChoice,
                     Guides = ancestorHasMore.ToArray(), IsLast = npcLast,
                 });
                 // GameObjects parented under the NPC ride along with its body,
@@ -2222,12 +2460,12 @@ public sealed partial class PlacePreview : Grid
                 ancestorHasMore.Add(!npcLast);
                 WalkScene(pl.Children, npcPath, depth + 2,
                           world.Then(LeafAff(pl.Body)), true,
-                          childrenInactive || !pl.StartActive, ancestorHasMore, into);
+                          childrenInactive || !pl.StartActive, ancestorHasMore, into, npcConditional, npcChoice);
                 ancestorHasMore.RemoveAt(ancestorHasMore.Count - 1);
             }
 
             WalkScene(o.Children, path, depth + 1, world, npc, childrenInactive,
-                      ancestorHasMore, into);
+                      ancestorHasMore, into, conditional, choice, picks);
             ancestorHasMore.RemoveAt(ancestorHasMore.Count - 1);
         }
     }
@@ -2238,18 +2476,22 @@ public sealed partial class PlacePreview : Grid
     /// rotation / mirror / non-uniform scale (no scale/rotation decomposition).
     /// <paramref name="spritePpu"/> is the sprite's authored pixels-per-unit:
     /// NPC art loads at 100, GameObject sprites at the level's own 70.32 (so
-    /// one sprite pixel is one canvas pixel).</summary>
-    private Matrix LeafMatrix(in Aff w, double spx, double spy, double spritePpu = NpcSpritePpu)
+    /// one sprite pixel is one canvas pixel). <paramref name="pivotX"/>, <paramref name="pivotY"/>: where the sprite
+    /// is pivoted, as a share of its rect from its bottom-left (Unity's own convention; the centre unless a vanilla
+    /// sprite says otherwise, 1.9.2).</summary>
+    private Matrix LeafMatrix(in Aff w, double spx, double spy, double spritePpu = NpcSpritePpu,
+                              double pivotX = 0.5, double pivotY = 0.5)
     {
         // World units land on canvas at the camera's rate THROUGH the level
         // root's scale — everything authored under the level inherits it.
         double ppu = WorldPpu;
         double k = ppu / spritePpu;
-        double halfW = spx / (2.0 * spritePpu);
-        double halfH = spy / (2.0 * spritePpu);
-        // Top-left pixel maps to local unit (-halfW, +halfH).
-        double wx = w.A * (-halfW) + w.C * halfH + w.Tx;
-        double wy = w.B * (-halfW) + w.D * halfH + w.Ty;
+        // The rect's left and top edges from the pivot, in local units (the centre: -w/2, +h/2).
+        double left = -pivotX * spx / spritePpu;
+        double top = (1.0 - pivotY) * spy / spritePpu;
+        // Top-left pixel maps to local unit (left, top).
+        double wx = w.A * left + w.C * top + w.Tx;
+        double wy = w.B * left + w.D * top + w.Ty;
         return new Matrix(
             k * w.A, -k * w.B,      // M11, M12  (x-axis, canvas Y flipped)
             -k * w.C, k * w.D,      // M21, M22  (y-axis)
@@ -2274,7 +2516,7 @@ public sealed partial class PlacePreview : Grid
     {
         if (_placeholder.Visibility == Visibility.Visible) return;
 
-        var placements = _scene.Where(e => e.Npc != null && !e.Hidden).ToList();
+        var placements = _scene.Where(e => e.Npc != null && !e.Hidden && !LeftOutOnArrival(e, e.Npc.StartActive)).ToList();
         if (placements.Count == 0) return;
 
         var catalog = NpcCatalog?.Cast<object>().OfType<NpcViewModel>()
@@ -2927,7 +3169,7 @@ public sealed partial class PlacePreview : Grid
             .FirstOrDefault(n => n.Key == pl.Npc);
     }
 
-    private static GizmoFrame FrameFromParent(in Aff p) => new(
+    private GizmoFrame FrameFromParent(in Aff p) => new(
         new Point(WorldOriginX + p.Tx * PixelsPerUnit, WorldOriginY - p.Ty * PixelsPerUnit),
         new Vector(p.A * PixelsPerUnit, -p.B * PixelsPerUnit),
         new Vector(p.C * PixelsPerUnit, -p.D * PixelsPerUnit));

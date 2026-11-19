@@ -100,6 +100,7 @@ namespace SMSModForge.PackPlugin
             ListenTick();
             WatchTick();
             TimelineTick();
+            ParallaxTick();
             if (_waitingFor != null && !Waiting()) _waitingFor = null;
             if (_waitingFor != null) return;
 

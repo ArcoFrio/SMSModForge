@@ -31,14 +31,26 @@ public sealed class GpuFrameTests
     [Fact]
     public void AutomaticTimesBothAndTakesTheFaster()
     {
-        Services.PreviewRendererManager.Measure();
-        _out.WriteLine(Services.PreviewRendererManager.Measurement);
-        var m = System.Text.RegularExpressions.Regex.Match(Services.PreviewRendererManager.Measurement ?? "",
-                                                           @"card ([\d.]+) ms, processor ([\d.]+) ms");
-        Assert.True(m.Success, "nothing was measured: " + Services.PreviewRendererManager.Measurement);
-        double card = double.Parse(m.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture);
-        double processor = double.Parse(m.Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture);
-        Assert.Equal(card < processor, Services.PreviewRendererManager.MeasuredCard);
+        // The answer is the process's: put it back, or every test after this one in the same tester finds Automatic
+        // on the card (PreviewRendererTests did, 2026-11-19).
+        var wasCard = Services.PreviewRendererManager.MeasuredCard;
+        var wasNote = Services.PreviewRendererManager.Measurement;
+        try
+        {
+            Services.PreviewRendererManager.Measure();
+            _out.WriteLine(Services.PreviewRendererManager.Measurement);
+            var m = System.Text.RegularExpressions.Regex.Match(Services.PreviewRendererManager.Measurement ?? "",
+                                                               @"card ([\d.]+) ms, processor ([\d.]+) ms");
+            Assert.True(m.Success, "nothing was measured: " + Services.PreviewRendererManager.Measurement);
+            double card = double.Parse(m.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture);
+            double processor = double.Parse(m.Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture);
+            Assert.Equal(card < processor, Services.PreviewRendererManager.MeasuredCard);
+        }
+        finally
+        {
+            Services.PreviewRendererManager.MeasuredCard = wasCard;
+            Services.PreviewRendererManager.Measurement = wasNote;
+        }
     }
 
     /// <summary>A backdrop without a lamp (most of the game's levels: a global
@@ -106,14 +118,15 @@ public sealed class GpuFrameTests
     }
 
     [Theory]
-    [InlineData(0f, true)]
-    [InlineData(0.55f, true)]
-    [InlineData(0f, false)]
-    public void TheCardsFrameIsTheProcessors(float silhouette, bool bodyShows)
+    [InlineData("MyRoom", 0f, true)]
+    [InlineData("MyRoom", 0.55f, true)]
+    [InlineData("MyRoom", 0f, false)]
+    [InlineData("Beach", 0f, true)]   // a lamp whose glow is drawn with the room, under the bust (1.9.2)
+    public void TheCardsFrameIsTheProcessors(string backdropName, float silhouette, bool bodyShows)
     {
         using var card = GpuFrame.TryCreate();
         Assert.True(card != null, "no graphics card device: " + GpuDevice.SharedFailure);
-        var backdrop = PreviewBackdrop.Load(Path.Combine(GameRun.RepoRoot(), "SMSModForge", "Resources", "Backdrops", "MyRoom"));
+        var backdrop = PreviewBackdrop.Load(Path.Combine(GameRun.RepoRoot(), "SMSModForge", "Resources", "Backdrops", backdropName));
         var scene = new BackdropScene(backdrop);
         var gi = scene.Prepare();
         var lamp = scene.Lamp!;
@@ -183,7 +196,7 @@ public sealed class GpuFrameTests
             }
             var noGi = Card(parts, false);
             int controlOff = Enumerable.Range(0, cpu.Length).Count(i => Math.Abs(cpu[i] - noGi[i]) > 1);
-            _out.WriteLine($"silhouette {silhouette}, body {bodyShows}, bloom {parts.Bloom}: {same} of {cpu.Length} bytes the processor's, {overOne} more than a level off; "
+            _out.WriteLine($"{backdropName}: silhouette {silhouette}, body {bodyShows}, bloom {parts.Bloom}: {same} of {cpu.Length} bytes the processor's, {overOne} more than a level off; "
                            + $"the card without the edge glow: {controlOff} over a level");
             if (bodyShows) Assert.True(controlOff > 500, "control: the card without the edge glow passes for the processor's frame with it");
             Assert.True(overOne <= cpu.Length / 5000, $"the card's frame is more than a level from the processor's at {overOne} bytes");

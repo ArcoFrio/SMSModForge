@@ -140,7 +140,7 @@ internal static class NpcRender
         Array.Clear(coverage);
         foreach (var layer in layers)
             if (layer != null) BackdropRender.Layer(target, scene, layer, coverage);
-        if (lamp != null) lamp.Glow(target, null, BackdropRender.Covered(scene, coverage));
+        if (lamp != null) lamp.Glow(target, null, BackdropRender.Covered(scene, coverage), onTheRoomsLayer: true);
         else BackdropRender.Lamps(target, scene, coverage);
         BackdropRender.Present(target, scene, parts, output);
     }

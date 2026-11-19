@@ -252,6 +252,9 @@ public static class VanillaDelta
         // is in world units, and the game's are far from uniform.
         float ppu = baseline.SpriteRenderer?.PixelsPerUnit ?? 0f;
         if (ppu > 0f) node.SpritePpu = ppu;
+        // ...and where it is pivoted: art cut from a whole level's canvas keeps that canvas's centre as its pivot.
+        node.SpritePivotX = baseline.SpriteRenderer?.PivotX ?? 0.5f;
+        node.SpritePivotY = baseline.SpriteRenderer?.PivotY ?? 0.5f;
 
         // The object's real parallax, so the preview drifts a bound node the way
         // the game does. Preview-only like everything above: the runtime never

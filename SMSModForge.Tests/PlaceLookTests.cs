@@ -21,7 +21,8 @@ namespace SMSModForge.Tests;
 /// under its own tick box and within the preview quality. Measured from the
 /// picture drawn: a dark place with a white square, the bloom lighting the dark
 /// beside the square at Ultra, and not at Low (which draws no bloom) even
-/// ticked; nothing drawn over the place with every part unticked (the control).
+/// ticked; the level's lamps (1.9.2) one of the parts, drawn alone; nothing
+/// drawn over the place with every part unticked (the control).
 /// </summary>
 [Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class PlaceLookTests : IDisposable
@@ -79,7 +80,9 @@ public sealed class PlaceLookTests : IDisposable
                 var bloom = (CheckBox)window.FindName("PlaceLookBloom");
                 var flares = (CheckBox)window.FindName("PlaceLookFlares");
                 var colour = (CheckBox)window.FindName("PlaceLookColour");
-                Assert.True(bloom.IsChecked == true && flares.IsChecked == true && colour.IsChecked == true, "the game's look is not on by default");
+                var lights = (CheckBox)window.FindName("PlaceLookLights");
+                Assert.True(bloom.IsChecked == true && flares.IsChecked == true && colour.IsChecked == true && lights.IsChecked == true,
+                            "the game's look is not on by default");
 
                 // The look's middle row as drawn (the view's own pixels, 1.9.1), once a new pass has come in.
                 int width = 0;
@@ -114,6 +117,9 @@ public sealed class PlaceLookTests : IDisposable
                 Assert.True(Math.Abs(low - noBloom) <= 1, $"Low draws a bloom ({low} against {noBloom} without one)");
 
                 bloom.IsChecked = false; flares.IsChecked = false; colour.IsChecked = false;
+                WindowHarness.Wait(TimeSpan.FromMilliseconds(300));
+                Assert.True(place.LookShown, "the level's lamps alone are not drawn over the place");
+                lights.IsChecked = false;
                 WindowHarness.Wait(TimeSpan.FromMilliseconds(300));
                 Assert.False(place.LookShown, "with every part unticked the look is still drawn over the place");
             });

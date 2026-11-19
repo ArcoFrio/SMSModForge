@@ -530,11 +530,25 @@ public sealed class CharacterPanelFollowsTests
                     var slider = (Slider)studio.FindName(name);
                     double before = slider.Value;
                     var source = PresentationSource.FromVisual(slider);
-                    var args = new System.Windows.Input.KeyEventArgs(
-                        System.Windows.Input.Keyboard.PrimaryDevice, source!, 0, System.Windows.Input.Key.Right)
-                    { RoutedEvent = System.Windows.Input.Keyboard.PreviewKeyDownEvent };
-                    slider.RaiseEvent(args);
-                    WindowHarness.Pump();
+                    // The handler reads the real keyboard's modifiers, and the author types on this machine while
+                    // the suite runs: a Shift held then is five steps (it once made 20 into 25). Send the key with
+                    // no modifier down, and again from the same value if one was.
+                    System.Windows.Input.KeyEventArgs args;
+                    for (int attempt = 0; ; attempt++)
+                    {
+                        var clock = System.Diagnostics.Stopwatch.StartNew();
+                        while (System.Windows.Input.Keyboard.Modifiers != System.Windows.Input.ModifierKeys.None && clock.Elapsed < System.TimeSpan.FromSeconds(5))
+                            WindowHarness.Wait(System.TimeSpan.FromMilliseconds(50));
+                        slider.Value = before;
+                        var held = System.Windows.Input.Keyboard.Modifiers;
+                        args = new System.Windows.Input.KeyEventArgs(
+                            System.Windows.Input.Keyboard.PrimaryDevice, source!, 0, System.Windows.Input.Key.Right)
+                        { RoutedEvent = System.Windows.Input.Keyboard.PreviewKeyDownEvent };
+                        slider.RaiseEvent(args);
+                        held |= System.Windows.Input.Keyboard.Modifiers;
+                        WindowHarness.Pump();
+                        if (held == System.Windows.Input.ModifierKeys.None || attempt == 10) break;
+                    }
 
                     _out.WriteLine($"{name}: {before} -> {slider.Value}, handled {args.Handled}");
                     Assert.True(args.Handled, $"{name} does not answer the arrow keys");

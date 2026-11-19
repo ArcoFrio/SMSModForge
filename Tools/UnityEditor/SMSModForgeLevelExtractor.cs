@@ -294,6 +294,16 @@ namespace SMSModForge.EditorTools
                     sb.Append(", \"pixelSize\": [")
                       .Append(Mathf.RoundToInt(sr.sprite.rect.width)).Append(", ")
                       .Append(Mathf.RoundToInt(sr.sprite.rect.height)).Append(']');
+                    // Where the sprite is pivoted, as a share of its rect (1.9.2), when not its centre: the art
+                    // written is the rect alone, so a sprite cut out of a whole level's canvas and pivoted on that
+                    // canvas's centre (the Beach's water) needs it to be drawn where the game draws it.
+                    // Tools/Scenes/level-sprite-pivots.py puts the same into a catalog written before this.
+                    float pivotX = sr.sprite.rect.width > 0f ? sr.sprite.pivot.x / sr.sprite.rect.width : 0.5f;
+                    float pivotY = sr.sprite.rect.height > 0f ? sr.sprite.pivot.y / sr.sprite.rect.height : 0.5f;
+                    if (Mathf.Abs(pivotX - 0.5f) > 0.0001f || Mathf.Abs(pivotY - 0.5f) > 0.0001f)
+                        sb.Append(", \"pivot\": [")
+                          .Append(pivotX.ToString("0.####", CultureInfo.InvariantCulture)).Append(", ")
+                          .Append(pivotY.ToString("0.####", CultureInfo.InvariantCulture)).Append(']');
                 }
                 sb.Append(" },\n");
             }

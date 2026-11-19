@@ -23,6 +23,10 @@ Each is a snapshot; a new game version needs each one re-made and diffed.
 | Data | Where it lives | How it was made |
 |---|---|---|
 | Bust art, per character/outfit | `SMSModForge/Resources/VanillaBustArt/` | Unity bust extractor (`Tools/UnityEditor/`), `Tools/regen_vanilla_busts.py` |
+| Level sprites' pivots (1.9.2): 217 of 512 sprites are off their rect's centre | both `vanilla_levels.json` (renderers' `"pivot"`) | `Tools/Scenes/level-sprite-pivots.py` from the AssetRipper export (the extractor writes them too now) |
+| Level lights' target sorting layers (1.9.2): what a lamp lights; one of 144 (the PC's room's, intensity 25) lights no level | both catalogs, each Light2D's `m_ApplyToSortingLayers` | `Tools/Scenes/level-light-layers.py` from the scene YAML (a hex string with `*`/`+` for `a`/`b`) and the TagManager |
+| Level video screens and their stills (1.9.2): the Inside Car's sunset, the Subway Train's tunnel | both catalogs' `"videoScreen"`; `Video.PNG` beside each level's art (full and 480 px) | `Tools/Scenes/level-video-stills.py` from the scene YAML, materials and VideoClip folder, with ffmpeg |
+| The five bust backdrops (1.9.1; captured again at rest in 1.9.2) | `SMSModForge/Resources/Backdrops/` | in-game S4/S7 then `Tools/Game/backdrop-from-game.py`; the suite holds the levels at rest (`parallax rest`), and its test packs touch no backdrop level |
 | Full-size faces (blink, mouths, expressions) | `Resources/VanillaBustFaces/` | `Tools/MakeFullSizeFaces.py` |
 | Which busts have which faces | `Shared/VanillaBustExpressions.cs` | `Tools/regen_vanilla_expressions.py` |
 | Bust list, names, characters | `SMSModForge/Model/VanillaBusts.cs`, `Shared/VanillaCastData.cs` | extractor output |
@@ -55,6 +59,15 @@ Each is a snapshot; a new game version needs each one re-made and diffed.
       squares the volume; pack music clones `12_AudioPlayer/Beach` at volume
       **0.5**; pack SFX play on GC2's UI channel.
 - [ ] **Name colours** — see the table above; re-read the colorizer.
+- [ ] **Where the levels stand from the camera** (`VanillaLevelCatalog.LevelsX/LevelsY`,
+      1.9.2): `5_Levels` at world **(0.685, -0.2)**, scale 1, the Main Camera at the
+      origin - read in game with the bridge's `find` (each level's own place under it
+      is in the extraction). The place preview draws a game level there; the levels
+      follow the mouse (`ParallaxMouseEffect`: half its strength in local units at the
+      screen's edge), so the in-game suite holds them at rest (`parallax rest`).
+      Recheck with the camera throwaway's `find 5_Levels` / `find Main Camera`, and
+      `PlaceExportTests.ALevelsOwnArtIsDrawnAtTheGamesSize` (shift and scale against
+      the backdrops' room.png).
 - [ ] **Text in brackets** (`Rendering/DialogueLook.BracketHex`, the rule in
       `DialogueLinePreview.Pieces`): the game's `ParenthesesHighlighter`
       (Assembly-CSharp; decompiled 2026-10-22) wraps an opening bracket to its
@@ -120,6 +133,18 @@ Each is a snapshot; a new game version needs each one re-made and diffed.
       after the top-most layer it lights, and the fake GI's background copied
       from one pixel of every 4x4 (the one at (1, 1)). A URP update can change
       any of these; S6 compares the room and that background with the game's.
+      Where the glow falls (1.9.2, `LampSettings.GlowWithTheRoom`, read from
+      the decompiled 2D runtime of Unity 6000.0.64): `DrawLight2DPass` draws a
+      light's volume with the layer batch whose `endLayerValue` is its
+      `GetTopMostLitLayer()`, and `Renderer2D`'s render graph copies the fake
+      GI's background after that batch's volumes when the batch holds the
+      copy's layer - `m_CameraSortingLayersTextureBound: 0`, Default, in
+      `Renderer2D.asset`; sorting layers Default, Bust, Photos, Foreground in
+      `TagManager.asset`. So a lamp lighting only Default (the Beach's) glows
+      under the busts and inside that background; the PC's room's (Default and
+      Photos) glows over them. The backdrop's lamp carries its `"layers"`
+      (`backdrop-from-game.py`, from `lights-list`); `GameLampGlowTests` and S8
+      on the Beach show a change.
       The lamp's numbers and the room's captures come from S4
       (`Tools/Game/backdrop-from-game.py`), as does the GPU's sRGB decode table
       (`lookupDecode`) the preview reads bust art with.

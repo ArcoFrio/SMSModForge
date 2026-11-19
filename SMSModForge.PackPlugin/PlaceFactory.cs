@@ -285,6 +285,56 @@ namespace SMSModForge.PackPlugin
         // ─────────────────────────────── Overlay construction ──────────
 
         /// <summary>
+        /// What a pack's new sprite on a level is cloned from (1.9.2): the level's
+        /// second child when it is a plain sprite - a picture, perhaps drifting
+        /// with the mouse, and nothing else: the back layer of every pack place
+        /// and of the game's levels laid out that way. Null otherwise, and the
+        /// sprite is made plain (<see cref="MakePlainSprite"/>). Of the game's 146
+        /// levels only 39 have a sprite there: the others have a light, a particle
+        /// system, a trigger, or no second child at all, and a clone of that (or,
+        /// with none, of the level itself, its mask and its triggers) was no
+        /// picture - a pack's new sign on the Hiking Path came out a particle
+        /// system with no sign.
+        /// </summary>
+        private static Transform SpritePrototype(Transform level)
+        {
+            if (level.childCount < 2) return null;
+            var second = level.GetChild(1);
+            if (second.GetComponent<SpriteRenderer>() == null) return null;
+            foreach (var c in second.GetComponents<Component>())
+                if (c != null && !(c is Transform) && !(c is SpriteRenderer) && c.GetType().Name != "ParallaxMouseEffect") return null;
+            return second;
+        }
+
+        /// <summary>A plain sprite object: a SpriteRenderer drawn with the level's own
+        /// plain lit material (the first of its sprites using Sprite-Lit-Default),
+        /// or URP's (1.9.2).</summary>
+        private static GameObject MakePlainSprite(string name, Transform parent, Transform level)
+        {
+            var go = new GameObject(name);
+            go.transform.SetParent(parent, false);
+            var sr = go.AddComponent<SpriteRenderer>();
+            var material = PlainLitMaterial(level);
+            if (material != null) sr.sharedMaterial = material;
+            return go;
+        }
+
+        private static Material _plainLit;
+
+        private static Material PlainLitMaterial(Transform level)
+        {
+            foreach (var sr in level.GetComponentsInChildren<SpriteRenderer>(true))
+                if (sr.sharedMaterial != null && sr.sharedMaterial.name.StartsWith("Sprite-Lit-Default", System.StringComparison.Ordinal))
+                    return sr.sharedMaterial;
+            if (_plainLit == null)
+            {
+                var shader = Shader.Find("Universal Render Pipeline/2D/Sprite-Lit-Default");
+                if (shader != null) _plainLit = new Material(shader);
+            }
+            return _plainLit;
+        }
+
+        /// <summary>
         /// Public entry point for building an authored <c>gameObjects</c> tree
         /// onto ANY level — used both by pack places and by the vanilla-extension
         /// pass (via <see cref="NavigatorRuntime"/>) to decorate levels the pack
@@ -299,13 +349,9 @@ namespace SMSModForge.PackPlugin
         {
             if (nodes == null || nodes.Count == 0 || level == null) return;
 
-            // The secondary sprite child is the cleanest prototype (plain sprite
-            // + parallax, no level-mask material clone); fall back to the level
-            // root if a level somehow has no second child. Vanilla levels share
-            // this layout — pack places are clones of one.
-            Transform proto = level.transform.childCount > 1
-                ? level.transform.GetChild(1)
-                : level.transform;
+            // What a new sprite is made from: the level's back layer when it has
+            // a plain one, else nothing - see SpritePrototype.
+            Transform proto = SpritePrototype(level.transform);
 
             Transform parent = parentOverride != null ? parentOverride : level.transform;
             foreach (var o in nodes)
@@ -389,13 +435,17 @@ namespace SMSModForge.PackPlugin
                         return;
                     }
                 }
-                else if (hasSprite)
+                else if (hasSprite && proto != null)
                 {
                     go = Object.Instantiate(proto.gameObject, parent);
                     go.name = name;
                     // Strip any children that rode along on the prototype clone.
                     for (int i = go.transform.childCount - 1; i >= 0; i--)
                         Object.Destroy(go.transform.GetChild(i).gameObject);
+                }
+                else if (hasSprite)
+                {
+                    go = MakePlainSprite(name, parent, level.transform);
                 }
                 else
                 {

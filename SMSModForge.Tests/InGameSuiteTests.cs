@@ -93,6 +93,11 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
             Warning = game.AskUntil("warning", w => w.StartsWith("open", StringComparison.Ordinal), 15);
             if (Warning.StartsWith("open", StringComparison.Ordinal)) game.Ask("warning go-on");
             game.Ask("wait 2", 10);
+            // Every level held where it rests (1.9.2): a level follows the mouse,
+            // and on the run's desktop the mouse is wherever the author's is - the
+            // backdrops were captured with each room 19 game px off its rest, and
+            // a check comparing with them passed only while the mouse sat still.
+            game.Ask("parallax rest");
             _inGame = true;
             return game;
         }
@@ -381,12 +386,12 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
     {
         if (Off) return;
         var game = _s.InGame();
-        const string beach = "5_Levels/14_Beach";
+        const string beach = "5_Levels/" + InGameSuitePacks.World.Hike;
 
-        string mark = Find(game, beach + "/BeachMark");
+        string mark = Find(game, beach + "/HikeMark");
         var (mx, my) = XY(Field(mark, "home"));
-        Near(2f, mx, "BeachMark x");
-        Near(1f, my, "BeachMark y");
+        Near(2f, mx, "HikeMark x");
+        Near(1f, my, "HikeMark y");
         Assert.Equal("#CC2222FF", Field(mark, "texel"));
 
         // A bound object that asks to be moved is moved...
@@ -395,7 +400,7 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
         Near(0.5f, ly, "Light 2D local y");
 
         // ...and one bound only to hang a child on stays where the game has it.
-        var vanilla = VanillaLevelCatalog.FindLevel("14_Beach");
+        var vanilla = VanillaLevelCatalog.FindLevel(InGameSuitePacks.World.Hike);
         Assert.True(vanilla != null, "The editor's catalog of the game's levels is not here to compare with.");
         var npcs = VanillaLevelCatalog.FindNode(vanilla, "NPCs")!;
         var light = VanillaLevelCatalog.FindNode(vanilla, "Light 2D")!;
