@@ -164,7 +164,7 @@ namespace SMSModForge.PackPlugin
         public void DumpConditionDebug()
         {
             foreach (var b in _built)
-                if (b.DebugConditions) DumpConditionDebug(b);
+                if (b.DebugConditions) LogConditionDebug(b);
         }
 #endif
 
@@ -173,7 +173,9 @@ namespace SMSModForge.PackPlugin
         /// looked at after the world loads (1.10.0) - no key needed, so the tick works in a Release build too - and
         /// on F12 in a Debug build.
         /// </summary>
-        private void DumpConditionDebug(DialogueBuilder.BuiltDialogue b)
+        // Not "Dump...": ReleaseReadinessTests keeps the F12 dump (DumpConditionDebug(), Debug only) out of a
+        // Release plugin by its name, and this one ships.
+        private void LogConditionDebug(DialogueBuilder.BuiltDialogue b)
         {
             {
                 bool all = ConditionEvaluator.All(b.StartConditions, _ctx.Vars, _ctx.Log, _ctx.PackId);
@@ -520,7 +522,7 @@ namespace SMSModForge.PackPlugin
                 if (b.DebugConditions && (!b.DebugLogged || nowPassing != b.LastConditionsPassed))
                 {
                     b.DebugLogged = true;
-                    try { DumpConditionDebug(b); } catch (System.Exception ex) { _ctx.Log?.LogWarning("[CondDebug] " + b.Key + ": " + ex.Message); }
+                    try { LogConditionDebug(b); } catch (System.Exception ex) { _ctx.Log?.LogWarning("[CondDebug] " + b.Key + ": " + ex.Message); }
                 }
                 if (b.LastConditionsPassed && !nowPassing)
                 {
