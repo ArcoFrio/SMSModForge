@@ -123,6 +123,21 @@ public sealed class NodeActionViewModel : ObservableObject
         "path", "scene", "targetKind",   // legacy, migrated by NormalizeSetActive
     };
 
+    /// <summary>
+    /// Read the row's values again after they were written into its definition from code (a tutorial's "Do it for
+    /// me", 1.10.0): its fields and the line's summary show them. A value set through the rows needs nothing.
+    /// </summary>
+    internal void Reread()
+    {
+        RebuildParamRows();
+        if (IsQuestFamily)
+        {
+            QuestPicker.ShowsTask = QuestTakesTask;
+            QuestPicker.RaiseAll();
+        }
+        OnPropertyChanged(string.Empty);
+    }
+
     private void RebuildParamRows()
     {
         ParamRows.Clear();

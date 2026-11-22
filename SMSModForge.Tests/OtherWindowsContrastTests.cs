@@ -40,7 +40,7 @@ public sealed class OtherWindowsContrastTests : IDisposable
     public void Dispose() { try { Directory.Delete(_dir, true); } catch (IOException) { } }
 
     public static IEnumerable<object[]> Windows()
-        => new[] { "ColorPicker", "CustomThemes", "ExportSize", "PackTranslations", "SaveConfirm",
+        => new[] { "ColorPicker", "CustomThemes", "ExportSize", "NewPack", "PackTranslations", "SaveConfirm",
                    "SpritePicker", "TextPrompt", "TextReport", "TranslatePack", "UiTextEdit", "Update" }
            .Select(n => new object[] { n });
 

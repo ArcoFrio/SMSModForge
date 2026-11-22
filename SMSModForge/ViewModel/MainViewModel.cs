@@ -17,7 +17,7 @@ namespace SMSModForge.ViewModel;
 /// outfit (which drives the preview + editor panel), and the file-system root
 /// for the pack (so file pickers can resolve relative paths).
 /// </summary>
-public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISuggestionSource
+public sealed partial class MainViewModel : ObservableObject, IGameConditionEditor, ISuggestionSource
 {
     private ModPack _pack = PackRepository.CreateEmpty("Untitled");
     public ModPack Pack
@@ -242,13 +242,43 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// while a language is up is the pack in its own words AND what the
     /// language showed, because either alone restores the wrong thing.
     /// </summary>
-    private string UndoSnapshot()
+    private PackPieces UndoStep(PackPieces? like)
     {
-        if (_language == null) return PackRepository.Serialize(Pack);
+        if (_language == null) return PackPieces.Take(Pack, like);
 
-        string own;
-        using (OwnWords()) own = PackRepository.Serialize(Pack);
-        return Services.Translation.LanguageSession.Wrap(_language.Code, _language.Shown(Pack), own);
+        string shown = Services.Translation.LanguageSession.Header(_language.Code, _language.Shown(Pack));
+        using (OwnWords()) return PackPieces.Take(Pack, like, shown);
+    }
+
+    /// <summary>
+    /// One entry of the pack as it is now, held against the step's: for a restore that touched that entry and
+    /// nothing else to know it put it back whole - without writing the rest of the pack out to find it the same.
+    /// </summary>
+    private bool IsAtEntry(PackPieces step, string section, int index)
+    {
+        long said = Services.UndoService.Said;
+        int s = Array.IndexOf(step.Names, section);
+        if (s < 0 || index < 0 || index >= step.Entries[s].Length) return false;
+        object? entry = section switch
+        {
+            "places" => index < Pack.Places.Count ? Pack.Places[index] : null,
+            "vanillaExtensions" => index < Pack.VanillaExtensions.Count ? Pack.VanillaExtensions[index] : null,
+            "dialogues" => index < Pack.Dialogues.Count ? Pack.Dialogues[index] : null,
+            _ => null,
+        };
+        if (entry == null || !string.Equals(ModelAssign.Written(entry), step.Entries[s][index].Text, StringComparison.Ordinal)) return false;
+        Undo.Absorb(step, said);
+        return true;
+    }
+
+    /// <summary>The pack as it is now, held against a step: for a restore to know it put back all of it.</summary>
+    private bool IsAt(PackPieces step)
+    {
+        long said = Services.UndoService.Said;
+        var now = UndoStep(step);
+        if (!now.SameAs(step)) return false;
+        Undo.Absorb(now, said);
+        return true;
     }
 
     /// <summary>
@@ -590,7 +620,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     public void RefreshLanguage()
     {
         CommitPendingRenames();
-        RebindKeepingSelection(() => { }, asUndoStep: false);
+        // Every row made anew: a row keeps words it worked out as it was made, in the language it was made in.
+        // The rows an undo keeps (Reshow) are the very thing to drop here.
+        _remakeRows = true;
+        try { RebindKeepingSelection(() => { }, asUndoStep: false); }
+        finally { _remakeRows = false; }
         RefreshEditingLanguageOptions();
         if (PackRoot != null && Issues.Count > 0) Validate();
         OnPropertyChanged(string.Empty);
@@ -604,30 +638,88 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// <summary>Restores an undo/redo snapshot: reload the pack, rebind every
     /// view-model, then re-select the dialogue + node that were selected before,
     /// so the editor lands back where the user was.</summary>
-    private void OnUndoRestore(string json)
+    private void OnUndoRestore(Services.UndoService.Restore restore)
     {
+        var step = restore.To;
         string? code = null;
         Shared.TextFile? shown = null;
-        if (Services.Translation.LanguageSession.Unwrap(json, out var c, out var texts, out var own))
+        if (step.Language != null)
         {
-            json = own;
+            Services.Translation.LanguageSession.ReadHeader(step.Language, out var c, out var texts);
             code = c;
             shown = texts;
         }
 
-        // One place, or one extension of a level, is all most steps on the
-        // Places tab change: put that back and leave the rest of the editor
-        // alone - and when all it changed is where things sit, move them back
-        // on the views already on screen, the way the gizmo moved them. Not
-        // while a language is up: its session remembers the pack's objects,
-        // and every one of them would have to be the same.
-        if (code == null && _language == null)
+        // Only what the step changed is put back, and only what shows it is
+        // built again (1.10.0): until then every step but a place's read the
+        // whole pack and rebuilt every tab - 1.1 to 1.4 s on a large pack. One
+        // place, or one extension of a level, is all most steps on the Places
+        // tab change: that entry alone - and when all it changed is where
+        // things sit, written back through the views already on screen, the
+        // way the gizmo wrote them. Any other step: the entries that differ
+        // read into the pack, and the tabs they are on built again. Each way
+        // is held to the step: the pack afterwards must be the step, piece for
+        // piece, or the next way is tried - the last being the whole pack
+        // read, as before. Not while a language is up: its session remembers
+        // the pack's objects, and every one of them would have to be the same.
+        // And where the editor was: what was picked when the edit being taken back was made (or, forward
+        // again, once it had been) is picked again - an undo lands on the record it changed, wherever the
+        // author has been since.
+        var picks = restore.View as Picks;
+        var phases = System.Diagnostics.Stopwatch.StartNew();
+        // The tab the change was made on, and the record it was made to, on screen before the change is
+        // put back - so the window can tell what the step changes on the page, and say so.
+        if (picks != null)
         {
-            var entry = Model.SnapshotDiff.OneEntry(Undo.Leaving, json);
-            if (entry != null && (TryRestoreTransforms(entry, json) || TryRestoreOneEntry(entry, json))) return;
+            Undo.Suspended = true;
+            try
+            {
+                if (picks.Tab >= 0 && SelectedTabIndex != picks.Tab) SelectedTabIndex = picks.Tab;
+                PickAgain(picks);
+            }
+            finally { Undo.Suspended = false; }
+        }
+        double onScreen = phases.Elapsed.TotalMilliseconds;
+        HistoryPageShown?.Invoke();
+        double noted = phases.Elapsed.TotalMilliseconds;
+        LastRestore = "whole";   // English on purpose: for tests, never shown
+        LastRestorePhases = "";
+        // One of the ways that put a step back where it is shown: tried, and when it did the job, what the
+        // step had picked is picked again.
+        bool Fast(string way, Func<bool> put)
+        {
+            double from = phases.Elapsed.TotalMilliseconds;
+            if (!put()) return false;
+            double done = phases.Elapsed.TotalMilliseconds;
+            LastRestore = way;
+            PickedAgain(picks);
+            LastRestorePhases = FormattableString.Invariant($"tab and record shown {onScreen:0.0} ms, page noted {noted - onScreen:0.0}, tried before {from - noted:0.0}, put back {done - from:0.0}, picked again {phases.Elapsed.TotalMilliseconds - done:0.0}");   // English on purpose: for tests, never shown
+            return true;
+        }
+        if (code == null && _language == null && restore.From.Language == null)
+        {
+            var changes = restore.Changes;
+            if (changes.Count == 0) { LastRestore = "nothing"; PickedAgain(picks); return; }   // English on purpose: for tests, never shown
+            if (changes.Count == 1 && changes[0].Changed is { Count: 1 } one && changes[0].Name is "places" or "vanillaExtensions")
+            {
+                var entry = new Model.SnapshotDiff.Entry { Section = changes[0].Name, Index = one[0], ToPiece = changes[0].To[one[0]] };
+                // Where things stand and what a light is like, written back through the rows on screen: what
+                // the preview's own handles change, and what it is holding while they do.
+                if (Fast("values", () => TryRestoreTransforms(entry, step))) return;   // English on purpose: for tests, never shown
+                // Anything else of the objects - one renamed, added, taken out, given another picture: the
+                // objects that differ, where they are.
+                if (Fast("values", () => TryRestoreObjectRows(changes[0], step))) return;   // English on purpose: for tests, never shown
+                if (Fast("entry", () => TryRestoreOneEntry(entry, step))) return;      // English on purpose: for tests, never shown
+            }
+            // A dialogue whose lines changed and nothing else of it: the lines given the step's values where they
+            // are, their rows and the editor reading them again.
+            if (changes.Count == 1 && Fast("values", () => TryRestoreDialogueLines(changes[0], step))) return;   // English on purpose: for tests, never shown
+            // A screen whose objects changed and nothing else of it: those objects, where they are.
+            if (changes.Count == 1 && Fast("values", () => TryRestoreUiNodes(changes[0], step))) return;         // English on purpose: for tests, never shown
+            if (TryRestoreSections(restore, picks)) { LastRestore = "sections"; return; }           // English on purpose: for tests, never shown
         }
 
-        var pack = PackRepository.Deserialize(json);
+        var pack = PackRepository.Deserialize(restore.ToJson());
         if (pack == null) return;
 
         RebindKeepingSelection(() =>
@@ -640,8 +732,23 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             // It knows what the language said at that step, not what the file
             // on disk says - so it cannot claim nothing is unsaved.
             _language?.MarkUnsaved();
-        }, asUndoStep: false);
+        }, asUndoStep: false, picks: picks);
         RaiseEditingLanguage();
+    }
+
+    /// <summary>Raised as an undo or redo has brought up the tab and the record its step was made on, and
+    /// is about to put the step back: for the window to note what the page shows, to mark what changes.</summary>
+    public event Action? HistoryPageShown;
+
+    /// <summary>After a step was put back where it is shown: what the step had picked, picked again - which
+    /// says things and edits nothing, so nothing is left for the next look.</summary>
+    private void PickedAgain(Picks? picks)
+    {
+        if (picks == null) return;
+        Undo.Suspended = true;
+        try { PickAgain(picks); }
+        finally { Undo.Suspended = false; }
+        Undo.SeenAll();
     }
 
     /// <summary>
@@ -655,7 +762,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// serialize to exactly the snapshot being restored, or the full restore
     /// runs after all. False whenever it did not do the whole job itself.
     /// </summary>
-    private bool TryRestoreOneEntry(Model.SnapshotDiff.Entry entry, string json)
+    private bool TryRestoreOneEntry(Model.SnapshotDiff.Entry entry, PackPieces step)
     {
         bool done;
         Undo.Suspended = true;
@@ -679,8 +786,9 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         catch (Newtonsoft.Json.JsonException) { done = false; }
         finally { Undo.Suspended = false; }
 
-        // Nothing less than the full restore would have produced will do.
-        return done && string.Equals(UndoSnapshot(), json, StringComparison.Ordinal);
+        // Nothing less than the full restore would have produced will do: the entry must be the step's. (The
+        // rest of the pack was not touched.)
+        return done && IsAtEntry(step, entry.Section, entry.Index);
     }
 
     /// <summary>
@@ -694,7 +802,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// snapshot like every other way of restoring: anything the numbers do not
     /// cover leaves the pack different from it, and the next way is tried.
     /// </summary>
-    private bool TryRestoreTransforms(Model.SnapshotDiff.Entry entry, string json)
+    private bool TryRestoreTransforms(Model.SnapshotDiff.Entry entry, PackPieces step)
     {
         IList<GameObjectViewModel>? views = null;
         List<GameObjectDef>? defs = null;
@@ -731,8 +839,273 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         Undo.Suspended = true;
         try { MoveBack(views, defs); }
         finally { Undo.Suspended = false; }
-        return string.Equals(UndoSnapshot(), json, StringComparison.Ordinal);
+        return IsAtEntry(step, entry.Section, entry.Index);
     }
+
+    /// <summary>
+    /// A dialogue put back line by line (1.10.0): when a step changed the lines of one dialogue - what they say
+    /// or do, which there are, where each hangs - and nothing of the dialogue's own, each line that differs is
+    /// given the step's values where it is (Model.ModelAssign) and its row told to read itself again, a line
+    /// the step has and the dialogue has not gets a row, and one it has not loses its row
+    /// (DialogueViewModel.ReadLinesAgain). The dialogue's view, the rows of every other line and the editor
+    /// stay the ones on screen; putting the dialogue's view back whole built every line's row again and picked
+    /// the line again - a quarter of a second and more on a large pack for one word taken back, and over a
+    /// second, the page drawn again, for a line added. Anything else a step did to a dialogue goes the longer
+    /// way.
+    /// </summary>
+    private bool TryRestoreDialogueLines(PackPieces.SectionChange change, PackPieces step)
+    {
+        if (change.Name != "dialogues" || change.Changed is not { Count: 1 } one) return false;
+        int index = one[0];
+        if (index < 0 || index >= Pack.Dialogues.Count) return false;
+        var live = Pack.Dialogues[index];
+        int at = IndexOfModel(Dialogues, live, d => d.Model);
+        if (at < 0) return false;
+        var view = Dialogues[at];
+        DialogueDef? def;
+        try { def = EntryOf<DialogueDef>(new Model.SnapshotDiff.Entry { To = change.To[index].Text }); }
+        catch (Newtonsoft.Json.JsonException) { return false; }
+        if (def == null || def.Key != live.Key) return false;
+
+        // Nothing of the dialogue itself may differ - its lines and which of them it starts from aside: the
+        // rest is shown by its own view, which this leaves alone.
+        var liveNodes = live.Nodes;
+        var defNodes = def.Nodes;
+        var liveRoots = live.RootNodeIds;
+        var defRoots = def.RootNodeIds;
+        string own, stepsOwn;
+        live.Nodes = new List<DialogueNodeDef>();
+        def.Nodes = new List<DialogueNodeDef>();
+        live.RootNodeIds = new List<int>();
+        def.RootNodeIds = new List<int>();
+        try { own = ModelAssign.Written(live); stepsOwn = ModelAssign.Written(def); }
+        finally { live.Nodes = liveNodes; def.Nodes = defNodes; live.RootNodeIds = liveRoots; def.RootNodeIds = defRoots; }
+        if (!string.Equals(own, stepsOwn, StringComparison.Ordinal)) return false;
+
+        Undo.Suspended = true;
+        try
+        {
+            if (!view.ReadLinesAgain(def, out var changed)) return false;
+            foreach (var row in changed) row.RefreshAll();
+            // A line that is no longer there is no longer the one in the editor.
+            if (SelectedNode != null && ReferenceEquals(SelectedDialogue, view) && !view.Nodes.Contains(SelectedNode)) SelectedNode = null;
+            // The line in the editor, read again the way picking it reads it - and its sounds' rows made
+            // again: each holds the line's own entry for its sound, which is another now (they showed the
+            // values the undo had taken back, and went on changing an entry no longer the line's).
+            if (SelectedNode is { } picked && changed.Contains(picked))
+            {
+                SelectedNode = picked;
+                _cueRowsFor = null;
+                RebuildCueRows();
+            }
+        }
+        finally { Undo.Suspended = false; }
+        return IsAtEntry(step, "dialogues", index);
+    }
+
+    /// <summary>
+    /// A place, or a game's level, put back object by object (1.10.0): when a step changed its objects - what
+    /// one says, which there are, where each is among its siblings - and nothing of the place's own, the
+    /// objects that differ are put back where they are (GameObjectRows): every other row, the tree and the
+    /// preview's own picture of the place stay. Before, only a move was put back this way; an object added,
+    /// taken out, renamed or given another picture made the place's whole view again - close to a second on a
+    /// game's level. Anything else a step did to a place goes the longer way.
+    /// </summary>
+    private bool TryRestoreObjectRows(PackPieces.SectionChange change, PackPieces step)
+    {
+        if (change.Changed is not { Count: 1 } one) return false;
+        int index = one[0];
+        if (change.From[index] is not SplitPiece from || change.To[index] is not SplitPiece to) return false;
+        if (!from.Parts[0].SameTextAs(to.Parts[0])) return false;
+        long said = Services.UndoService.Said;
+        Undo.Suspended = true;
+        try
+        {
+            switch (change.Name)
+            {
+                case "places":
+                {
+                    if (index < 0 || index >= Pack.Places.Count) return false;
+                    int at = IndexOfModel(Places, Pack.Places[index], p => p.Model);
+                    if (at < 0 || !Places[at].ReadObjectsAgain(from, to)) return false;
+                    break;
+                }
+                case "vanillaExtensions":
+                {
+                    if (index < 0 || index >= Pack.VanillaExtensions.Count) return false;
+                    int at = IndexOfModel(VanillaExtensions, Pack.VanillaExtensions[index], v => v.Model);
+                    if (at < 0 || !VanillaExtensions[at].ReadObjectsAgain(from, to)) return false;
+                    break;
+                }
+                default: return false;
+            }
+            // Names an object gives other lists, in case the step renamed one.
+            RebuildGameObjectNameOptions();
+            RebuildSelectedNodeOverlayOptions();
+        }
+        finally { Undo.Suspended = false; }
+        using (OwnWords())
+            if (!step.Holds(Pack, change.Name, one)) return false;
+        Undo.Absorb(step, said);
+        return true;
+    }
+
+    /// <summary>
+    /// A screen put back object by object (1.10.0): when a step changed the objects of one screen - what one
+    /// says, which there are, where each hangs - and nothing of the screen's own, the objects that differ are
+    /// given the step's values where they are, one the step has and the screen has not gets a row, one it has
+    /// not loses its row (UiViewModel.ReadNodesAgain; the step keeps a screen object by object -
+    /// Model.SplitPiece - so which differ is known without reading anything). The screen's view, the tree and
+    /// the rows of every other object stay the ones on screen. Before, the whole screen was read and every
+    /// row built again: a third of a second on a pack that changes one of the game's larger screens, for one
+    /// object nudged in the preview. Anything else a step did to a screen goes the longer way.
+    /// </summary>
+    private bool TryRestoreUiNodes(PackPieces.SectionChange change, PackPieces step)
+    {
+        if (change.Name != "uis" || change.Changed is not { Count: 1 } one) return false;
+        int index = one[0];
+        if (index < 0 || index >= Pack.Uis.Count) return false;
+        if (change.From[index] is not SplitPiece from || change.To[index] is not SplitPiece to) return false;
+        int at = IndexOfModel(Uis, Pack.Uis[index], u => u.Model);
+        if (at < 0) return false;
+        long said = Services.UndoService.Said;
+        Undo.Suspended = true;
+        try
+        {
+            if (!Uis[at].ReadNodesAgain(from, to)) return false;
+        }
+        finally { Undo.Suspended = false; }
+        // Held to the step: the screen, written out object by object, is what the step has.
+        using (OwnWords())
+            if (!step.Holds(Pack, "uis", one)) return false;
+        Undo.Absorb(step, said);
+        return true;
+    }
+
+    /// <summary>How the last undo or redo was put back: "values" (written back through the views on screen),
+    /// "entry" (one place's view made again), "sections" (the entries that differ read, their tabs built again),
+    /// "whole" (the whole pack read, every tab built again) or "nothing" - for tests.</summary>
+    internal string LastRestore { get; private set; } = "";
+
+    /// <summary>
+    /// The tabs' lists by the sections of the pack they show: what is built again when a step changes one. A
+    /// section not named here (the pack's own name and version, the game's conditions) is put back by reading
+    /// the whole pack.
+    /// </summary>
+    private Action? RebindOf(string section) => section switch
+    {
+        "characters" or "actors" or "actorFolders" => RebindPeople,
+        "places" or "placeFolders" => RebindPlaces,
+        "vanillaExtensions" => RebindVanillaExtensions,
+        "mapButtons" => RebindMapButtons,
+        "dialogues" or "dialogueFolders" => RebindDialogues,
+        "variables" or "variableFolders" => RebindVariables,
+        "scenes" or "sceneFolders" => RebindScenes,
+        "npcs" or "npcFolders" => RebindNpcs,
+        "wallpapers" or "wallpaperFolders" => RebindWallpapers,
+        "effects" or "effectFolders" => RebindEffects,
+        "music" or "musicFolders" => RebindMusic,
+        "sfx" or "sfxFolders" => RebindSfx,
+        "integrationRules" or "integrationFolders" => RebindIntegrationRules,
+        "quests" or "questFolders" => RebindQuests,
+        "uis" or "uiFolders" => RebindUis,
+        _ => null,
+    };
+
+    private void RebindPeople()
+    {
+        RebindCharacters();
+        RebindActors();
+    }
+
+    /// <summary>
+    /// Put back a step by its sections (1.10.0): the entries that differ are read into the pack where the old
+    /// ones were (Model.PackPieces.Apply - every other entry stays the object it was), and the tabs those
+    /// sections are on are built again, with the lists of names the others read from them. Selection kept as a
+    /// whole restore keeps it. False when it did not do the whole job: the whole restore that follows puts
+    /// right whatever this left.
+    /// </summary>
+    private bool TryRestoreSections(Services.UndoService.Restore restore, Picks? picks = null)
+    {
+        var changes = restore.Changes;
+        var rebinds = new List<Action>();
+        foreach (var change in changes)
+        {
+            var rebind = RebindOf(change.Name);
+            if (rebind == null) return false;
+            if (!rebinds.Contains(rebind)) rebinds.Add(rebind);
+        }
+        bool applied = false;
+        var clock = System.Diagnostics.Stopwatch.StartNew();
+        double read = 0, rebound = 0, options = 0;
+        try
+        {
+            RebindKeepingSelection(() => { applied = PackPieces.Apply(Pack, changes, out _); read = clock.Elapsed.TotalMilliseconds; }, asUndoStep: false, rebind: () =>
+            {
+                if (!applied) return;
+                // People are merged as the whole pack is when read (PackRepository.Deserialize).
+                if (rebinds.Contains(RebindPeople)) CharacterMerge.Apply(Pack);
+                foreach (var rebind in rebinds) rebind();
+                rebound = clock.Elapsed.TotalMilliseconds;
+                RebuildOptionsAfterRebind();
+                options = clock.Elapsed.TotalMilliseconds;
+            }, absorb: false, picks: picks);
+        }
+        catch (Newtonsoft.Json.JsonException) { return false; }
+        double selected = clock.Elapsed.TotalMilliseconds;
+        bool exact = applied && HoldsWhatWasPutBack(restore, rebinds);
+        LastRestoreTimes = FormattableString.Invariant($"read {read:0.0} ms, tabs rebuilt {rebound - read:0.0}, names {options - rebound:0.0}, selection {selected - options:0.0}, held to the step {clock.Elapsed.TotalMilliseconds - selected:0.0}");   // English on purpose: for tests, never shown
+        return exact;
+    }
+
+    /// <summary>The sections a tab's lists are built from: what building them again could have touched.</summary>
+    private string[] SectionsOf(Action rebind)
+    {
+        if (rebind == RebindPeople) return new[] { "characters", "actors", "actorFolders" };
+        if (rebind == RebindPlaces) return new[] { "placeFolders" };
+        if (rebind == RebindDialogues) return new[] { "dialogueFolders" };
+        if (rebind == RebindVariables) return new[] { "variableFolders" };
+        if (rebind == RebindScenes) return new[] { "sceneFolders" };
+        if (rebind == RebindNpcs) return new[] { "npcFolders" };
+        if (rebind == RebindWallpapers) return new[] { "wallpaperFolders" };
+        if (rebind == RebindEffects) return new[] { "effectFolders" };
+        if (rebind == RebindMusic) return new[] { "musicFolders" };
+        if (rebind == RebindSfx) return new[] { "sfxFolders" };
+        if (rebind == RebindIntegrationRules) return new[] { "integrationFolders" };
+        if (rebind == RebindQuests) return new[] { "questFolders" };
+        if (rebind == RebindUis) return new[] { "uiFolders" };
+        return Array.Empty<string>();
+    }
+
+    /// <summary>
+    /// A restore by sections held to its step (1.10.0): what it put back - the entries it read, the sections
+    /// it made again - and the lists the tabs it built again keep, written out and held against the step's.
+    /// Everything else is the objects it was, which nothing here touched; writing all of it out to find it
+    /// the same took as long as the restore.
+    /// </summary>
+    private bool HoldsWhatWasPutBack(Services.UndoService.Restore restore, List<Action> rebinds)
+    {
+        long said = Services.UndoService.Said;
+        var step = restore.To;
+        // All of a section a tab's building could have touched; of any other, the entries that were read.
+        var whole = new HashSet<string>(rebinds.SelectMany(SectionsOf), StringComparer.Ordinal);
+        using (OwnWords())
+        {
+            foreach (var change in restore.Changes)
+                if (!whole.Contains(change.Name) && !step.Holds(Pack, change.Name, change.Changed)) return false;
+            foreach (string section in whole)
+                if (!step.Holds(Pack, section)) return false;
+        }
+        Undo.Absorb(step, said);
+        return true;
+    }
+
+    /// <summary>Where the last restore by sections spent its time - for tests.</summary>
+    internal string LastRestoreTimes { get; private set; } = "";
+
+    /// <summary>Where the last restore put back where it is shown spent its time - for tests.</summary>
+    internal string LastRestorePhases { get; private set; } = "";
+
 
     private static bool SameShape(IList<GameObjectViewModel> views, List<GameObjectDef> defs)
     {
@@ -761,6 +1134,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             if (v.RotationZ != d.RotationZ) v.RotationZ = d.RotationZ;
             if (v.ScaleX != d.ScaleX) v.ScaleX = d.ScaleX;
             if (v.ScaleY != d.ScaleY) v.ScaleY = d.ScaleY;
+            LightBack(v, d);
             MoveBack(v.Children, d.Children);
             for (int n = 0; n < v.Npcs.Count; n++)
             {
@@ -773,6 +1147,30 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
                 MoveBack(pv.Children, pd.Children);
             }
         }
+    }
+
+    /// <summary>
+    /// An object's light to what the step has (1.10.0): given the step's values where it is, so the light the
+    /// panel beside the picture is showing is still the object's - or, a light added or taken away, the step's
+    /// own put in its place. What it knows of the game's (the layers a lamp of the game's lights) stays with it.
+    /// </summary>
+    private static void LightBack(GameObjectViewModel v, GameObjectDef d)
+    {
+        var mine = v.Model.Light;
+        bool sameLight = mine == null ? d.Light == null
+                       : d.Light != null && string.Equals(ModelAssign.Written(mine), ModelAssign.Written(d.Light), StringComparison.Ordinal);
+        if (sameLight && v.Model.RemoveLight == d.RemoveLight) return;
+        if (mine != null && d.Light != null)
+        {
+            if (ModelAssign.Into(mine, d.Light)) v.Light?.RefreshAll();
+        }
+        else
+        {
+            if (d.Light != null && mine == null) d.Light.GameLayers = v.Model.BaselineLight?.GameLayers;
+            v.Model.Light = d.Light;
+        }
+        v.Model.RemoveLight = d.RemoveLight;
+        v.RefreshLight();
     }
 
     private static void MoveBack(NpcTransformViewModel v, NpcTransform? d)
@@ -790,7 +1188,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     }
 
     private T? EntryOf<T>(Model.SnapshotDiff.Entry entry) where T : class
-        => Newtonsoft.Json.JsonConvert.DeserializeObject<T>(entry.To, PackRepository.ManifestSettings);
+        => entry.ToPiece is SplitPiece parts ? parts.Build() as T
+           : Newtonsoft.Json.JsonConvert.DeserializeObject<T>(entry.ToPiece?.Text ?? entry.To, PackRepository.ManifestSettings);
 
     private bool SwapPlace(Model.SnapshotDiff.Entry entry)
     {
@@ -845,44 +1244,16 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// after switching to Spanish to check one line, reads as the editor
     /// having thrown them somewhere else.
     /// </summary>
-    private void RebindKeepingSelection(Action swap, bool asUndoStep)
+    private void RebindKeepingSelection(Action swap, bool asUndoStep, Action? rebind = null, bool absorb = true, Picks? picks = null)
     {
 
-        string? dlgKey = SelectedDialogue?.Key;
-        int? nodeId = SelectedNode?.Id;
-        // Remember the selection on the other tabs too, so an undo lands the user
-        // back on the same place / NPC (RebindAll resets each to the first item)
-        // — otherwise reverting a Places-tab edit would jump away and look broken.
-        string? placeKey = SelectedPlace?.Key;
-        string? npcKey = SelectedNpc?.Key;
-        // Busts too: RebindAll drops the selection onto the first character's
-        // first outfit, so without this an undo on the Busts tab throws you onto
-        // a different bust than the one you were editing.
-        string? outfitKey = SelectedOutfit?.Key;
-        // The Places tab shows either a pack place or a vanilla extension, never
-        // both — setting one selection clears the other. Only the place was ever
-        // restored, so an undo made while editing an extension put the place
-        // editor back on screen and moved the user to a different level entirely.
-        string? extSource = SelectedVanillaExtension?.Source;
-        // And the UI tab, for the same reason as all of the above: RebindUis
-        // clears the selection outright, so an undo emptied the list, the tree
-        // and the preview at once and left nothing on screen to say whether the
-        // change had been undone or the editor had simply broken.
-        //
-        // By name rather than by index: an undo may be undoing the add or the
-        // removal of a UI, so the position of the one being edited is exactly
-        // the thing that cannot be relied on.
-        string? uiName = SelectedUi?.Model.Name;
-        // The quest being edited, and the task inside it, for the same reason.
-        string? questKey = SelectedQuest?.Key;
-        string? questTaskKey = SelectedQuest?.SelectedTask?.Key;
-        string? uiNodeName = SelectedUi?.SelectedNode?.Model.Name;
+        var was = picks ?? PicksNow();
 
         Undo.Suspended = true;
         try
         {
             swap();
-            RebindAll();
+            if (rebind != null) rebind(); else RebindAll();
             // ...and nothing else. Putting a change back does not re-check the
             // pack, because no other edit does either: the issue list is built
             // when a pack is opened, saved or published, and typing a line or
@@ -894,93 +1265,416 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         }
         finally { Undo.Suspended = false; }
 
-        // An undo is already a step; a switch of language is one of its own,
-        // so the language can be switched back by undoing it.
-        if (asUndoStep) Undo.Checkpoint();
-        else Undo.AbsorbCurrentAsBaseline();
+        PickAgain(was);
 
-        if (dlgKey != null)
+        // An undo is already a step; a switch of language is one of its own,
+        // so the language can be switched back by undoing it. After what was
+        // picked is picked again (1.10.0): picking says things and edits
+        // nothing, and said after the pack was taken in it had the next box
+        // left look at the whole pack for nothing.
+        if (asUndoStep) Undo.Checkpoint();
+        else if (absorb) Undo.AbsorbCurrentAsBaseline();
+    }
+
+    private int _commandDepth;
+    private bool _movedInHistory;
+
+    private void CommandBeginning()
+    {
+        // A command run by a command is part of it: one step for the lot.
+        if (_commandDepth++ > 0) return;
+        Undo.CheckpointIfTouched();
+        Undo.NoteViewBeforeCommand();
+    }
+
+    private void CommandDone()
+    {
+        if (_commandDepth > 0) _commandDepth--;
+        if (_commandDepth > 0) return;
+        // An undo or a redo: the pack is the step it put back, held to it already.
+        if (_movedInHistory) { _movedInHistory = false; Undo.CheckpointIfTouched(); }
+        else Undo.Checkpoint();
+        Undo.CommandEnded();
+    }
+
+    /// <summary>
+    /// The window is closed: this editor no longer answers to commands. (They are heard through events of
+    /// RelayCommand's own, which outlive the window - every editor a test run had opened was still looking at
+    /// its pack at every command of the one on screen.)
+    /// </summary>
+    public void DetachFromCommands()
+    {
+        RelayCommand.Executing -= CommandBeginning;
+        RelayCommand.Executed -= CommandDone;
+    }
+
+    /// <summary>What is picked on every tab: remembered with each undo step (Services.UndoService.CaptureView)
+    /// and across the tabs' lists being built again.</summary>
+    private sealed class Picks
+    {
+        public Pick Dialogue = null!, Line = null!, Character = null!, Outfit = null!, Place = null!, Extension = null!, MapButton = null!,
+                    Npc = null!, Scene = null!, Wallpaper = null!, Effect = null!, Music = null!, Sfx = null!, Variable = null!, Rule = null!, Quest = null!,
+                    QuestTask = null!, Ui = null!;
+        public string? QuestTaskKey, UiNodeName;
+        public Model.UiNodeDef? UiNode;
+        /// <summary>The tab that was open: where the edit was made, which an undo of it goes back to (the
+        /// author, 1.10.0: "Undoing/redoing should show the user what's actually being undone/redone").</summary>
+        public int Tab = -1;
+        /// <summary>Where the object picked on a screen is in its tree: which child of which child. Names
+        /// repeat across a screen, and by name alone an undo landed on the first object so named.</summary>
+        public int[]? UiNodePath;
+        /// <summary>Everything else that is picked from a list, found by looking (<see cref="OtherPicksOf"/>).</summary>
+        public List<OtherPick> Others = new();
+    }
+
+    // ── What is picked, found by looking ────────────────────────────────
+    //
+    // The picks above are named one by one, and a list added to the editor later would not be among them: an
+    // undo of something done on it would be right in the pack and leave the author looking at another record.
+    // So what is picked is also found the way the page's own lists find it (1.10.0): any "Selected..." of the
+    // editor - or of a record that is itself picked - that can be set and holds one of the records of a list
+    // beside it is remembered with that list, and picked again from it. Nothing is said anywhere about which
+    // lists there are; a new one is followed because it is there. (HistoryFollowsEveryListTests holds every
+    // such "Selected..." to having a list to be found in.)
+
+    /// <summary>One thing picked from a list, and what is picked inside it.</summary>
+    private sealed class OtherPick
+    {
+        public System.Reflection.PropertyInfo Selected = null!, List = null!;
+        public Pick Pick = null!;
+        public List<OtherPick> Inner = new();
+    }
+
+    /// <summary>A kind's "Selected..." properties that hold a record's view, each with the lists of the same
+    /// kind beside it.</summary>
+    internal static (System.Reflection.PropertyInfo Selected, System.Reflection.PropertyInfo[] Lists)[] SelectablesOf(Type kind)
+        => Selectables.GetOrAdd(kind, static k =>
         {
-            var d = Dialogues.FirstOrDefault(x => x.Key == dlgKey);
-            if (d != null)
+            const System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
+            var all = k.GetProperties(flags).Where(p => p.GetIndexParameters().Length == 0).ToArray();
+            var found = new List<(System.Reflection.PropertyInfo, System.Reflection.PropertyInfo[])>();
+            foreach (var p in all)
             {
-                SelectedDialogue = d;
-                if (nodeId != null)
-                    SelectedNode = d.Nodes.FirstOrDefault(n => n.Id == nodeId.Value);
+                if (!p.Name.StartsWith("Selected", StringComparison.Ordinal) || p.GetMethod == null || p.SetMethod is not { IsPublic: true }) continue;
+                var of = p.PropertyType;
+                if (of.IsValueType || of == typeof(string) || of.GetProperty("Model", flags) == null) continue;
+                var lists = all.Where(q => q.GetMethod != null && typeof(System.Collections.IList).IsAssignableFrom(q.PropertyType)
+                                           && q.PropertyType.IsGenericType && q.PropertyType.GetGenericArguments() is { Length: 1 } args
+                                           && (of.IsAssignableFrom(args[0]) || args[0].IsAssignableFrom(of))).ToArray();
+                found.Add((p, lists));
+            }
+            // Two that hold the same kind of view are one pick and a way to it: the game's conversations are a
+            // list of their own, and picking from it picks the dialogue. Setting the way to it again would pick
+            // over what the pick itself was just put back to - so only the pick is followed: the plainer name.
+            return found.GroupBy(f => f.Item1.PropertyType)
+                        .Select(same => same.OrderBy(f => f.Item1.Name.Length).ThenBy(f => f.Item1.Name, StringComparer.Ordinal).First())
+                        .ToArray();
+        });
+
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<Type, (System.Reflection.PropertyInfo, System.Reflection.PropertyInfo[])[]> Selectables = new();
+
+    /// <summary>What is picked from the lists of <paramref name="owner"/>, and inside each of those.</summary>
+    private static List<OtherPick> OtherPicksOf(object owner, int deeper)
+    {
+        var found = new List<OtherPick>();
+        foreach (var (selected, lists) in SelectablesOf(owner.GetType()))
+        {
+            object? picked;
+            try { picked = selected.GetValue(owner); }
+            catch (System.Reflection.TargetInvocationException) { continue; }
+            if (picked == null) continue;
+            foreach (var list in lists)
+            {
+                if (list.GetValue(owner) is not System.Collections.IList all || !all.Contains(picked)) continue;
+                var other = new OtherPick { Selected = selected, List = list, Pick = Pick.OfAny(picked, all) };
+                if (deeper > 0) other.Inner = OtherPicksOf(picked, deeper - 1);
+                found.Add(other);
+                break;
+            }
+        }
+        return found;
+    }
+
+    /// <summary>Pick again what <see cref="OtherPicksOf"/> found, wherever something else is picked now. What
+    /// the named picks have already put right is found right, and left.</summary>
+    private void PickOthersAgain(object owner, List<OtherPick> others)
+    {
+        foreach (var other in others)
+        {
+            if (other.List.GetValue(owner) is not System.Collections.IList all) continue;
+            object? now = other.Pick.InAny(all);
+            if (now == null) continue;
+            if (!ReferenceEquals(other.Selected.GetValue(owner), now))
+            {
+                // A list shown as a tree with folders picks through its tree, which opens the folder.
+                if (ReferenceEquals(owner, this))
+                    foreach (var tree in Trees.Value)
+                        if ((tree.GetValue(this) as UnitTreeController)?.FindLeaf(now) is { } leaf)
+                        {
+                            ((UnitTreeController)tree.GetValue(this)!).Selected = leaf;
+                            break;
+                        }
+                if (!ReferenceEquals(other.Selected.GetValue(owner), now)) other.Selected.SetValue(owner, now);
+            }
+            if (other.Inner.Count > 0) PickOthersAgain(now, other.Inner);
+        }
+    }
+
+    private static readonly Lazy<System.Reflection.PropertyInfo[]> Trees = new(() =>
+        typeof(MainViewModel).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+                             .Where(p => p.PropertyType == typeof(UnitTreeController) && p.GetMethod != null).ToArray());
+
+    private static int[]? PathOf(IList<UiNodeViewModel> rows, UiNodeViewModel row)
+    {
+        for (int i = 0; i < rows.Count; i++)
+        {
+            if (ReferenceEquals(rows[i], row)) return new[] { i };
+            if (PathOf(rows[i].Children, row) is { } deeper) return deeper.Prepend(i).ToArray();
+        }
+        return null;
+    }
+
+    private static UiNodeViewModel? AtPath(IList<UiNodeViewModel> rows, int[] path)
+    {
+        UiNodeViewModel? row = null;
+        foreach (int i in path)
+        {
+            if (i < 0 || i >= rows.Count) return null;
+            row = rows[i];
+            rows = row.Children;
+        }
+        return row;
+    }
+
+    private Picks PicksNow()
+    {
+        return new Picks
+        {
+            // What is picked on every tab, to be picked again once the lists are built (1.10.0): the very record
+            // where the step left it in place, else the one of its name, else the one where it was. By name alone,
+            // a rename taken back lost its record - the name is the thing the undo changed - and half the tabs were
+            // not remembered at all: an undo on Characters landed on the first character, one on Variables on the
+            // first variable. (Found by the walk over every control, UndoEveryControlTests.)
+            Dialogue = Pick.Of(SelectedDialogue, Dialogues, x => x.Model),
+            Line = Pick.Of(SelectedNode, SelectedDialogue?.Nodes, x => x.Model),
+            Character = Pick.Of(SelectedCharacter, Characters, x => x.Model),
+            Outfit = Pick.Of(SelectedOutfit, SelectedCharacter?.Outfits, x => x.Model),
+            // The Places tab shows either a pack place or a vanilla extension, never
+            // both - setting one selection clears the other.
+            Place = Pick.Of(SelectedPlace, Places, x => x.Model),
+            Extension = Pick.Of(SelectedVanillaExtension, VanillaExtensions, x => x.Model),
+            MapButton = Pick.Of(SelectedMapButton, MapButtons, x => x.Model),
+            Npc = Pick.Of(SelectedNpc, Npcs, x => x.Model),
+            Scene = Pick.Of(SelectedScene, Scenes, x => x.Model),
+            Wallpaper = Pick.Of(SelectedWallpaper, Wallpapers, x => x.Model),
+            Effect = Pick.Of(SelectedEffect, Effects, x => x.Model),
+            Music = Pick.Of(SelectedMusic, Music, x => x.Model),
+            Sfx = Pick.Of(SelectedSfx, Sfx, x => x.Model),
+            Variable = Pick.Of(SelectedVariable, Variables, x => x.Model),
+            Rule = Pick.Of(SelectedIntegrationRule, IntegrationRules, x => x.Model),
+            Quest = Pick.Of(SelectedQuest, Quests, x => x.Model),
+            QuestTask = Pick.Of(SelectedQuest?.SelectedTask, SelectedQuest?.TaskRows, x => x.Model),
+            QuestTaskKey = SelectedQuest?.SelectedTask?.Key,
+            // The UI tab: RebindUis clears the selection outright, so an undo emptied
+            // the list, the tree and the preview at once and left nothing on screen
+            // to say whether the change had been undone or the editor had simply
+            // broken.
+            Ui = Pick.Of(SelectedUi, Uis, x => x.Model),
+            UiNode = SelectedUi?.SelectedNode?.Model,
+            UiNodeName = SelectedUi?.SelectedNode?.Model.Name,
+            UiNodePath = SelectedUi?.SelectedNode is { } pickedRow ? PathOf(SelectedUi.Nodes, pickedRow) : null,
+            Tab = SelectedTabIndex,
+            Others = OtherPicksOf(this, deeper: 2),
+        };
+    }
+
+    /// <summary>Pick again what <paramref name="was"/> picked, wherever something else is picked now.</summary>
+    private void PickAgain(Picks was)
+    {
+        // Only what is not picked already (1.10.0): a list that was not built again still has the record picked
+        // that it had, and picking it over again read the whole editor for it again - a dialogue and its line a
+        // fifth of a second on a large pack, on every undo of anything.
+        if (was.Dialogue.In(Dialogues, x => x.Model) is { } d)
+        {
+            if (!ReferenceEquals(SelectedDialogue, d)) SelectedDialogue = d;
+            if (was.Line.Was)
+            {
+                var l = was.Line.In(d.Nodes, x => x.Model);
+                if (!ReferenceEquals(SelectedNode, l)) SelectedNode = l;
             }
         }
 
-        if (placeKey != null)
+        if (was.Character.In(Characters, x => x.Model) is { } c)
         {
-            var p = Places.FirstOrDefault(x => x.Key == placeKey);
-            if (p != null) SelectedPlace = p;
+            if (!ReferenceEquals(SelectedCharacter, c)) SelectedCharacter = c;
+            if (was.Outfit.In(c.Outfits, x => x.Model) is { } o && !ReferenceEquals(SelectedOutfit, o)) SelectedOutfit = o;
         }
-        if (questKey != null)
+
+        void Again<TVm>(Pick slot, IList<TVm> all, Func<TVm, object> model, Func<TVm?> picked, Action<TVm> pick, UnitTreeController? tree = null)
+            where TVm : class
         {
-            var q = Quests.FirstOrDefault(x => x.Key == questKey);
-            if (q != null)
+            if (slot.In(all, model) is not { } now || ReferenceEquals(picked(), now)) return;
+            if (tree?.FindLeaf(now) is { } leaf) tree.Selected = leaf;
+            if (!ReferenceEquals(picked(), now)) pick(now);
+        }
+
+        Again(was.Place, Places, x => x.Model, () => SelectedPlace, x => SelectedPlace = x, PlaceTree);
+        Again(was.MapButton, MapButtons, x => x.Model, () => SelectedMapButton, x => SelectedMapButton = x);
+        Again(was.Npc, Npcs, x => x.Model, () => SelectedNpc, x => SelectedNpc = x, NpcTree);
+        Again(was.Scene, Scenes, x => x.Model, () => SelectedScene, x => SelectedScene = x, SceneTree);
+        Again(was.Wallpaper, Wallpapers, x => x.Model, () => SelectedWallpaper, x => SelectedWallpaper = x, WallpaperTree);
+        Again(was.Effect, Effects, x => x.Model, () => SelectedEffect, x => SelectedEffect = x, EffectTree);
+        Again(was.Music, Music, x => x.Model, () => SelectedMusic, x => SelectedMusic = x, MusicTree);
+        Again(was.Sfx, Sfx, x => x.Model, () => SelectedSfx, x => SelectedSfx = x, SfxTree);
+        Again(was.Variable, Variables, x => x.Model, () => SelectedVariable, x => SelectedVariable = x);
+        if (was.Rule.In(IntegrationRules, x => x.Model) is { } r && !ReferenceEquals(SelectedIntegrationRule, r))
+        {
+            SelectedIntegrationRule = r;
+            SelectedIntegrationTreeItem = FindIntegrationLeaf(r);
+        }
+
+        if (was.Quest.In(Quests, x => x.Model) is { } q)
+        {
+            if (q.ShowsVanillaPanel)
             {
-                if (q.ShowsVanillaPanel)
-                {
-                    SelectedVanillaQuest = q;
-                    var row = q.ExtensionRows.OfType<QuestTaskViewModel>().FirstOrDefault(t => t.Key == questTaskKey);
-                    if (row != null) q.SelectedExtensionRow = row;
-                }
-                else
+                if (!ReferenceEquals(SelectedVanillaQuest, q)) SelectedVanillaQuest = q;
+                var row = q.ExtensionRows.OfType<QuestTaskViewModel>().FirstOrDefault(t => t.Key == was.QuestTaskKey);
+                if (row != null && !ReferenceEquals(q.SelectedExtensionRow, row)) q.SelectedExtensionRow = row;
+            }
+            else
+            {
+                if (!ReferenceEquals(SelectedQuest, q))
                 {
                     var leaf = QuestTree.FindLeaf(q);
                     if (leaf != null) QuestTree.Selected = leaf;
                     else SelectedQuest = q;
-                    if (questTaskKey != null)
-                        q.SelectedTask = q.TaskRows.FirstOrDefault(t => t.Key == questTaskKey);
                 }
+                if (was.QuestTask.Was && was.QuestTask.In(q.TaskRows, x => x.Model) is { } task && !ReferenceEquals(q.SelectedTask, task))
+                    q.SelectedTask = task;
             }
         }
-        if (npcKey != null)
-        {
-            var n = Npcs.FirstOrDefault(x => x.Key == npcKey);
-            if (n != null) SelectedNpc = n;
-        }
-        if (outfitKey != null)
-        {
-            var o = Characters.SelectMany(c => c.Outfits).FirstOrDefault(x => x.Key == outfitKey);
-            if (o != null) SelectedOutfit = o;
-        }
+
         // Last, so it wins: the two are mutually exclusive and at most one of
         // them was set when the snapshot was taken.
-        if (extSource != null)
-        {
-            var e = VanillaExtensions.FirstOrDefault(x => x.Source == extSource);
-            if (e != null) SelectedVanillaExtension = e;
-        }
+        if (was.Extension.In(VanillaExtensions, x => x.Model) is { } e && !ReferenceEquals(SelectedVanillaExtension, e))
+            SelectedVanillaExtension = e;
 
-        if (uiName != null)
+        if (was.Ui.In(Uis, x => x.Model) is { } u)
         {
-            var u = Uis.FirstOrDefault(x => x.Model.Name == uiName);
-            if (u != null)
+            if (!ReferenceEquals(SelectedUi, u)) SelectedUi = u;
+
+            // And the object inside it, so an undo of a nudge leaves the
+            // handles on the thing that was nudged.
+            if (was.UiNodeName != null)
             {
-                SelectedUi = u;
+                var row = (was.UiNode != null ? FindNode(u.Nodes, was.UiNode) : null)
+                          ?? (was.UiNodePath != null ? AtPath(u.Nodes, was.UiNodePath) : null)
+                          ?? FindNode(u.Nodes, was.UiNodeName);
+                // An object that is not there (yet: a redo is about to add it) leaves what is picked alone.
+                // Picking nothing took the object's whole panel down, to be built again a moment later when the
+                // object was there - most of a second on a large screen, for one press.
+                if (row != null && !ReferenceEquals(u.SelectedNode, row)) u.SelectedNode = row;
 
-                // And the object inside it, so an undo of a nudge leaves the
-                // handles on the thing that was nudged.
-                if (uiNodeName != null)
+                // The tree keeps its own highlight, and setting the view
+                // model's selection does not move it. Without this the
+                // property panel comes back filled in while the tree shows
+                // nothing selected - which reads as the undo having lost
+                // the object.
+                if (row != null)
                 {
-                    var row = FindNode(u.Nodes, uiNodeName);
-                    u.SelectedNode = row;
-
-                    // The tree keeps its own highlight, and setting the view
-                    // model's selection does not move it. Without this the
-                    // property panel comes back filled in while the tree shows
-                    // nothing selected - which reads as the undo having lost
-                    // the object.
-                    if (row != null)
-                    {
-                        for (var up = row.Parent; up != null; up = up.Parent) up.IsExpanded = true;
-                        row.IsSelected = true;
-                    }
+                    for (var up = row.Parent; up != null; up = up.Parent) up.IsExpanded = true;
+                    row.IsSelected = true;
                 }
             }
         }
+
+        // And everything picked from a list that is not named above.
+        PickOthersAgain(this, was.Others);
+    }
+
+    /// <summary>
+    /// What was picked in one of the tabs' lists, to be found again once the list has been built again: the
+    /// record itself (an undo leaves what it did not change in place), else the record of its name, else the
+    /// one where it was in the list.
+    /// </summary>
+    private sealed class Pick
+    {
+        private object? _model;
+        private string? _name;
+        private int _index = -1;
+
+        public bool Was => _model != null;
+
+        public static Pick Of<TVm>(TVm? picked, IEnumerable<TVm>? all, Func<TVm, object> model) where TVm : class
+        {
+            var pick = new Pick();
+            if (picked == null) return pick;
+            pick._model = model(picked);
+            pick._name = NameOf(pick._model);
+            if (all != null)
+            {
+                int i = 0;
+                foreach (var v in all)
+                {
+                    if (ReferenceEquals(v, picked)) { pick._index = i; break; }
+                    i++;
+                }
+            }
+            return pick;
+        }
+
+        private static string? NameOf(object model)
+        {
+            foreach (string property in new[] { "Key", "Name", "Source", "Id" })
+                if (model.GetType().GetProperty(property)?.GetValue(model) is { } value) return property + "=" + value;
+            return null;
+        }
+
+        private static object ModelOf(object view) => view.GetType().GetProperty("Model")?.GetValue(view) ?? view;
+
+        /// <summary>The same for a view of any kind, its record found by looking (see OtherPicksOf).</summary>
+        public static Pick OfAny(object picked, System.Collections.IList all)
+        {
+            var pick = new Pick { _model = ModelOf(picked) };
+            pick._name = NameOf(pick._model);
+            pick._index = all.IndexOf(picked);
+            return pick;
+        }
+
+        public object? InAny(System.Collections.IList all)
+        {
+            if (_model == null) return null;
+            foreach (object? v in all)
+                if (v != null && ReferenceEquals(ModelOf(v), _model)) return v;
+            if (_name != null)
+                foreach (object? v in all)
+                    if (v != null && NameOf(ModelOf(v)) == _name) return v;
+            return all.Count == 0 || _index < 0 ? null : all[Math.Min(_index, all.Count - 1)];
+        }
+
+        public TVm? In<TVm>(IList<TVm> all, Func<TVm, object> model) where TVm : class
+        {
+            if (_model == null) return null;
+            foreach (var v in all)
+                if (ReferenceEquals(model(v), _model)) return v;
+            if (_name != null)
+                foreach (var v in all)
+                    if (NameOf(model(v)) == _name) return v;
+            return all.Count == 0 || _index < 0 ? null : all[Math.Min(_index, all.Count - 1)];
+        }
+    }
+
+    /// <summary>The row showing this very object, anywhere in a UI's tree.</summary>
+    private static UiNodeViewModel? FindNode(
+        System.Collections.Generic.IEnumerable<UiNodeViewModel> rows, Model.UiNodeDef node)
+    {
+        foreach (var row in rows)
+        {
+            if (ReferenceEquals(row.Model, node)) return row;
+            var deeper = FindNode(row.Children, node);
+            if (deeper != null) return deeper;
+        }
+        return null;
     }
 
     /// <summary>The first row with this name, anywhere in a UI's tree. Names
@@ -1016,6 +1710,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     public ObservableCollection<SceneViewModel> Scenes { get; } = new();
     public ObservableCollection<NpcViewModel> Npcs { get; } = new();
     public ObservableCollection<WallpaperViewModel> Wallpapers { get; } = new();
+    /// <summary>The pack's effects, for the FX tab (1.10.0).</summary>
+    public ObservableCollection<EffectViewModel> Effects { get; } = new();
     public ObservableCollection<MusicViewModel> Music { get; } = new();
     public ObservableCollection<SfxViewModel> Sfx { get; } = new();
 
@@ -1563,6 +2259,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         {
             _packRoot = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(IsPackOpen));
+            System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             OnPropertyChanged(nameof(Title));
             OnPropertyChanged(nameof(PackName));
             OnPropertyChanged(nameof(CanChooseLoadPackOnStart));
@@ -2042,17 +2740,12 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         // What is hidden in the preview is remembered per pack folder, and each
         // row reads it as it is made.
         Services.UiPreviewHiding.Open(PackRoot);
-        Uis.Clear();
         // Each seeds itself from the shipped vanilla UI on construction, so an
         // extension that holds three nodes on disk opens as the whole screen.
         // The delta pass prunes it back on save, so this cannot grow a manifest.
-        foreach (var u in Pack.Uis)
-        {
-            var row = new UiViewModel(u, PackMadeOn) { NewName = NewName };
-            row.PropertyChanged += UiRenamed;
-            Uis.Add(row);
-        }
-        SelectedUi = null;
+        Reshow(Uis, Pack.Uis, u => u.Model, u => new UiViewModel(u, PackMadeOn) { NewName = NewName },
+               made: u => u.PropertyChanged += UiRenamed, dropped: u => u.PropertyChanged -= UiRenamed);
+        if (SelectedUi != null && !Uis.Contains(SelectedUi)) SelectedUi = null;
         RebuildUiOptions();
         OnPropertyChanged(nameof(AvailableUiScreens)); OnPropertyChanged(nameof(AvailableUiScreensGrouped));
     }
@@ -2075,6 +2768,14 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
                 // list - there was no way back to it.
                 PlaceTree.Deselect();
             }
+            // Its own level is in the list before the page shows it (1.10.0). The list leaves out the levels
+            // other extensions have taken, this one's among them until now - and a list told to show an entry
+            // it does not have shows nothing, and goes on showing nothing when the entry arrives: the Source
+            // box was empty on the extension just picked whenever the page was already up.
+            if (value != null && !string.IsNullOrEmpty(value.Source)
+                && !VanillaSourceOptions.Any(o => string.Equals(o.Token, value.Source, StringComparison.OrdinalIgnoreCase))
+                && PlaceTargetRef.TryParse(value.Source, out var own) && VanillaPlaces.FindByGoName(own.Key) is { } level)
+                VanillaSourceOptions.Add(new NavigatorTargetOption(Token: value.Source, DisplayLabel: $"{level.DisplayName} ({level.GoName})"));
             OnPropertyChanged();
             // Moving off an extension is the natural moment to re-evaluate
             // whether it still changes anything, so the sidebar markers track
@@ -2092,10 +2793,55 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         set
         {
             if (!ReferenceEquals(_selectedDialogue, value)) CommitPendingRenames();
+            bool another = !ReferenceEquals(_selectedDialogue, value);
+            bool gamesBefore = _selectedDialogue is { } before && (before.IsVanillaBased || before.WantsVanilla);
             _selectedDialogue = value;
             WatchRename(value);
+            // Its own conversation is in the list before the page shows it (1.10.0). The list leaves out the
+            // conversations other changes have taken - this one's among them while another dialogue is picked -
+            // and a list told to show an entry it does not have shows nothing, and goes on showing nothing when
+            // the entry arrives: the Conversation box was empty on a change picked while the page was already
+            // up, and after a redo that made its view again (found by the walk over every control).
+            if (another && (gamesBefore || value is { } now && (now.IsVanillaBased || now.WantsVanilla)))
+            {
+                OnPropertyChanged(nameof(AvailableVanillaDialogues));
+                OnPropertyChanged(nameof(AvailableVanillaDialoguesGrouped));
+            }
             OnPropertyChanged();
             SelectedNode = null;
+            if (another) FollowInDialogueLists(value);
+        }
+    }
+
+    /// <summary>
+    /// Light <paramref name="d"/>'s row - in the Dialogues tree, or in the game conversations' list - when it was
+    /// picked somewhere else: a tutorial, an undo, a link. The page showed Her secret while the list lit "Test:
+    /// her lines", or nothing (found by the review of every tutorial step, 1.10.0). The row is lit, not picked:
+    /// the conversation is picked already.
+    /// </summary>
+    private void FollowInDialogueLists(DialogueViewModel? d)
+    {
+        if (d == null) return;
+        if (_selectedDialogueTreeItem is DialogueLeafNode lit && ReferenceEquals(lit.Dialogue, d)) return;
+        if (ReferenceEquals(_selectedVanillaDialogue, d)) return;
+        if (FindLeaf(d) is { } leaf)
+        {
+            if (_selectedDialogueTreeItem != null) _selectedDialogueTreeItem.IsSelected = false;
+            TreePlace.OpenTo<DialogueTreeItem>(DialogueTree, leaf, n => (n as DialogueFolderNode)?.Children, f => f.IsExpanded = true);
+            _selectedDialogueTreeItem = leaf;
+            leaf.IsSelected = true;
+            OnPropertyChanged(nameof(SelectedDialogueTreeItem));
+            if (_selectedVanillaDialogue != null)
+            {
+                _selectedVanillaDialogue = null;
+                OnPropertyChanged(nameof(SelectedVanillaDialogue));
+            }
+        }
+        else if (VanillaDialogues.Contains(d))
+        {
+            _selectedVanillaDialogue = d;
+            OnPropertyChanged(nameof(SelectedVanillaDialogue));
+            DeselectDialogueTree();
         }
     }
 
@@ -2289,7 +3035,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             // Characters, not Actors — CharacterMerge empties the actor list
             // once it has folded them in, so this always returned "".
             var speaker = SpeakerFor(actorKey);
-            return speaker?.DefaultOutfit ?? "";
+            if (!string.IsNullOrEmpty(speaker?.DefaultOutfit)) return speaker!.DefaultOutfit;
+            // No default outfit named: the game shows the first one (OutfitConveniencesTests), and so does this - it
+            // said "No bust to show" over a line whose speaker has a bust.
+            return speaker?.FindDefaultOutfit()?.Model.GameObjectName ?? "";
         }
     }
 
@@ -2531,7 +3280,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private static bool SameChoice(string a, string b) => string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
 
-    private void RebuildOutfitChoices()
+    private void RebuildOutfitChoices(bool force = false)
     {
         var choices = new System.Collections.Generic.List<PictureChoice> { new("", Loc.T("dialogues.outfitKeep"), tip: Loc.T("dialogues.outfitKeep.tip")) };
         foreach (var bust in SelectedNodeOutfitOptions) choices.Add(new PictureChoice(bust, bust));
@@ -2539,7 +3288,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         if (current.Length > 0 && !current.StartsWith('$') && !choices.Any(c => SameChoice(c.Value, current)))
             choices.Add(new PictureChoice(current, current, isUnknown: true));
 
-        if (!choices.Select(c => c.Value).SequenceEqual(SelectedNodeOutfitChoices.Select(c => c.Value)))
+        if (force || !choices.Select(c => c.Value).SequenceEqual(SelectedNodeOutfitChoices.Select(c => c.Value)))
         {
             SelectedNodeOutfitChoices.Clear();
             foreach (var c in choices) SelectedNodeOutfitChoices.Add(c);
@@ -3190,6 +3939,15 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
                     Follow = (from, to) => Refs(Services.RefKind.Music, from, to),
                 };
 
+            case EffectViewModel fx:
+                return new RenameTracker.Rule
+                {
+                    Read = () => fx.Key,
+                    Alive = () => Effects.Contains(fx),
+                    Collides = to => Effects.Any(x => x != fx && Same(x.Key, to)),
+                    Follow = (from, to) => Refs(Services.RefKind.Effect, from, to),
+                };
+
             case SfxViewModel sfx:
                 return new RenameTracker.Rule
                 {
@@ -3324,6 +4082,16 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// <summary>NPC entries for the Places placement picker (editable combo). Includes token and display label
     /// so when an NPC's DisplayName changes, the dropdown immediately reflects it.</summary>
     public ObservableCollection<NavigatorTargetOption> NpcKeyOptions { get; } = new();
+
+    private EffectViewModel? _selectedEffect;
+    public EffectViewModel? SelectedEffect
+    {
+        get => _selectedEffect;
+        set { _selectedEffect = value; OnPropertyChanged(); }
+    }
+
+    /// <summary>The pack's effects by key, for the Play effect and Stop effect actions.</summary>
+    public IReadOnlyList<string> EffectKeyOptions => Effects.Select(e => e.Key).OrderBy(k => k, StringComparer.OrdinalIgnoreCase).ToList();
 
     private WallpaperViewModel? _selectedWallpaper;
     public WallpaperViewModel? SelectedWallpaper
@@ -3483,9 +4251,58 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             var view = new System.Windows.Data.CollectionViewSource { Source = Tutorials }.View;
             view.GroupDescriptions.Add(
                 new System.Windows.Data.PropertyGroupDescription(nameof(TutorialListItem.Group)));
+            // The ModForge tab's one search (1.10.0) narrows the tutorials as it does the guide.
+            if (IsDocSearchActive)
+                view.Filter = o => o is TutorialListItem item && TutorialMatches(item.Def, _docQuery.Trim());
             return view;
         }
     }
+
+    /// <summary>A tutorial the search finds: by its title, its summary or any of its steps.</summary>
+    private static bool TutorialMatches(SMSModForge.Tutorials.TutorialDef t, string query)
+        => Documentation.DocSearch.Matches(t.Title, query) || Documentation.DocSearch.Matches(t.Summary, query) ||
+           t.Steps.Any(s => StepMatches(s, query));
+
+    private static bool StepMatches(SMSModForge.Tutorials.TutorialStep s, string query)
+        => Documentation.DocSearch.Matches(s.Title, query) || Documentation.DocSearch.Matches(s.Body, query) ||
+           Documentation.DocSearch.Matches(s.More, query);
+
+    /// <summary>One step a search found, to start its tutorial right there.</summary>
+    public sealed record TutorialStepHit(SMSModForge.Tutorials.TutorialDef Def, int Index)
+    {
+        public string Tutorial => Def.Title;
+        public string Step => Loc.F("tutorials.search.step", "number", Index + 1, "title", Def.Steps[Index].Title);
+    }
+
+    /// <summary>The steps the search found, in the ladder's order: three of a tutorial at most, so one that
+    /// is all about the word does not hide the others, and a dozen in all (more is a word too common to help).</summary>
+    public IReadOnlyList<TutorialStepHit> TutorialStepHits
+    {
+        get
+        {
+            if (!IsDocSearchActive) return Array.Empty<TutorialStepHit>();
+            string q = _docQuery.Trim();
+            return SMSModForge.Tutorials.TutorialCatalog.All
+                .Where(t => t.IsOnLadder)
+                .SelectMany(t => t.Steps.Select((s, i) => (t, s, i)).Where(x => StepMatches(x.s, q)).Take(3))
+                .Take(12)
+                .Select(x => new TutorialStepHit(x.t, x.i))
+                .ToList();
+        }
+    }
+
+    /// <summary>The search found steps: they are listed above the tutorials.</summary>
+    public bool HasTutorialStepHits => TutorialStepHits.Count > 0;
+
+    /// <summary>The search found no tutorial at all.</summary>
+    public bool HasNoTutorialResults => IsDocSearchActive && !SMSModForge.Tutorials.TutorialCatalog.All.Any(t => t.IsOnLadder && TutorialMatches(t, _docQuery.Trim()));
+
+    /// <summary>Starts a tutorial at a step the search found (parameter: the hit).</summary>
+    public RelayCommand StartTutorialAtCommand => _startTutorialAt ??= new RelayCommand(p =>
+    {
+        if (p is TutorialStepHit hit) TutorialRunner.Start(hit.Def, hit.Index);
+    });
+    private RelayCommand? _startTutorialAt;
 
     public ObservableCollection<ValidationIssue> Issues { get; } = new();
 
@@ -3776,6 +4593,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     public RelayCommand AddNpcCommand { get; }
     public RelayCommand RemoveNpcCommand { get; }
     public RelayCommand AddWallpaperCommand { get; }
+    public RelayCommand AddEffectCommand { get; }
+    public RelayCommand RemoveEffectCommand { get; }
     public RelayCommand RemoveWallpaperCommand { get; }
     public RelayCommand AddMusicCommand { get; }
     public RelayCommand RemoveMusicCommand { get; }
@@ -3828,6 +4647,13 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     /// <summary>Whether node rows are drawn the way the game draws a line. See
     /// EditorPrefs for why this starts off.</summary>
+    /// <summary>Options ▸ Animations (Services.Motion).</summary>
+    public bool Animations
+    {
+        get => Services.EditorPrefs.Animations;
+        set { Services.EditorPrefs.Animations = value; OnPropertyChanged(); }
+    }
+
     public bool GameLookNodeRows
     {
         get => Services.EditorPrefs.GameLookNodeRows;
@@ -3892,10 +4718,25 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     /// <summary>The guided tutorials offered on the ModForge tab, each paired
     /// with whether this author has finished it.</summary>
-    public IReadOnlyList<TutorialListItem> Tutorials =>
-        SMSModForge.Tutorials.TutorialCatalog.All
-            .Select(t => new TutorialListItem(t, Services.EditorPrefs.IsTutorialComplete(t.Id)))
-            .ToList();
+    /// In the order the list shows them: each tutorial of the first run, with the ones going deeper into it right
+    /// under it (1.10.0). Continue learning goes by <see cref="SMSModForge.Tutorials.TutorialDef.Level"/> instead,
+    /// the story's order.
+    public IReadOnlyList<TutorialListItem> Tutorials
+    {
+        get
+        {
+            var all = SMSModForge.Tutorials.TutorialCatalog.All;
+            var ordered = new List<SMSModForge.Tutorials.TutorialDef>();
+            foreach (var t in all.Where(t => !t.IsDeeper))
+            {
+                ordered.Add(t);
+                ordered.AddRange(all.Where(d => d.ParentId == t.Id).OrderBy(d => d.Level));
+            }
+            // One whose parent is not in the catalog is still listed, last.
+            ordered.AddRange(all.Where(t => !ordered.Contains(t)));
+            return ordered.Select(t => new TutorialListItem(t, Services.EditorPrefs.IsTutorialComplete(t.Id))).ToList();
+        }
+    }
 
     /// <summary>Drives whichever tutorial is running. Always present; idle
     /// until started, so the overlay has something to bind to from the start.</summary>
@@ -3903,6 +4744,16 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     /// <summary>Starts the tutorial passed as the command parameter.</summary>
     public RelayCommand StartTutorialCommand { get; }
+
+    /// <summary>Asks the place preview showing to pick an object, as a click on it does (a tutorial step's light,
+    /// 1.10.0). MainWindow passes it on to the preview on screen.</summary>
+    public event Action<GameObjectViewModel>? PreviewPickRequested;
+
+    public void PickInPreview(GameObjectViewModel node) => PreviewPickRequested?.Invoke(node);
+
+    /// <summary>The start page's "Learn ModForge": the first tutorial (1.10.0).</summary>
+    public RelayCommand StartFirstTutorialCommand { get; }
+
 
 
     /// <summary>The end-user reference rendered in the ModForge tab's
@@ -3925,6 +4776,12 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             OnPropertyChanged(nameof(DocSearchSummary));
             OnPropertyChanged(nameof(IsDocSearchActive));
             OnPropertyChanged(nameof(HasNoDocResults));
+            // One search for the tutorials and the guide (1.10.0): both narrow, and both open to show what it found.
+            OnPropertyChanged(nameof(TutorialsView));
+            OnPropertyChanged(nameof(TutorialStepHits));
+            OnPropertyChanged(nameof(HasTutorialStepHits));
+            OnPropertyChanged(nameof(HasNoTutorialResults));
+            RaiseHomePages();
         }
     }
 
@@ -3983,6 +4840,9 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         WallpaperTree = new UnitTreeController(() => Pack.WallpaperFolders,
             o => ((WallpaperViewModel)o).Key, o => ((WallpaperViewModel)o).Display,
             o => SelectedWallpaper = (WallpaperViewModel)o, () => Undo.Checkpoint());
+        EffectTree = new UnitTreeController(() => Pack.EffectFolders,
+            o => ((EffectViewModel)o).Key, o => ((EffectViewModel)o).Display,
+            o => SelectedEffect = (EffectViewModel)o, () => Undo.Checkpoint());
         MusicTree = new UnitTreeController(() => Pack.MusicFolders,
             o => ((MusicViewModel)o).Key, o => ((MusicViewModel)o).Display,
             o => SelectedMusic = (MusicViewModel)o, () => Undo.Checkpoint());
@@ -3992,8 +4852,27 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         QuestTree = new UnitTreeController(() => Pack.QuestFolders,
             o => ((QuestViewModel)o).Key, o => ((QuestViewModel)o).Display,
             o => QuestPickedInTree((QuestViewModel)o), () => Undo.Checkpoint());
-        foreach (var tree in new[] { ActorTree, PlaceTree, SceneTree, NpcTree, WallpaperTree, MusicTree, SfxTree, QuestTree })
+        foreach (var tree in new[] { ActorTree, PlaceTree, SceneTree, NpcTree, WallpaperTree, EffectTree, MusicTree, SfxTree, QuestTree })
+        {
             tree.NewFolderName = () => NewName("common.newFolder");
+            tree.Made = made => RecordMade?.Invoke(made);
+        }
+        // A record picked by anything but its row - a tutorial, an undo, a link - lights its row (1.10.0).
+        PropertyChanged += (_, e) =>
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(SelectedActor): ActorTree.Follow(SelectedActor); break;
+                case nameof(SelectedPlace): PlaceTree.Follow(SelectedPlace); break;
+                case nameof(SelectedScene): SceneTree.Follow(SelectedScene); break;
+                case nameof(SelectedNpc): NpcTree.Follow(SelectedNpc); break;
+                case nameof(SelectedWallpaper): WallpaperTree.Follow(SelectedWallpaper); break;
+                case nameof(SelectedEffect): EffectTree.Follow(SelectedEffect); break;
+                case nameof(SelectedMusic): MusicTree.Follow(SelectedMusic); break;
+                case nameof(SelectedSfx): SfxTree.Follow(SelectedSfx); break;
+                case nameof(SelectedQuest): QuestTree.Follow(SelectedQuest); break;
+            }
+        };
 
         // Quest action and condition rows list the pack's quests and their
         // tasks. A row is built from its own definition and cannot reach the
@@ -4071,6 +4950,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         SortView(Scenes, nameof(SceneViewModel.Display));
         SortView(Variables, nameof(PackVariableViewModel.Name));
         SortView(Wallpapers, nameof(WallpaperViewModel.Display));
+        SortView(Effects, nameof(EffectViewModel.Display));
         SortView(Music, nameof(MusicViewModel.Display));
         SortView(Sfx, nameof(SfxViewModel.Display));
         SortView(Quests, nameof(QuestViewModel.Display));
@@ -4081,7 +4961,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         Places.CollectionChanged += (_, _) => OnPropertyChanged(nameof(PlaceCount));
         VanillaExtensions.CollectionChanged += (_, _) => OnPropertyChanged(nameof(PlaceCount));
 
-        Undo = new Services.UndoService(UndoSnapshot);
+        Undo = new Services.UndoService(UndoStep);
         Undo.RestoreRequested += OnUndoRestore;
         Undo.StateChanged += () => UndoCommand?.Raise();  // global requery refreshes both
         // A step the undo history took is a commit; so is another record or
@@ -4093,7 +4973,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         {
             if (e.PropertyName is nameof(SelectedTabIndex) or nameof(SelectedOutfit) or nameof(SelectedCharacter)
                 or nameof(SelectedNpc) or nameof(SelectedPlace) or nameof(SelectedMapButton) or nameof(SelectedDialogue)
-                or nameof(SelectedScene) or nameof(SelectedMusic) or nameof(SelectedSfx) or nameof(SelectedWallpaper)
+                or nameof(SelectedScene) or nameof(SelectedMusic) or nameof(SelectedSfx) or nameof(SelectedWallpaper) or nameof(SelectedEffect)
                 or nameof(SelectedVariable) or nameof(SelectedIntegrationRule) or nameof(SelectedQuest))
                 SuggestionsTouched();
         };
@@ -4102,10 +4982,22 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         // Snapshot the pre-command state before every command-driven mutation,
         // so each add/remove/toggle is its own undo step (text-field edits are
         // checkpointed separately on focus-loss by the window).
-        RelayCommand.Executing += () => Undo.Checkpoint();
+        // Only when something has been said to edit the pack since the last
+        // step (1.10.0): most commands - a selection, a window opened - change
+        // nothing, and looking at the whole pack before and after each one was
+        // a tenth of a second and more of every click on a large pack.
+        Undo.CaptureView = PicksNow;
+        Undo.Moved += () => { if (_commandDepth > 0) _movedInHistory = true; };
+        RelayCommand.Executing += CommandBeginning;
         // And after, so a command's own change becomes a step even when it is
         // the first change since the pack was opened - see RelayCommand.Executed.
-        RelayCommand.Executed += () => Undo.Checkpoint();
+        // Looked at whatever has been said (1.10.0): a command that adds a row
+        // to a list, takes one out or moves one says nothing - no view model's
+        // value changed - and its step was not taken until something else was
+        // edited: Ctrl+Z straight after "+ Add action" did nothing, or took
+        // the action back together with the next edit (found by the walk over
+        // every control, UndoEveryControlTests).
+        RelayCommand.Executed += CommandDone;
 
         // Keep the variable pickers live as variables are edited. Adding a
         // variable already rebuilt them, but editing an existing one's Name or
@@ -4126,13 +5018,14 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         WatchIdentities(Npcs, RebuildNpcOptions);
         // RelayCommand.Executing checkpoints just before these run, so the most
         // recent change is captured before we step back/forward.
-        UndoCommand = new RelayCommand(() => Undo.Undo(), () => Undo.CanUndo);
+        // Also while an edit is not a step yet: Undo looks first, and takes that edit back.
+        UndoCommand = new RelayCommand(() => Undo.Undo(), () => Undo.CanUndo || Undo.Pending);
         RedoCommand = new RelayCommand(() => Undo.Redo(), () => Undo.CanRedo);
 
         NewPackCommand     = new RelayCommand(NewPack);
         OpenPackCommand    = new RelayCommand(OpenPack);
-        SavePackCommand    = new RelayCommand(() => SavePack());
-        SavePackAsCommand  = new RelayCommand(SavePackAs);
+        SavePackCommand    = new RelayCommand(() => SavePack(), () => IsPackOpen);
+        SavePackAsCommand  = new RelayCommand(SavePackAs, () => IsPackOpen);
         // Export is only available once the pack has been saved at least
         // once — the exporter zips the on-disk folder, so an in-memory-
         // only pack has nothing to bundle.
@@ -4299,6 +5192,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         AddNpcCommand                 = new RelayCommand(AddNpc);
         RemoveNpcCommand              = new RelayCommand(RemoveNpc);
         AddWallpaperCommand           = new RelayCommand(AddWallpaper);
+        AddEffectCommand              = new RelayCommand(AddEffect);
+        RemoveEffectCommand           = new RelayCommand(RemoveEffect, () => SelectedEffect != null || EffectTree.Selected is UnitFolderNode);
         RemoveWallpaperCommand        = new RelayCommand(RemoveWallpaper, () => SelectedWallpaper != null || WallpaperTree.Selected is UnitFolderNode);
         AddMusicCommand               = new RelayCommand(AddMusic);
         RemoveMusicCommand            = new RelayCommand(RemoveMusic, () => SelectedMusic != null || MusicTree.Selected is UnitFolderNode);
@@ -4334,7 +5229,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         AddIntegrationActionCommand    = new RelayCommand(() => SelectedIntegrationRule?.AddAction(),
                                                           () => SelectedIntegrationRule != null);
 
-        ValidateCommand               = new RelayCommand(Validate);
+        ValidateCommand               = new RelayCommand(Validate, () => IsPackOpen);
         OpenRecentCommand             = new RelayCommand(p => OpenRecentPack((string)p!));
         RemoveRecentCommand           = new RelayCommand(p => RemoveRecentPack((string)p!));
         ApplyThemeCommand             = new RelayCommand(p =>
@@ -4357,6 +5252,15 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             // The list is bound through the grouped view, so that is the
             // one the window is actually watching.
             OnPropertyChanged(nameof(TutorialsView));
+            RaiseHomeLearning();
+        };
+        // A step on the ModForge tab is about its Home page (the pack's language, Validate): shown, not the
+        // page or the search the author left it on.
+        TutorialRunner.StepChanged   += s =>
+        {
+            if (s.Tab != MainTab.ModForge) return;
+            if (IsDocSearchActive) DocQuery = "";
+            HomePage = HomePage.Home;
         };
         StartTutorialCommand          = new RelayCommand(p =>
         {
@@ -4364,6 +5268,16 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
                    ?? (p as TutorialListItem)?.Def;
             if (def != null) TutorialRunner.Start(def);
         });
+        // The start page's "Learn ModForge" (1.10.0): the first tutorial on the ladder, which makes its pack.
+        StartFirstTutorialCommand     = new RelayCommand(() =>
+        {
+            var first = SMSModForge.Tutorials.TutorialCatalog.All.Where(t => t.IsOnLadder).OrderBy(t => t.Level).FirstOrDefault();
+            if (first != null) TutorialRunner.Start(first);
+        });
+        // What follows a tutorial: the next on the ladder (1.10.0, "Next: ..." on its last step).
+        TutorialRunner.FollowingTutorial = done => done.IsOnLadder
+            ? SMSModForge.Tutorials.TutorialCatalog.All.Where(t => t.IsOnLadder && t.Level > done.Level).OrderBy(t => t.Level).FirstOrDefault()
+            : null;
         ClearDocSearchCommand         = new RelayCommand(() => DocQuery = "");
         ApplyPreviewQualityCommand    = new RelayCommand(p =>
         {
@@ -4395,12 +5309,17 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         ViewSort.Alphabetical(Variables, nameof(PackVariableViewModel.Name));
         ViewSort.Alphabetical(Scenes, nameof(SceneViewModel.Display));
         ViewSort.Alphabetical(Wallpapers, nameof(WallpaperViewModel.Display));
+        ViewSort.Alphabetical(Effects, nameof(EffectViewModel.Display));
         ViewSort.Alphabetical(Music, nameof(MusicViewModel.Display));
         ViewSort.Alphabetical(Sfx, nameof(SfxViewModel.Display));
         ViewSort.Alphabetical(Quests, nameof(QuestViewModel.Display));
         ViewSort.Alphabetical(IntegrationRules, nameof(UpdateRuleViewModel.Display));
 
         LoadRecentFiles();
+        RecentFiles.CollectionChanged += (_, _) => OnPropertyChanged(nameof(RecentPacks));
+        // A person starts on the start page, no pack open; the harness on an untitled pack ready to edit, as every
+        // test written before the start page expects - unless a test of the start page asks for the real start.
+        _untitledOpen = Services.TestMode.Active && !Services.TestMode.StartsWithNoPack;
         RebindCharacters();
         RebindPlaces();
         RebindVanillaExtensions();
@@ -4411,6 +5330,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         RebindScenes();
         RebindNpcs();
         RebindWallpapers();
+        RebindEffects();
         RebindMusic();
         RebindSfx();
         RebindIntegrationRules();
@@ -4434,38 +5354,39 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RebindCharacters()
     {
-        Characters.Clear();
-        foreach (var c in Pack.Characters)
-            Characters.Add(HookSpeaker(new CharacterViewModel(c, () => Characters)));
-        SelectedOutfit = Characters.FirstOrDefault()?.Outfits.FirstOrDefault();
+        Reshow(Characters, Pack.Characters, c => c.Model, c => HookSpeaker(new CharacterViewModel(c, () => Characters)));
+        // Whoever is picked stays picked while they are still there.
+        if (SelectedCharacter == null || !Characters.Contains(SelectedCharacter))
+            SelectedOutfit = Characters.FirstOrDefault()?.Outfits.FirstOrDefault();
     }
 
     private void RebindPlaces()
     {
-        Refill(Places, Pack.Places.Select(p => new PlaceViewModel(p)));
-        WatchKeys(Places, () => Places.Select(x => x.Key));
+        Reshow(Places, Pack.Places, p => p.Model, p => new PlaceViewModel(p), made: p => p.WatchDisplayName(() => Places.Select(x => x.Key)));
         PlaceTree.Build(Places);
-        SelectedPlace = Places.FirstOrDefault();
+        // The place picked stays picked while it is still there - and none is picked over an extension that is.
+        bool extensionPicked = SelectedVanillaExtension != null && VanillaExtensions.Contains(SelectedVanillaExtension);
+        if (SelectedPlace == null ? !extensionPicked : !Places.Contains(SelectedPlace)) SelectedPlace = Places.FirstOrDefault();
     }
 
     private void RebindVanillaExtensions()
     {
-        VanillaExtensions.Clear();
         // The VM seeds itself from the vanilla catalog on construction, so the
         // GameObjects list and preview show the level as it really is. Untouched
         // bound nodes are pruned again on save, so this can't grow the manifest.
-        foreach (var v in Pack.VanillaExtensions)
-            VanillaExtensions.Add(new VanillaPlaceExtensionViewModel(v));
-        SelectedVanillaExtension = null;
+        Reshow(VanillaExtensions, Pack.VanillaExtensions, v => v.Model, v => new VanillaPlaceExtensionViewModel(v));
+        if (SelectedVanillaExtension != null && !VanillaExtensions.Contains(SelectedVanillaExtension))
+        {
+            SelectedVanillaExtension = null;
+            if (SelectedPlace == null) SelectedPlace = Places.FirstOrDefault();
+        }
         RebindUis();
     }
 
     private void RebindMapButtons()
     {
-        MapButtons.Clear();
-        foreach (var b in Pack.MapButtons)
-            MapButtons.Add(new MapButtonViewModel(b, RemoveMapButtonVm));
-        SelectedMapButton = null;
+        Reshow(MapButtons, Pack.MapButtons, b => b.Model, b => new MapButtonViewModel(b, RemoveMapButtonVm));
+        if (SelectedMapButton != null && !MapButtons.Contains(SelectedMapButton)) SelectedMapButton = null;
     }
 
     /// <summary>
@@ -4627,13 +5548,78 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// (1.6.3). See <see cref="Services.Translation.TranslationSummaryCache"/>.</summary>
     public Services.Translation.TranslationSummaryCache TranslationSummaries { get; } = new();
 
+    /// <summary>
+    /// Whether a pack is open (1.10.0): until one is, the editor shows only its menus and the start page - New,
+    /// Open and the packs opened lately (the author: "Locking the UI until there's a modpack open"). A pack opened
+    /// from a folder, or made by New (which makes its folder at once); under the harness also the untitled pack
+    /// every test starts on.
+    /// </summary>
+    public bool IsPackOpen => PackRoot != null || _untitledOpen;
+
+    private bool _untitledOpen;
+
+    /// <summary>The packs opened lately, for the start page: newest first, each with its name and whether it is
+    /// still there.</summary>
+    public IReadOnlyList<RecentPackRow> RecentPacks => RecentFiles.Select(p => new RecentPackRow(p)).ToList();
+
+    /// <summary>
+    /// Asks where a new pack goes and what it is called (the window's: a small window with both), or null when
+    /// the author changed their mind. Unset under the harness unless a test sets it.
+    /// </summary>
+    public Func<(string Folder, string Name)?>? ChooseNewPack { get; set; }
+
+    /// <summary>
+    /// A new pack: its name and folder asked for first, the folder made and the pack saved in it at once, and that
+    /// pack opened - an empty one with somewhere to save from the start (1.10.0). A folder that already holds
+    /// anything gets a folder of the pack's name inside it (Model.NewPackPlace). Under the harness with nobody to
+    /// ask, the untitled pack every test before the start page starts on.
+    /// </summary>
     private void NewPack()
     {
         if (!ConfirmDiscardChanges("unsaved.beforeNewPack")) return;
+        if (ChooseNewPack == null && Services.TestMode.Active)
+        {
+            NewUntitled();
+            return;
+        }
+        if (ChooseNewPack?.Invoke() is not { } chosen || string.IsNullOrWhiteSpace(chosen.Name)) return;
+        MakePack(chosen.Folder, chosen.Name);
+    }
+
+    /// <summary>
+    /// A new pack called <paramref name="name"/>, saved at once in <paramref name="folder"/> (or a folder of its
+    /// own inside it, when that one already holds other things - NewPackPlace), and opened. What New does once its
+    /// window is answered, and what a tutorial's "Do it for me" does (1.10.0). Unsaved work is asked about first.
+    /// False when nothing was made.
+    /// </summary>
+    internal bool MakePack(string folder, string name, bool askFirst = false)
+    {
+        if (askFirst && !ConfirmDiscardChanges("unsaved.beforeNewPack")) return false;
+        name = name.Trim();
+        string dir = Model.NewPackPlace.Where(folder, name);
+        try
+        {
+            Directory.CreateDirectory(dir);
+            PackRepository.Save(PackRepository.CreateEmpty(name), dir);
+        }
+        catch (Exception ex)
+        {
+            Tell(ex.Message, Loc.T("newPack.failed.title"), MessageBoxImage.Error);
+            return false;
+        }
+        // Asked already: a second "discard your changes?" for the same New would be one too many.
+        OpenPackFromPath(dir, askedAlready: true);
+        return PackRoot != null;
+    }
+
+    private void NewUntitled()
+    {
         DropEditingLanguage();
         TranslationSummaries.Forget();
         Pack = PackRepository.CreateEmpty("Untitled");
         PackRoot = null;
+        _untitledOpen = true;
+        OnPropertyChanged(nameof(IsPackOpen));
         NewerForgeVersion = null;
         RebindAll();
         MarkSaved();
@@ -4653,10 +5639,18 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         RebindScenes();
         RebindNpcs();
         RebindWallpapers();
+        RebindEffects();
         RebindMusic();
         RebindSfx();
         RebindIntegrationRules();
         RebindQuests();
+        RebuildOptionsAfterRebind();
+    }
+
+    /// <summary>The lists of names the tabs read from one another, and what is read straight off the pack: made
+    /// again after the tabs' own lists are (all of them, or those an undo put back).</summary>
+    private void RebuildOptionsAfterRebind()
+    {
         RebuildTargetOptions();
         RebuildDialogueRoomTalkOptions();
         RebuildLevelOptions();
@@ -4697,6 +5691,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void OpenPack()
     {
+        // No file picker under the test harness: answered as a cancel (CLAUDE.md).
+        if (Services.TestMode.Active) return;
         var dialog = new OpenFileDialog
         {
             Filter = Loc.T("open.filter") + "|modpack.json;bustpack.json|" + Loc.T("common.allFiles") + "|*.*",
@@ -4734,11 +5730,13 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     }
     private string? _newerForgeVersion;
 
-    internal void OpenPackFromPath(string dir)
+    internal void OpenPackFromPath(string dir) => OpenPackFromPath(dir, askedAlready: false);
+
+    private void OpenPackFromPath(string dir, bool askedAlready)
     {
         // Guarded HERE rather than in each caller: the Open dialog and the
         // recent list both land here, and so will anything added later.
-        if (!ConfirmDiscardChanges("unsaved.beforeOpening")) return;
+        if (!askedAlready && !ConfirmDiscardChanges("unsaved.beforeOpening")) return;
 
         try
         {
@@ -4989,13 +5987,16 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// <summary>Every language a pack can be written in, as its speakers name
     /// it. Built once: the list is the same for every pack.</summary>
     public IReadOnlyList<EditingLanguageOption> PackLanguageOptions => AllPackLanguages();
-    private static IReadOnlyList<EditingLanguageOption>? _packLanguageOptions;
+    // Made once, on whichever thread asks first - App starts it on a worker, as Windows' list of every language
+    // takes most of half a second (UiDelayTests' profile).
+    private static readonly Lazy<IReadOnlyList<EditingLanguageOption>> _packLanguageOptions =
+        new(BuildPackLanguageOptions, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
     /// <summary>Every language a pack can be written in, each named as its
     /// own speakers write it - which is never translated, so a reader can find
     /// their language in the list whatever language the editor is in.</summary>
     internal static IReadOnlyList<EditingLanguageOption> AllPackLanguages()
-        => _packLanguageOptions ??= BuildPackLanguageOptions();
+        => _packLanguageOptions.Value;
 
     private static IReadOnlyList<EditingLanguageOption> BuildPackLanguageOptions()
     {
@@ -5427,6 +6428,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         SyncVariableFoldersToModel();
         SyncIntegrationFoldersToModel();
         SyncUnitFoldersToModel();
+        // No file picker under the test harness: answered as a cancel (CLAUDE.md).
+        if (Services.TestMode.Active) return;
         var dialog = new SaveFileDialog
         {
             FileName = PackRepository.ManifestFileName,
@@ -5507,6 +6510,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         if (!OfferTranslationBeforeExport()) return;
 
         var remembered = Services.ExportPathService.Get(PackRoot);
+        // No file picker under the test harness: answered as a cancel (CLAUDE.md).
+        if (Services.TestMode.Active) return;
         var dialog = new SaveFileDialog
         {
             FileName = remembered != null
@@ -5659,6 +6664,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         if (published != null && current != published.Value)
             return (current, Model.VersionBump.Change.None);
 
+        // Options > Version the pack automatically, off (1.10.0): the version is what was typed. The option was
+        // read by nothing since the version moved from saving to publishing, so unticking it changed nothing.
+        if (!Services.EditorPrefs.AutoVersion)
+            return (current, Model.VersionBump.Change.None);
+
         var change = Model.VersionBump.Classify(
             Model.PublishRecord.Read(PackRoot), OwnWordsSaved());
 
@@ -5708,6 +6718,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             : Loc.F("publish.dialogTitleMoving", "pack", Pack.PackId, "from", Pack.Version, "to", version);
 
         var remembered = Services.PublishPathService.Get(PackRoot);
+        // No file picker under the test harness: answered as a cancel (CLAUDE.md).
+        if (Services.TestMode.Active) return;
         var dialog = new SaveFileDialog
         {
             FileName = Model.PackPublisher.ArchiveNameFor(Pack.PackId, version),
@@ -5818,6 +6830,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
                 said += "\n\n" + Loc.P("export.backupsLeftOut", result.BackupsLeftOut.Count,
                                        "size", (result.BackupBytes / 1024.0 / 1024.0).ToString("N1"),
                                        "names", BackupNames(result.BackupsLeftOut));
+            // The tutorials' practice art, unchanged: the plugin has its own copy (1.10.0).
+            if (result.TutorialArtLeftOut.Count > 0)
+                said += "\n\n" + Loc.P("export.tutorialArtLeftOut", result.TutorialArtLeftOut.Count,
+                                       "size", (result.TutorialArtBytes / 1024.0 / 1024.0).ToString("N1"));
             Tell(said, Loc.T("export.done.title"), MessageBoxImage.Information);
         }
         catch (Exception ex)
@@ -6076,13 +7092,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     {
         // The dialogues' folds are remembered per pack folder.
         Services.DialogueFolds.Open(PackRoot);
-        Dialogues.Clear();
-        foreach (var d in Pack.Dialogues)
-            Dialogues.Add(HookDebugTracking(new DialogueViewModel(d)));
-        foreach (var d in Dialogues) d.WatchDisplayName(() => Dialogues);
+        Reshow(Dialogues, Pack.Dialogues, d => d.Model, d => HookDebugTracking(new DialogueViewModel(d)), made: d => d.WatchDisplayName(() => Dialogues));
         BuildDialogueTree();
         RefreshVanillaDialogues();
-        SelectedDialogue = Dialogues.FirstOrDefault(d => !d.IsVanillaBased) ?? Dialogues.FirstOrDefault();
+        if (SelectedDialogue == null || !Dialogues.Contains(SelectedDialogue))
+            SelectedDialogue = Dialogues.FirstOrDefault(d => !d.IsVanillaBased) ?? Dialogues.FirstOrDefault();
         RefreshDebuggedDialogues();
     }
 
@@ -6168,6 +7182,14 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     public TreeFilterViewModel CharacterTreeFilter { get; }
     private System.Collections.Generic.IEnumerable<IFilterableTreeNode> CharacterFilterRoots => Characters;
 
+    /// <summary>
+    /// A record was just made - + Dialogue, + Rule, + Place, a paste - and is the one picked. Its page opens at
+    /// its top, where its name is: the page kept the last record's scroll, and a tutorial's "name it" asked for a
+    /// box above the view (found by the review of every tutorial step, 1.10.0). Picking a record that was there
+    /// already keeps the page where it was, as before.
+    /// </summary>
+    public event Action<object>? RecordMade;
+
     private DialogueTreeItem? _selectedDialogueTreeItem;
     public DialogueTreeItem? SelectedDialogueTreeItem
     {
@@ -6184,7 +7206,9 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
             if (value is DialogueLeafNode leaf)
             {
-                SelectedDialogue = leaf.Dialogue;
+                // Not again when it is the one picked: the control answering FollowInDialogueLists's highlight
+                // would let go of the line picked in it.
+                if (!ReferenceEquals(SelectedDialogue, leaf.Dialogue)) SelectedDialogue = leaf.Dialogue;
 
                 // And the vanilla list lets go. It clears its own highlight
                 // through the two-way binding; this is what stops the pane
@@ -6200,6 +7224,13 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     public void BuildDialogueTree()
     {
+        // What is picked, by where it is: every node is about to be another (see TreePlace).
+        var picked = _selectedDialogueTreeItem;
+        static IEnumerable<DialogueTreeItem>? Inside(DialogueTreeItem n) => (n as DialogueFolderNode)?.Children;
+        static string? FolderName(DialogueTreeItem n) => (n as DialogueFolderNode)?.Name;
+        var pickedFolder = picked is DialogueFolderNode ? TreePlace.FoldersTo<DialogueTreeItem>(DialogueTree, picked, Inside, FolderName) : null;
+        string? pickedKey = (picked as DialogueLeafNode)?.Dialogue.Key;
+
         DialogueTree.Clear();
         var placed = new HashSet<string>();
         foreach (var f in Pack.DialogueFolders)
@@ -6210,6 +7241,17 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         SortTree(DialogueTree);
         // A rebuild replaces every node, so re-apply any live search.
         DialogueTreeFilter.Reapply();
+
+        if (picked != null)
+        {
+            var again = pickedFolder != null ? TreePlace.FolderAt<DialogueTreeItem>(DialogueTree, pickedFolder, Inside, FolderName)
+                : pickedKey != null ? TreePlace.First<DialogueTreeItem>(DialogueTree, Inside, n => n is DialogueLeafNode l && l.Dialogue.Key == pickedKey)
+                : null;
+            // The highlight only: which dialogue the tab shows is the tab's to pick.
+            _selectedDialogueTreeItem = again;
+            if (again != null) again.IsSelected = true;
+            OnPropertyChanged(nameof(SelectedDialogueTreeItem));
+        }
     }
 
 
@@ -6309,6 +7351,13 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     public void BuildVariableTree()
     {
+        // What is picked, by where it is: every node is about to be another (see TreePlace).
+        var picked = _selectedVariableTreeItem;
+        static IEnumerable<VariableTreeItem>? Inside(VariableTreeItem n) => (n as VariableFolderNode)?.Children;
+        static string? FolderName(VariableTreeItem n) => (n as VariableFolderNode)?.Name;
+        var pickedFolder = picked is VariableFolderNode ? TreePlace.FoldersTo<VariableTreeItem>(VariableTree, picked, Inside, FolderName) : null;
+        string? pickedName = (picked as VariableLeafNode)?.Variable.Name;
+
         VariableTree.Clear();
         var placed = new HashSet<string>();
         foreach (var f in Pack.VariableFolders)
@@ -6319,6 +7368,14 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         SortVariableTree(VariableTree);
         // A rebuild replaces every node, so re-apply any live search.
         VariableTreeFilter.Reapply();
+
+        if (picked != null)
+        {
+            _selectedVariableTreeItem = pickedFolder != null ? TreePlace.FolderAt<VariableTreeItem>(VariableTree, pickedFolder, Inside, FolderName)
+                : pickedName != null ? TreePlace.First<VariableTreeItem>(VariableTree, Inside, n => n is VariableLeafNode l && l.Variable.Name == pickedName)
+                : null;
+            OnPropertyChanged(nameof(SelectedVariableTreeItem));
+        }
     }
 
 
@@ -6476,7 +7533,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     // dispatches all no-op there. The places themselves are MainTab's.
     private const int TabBusts = MainTab.Characters, TabNpcs = MainTab.Npcs, TabPlaces = MainTab.Places,
                       TabMapButtons = MainTab.MapButtons, TabDialogues = MainTab.Dialogues, TabScenes = MainTab.Scenes, TabMusic = MainTab.Music,
-                      TabSfx = MainTab.Sfx, TabWallpapers = MainTab.Wallpapers, TabVariables = MainTab.Variables, TabIntegration = MainTab.Integration;
+                      TabSfx = MainTab.Sfx, TabWallpapers = MainTab.Wallpapers, TabFx = MainTab.Fx, TabVariables = MainTab.Variables, TabIntegration = MainTab.Integration;
     // The UI tab has no constant here: none of the per-tab commands act on it.
     private const int TabQuests = MainTab.Quests;
 
@@ -6489,8 +7546,17 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         set { if (_selectedTabIndex != value) CommitPendingRenames();
               _selectedTabIndex = value; OnPropertyChanged();
               // A face's picture changed on the Characters tab shows on the
-              // line's buttons when its author comes back to it.
-              if (value == TabDialogues) RebuildExpressionChoices(force: true);
+              // line's buttons when its author comes back to it - and so do the
+              // speaker's outfits: one added or renamed there was missing from the
+              // line's Outfit buttons until another line was chosen (found by the
+              // review of every tutorial step, 1.10.0: Characters, in depth).
+              if (value == TabDialogues)
+              {
+                  RebuildSelectedNodeExpressionOptions();
+                  RebuildSelectedNodeOutfitOptions();
+                  RebuildOutfitChoices(force: true);
+                  RebuildExpressionChoices(force: true);
+              }
               // What uses the variable may have changed on another tab.
               if (value == MainTab.Variables) RefreshVariableUses(); }
     }
@@ -6501,6 +7567,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     public UnitTreeController SceneTree { get; }
     public UnitTreeController NpcTree { get; }
     public UnitTreeController WallpaperTree { get; }
+    public UnitTreeController EffectTree { get; }
     public UnitTreeController MusicTree { get; }
     public UnitTreeController SfxTree { get; }
     public UnitTreeController QuestTree { get; }
@@ -6514,6 +7581,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         SceneTree.SyncToModel();
         NpcTree.SyncToModel();
         WallpaperTree.SyncToModel();
+        EffectTree.SyncToModel();
         MusicTree.SyncToModel();
         SfxTree.SyncToModel();
         QuestTree.SyncToModel();
@@ -6882,6 +7950,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             case TabNpcs: DuplicateFlat(SelectedNpc?.Model, Pack.Npcs, Npcs, n => n.Key, (n, k) => n.Key = k, d => new NpcViewModel(d), vm => { NpcTree.PlaceNew(vm); RebuildNpcOptions(); }); break;
             case TabVariables: DuplicateFlat(SelectedVariable?.Model, Pack.Variables, Variables, v => v.Name, (v, k) => v.Name = k, d => new PackVariableViewModel(d), vm => PlaceNewVariableInTree(vm)); break;
             case TabWallpapers: DuplicateFlat(SelectedWallpaper?.Model, Pack.Wallpapers, Wallpapers, w => w.Key, (w, k) => w.Key = k, d => new WallpaperViewModel(d), vm => WallpaperTree.PlaceNew(vm)); break;
+            case TabFx: DuplicateFlat(SelectedEffect?.Model, Pack.Effects, Effects, x => x.Key, (x, k) => x.Key = k, d => new EffectViewModel(d), vm => { EffectTree.PlaceNew(vm); OnPropertyChanged(nameof(EffectKeyOptions)); }); break;
             case TabMusic: DuplicateFlat(SelectedMusic?.Model, Pack.Music, Music, m => m.Key, (m, k) => m.Key = k, d => new MusicViewModel(d), vm => { MusicTree.PlaceNew(vm); RebuildMusicKeyOptions(); }); break;
             case TabSfx: DuplicateFlat(SelectedSfx?.Model, Pack.Sfx, Sfx, s => s.Key, (s, k) => s.Key = k, MakeSfxVm, vm => { SfxTree.PlaceNew(vm); RebuildSfxKeyOptions(); }); break;
             case TabQuests: DuplicateFlat(SelectedQuest?.Model, Pack.Quests, Quests, q => q.Key, (q, k) => q.Key = k, MakeQuestVm, ShowNewQuest); break;
@@ -6901,6 +7970,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             case TabNpcs: if (SelectedNpc != null) EditorClipboard.SetItem(SelectedNpc.Model); break;
             case TabVariables: if (SelectedVariable != null) EditorClipboard.SetItem(SelectedVariable.Model); break;
             case TabWallpapers: if (SelectedWallpaper != null) EditorClipboard.SetItem(SelectedWallpaper.Model); break;
+            case TabFx: if (SelectedEffect != null) EditorClipboard.SetItem(SelectedEffect.Model); break;
             case TabMusic: if (SelectedMusic != null) EditorClipboard.SetItem(SelectedMusic.Model); break;
             case TabSfx: if (SelectedSfx != null) EditorClipboard.SetItem(SelectedSfx.Model); break;
             case TabQuests: if (SelectedQuest != null) EditorClipboard.SetItem(SelectedQuest.Model); break;
@@ -6920,6 +7990,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             case TabNpcs: PasteFlat(Pack.Npcs, Npcs, n => n.Key, (n, k) => n.Key = k, d => new NpcViewModel(d), vm => { NpcTree.PlaceNew(vm); RebuildNpcOptions(); }); break;
             case TabVariables: PasteFlat(Pack.Variables, Variables, v => v.Name, (v, k) => v.Name = k, d => new PackVariableViewModel(d), vm => PlaceNewVariableInTree(vm)); break;
             case TabWallpapers: PasteFlat(Pack.Wallpapers, Wallpapers, w => w.Key, (w, k) => w.Key = k, d => new WallpaperViewModel(d), vm => WallpaperTree.PlaceNew(vm)); break;
+            case TabFx: PasteFlat(Pack.Effects, Effects, x => x.Key, (x, k) => x.Key = k, d => new EffectViewModel(d), vm => { EffectTree.PlaceNew(vm); OnPropertyChanged(nameof(EffectKeyOptions)); }); break;
             case TabMusic: PasteFlat(Pack.Music, Music, m => m.Key, (m, k) => m.Key = k, d => new MusicViewModel(d), vm => { MusicTree.PlaceNew(vm); RebuildMusicKeyOptions(); }); break;
             case TabSfx: PasteFlat(Pack.Sfx, Sfx, s => s.Key, (s, k) => s.Key = k, MakeSfxVm, vm => { SfxTree.PlaceNew(vm); RebuildSfxKeyOptions(); }); break;
             case TabQuests: PasteFlat(Pack.Quests, Quests, q => q.Key, (q, k) => q.Key = k, MakeQuestVm, ShowNewQuest); break;
@@ -6951,6 +8022,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             case TabNpcs: Run(RemoveNpcCommand); break;
             case TabVariables: Run(RemoveVariableCommand); break;
             case TabWallpapers: Run(RemoveWallpaperCommand); break;
+            case TabFx: Run(RemoveEffectCommand); break;
             case TabMusic: Run(RemoveMusicCommand); break;
             case TabSfx: Run(RemoveSfxCommand); break;
             case TabQuests: Run(RemoveQuestCommand); break;
@@ -7000,6 +8072,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
             case TabWallpapers when SelectedWallpaper != null:
                 RenameDisplayName("rename.wallpaper", SelectedWallpaper, v => v.DisplayName, (v, n) => v.DisplayName = n, v => v.Key,
                                   () => { WallpaperTree.Sort(); WallpaperTree.SyncToModel(); });
+                break;
+            case TabFx when SelectedEffect != null:
+                RenameDisplayName("rename.effect", SelectedEffect, v => v.DisplayName, (v, n) => v.DisplayName = n, v => v.Key,
+                                  () => { EffectTree.Sort(); EffectTree.SyncToModel(); OnPropertyChanged(nameof(EffectKeyOptions)); });
                 break;
             case TabMusic when SelectedMusic != null:
                 RenameDisplayName("rename.music", SelectedMusic, v => v.DisplayName, (v, n) => v.DisplayName = n, v => v.Key,
@@ -7104,6 +8180,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
                     RenameKey("rename.wallpaper", SelectedWallpaper, v => v.Key, (v, k) => { v.Key = k; WallpaperTree.Sort(); WallpaperTree.SyncToModel(); },
                               Wallpapers.Where(x => x != SelectedWallpaper).Select(x => x.Key));
                 break;
+            case TabFx:
+                if (SelectedEffect != null)
+                    RenameKey("rename.effect", SelectedEffect, v => v.Key, (v, k) => { v.Key = k; EffectTree.Sort(); EffectTree.SyncToModel(); OnPropertyChanged(nameof(EffectKeyOptions)); },
+                              Effects.Where(x => x != SelectedEffect).Select(x => x.Key));
+                break;
             case TabMusic:
                 if (SelectedMusic != null)
                     RenameKey("rename.music", SelectedMusic, v => v.Key, (v, k) => { v.Key = k; RebuildMusicKeyOptions(); MusicTree.Sort(); MusicTree.SyncToModel(); },
@@ -7147,6 +8228,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         TabMusic => SelectedMusic,
         TabSfx => SelectedSfx,
         TabWallpapers => SelectedWallpaper,
+        TabFx => SelectedEffect,
         TabVariables => SelectedVariable,
         TabIntegration => SelectedIntegrationRule,
         TabQuests => SelectedQuest,
@@ -7165,6 +8247,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         TabMusic => MusicTree.Selected as IRenamableFolder,
         TabSfx => SfxTree.Selected as IRenamableFolder,
         TabWallpapers => WallpaperTree.Selected as IRenamableFolder,
+        TabFx => EffectTree.Selected as IRenamableFolder,
         TabVariables => SelectedVariableTreeItem as IRenamableFolder,
         TabIntegration => SelectedIntegrationTreeItem as IRenamableFolder,
         TabQuests => QuestTree.Selected as IRenamableFolder,
@@ -7321,6 +8404,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         DialogueDropTarget().Add(leaf);
         SyncFoldersToModel();
         SelectedDialogueTreeItem = leaf;
+        RecordMade?.Invoke(vm);
     }
 
     /// <summary>
@@ -7360,6 +8444,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         SelectedVariable = vm;
         SelectedVariableTreeItem = leaf;
         RebuildVariableNameOptions();
+        RecordMade?.Invoke(vm);
     }
 
     /// <summary>Variable-tree counterpart of <see cref="DialogueDropTarget"/>.</summary>
@@ -7596,6 +8681,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         SyncFoldersToModel();
         SelectedDialogueTreeItem = leaf;
         SelectedDialogue = vm;
+        RecordMade?.Invoke(vm);
     }
 
     /// <summary>
@@ -7775,17 +8861,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         // Unhook old subscriptions before clearing — otherwise the now-detached
         // ActorViewModels would keep this MainViewModel alive via the
         // DefaultBustKeyChanged delegate.
-        foreach (var a in Actors) a.DefaultBustKeyChanged -= OnActorDefaultBustKeyChanged;
-        Actors.Clear();
-        foreach (var a in Pack.Actors)
-        {
-            var vm = new ActorViewModel(a);
-            vm.DefaultBustKeyChanged += OnActorDefaultBustKeyChanged;
-            vm.PropertyChanged += OnActorPropertyChanged;
-            Actors.Add(vm);
-        }
+        Reshow(Actors, Pack.Actors, a => a.Model, MakeActorVm,
+               dropped: a => { a.DefaultBustKeyChanged -= OnActorDefaultBustKeyChanged; a.PropertyChanged -= OnActorPropertyChanged; });
         ActorTree.Build(Actors);
-        SelectedActor = Actors.FirstOrDefault();
+        if (SelectedActor == null || !Actors.Contains(SelectedActor)) SelectedActor = Actors.FirstOrDefault();
     }
 
     private void OnActorDefaultBustKeyChanged(object? sender, System.EventArgs e)
@@ -7945,9 +9024,9 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RebindVariables()
     {
-        Refill(Variables, Pack.Variables.Select(v => new PackVariableViewModel(v)));
+        Reshow(Variables, Pack.Variables, v => v.Model, v => new PackVariableViewModel(v));
         BuildVariableTree();
-        SelectedVariable = Variables.FirstOrDefault();
+        if (SelectedVariable == null || !Variables.Contains(SelectedVariable)) SelectedVariable = Variables.FirstOrDefault();
     }
 
     /// <summary>
@@ -7996,6 +9075,75 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     /// from the records as they are then, so the last one is all that shows;
     /// it runs before anything is selected, as the per-item ones did.
     /// </summary>
+    /// <summary>
+    /// A tab's list made to show the pack's records again, keeping every row whose record is the very one it
+    /// showed (1.10.0). An undo puts back the records that differ and leaves the others the objects they were
+    /// (Model.PackPieces.Apply): their rows - and whatever on screen shows them - stay as they are, where
+    /// building the whole list again was most of what an undo cost (a tenth to half a second on a large
+    /// pack, and the page drawn again after it). A row is made for each record that has none, rows of
+    /// records no longer there are dropped, and the order is the pack's. With no row to keep - another pack -
+    /// the list is simply filled.
+    /// </summary>
+    /// <summary>Set while the editor's language changes: <see cref="Reshow"/> keeps no row.</summary>
+    private bool _remakeRows;
+
+    private void Reshow<TDef, TVm>(ObservableCollection<TVm> rows, IList<TDef> records, Func<TVm, TDef> recordOf, Func<TDef, TVm> make,
+                                   Action<TVm>? made = null, Action<TVm>? dropped = null)
+        where TDef : class where TVm : class
+    {
+        var have = new Dictionary<TDef, TVm>(ReferenceEqualityComparer.Instance);
+        if (!_remakeRows)
+            foreach (var row in rows) have[recordOf(row)] = row;
+        var wanted = new List<TVm>(records.Count);
+        var kept = new HashSet<TVm>(ReferenceEqualityComparer.Instance);
+        var fresh = new List<TVm>();
+        foreach (var record in records)
+        {
+            if (have.TryGetValue(record, out var row) && kept.Add(row)) { wanted.Add(row); continue; }
+            var one = make(record);
+            wanted.Add(one);
+            fresh.Add(one);
+        }
+        if (dropped != null)
+            foreach (var row in rows)
+                if (!kept.Contains(row)) dropped(row);
+
+        _holdRebuilds++;
+        try
+        {
+            if (kept.Count == 0)
+            {
+                rows.Clear();
+                foreach (var row in wanted) rows.Add(row);
+            }
+            else
+            {
+                for (int i = 0; i < wanted.Count; i++)
+                {
+                    if (i < rows.Count && ReferenceEquals(rows[i], wanted[i])) continue;
+                    int at = -1;
+                    for (int k = i + 1; k < rows.Count; k++)
+                        if (ReferenceEquals(rows[k], wanted[i])) { at = k; break; }
+                    if (at >= 0) rows.Move(at, i);
+                    else rows.Insert(i, wanted[i]);
+                }
+                while (rows.Count > wanted.Count) rows.RemoveAt(rows.Count - 1);
+            }
+        }
+        finally
+        {
+            _holdRebuilds--;
+            if (_holdRebuilds == 0)
+            {
+                var held = _heldRebuilds.ToList();
+                _heldRebuilds.Clear();
+                foreach (var rebuild in held) rebuild();
+            }
+        }
+        if (made != null)
+            foreach (var row in fresh) made(row);
+    }
+
     private void Refill<T>(ObservableCollection<T> collection, IEnumerable<T> items)
     {
         _holdRebuilds++;
@@ -8234,6 +9382,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         SelectedVariableTreeItem = leaf;
         SelectedVariable = vm;
         RebuildVariableNameOptions();
+        RecordMade?.Invoke(vm);
     }
 
     private void RemoveVariable()
@@ -8260,8 +9409,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RebindScenes()
     {
-        Refill(Scenes, Pack.Scenes.Select(s => new SceneViewModel(s)));
-        WatchKeys(Scenes, () => Scenes.Select(x => x.Key));
+        Reshow(Scenes, Pack.Scenes, s => s.Model, s => new SceneViewModel(s), made: s => s.WatchDisplayName(() => Scenes.Select(x => x.Key)));
         // A change to one of the game's scenes with none picked yet, still called
         // what it was added as (an undo, a reopened pack): the first pick names it.
         string placeholder = NewName("scenes.game.newName");
@@ -8276,6 +9424,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         // their own under it.
         SceneTree.Build(Scenes.Where(s => !s.IsGameScene).ToList());
         RefreshGameScenes();
+        // The scene picked stays picked while it is still there.
+        if (SelectedScene != null && Scenes.Contains(SelectedScene)) return;
         _selectedGameScene = null;
         OnPropertyChanged(nameof(SelectedGameScene));
         SelectFirstScene();
@@ -8707,19 +9857,53 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RebindWallpapers()
     {
-        Wallpapers.Clear();
-        foreach (var w in Pack.Wallpapers) Wallpapers.Add(new WallpaperViewModel(w));
-        WatchKeys(Wallpapers, () => Wallpapers.Select(x => x.Key));
+        Reshow(Wallpapers, Pack.Wallpapers, w => w.Model, w => new WallpaperViewModel(w), made: w => w.WatchDisplayName(() => Wallpapers.Select(x => x.Key)));
         WallpaperTree.Build(Wallpapers);
-        SelectedWallpaper = Wallpapers.FirstOrDefault();
+        if (SelectedWallpaper == null || !Wallpapers.Contains(SelectedWallpaper)) SelectedWallpaper = Wallpapers.FirstOrDefault();
     }
 
     private void RebindNpcs()
     {
-        Refill(Npcs, Pack.Npcs.Select(n => new NpcViewModel(n)));
-        WatchKeys(Npcs, () => Npcs.Select(x => x.Key));
+        Reshow(Npcs, Pack.Npcs, n => n.Model, n => new NpcViewModel(n), made: n => n.WatchDisplayName(() => Npcs.Select(x => x.Key)));
         NpcTree.Build(Npcs);
-        SelectedNpc = Npcs.FirstOrDefault();
+        if (SelectedNpc == null || !Npcs.Contains(SelectedNpc)) SelectedNpc = Npcs.FirstOrDefault();
+    }
+
+    // ── Effects (the FX tab, 1.10.0) ──────────────────────────────────
+
+    private void RebindEffects()
+    {
+        Reshow(Effects, Pack.Effects, x => x.Model, x => new EffectViewModel(x), made: x => x.WatchDisplayName(() => Effects.Select(e => e.Key)));
+        EffectTree.Build(Effects);
+        if (SelectedEffect == null || !Effects.Contains(SelectedEffect)) SelectedEffect = Effects.FirstOrDefault();
+        OnPropertyChanged(nameof(EffectKeyOptions));
+    }
+
+    private void AddEffect()
+    {
+        var def = new EffectDef
+        {
+            Key = $"effect{Pack.Effects.Count + 1}",
+            DisplayName = Loc.T("fx.newEffect"),
+        };
+        Pack.Effects.Add(def);
+        var vm = new EffectViewModel(def);
+        Effects.Add(vm);
+        vm.DeriveKeyFromDisplayName(() => Effects.Select(x => x.Key));
+        EffectTree.PlaceNew(vm);
+        OnPropertyChanged(nameof(EffectKeyOptions));
+    }
+
+    private void RemoveEffect()
+    {
+        if (EffectTree.RemoveSelectedFolderLiftChildren()) return;
+        if (SelectedEffect is null) return;
+        var vm = SelectedEffect;
+        Pack.Effects.Remove(vm.Model);
+        Effects.Remove(vm);
+        EffectTree.RemoveLeafFor(vm);
+        SelectedEffect = Effects.FirstOrDefault();
+        OnPropertyChanged(nameof(EffectKeyOptions));
     }
 
     private void AddWallpaper()
@@ -8751,17 +9935,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RebindMusic()
     {
-        foreach (var m in Music) m.PropertyChanged -= OnMusicChanged;
-        Music.Clear();
-        foreach (var m in Pack.Music)
-        {
-            var vm = new MusicViewModel(m);
-            vm.PropertyChanged += OnMusicChanged;
-            Music.Add(vm);
-        }
-        WatchKeys(Music, () => Music.Select(x => x.Key));
+        Reshow(Music, Pack.Music, m => m.Model, m => new MusicViewModel(m),
+               made: m => { m.PropertyChanged += OnMusicChanged; m.WatchDisplayName(() => Music.Select(x => x.Key)); },
+               dropped: m => m.PropertyChanged -= OnMusicChanged);
         MusicTree.Build(Music);
-        SelectedMusic = Music.FirstOrDefault();
+        if (SelectedMusic == null || !Music.Contains(SelectedMusic)) SelectedMusic = Music.FirstOrDefault();
         RebuildMusicKeyOptions();
     }
 
@@ -8839,11 +10017,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RebindQuests()
     {
-        Quests.Clear();
-        foreach (var q in Pack.Quests)
-            Quests.Add(MakeQuestVm(q));
+        Reshow(Quests, Pack.Quests, q => q.Model, MakeQuestVm);
         QuestTree.Build(Quests.Where(q => !q.ShowsVanillaPanel).ToList());
         RefreshVanillaQuests();
+        // The quest picked stays picked while it is still there.
+        if (SelectedQuest != null && Quests.Contains(SelectedQuest)) return;
         _selectedVanillaQuest = null;
         OnPropertyChanged(nameof(SelectedVanillaQuest));
         var first = Quests.FirstOrDefault(q => !q.ShowsVanillaPanel);
@@ -9074,17 +10252,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RebindSfx()
     {
-        foreach (var s in Sfx) s.PropertyChanged -= OnSfxChanged;
-        Sfx.Clear();
-        foreach (var s in Pack.Sfx)
-        {
-            var vm = new SfxViewModel(s);
-            vm.PropertyChanged += OnSfxChanged;
-            Sfx.Add(vm);
-        }
-        WatchKeys(Sfx, () => Sfx.Select(x => x.Key));
+        Reshow(Sfx, Pack.Sfx, s => s.Model, s => new SfxViewModel(s),
+               made: s => { s.PropertyChanged += OnSfxChanged; s.WatchDisplayName(() => Sfx.Select(x => x.Key)); },
+               dropped: s => s.PropertyChanged -= OnSfxChanged);
         SfxTree.Build(Sfx);
-        SelectedSfx = Sfx.FirstOrDefault();
+        if (SelectedSfx == null || !Sfx.Contains(SelectedSfx)) SelectedSfx = Sfx.FirstOrDefault();
         RebuildSfxKeyOptions();
     }
 
@@ -9286,6 +10458,20 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
     public sealed record NameTokenOption(string Token, string Shown, bool IsGames);
 
     /// <summary>
+    /// The names in a line of the line being edited that become their characters' tokens as they are typed
+    /// (1.10.0; Validation.NameMentions.Detectable): the pack's characters' names, its own and the game's,
+    /// less those kept as plain words in that line. Each with the token it becomes.
+    /// </summary>
+    public IReadOnlyList<(int Start, int Length, string Token)> NamesToMakeTokens(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return Array.Empty<(int, int, string)>();
+        var names = Validation.NameMentions.Detectable(Pack);
+        return Validation.NameMentions.Find(text, names, SelectedNode?.Model.PlainNames)
+            .Select(h => (h.Start, h.Length, SMSModForge.Shared.NameTokens.Make(h.Key)))
+            .ToList();
+    }
+
+    /// <summary>
     /// Whom the line editor's name button offers, in three groups: who speaks in
     /// the conversation open now, then the pack's own characters, then the game's
     /// (the long list, last). Each once, never the player - their name is
@@ -9445,15 +10631,16 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     private void RebindIntegrationRules()
     {
-        IntegrationRules.Clear();
-        foreach (var r in Pack.IntegrationRules)
-            IntegrationRules.Add(HookRuleDebugTracking(new UpdateRuleViewModel(r)));
-        WatchKeys(IntegrationRules, () => IntegrationRules.Select(x => x.Key));
+        Reshow(IntegrationRules, Pack.IntegrationRules, r => r.Model, r => HookRuleDebugTracking(new UpdateRuleViewModel(r)),
+               made: r => r.WatchDisplayName(() => IntegrationRules.Select(x => x.Key)));
         RefreshDebuggedRules();
         BuildIntegrationTree();
-        SelectedIntegrationRule = IntegrationRules.FirstOrDefault();
-        SelectedIntegrationTreeItem = SelectedIntegrationRule != null
-            ? FindIntegrationLeaf(SelectedIntegrationRule) : null;
+        if (SelectedIntegrationRule == null || !IntegrationRules.Contains(SelectedIntegrationRule))
+        {
+            SelectedIntegrationRule = IntegrationRules.FirstOrDefault();
+            SelectedIntegrationTreeItem = SelectedIntegrationRule != null
+                ? FindIntegrationLeaf(SelectedIntegrationRule) : null;
+        }
     }
 
     private void AddIntegrationRule()
@@ -9525,6 +10712,13 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
 
     public void BuildIntegrationTree()
     {
+        // What is picked, by where it is: every node is about to be another (see TreePlace).
+        var picked = _selectedIntegrationTreeItem;
+        static IEnumerable<IntegrationTreeItem>? Inside(IntegrationTreeItem n) => (n as IntegrationFolderNode)?.Children;
+        static string? FolderName(IntegrationTreeItem n) => (n as IntegrationFolderNode)?.Name;
+        var pickedFolder = picked is IntegrationFolderNode ? TreePlace.FoldersTo<IntegrationTreeItem>(IntegrationTree, picked, Inside, FolderName) : null;
+        string? pickedKey = (picked as IntegrationLeafNode)?.Rule.Key;
+
         IntegrationTree.Clear();
         var placed = new HashSet<string>();
         foreach (var f in Pack.IntegrationFolders)
@@ -9535,6 +10729,14 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         SortIntegrationTree(IntegrationTree);
         // A rebuild replaces every node, so re-apply any live search.
         IntegrationTreeFilter.Reapply();
+
+        if (picked != null)
+        {
+            _selectedIntegrationTreeItem = pickedFolder != null ? TreePlace.FolderAt<IntegrationTreeItem>(IntegrationTree, pickedFolder, Inside, FolderName)
+                : pickedKey != null ? TreePlace.First<IntegrationTreeItem>(IntegrationTree, Inside, n => n is IntegrationLeafNode l && l.Rule.Key == pickedKey)
+                : null;
+            OnPropertyChanged(nameof(SelectedIntegrationTreeItem));
+        }
     }
 
 
@@ -9625,6 +10827,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         SyncIntegrationFoldersToModel();
         SelectedIntegrationRule = vm;
         SelectedIntegrationTreeItem = leaf;
+        RecordMade?.Invoke(vm);
     }
 
     public ObservableCollection<IntegrationTreeItem>? FindIntegrationParentChildren(IntegrationTreeItem item)
@@ -9714,6 +10917,9 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor, ISug
         using (OwnWords()) found = PackValidator.Validate(Pack, PackRoot, ShowIgnoredIssues);
         foreach (var issue in found)
             Issues.Add(issue with { Place = IssuePlace.Describe(issue.Where, Pack) });
+        OnPropertyChanged(nameof(IssuesSummary));
+        OnPropertyChanged(nameof(HasIssues));
+        OnPropertyChanged(nameof(IssueLevel));
         OnPropertyChanged(nameof(IgnoredIssueCount));
         OnPropertyChanged(nameof(HasIgnoredIssues));
     }

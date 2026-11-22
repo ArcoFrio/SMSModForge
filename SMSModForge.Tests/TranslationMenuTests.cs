@@ -144,7 +144,11 @@ public class TranslationMenuTests : IDisposable
         Assert.Contains("line 2", report);
         Assert.Contains("'misc.nothing'", report);
         Assert.Contains("{0}", report);
-        Assert.DoesNotContain("{line}", report);
-        Assert.DoesNotContain("{key}", report);
+        // The report's own sentences are filled in. Its list of missing texts quotes the English as it is, braces
+        // and all ("Once this line is done: {line}"), and which of them it shows first is the English file's
+        // order in a dictionary: those lines are left out of this.
+        string own = string.Join("\n", report.Split('\n').Where(l => !l.TrimStart().StartsWith("• '", System.StringComparison.Ordinal)));
+        Assert.DoesNotContain("{line}", own);
+        Assert.DoesNotContain("{key}", own);
     }
 }

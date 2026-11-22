@@ -20,24 +20,38 @@ public sealed class GameObjectViewModel : ObservableObject
     private readonly Action<GameObjectViewModel>? _removeCallback;
     private readonly bool _parentInNpcSubtree;
     private readonly ObservableCollection<GameObjectViewModel>? _parentCollection;
+    private readonly List<GameObjectDef>? _parentModels;
 
     public GameObjectDef Model { get; }
 
+    /// <param name="parentCollection">The rows this one is among, and <paramref name="parentModels"/> the
+    /// pack's list they show: what Paste puts a copy beside this row in. Every row is given both, however it
+    /// was made (1.10.0): only a child added by hand in the same session had the rows - so Paste did nothing
+    /// on any other row - and none had the list, so what Paste did add went into the pack as a child of the
+    /// row it showed beside. A row made by filling in a game's level also did not know it was under the
+    /// level's NPCs object, which a row read back from the pack does: the same object offered "+ Add NPC
+    /// child" after an undo and not before it (found by the walk over every control).</param>
     public GameObjectViewModel(GameObjectDef model, Action<GameObjectViewModel>? removeCallback = null,
-                               bool parentInNpcSubtree = false, ObservableCollection<GameObjectViewModel>? parentCollection = null)
+                               bool parentInNpcSubtree = false, ObservableCollection<GameObjectViewModel>? parentCollection = null,
+                               List<GameObjectDef>? parentModels = null)
     {
         Model = model;
         _removeCallback = removeCallback;
         _parentInNpcSubtree = parentInNpcSubtree;
         _parentCollection = parentCollection;
+        _parentModels = parentModels;
+        // A light of the game's that is nothing but a light (the template
+        // level's, a lamp of a vanilla level) is removed by switching it off:
+        // dropping the node would only bring it back when the pack is next
+        // opened, the game's light untouched (1.10.0).
         RemoveCommand = new RelayCommand(
-            () => _removeCallback?.Invoke(this),
-            () => _removeCallback != null && !IsNpcRoot);
+            () => { if (IsGameLightOnly) RemoveLight(); else _removeCallback?.Invoke(this); },
+            () => _removeCallback != null && !IsNpcRoot && !(IsGameLightOnly && Model.RemoveLight));
         Components = new ObservableCollection<ComponentRowViewModel>(
             model.Components.Select(c => new ComponentRowViewModel(c, RemoveComponent)));
         AddComponentCommand = new RelayCommand(() => AddComponent());
-        Children = new ObservableCollection<GameObjectViewModel>(
-            model.Children.Select(c => new GameObjectViewModel(c, RemoveChild, IsInNpcSubtree)));
+        Children = new ObservableCollection<GameObjectViewModel>();
+        foreach (var child in model.Children) Children.Add(Child(child));
         AddChildCommand = new RelayCommand(() => AddChild());
         Npcs = new ObservableCollection<NpcPlacementViewModel>(
             model.Npcs.Select(n => new NpcPlacementViewModel(n, RemoveNpc)));
@@ -213,7 +227,7 @@ public sealed class GameObjectViewModel : ObservableObject
         OnPropertyChanged(nameof(StartActive));
         OnPropertyChanged(nameof(SortingOrder));
         OnPropertyChanged(nameof(PreviewSprite));
-        RefreshVanillaChange();
+        RefreshLight();
     }
 
     public bool OverrideTransform
@@ -272,11 +286,78 @@ public sealed class GameObjectViewModel : ObservableObject
     public ObservableCollection<GameObjectViewModel> Children { get; }
     public RelayCommand AddChildCommand { get; }
 
-    public GameObjectViewModel AddChild()
+    /// <summary>The row of one of this object's children: made the same way whoever makes it.</summary>
+    private GameObjectViewModel Child(GameObjectDef def) => new(def, RemoveChild, IsInNpcSubtree, Children, Model.Children);
+
+    /// <summary>A row for an object that is to go under this one (GameObjectRows puts it there).</summary>
+    internal GameObjectViewModel RowFor(GameObjectDef def) => Child(def);
+
+    /// <summary>
+    /// The object given another's saved values, staying the object - and this the row - it is (1.10.0, an undo
+    /// or a redo put back where it is shown). What is under it is not part of what it is given and stays; its
+    /// light stays the light it was, given the values, because the preview's panel holds on to it; and what
+    /// it keeps of the game's beside what is saved (the object it was filled in from, its picture) is its own
+    /// still.
+    /// </summary>
+    internal void TakeValues(GameObjectDef read)
     {
-        var def = new GameObjectDef();
+        var children = Model.Children;
+        var under = children.ToList();
+        var light = Model.Light;
+        if (!ModelAssign.Into(Model, read)) return;
+        // The very list: the rows under this one hold on to it (a copy pasted beside one goes into it).
+        if (!ReferenceEquals(Model.Children, children)) Model.Children = children;
+        if (!children.SequenceEqual(under)) { children.Clear(); children.AddRange(under); }
+        if (light != null && Model.Light != null && !ReferenceEquals(light, Model.Light) && ModelAssign.Into(light, Model.Light))
+        {
+            Model.Light = light;
+            Light?.RefreshAll();
+        }
+        ReadAgain();
+    }
+
+    /// <summary>
+    /// Everything read from the object again: the rows of its lists - its components, the characters standing
+    /// on it, when it shows - made again wherever the object's lists are no longer the ones they show, and
+    /// every value said to have changed.
+    /// </summary>
+    internal void ReadAgain()
+    {
+        static bool Shows<TRow, TDef>(IList<TRow> rows, IList<TDef> defs, Func<TRow, TDef> of) where TDef : class
+        {
+            if (rows.Count != defs.Count) return false;
+            for (int i = 0; i < rows.Count; i++)
+                if (!ReferenceEquals(of(rows[i]), defs[i])) return false;
+            return true;
+        }
+        if (!Shows(Components, Model.Components, r => r.Model))
+        {
+            Components.Clear();
+            foreach (var c in Model.Components) Components.Add(new ComponentRowViewModel(c, RemoveComponent));
+        }
+        if (!Shows(Npcs, Model.Npcs, r => r.Model))
+        {
+            Npcs.Clear();
+            foreach (var n in Model.Npcs) Npcs.Add(new NpcPlacementViewModel(n, RemoveNpc));
+        }
+        if (!Shows(ActiveConditions, Model.ActiveConditions, r => r.Model))
+        {
+            ActiveConditions.Clear();
+            foreach (var c in Model.ActiveConditions) ActiveConditions.Add(new NodeConditionViewModel(c, RemoveActiveCondition, context: ConditionContext.Rule));
+        }
+        OnPropertyChanged(string.Empty);
+        RefreshFromModel();
+        OnPropertyChanged(nameof(HasActiveConditions));
+    }
+
+    public GameObjectViewModel AddChild() => Adopt(new GameObjectDef());
+
+    /// <summary>A child given to this object, with its row - a new one, or one of the game's level being
+    /// filled in.</summary>
+    public GameObjectViewModel Adopt(GameObjectDef def)
+    {
         Model.Children.Add(def);
-        var vm = new GameObjectViewModel(def, RemoveChild, IsInNpcSubtree, Children);
+        var vm = Child(def);
         Children.Add(vm);
         return vm;
     }
@@ -297,17 +378,14 @@ public sealed class GameObjectViewModel : ObservableObject
         var existingNames = _parentCollection?.Select(g => g.Model.Name)
             .Where(n => !string.IsNullOrWhiteSpace(n)) ?? Array.Empty<string>();
         cloned.Name = UniqueName(baseName, existingNames);
-        // Insert after this row in the parent collection.
-        if (_parentCollection != null)
-        {
-            var idx = _parentCollection.IndexOf(this);
-            _parentCollection.Insert(Math.Min(idx + 1, _parentCollection.Count), new GameObjectViewModel(cloned, null, IsInNpcSubtree, _parentCollection));
-            Model.Children.Add(cloned);
-        }
-        else
-        {
-            // No parent collection — can't paste.
-        }
+        if (_parentCollection == null || _parentModels == null) return;
+        // Beside this row, in the pack's list and among the rows alike - before it when it is the forced NPCs
+        // node, which stays last. A row like its neighbours: removable the way they are, under what they are.
+        int row = _parentCollection.IndexOf(this), entry = _parentModels.IndexOf(Model);
+        if (row < 0 || entry < 0) return;
+        int shift = IsNpcRoot ? 0 : 1;
+        _parentModels.Insert(entry + shift, cloned);
+        _parentCollection.Insert(row + shift, new GameObjectViewModel(cloned, _removeCallback, _parentInNpcSubtree, _parentCollection, _parentModels));
     }
 
     private static string UniqueName(string baseName, IEnumerable<string> existing)
@@ -510,4 +588,136 @@ public sealed class GameObjectViewModel : ObservableObject
 
     /// <summary>Short label for headers / tooltips.</summary>
     public string Display => string.IsNullOrWhiteSpace(Name) ? Loc.T("gameObject.unnamed") : Name;
+
+    // ── Its light (1.10.0) ────────────────────────────────────────────────
+
+    private LightViewModel? _light;
+
+    /// <summary>The object's light, or null for none.</summary>
+    public LightViewModel? Light
+    {
+        get
+        {
+            if (Model.Light == null) return _light = null;
+            if (_light == null || !ReferenceEquals(_light.Model, Model.Light))
+                _light = new LightViewModel(Model.Light, OnLightEdited);
+            return _light;
+        }
+    }
+
+    public bool HasLight => Model.Light != null;
+
+    // ── Its effect (1.10.0) ───────────────────────────────────────────────
+
+    private EffectViewModel? _effect;
+
+    /// <summary>The effect the object plays, or null for none (as the light: read again from the model each
+    /// time, so a step put back reaches the panel).</summary>
+    public EffectViewModel? Effect
+    {
+        get
+        {
+            if (Model.Effect == null) return _effect = null;
+            if (_effect == null || !ReferenceEquals(_effect.Model, Model.Effect))
+                _effect = new EffectViewModel(Model.Effect);
+            return _effect;
+        }
+    }
+
+    public bool HasEffect => Model.Effect != null;
+
+    public RelayCommand AddEffectCommand => _addEffect ??= new RelayCommand(() => AddEffect(), () => Model.Effect == null);
+    private RelayCommand? _addEffect;
+
+    public RelayCommand RemoveEffectCommand => _removeEffect ??= new RelayCommand(RemoveEffect, () => Model.Effect != null);
+    private RelayCommand? _removeEffect;
+
+    public EffectViewModel AddEffect(EffectDef? effect = null)
+    {
+        Model.Effect = effect ?? EffectDef.ForAPlace();
+        RefreshEffect();
+        return Effect!;
+    }
+
+    public void RemoveEffect()
+    {
+        Model.Effect = null;
+        RefreshEffect();
+    }
+
+    public void RefreshEffect()
+    {
+        OnPropertyChanged(nameof(Effect));
+        OnPropertyChanged(nameof(HasEffect));
+        RefreshVanillaChange();
+    }
+
+    /// <summary>A bound object's light switched off (<see cref="GameObjectDef.RemoveLight"/>).</summary>
+    public bool LightRemoved => Model.RemoveLight;
+
+    /// <summary>One of the game's objects that is a light and nothing else: the
+    /// template level's light in a pack place, most of a vanilla level's lamps.</summary>
+    public bool IsGameLightOnly => Model.KeepsWhatItFinds && Model.Baseline is { } b
+        && b.SpriteRenderer == null && Model.BaselineLight != null;
+
+    /// <summary>Whether the light can be put back to the game's: it was removed,
+    /// or changed.</summary>
+    public bool CanRestoreLight => Model.KeepsWhatItFinds && Model.BaselineLight != null
+        && (Model.RemoveLight || VanillaDelta.LightDiffers(Model));
+
+    /// <summary>The template level's light, in a pack place.</summary>
+    public bool IsTemplateLight => TemplateLight.Is(Model) && Model.Baseline != null;
+
+    /// <summary>Give the object a light: a round white one at half strength.</summary>
+    public RelayCommand AddLightCommand => _addLight ??= new RelayCommand(() => AddLight(), () => Model.Light == null);
+    private RelayCommand? _addLight;
+
+    public RelayCommand RemoveLightCommand => _removeLight ??= new RelayCommand(RemoveLight, () => Model.Light != null);
+    private RelayCommand? _removeLight;
+
+    public RelayCommand RestoreLightCommand => _restoreLight ??= new RelayCommand(RestoreLight, () => CanRestoreLight);
+    private RelayCommand? _restoreLight;
+
+    public LightViewModel AddLight(LightDef? light = null)
+    {
+        Model.RemoveLight = false;
+        Model.Light = light ?? new LightDef();
+        RefreshLight();
+        return Light!;
+    }
+
+    /// <summary>Take the light off. The game's own is switched off rather than
+    /// forgotten, so it stays off in the game.</summary>
+    public void RemoveLight()
+    {
+        Model.RemoveLight = Model.KeepsWhatItFinds && Model.BaselineLight != null;
+        Model.Light = null;
+        RefreshLight();
+    }
+
+    /// <summary>The game's light back as the game has it.</summary>
+    public void RestoreLight()
+    {
+        Model.RemoveLight = false;
+        Model.Light = Model.BaselineLight;
+        RefreshLight();
+    }
+
+    private void OnLightEdited()
+    {
+        OnPropertyChanged(nameof(Light));
+        OnPropertyChanged(nameof(CanRestoreLight));
+        RefreshVanillaChange();
+    }
+
+    /// <summary>Re-read the light after it was replaced on the model.</summary>
+    public void RefreshLight()
+    {
+        OnPropertyChanged(nameof(Light));
+        OnPropertyChanged(nameof(HasLight));
+        OnPropertyChanged(nameof(LightRemoved));
+        OnPropertyChanged(nameof(CanRestoreLight));
+        OnPropertyChanged(nameof(IsGameLightOnly));
+        RefreshVanillaChange();
+    }
 }

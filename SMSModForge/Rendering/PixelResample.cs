@@ -31,7 +31,9 @@ internal static class PixelResample
         int dstStride = width * 4;
         var made = new byte[dstStride * height];
 
-        for (int y = 0; y < height; y++)
+        // Each row is its own (1.10.0): on every core at once, the same picture. A level's art took over a second
+        // on the UI thread one row at a time (UiDelayTests' profile).
+        System.Threading.Tasks.Parallel.For(0, height, y =>
         {
             double fy = (y + 0.5) * sourceHeight / height - 0.5;
             int y0 = (int)System.Math.Floor(fy);
@@ -61,7 +63,7 @@ internal static class PixelResample
                     made[di + c] = (byte)(top + (bottom - top) * wy + 0.5);
                 }
             }
-        }
+        });
 
         return made;
     }

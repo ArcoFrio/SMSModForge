@@ -31,4 +31,13 @@ public static class TabIcon
 
     public static int GetBadge(DependencyObject o) => (int)o.GetValue(BadgeProperty);
     public static void SetBadge(DependencyObject o, int value) => o.SetValue(BadgeProperty, value);
+
+    /// <summary>How serious what the badge counts is - "error" (the default red), "warning" (amber) or "info"
+    /// (muted) - so a pack with only notes does not shout like one that will not work (1.10.0, the author:
+    /// "notification-like highlighting to the number of issues").</summary>
+    public static readonly DependencyProperty BadgeLevelProperty =
+        DependencyProperty.RegisterAttached("BadgeLevel", typeof(string), typeof(TabIcon), new PropertyMetadata("error"));
+
+    public static string GetBadgeLevel(DependencyObject o) => (string)o.GetValue(BadgeLevelProperty);
+    public static void SetBadgeLevel(DependencyObject o, string value) => o.SetValue(BadgeLevelProperty, value);
 }

@@ -335,6 +335,47 @@ namespace SMSModForge.PackPlugin
                     Say("ok set-field " + words[0] + "." + words[1] + " = " + Convert.ToString(field.GetValue(comp), CultureInfo.InvariantCulture));
                     return true;
                 }
+                case "light":
+                {
+                    // light <path> key=value ...: a 2D light's settings, to show what each changes (1.10.0):
+                    // layers=Default,Bust  color=#RRGGBB  intensity=1  outer=4  inner=0  angle=360  glow=0.3  pos=x,y (world)
+                    var words = (a + " " + rest).Trim().Split(' ');
+                    var settings = words.Where(w => w.Contains('=')).ToArray();
+                    string at = string.Join(" ", words.Where(w => !w.Contains('=')));
+                    var type = Light2DType();
+                    var target = FindPath(at);
+                    var light = target != null && type != null ? target.GetComponent(type) as Behaviour : null;
+                    if (light == null) { Say("error light: no Light2D at " + at); return true; }
+                    void Set(string property, object value) => type.GetProperty(property)?.SetValue(light, value, null);
+                    float F(string v) => float.Parse(v, CultureInfo.InvariantCulture);
+                    foreach (var s in settings)
+                    {
+                        string key = s.Substring(0, s.IndexOf('=')), value = s.Substring(s.IndexOf('=') + 1);
+                        switch (key)
+                        {
+                            case "layers": Set("targetSortingLayers", value.Split(',').Select(SortingLayer.NameToID).ToArray()); break;
+                            case "color":
+                                ColorUtility.TryParseHtmlString(value, out var c);
+                                c.a = 1f;
+                                Set("color", c);
+                                break;
+                            case "intensity": Set("intensity", F(value)); break;
+                            case "outer": Set("pointLightOuterRadius", F(value)); break;
+                            case "inner": Set("pointLightInnerRadius", F(value)); break;
+                            case "angle": Set("pointLightOuterAngle", F(value)); Set("pointLightInnerAngle", F(value)); break;
+                            case "glow": Set("volumetricEnabled", F(value) > 0f); if (F(value) > 0f) Set("volumeIntensity", F(value)); break;
+                            case "pos":
+                                var xy = value.Split(',').Select(F).ToArray();
+                                light.transform.position = new Vector3(xy[0], xy[1], light.transform.position.z);
+                                break;
+                            default: Say("error light: no setting " + key); return true;
+                        }
+                    }
+                    var layers = type.GetField("m_ApplyToSortingLayers", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(light) as int[];
+                    Say("ok light " + at + " layers " + (layers == null ? "-" : string.Join(",", layers.Select(SortingLayer.IDToName).ToArray()))
+                        + " at " + Lf(light.transform.position.x) + "," + Lf(light.transform.position.y));
+                    return true;
+                }
                 case "shadow-casters":
                 {
                     // Every ShadowCaster2D in the scene, switched on or not.

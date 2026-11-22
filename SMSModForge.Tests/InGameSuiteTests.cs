@@ -1087,6 +1087,83 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
         Assert.Contains(InGameSuitePacks.Quests.GameQuest + ": not started yet", _s.Warning);
     }
 
+    // ── P: effects (the FX tab, 1.10.0) ──────────────────────────────────
+
+    /// <summary>The objects under one, by name; nothing when there is no such object (yet).</summary>
+    private static string[] Kids(GameRun game, string path)
+    {
+        try
+        {
+            string said = game.Ask("children " + path);
+            int colon = said.IndexOf(": ", StringComparison.Ordinal);
+            string list = colon >= 0 ? said[(colon + 2)..] : said;
+            return list == "(none)" ? Array.Empty<string>() : list.Split(" | ").Select(p => p[(p.LastIndexOf('/') + 1)..]).ToArray();
+        }
+        catch (BridgeError) { return Array.Empty<string>(); }
+    }
+
+    private const string EffectsRoot = "SMSModForge Effects";
+
+    [Fact]
+    public void P1_An_effect_plays_when_its_rule_its_conditions_or_a_photo_say_and_the_games_own_points_are_changed()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        const string id = InGameSuitePacks.Effects.Id;
+        string burst = "Effect " + id + ".burst", fire = "Effect " + id + ".fire", hearts = "Effect " + id + ".photoHearts";
+
+        // The game's own followers, three times as many (Harmony on the game's TriggerExplosion); its hearts,
+        // which no pack changed, as many as asked - the control.
+        int Clones(string name) => Kids(game, "Attractor_Canvas").Count(k => k == name + "(Clone)");
+        int followers = Clones("Attractor_NewFollower"), subscribers = Clones("Attractor_NewSubscriber");
+        game.Ask("call ExplosiveUIParticleAttractor TriggerExplosion 2 Attractor_Canvas/Attractor_Follower");
+        game.Ask("call ExplosiveUIParticleAttractor TriggerExplosion 2 Attractor_Canvas/Attractor_Subscriber");
+        Assert.Equal(followers + 6, Clones("Attractor_NewFollower"));
+        Assert.Equal(subscribers + 2, Clones("Attractor_NewSubscriber"));
+
+        // Played by a rule's actions: the burst, and the words beside it; gone once done.
+        Assert.DoesNotContain(burst, Kids(game, EffectsRoot));
+        game.Ask($"pset {id} burstGo true");
+        game.AskUntil("children " + EffectsRoot, k => k.Contains(burst, StringComparison.Ordinal), 5);
+        var now = Kids(game, EffectsRoot);
+        Assert.Contains(burst, now);
+        Assert.Contains("Effect popup words", now);
+        game.AskUntil("children " + EffectsRoot, k => !k.Contains(burst, StringComparison.Ordinal), 6);
+        Assert.DoesNotContain(burst, Kids(game, EffectsRoot));
+        game.Ask($"pset {id} burstGo false");
+
+        // While its conditions hold: the fire comes and, once they do not, goes.
+        Assert.DoesNotContain(fire, Kids(game, EffectsRoot));
+        game.Ask($"pset {id} fireOn true");
+        game.AskUntil("children " + EffectsRoot, k => k.Contains(fire, StringComparison.Ordinal), 5);
+        Assert.Contains(fire, Kids(game, EffectsRoot));
+        game.Ask($"pset {id} fireOn false");
+        game.AskUntil("children " + EffectsRoot, k => !k.Contains(fire, StringComparison.Ordinal), 8);
+        Assert.DoesNotContain(fire, Kids(game, EffectsRoot));
+
+        // An object of a room plays its effect where it stands, with the room - in the room, so the player goes
+        // there first: a room the player is not in runs nothing (the whole run found it from another room, with
+        // nothing out). The one beside it has none.
+        string room = InGameSuitePacks.Effects.HearthLevel;
+        Travel(game, "vanilla:" + room, room);
+        string hearthPath = "5_Levels/" + room + "/" + InGameSuitePacks.Effects.Hearth;
+        Assert.Contains("Effect " + id + "." + InGameSuitePacks.Effects.Hearth, Kids(game, hearthPath));
+        Assert.True(Active(game, hearthPath + "/Effect " + id + "." + InGameSuitePacks.Effects.Hearth), "the hearth's effect is off");
+        game.AskUntil("fx-alive " + hearthPath, n => int.TryParse(n, NumberStyles.Integer, CultureInfo.InvariantCulture, out int alive) && alive > 0, 5);
+        Assert.True(int.Parse(game.Ask("fx-alive " + hearthPath), CultureInfo.InvariantCulture) > 0, "the hearth's effect has nothing out");
+        Assert.DoesNotContain(Kids(game, "5_Levels/" + room + "/" + InGameSuitePacks.Effects.Plain), k => k.StartsWith("Effect", StringComparison.Ordinal));
+
+        // Each Starmaker photo shown: the pack's 12 hearts.
+        Assert.DoesNotContain(hearts, Kids(game, EffectsRoot));
+        try
+        {
+            game.Ask("set-active 4_CG_Manager-Photos/03_MLeanForwd true");
+            game.AskUntil("children " + EffectsRoot, k => k.Contains(hearts, StringComparison.Ordinal), 5);
+            Assert.Equal(12, Kids(game, EffectsRoot + "/" + hearts).Count(k => k == "point"));
+        }
+        finally { game.Ask("set-active 4_CG_Manager-Photos/03_MLeanForwd false"); }
+    }
+
     // ── H: integration rules ─────────────────────────────────────────────
 
     private int Num(GameRun game, string pack, string name) => (int)double.Parse(game.PackVar(pack, name), CultureInfo.InvariantCulture);
@@ -1150,6 +1227,94 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
         game.Ask($"pset {id} go_Bob true");
         Assert.Equal("1", VarSoon(game, id, "count_Bob", "1"));
         Assert.Equal("1", game.PackVar(id, "count_Ann"));
+    }
+
+    [Fact]
+    public void H4_A_dialogue_set_for_condition_debugging_logs_its_conditions_with_no_key_and_an_unflagged_one_does_not()
+    {
+        // Until 1.10.0 only F12 logged it, and F12 is compiled into Debug builds alone: the tick did nothing in the
+        // plugin players and authors install. It now logs when the conditions flip and once as the world loads.
+        if (Off) return;
+        _s.InGame();
+        string log = System.IO.Path.Combine(GameRun.TestCopy!, "BepInEx", "LogOutput.log");
+        string text;
+        using (var f = new System.IO.FileStream(log, System.IO.FileMode.Open, System.IO.FileAccess.Read,
+                                                System.IO.FileShare.ReadWrite | System.IO.FileShare.Delete))
+        using (var r = new System.IO.StreamReader(f)) text = r.ReadToEnd();
+        string id = InGameSuitePacks.Rules.Id;
+        int flagged = text.Split('\n').Count(l => l.Contains("[CondDebug] ── " + id + ".debugflag"));
+        _out.WriteLine($"debugflag: {flagged} breakdown(s) in the log");
+        Assert.Equal(1, flagged);   // once as the world loaded - not once a frame
+        // Control: the same dialogue, not flagged.
+        Assert.DoesNotContain("[CondDebug] ── " + id + ".debugplain", text);
+    }
+
+    // ── I: installing ────────────────────────────────────────────────────
+
+    [Fact]
+    public void I1_A_pack_the_game_has_loaded_can_be_exported_over_while_the_game_runs()
+    {
+        // Until 1.10.0 the plugin kept every pack it loaded open for reading alone, for the whole session: an
+        // export of a change over it failed with "being used by another process" until the game was closed. It now
+        // shares the file for deleting, so the export replaces it and the next save loaded reads the new one.
+        if (Off) return;
+        var game = _s.InGame();
+        string id = InGameSuitePacks.Rules.Id;
+        string installed = Path.Combine(GameRun.TestCopy!, "Mods", id + PackExporter.FileExtension);
+        string folder = Path.Combine(Path.GetDirectoryName(_s.Report)!, "packs", id);
+        Assert.True(Directory.Exists(folder), "the suite's own copy of the pack is not where it was exported from");
+
+        // The game has the file open: nobody can have it to themselves.
+        Assert.ThrowsAny<IOException>(() =>
+        {
+            using var alone = new FileStream(installed, FileMode.Open, FileAccess.Read, FileShare.None);
+        });
+        // Control: held as the plugin held it until now, the editor's export cannot replace it.
+        using (new FileStream(installed, FileMode.Open, FileAccess.Read, FileShare.Read))
+            Assert.ThrowsAny<IOException>(() => PackExporter.Export(folder, installed));
+
+        // The game holding it does not stop the export.
+        var result = PackExporter.Export(folder, installed);
+        _out.WriteLine("exported over the pack the game has loaded: " + result);
+        Assert.True(File.Exists(installed));
+        // And the game carries on with the copy it opened.
+        Assert.Equal("true", game.PackVar(id, "loaded"));
+    }
+
+    [Fact]
+    public void I2_The_tutorials_practice_art_a_pack_leaves_out_is_drawn_from_the_plugins_own_copy()
+    {
+        // 1.10.0: the export leaves the practice art out when it is the file ModForge ships, and the plugin carries
+        // the same files beside it (BepInEx/plugins/SMSModForge/TutorialArt).
+        if (Off) return;
+        var game = _s.InGame();
+        string installed = Path.Combine(GameRun.TestCopy!, "Mods", InGameSuitePacks.Story.Id + PackExporter.FileExtension);
+        using (var file = new FileStream(installed, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete))
+        using (var zip = new System.IO.Compression.ZipArchive(file, System.IO.Compression.ZipArchiveMode.Read))
+            Assert.DoesNotContain(zip.Entries, e => e.FullName.StartsWith(SMSModForge.Shared.TutorialArt.Folder + "/", StringComparison.OrdinalIgnoreCase));
+
+        // What the picture holds where the bridge reads it: the middle texel, Unity counting rows from the bottom.
+        var png = new System.Windows.Media.Imaging.PngBitmapDecoder(
+            new Uri(Path.Combine(SMSModForge.Tutorials.TutorialAssets.SourceRoot, InGameSuitePacks.PracticeScene.Replace('/', Path.DirectorySeparatorChar))),
+            System.Windows.Media.Imaging.BitmapCreateOptions.PreservePixelFormat, System.Windows.Media.Imaging.BitmapCacheOption.OnLoad).Frames[0];
+        var bgra = new System.Windows.Media.Imaging.FormatConvertedBitmap(png, System.Windows.Media.PixelFormats.Bgra32, null, 0);
+        int w = bgra.PixelWidth, h = bgra.PixelHeight;
+        var px = new byte[4];
+        bgra.CopyPixels(new System.Windows.Int32Rect(w / 2, h - 1 - h / 2, 1, 1), px, 4, 0);
+        string expected = $"#{px[2]:X2}{px[1]:X2}{px[0]:X2}{px[3]:X2}";
+
+        Play(game, "showpractice");
+        string drawn = Field(Find(game, Scenes + "practice/Core/Art"), "texel");
+        _out.WriteLine($"the practice scene's middle texel: {drawn}, the shipped picture's {expected}");
+        Assert.Equal(expected, drawn);
+        // Control: a practice file that is nowhere has nothing to draw - the scene is not even built without art.
+        Play(game, "showpracticemissing");
+        string missing;
+        try { missing = Field(Find(game, Scenes + "practicemissing/Core/Art"), "texel"); }
+        catch (BridgeError) { missing = "(no scene: no art)"; }
+        _out.WriteLine("the scene whose practice file is nowhere: " + missing);
+        Assert.NotEqual(expected, missing);
+        Play(game, "hidescenes");
     }
 
     // ── J: dialogues ─────────────────────────────────────────────────────
@@ -1449,6 +1614,32 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
         string quest = game.Ask("quest " + InGameSuitePacks.Quests.Id + " chase");
         _out.WriteLine(quest);
         Assert.Contains("title=" + InGameSuitePacks.Quests.ChaseTitleShown, quest);
+    }
+
+    /// <summary>
+    /// A name token for one of the game's characters reads as their name in a pack that touches nobody (1.10.0,
+    /// reported by a pack's author: "in-game it printed {name:anna} literally"): a line with nothing else to fill
+    /// in, and one beside a pack variable. Control: the line's words around the tokens are the pack's (so the line
+    /// read is that line), and the variable beside the token is filled in from the pack (3).
+    /// </summary>
+    [Fact]
+    public void K9b_A_name_token_for_one_of_the_games_characters_reads_as_their_name_in_a_pack_that_touches_nobody()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        SeeConversationsThrough(game);
+        Begin(game, InGameSuitePacks.BareNames.Id, "plain");
+        string plain = game.AskUntil("line", l => l.Contains("meet"), 6);
+        _out.WriteLine(plain);
+        Assert.Contains(InGameSuitePacks.BareNames.PlainShown, plain);
+        Assert.DoesNotContain("{name:", plain);
+        game.Ask("wait-dialogue-end 20", 30);
+
+        Begin(game, InGameSuitePacks.BareNames.Id, "counted");
+        string counted = game.AskUntil("line", l => l.Contains("times"), 6);
+        _out.WriteLine(counted);
+        Assert.Contains(InGameSuitePacks.BareNames.CountedShown, counted);
+        game.Ask("wait-dialogue-end 20", 30);
     }
 
     [Fact]
@@ -1914,6 +2105,32 @@ public sealed partial class InGameSuiteTests : IClassFixture<InGameSuiteTests.Se
         Assert.Contains("a", game.PackVar(id, "keptList"));
         Assert.Contains("b", game.PackVar(id, "keptList"));
         Assert.Equal("0", game.PackVar(id, "lostNumber"));        // control: not one a save keeps
+    }
+
+    [Fact]
+    public void W2_A_pack_exported_again_while_the_game_runs_is_read_at_the_next_load()
+    {
+        // With I1 (1.10.0): an export replaces the file under the running game, and loading a save reads every
+        // pack again - so testing a change is export, then load. The guide and the tutorials say so.
+        if (Off) return;
+        var game = _s.InGame();
+        string id = InGameSuitePacks.Rules.Id;
+        string folder = Path.Combine(Path.GetDirectoryName(_s.Report)!, "packs", id);
+        string installed = Path.Combine(GameRun.TestCopy!, "Mods", id + PackExporter.FileExtension);
+        var pack = PackRepository.Load(folder);
+        pack.Variables.Add(InGameSuitePacks.Var("exportedAgain", PackVariableType.String, "yes"));
+        PackRepository.Save(pack, folder);
+        _out.WriteLine("exported again: " + PackExporter.Export(folder, installed));
+
+        // Control: the game goes on with what it loaded - it has no such variable yet.
+        Assert.Throws<BridgeError>(() => game.PackVar(id, "exportedAgain"));
+
+        game.Ask("load");
+        game.Ask("wait-ingame 150", 180);
+        if (game.AskUntil("warning", w => w.StartsWith("open", StringComparison.Ordinal), 4).StartsWith("open", StringComparison.Ordinal))
+            game.Ask("warning go-on");
+        game.Ask("wait 2", 10);
+        Assert.Equal("yes", game.PackVar(id, "exportedAgain"));
     }
 
     // ── Z: a restart - the main menu's settings carried into the next game ─

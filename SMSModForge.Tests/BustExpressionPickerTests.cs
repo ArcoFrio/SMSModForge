@@ -51,6 +51,7 @@ public sealed class BustExpressionPickerTests : IDisposable
         // no root clears everything and publishes an empty list.
         var preview = new JigglePreview { PackRoot = @"C:\nowhere" };
         preview.Outfit = outfit;
+        WindowHarness.Pump();   // the bust's pictures arrive a moment after it is chosen (loaded off the interface's thread)
         return preview;
     }
 
@@ -110,7 +111,7 @@ public sealed class BustExpressionPickerTests : IDisposable
             // same list.
             Assert.Equal("Happy", english.Single(c => c.Key == "Happy").Label);
             Assert.NotEqual("Happy", spanish.Single(c => c.Key == "Happy").Label);
-            Assert.NotEqual(english[0].Label, spanish[0].Label);
+            // (Not the plain face's: it is Neutral in Spanish too, since it took the line editor's word for it.)
         });
     }
 
@@ -156,6 +157,7 @@ public sealed class BustExpressionPickerTests : IDisposable
             Assert.Equal(5, preview.ExpressionChoices.Count);
 
             preview.Outfit = Outfit(expressions: false);
+            WindowHarness.Pump();   // the bust's pictures arrive a moment after it is chosen (loaded off the interface's thread)
             _out.WriteLine(string.Join(", ", preview.ExpressionChoices.Select(c => c.Key)));
             Assert.Single(preview.ExpressionChoices);
         });

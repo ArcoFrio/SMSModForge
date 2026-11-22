@@ -126,6 +126,9 @@ public enum ParamType
     /// (<c>8_Room_Talk/Kitchen/Annanotthere</c>). Combobox bound to
     /// <c>MainViewModel.GameConversationOptions</c>.</summary>
     GameConversationRef,
+
+    /// <summary>One of the pack's effects, by key (the FX tab, 1.10.0).</summary>
+    EffectRef,
 }
 
 /// <summary>

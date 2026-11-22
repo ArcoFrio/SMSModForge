@@ -95,6 +95,9 @@ public sealed class PreviewQualityTests : IDisposable
             {
                 var vm = (MainViewModel)window.DataContext;
                 vm.OpenPackFromPath(_dir);
+                // The rate a preview keeps, not the first seconds after a pack opens, when the editor builds its
+                // other views ahead (MainWindow.WarmUp) and a frame can wait for one of them.
+                WindowHarness.Until(() => window.WarmedUp, TimeSpan.FromSeconds(30));
                 var tabs = (TabControl)window.FindName("MainTabs");
 
                 tabs.SelectedIndex = MainTab.Characters;

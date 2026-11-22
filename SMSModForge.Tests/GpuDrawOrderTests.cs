@@ -85,8 +85,19 @@ public sealed class GpuDrawOrderTests
         using var milking = GpuMilking.TryCreate();
         using var post = GpuPost.TryCreate();
         using var viewPost = GpuPost.TryCreate();
+        // A place's scene drawn by the card itself (1.10.0): the one drawing here that draws triangles.
+        using var placeScene = GpuPlaceScene.TryCreate();
+        using var placeMilking = GpuMilking.TryCreate();
+        using var placePost = GpuPost.TryCreate();
         var drawings = new List<(string Name, Func<byte[]> Draw)>
         {
+            ("a place's scene, lit, with the look", () =>
+            {
+                var frame = PlaceFrameSamples.Make(room, placeMilking!, BackdropRender.PostParts.All);
+                var o = new byte[frame.Vw * frame.Vh * 4];
+                placeScene!.Draw(frame, placePost!, o);
+                return o;
+            }),
             ("the bust over the PC's room", () => { var o = new byte[N * N * 4]; bustCard!.Draw(lamp, shadow, room, bust, bustMask, p, tint, 6.21f, true, room.Backdrop.BustRestBottom + 1, true, 0f, null, null, null, BackdropRender.PostParts.All, Z, o); return o; }),
             ("the bust over the Forest", () => { var o = new byte[N * N * 4]; forestCard!.DrawNoLamp(forest, bust, bustMask, p, tint, 6.21f, true, forest.Backdrop.BustRestBottom + 1, true, 0f, null, null, null, BackdropRender.PostParts.All, Z, o); return o; }),
             ("an NPC over the PC's room", () => { var o = new byte[N * N * 4]; npcCard!.DrawNpc(room, npcGi, true, npcLight, npc, null, npcMask, 240, 480, p, tint, 3.7f, nl, nb, nw, nh, BackdropRender.PostParts.All, Z, o); return o; }),

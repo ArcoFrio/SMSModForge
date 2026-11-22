@@ -46,6 +46,7 @@ public partial class ColorPickerWindow : Window
     /// </summary>
     public static string? Pick(Window owner, string? current)
     {
+        if (Services.TestMode.Active) return null;   // no window under the test harness: answered as a cancel
         var w = new ColorPickerWindow { Owner = owner };
         w.Seed(current);
         return w.ShowDialog() == true ? w.Chosen : null;

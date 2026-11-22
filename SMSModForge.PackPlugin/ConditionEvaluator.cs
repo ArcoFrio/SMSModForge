@@ -367,6 +367,10 @@ namespace SMSModForge.PackPlugin
                         // could not. Both "not found" and "found but off" still read
                         // false, so the answer is unchanged for packs that already
                         // worked — what changes is that the right object is found.
+                        // "Anything under it" (1.10.0): something under the object is on, rather than the
+                        // object itself - one of the game's photos under the photos' manager, which is always on.
+                        if (string.Equals((string)p[SMSModForge.Shared.Effects.UnderParam], "true", System.StringComparison.OrdinalIgnoreCase))
+                            return go != null && go.activeInHierarchy && AnythingOnUnder(go.transform);
                         return go != null && go.activeInHierarchy;
                     }
                 case "InputKey":
@@ -577,6 +581,17 @@ namespace SMSModForge.PackPlugin
         /// <summary><c>place:key</c> as PlaceRegistry spells it, <c>self:key</c>;
         /// anything else as it is. Remembered per token: asked every frame
         /// (1.9.0), and the same token always spells the same.</summary>
+        private static readonly System.Collections.Generic.List<Transform> _under = new System.Collections.Generic.List<Transform>();
+
+        /// <summary>Something under <paramref name="t"/> is on: the switched-on objects under it (Unity hands back
+        /// only those, itself first), more than itself.</summary>
+        private static bool AnythingOnUnder(Transform t)
+        {
+            _under.Clear();
+            t.GetComponentsInChildren(false, _under);
+            return _under.Count > 1;
+        }
+
         private static string SelfToken(string token)
         {
             if (_selfTokens.TryGetValue(token, out var known)) return known;

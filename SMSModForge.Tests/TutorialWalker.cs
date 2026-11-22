@@ -38,6 +38,8 @@ internal sealed class TutorialWalker : IDisposable
     {
         Vm = vm;
         Directory.CreateDirectory(Root);
+        // A pack a tutorial makes for the reader goes in the walker's own folder.
+        TutorialDef.PracticeFolder = () => Root;
     }
 
     public void Dispose()
@@ -55,6 +57,13 @@ internal sealed class TutorialWalker : IDisposable
 
     /// <summary>Put the practice art in the pack, which several steps rely on.</summary>
     public void CopyAssets() => TutorialAssets.EnsureCopied(Root);
+
+    /// <summary>What the tutorials before this one made, brought in as the reader's "Bring in what came before"
+    /// does (<see cref="StoryPack.BringIn"/>, 1.10.0) - when the tutorial would offer it.</summary>
+    public void BringInStory(TutorialDef tutorial)
+    {
+        if (StoryPack.Missing(Vm, tutorial).Count > 0) StoryPack.BringIn(Vm, tutorial);
+    }
 
     /// <summary>
     /// Write a file the pack can point at, for a step that needs art present
@@ -76,575 +85,42 @@ internal sealed class TutorialWalker : IDisposable
 }
 
 /// <summary>
-/// What to do to satisfy each step, keyed by tutorial id and step title.
-/// <para/>
-/// These live with the tests, not with the tutorials. A tutorial stays plain
-/// data that the editor renders; knowing how to complete one is a testing
-/// concern, and putting it in the catalog would mean every tutorial shipped
-/// with a second description of itself to keep in step.
-/// <para/>
-/// A solution acts through the view model, which is the same thing the buttons
-/// act through. It is deliberately NOT allowed to poke the step's own check:
+/// The way through each step: its own <see cref="TutorialStep.Solve"/> since 1.10.0 - the very code "Do it for me"
+/// runs in the editor, so a step's way through and its check are proved against each other (a test seam shares the
+/// real path). A solution acts through the view model, as the buttons do, and never pokes the step's own check:
 /// the point is to reach the state honestly and let the check judge it.
 /// </summary>
 internal static class TutorialSolutions
 {
     public static string Key(string tutorialId, string stepTitle) => tutorialId + " / " + stepTitle;
 
+    /// <summary>
+    /// The way through a step: its own <see cref="TutorialStep.Solve"/> - what "Do it for me" does in the editor
+    /// (1.10.0), so the tests walk the tutorials through the very code a reader can press - or, for a step not
+    /// moved over yet, this table's. False when it has neither.
+    /// </summary>
+    public static bool TrySolve(string tutorialId, TutorialStep step, TutorialWalker w, TutorialScratch scratch)
+    {
+        if (step.Solve is { } own)
+        {
+            own(w.Vm, scratch);
+            return true;
+        }
+        if (!All.TryGetValue(Key(tutorialId, step.Title), out var solve)) return false;
+        solve(w);
+        return true;
+    }
+
+    /// <summary>Whether a step has a way through it at all.</summary>
+    public static bool Has(string tutorialId, TutorialStep step) => step.Solve != null || All.ContainsKey(Key(tutorialId, step.Title));
+
+    /// <summary>
+    /// Ways through steps that have no <see cref="TutorialStep.Solve"/> of their own. Every tutorial carries its
+    /// own since 1.10.0 ("Do it for me"), and what an earlier tutorial leaves is brought in by
+    /// <see cref="StoryPack"/>: only the diagnostic walkthrough, which is not for authors, is left here.
+    /// </summary>
     public static readonly Dictionary<string, Action<TutorialWalker>> All = new(StringComparer.Ordinal)
     {
-        // ── 1. First steps ────────────────────────────────────────────
-        ["first-steps / Start a fresh pack"] = w =>
-        {
-            // The check watches for a different ModPack instance, which is what
-            // File > New pack produces.
-            w.Vm.NewPackCommand.Execute(null);
-        },
-        ["first-steps / Save it somewhere"] = w => w.SaveToRoot(),
-
-        // ── A quest in the journal ───────────────────────────────────
-        ["a-quest / Start one"] = w => w.Vm.AddQuestCommand.Execute(null),
-        ["a-quest / Call it something"] = w => w.Vm.SelectedQuest!.Title = "Lost Letters (Mira)",
-        ["a-quest / Say when it starts"] = w => w.Vm.SelectedQuest!.StartConditions.AddCommand.Execute(null),
-        ["a-quest / Say what finishes a step"] = w =>
-        {
-            var q = w.Vm.SelectedQuest!;
-            q.SelectedTask = q.TaskRows[0];
-            q.SelectedTask.CompletionConditions.AddCommand.Execute(null);
-        },
-        ["a-quest / Give it steps"] = w =>
-        {
-            var q = w.Vm.SelectedQuest!;
-            q.AddTaskCommand.Execute(null);
-            q.SelectedTask!.Name = "Ask around the harbour.";
-            q.AddTaskCommand.Execute(null);
-            q.SelectedTask!.Name = "Bring the letters home.";
-        },
-
-        // ── A screen of your own ─────────────────────────────────────
-        ["a-screen-of-your-own / Start one"] = w => w.Vm.AddOwnUiCommand.Execute(null),
-        ["a-screen-of-your-own / Call it something"] = w =>
-        {
-            w.Vm.SelectedUi!.Name = "Quest note";
-        },
-        ["a-screen-of-your-own / Put something on it"] = w =>
-        {
-            // Inside the panel the template made, which is what the step says
-            // to do - + Object adds into whatever is selected, and with nothing
-            // selected there is nowhere for it to go.
-            var ui = w.Vm.SelectedUi!;
-            ui.SelectedNode = ui.Nodes[0];
-            ui.AddChildCommand.Execute(null);
-        },
-        ["a-screen-of-your-own / Say what it is"] = w =>
-        {
-            var ui = w.Vm.SelectedUi!;
-            var made = ui.Nodes[0].Children[^1];
-            ui.SelectedNode = made;
-            made.Name = "Note body";
-            made.Width = 400;
-            made.Height = 200;
-        },
-        ["first-steps / Add a character"] = w => w.Vm.AddCharacterCommand.Execute(null),
-        ["first-steps / Give them a name"] = w =>
-        {
-            w.Vm.SelectedCharacter!.DisplayName = "Test Girl";
-        },
-        ["first-steps / Give them a face"] = w =>
-        {
-            w.CopyAssets();
-            w.Vm.SelectedOutfit!.BaseSprite = TutorialAssets.Bust(1);
-        },
-        ["first-steps / Say what this outfit has"] = w =>
-        {
-            var o = w.Vm.SelectedOutfit!;
-            o.BlinkEnabled = false;
-            o.MouthEnabled = false;
-            o.ExpressionEnabled = false;
-        },
-
-        // ── 4. A face that moves ──────────────────────────────────────
-        ["a-face-that-moves / Open the character you made"] = w =>
-        {
-            GiveACharacter(w);
-            w.Vm.SelectedOutfit = AuthorsOwn(w).Outfits[0];
-        },
-        ["a-face-that-moves / Give it a blink"] = w =>
-        {
-            var o = w.Vm.SelectedOutfit!;
-            o.BlinkEnabled = true;
-            o.BlinkSprite = TutorialAssets.BustBlink(1);
-        },
-        ["a-face-that-moves / Four mouths, named by a prefix"] = w =>
-        {
-            var o = w.Vm.SelectedOutfit!;
-            o.MouthEnabled = true;
-            // A stem, with no number and no extension: the runtime appends
-            // 1..4 and the extension itself.
-            o.MouthPrefix = TutorialAssets.MouthPrefix(1);
-        },
-        ["a-face-that-moves / Four expressions, named the same way"] = w =>
-        {
-            var o = w.Vm.SelectedOutfit!;
-            o.ExpressionEnabled = true;
-            o.ExpressionPrefix = TutorialAssets.ExpressionPrefix(1);
-        },
-
-        // ── 2. A place of your own ────────────────────────────────────
-        ["a-place / Add a place"] = w =>
-        {
-            w.SaveToRoot();
-            w.CopyAssets();
-            w.Vm.AddPlaceCommand.Execute(null);
-        },
-        ["a-place / The room itself"] = w =>
-            w.Vm.SelectedPlace!.SecondarySprite = TutorialAssets.RoomBase,
-        ["a-place / And something standing in it"] = w =>
-            w.Vm.SelectedPlace!.BaseSprite = TutorialAssets.RoomSecondary,
-        ["a-place / Give it some depth"] = w =>
-        {
-            var p = w.Vm.SelectedPlace!;
-            p.ParallaxSecondaryLinked = false;
-            p.ParallaxSecondaryStrength = p.ParallaxStrength + 0.4f;
-        },
-        ["a-place / A way back out"] = w =>
-        {
-            var b = w.Vm.SelectedPlace!.AddNavigatorButton();
-            b!.Target = Bedroom;
-        },
-        ["a-place / A door from your bedroom"] = w =>
-            w.Vm.AddVanillaExtensionCommand.Execute(null),
-        ["a-place / Aim it at the bedroom"] = w =>
-            w.Vm.SelectedVanillaExtension!.Source = Bedroom,
-        ["a-place / Say what the button reads"] = w =>
-            w.Vm.SelectedPlace!.NavigatorButtons[0].Label = "My Room",
-        ["a-place / Point it at your room"] = w =>
-        {
-            // The check counts buttons on an extension that lead to a pack
-            // place, so the target has to be this pack's place, not the bedroom.
-            var b = w.Vm.SelectedVanillaExtension!.AddNavigatorButton();
-            b!.Target = "self:" + w.Vm.Places[0].Key;
-        },
-
-        // ── 3. Putting things in the room ─────────────────────────────
-        ["dressing-the-room / Open the room you built"] = w =>
-        {
-            GiveAPlace(w);
-            w.Vm.SelectedPlace = w.Vm.Places[0];
-        },
-        ["dressing-the-room / Add an object"] = w =>
-            w.Vm.SelectedPlace!.AddGameObject(),
-        ["dressing-the-room / Give it a name and a picture"] = w =>
-        {
-            var g = w.Vm.SelectedPlace!.GameObjects[0];
-            g.Name = "Vase";
-            g.Sprite = TutorialAssets.Prop;
-        },
-        ["dressing-the-room / Put it where you want it"] = w =>
-        {
-            // The gizmo writes the same X and Y a person could type, so moving
-            // it through the view model is the same act.
-            var g = w.Vm.SelectedPlace!.GameObjects[0];
-            g.X += 1.5f;
-            g.Y -= 0.75f;
-        },
-        ["dressing-the-room / Decide what it stands in front of"] = w =>
-            // Between the back layer at -12 and the front at -10.
-            w.Vm.SelectedPlace!.GameObjects[0].SortingOrder = -11,
-        ["dressing-the-room / Leave it switched off"] = w =>
-            w.Vm.SelectedPlace!.GameObjects[0].StartActive = false,
-
-        // ── 6. Lines that choose themselves ───────────────────────────
-        ["lines-that-choose / Open the conversation you wrote"] = w =>
-        {
-            GiveADialogueLine(w);
-            w.Vm.SelectedNode = w.Vm.SelectedDialogue!.Nodes[0];
-        },
-        ["lines-that-choose / Gate it on something real"] = w =>
-        {
-            var n = w.Vm.SelectedNode!;
-            w.Vm.AddNodeConditionCommand.Execute(null);
-            var c = n.Conditions.Last();
-            // Through the view model, not the def: setting the type is what
-            // seeds the category, and the category setter is what clears a
-            // target belonging to the previous one. Editing the def underneath
-            // both would test a state the editor cannot produce.
-            c.Type = SMSModForge.Model.NodeConditionTypes.GameObjectActive;
-            c.GoCategory = SMSModForge.ViewModel.NodeActionViewModel.CatOverlay;
-            c.GoOverlayLevel = "place:" + w.Vm.Places[0].Key;
-            c.GoTarget = "Lamp";
-        },
-        ["lines-that-choose / Someone else in the room"] = w =>
-        {
-            w.Vm.AddDialogueRootNodeCommand.Execute(null);
-            var n = w.Vm.SelectedNode!;
-            n.Text = "And what am I supposed to say to that?";
-            n.Actor = "player";
-        },
-        ["lines-that-choose / Letting one option say more"] = w =>
-        {
-            // This tutorial starts from a bare dialogue, so build the shape
-            // tutorial 5 leaves behind first: a choice, two options, one of
-            // them exiting, and a closing line after both.
-            var d = w.Vm.SelectedDialogue!;
-
-            w.Vm.SelectedNode = null;
-            w.Vm.AddDialogueRootNodeCommand.Execute(null);
-            var choice = w.Vm.SelectedNode!;
-            choice.Kind = SMSModForge.Model.DialogueNodeKind.Choice;
-            choice.Text = "What do you say?";
-
-            foreach (var label in new[] { "Say hello", "Say nothing" })
-            {
-                w.Vm.SelectedNode = choice;
-                w.Vm.AddDialogueChildNodeCommand.Execute(null);
-                w.Vm.SelectedNode!.Text = label;
-            }
-            d.Nodes.First(n => n.Text == "Say nothing").JumpMode =
-                SMSModForge.Model.JumpMode.Exit;
-
-            w.Vm.SelectedNode = null;
-            w.Vm.AddDialogueRootNodeCommand.Execute(null);
-            var closing = w.Vm.SelectedNode!;
-            closing.Text = "Well. See you around.";
-            closing.Tag = "ending";
-
-            // The reaction hangs off the option that does NOT exit — a child
-            // under the exiting one would never be reached — and jumps
-            // forward to the ending both branches now share.
-            w.Vm.SelectedNode = d.Nodes.First(n => n.Text == "Say hello");
-            w.Vm.AddDialogueChildNodeCommand.Execute(null);
-            var reaction = w.Vm.SelectedNode!;
-            reaction.Text = "Good. I was starting to think you had forgotten how.";
-            reaction.JumpMode = SMSModForge.Model.JumpMode.Jump;
-            reaction.JumpTargetTag = "ending";
-        },
-
-        // ── 4. On the world map ───────────────────────────────────────
-        ["on-the-world-map / Add a map button"] = w =>
-        {
-            GiveAPlace(w);
-            w.Vm.AddMapButtonCommand.Execute(null);
-        },
-        ["on-the-world-map / Say where it goes"] = w =>
-            w.Vm.MapButtons[^1].Target = "self:" + w.Vm.Places[0].Key,
-        ["on-the-world-map / Choose which menu it lives in"] = w =>
-        {
-            // Any district but the one it arrived in: the step is about making
-            // a choice, and a new button already sits in Foundry.
-            var b = w.Vm.MapButtons[^1];
-            var other = SMSModForge.Model.WorldMapDistricts.All
-                .First(d => d.GoName != b.District);
-            b.District = other.GoName;
-        },
-        ["on-the-world-map / Give it something to read"] = w =>
-            w.Vm.MapButtons[^1].Label = "The Old Workshop",
-
-        // ── 5. Your first conversation ────────────────────────────────
-        ["first-conversation / Add a dialogue"] = w =>
-        {
-            GiveAPlace(w);
-            w.Vm.AddDialogueCommand.Execute(null);
-        },
-        ["first-conversation / Say where it happens"] = w =>
-        {
-            // Point the pinned level row at the pack's own place, which is what
-            // the step asks for and what the game needs to find the dialogue.
-            var row = w.Vm.SelectedDialogue!.StartConditions[0];
-            row.Model.Params["level"] = "place:" + w.Vm.Places[0].Key;
-        },
-        ["first-conversation / Write a line"] = w =>
-        {
-            w.Vm.AddDialogueRootNodeCommand.Execute(null);
-            var n = w.Vm.SelectedNode!;
-            n.Text = "Hello there.";
-            // Somebody has to say it. A line with no actor shows no name.
-            n.Actor = AuthorsOwn(w).Key;
-        },
-        ["first-conversation / Give the player a say"] = w =>
-        {
-            // A finished Choice: a prompt of its own, and two options that say
-            // something. All three are rendered, so all three are required.
-            var d = w.Vm.SelectedDialogue!;
-            w.Vm.AddDialogueRootNodeCommand.Execute(null);
-            var choice = w.Vm.SelectedNode!;
-            choice.Kind = SMSModForge.Model.DialogueNodeKind.Choice;
-            choice.Text = "What do you say?";
-
-            foreach (var label in new[] { "Say hello", "Say nothing" })
-            {
-                w.Vm.SelectedNode = choice;
-                w.Vm.AddDialogueChildNodeCommand.Execute(null);
-                w.Vm.SelectedNode!.Text = label;
-            }
-        },
-        ["first-conversation / Make Exit mean something"] = w =>
-        {
-            // Exit only means anything when something comes after it that is
-            // not simply the other branch of the same choice.
-            var d = w.Vm.SelectedDialogue!;
-            var option = d.Nodes.First(n => n.Text == "Say nothing");
-            option.JumpMode = SMSModForge.Model.JumpMode.Exit;
-
-            w.Vm.SelectedNode = null;
-            w.Vm.AddDialogueRootNodeCommand.Execute(null);
-            w.Vm.SelectedNode!.Text = "A closing line, which Exit skips.";
-        },
-
-        // ── 4. Making it move ─────────────────────────────────────────
-        ["making-it-move / Open the character you made"] = w =>
-        {
-            GiveACharacter(w);
-            w.Vm.SelectedOutfit = AuthorsOwn(w).Outfits[0];
-        },
-        ["making-it-move / Pick a bust with something to move"] = w =>
-            // The check is baselined against whatever was already there, so it
-            // has to CHANGE, not merely be non-empty.
-            w.Vm.SelectedOutfit!.BaseSprite = TutorialAssets.Bust(4),
-        ["making-it-move / Paint where it should move"] = w =>
-            w.Vm.SelectedOutfit!.MaskSprite = w.WritePng("Sprites/Test/Mask.png"),
-
-        // ── 5. Populating the room ────────────────────────────────────
-        ["populating / Define one"] = w =>
-        {
-            GiveAPlace(w);
-            w.Vm.AddNpcCommand.Execute(null);
-            w.Vm.SelectedNpc!.Sprite = TutorialAssets.Npc(0);
-        },
-        ["populating / Give them some life"] = w =>
-            w.Vm.SelectedNpc!.Mask = w.WritePng("NPCs/Test/Mask.png"),
-        ["populating / Put them in the room"] = w =>
-        {
-            w.Vm.SelectedPlace = w.Vm.Places[0];
-            var placed = w.Vm.SelectedPlace!.NpcsNode.AddNpc();
-            placed.Npc = w.Vm.Npcs[0].Key;
-        },
-        ["populating / Switch them on"] = w =>
-            w.Vm.SelectedPlace!.NpcsNode.Npcs[0].StartActive = true,
-
-
-        // ── 10. One person, two places ────────────────────────────────
-        ["npcs-that-belong / Put the same person in twice"] = w =>
-        {
-            GiveAPlacedNpc(w);
-            // Choosing the room in the place list, as the step lets an author.
-            w.Vm.SelectedPlace = w.Vm.Places[0];
-            var placed = w.Vm.SelectedPlace!.NpcsNode.AddNpc();
-            placed.Npc = w.Vm.Npcs[0].Key;
-        },
-        ["npcs-that-belong / Tell them apart"] = w =>
-        {
-            // Two placements of one definition, told apart by their own names.
-            var list = w.Vm.SelectedPlace!.NpcsNode.Npcs;
-            list[0].Name = "ByTheDoor";
-            list[^1].Name = "ByTheWindow";
-        },
-        ["npcs-that-belong / Stand them on something"] = w =>
-            w.Vm.SelectedNpc!.ReflectionEnabled = true,
-        ["npcs-that-belong / Give them eyes that close"] = w =>
-            w.Vm.SelectedNpc!.BlinkSprite = TutorialAssets.NpcBlink(1),
-
-
-        // ── 11. Sound in a room ───────────────────────────────────────
-        ["sound-in-a-room / Add a track"] = w =>
-        {
-            GiveADialogueLine(w);
-            w.Vm.AddMusicCommand.Execute(null);
-            w.Vm.SelectedMusic!.AudioPath = TutorialAssets.Music;
-            w.Vm.SelectedMusic!.DisplayName = "Neon Rain";
-        },
-        ["sound-in-a-room / Make something play it"] = w =>
-        {
-            // The door from tutorial 3, rebuilt here: this tutorial starts from
-            // a bare pack, so the extension and its button have to exist before
-            // there is anywhere to put a track.
-            w.Vm.AddVanillaExtensionCommand.Execute(null);
-            var ext = w.Vm.SelectedVanillaExtension!;
-            ext.Source = Bedroom;
-            var btn = ext.AddNavigatorButton()!;
-            btn.Target = "self:" + w.Vm.Places[0].Key;
-            // The RUNTIME name, which is what the runtime looks the track up by.
-            btn.Music = w.Vm.Music[0].Key;
-        },
-        ["sound-in-a-room / Add an effect"] = w =>
-        {
-            w.Vm.AddSfxCommand.Execute(null);
-            w.Vm.SelectedSfx!.AudioPath = TutorialAssets.Sfx;
-            w.Vm.SelectedSfx!.DisplayName = "Door";
-        },
-        ["sound-in-a-room / The part you would never guess"] = w =>
-            w.Vm.SelectedSfx!.TextPatternsCsv = "*door*",
-        ["sound-in-a-room / Say it in a line"] = w =>
-        {
-            // The pattern goes into the text as written -- asterisks included,
-            // which is what the runtime looks for. The line chosen first, as an
-            // author has to before its editor is there to type in.
-            var d = w.Vm.SelectedDialogue!;
-            w.Vm.SelectedNode = d.Nodes[0];
-            d.Nodes[0].Text = "*door* Oh — you are back.";
-        },
-        ["sound-in-a-room / The other way to fire one"] = w =>
-        {
-            // The same effect, fired without putting anything in the line.
-            var d = w.Vm.SelectedDialogue!;
-            w.Vm.SelectedNode = d.Nodes[0];
-            var a = d.Nodes[0].AddActionOnFinish();
-            a.Model.Type = SMSModForge.Model.NodeActionTypes.PlaySFX;
-            a.Model.Params["clip"] = w.Vm.Sfx[0].Key;
-        },
-
-        // ── 6. Remembering things ─────────────────────────────────────
-        ["remembering / Declare one"] = w =>
-        {
-            GiveADialogueLine(w);
-            w.Vm.AddVariableCommand.Execute(null);
-            // The check rejects the generated "varN" name, because a variable
-            // called that teaches nothing about naming one.
-            w.Vm.SelectedVariable!.Name = "MetTheGirl";
-        },
-        ["remembering / Set it from a conversation"] = w =>
-        {
-            w.Vm.SelectedNode = w.Vm.SelectedDialogue!.Nodes[0];
-            w.Vm.AddNodeActionOnFinishCommand.Execute(null);
-            var a = w.Vm.SelectedNode!.ActionsOnFinish.Last();
-            a.Model.Type = SMSModForge.Model.NodeActionTypes.SetVariable;
-            a.Model.Params["name"] = "MetTheGirl";
-            a.Model.Params["value"] = "true";
-        },
-        ["remembering / When one value is not enough"] = w =>
-        {
-            w.Vm.AddVariableCommand.Execute(null);
-            w.Vm.SelectedVariable!.Name = "TopicsDiscussed";
-            // The type is the whole point of the step; the check counts
-            // List-typed variables, not variables.
-            w.Vm.SelectedVariable!.Model.Type = SMSModForge.Model.PackVariableType.List;
-        },
-        ["remembering / Putting things in and asking what is there"] = w =>
-        {
-            var n = w.Vm.SelectedDialogue!.Nodes[0];
-            w.Vm.SelectedNode = n;
-            w.Vm.AddNodeActionOnFinishCommand.Execute(null);
-            var a = n.ActionsOnFinish.Last();
-            a.Model.Type = SMSModForge.Model.NodeActionTypes.AddToList;
-            a.Model.Params["list"] = "TopicsDiscussed";
-            a.Model.Params["value"] = "TheWeather";
-        },
-        ["remembering / Give them something to unlock"] = w =>
-        {
-            w.Vm.AddWallpaperCommand.Execute(null);
-            w.Vm.SelectedWallpaper!.SpritePath = TutorialAssets.Wallpaper;
-            w.Vm.SelectedWallpaper!.AddUnlockConditionCommand.Execute(null);
-        },
-
-
-        // ── 13. Putting a value into a line ───────────────────────────
-        ["values-in-text / Show your variable in a line"] = w =>
-        {
-            GiveADialogueLine(w);
-            w.Vm.SelectedDialogue!.Nodes[0].Text = "You have [PV:MetTheGirl] of those.";
-        },
-        ["values-in-text / A value you do not know yet"] = w =>
-        {
-            var n = w.Vm.SelectedDialogue!.Nodes[0];
-            w.Vm.SelectedNode = n;
-            w.Vm.AddNodeActionOnFinishCommand.Execute(null);
-            var a = n.ActionsOnFinish.Last();
-            a.Model.Type = SMSModForge.Model.NodeActionTypes.SetVariable;
-            a.Model.Params["name"] = "Copy";
-            // One dollar and a name: the value comes from the variable.
-            a.Model.Params["value"] = "$MetTheGirl";
-        },
-
-        // ── 7. Rules that run themselves ──────────────────────────────
-        ["rules / Make one"] = w =>
-        {
-            w.SaveToRoot();
-            w.CopyAssets();
-            w.Vm.AddSceneCommand.Execute(null);
-            w.Vm.SelectedScene!.SceneSprite = TutorialAssets.Scene;
-            w.Vm.SelectedScene!.DisplayName = "The Big Picture";
-        },
-        ["rules / Add a rule"] = w => w.Vm.AddIntegrationRuleCommand.Execute(null),
-        ["rules / Give it something to watch"] = w =>
-            w.Vm.AddIntegrationConditionCommand.Execute(null),
-        ["rules / And something to do"] = w =>
-        {
-            w.Vm.AddIntegrationActionCommand.Execute(null);
-            var a = w.Vm.SelectedIntegrationRule!.Actions.Last();
-            // As an author does it: the type first - the Category row only
-            // shows for a Set Active action, and only it can set one (1.8.0).
-            a.DisplayType = SMSModForge.Model.NodeActionTypes.SetGameObjectActive;
-            a.Category = SMSModForge.ViewModel.NodeActionViewModel.CatScene;
-            a.Target = w.Vm.Scenes[0].Key;
-            a.Active = true;
-        },
-
-        // ── The diagnostic walkthrough ────────────────────────────────
         ["smoke / Now do something"] = w => w.Vm.AddCharacterCommand.Execute(null),
     };
-
-    // ── Getting a walker to a starting point ──────────────────────────
-    //
-    // Later tutorials carry on in the pack an earlier one left, so a walk that
-    // starts at tutorial 5 has to be handed the same ground. These do that
-    // through the view model, exactly as the earlier tutorial would have.
-
-    /// <summary>A character the author made - not the player, and not one of
-    /// the game's cast, which a real window lists beside the pack's own.</summary>
-    private static bool IsAuthorsOwn(CharacterViewModel c) => !c.IsPlayer && !c.Model.IsVanillaCharacter;
-
-    private static CharacterViewModel AuthorsOwn(TutorialWalker w) => w.Vm.Characters.First(IsAuthorsOwn);
-
-    private static void GiveACharacter(TutorialWalker w)
-    {
-        // The built-in player is in every pack from the moment it exists, so
-        // "are there any characters" is always true and would skip this.
-        // What these walks need is a character the AUTHOR made.
-        if (w.Vm.Characters.Any(IsAuthorsOwn)) return;
-        w.SaveToRoot();
-        w.CopyAssets();
-        w.Vm.AddCharacterCommand.Execute(null);
-        w.Vm.SelectedCharacter!.DisplayName = "Test Girl";
-        w.Vm.SelectedOutfit!.BaseSprite = TutorialAssets.Bust(1);
-    }
-
-    private static void GiveAPlace(TutorialWalker w)
-    {
-        GiveACharacter(w);
-        if (w.Vm.Places.Count > 0) return;
-        w.Vm.AddPlaceCommand.Execute(null);
-        w.Vm.SelectedPlace!.SecondarySprite = TutorialAssets.RoomBase;
-    }
-
-    /// <summary>A place with one NPC already placed in it — where the first
-    /// NPC tutorial leaves off, and where the second one begins.</summary>
-    private static void GiveAPlacedNpc(TutorialWalker w)
-    {
-        GiveAPlace(w);
-        w.Vm.SelectedPlace = w.Vm.Places[0];
-        if (w.Vm.Npcs.Count == 0)
-        {
-            w.Vm.AddNpcCommand.Execute(null);
-            w.Vm.SelectedNpc!.Sprite = TutorialAssets.Npc(0);
-        }
-        if (w.Vm.SelectedPlace!.NpcsNode.Npcs.Count == 0)
-        {
-            var first = w.Vm.SelectedPlace.NpcsNode.AddNpc();
-            first.Npc = w.Vm.Npcs[0].Key;
-        }
-    }
-
-    private static void GiveADialogueLine(TutorialWalker w)
-    {
-        GiveAPlace(w);
-        if (w.Vm.Dialogues.Count > 0) return;
-        w.Vm.AddDialogueCommand.Execute(null);
-        w.Vm.AddDialogueRootNodeCommand.Execute(null);
-        w.Vm.SelectedNode!.Text = "Hello there.";
-    }
-
-    /// <summary>The bedroom every save starts in — what tutorial 2 navigates
-    /// to and from. Spelled here so a rename shows up as a test failure rather
-    /// than as a tutorial that quietly cannot be finished.</summary>
-    private const string Bedroom = "vanilla:5_MyRoom";
 }

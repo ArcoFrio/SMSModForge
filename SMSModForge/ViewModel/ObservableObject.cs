@@ -17,5 +17,16 @@ public abstract class ObservableObject : INotifyPropertyChanged
     }
 
     protected void OnPropertyChanged([CallerMemberName] string? name = null)
-        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    {
+        // Whatever edits the pack says so here - and so does much that does not (a selection, a list of
+        // choices): undo looks at the pack the next time an edit could have ended only when something was said
+        // (Services.UndoService.CheckpointIfTouched, 1.10.0).
+        if (TouchesPack(name)) Services.UndoService.Touch();
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+
+    /// <summary>Whether a change of <paramref name="name"/> could be an edit of the pack. True unless a view
+    /// model knows better: saying so costs undo a look at the pack, not saying so when it was one joins that
+    /// edit to the next step.</summary>
+    protected virtual bool TouchesPack(string? name) => true;
 }

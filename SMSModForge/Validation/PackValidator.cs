@@ -446,8 +446,50 @@ public static class PackValidator
         NodeActionTypes.SetSprite, NodeActionTypes.SetComponentProperty,
     };
 
+    /// <summary>
+    /// The pack's effects (the FX tab, 1.10.0): what would play nothing, or never play. An action naming an effect
+    /// the pack has not got is checked with the other names an action uses (CheckUnitReferences).
+    /// </summary>
+    private static void CheckEffects(List<ValidationIssue> issues, ModPack pack, string packRoot)
+    {
+        if (pack.Effects.Count == 0) return;
+        var played = new HashSet<string>(System.StringComparer.Ordinal);
+        foreach (var (a, _) in Services.PackWalk.Actions(pack))
+            if (a.Type == NodeActionTypes.PlayEffect && a.Params.TryGetValue(Shared.Effects.EffectParam, out var k) && !string.IsNullOrWhiteSpace(k))
+                played.Add(k.Trim());
+        var packVars = new HashSet<string>(pack.Variables.Select(v => v.Name), System.StringComparer.Ordinal);
+        foreach (var e in pack.Effects)
+        {
+            string where = $"effects[{e.Key}]";
+            string name = string.IsNullOrWhiteSpace(e.DisplayName) ? e.Key : e.DisplayName;
+            var template = Shared.Effects.Find(e.Template);
+            if (template == null)
+            {
+                issues.Add(new(Severity.Error, where + ".template", Loc.F("validation.effect.unknownTemplate", "name", name, "template", e.Template), "effect.unknownTemplate"));
+                continue;
+            }
+            if (!string.IsNullOrWhiteSpace(e.Texture)) CheckFile(packRoot, e.Texture!, where + ".texture", issues);
+            if (e.ChangesGame && template.CanChangeGames) continue;   // the game plays it
+            switch (e.PlayWhen)
+            {
+                case Shared.Effects.WhenUnderTurnsOn when string.IsNullOrWhiteSpace(e.Under):
+                    issues.Add(new(Severity.Warning, where + ".under", Loc.F("validation.effect.noObject", "name", name), "effect.noObject"));
+                    break;
+                case Shared.Effects.WhenTrue or Shared.Effects.WhileTrue when e.Conditions.Count == 0:
+                    issues.Add(new(Severity.Warning, where + ".conditions", Loc.F("validation.effect.noConditions", "name", name), "effect.noConditions"));
+                    break;
+                case Shared.Effects.OnAction when !played.Contains(e.Key):
+                    issues.Add(new(Severity.Info, where, Loc.F("validation.effect.neverPlayed", "name", name), "effect.neverPlayed"));
+                    break;
+            }
+            for (int i = 0; i < e.Conditions.Count; i++)
+                ValidateNodeCondition(e.Conditions[i], $"{where}.conditions[{i}]", packVars, issues);
+        }
+    }
+
     private static void CheckUnitReferences(List<ValidationIssue> issues, ModPack pack)
     {
+        var effects = new HashSet<string>(pack.Effects.Select(e => e.Key), System.StringComparer.Ordinal);
 
         var sfx = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
         foreach (var f in pack.Sfx) sfx.Add(f.Key);
@@ -490,6 +532,15 @@ public static class PackValidator
             if (a.Type == NodeActionTypes.PlaySFX &&
                 a.Params.TryGetValue("clip", out var clip))
                 Ref(clip, sfx, "validation.action.unknownSfx", "action.unknownSfx", aw);
+
+            if ((a.Type == NodeActionTypes.PlayEffect || a.Type == NodeActionTypes.StopEffect) &&
+                a.Params.TryGetValue(Shared.Effects.EffectParam, out var effect))
+            {
+                if (string.IsNullOrWhiteSpace(effect))
+                    issues.Add(new(Severity.Warning, aw, Loc.T("validation.action.noEffect"), "action.noEffect"));
+                else
+                    Ref(effect, effects, "validation.action.unknownEffect", "action.unknownEffect", aw);
+            }
 
             // Scene is a category on the targeting row rather than a type of
             // its own, so the kind decides whether target names a scene - on
@@ -597,6 +648,7 @@ public static class PackValidator
         CheckKinWordsInText(issues, pack);
         CheckTextTokens(issues, pack);
         CheckUnitReferences(issues, pack);
+        CheckEffects(issues, pack, packRoot);
         // One writing-out of the pack, and one reading of each translation, for
         // the checks below: each made its own, three of each per Validate (1.9.0).
         var saved = new SavedPack(pack);
@@ -606,6 +658,8 @@ public static class PackValidator
         NameMentions.Check(issues, pack, saved);
         // Changes to the game's own scenes (1.9.0).
         GameSceneChecks.Check(issues, pack);
+        // The places' lights (1.10.0).
+        CheckLights(pack, packRoot, issues);
 
         if (string.IsNullOrWhiteSpace(pack.PackId))
             issues.Add(new(Severity.Error, "$.packId", Loc.T("validation.pack.idMissing"), "pack.idMissing"));
@@ -1319,6 +1373,62 @@ public static class PackValidator
         }
         foreach (var place in pack.Places) Walk(place.GameObjects, $"places[{place.Key}]");
         foreach (var ext in pack.VanillaExtensions) Walk(ext.GameObjects, $"vanillaExtensions[{ext.Source}]");
+    }
+
+    /// <summary>A light the game cannot make (1.10.0): a free shape of fewer than three corners, which the plugin
+    /// leaves out, and a picture light whose picture is not in the pack, which lights nothing.</summary>
+    private static void CheckLights(ModPack pack, string packRoot, List<ValidationIssue> issues)
+    {
+        void Walk(IEnumerable<GameObjectDef> nodes, string where)
+        {
+            foreach (var n in nodes)
+            {
+                string at = $"{where}.{n.Name}";
+                if (n.Light is { } light && !n.RemoveLight)
+                {
+                    if (light.IsFree && light.Points.Count(p => p.Length >= 2) < 3)
+                        issues.Add(new(Severity.Error, at + ".light.points", Loc.F("validation.light.fewPoints", "name", n.Name), "light.fewPoints"));
+                    if (light.IsPicture)
+                    {
+                        if (string.IsNullOrWhiteSpace(light.Picture))
+                            issues.Add(new(Severity.Error, at + ".light.picture", Loc.F("validation.light.noPicture", "name", n.Name), "light.noPicture"));
+                        else
+                            CheckFile(packRoot, light.Picture, at + ".light.picture", issues);
+                    }
+                }
+                // Its effect (1.10.0): a template this ModForge has, a picture that is there.
+                if (n.Effect is { } effect)
+                {
+                    if (Shared.Effects.Find(effect.Template) == null)
+                        issues.Add(new(Severity.Error, at + ".effect.template", Loc.F("validation.effect.unknownTemplate", "name", n.Name, "template", effect.Template), "effect.unknownTemplate"));
+                    if (!string.IsNullOrWhiteSpace(effect.Texture))
+                        CheckFile(packRoot, effect.Texture!, at + ".effect.texture", issues);
+                }
+                Walk(n.Children, at);
+            }
+        }
+        foreach (var place in pack.Places) Walk(place.GameObjects, $"places[{place.Key}]");
+        foreach (var ext in pack.VanillaExtensions) Walk(ext.GameObjects, $"vanillaExtensions[{ext.Source}]");
+
+        // Two whole-place lights always on in one place: only the last switched on is used (PackAmbient).
+        void Ambients(IEnumerable<GameObjectDef> nodes, string where)
+        {
+            var always = new List<string>();
+            void Find(IEnumerable<GameObjectDef> level)
+            {
+                foreach (var n in level)
+                {
+                    if (!n.StartActive || n.ActiveConditions.Count > 0) continue;
+                    if (n.Light is { IsAmbient: true } && !n.RemoveLight) always.Add(n.Name);
+                    Find(n.Children);
+                }
+            }
+            Find(nodes);
+            if (always.Count > 1)
+                issues.Add(new(Severity.Warning, where + ".light", Loc.F("validation.light.twoAmbients", "names", Loc.JoinAnd(always)), "light.twoAmbients"));
+        }
+        foreach (var place in pack.Places) Ambients(place.GameObjects, $"places[{place.Key}]");
+        foreach (var ext in pack.VanillaExtensions) Ambients(ext.GameObjects, $"vanillaExtensions[{ext.Source}]");
     }
 
     private static void CheckLevelTokens(ModPack pack, List<ValidationIssue> issues)

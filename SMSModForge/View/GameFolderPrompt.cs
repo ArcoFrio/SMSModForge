@@ -24,6 +24,7 @@ public static class GameFolderPrompt
     /// </summary>
     public static bool Ask(Window owner)
     {
+        if (Services.TestMode.Active) return false;   // no folder picker under the test harness: answered as a cancel
         using var dialog = new System.Windows.Forms.FolderBrowserDialog
         {
             Description = Loc.T("gameFolder.pick"),

@@ -155,6 +155,12 @@ public static class ThemeManager
     /// untouched vanilla object, and an NPC look like a changed one.</summary>
     public const string KeyVanillaSurface = "Theme.VanillaSurface";
     public const string KeyChangedSurface = "Theme.ChangedSurface";
+
+    /// <summary>The chip that names a row as the game's own ("vanilla"): the same hue as the row's cast, as
+    /// strong as still leaves the theme's text readable on it. It was a fixed half-clear blue until 1.10.0,
+    /// which the words read on at 4.19 in Dark and 3.79 in Graphite - found when a pack's place got a row of
+    /// the game's own (its light) and the contrast walk met one for the first time.</summary>
+    public const string KeyVanillaChip = "Theme.VanillaChip";
     public const string KeyWashOpacity = "Theme.WashOpacity";
 
     /// <summary>
@@ -192,9 +198,12 @@ public static class ThemeManager
     /// </summary>
     public static readonly (string Text, string[] On)[] TextPairs =
     {
-        (KeyText, new[] { KeySurface, KeyControl, KeySelection, KeySelectionInactive, KeySurfaceAlt }),
+        (KeyText, new[] { KeySurface, KeyControl, KeySelection, KeySelectionInactive, KeySurfaceAlt,
+                          KeyVanillaSurface, KeyChangedSurface, KeyVanillaChip }),
         (KeyChromeText, new[] { KeyChrome }),
-        (KeyTextMuted, new[] { KeySurface, KeyControl, KeyWindow, KeySurfaceAlt, KeyChrome }),
+        // On an object's row too, whoever's it is (1.10.0): the notes under a row of the game's own are muted,
+        // and read at 4.2 to 4.4 on its cast in three of the dark themes.
+        (KeyTextMuted, new[] { KeySurface, KeyControl, KeyWindow, KeySurfaceAlt, KeyChrome, KeyVanillaSurface, KeyChangedSurface }),
         (KeyHeading, new[] { KeySurface, KeyAccentSoft }),
         (KeyButtonText, new[] { KeyButton, KeyButtonHover, KeyButtonPressed }),
         (KeySelectionText, new[] { KeySelection }),
@@ -452,13 +461,19 @@ public static class ThemeManager
         p[KeySurface] = surface;
         p[KeyControl] = control;
         p[KeyAccent] = accent;
-        p[KeyText] = Readable(text, surface, control);
+        // Blended toward a hue rather than alpha-composited, so the result is
+        // opaque and still tracks whether the theme is light or dark.
+        var vanillaHue = Color.FromRgb(0x5B, 0x8F, 0xCB);
+        var vanillaSurface = Blend(surface, vanillaHue, 0.16);
+        var changedSurface = Blend(surface, accent, dark ? 0.24 : 0.18);
+
+        p[KeyText] = Readable(text, surface, control, vanillaSurface, changedSurface);
         p[KeyChromeText] = t.ChromeText is { } ct ? Hex(ct) : Readable(text, chrome);
         p[KeySurfaceAlt] = Blend(surface, text, dark ? 0.045 : 0.035);
         p[KeyBorder] = t.Border is { } b ? Hex(b) : Blend(surface, text, dark ? 0.20 : 0.17);
         p[KeyControlBorder] = Blend(control, text, dark ? 0.30 : 0.32);
         p[KeyHover] = Under(surface, text, dark ? 0.09 : 0.06, text);
-        p[KeyTextMuted] = Readable(Blend(text, surface, 0.36), surface, control, p[KeySurfaceAlt], window, chrome);
+        p[KeyTextMuted] = Readable(Blend(text, surface, 0.36), surface, control, p[KeySurfaceAlt], window, chrome, vanillaSurface, changedSurface);
         p[KeyTextDisabled] = Blend(text, surface, 0.55);
 
         p[KeyAccentHover] = dark ? Blend(accent, Colors.White, 0.15) : Blend(accent, Colors.Black, 0.12);
@@ -514,10 +529,9 @@ public static class ThemeManager
         p[KeyStatusBar] = t.IsEx ? accent : chrome;
         p[KeyStatusBarText] = t.IsEx ? p[KeyOnAccent] : p[KeyChromeText];
 
-        // Blended toward a hue rather than alpha-composited, so the result is
-        // opaque and still tracks whether the theme is light or dark.
-        p[KeyVanillaSurface] = Blend(surface, Color.FromRgb(0x5B, 0x8F, 0xCB), 0.16);
-        p[KeyChangedSurface] = Blend(surface, accent, dark ? 0.24 : 0.18);
+        p[KeyVanillaSurface] = vanillaSurface;
+        p[KeyChangedSurface] = changedSurface;
+        p[KeyVanillaChip] = Under(vanillaSurface, vanillaHue, 0.5, p[KeyText]);
 
         // Six parts of the way from the theme's own text colour to the markup
         // hue: far enough to read as a different KIND of thing, near enough to

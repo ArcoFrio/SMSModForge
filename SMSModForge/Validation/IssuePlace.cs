@@ -76,6 +76,8 @@ public static class IssuePlace
             }
             case "integrationRules":
                 return Named(pack.IntegrationRules.FirstOrDefault(r => r.Key == inner)?.DisplayName, inner) + Field(rest);
+            case "effects":
+                return Named(pack.Effects.FirstOrDefault(e => e.Key == inner)?.DisplayName, inner) + Field(rest);
             case "vanillaExtensions":
             case "mapButtons":
             {

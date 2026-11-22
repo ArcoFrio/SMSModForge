@@ -25,7 +25,7 @@ internal static class InGameSuitePacks
 {
     /// <summary>The pack ids the suite installs, and nothing else is left in
     /// the test copy's Mods.</summary>
-    public static readonly string[] Ids = { "gamecheck", "gameorder", World.Id, Story.Id, Quests.Id, Rules.Id, Saving.Id, Talk.Id, Looks.Id };
+    public static readonly string[] Ids = { "gamecheck", "gameorder", World.Id, Story.Id, Quests.Id, Rules.Id, Saving.Id, Talk.Id, Looks.Id, BareNames.Id, Effects.Id };
 
     /// <summary>Exports every pack into the test copy's Mods folder, which the
     /// suite owns: a pack left there by anything else is taken out.</summary>
@@ -56,12 +56,27 @@ internal static class InGameSuitePacks
         Export(Saving.Make(), Folder(Saving.Id));
         Export(Talk.Make(Folder(Talk.Id)), Folder(Talk.Id), Talk.Translate);
         Export(Looks.Make(Folder(Looks.Id)), Folder(Looks.Id));
+        Export(BareNames.Make(), Folder(BareNames.Id));
+        Export(Effects.Make(Folder(Effects.Id)), Folder(Effects.Id));
         return said;
     }
 
     // ── The pieces packs are made of ────────────────────────────────────
 
     /// <summary>A PNG of one colour, written into the pack.</summary>
+    /// <summary>One of the tutorials' practice pictures, inside their folder (I2).</summary>
+    public const string PracticeScene = "Scenes/Dummy/DummyScene01.png";
+
+    /// <summary>A file of the tutorials' practice art copied into the pack as a tutorial copies it; its path in
+    /// the pack.</summary>
+    public static string PracticeArt(string packFolder, string inside)
+    {
+        string to = Path.Combine(packFolder, TutorialArt.Folder, inside.Replace('/', Path.DirectorySeparatorChar));
+        Directory.CreateDirectory(Path.GetDirectoryName(to)!);
+        File.Copy(Path.Combine(SMSModForge.Tutorials.TutorialAssets.SourceRoot, inside.Replace('/', Path.DirectorySeparatorChar)), to, true);
+        return TutorialArt.Folder + "/" + inside;
+    }
+
     public static string Png(string packFolder, string rel, int w, int h, Color colour)
     {
         var pixels = new byte[w * h * 4];
@@ -525,6 +540,14 @@ internal static class InGameSuitePacks
                 Act(NodeActionTypes.SetSprite, ("kind", "Scene"), ("target", "still"), ("sprite", swap))));
             pack.Dialogues.Add(Script("openpanel", "The panel.", Show("UI", "checkpanel", true)));
             pack.Dialogues.Add(Script("closepanel", "No panel.", Show("UI", "checkpanel", false)));
+            // The tutorials' practice art (1.10.0, I2): copied into the pack as a tutorial copies it, so the export
+            // leaves it out and the game reads the plugin's own copy. Control: a practice file nobody has.
+            pack.Scenes.Add(new SceneDef { Key = "practice", DisplayName = "Practice", Sound = SceneSoundMode.None,
+                                           SceneSprite = PracticeArt(folder, PracticeScene) });
+            pack.Scenes.Add(new SceneDef { Key = "practicemissing", DisplayName = "Practice, missing", Sound = SceneSoundMode.None,
+                                           SceneSprite = TutorialArt.Folder + "/Scenes/Dummy/NoSuchScene.png" });
+            pack.Dialogues.Add(Script("showpractice", "Practice art.", Show("Scene", "practice", true)));
+            pack.Dialogues.Add(Script("showpracticemissing", "No such art.", Show("Scene", "practicemissing", true)));
 
             pack.Uis.Add(new UiDef
             {
@@ -835,9 +858,19 @@ internal static class InGameSuitePacks
                 ("branchElse", PackVariableType.Int, "0"),
                 ("go_Ann", PackVariableType.Bool, "false"), ("go_Bob", PackVariableType.Bool, "false"),
                 ("count_Ann", PackVariableType.Int, "0"), ("count_Bob", PackVariableType.Int, "0"),
-                ("loaded", PackVariableType.Bool, "false"),
+                ("loaded", PackVariableType.Bool, "false"), ("never", PackVariableType.Bool, "false"),
             })
                 pack.Variables.Add(Var(name, type, value));
+
+            // Condition debugging on a dialogue (1.10.0): the flagged one logs its breakdown when the world loads,
+            // with no key pressed; its unflagged twin logs nothing. Neither can ever start.
+            foreach (var (key, flagged) in new[] { ("debugflag", true), ("debugplain", false) })
+            {
+                var d = new DialogueDef { Key = key, DisplayName = key, DebugConditions = flagged, StartConditions = { Is("never", "true") } };
+                d.Nodes.Add(new DialogueNodeDef { Id = 1, Text = "Never said." });
+                d.RootNodeIds.Add(1);
+                pack.Dialogues.Add(d);
+            }
 
             pack.IntegrationRules.Add(new UpdateRuleDef { Key = "rise", TriggerMode = UpdateRuleTriggerMode.OnRisingEdge,
                                                           Conditions = { Is("ruleGo", "true") }, Actions = { Add("fired") } });
@@ -862,6 +895,96 @@ internal static class InGameSuitePacks
             {
                 Key = "loaded", TriggerMode = UpdateRuleTriggerMode.OnSceneLoad,
                 Actions = { Act(NodeActionTypes.SetVariable, ("name", "loaded"), ("value", "true")) },
+            });
+            return pack;
+        }
+    }
+
+    // ── Effects (the FX tab, 1.10.0) ────────────────────────────────────
+
+    /// <summary>
+    /// <c>suitefx</c>, one effect of each way of playing:
+    /// <list type="bullet">
+    ///   <item><c>burst</c>: ModForge's burst in a star of the pack's own, gold, played by the rule <c>go</c> when
+    ///   <c>burstGo</c> turns true.</item>
+    ///   <item><c>fire</c>: the game's campfire, blue, at the bottom left, while <c>fireOn</c> is true.</item>
+    ///   <item><c>photoHearts</c>: ModForge's points, 12 of them, each time a Starmaker photo is shown.</item>
+    ///   <item><c>moreFollowers</c>: the game's own followers changed - three times as many, quicker.</item>
+    ///   <item><c>words</c>: "+[PV:fans] Fans" floating up, played with the burst.</item>
+    /// </list>
+    /// </summary>
+    public static class Effects
+    {
+        public const string Id = "suitefx";
+        public const string Star = "Effects/star.png";
+        /// <summary>The kitchen's objects: one with an effect, one without.</summary>
+        public const string Hearth = "FxHearth", Plain = "FxPlain";
+
+        /// <summary>
+        /// Where they stand: the house's kitchen, which no other check looks at. Every pack of the suite is in for
+        /// the whole session, and in the bedroom the fire burned through the checks that photograph the bedroom
+        /// against the room the editor ships (S3, S4, S6, S9 failed with it, 1.10.0's first whole run).
+        /// </summary>
+        public const string HearthLevel = "2_Kitchen";
+
+        public static ModPack Make(string folder)
+        {
+            var pack = PackRepository.CreateEmpty(Id);
+            pack.PackId = Id;
+            foreach (var (name, type, value) in new[]
+            {
+                ("burstGo", PackVariableType.Bool, "false"), ("fireOn", PackVariableType.Bool, "false"), ("fans", PackVariableType.Int, "10"),
+            })
+                pack.Variables.Add(Var(name, type, value));
+            PngOf(folder, Star, 32, 32, (x, y) =>
+            {
+                double dx = x - 15.5, dy = y - 15.5;
+                return Math.Abs(dx) * Math.Abs(dy) < 18 || dx * dx + dy * dy < 30 ? Color.FromArgb(255, 255, 255, 255) : Color.FromArgb(0, 0, 0, 0);
+            });
+            pack.Effects.Add(new EffectDef
+            {
+                Key = "burst", DisplayName = "Burst", Template = SMSModForge.Shared.Effects.ForgePrefix + "burst",
+                Texture = Star, Color = "#FFD27AFF", Amount = 2, X = 0.5f, Y = 0.6f,
+            });
+            pack.Effects.Add(new EffectDef
+            {
+                Key = "fire", DisplayName = "Fire", Template = SMSModForge.Shared.Effects.VanillaPrefix + "campfire",
+                Color = "#7AB8FFFF", X = 0.2f, Y = 0.25f, Layer = SMSModForge.Shared.Effects.Front,
+                PlayWhen = SMSModForge.Shared.Effects.WhileTrue, Conditions = { Is("fireOn", "true") },
+            });
+            pack.Effects.Add(new EffectDef
+            {
+                Key = "photoHearts", DisplayName = "Photo hearts", Template = SMSModForge.Shared.Effects.ForgePrefix + "points",
+                Amount = 12, Spread = 0.4f, PlayWhen = SMSModForge.Shared.Effects.WhenUnderTurnsOn, Under = "4_CG_Manager-Photos",
+            });
+            pack.Effects.Add(new EffectDef
+            {
+                Key = "moreFollowers", DisplayName = "More followers", Template = SMSModForge.Shared.Effects.FollowerPoints,
+                ChangesGame = true, Amount = 3, FloatSeconds = 1, TravelSeconds = 0.5f,
+            });
+            pack.Effects.Add(new EffectDef
+            {
+                Key = "words", DisplayName = "Words", Template = SMSModForge.Shared.Effects.ForgePrefix + "popup",
+                Text = "+[PV:fans] Fans", Color = "#FFE07AFF", Seconds = 2,
+            });
+            // An object of the kitchen playing the game's campfire, blue (effects in places, 1.10.0); one beside it with none.
+            pack.VanillaExtensions.Add(new VanillaPlaceExtensionDef
+            {
+                Source = "vanilla:" + HearthLevel,
+                GameObjects =
+                {
+                    new GameObjectDef { Name = Hearth, X = -3f, Y = -2f, Effect = new EffectDef { Key = "", DisplayName = "", Template = SMSModForge.Shared.Effects.VanillaPrefix + "campfire", Color = "#80C0FFFF" } },
+                    new GameObjectDef { Name = Plain, X = 3f, Y = -2f },
+                },
+            });
+            pack.IntegrationRules.Add(new UpdateRuleDef
+            {
+                Key = "go", TriggerMode = UpdateRuleTriggerMode.OnRisingEdge, Conditions = { Is("burstGo", "true") },
+                Actions =
+                {
+                    Act(NodeActionTypes.PlayEffect, ("effect", "burst")),
+                    Act(NodeActionTypes.PlayEffect, ("effect", "words"), ("x", "0.5"), ("y", "0.7")),
+                },
             });
             return pack;
         }
@@ -1324,7 +1447,120 @@ internal static class InGameSuitePacks
                 MaskSprite = PngOf(folder, "Places/look-mask.png", PlaceMaskW, PlaceMaskH,
                                    (x, _) => x < PlaceMaskW / 2 ? Color.FromArgb(255, 255, 255, 255) : Color.FromArgb(0, 0, 0, 0)),
             });
+            // A place of the pack's own lit by every kind of light (1.10.0): flat grey,
+            // so what a light does is all that changes; the template's light changed,
+            // a round light narrowed to a turned cone with a glow, a free shape and a
+            // picture light - how the game lights a pack place (S11).
+            string lightArt = PngOf(folder, "Places/light.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x50, 0x50, 0x50));
+            pack.Places.Add(new PlaceDef
+            {
+                Key = LightPlaceKey, InternalName = LightPlaceObject, DisplayName = "Light Place",
+                BaseSprite = lightArt,
+                SecondarySprite = PngOf(folder, "Places/light-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x50, 0x50, 0x50)),
+                GameObjects =
+                {
+                    new GameObjectDef
+                    {
+                        Name = TemplateLight.ObjectName, Bind = true,
+                        Light = new LightDef { Color = "#FF8040", Strength = 0.35f, OuterRadius = 55f, Falloff = 0.607f, Glow = 0.5f },
+                    },
+                    new GameObjectDef
+                    {
+                        Name = "LampA", X = -5f, Y = 1.5f, RotationZ = 30f,
+                        Light = new LightDef { Color = "#FFE0B0", Strength = 0.8f, OuterRadius = 3f, InnerRadius = 0.6f,
+                                               OuterAngle = 120f, InnerAngle = 60f, Falloff = 0.5f, Glow = 0.3f },
+                    },
+                    new GameObjectDef
+                    {
+                        Name = "Window", X = 4f, Y = 1.5f,
+                        Light = new LightDef { Shape = LightDef.ShapeFree, Color = "#80C0FF", Strength = 0.6f, Falloff = 0.5f, Edge = 0.6f,
+                                               Points = { new[] { -1.2f, -1f }, new[] { 1.2f, -1f }, new[] { 0.2f, 1.6f } } },
+                    },
+                    new GameObjectDef
+                    {
+                        Name = "Pattern", X = 0f, Y = -2.5f, ScaleX = 3f, ScaleY = 3f,
+                        Light = new LightDef { Shape = LightDef.ShapePicture, Strength = 1f,
+                                               Picture = PngOf(folder, "Lights/pattern.png", 64, 32, PatternAt) },
+                    },
+                },
+            });
+            // ...one where a character stands by a light that lights the characters too (S13): its template
+            // light removed, so no lamp casts the bust's shadow.
+            pack.Places.Add(new PlaceDef
+            {
+                Key = CharacterPlaceKey, InternalName = CharacterPlaceObject, DisplayName = "Character Place",
+                BaseSprite = lightArt,
+                SecondarySprite = PngOf(folder, "Places/character-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x50, 0x50, 0x50)),
+                GameObjects =
+                {
+                    new GameObjectDef { Name = TemplateLight.ObjectName, Bind = true, RemoveLight = true },
+                    new GameObjectDef
+                    {
+                        Name = CharacterLamp, X = -2.2f, Y = 0f,
+                        Light = new LightDef { Color = "#FF7A1A", Strength = 1.5f, OuterRadius = 5f, InnerRadius = 0.8f, Glow = 0.35f, LightsCharacters = true },
+                    },
+                },
+            });
+            // ...the same keeping its template light, which casts the bust's shadow (S13).
+            pack.Places.Add(new PlaceDef
+            {
+                Key = ShadowPlaceKey, InternalName = ShadowPlaceObject, DisplayName = "Shadow Place",
+                BaseSprite = lightArt,
+                SecondarySprite = PngOf(folder, "Places/shadow-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x50, 0x50, 0x50)),
+                GameObjects =
+                {
+                    new GameObjectDef
+                    {
+                        Name = CharacterLamp, X = -2.2f, Y = 0f,
+                        Light = new LightDef { Color = "#FF7A1A", Strength = 1.5f, OuterRadius = 5f, InnerRadius = 0.8f, Glow = 0.35f, LightsCharacters = true },
+                    },
+                },
+            });
+            // ...the same at night (S13, S14): its own base light dark and blue, the characters' left alone.
+            pack.Places.Add(new PlaceDef
+            {
+                Key = NightPlaceKey, InternalName = NightPlaceObject, DisplayName = "Night Place",
+                BaseSprite = lightArt,
+                SecondarySprite = PngOf(folder, "Places/night-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x50, 0x50, 0x50)),
+                GameObjects =
+                {
+                    new GameObjectDef { Name = NightDarkness, Light = new LightDef { Shape = LightDef.ShapeAmbient, Color = "#8C9CCC", Strength = 0.35f } },
+                    new GameObjectDef
+                    {
+                        Name = CharacterLamp, X = -2.2f, Y = 0f,
+                        Light = new LightDef { Color = "#FF7A1A", Strength = 1.5f, OuterRadius = 5f, InnerRadius = 0.8f, Glow = 0.35f, LightsCharacters = true },
+                    },
+                },
+            });
+            // ...and one whose template light is removed (S12): switched off in the game.
+            pack.Places.Add(new PlaceDef
+            {
+                Key = DarkPlaceKey, InternalName = DarkPlaceObject, DisplayName = "Dark Place",
+                BaseSprite = lightArt,
+                SecondarySprite = PngOf(folder, "Places/dark-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x50, 0x50, 0x50)),
+                GameObjects = { new GameObjectDef { Name = TemplateLight.ObjectName, Bind = true, RemoveLight = true } },
+            });
             return pack;
+        }
+
+        /// <summary>The light place (<see cref="Make"/>, S11): its key and object, and the objects whose lights it has.</summary>
+        public const string LightPlaceKey = "lightplace", LightPlaceObject = "LightPlace";
+        /// <summary>A place where a character stands by a light that lights the characters too (S13).</summary>
+        public const string CharacterPlaceKey = "characterplace", CharacterPlaceObject = "CharacterPlace", CharacterLamp = "CharacterLamp";
+        /// <summary>The same at night: its darkness object (S13, S14).</summary>
+        public const string NightPlaceKey = "nightplace", NightPlaceObject = "NightPlace", NightDarkness = "Darkness";
+        /// <summary>The same, keeping its template light (S13): the bust's shadow from it.</summary>
+        public const string ShadowPlaceKey = "shadowplace", ShadowPlaceObject = "ShadowPlace";
+        /// <summary>A place whose template light is removed (S12).</summary>
+        public const string DarkPlaceKey = "darkplace", DarkPlaceObject = "DarkPlace";
+        public static readonly string[] LightObjects = { TemplateLight.ObjectName, "LampA", "Window", "Pattern" };
+
+        /// <summary>The picture light's picture: warm and cool stripes, fading out to the right, a see-through square in the middle.</summary>
+        public static Color PatternAt(int x, int y)
+        {
+            if (x >= 28 && x < 36 && y >= 12 && y < 20) return Color.FromArgb(0, 255, 255, 255);
+            byte a = (byte)(255 - x * 3);
+            return x / 8 % 2 == 0 ? Color.FromArgb(a, 255, 180, 60) : Color.FromArgb(a, 60, 160, 255);
         }
 
         /// <summary>The look place (<see cref="Make"/>): its key, object, art and mask.</summary>
@@ -1367,6 +1603,42 @@ internal static class InGameSuitePacks
                 Key = "newday", TriggerMode = UpdateRuleTriggerMode.OnDayChange,
                 Actions = { Act(NodeActionTypes.SetVariable, ("name", "dayTurned"), ("value", "true")) },
             });
+            return pack;
+        }
+    }
+
+    /// <summary>
+    /// <c>suitebare</c> (1.10.0): a pack that names the game's characters by token and touches none of them - no
+    /// character of its own, none of the game's changed or renamed, by this pack or (for Adrian) by any other the
+    /// suite installs. As a pack's author reported it (Discord, 2026-11-20): Validate said "Names Anna in plain
+    /// text" and offered {name:anna}; written so, "in-game it printed {name:anna} literally" while {PC} and [PV:]
+    /// worked. K9's own line names characters a pack declares or renames; this is the one nobody declares.
+    /// <list type="bullet">
+    ///   <item><c>plain</c>: a line with the two tokens and nothing else to fill in - read once, as the pack loads.</item>
+    ///   <item><c>counted</c>: a token beside a <c>[PV:]</c> - read as the line is said.</item>
+    /// </list>
+    /// </summary>
+    public static class BareNames
+    {
+        public const string Id = "suitebare";
+        public const string Plain = "Hello {name:anna}, meet {name:adrian}.";
+        public const string PlainShown = "Hello Anna, meet Adrian.";
+        public const string Counted = "Told [PV:count] times, {name:adrian}.";
+        public const string CountedShown = "Told 3 times, Adrian.";
+
+        public static ModPack Make()
+        {
+            var pack = PackRepository.CreateEmpty(Id);
+            pack.PackId = Id;
+            pack.Variables.Add(Var("never", PackVariableType.Bool, "false"));
+            pack.Variables.Add(Var("count", PackVariableType.Int, "3"));
+            var plain = Script("plain", Plain);
+            var counted = Script("counted", Counted);
+            // Long enough on screen to be read back.
+            plain.Nodes[0].Timeout = 3f;
+            counted.Nodes[0].Timeout = 3f;
+            pack.Dialogues.Add(plain);
+            pack.Dialogues.Add(counted);
             return pack;
         }
     }

@@ -380,4 +380,7 @@ internal sealed class FalloffLookup
 
     /// <summary>Bilinear at (u, v), clamped.</summary>
     public float At(float u, float v) => GameSampling.BilinearOne(_texel, Width, Height, u, v);
+
+    /// <summary>The table itself (rows of <see cref="Width"/>), for the card.</summary>
+    internal float[] Texels => _texel;
 }

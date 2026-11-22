@@ -15,5 +15,16 @@ public static class MainTab
 {
     public const int ModForge = 0, Characters = 1, Npcs = 2, Places = 3, MapButtons = 4,
                      Dialogues = 5, Scenes = 6, Music = 7, Sfx = 8, Wallpapers = 9,
-                     Ui = 10, Quests = 11, Variables = 12, Integration = 13;
+                     Fx = 10, Ui = 11, Quests = 12, Variables = 13, Integration = 14;
+
+    /// <summary>Each tab's name, by where it stands: the key of its header in the English file (MainTabOrderTests
+    /// holds it to the window's). For text that names a tab, as a tutorial's card does (1.10.0).</summary>
+    public static readonly string[] HeaderKeys =
+    {
+        "home.modforge", "characters.characters", "npcs.npcs", "places.places", "mapButtons.mapButtons",
+        "dialogues.dialogues", "scenes.scenes", "music.music", "sfx.sfx", "wallpapers.wallpapers",
+        "fx.fx", "ui.ui", "quests.quests", "variables.variables", "integration.integration",
+    };
+
+    public static string Name(int tab) => tab >= 0 && tab < HeaderKeys.Length ? Localization.Loc.T(HeaderKeys[tab]) : "";
 }

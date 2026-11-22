@@ -29,7 +29,12 @@ public sealed class LanguageGuessTests
     private static List<string> Shipped(string code, bool english = false, bool withHints = true)
     {
         var file = TextFile.Parse(File.ReadAllText(Path.Combine(Loc.ShippedFolder, code + ".txt")));
-        return file.Entries.Where(e => withHints || !e.Key.StartsWith("vhint.", System.StringComparison.Ordinal))
+        // Not the tutorials' steps or the guide's worked examples (1.10.0): in every language they quote, in
+        // English, the names and lines the reader types - the tutorials check them in English - so a Spanish step
+        // can be half English on purpose. A pack's line, which is what the guess is for, does not do that.
+        return file.Entries.Where(e => !e.Key.StartsWith("tutorial.", System.StringComparison.Ordinal)
+                                       && !e.Key.StartsWith("docs.example.", System.StringComparison.Ordinal))
+                   .Where(e => withHints || !e.Key.StartsWith("vhint.", System.StringComparison.Ordinal))
                    .Select(e => english ? e.English : e.Text)
                    .Where(t => !string.IsNullOrWhiteSpace(t)).Select(t => t!).ToList();
     }

@@ -36,8 +36,12 @@ namespace SMSModForge.PackPlugin
             public bool Queued;
             public bool DisableVanillaTrigger;
 
-            /// <summary>Author opted this dialogue into the F12 condition-state dump.</summary>
+            /// <summary>Author opted this dialogue into condition debugging: its start conditions' breakdown is
+            /// logged when they flip and once when the world loads (and on F12 in a Debug build).</summary>
             public bool DebugConditions;
+
+            /// <summary>Runtime-only: the breakdown has been logged at least once since the world loaded.</summary>
+            public bool DebugLogged;
 
             /// <summary>
             /// Runtime-only: a queued dialogue whose conditions have passed but

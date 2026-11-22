@@ -34,7 +34,10 @@ namespace SMSModForge.View.Controls;
 /// put in it, which is what makes the mapping between a character offset and a
 /// position in the document something this can compute rather than something
 /// WPF has to be asked about — and <c>TextRange.Text</c> has its own ideas
-/// about newlines that are not worth fighting.
+/// about newlines that are not worth fighting. One run is not its own text: a
+/// name chip (1.10.0) shows a character's name and stands for its
+/// <c>{name:key}</c> in the line - until it is typed into, when it is the
+/// words it then shows.
 /// <para/>
 /// <b>The rule the whole thing rests on.</b> The document is only ever a
 /// rendering OF <see cref="Text"/>: what comes back out of it must be exactly
@@ -43,8 +46,11 @@ namespace SMSModForge.View.Controls;
 /// spends their time in, and a control that eats a character while somebody
 /// types is worse than one that shows no formatting at all.
 /// </summary>
-public sealed class MarkupTextBox : RichTextBox
+public sealed class MarkupTextBox : RichTextBox, ILineRuns
 {
+    /// <summary>The runs the line is drawn in (for the glow under coloured words).</summary>
+    public IEnumerable<Run> LineRuns => Document.Blocks.OfType<Paragraph>().SelectMany(p => p.Inlines.OfType<Run>());
+
     /// <summary>Guards the two directions from driving each other: setting the
     /// document raises TextChanged, which would write back to Text, which would
     /// rebuild the document.</summary>
@@ -83,6 +89,25 @@ public sealed class MarkupTextBox : RichTextBox
         };
         Unloaded += (_, _) => DialogueMarkup.TokenColorsChanged -= TokenColorsChanged;
 
+        // The small x on each name (1.10.0): drawn over the box, not in its document.
+        Loaded += (_, _) =>
+        {
+            if (_closers == null && AdornerLayer.GetAdornerLayer(this) is { } layer)
+            {
+                _closers = new ChipClosers(this);
+                layer.Add(_closers);
+            }
+            _closers?.InvalidateVisual();
+        };
+        Unloaded += (_, _) =>
+        {
+            if (_closers != null) AdornerLayer.GetAdornerLayer(this)?.Remove(_closers);
+            _closers = null;
+        };
+        Rendered += () => _closers?.InvalidateVisual();
+        SizeChanged += (_, _) => _closers?.InvalidateVisual();
+        AddHandler(ScrollViewer.ScrollChangedEvent, new ScrollChangedEventHandler((_, _) => _closers?.InvalidateVisual()));
+
         CommandBindings.Add(new System.Windows.Input.CommandBinding(
             System.Windows.Input.ApplicationCommands.Undo,
             (_, e) => { e.Handled = Undo(); },
@@ -117,10 +142,25 @@ public sealed class MarkupTextBox : RichTextBox
         // own undo putting the pack back - is a different line as far as this
         // box's history goes. Stepping back into the last one's edits from
         // here would write them onto this one.
-        if (!box._syncing && !box._writingOwnEdit) box.ForgetHistory();
+        bool fromOutside = !box._syncing && !box._writingOwnEdit;
+        string was = box._last;
+        if (fromOutside)
+        {
+            box.ForgetHistory();
+            box._edited = null;
+            box._keptHere.Clear();
+        }
         box._last = text;
 
         box.Render(text);
+
+        // Put back by the editor's undo while the caret is in it (1.10.0): the caret where the change was, as
+        // the box's own undo left it - not at the start of the line.
+        if (fromOutside && box.IsKeyboardFocusWithin && !box.HidesTags && was != text)
+        {
+            int at = Math.Clamp(CaretFor(text, was), 0, text.Length);
+            box.Select(at, 0);
+        }
     }
 
     public static readonly DependencyProperty HidesTagsProperty =
@@ -430,8 +470,31 @@ public sealed class MarkupTextBox : RichTextBox
     /// write is not mistaken for a line arriving from outside.</summary>
     private bool _writingOwnEdit;
 
-    public bool CanUndoLine => _undo.Count > 0;
-    public bool CanRedoLine => _redo.Count > 0;
+    public bool CanUndoLine => KeepsOwnHistory && _undo.Count > 0;
+    public bool CanRedoLine => KeepsOwnHistory && _redo.Count > 0;
+
+    /// <summary>
+    /// Whether Ctrl+Z here steps through the box's own history of the line. Off in the editor's window
+    /// (1.10.0), where there is one history for everything: the box's own answered first while it had the
+    /// keyboard, so a line typed, left and come back to was taken back by the box - which the editor saw as a
+    /// new edit, and its next undo put the words back. The box then only says where each of its steps begins
+    /// (<see cref="StepBeginningEvent"/>), and the editor takes them.
+    /// </summary>
+    public bool KeepsOwnHistory
+    {
+        get => _keepsOwnHistory;
+        set
+        {
+            _keepsOwnHistory = value;
+            if (!value) { _undo.Clear(); _redo.Clear(); }
+        }
+    }
+    private bool _keepsOwnHistory = true;
+
+    /// <summary>A step of the line is about to begin - a run of typing, a tag - and the line is still as it
+    /// was before it. Raised only while <see cref="KeepsOwnHistory"/> is off.</summary>
+    public static readonly RoutedEvent StepBeginningEvent =
+        EventManager.RegisterRoutedEvent("StepBeginning", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(MarkupTextBox));
 
     /// <summary>Step back once. False when there is nothing to step back to,
     /// so the caller can hand the key on.</summary>
@@ -458,7 +521,7 @@ public sealed class MarkupTextBox : RichTextBox
     /// <summary>Where the caret goes when a run of typing is undone: the end of
     /// the part of the old line the run replaced, which is where a TextBox puts
     /// it too.</summary>
-    private static int CaretFor(string before, string after)
+    internal static int CaretFor(string before, string after)
     {
         int prefix = 0;
         int shorter = Math.Min(before.Length, after.Length);
@@ -473,6 +536,11 @@ public sealed class MarkupTextBox : RichTextBox
 
     private void Remember(Step before)
     {
+        if (!KeepsOwnHistory)
+        {
+            RaiseEvent(new RoutedEventArgs(StepBeginningEvent, this));
+            return;
+        }
         _undo.Add(before);
         _redo.Clear();
     }
@@ -496,7 +564,46 @@ public sealed class MarkupTextBox : RichTextBox
     protected override void OnPreviewMouseDown(System.Windows.Input.MouseButtonEventArgs e)
     {
         _typing = false;
+        NamesOnceSettled();
         base.OnPreviewMouseDown(e);
+    }
+
+    /// <summary>What is typed beside a name goes beside it, never into it: WPF would add it to the name's own
+    /// run, which would then no longer be the name.</summary>
+    protected override void OnPreviewTextInput(System.Windows.Input.TextCompositionEventArgs e)
+    {
+        if (!HidesTags && !IsReadOnly && !string.IsNullOrEmpty(e.Text) && Selection.IsEmpty
+            && CaretPosition.Parent is Run { Tag: NameChip } chip && chip.Text == ((NameChip)chip.Tag).Shown)
+        {
+            bool atEnd = CaretPosition.CompareTo(chip.ContentEnd) == 0;
+            if (atEnd || CaretPosition.CompareTo(chip.ContentStart) == 0)
+            {
+                var beside = new Run(e.Text);
+                // One change: the caret is after the words before anything reads where it is.
+                BeginChange();
+                try
+                {
+                    if (atEnd) Body.Inlines.InsertAfter(chip, beside);
+                    else Body.Inlines.InsertBefore(chip, beside);
+                    CaretPosition = beside.ContentEnd;
+                }
+                finally { EndChange(); }
+                e.Handled = true;
+                return;
+            }
+        }
+        base.OnPreviewTextInput(e);
+    }
+
+    /// <summary>The box let go of: every name typed in it is finished.</summary>
+    protected override void OnLostKeyboardFocus(System.Windows.Input.KeyboardFocusChangedEventArgs e)
+    {
+        if (!IsKeyboardFocusWithin)
+        {
+            MakeNames(all: true);
+            _edited = null;
+        }
+        base.OnLostKeyboardFocus(e);
     }
 
     /// <summary>
@@ -515,6 +622,18 @@ public sealed class MarkupTextBox : RichTextBox
             e.Handled = true;
             return;
         }
+
+        // A name is one thing: Backspace just after it, or Delete just before it, takes the whole name.
+        if ((e.Key == System.Windows.Input.Key.Back || e.Key == System.Windows.Input.Key.Delete)
+            && System.Windows.Input.Keyboard.Modifiers == System.Windows.Input.ModifierKeys.None
+            && RemoveChipBeside(e.Key == System.Windows.Input.Key.Back))
+        {
+            e.Handled = true;
+            return;
+        }
+
+        // The caret moved by hand: a name it leaves is finished.
+        if (IsNavigation(e.Key)) NamesOnceSettled();
 
         // Moving the caret by hand ends a run of typing, and so does anything
         // done with Ctrl held - a paste or a cut is a step of its own.
@@ -619,10 +738,249 @@ public sealed class MarkupTextBox : RichTextBox
         var built = new System.Text.StringBuilder();
         foreach (var inline in Body.Inlines)
         {
-            if (inline is Run run) built.Append(run.Text);
+            if (inline is Run run) built.Append(LineOf(run));
             else if (inline is LineBreak) built.Append('\n');
         }
         return built.ToString();
+    }
+
+    // ── Names ─────────────────────────────────────────────────────────
+    //
+    // A name typed in a line becomes its character's {name:key} by itself (1.10.0, the author: "there should
+    // be some level of automatic detection when the user types in a character's name, with changing the name
+    // in the text field and previews to have the color of the character and a very small x next to it if the
+    // user decides to put it as plain text instead. The detection should happen as soon as the user finishes
+    // typing the name"). Which words are names is the window's to say (FindNames: the pack's characters);
+    // this box finds them when a word is finished - a word typed after it, the caret taken elsewhere, the box
+    // left - among the words just typed, never elsewhere in the line. Each change is an undo step of its own,
+    // so Ctrl+Z gives the name back as it was typed.
+
+    /// <summary>A name token shown as the name: the run's text is <see cref="Shown"/>, the line holds <see cref="Token"/>.</summary>
+    private sealed class NameChip
+    {
+        public NameChip(string token, string shown) { Token = token; Shown = shown; }
+        public string Token { get; }
+        public string Shown { get; }
+    }
+
+    /// <summary>What a run stands for in the line: a name chip that still shows the name, its token; any other
+    /// run - a chip that was typed into among them - its own words.</summary>
+    private static string LineOf(Run run) => run.Tag is NameChip chip && run.Text == chip.Shown ? chip.Token : run.Text;
+
+    /// <summary>The names in a line that become tokens, each with its token - set by the window, which knows
+    /// the pack's characters and the names kept plain in the line being edited. None while unset.</summary>
+    public Func<string, IReadOnlyList<(int Start, int Length, string Token)>>? FindNames { get; set; }
+
+    /// <summary>Told the name the author kept as plain words with a name's x, for the line to remember.</summary>
+    public Action<string>? KeepPlain { get; set; }
+
+    /// <summary>Names kept as plain words here since the line arrived, whether or not anybody remembers them.</summary>
+    private readonly HashSet<string> _keptHere = new(StringComparer.Ordinal);
+
+    /// <summary>Where the line has been typed in since it arrived (or since the box was last left), in characters
+    /// of <see cref="Text"/>: the only words names are looked for in. Null for nowhere.</summary>
+    private (int From, int To)? _edited;
+
+    private bool _makingNames;
+
+    /// <summary>Every intact name chip, with where its token starts in <see cref="Text"/>.</summary>
+    private IEnumerable<(int Start, NameChip Chip, Run Run)> Chips()
+    {
+        int offset = 0;
+        foreach (var inline in Body.Inlines)
+        {
+            if (inline is Run run)
+            {
+                string line = LineOf(run);
+                if (run.Tag is NameChip chip && line == chip.Token) yield return (offset, chip, run);
+                offset += line.Length;
+            }
+            else if (inline is LineBreak) offset++;
+        }
+    }
+
+    /// <summary>Whether any name of the line is shown as a chip - for tests.</summary>
+    internal int ChipCount => Chips().Count();
+
+    /// <summary>Where the line now differs from what it was: widened to take in the words just typed, and moved
+    /// along with what is after them.</summary>
+    private void NoteTyping(string before, string after)
+    {
+        int p = 0, shorter = Math.Min(before.Length, after.Length);
+        while (p < shorter && before[p] == after[p]) p++;
+        int s = 0;
+        while (s < shorter - p && before[before.Length - 1 - s] == after[after.Length - 1 - s]) s++;
+        int oldEnd = before.Length - s, newEnd = after.Length - s, delta = newEnd - oldEnd;
+        int Moved(int x) => x >= oldEnd ? x + delta : x <= p ? x : newEnd;
+        _edited = _edited is { } was ? (Math.Min(Moved(was.From), p), Math.Max(Moved(was.To), newEnd)) : (p, newEnd);
+    }
+
+    /// <summary>Once what the key or the click did has been done: the names it finished.</summary>
+    private void NamesOnceSettled()
+    {
+        if (_edited == null || FindNames == null) return;
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, new Action(() => MakeNames(all: false)));
+    }
+
+    /// <summary>
+    /// The names among the words typed that are finished, made their characters' tokens - one undo step. A
+    /// name is finished when the caret is no longer on it (a word typed after it, the caret taken elsewhere),
+    /// or, with <paramref name="all"/>, whatever the caret: the box was left.
+    /// </summary>
+    private void MakeNames(bool all)
+    {
+        if (FindNames == null || HidesTags || IsReadOnly || _makingNames || _edited is not { } edited) return;
+        string text = Text;
+        int caret = all || !IsKeyboardFocusWithin ? -1 : CaretIndex;
+        var hits = new List<(int Start, int Length, string Token)>();
+        foreach (var hit in FindNames(text))
+        {
+            int end = hit.Start + hit.Length;
+            if (hit.Start > edited.To || end < edited.From) continue;                // not typed now
+            if (caret >= hit.Start && caret <= end) continue;                         // still being typed
+            if (end > text.Length || _keptHere.Contains(text.Substring(hit.Start, hit.Length))) continue;
+            hits.Add(hit);
+        }
+        if (hits.Count == 0) return;
+        hits.Sort((a, b) => a.Start.CompareTo(b.Start));
+
+        var built = new System.Text.StringBuilder(text.Length + hits.Count * 8);
+        int from = 0, newCaret = caret;
+        foreach (var (start, length, token) in hits)
+        {
+            if (start < from) continue;                                               // overlapping: the first
+            built.Append(text, from, start - from).Append(token);
+            if (caret >= start + length) newCaret += token.Length - length;
+            from = start + length;
+        }
+        built.Append(text, from, text.Length - from);
+        string now = built.ToString();
+
+        // A step of its own: what was typed is one, the names made of it the next.
+        Remember(new Step(text, caret < 0 ? SelectionStart : caret, 0));
+        _typing = false;
+        _makingNames = true;
+        try { WriteOwnEdit(now); }
+        finally { _makingNames = false; }
+        NoteTyping(text, now);
+        if (caret >= 0 && IsKeyboardFocusWithin) Select(Math.Clamp(newCaret, 0, now.Length), 0);
+    }
+
+    /// <summary>
+    /// The name whose token starts at <paramref name="start"/> written back as plain words, and kept so in this
+    /// line - what its x does. One undo step; false when no name starts there.
+    /// </summary>
+    internal bool KeepNamePlain(int start)
+    {
+        if (IsReadOnly || HidesTags) return false;
+        foreach (var (at, chip, _) in Chips())
+        {
+            if (at != start) continue;
+            string text = Text;
+            Remember(new Step(text, start, 0));
+            _typing = false;
+            _keptHere.Add(chip.Shown);
+            KeepPlain?.Invoke(chip.Shown);
+            string now = text.Substring(0, start) + chip.Shown + text.Substring(start + chip.Token.Length);
+            WriteOwnEdit(now);
+            if (IsKeyboardFocusWithin) Select(start + chip.Shown.Length, 0);
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>A click at <paramref name="at"/> (the box's own units) on a name's x: that name kept as plain
+    /// words. What the x's mouse handler calls; false where there is no x.</summary>
+    internal bool ClickCloserAt(Point at)
+    {
+        foreach (var (spot, start) in CloserSpots)
+            if (spot.Contains(at)) return KeepNamePlain(start);
+        return false;
+    }
+
+    /// <summary>Backspace just after a name, or Delete just before one: the whole name goes, one step.</summary>
+    private bool RemoveChipBeside(bool before)
+    {
+        if (IsReadOnly || HidesTags || !Selection.IsEmpty) return false;
+        int caret = CaretIndex;
+        foreach (var (start, chip, _) in Chips())
+        {
+            int end = start + chip.Token.Length;
+            if (before ? end != caret : start != caret) continue;
+            string text = Text;
+            Remember(new Step(text, caret, 0));
+            _typing = false;
+            WriteOwnEdit(text.Remove(start, chip.Token.Length));
+            Select(start, 0);
+            return true;
+        }
+        return false;
+    }
+
+    private ChipClosers? _closers;
+
+    /// <summary>The x's are drawn again whenever whether they show can change.</summary>
+    protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.Property == IsReadOnlyProperty || e.Property == IsEnabledProperty || e.Property == IsVisibleProperty
+            || e.Property == FontSizeProperty)
+            _closers?.InvalidateVisual();
+    }
+
+    /// <summary>Whether names show the x that keeps them as plain words: where the line can be edited.</summary>
+    private bool ShowsClosers => !HidesTags && !IsReadOnly && IsEnabled && IsVisible;
+
+    /// <summary>Where each name's x is drawn, in the box's own units - for tests.</summary>
+    internal IReadOnlyList<(Rect Spot, int Start)> CloserSpots => _closers?.Spots ?? (IReadOnlyList<(Rect, int)>)Array.Empty<(Rect, int)>();
+
+    /// <summary>
+    /// The small x at each name's top right corner, over the box (an adorner: the document stays runs and line
+    /// breaks). Only the x's own spots take the mouse; everywhere else clicks reach the words beneath.
+    /// </summary>
+    private sealed class ChipClosers : Adorner
+    {
+        private readonly MarkupTextBox _box;
+        public readonly List<(Rect Spot, int Start)> Spots = new();
+
+        public ChipClosers(MarkupTextBox box) : base(box)
+        {
+            _box = box;
+            IsClipEnabled = true;
+            Cursor = System.Windows.Input.Cursors.Hand;
+            ToolTip = SMSModForge.Localization.Loc.T("dialogues.name.keepPlain.tip");
+        }
+
+        protected override void OnRender(DrawingContext dc)
+        {
+            Spots.Clear();
+            if (!_box.ShowsClosers) return;
+            var chipBack = (Color)ColorConverter.ConvertFromString(DialogueLook.TokenChipHex)!;
+            double size = Math.Max(7, Math.Round(_box.FontSize * 0.55));
+            foreach (var (start, _, run) in _box.Chips())
+            {
+                Rect last = run.ContentEnd.GetCharacterRect(LogicalDirection.Backward);
+                if (last.IsEmpty || double.IsInfinity(last.Top)) continue;
+                // Centred on the name's top right corner, like a badge - kept inside the box, a name at its
+                // very top included.
+                var spot = new Rect(Math.Min(last.Right - size * 0.5, _box.ActualWidth - size),
+                                    Math.Max(last.Top - size * 0.4, 0), size, size);
+                var centre = new Point(spot.X + size / 2, spot.Y + size / 2);
+                var ink = run.Foreground as SolidColorBrush ?? Brushes.White;
+                dc.DrawEllipse(new SolidColorBrush(chipBack), new Pen(ink, 0.8), centre, size / 2, size / 2);
+                var pen = new Pen(ink, 1.1) { StartLineCap = PenLineCap.Round, EndLineCap = PenLineCap.Round };
+                double r = size * 0.2;
+                dc.DrawLine(pen, new Point(centre.X - r, centre.Y - r), new Point(centre.X + r, centre.Y + r));
+                dc.DrawLine(pen, new Point(centre.X - r, centre.Y + r), new Point(centre.X + r, centre.Y - r));
+                Spots.Add((spot, start));
+            }
+        }
+
+        protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (_box.ClickCloserAt(e.GetPosition(_box))) { e.Handled = true; return; }
+            base.OnMouseLeftButtonDown(e);
+        }
     }
 
     /// <summary>
@@ -643,9 +1001,16 @@ public sealed class MarkupTextBox : RichTextBox
         {
             if (inline is Run run)
             {
+                string line = LineOf(run);
                 if (at.CompareTo(run.ContentStart) >= 0 && at.CompareTo(run.ContentEnd) <= 0)
-                    return offset + run.ContentStart.GetOffsetToPosition(at);
-                offset += run.Text.Length;
+                {
+                    int d = run.ContentStart.GetOffsetToPosition(at);
+                    // A name chip: its start is its token's start, its end its token's end.
+                    if (line.Length != run.Text.Length)
+                        return offset + (d <= 0 ? 0 : d >= run.Text.Length ? line.Length : Math.Min(d, line.Length));
+                    return offset + d;
+                }
+                offset += line.Length;
             }
             else if (inline is LineBreak)
             {
@@ -666,9 +1031,16 @@ public sealed class MarkupTextBox : RichTextBox
         {
             if (inline is Run run)
             {
-                if (offset <= seen + run.Text.Length)
-                    return run.ContentStart.GetPositionAtOffset(offset - seen);
-                seen += run.Text.Length;
+                string line = LineOf(run);
+                if (offset <= seen + line.Length)
+                {
+                    int rel = offset - seen;
+                    if (line.Length != run.Text.Length)
+                        return rel <= 0 ? run.ContentStart : rel >= line.Length ? run.ContentEnd
+                             : run.ContentStart.GetPositionAtOffset(Math.Min(rel, run.Text.Length));
+                    return run.ContentStart.GetPositionAtOffset(rel);
+                }
+                seen += line.Length;
             }
             else if (inline is LineBreak)
             {
@@ -690,6 +1062,7 @@ public sealed class MarkupTextBox : RichTextBox
         if (HidesTags) return;
 
         string typed = PlainText();
+        string before = _last;
 
         // Typed, deleted or pasted: one step for the run, recorded from what
         // the line was before the run began. A document change that leaves the
@@ -710,6 +1083,12 @@ public sealed class MarkupTextBox : RichTextBox
         finally { _syncing = false; }
 
         Render(typed);
+
+        if (typed != before)
+        {
+            NoteTyping(before, typed);
+            MakeNames(all: false);
+        }
     }
 
     /// <summary>
@@ -794,6 +1173,9 @@ public sealed class MarkupTextBox : RichTextBox
         finally { _syncing = false; }
     }
 
+    /// <summary>The language of what is not words: none the speller has a dictionary for.</summary>
+    private static readonly System.Windows.Markup.XmlLanguage NotWords = System.Windows.Markup.XmlLanguage.GetLanguage("zxx");
+
     /// <summary>
     /// One span as inlines. More than one when the span holds newlines, since a
     /// Run cannot carry a line break.
@@ -808,7 +1190,25 @@ public sealed class MarkupTextBox : RichTextBox
             if (i > 0) yield return new LineBreak();
             if (lines[i].Length == 0) continue;
 
+            // A code inside the words ([PV:Confidence], $Mood) in a run of its own, in no language: Windows' speller,
+            // which checks this box, skips text in a language it has no dictionary for, and underlined the code in
+            // red as a misspelling (1.10.0, found by the review of every tutorial step).
+            if (!span.IsTag && !span.IsToken && Services.Speller.HasCodes(lines[i]))
+            {
+                foreach (var (piece, code) in Services.Speller.CodePieces(lines[i]))
+                {
+                    var part = new Run(piece);
+                    Apply(part, span.Style);
+                    if (code) part.Language = NotWords;
+                    if (span.Style.Cue) part.TextDecorations = CueUnderline();
+                    yield return part;
+                }
+                continue;
+            }
+
             var run = new Run(lines[i]);
+            // Tags and tokens are not words either.
+            if (span.IsTag || span.IsToken) run.Language = NotWords;
             if (span.IsTag)
             {
                 // Its own colour on its own chip, and not styled by itself: a
@@ -826,6 +1226,13 @@ public sealed class MarkupTextBox : RichTextBox
                 // applies, because what the game puts here in its place WILL be
                 // bold or coloured or half-size along with the rest.
                 Apply(run, span.Style);
+                // A character's name token shows as their name (1.10.0): what the player reads there. The line
+                // still holds the token (LineOf). One nobody answers to stays its braces, so the typo shows.
+                if (DialogueMarkup.NameIn(lines[i]) is { Length: > 0 } name)
+                {
+                    run.Text = name;
+                    run.Tag = new NameChip(lines[i], name);
+                }
                 var person = DialogueMarkup.TokenColor?.Invoke(lines[i]);
                 if (person is { } c)
                 {
@@ -859,6 +1266,11 @@ public sealed class MarkupTextBox : RichTextBox
     /// <paramref name="behind"/>.
     /// </summary>
     private IEnumerable<Inline> BuildReadable(DialogueLinePreview.Piece piece, Color behind)
+        => ReadableInlines(this, FontSize, piece, behind);
+
+    /// <summary>The same, for any element showing a line this way (the Dialogues list's rows,
+    /// <see cref="MarkupTextBlock"/>): its resources and its font size.</summary>
+    internal static IEnumerable<Inline> ReadableInlines(FrameworkElement host, double fontSize, DialogueLinePreview.Piece piece, Color behind)
     {
         string[] lines = piece.Text.Split('\n');
         for (int i = 0; i < lines.Length; i++)
@@ -868,7 +1280,7 @@ public sealed class MarkupTextBox : RichTextBox
             var run = new Run(lines[i]);
             if (piece.Token)
             {
-                Apply(run, piece.Style);
+                ApplyStyle(run, piece.Style, fontSize);
                 var person = DialogueMarkup.TokenColor?.Invoke(piece.Source ?? lines[i]);
                 var chip = (Color)ColorConverter.ConvertFromString(DialogueLook.TokenChipHex)!;
                 run.Background = new SolidColorBrush(chip);
@@ -878,7 +1290,7 @@ public sealed class MarkupTextBox : RichTextBox
             }
             else
             {
-                Apply(run, piece.Style);
+                ApplyStyle(run, piece.Style, fontSize);
                 if (piece.Bracketed)
                 {
                     run.Foreground = new SolidColorBrush(ReadableInk.On((Color)ColorConverter.ConvertFromString(DialogueLook.BracketHex)!, behind));
@@ -890,14 +1302,16 @@ public sealed class MarkupTextBox : RichTextBox
                     run.Tag = Glows;
                 }
             }
-            if (piece.Style.Cue) run.TextDecorations = CueUnderline();
+            if (piece.Style.Cue) run.TextDecorations = CueUnderlineFor(host);
             yield return run;
         }
     }
 
-    private TextDecorationCollection CueUnderline()
+    private TextDecorationCollection CueUnderline() => CueUnderlineFor(this);
+
+    private static TextDecorationCollection CueUnderlineFor(FrameworkElement host)
     {
-        var ink = TryFindResource(Services.ThemeManager.KeyAccent) as Brush ?? Brushes.SteelBlue;
+        var ink = host.TryFindResource(Services.ThemeManager.KeyAccent) as Brush ?? Brushes.SteelBlue;
         var pen = new Pen(ink, 1.5) { DashStyle = new DashStyle(new double[] { 2, 1.5 }, 0) };
         pen.Freeze();
         return new TextDecorationCollection
@@ -936,11 +1350,13 @@ public sealed class MarkupTextBox : RichTextBox
         => TryFindResource(Services.ThemeManager.KeyMarkupBack) as Brush
            ?? new SolidColorBrush(Color.FromRgb(0xDE, 0xE4, 0xEB));
 
-    private void Apply(Run run, DialogueMarkup.Style style)
+    private void Apply(Run run, DialogueMarkup.Style style) => ApplyStyle(run, style, FontSize);
+
+    private static void ApplyStyle(Run run, DialogueMarkup.Style style, double fontSize)
     {
         if (style.Bold) run.FontWeight = FontWeights.Bold;
         if (style.Italic) run.FontStyle = FontStyles.Italic;
-        if (Math.Abs(style.Scale - 1) > 0.0001) run.FontSize = FontSize * style.Scale;
+        if (Math.Abs(style.Scale - 1) > 0.0001) run.FontSize = fontSize * style.Scale;
 
         var brush = BrushFor(style.Color);
         if (brush != null) run.Foreground = brush;

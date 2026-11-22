@@ -38,6 +38,7 @@ public sealed class ParamTypeTemplateSelector : DataTemplateSelector
     public DataTemplate? SignalRefTemplate { get; set; }
     public DataTemplate? MusicRefTemplate { get; set; }
     public DataTemplate? SfxRefTemplate { get; set; }
+    public DataTemplate? EffectRefTemplate { get; set; }
     public DataTemplate? GameObjectPathTemplate { get; set; }
     public DataTemplate? SpriteRefTemplate { get; set; }
     public DataTemplate? ChoiceTemplate { get; set; }
@@ -67,6 +68,7 @@ public sealed class ParamTypeTemplateSelector : DataTemplateSelector
             ParamType.SignalRef => SignalRefTemplate ?? StringTemplate,
             ParamType.MusicRef => MusicRefTemplate ?? StringTemplate,
             ParamType.SfxRef => SfxRefTemplate ?? StringTemplate,
+            ParamType.EffectRef => EffectRefTemplate ?? StringTemplate,
             ParamType.GameObjectPath => GameObjectPathTemplate ?? StringTemplate,
             ParamType.SpriteRef => SpriteRefTemplate ?? StringTemplate,
             ParamType.Choice => ChoiceTemplate ?? StringTemplate,

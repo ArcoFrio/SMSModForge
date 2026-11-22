@@ -184,9 +184,9 @@ public sealed class NameTokenOnScreenTests
 
             string Row()
             {
-                var row = Descendants<MarkupTextBox>(window)
+                var row = Descendants<MarkupTextBlock>(window)
                     .First(b => b.Name == "NodeRowText" && ReferenceEquals(b.DataContext, vm.SelectedNode));
-                return new TextRange(row.Document.ContentStart, row.Document.ContentEnd).Text.TrimEnd('\r', '\n');
+                return new TextRange(row.ContentStart, row.ContentEnd).Text.TrimEnd('\r', '\n');
             }
 
             _out.WriteLine(Row());

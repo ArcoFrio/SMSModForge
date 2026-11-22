@@ -304,13 +304,20 @@ public sealed class LanguageSession
     /// correction to the Spanish and a change to the pack alike.
     /// </summary>
     public static string Wrap(string code, IReadOnlyDictionary<string, string> shown, string ownPack)
+        => SnapshotMark + Header(code, shown) + "\n" + ownPack;
+
+    /// <summary>What a step taken in pieces (Model.PackPieces, 1.10.0) remembers of the language beside the
+    /// pack in its own words: its code, and what it showed. <see cref="ReadHeader"/> reads it back.</summary>
+    public static string Header(string code, IReadOnlyDictionary<string, string> shown)
     {
         var texts = new JObject();
         foreach (var pair in shown) texts[pair.Key] = pair.Value;
-        return SnapshotMark + code + "\n"
-             + texts.ToString(Newtonsoft.Json.Formatting.None) + "\n"
-             + ownPack;
+        return code + "\n" + texts.ToString(Newtonsoft.Json.Formatting.None);
     }
+
+    /// <summary>Read back what <see cref="Header"/> wrote.</summary>
+    public static void ReadHeader(string header, out string code, out TextFile shown)
+        => Unwrap(SnapshotMark + header + "\n", out code, out shown, out _);
 
     /// <summary>Read back a step <see cref="Wrap"/> made. False for an ordinary
     /// one, which is a pack and nothing else.</summary>

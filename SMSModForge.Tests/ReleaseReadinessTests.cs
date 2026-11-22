@@ -164,6 +164,36 @@ public sealed class ReleaseReadinessTests
     }
 
     /// <summary>
+    /// The tutorials' practice art, beside the plugin (1.10.0): an exported pack leaves out every file of its
+    /// TutorialArt folder that is exactly as ModForge ships it, and the game reads those from the plugin's own
+    /// copy. A plugin zip without it ships packs with holes where the tutorials' pictures and sounds were.
+    /// </summary>
+    [Fact]
+    public void The_plugin_zip_carries_the_tutorials_art_that_packs_leave_out()
+    {
+        string? path = Environment.GetEnvironmentVariable("SMSMODFORGE_RELEASE_PLUGIN");
+        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path) || !path.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+        {
+            _out.WriteLine("SMSMODFORGE_RELEASE_PLUGIN not set to a zip; nothing to check.");
+            return;
+        }
+        using var zip = ZipFile.OpenRead(path);
+        var inZip = zip.Entries.ToDictionary(e => e.FullName.Replace('\\', '/'), e => e.Length, StringComparer.OrdinalIgnoreCase);
+        string source = Path.Combine(TranslationCoverageTests.EditorDir, "Resources", "TutorialAssets");
+        var files = Directory.EnumerateFiles(source, "*", SearchOption.AllDirectories).ToList();
+        Assert.True(files.Count > 20, $"only {files.Count} files in {source}");   // the control: a folder read
+        var missing = new List<string>();
+        foreach (string file in files)
+        {
+            string rel = Path.GetRelativePath(source, file).Replace('\\', '/');
+            string entry = "BepInEx/plugins/SMSModForge/TutorialArt/" + rel;
+            if (!inZip.TryGetValue(entry, out long length) || length != new FileInfo(file).Length) missing.Add(rel);
+        }
+        _out.WriteLine($"{files.Count - missing.Count} of {files.Count} tutorial files in the zip");
+        Assert.True(missing.Count == 0, "missing or different in the plugin zip: " + string.Join(", ", missing.Take(20)));
+    }
+
+    /// <summary>
     /// Every language has what this version added to or changed in the English.
     /// <para/>
     /// Nothing else stops a release short of it. A text added during a version

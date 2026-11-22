@@ -89,10 +89,21 @@ namespace SMSModForge.PackPlugin
                 return null;
             }
 
+            // Shared for deleting as well as reading (1.10.0). The archive stays open for the whole session, and
+            // opened as ZipFile.OpenRead opens it, the file could not be replaced while the game ran: the editor's
+            // export failed with "being used by another process" (measured with a control - scratch probe of
+            // 2026-11-21). Shared this way, an export replaces the file, this session keeps reading the copy it
+            // opened, and the next save loaded reads the new one.
             ZipArchive zip;
-            try { zip = ZipFile.OpenRead(smspackPath); }
+            FileStream file = null;
+            try
+            {
+                file = new FileStream(smspackPath, FileMode.Open, FileAccess.Read, FileShare.Read | FileShare.Delete);
+                zip = new ZipArchive(file, ZipArchiveMode.Read, false);
+            }
             catch (System.Exception ex)
             {
+                file?.Dispose();
                 logger?.LogError("[SMSModForge.PackPlugin] PackArchive: bad zip '" + smspackPath +
                                  "': " + ex.Message);
                 return null;
@@ -173,7 +184,23 @@ namespace SMSModForge.PackPlugin
         /// <summary>Every file in the pack, by its path inside it.</summary>
         public IEnumerable<string> Paths => _entries.Keys;
 
-        public bool Has(string rel) => Resolve(rel) != null;
+        public bool Has(string rel) => Resolve(rel) != null || BuiltIn(rel) != null;
+
+        /// <summary>
+        /// The tutorials' practice art the plugin carries (1.10.0, Shared/TutorialArt): a path under TutorialArt/
+        /// that this pack does not hold is read from BepInEx/plugins/SMSModForge/TutorialArt, so a pack made in the
+        /// tutorials need not carry 13 MB of it. A file the pack does hold there is the pack's, and wins.
+        /// </summary>
+        internal static string BuiltInRoot
+        {
+            get
+            {
+                string plugins = Path.GetDirectoryName(typeof(PackArchive).Assembly.Location) ?? "";
+                return Path.Combine(Path.Combine(plugins, SMSModForge.Shared.TutorialArt.PluginFolder), SMSModForge.Shared.TutorialArt.Folder);
+            }
+        }
+
+        private static string BuiltIn(string rel) => SMSModForge.Shared.TutorialArt.FileIn(BuiltInRoot, rel);
 
         /// <summary>
         /// The file in the pack a manifest path means: the path itself, or - for
@@ -198,7 +225,8 @@ namespace SMSModForge.PackPlugin
         /// is missing.</summary>
         public string ReadText(string rel)
         {
-            if (!TryGetEntry(rel, out var entry)) return null;
+            if (!TryGetEntry(rel, out var entry))
+                return BuiltIn(rel) is string own ? File.ReadAllText(own, Encoding.UTF8) : null;
             using (var stream = entry.Open())
             using (var reader = new StreamReader(stream, Encoding.UTF8))
                 return reader.ReadToEnd();
@@ -208,7 +236,8 @@ namespace SMSModForge.PackPlugin
         /// Used by every <c>Texture2D.LoadImage</c> + sprite factory.</summary>
         public byte[] ReadBytes(string rel)
         {
-            if (!TryGetEntry(rel, out var entry)) return null;
+            if (!TryGetEntry(rel, out var entry))
+                return BuiltIn(rel) is string own ? File.ReadAllBytes(own) : null;
             using (var stream = entry.Open())
             using (var ms = new MemoryStream(checked((int)entry.Length)))
             {
@@ -231,7 +260,8 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         public string ExtractToTemp(string rel)
         {
-            if (!TryGetEntry(rel, out var entry)) return null;
+            // The plugin's own copy is a file already.
+            if (!TryGetEntry(rel, out var entry)) return BuiltIn(rel);
             string key = Resolve(rel);
             if (_extractedCache.TryGetValue(key, out var cached) && File.Exists(cached))
                 return cached;

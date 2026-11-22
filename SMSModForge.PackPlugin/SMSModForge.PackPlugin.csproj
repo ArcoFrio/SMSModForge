@@ -14,9 +14,9 @@
          reports comes from Shared/ForgeVersion.cs. Kept in step, and listed
          here only so the next person to look for a version finds the note
          rather than believing these. -->
-    <Version>1.9.2</Version>
-    <AssemblyVersion>1.9.2.0</AssemblyVersion>
-    <FileVersion>1.9.2.0</FileVersion>
+    <Version>1.10.0</Version>
+    <AssemblyVersion>1.10.0.0</AssemblyVersion>
+    <FileVersion>1.10.0.0</FileVersion>
     <AssemblyName>SMSModForge.PackPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -55,6 +55,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <!-- The tutorials' practice art, beside the plugin (1.10.0, Shared/TutorialArt): a pack made in the
+       tutorials reads it from here, and does not carry it. The same files the editor ships. -->
+  <ItemGroup>
+    <None Include="..\SMSModForge\Resources\TutorialAssets\**\*.*">
+      <Link>SMSModForge\TutorialArt\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Plugin.cs" />
     <Compile Include="UiFactory.cs" />
@@ -77,6 +85,9 @@
     <Compile Include="DebugBridgeTimeline.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="DebugBridgeScenes.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="DebugBridgeShaders.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="DebugBridgeFx.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="EffectRuntime.cs" />
+    <Compile Include="EffectComponents.cs" />
     <Compile Include="GameRoomTalks.cs" />
     <Compile Include="QuestRegistry.cs" />
     <Compile Include="QuestRuntime.cs" />
@@ -117,6 +128,8 @@
     <Compile Include="MaskTextures.cs" />
     <Compile Include="NpcFactory.cs" />
     <Compile Include="PlaceFactory.cs" />
+    <Compile Include="PackLights.cs" />
+    <Compile Include="PackAmbient.cs" />
     <Compile Include="PlaceRegistry.cs" />
     <Compile Include="GameObjectGateRegistry.cs" />
     <Compile Include="NavigatorRuntime.cs" />
@@ -317,6 +330,7 @@
     <Compile Include="..\Shared\PackOrder.cs" Link="Shared\PackOrder.cs" />
     <Compile Include="..\Shared\PackConflicts.cs" Link="Shared\PackConflicts.cs" />
     <Compile Include="..\Shared\Transitions.cs" Link="Shared\Transitions.cs" />
+    <Compile Include="..\Shared\Effects.cs" Link="Shared\Effects.cs" />
     <Compile Include="..\Shared\RichText.cs" Link="Shared\RichText.cs" />
     <Compile Include="..\Shared\SoundCues.cs" Link="Shared\SoundCues.cs" />
     <Compile Include="..\Shared\TextTemplates.cs" Link="Shared\TextTemplates.cs" />
@@ -338,6 +352,7 @@
     <Compile Include="..\Shared\AnimationClock.cs" Link="Shared\AnimationClock.cs" />
     <Compile Include="..\Shared\MediaKinds.cs" Link="Shared\MediaKinds.cs" />
     <Compile Include="..\Shared\PackPaths.cs" Link="Shared\PackPaths.cs" />
+    <Compile Include="..\Shared\TutorialArt.cs" Link="Shared\TutorialArt.cs" />
     <Compile Include="..\Shared\ModsFolder.cs" Link="Shared\ModsFolder.cs" />
     <Compile Include="..\Shared\PackInstallScan.cs" Link="Shared\PackInstallScan.cs" />
     <Compile Include="..\Shared\ForgeVersion.cs" Link="Shared\ForgeVersion.cs" />

@@ -22,7 +22,9 @@ namespace SMSModForge.ViewModel;
 /// </summary>
 public sealed class UiNodeViewModel : ObservableObject
 {
-    private readonly Action<UiNodeViewModel>? _remove;
+    /// <summary>How this row is taken out of what it is inside: its parent's, so another's once an undo has
+    /// put it under another object (<see cref="TakeChildren"/>).</summary>
+    private Action<UiNodeViewModel>? _remove;
     private readonly Func<UiNodeDef, bool>? _hasChanges;
     private readonly Action<UiNodeViewModel>? _reset;
     private readonly Func<UiNodeDef, VanillaUiSurface.Node?>? _gameNode;
@@ -1358,10 +1360,91 @@ public sealed class UiNodeViewModel : ObservableObject
         }
     }
 
+    /// <summary>A row for an object that is to go inside this one (<see cref="TakeChildren"/> puts it there).</summary>
+    internal UiNodeViewModel RowFor(UiNodeDef def)
+        => new(def, RemoveChild, _hasChanges, _reset, _gameNode, _hiddenChanged);
+
+    /// <summary>
+    /// The objects inside this one made the rows given, in their order (1.10.0, an undo or a redo that added,
+    /// removed or moved objects): a row already here stays, moved if it has to be; one that was under another
+    /// object, or is new, is taken in; one not named goes. Nothing happens to a row that is where it should
+    /// be, so putting one object back costs that object and not the screen's whole tree built again.
+    /// </summary>
+    internal void TakeChildren(IReadOnlyList<UiNodeViewModel> rows)
+    {
+        bool same = rows.Count == Children.Count;
+        for (int i = 0; same && i < rows.Count; i++) same = ReferenceEquals(rows[i], Children[i]);
+        if (same) return;
+
+        var wanted = new HashSet<UiNodeViewModel>(rows);
+        for (int i = Children.Count - 1; i >= 0; i--)
+        {
+            var gone = Children[i];
+            if (wanted.Contains(gone)) continue;
+            gone.Changed -= Bubble;
+            // Unless another object has taken it in already.
+            if (ReferenceEquals(gone.Parent, this)) gone.Parent = null;
+            Children.RemoveAt(i);
+        }
+        for (int i = 0; i < rows.Count; i++)
+        {
+            var row = rows[i];
+            int at = Children.IndexOf(row);
+            if (at == i) continue;
+            if (at >= 0) { Children.Move(at, i); continue; }
+            row._remove = RemoveChild;
+            row.Parent = this;
+            row.Changed += Bubble;
+            Children.Insert(i, row);
+        }
+        Model.Children.Clear();
+        foreach (var row in rows) Model.Children.Add(row.Model);
+        RaiseMoves();
+        Bubble();
+    }
+
+    /// <summary>
+    /// The rows of this object's lists - what a click does, when it shows, when it can be clicked, its
+    /// components - made again wherever the object's lists are no longer the ones the rows show: after its
+    /// values were replaced wholesale (a reset, an undo or a redo put back where it is). Until 1.10.0 a reset
+    /// left the rows of what it had just taken away on screen.
+    /// </summary>
+    private void ReadListsAgain()
+    {
+        static bool Shows<TRow, TDef>(IList<TRow> rows, IList<TDef> defs, Func<TRow, TDef> of) where TDef : class
+        {
+            if (rows.Count != defs.Count) return false;
+            for (int i = 0; i < rows.Count; i++)
+                if (!ReferenceEquals(of(rows[i]), defs[i])) return false;
+            return true;
+        }
+        if (!Shows(Actions, Model.OnClick, r => r.Model))
+        {
+            Actions.Clear();
+            foreach (var a in Model.OnClick) Actions.Add(new NodeActionViewModel(a, RemoveAction));
+        }
+        if (!Shows(ActiveConditions, Model.ActiveConditions, r => r.Model))
+        {
+            ActiveConditions.Clear();
+            foreach (var c in Model.ActiveConditions) ActiveConditions.Add(new NodeConditionViewModel(c, RemoveActiveCondition, context: ConditionContext.Polled));
+        }
+        if (!Shows(ClickConditions, Model.ClickConditions, r => r.Model))
+        {
+            ClickConditions.Clear();
+            foreach (var c in Model.ClickConditions) ClickConditions.Add(new NodeConditionViewModel(c, RemoveClickCondition, context: ConditionContext.OneShot));
+        }
+        if (!Shows(Components, Model.Components, r => r.Model))
+        {
+            Components.Clear();
+            foreach (var c in Model.Components) Components.Add(new ComponentRowViewModel(c, RemoveComponent));
+        }
+    }
+
     /// <summary>Re-read everything from the model. For after a reset, which
     /// replaces the values wholesale rather than through the setters.</summary>
     public void RefreshAll()
     {
+        ReadListsAgain();
         OnPropertyChanged(string.Empty);
         RefreshStickCells();
         Bubble();

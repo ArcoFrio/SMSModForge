@@ -123,6 +123,71 @@ public sealed class PreviewBackdrop
         return (At(0), At(1), At(2));
     }
 
+    /// <summary>
+    /// What the characters' layer's light texture is at each screen pixel (RGB, rows from the bottom): what a bust
+    /// is multiplied by (1.10.0). Null for the game's places the backdrops were captured in - a bust there takes the
+    /// global light alone, white (measured) - and for a place of the pack's with no light on the characters.
+    /// </summary>
+    public float[]? CharactersLight { get; private set; }
+
+    /// <summary>Made from a place of the pack's (<see cref="ForPlace"/>), not captured: drawn on the processor.</summary>
+    public bool IsPlace { get; private set; }
+
+    /// <summary>
+    /// For a place's lamp (1.10.0), what is known exactly rather than worked out from captures: the room's colour
+    /// before any light (<see cref="Albedo"/>, RGB per screen pixel, rows from the bottom); the light texture of the
+    /// place's other lights with the global one (<see cref="LampBase"/>, RGB per texel of the light texture, rows
+    /// from the bottom); and the glows of the other lights drawn with the room (<see cref="OthersBehindGlow"/>) and
+    /// over the characters (<see cref="OthersOverGlow"/>), RGB per screen pixel. Null for a captured backdrop.
+    /// </summary>
+    public float[]? Albedo { get; private set; }
+    public float[]? LampBase { get; private set; }
+    public float[]? OthersBehindGlow { get; private set; }
+    public float[]? OthersOverGlow { get; private set; }
+
+    /// <summary>
+    /// A place of the pack's as a bust's backdrop (1.10.0), made from the place preview rather than captured from
+    /// the game - the place as the preview draws it, which InGameSuiteTests.S11 holds to the game: the room as lit
+    /// (<paramref name="roomTopDown"/>, BGRA rows top-down; <paramref name="roomHdr"/>, linear RGB rows from the
+    /// bottom), what the bust's edge glow reads (<paramref name="background"/>), what the place's lights add over a
+    /// bust (<paramref name="overBust"/>, RGB per screen pixel) and what they multiply it by
+    /// (<paramref name="charactersLight"/>). Where a bust rests, its breathing, the edge glow's settings and the
+    /// game's post-processing are the same in every place (the five captured backdrops agree): taken from
+    /// <paramref name="like"/>. No lamp casts a bust's shadow: a light the pack makes casts none.
+    /// </summary>
+    internal static PreviewBackdrop ForPlace(string name, PreviewBackdrop like, byte[] roomTopDown, float[] roomHdr, float[] background,
+                                             int bw, int bh, float[] overBust, float[]? charactersLight, PlaceLamp? lamp = null)
+    {
+        var bust = new JObject
+        {
+            ["left"] = like.BustLeft, ["restBottom"] = like.BustRestBottom, ["width"] = like.BustWidth, ["height"] = like.BustHeight,
+            ["breathingPixels"] = like.BreathingPixels, ["breathingSpeed"] = like.BreathingSpeed,
+        };
+        int w = like.ScreenWidth, h = like.ScreenHeight;
+        // What the lights add over a bust, a cell a screen pixel.
+        if (lamp != null)
+            return new PreviewBackdrop(name, w, h, roomTopDown, like.Gi, bust, lamp.OthersOverGlow, 0, 0, 1, w, h,
+                                       lamp.Room, lamp.Room, Array.Empty<float[]>(), background, bw, bh, like.GradingTable, like.Post,
+                                       lamp.RoomNoGlow, lamp.Settings, like.LookupDecode)
+            {
+                CharactersLight = charactersLight, IsPlace = true, Albedo = lamp.Albedo, LampBase = lamp.Base,
+                OthersBehindGlow = lamp.OthersBehindGlow, OthersOverGlow = lamp.OthersOverGlow,
+            };
+        return new PreviewBackdrop(name, w, h, roomTopDown, like.Gi, bust, overBust, 0, 0, 1, w, h,
+                                   roomHdr, roomHdr, Array.Empty<float[]>(), background, bw, bh, like.GradingTable, like.Post,
+                                   null, null, like.LookupDecode) { CharactersLight = charactersLight, IsPlace = true };
+    }
+
+    /// <summary>
+    /// A place's lamp that casts a bust's shadow (1.10.0: the template level's light, shadows on in the game), with
+    /// the place around it: its settings; the room as seen, with the glows drawn with the room
+    /// (<see cref="Room"/>), and without the lamp's (<see cref="RoomNoGlow"/>), RGB rows from the bottom; and what
+    /// <see cref="Albedo"/>, <see cref="LampBase"/>, <see cref="OthersBehindGlow"/> and
+    /// <see cref="OthersOverGlow"/> hold.
+    /// </summary>
+    internal sealed record PlaceLamp(LampSettings Settings, float[] Room, float[] RoomNoGlow, float[] Albedo, float[] Base,
+                                     float[] OthersBehindGlow, float[] OthersOverGlow);
+
     /// <summary>The shipped backdrops' folder: Backdrops beside the editor.</summary>
     public static string ShippedFolder => Path.Combine(AppContext.BaseDirectory, "Backdrops");
 

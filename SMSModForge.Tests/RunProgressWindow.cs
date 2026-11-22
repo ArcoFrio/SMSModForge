@@ -38,6 +38,8 @@ internal sealed class RunProgressWindow : Form
     private readonly Func<RunProgress.Snapshot> _snapshot;
     private readonly int _testers;
     private readonly Label _count = new();
+    private readonly Label _part = new();
+    private bool _partShown;
     private readonly ProgressBar _bar = new();
     private readonly Label _time = new();
     private readonly Label _now = new();
@@ -93,6 +95,12 @@ internal sealed class RunProgressWindow : Form
         _count.Height = 26;
         _count.Font = new Font("Segoe UI", 11f, FontStyle.Bold);
 
+        // Which part of a run of several (WholeRun); hidden for a run of one.
+        _part.Dock = DockStyle.Top;
+        _part.Height = 22;
+        _part.AutoEllipsis = true;
+        _part.Visible = false;
+
         _bar.Dock = DockStyle.Top;
         _bar.Height = 22;
         _bar.Maximum = 1000;
@@ -128,6 +136,7 @@ internal sealed class RunProgressWindow : Form
         Controls.Add(_now);
         Controls.Add(_time);
         Controls.Add(_bar);
+        Controls.Add(_part);
         Controls.Add(_count);
 
         AutoScaleDimensions = new SizeF(96f, 96f);
@@ -202,6 +211,7 @@ internal sealed class RunProgressWindow : Form
     }
 
     internal string CountText => _count.Text;
+    internal string PartText => _partShown ? _part.Text : "";   // Visible is false on a window not shown yet
     internal string TimeText => _time.Text;
     internal string NowText => _now.Text;
     internal string FailedText => _failedLabel.Text;
@@ -215,6 +225,17 @@ internal sealed class RunProgressWindow : Form
 
         _count.Text = $"{s.Done:N0} of {s.Total:N0} tests" + (s.Skipped > 0 ? $"  ({s.Skipped:N0} skipped)" : "")
                       + (_testers > 1 ? $"  ·  {_testers} testers" : "");
+        if (s.Part != null)
+        {
+            _part.Text = s.Part;
+            if (!_partShown)
+            {
+                // Room for the line, once: the rest of the window keeps its size.
+                _partShown = true;
+                _part.Visible = true;
+                ClientSize = new Size(ClientSize.Width, ClientSize.Height + _part.Height);
+            }
+        }
         _bar.Value = Math.Clamp((int)Math.Round(s.Fraction * 1000), 0, 1000);
         _time.Text = Clock(s.Elapsed) + " elapsed"
                      + (!s.Finished && s.Left is { } left ? "  ·  " + Remaining(left) : "");

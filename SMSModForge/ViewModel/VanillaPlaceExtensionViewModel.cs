@@ -25,10 +25,12 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
             model.NavigatorButtons.Select(b =>
                 new NavigatorButtonViewModel(b, removeCallback: RemoveNavigatorButton,
                                                 moveCallback: MoveNavigatorButton)));
-        GameObjects = new ObservableCollection<GameObjectViewModel>(
-            model.GameObjects.Select(o => new GameObjectViewModel(o, RemoveGameObject)));
+        GameObjects = new ObservableCollection<GameObjectViewModel>();
+        foreach (var o in model.GameObjects) GameObjects.Add(Row(o));
         SeedFromCatalogCommand = new RelayCommand(SeedFromCatalog, () => HasCatalogEntry);
         AddNpcCommand = new RelayCommand(() => NpcsNode().AddNpc());
+        AddLightCommand = new RelayCommand(at => LightObjects.Dress(AddGameObject(), GameObjects, at));
+        AddEffectCommand = new RelayCommand(at => LightObjects.DressAsEffect(AddGameObject(), GameObjects, at));
         // Seed here rather than leaving it to whoever constructs us: an
         // extension loaded from disk already has its Source, so the property
         // setter below never fires for it, and the GameObjects list would come
@@ -195,10 +197,28 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
     {
         var lv = CatalogLevel;
         if (lv?.Hierarchy == null) return;
-        SeedInto(Model.GameObjects, GameObjects, lv, lv.Hierarchy.Children);
+        SeedInto(null, GameObjects, lv, lv.Hierarchy.Children);
+        // The whole level from here on: read back from the editor's own copy, its objects keep what they have.
+        Model.Working = true;
     }
 
-    private void SeedInto(System.Collections.Generic.List<GameObjectDef> defs,
+    /// <summary>The row of one of the level's top objects: among the level's rows, in the extension's list.</summary>
+    private GameObjectViewModel Row(GameObjectDef def) => new(def, RemoveGameObject, false, GameObjects, Model.GameObjects);
+
+    /// <summary>
+    /// The level's objects made what a step has, where they are (1.10.0; see <see cref="GameObjectRows"/>).
+    /// An object only the step has that is one of the game's is given what the game says of it again, the
+    /// way a level read back is.
+    /// </summary>
+    internal bool ReadObjectsAgain(SplitPiece from, SplitPiece to)
+    {
+        if (!GameObjectRows.ReadAgain(from, to, GameObjects, Model.GameObjects, Row, _ => true, out bool made)) return false;
+        if (made) EnsureSeeded();
+        return true;
+    }
+
+    /// <param name="parent">The row whose children are being filled in; null for the level's top objects.</param>
+    private void SeedInto(GameObjectViewModel? parent,
                           ObservableCollection<GameObjectViewModel> vms,
                           VanillaLevelCatalog.Level level,
                           System.Collections.Generic.List<VanillaLevelCatalog.Node> baseline)
@@ -206,27 +226,36 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
         foreach (var b in baseline)
         {
             if (string.IsNullOrWhiteSpace(b.Name)) continue;
+            // By the name it was filled in under, in a level read back from the editor's own copy: a row the
+            // author has renamed since is still that object's row.
             var existingVm = vms.FirstOrDefault(
-                v => string.Equals(v.Name, b.Name, System.StringComparison.OrdinalIgnoreCase));
+                v => string.Equals(Model.Working && !string.IsNullOrEmpty(v.Model.BaselineName) ? v.Model.BaselineName : v.Name,
+                                   b.Name, System.StringComparison.OrdinalIgnoreCase));
             if (existingVm == null)
             {
                 // Created bare, then anchored — same call the reloaded path uses,
                 // so a freshly seeded node and one read back off disk can't drift.
                 var def = new GameObjectDef { Name = b.Name, Bind = true };
                 VanillaDelta.Rebase(def, b, level);
-                defs.Add(def);
-                existingVm = new GameObjectViewModel(def, RemoveGameObject);
-                vms.Add(existingVm);
+                // A row like any other of its parent's: one made here knew neither its parent nor that it
+                // was under the level's NPCs object, and was taken away as if it were one of the top ones.
+                if (parent != null) existingVm = parent.Adopt(def);
+                else
+                {
+                    Model.GameObjects.Add(def);
+                    existingVm = Row(def);
+                    vms.Add(existingVm);
+                }
             }
             else if (existingVm.Model.Bind)
             {
                 // A node loaded from the manifest arrives stripped of everything
                 // the save path drops — transform, active flag, sorting, art. Put
                 // it back, or it reads as "moved to the origin" against vanilla.
-                VanillaDelta.Rebase(existingVm.Model, b, level);
+                VanillaDelta.Rebase(existingVm.Model, b, level, keepsItsOwn: Model.Working);
                 existingVm.RefreshFromModel();
             }
-            SeedInto(existingVm.Model.Children, existingVm.Children, level, b.Children);
+            SeedInto(existingVm, existingVm.Children, level, b.Children);
         }
     }
 
@@ -253,6 +282,7 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
     private void ResetAndSeed()
     {
         if (CatalogLevel?.Hierarchy == null) return;
+        Model.Working = false;
         Model.GameObjects.Clear();
         GameObjects.Clear();
         SeedFromCatalog();
@@ -333,7 +363,7 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
     {
         var def = new GameObjectDef();
         Model.GameObjects.Add(def);
-        var vm = new GameObjectViewModel(def, RemoveGameObject);
+        var vm = Row(def);
         GameObjects.Add(vm);
         return vm;
     }
@@ -343,6 +373,13 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
     /// <summary>Place an NPC on this vanilla level, under the level's own NPCs
     /// object — the same gesture as on a pack place.</summary>
     public RelayCommand AddNpcCommand { get; private set; } = null!;
+
+    /// <summary>A light object of the pack's on this level (1.10.0), from the
+    /// preview window's "+ Light": its parameter is where (float[] { x, y }).</summary>
+    public RelayCommand AddLightCommand { get; private set; } = null!;
+
+    /// <summary>An effect object of the pack's on this level (1.10.0), from the preview's "+ Effect".</summary>
+    public RelayCommand AddEffectCommand { get; private set; } = null!;
 
     /// <summary>
     /// The node standing for the level's NPCs object, created on demand.
@@ -365,7 +402,7 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
 
         var def = new GameObjectDef { Name = "NPCs", Bind = true };
         Model.GameObjects.Add(def);
-        var vm = new GameObjectViewModel(def, RemoveGameObject);
+        var vm = Row(def);
         GameObjects.Add(vm);
         return vm;
     }

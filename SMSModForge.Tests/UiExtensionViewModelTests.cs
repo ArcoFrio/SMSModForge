@@ -210,9 +210,13 @@ public class UiExtensionViewModelTests
         pack.Uis.Add(vm.Model);
 
         // Save, take the pruned form, and reopen from it as loading would.
+        // Written as a save writes it (PackRepository.Save): what only the editor's own copies keep - that the
+        // tree is the whole screen being worked on (UiDef.Working) - is left out of the file.
         var restore = VanillaUiDelta.PrepareForSave(pack);
-        var onDisk = Newtonsoft.Json.JsonConvert.SerializeObject(vm.Model);
+        string onDisk;
+        using (GameObjectDef.SaveScope()) onDisk = Newtonsoft.Json.JsonConvert.SerializeObject(vm.Model);
         restore();
+        Assert.DoesNotContain("\"working\"", onDisk);
 
         var reloaded = Newtonsoft.Json.JsonConvert
             .DeserializeObject<UiDef>(onDisk)!;

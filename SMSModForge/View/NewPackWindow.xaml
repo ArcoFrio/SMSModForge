@@ -1,0 +1,33 @@
+<Window x:Class="SMSModForge.View.NewPackWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:l="clr-namespace:SMSModForge.Localization"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{l:T newPack.title}" Width="520" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Background="{DynamicResource Theme.Window}"
+        Foreground="{DynamicResource Theme.Text}">
+    <!-- A new pack's name and folder, both at once (1.10.0): the pack is made and saved there as soon as it is
+         created, so it always has somewhere to save to. Where exactly is said before anything is made. -->
+    <StackPanel Margin="14">
+        <TextBlock Text="{l:T newPack.name}" FontWeight="SemiBold" Margin="0,0,0,4"/>
+        <TextBox x:Name="NameBox" Margin="0,0,0,12" TextChanged="Changed" ToolTip="{l:T newPack.name.tip}"/>
+        <TextBlock Text="{l:T newPack.folder}" FontWeight="SemiBold" Margin="0,0,0,4"/>
+        <DockPanel Margin="0,0,0,8">
+            <Button DockPanel.Dock="Right" Content="{l:T newPack.browse}" Padding="10,1" Margin="6,0,0,0"
+                    Click="Browse_Click" ToolTip="{l:T newPack.browse.tip}"/>
+            <TextBox x:Name="FolderBox" TextChanged="Changed"/>
+        </DockPanel>
+        <!-- Where the pack will be made: the folder itself when it is empty, else a folder of the pack's name
+             inside it (Model.NewPackPlace). -->
+        <Border Background="{DynamicResource Theme.Surface}" BorderBrush="{DynamicResource Theme.Border}" BorderThickness="1"
+                CornerRadius="3" Padding="8,6" Margin="0,0,0,14">
+            <TextBlock x:Name="WhereText" TextWrapping="Wrap" Foreground="{DynamicResource Theme.TextMuted}"/>
+        </Border>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="CreateButton" Content="{l:T newPack.create}" MinWidth="90" Padding="10,1" IsDefault="True"
+                    Click="Create_Click" Margin="0,0,8,0"/>
+            <Button Content="{l:T prompt.cancel}" MinWidth="74" IsCancel="True"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

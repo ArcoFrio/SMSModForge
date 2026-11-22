@@ -325,9 +325,9 @@ public sealed class UiViewModel : ObservableObject
         var parent = chosen?.Parent;
         if (chosen == null || parent == null) return;    // the root has no beside
 
-        Services.EditorClipboard.SetItem(chosen.Model);
-        var copied = Services.EditorClipboard.GetItem<UiNodeDef>();
-        if (copied == null) return;
+        // A copy made here, not through the clipboard: what the author copied stays copied (1.10.0 - Duplicate
+        // put the object on the clipboard over whatever was there; found by the walk over every control).
+        var copied = Services.EditorClipboard.CloneOne(chosen.Model);
 
         var made = parent.AddChild(copied);
         parent.MoveTo(made, parent.Children.IndexOf(chosen) + 1);
@@ -659,10 +659,27 @@ public sealed class UiViewModel : ObservableObject
         var vanilla = VanillaUiLibrary.Node(Catalog);
         if (vanilla == null) return;
 
-        var merged = VanillaUiSeed.Merge(vanilla, Model.Nodes, out int stranded,
+        UiNodeDef merged;
+        int stranded;
+        if (Model.Working && Model.Nodes.Count == 1 && Model.Nodes[0].IsBound)
+        {
+            // The whole screen already, as the editor left it (an undo step read back, a copy of the
+            // record): it is the tree. Laid over the game's again, what the pack had changed of its
+            // objects was lost - see UiDef.Working.
+            merged = Model.Nodes[0];
+            var seeded = VanillaUiSeed.FromBase(vanilla, VanillaUiLibrary.Assets.NameForKey);
+            // What the game says of its objects is not in a tree read from text: on it again.
+            VanillaUiSeed.GameLookOnto(merged, seeded);
+            var games = new HashSet<string>(VanillaUiSeed.Paths(seeded), StringComparer.Ordinal);
+            var made = _packMade?.Invoke(Model.Source);
+            stranded = VanillaUiSeed.Paths(merged).Count(path => !games.Contains(path) && made?.Contains(path) != true);
+        }
+        else
+            merged = VanillaUiSeed.Merge(vanilla, Model.Nodes, out stranded,
                                          VanillaUiLibrary.Assets.NameForKey,
                                          _packMade?.Invoke(Model.Source));
         Stranded = stranded;
+        Model.Working = true;
 
         Model.Nodes.Clear();
         foreach (var node in Nodes) node.Changed -= Bubble;
@@ -709,6 +726,7 @@ public sealed class UiViewModel : ObservableObject
         // A different screen, so the stored delta is not a delta against it —
         // merging would rebase every edit onto objects that merely share a
         // path. The tree starts again from the new screen.
+        Model.Working = false;
         Model.Nodes.Clear();
         foreach (var node in Nodes) node.Changed -= Bubble;
         Nodes.Clear();
@@ -729,8 +747,170 @@ public sealed class UiViewModel : ObservableObject
     /// </summary>
     public int Revision { get; private set; }
 
+    /// <summary>
+    /// The objects made what a step has, where they are (1.10.0, an undo or a redo): the screen as the editor
+    /// is showing it (<paramref name="from"/>: each of its parts is one row here, in the tree's order) against
+    /// the step (<paramref name="to"/>). A row whose object the step has unchanged stays, wherever the step
+    /// has it; a row whose object the step has with other values is given them and reads itself again; an
+    /// object only the step has gets a row, and a row the step has nothing for goes.
+    /// <para/>
+    /// A screen can be all of one of the game's - thousands of objects, megabytes written out - and putting a
+    /// step back used to read all of it and build every row again: a third of a second, the tree and the
+    /// preview drawn from nothing, for one object nudged. This costs what the step changed.
+    /// <para/>
+    /// False, with nothing changed, when the rows are not the screen <paramref name="from"/> says, or the step
+    /// changed something of the screen itself: the caller then puts the screen back whole.
+    /// </summary>
+    public bool ReadNodesAgain(SplitPiece from, SplitPiece to)
+    {
+        var rows = new List<UiNodeViewModel?> { null };      // by part: [0] is the screen itself
+        void Lay(IEnumerable<UiNodeViewModel> list)
+        {
+            foreach (var row in list) { rows.Add(row); Lay(row.Children); }
+        }
+        Lay(Nodes);
+        int n = from.Parts.Length, m = to.Parts.Length;
+        if (rows.Count != n || Nodes.Count != from.Kids[0]) return false;
+        for (int k = 1; k < n; k++)
+            if (rows[k]!.Children.Count != from.Kids[k]) return false;
+        if (!from.Parts[0].SameTextAs(to.Parts[0])) return false;
+
+        // Which row shows each of the step's objects.
+        var use = new UiNodeViewModel?[m];
+        var given = new bool[m];
+        var taken = new bool[n];
+        int left = m - 1;
+        for (int k = 1; k < m && k < n; k++)
+            if (ReferenceEquals(from.Parts[k], to.Parts[k])) { use[k] = rows[k]; taken[k] = true; left--; }
+        if (left > 0)
+        {
+            // The same object somewhere else: by the piece itself (two steps taken one like the other share
+            // it), then by what it says.
+            var byPiece = new Dictionary<PackPiece, Queue<int>>(ReferenceEqualityComparer.Instance);
+            var bySize = new Dictionary<int, List<int>>();
+            for (int i = 1; i < n; i++)
+            {
+                if (taken[i]) continue;
+                if (!byPiece.TryGetValue(from.Parts[i], out var q)) byPiece[from.Parts[i]] = q = new Queue<int>();
+                q.Enqueue(i);
+                int size = from.Parts[i].Text.Length;
+                if (!bySize.TryGetValue(size, out var of)) bySize[size] = of = new List<int>();
+                of.Add(i);
+            }
+            for (int k = 1; k < m; k++)
+            {
+                if (use[k] != null) continue;
+                if (byPiece.TryGetValue(to.Parts[k], out var q))
+                    while (q.Count > 0 && use[k] == null)
+                    {
+                        int i = q.Dequeue();
+                        if (!taken[i]) { use[k] = rows[i]; taken[i] = true; left--; }
+                    }
+                if (use[k] != null) continue;
+                string text = to.Parts[k].Text;
+                if (!bySize.TryGetValue(text.Length, out var of)) continue;
+                foreach (int i in of)
+                {
+                    if (taken[i] || !string.Equals(from.Parts[i].Text, text, StringComparison.Ordinal)) continue;
+                    use[k] = rows[i]; taken[i] = true; left--;
+                    break;
+                }
+            }
+        }
+        // The same objects hung the same way, and one that says something else: that object, changed.
+        if (left > 0 && from.SameShapeAs(to))
+            for (int k = 1; k < m; k++)
+                if (use[k] == null && !taken[k]) { use[k] = rows[k]; taken[k] = true; given[k] = true; }
+
+        // The top of the tree is the screen's own, made when the screen is: never another row.
+        static int After(int[] kids, int k)
+        {
+            int next = k + 1;
+            for (int i = 0; i < kids[k]; i++) next = After(kids, next);
+            return next;
+        }
+        if (to.Kids[0] != Nodes.Count) return false;
+        for (int i = 0, k = 1; i < to.Kids[0]; i++, k = After(to.Kids, k))
+            if (!ReferenceEquals(use[k], Nodes[i])) return false;
+
+        // Read before anything changes: an object that cannot be read leaves the screen as it was.
+        var read = new UiNodeDef?[m];
+        try
+        {
+            for (int k = 1; k < m; k++)
+                if (use[k] == null || given[k]) read[k] = (UiNodeDef)to.ReadNode(k);
+        }
+        catch (Newtonsoft.Json.JsonException) { return false; }
+
+        // What is picked now, to be picked still - or nothing, once its object is gone. Asked before anything
+        // moves: a tree whose picked row is taken out picks the row above it by itself, and that would be
+        // left picked - an object selected after an undo that had none selected before it.
+        var picked = _selectedNode;
+        _held++;
+        try
+        {
+            var changed = new List<UiNodeViewModel>();
+            for (int k = 1; k < m; k++)
+            {
+                if (!given[k]) continue;
+                var row = use[k]!;
+                var under = row.Model.Children.ToList();
+                bool hidden = row.Model.HiddenInPreview;
+                if (!ModelAssign.Into(row.Model, read[k]!)) return false;
+                row.Model.Children = under;
+                row.Model.HiddenInPreview = hidden;
+                changed.Add(row);
+            }
+            // What the game says of its own objects is not in what was read: on them again.
+            for (int k = 1; k < m; k++)
+            {
+                if (read[k] == null) continue;
+                var def = given[k] ? use[k]!.Model : read[k]!;
+                if (GameNodeOf(def) is { } games) VanillaUiSeed.GameLookOf(def, games);
+            }
+
+            bool made = false;
+            int at = 1;
+            List<UiNodeViewModel> Under(UiNodeViewModel parent, int count)
+            {
+                var list = new List<UiNodeViewModel>(count);
+                for (int i = 0; i < count; i++)
+                {
+                    int k = at++;
+                    var row = use[k];
+                    if (row == null) { row = parent.RowFor(read[k]!); made = true; }
+                    list.Add(row);
+                    row.TakeChildren(Under(row, to.Kids[k]));
+                }
+                return list;
+            }
+            for (int i = 0; i < to.Kids[0]; i++)
+            {
+                int k = at++;
+                Nodes[i].TakeChildren(Under(Nodes[i], to.Kids[k]));
+            }
+
+            foreach (var row in changed) row.RefreshAll();
+            if (made) ApplyHidden();
+            // An object that is no longer there is no longer the one being edited.
+            var still = picked != null && Array.Exists(use, row => ReferenceEquals(row, picked)) ? picked : null;
+            if (!ReferenceEquals(_selectedNode, still)) SelectedNode = still;
+        }
+        finally
+        {
+            _held--;
+            if (_held == 0 && _owed) { _owed = false; Bubble(); }
+        }
+        return true;
+    }
+
+    /// <summary>While a step is being put back: one notice for all of it, at the end.</summary>
+    private int _held;
+    private bool _owed;
+
     private void Bubble()
     {
+        if (_held > 0) { _owed = true; return; }
         Revision++;
         OnPropertyChanged(nameof(Summary));
         OnPropertyChanged(nameof(RootNode));

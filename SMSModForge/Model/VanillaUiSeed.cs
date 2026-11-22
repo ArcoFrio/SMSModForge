@@ -300,6 +300,40 @@ public static class VanillaUiSeed
         node.Loop = null;
     }
 
+    /// <summary>
+    /// What the game says of its own objects and a pack never saves - the tint a button rests at, a label's
+    /// style - put on a tree that was read back without it (1.10.0): an undo step, a copy of the record. Both
+    /// are read from the game when a screen is seeded and kept on the objects beside what is saved; a tree
+    /// that came from text has neither, and was drawn without them - every button at its full tint, every
+    /// label of the game's older kind in the wrong style - after any undo that read the screen back.
+    /// <paramref name="seeded"/> is the screen as the game has it (<see cref="FromBase"/>).
+    /// </summary>
+    public static void GameLookOnto(UiNodeDef tree, UiNodeDef seeded)
+    {
+        var byPath = new Dictionary<string, UiNodeDef>(StringComparer.Ordinal);
+        Index(seeded, byPath);
+        void Walk(UiNodeDef node)
+        {
+            if (node.IsBound && byPath.TryGetValue(node.Bind, out var games))
+            {
+                node.GameTint = games.GameTint;
+                if (node.Text != null && games.Text != null) node.Text.GameStyle = games.Text.GameStyle;
+            }
+            foreach (var child in node.Children) Walk(child);
+        }
+        Walk(tree);
+    }
+
+    /// <summary>The same for one object, from the game's own (see <see cref="GameLookOnto"/>).</summary>
+    public static void GameLookOf(UiNodeDef node, VanillaUiSurface.Node games)
+    {
+        node.GameTint = games.RestingTint;
+        if (node.Text != null && games.Text != null && !string.IsNullOrEmpty(games.Text.Value)) node.Text.GameStyle = GameStyleOf(games.Text);
+    }
+
+    private static string GameStyleOf(VanillaUiSurface.Text from)
+        => (string.Equals(from.Kind, "UI.Text", StringComparison.OrdinalIgnoreCase) ? Rendering.UiTextStyle.LegacyMark : "") + from.FontStyle;
+
     /// <summary>The bind paths a tree uses, in order. For checking that a seed
     /// and the surface it came from still agree.</summary>
     public static IEnumerable<string> Paths(UiNodeDef node)
@@ -394,7 +428,7 @@ public static class VanillaUiSeed
             Wrap = from.Wraps,
             LineSpacing = (float)(from.Number(from.LineSpacing) ?? 0),
             CharacterSpacing = (float)(from.Number(from.CharacterSpacing) ?? 0),
-            GameStyle = (string.Equals(from.Kind, "UI.Text", StringComparison.OrdinalIgnoreCase) ? Rendering.UiTextStyle.LegacyMark : "") + from.FontStyle,
+            GameStyle = GameStyleOf(from),
             AutoSize = from.AutoSizes,
             AutoSizeMin = (float)(from.Number(from.FontSizeMin) ?? 12),
             AutoSizeMax = (float)(from.Number(from.FontSizeMax) ?? 72),

@@ -5,7 +5,7 @@ using Xunit;
 namespace SMSModForge.Tests;
 
 /// <summary>
-/// Undo keeps its steps as UTF-8 (1.9.0, half the memory). Undo and redo must
+/// Undo keeps its steps small (1.9.0 as UTF-8; 1.10.0 in pieces, packed). Undo and redo must
 /// hand back exactly the text each step was - every letter, and a text UTF-8
 /// cannot hold (a lone half of a pair) kept as it was.
 /// </summary>
@@ -25,7 +25,9 @@ public sealed class UndoKeepsExactTextTests
         int now = 0;
         var undo = new UndoService(() => states[now]);
         var restored = new List<string>();
-        undo.RestoreRequested += s => restored.Add(s);
+        // As the editor does: the step put back is what the pack then is (1.10.0 - undo looks at the pack
+        // before it moves, and a pack still as it was would be an edit made since).
+        undo.RestoreRequested += r => { restored.Add(r.ToJson()); now = states.IndexOf(r.ToJson()); };
         undo.Reset();
         for (now = 1; now < states.Count; now++) undo.Checkpoint();
         now = states.Count - 1;

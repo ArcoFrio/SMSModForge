@@ -247,8 +247,8 @@ public sealed class NpcPlacementViewModel : ObservableObject
             model.ActiveConditions.Select(c => new NodeConditionViewModel(c, RemoveCondition)));
         AddActiveConditionCommand = new RelayCommand(() => AddActiveCondition());
         // An NPC's children sit inside the NPCs subtree, so they may host NPCs too.
-        Children = new System.Collections.ObjectModel.ObservableCollection<GameObjectViewModel>(
-            model.Children.Select(c => new GameObjectViewModel(c, RemoveChild, parentInNpcSubtree: true)));
+        Children = new System.Collections.ObjectModel.ObservableCollection<GameObjectViewModel>();
+        foreach (var c in model.Children) Children.Add(new GameObjectViewModel(c, RemoveChild, true, Children, model.Children));
         AddChildCommand = new RelayCommand(() => AddChild());
     }
 
@@ -304,7 +304,7 @@ public sealed class NpcPlacementViewModel : ObservableObject
     {
         var def = new GameObjectDef();
         Model.Children.Add(def);
-        var vm = new GameObjectViewModel(def, RemoveChild, parentInNpcSubtree: true);
+        var vm = new GameObjectViewModel(def, RemoveChild, true, Children, Model.Children);
         Children.Add(vm);
         return vm;
     }
@@ -315,10 +315,21 @@ public sealed class NpcPlacementViewModel : ObservableObject
         Children.Remove(vm);
     }
 
+    /// <summary>
+    /// The NPC it places. Nothing from the box is never a person's choice - a placement always names an NPC, and
+    /// removing one is its own − button - but what its dropdown hands back when the NPC it shows leaves the list: an
+    /// NPC removed or renamed while the place's page was built. That blanked the placement's NPC behind the author's
+    /// back, and undo could not hold it (1.10.0: the page is now built ahead of time, so its dropdowns are always
+    /// there - found by the walk over every control, UndoEveryControlTests, redoing an NPC's removal and rename).
+    /// </summary>
     public string Npc
     {
         get => Model.Npc;
-        set { Model.Npc = value; OnPropertyChanged(); OnPropertyChanged(nameof(Display)); }
+        set
+        {
+            if (value is null) return;
+            Model.Npc = value; OnPropertyChanged(); OnPropertyChanged(nameof(Display));
+        }
     }
 
     public string Name

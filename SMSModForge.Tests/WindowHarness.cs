@@ -74,6 +74,15 @@ internal static class WindowHarness
                         SMSModForge.Services.ThemeManager.Apply(SMSModForge.Services.ThemeManager.All.First(
                             t => string.Equals(t.Name, theme, StringComparison.OrdinalIgnoreCase)));
 
+                    // What draws the previews in this run (1.10.0): the suite's own default is the
+                    // processor (PreviewRendererManager under TestMode), so the place preview's
+                    // scene drawn by the graphics card would go untested by every window test.
+                    // SMSMODFORGE_TEST_RENDERER=Card runs them on the card.
+                    string? renderer = Environment.GetEnvironmentVariable("SMSMODFORGE_TEST_RENDERER");
+                    if (!string.IsNullOrWhiteSpace(renderer))
+                        SMSModForge.Services.PreviewRendererManager.Apply(SMSModForge.Services.PreviewRendererManager.All.First(
+                            r => string.Equals(r.Name, renderer, StringComparison.OrdinalIgnoreCase)));
+
                     _dispatcher = Dispatcher.CurrentDispatcher;
                     ready.Set();
                     Dispatcher.Run();
@@ -162,7 +171,21 @@ internal static class WindowHarness
                 new Action(() => frame.Continue = false), priority);
             Dispatcher.PushFrame(frame);
         }
+        // Work the editor does on threads of its own (1.10.0) - the speller's answers, the previews' pictures - back
+        // before a test reads what it gives, as a person waits a moment for the picture.
+        var until = DateTime.UtcNow.AddSeconds(10);
+        while (Elsewhere() && DateTime.UtcNow < until)
+        {
+            var frame = new DispatcherFrame();
+            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => frame.Continue = false), DispatcherPriority.Background);
+            Dispatcher.PushFrame(frame);
+            if (Elsewhere()) System.Threading.Thread.Sleep(5);
+        }
     }
+
+    private static bool Elsewhere()
+        => SMSModForge.Services.Speller.Pending > 0
+           || SMSModForge.View.Controls.JigglePreview.PendingLoads > 0;
 
     /// <summary>
     /// Open or close a dropdown, and return once it has. With Windows'

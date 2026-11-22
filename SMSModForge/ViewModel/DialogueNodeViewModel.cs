@@ -404,6 +404,17 @@ public sealed class DialogueNodeViewModel : ObservableObject
         }
     }
 
+    /// <summary>Names kept as plain words in this line (<see cref="DialogueNodeDef.PlainNames"/>).</summary>
+    public IReadOnlyList<string> PlainNames => Model.PlainNames;
+
+    /// <summary>The author clicked the x on a name in this line: it stays plain words here (1.10.0).</summary>
+    public void KeepNamePlain(string name)
+    {
+        if (string.IsNullOrEmpty(name) || Model.PlainNames.Contains(name)) return;
+        Model.PlainNames.Add(name);
+        OnPropertyChanged(nameof(PlainNames));
+    }
+
     public string Text
     {
         get => Model.Text;

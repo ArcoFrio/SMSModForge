@@ -71,6 +71,11 @@ public sealed class NavigatorButtonViewModel : ObservableObject
         get => Model.Target;
         set
         {
+            // Nothing from the box is its dropdown losing the place it shows - the place removed or renamed while
+            // the page was built - never a person's: clearing the words reaches here as "" through the box's Text.
+            // Taken as a choice, it blanked the button's target behind the author's back (1.10.0, found by the walk
+            // over every control with the pages built ahead of time).
+            if (value is null) return;
             if (Model.Target == value) return;
             Model.Target = value;
             OnPropertyChanged();

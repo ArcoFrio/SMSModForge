@@ -175,6 +175,18 @@ public sealed class DialogueNodeDef
     [JsonProperty(Shared.PackTexts.LettersOnlyKey, Order = 17)]
     public bool TextLettersOnly { get; set; }
     public bool ShouldSerializeTextLettersOnly() => TextLettersOnly;
+
+    /// <summary>
+    /// Names the author chose to keep as plain words in this line (1.10.0): a name typed in a line becomes its
+    /// character's name token by itself, and the small x on it writes the plain name back and puts it here, so
+    /// it is not made a token again - and Validate does not offer to. The game never reads it.
+    /// </summary>
+    [JsonProperty(PlainNamesKey, Order = 21)]
+    public List<string> PlainNames { get; set; } = new();
+    public bool ShouldSerializePlainNames() => PlainNames != null && PlainNames.Count > 0;
+
+    /// <summary>What <see cref="PlainNames"/> is written as.</summary>
+    public const string PlainNamesKey = "plainNames";
 }
 
 /// <summary>

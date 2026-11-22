@@ -372,3 +372,27 @@ probably moved. Refresh the editor's copy from the running game:
 Assumed by the preview, and measured in 1.8E: the game renders in linear colour
 space; TextMeshPro draws no uGUI Shadow or Outline; the last-resort font is
 `LiberationSans SDF`.
+
+## The FX tab's effects (1.10.0)
+
+`Shared/Effects.cs` names the game's effects a template copies, by where they sit in CoreGameScene; the in-game
+suite's P1 plays a pack's effects and changes the game's own points. If P1 or an effect stops showing after an
+update, check, in the test copy through the bridge (DebugBridgeFx.cs):
+
+- Each template's `GamePath` still exists (`fx-survey` lists every particle system; `fx-show <path>` plays a copy).
+  The effect's own scripts are taken off its copy, so a copy cannot run the game's logic - a new script on one is
+  fine.
+- The social points: `Attractor_Canvas/Attractor_Follower` and `Attractor_Subscriber`, each an
+  `ExplosiveUIParticleAttractor` (`particlePrefab`, `startPoint`, `endPoint`, `parentCanvas`, `explosionRadius`,
+  `floatDuration`, `travelDuration`; `TriggerExplosion(int count)` - Harmony-patched for "how many"). `PhotoBonus`
+  calls it (5 and 2, more with traits, cameras and ads) whenever one of `4_CG_Manager-Photos`'s photos turns on
+  (`scripts PhotoBonus` writes what it does, UnityEvent calls included). Icons (`fx-icon`): "User" #8FDCFF,
+  "Heart" #FF8FF8, 45 px.
+- Sorting layers `Default`, `Bust`, `Photos`, `Foreground`; the room's art at Default -15..-1; every screen of the
+  game a ScreenSpaceOverlay canvas (6_Effects/Effect_Canvas at 5, a conversation at 125) - `fx-layers`.
+- The camera: orthographic, 5.4 high, at 0,0,-10 (`fx-layers`).
+- ModForge's own particles copy a material of the game's that draws their picture, else
+  `Mobile/Particles/Alpha Blended` / `Additive`; the Cartoon FX pictures keep their shape in the red channel.
+- The pop-up words use `Curse Casual SDF Outline`.
+- The editor's preview pictures (`Resources/VanillaFx`) come from the game: `png-save` and `fx-icon` into the
+  bridge's shots folder, then `python -I Tools/Fx/fx-pictures-from-game.py <shots folder>`.

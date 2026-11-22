@@ -53,6 +53,7 @@ public sealed class PreviewJiggleAlignmentTests
         });
         var preview = new JigglePreview
         { PackRoot = _dir, Outfit = bust, VanillaBustKey = bust.GameObjectName };
+        WindowHarness.Pump();   // the bust's pictures arrive a moment after it is chosen (loaded off the interface's thread)
         return (bust, preview);
     }
 
@@ -93,6 +94,7 @@ public sealed class PreviewJiggleAlignmentTests
         Assert.True(bust.IsVanillaBust, "this test is about a bust the GAME draws");
 
         var preview = new JigglePreview { Outfit = bust, VanillaBustKey = bust.GameObjectName };
+        WindowHarness.Pump();   // the bust's pictures arrive a moment after it is chosen (loaded off the interface's thread)
         return (bust, preview);
     }
 
@@ -193,6 +195,7 @@ public sealed class PreviewJiggleAlignmentTests
             });
             var preview = new JigglePreview
             { PackRoot = _dir, Outfit = subject, VanillaBustKey = subject.GameObjectName };
+            WindowHarness.Pump();   // the bust's pictures arrive a moment after it is chosen (loaded off the interface's thread)
 
             _out.WriteLine($"{subject.GameObjectName}: the game says speed {differs!.Speed} / "
                            + $"frequency {differs.Frequency}; the preview runs "
@@ -225,6 +228,7 @@ public sealed class PreviewJiggleAlignmentTests
 
                     var preview = new JigglePreview
                     { Outfit = bust, VanillaBustKey = bust.GameObjectName };
+                    WindowHarness.Pump();   // the bust's pictures arrive a moment after it is chosen (loaded off the interface's thread)
 
                     _out.WriteLine($"{bust.GameObjectName}: no mask of ours -> "
                                    + $"frequency {preview.JiggleInEffect.Frequency}, "

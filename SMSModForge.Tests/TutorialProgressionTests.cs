@@ -27,6 +27,9 @@ public class TutorialProgressionTests
         var tut = TutorialCatalog.All.First(t => t.Id == tutorialId);
         using var w = new TutorialWalker();
         var trouble = new List<string>();
+        // Followed on its own: the story so far brought in first, as the tutorial offers.
+        try { w.BringInStory(tut); }
+        catch (Exception ex) { trouble.Add("bringing in the story so far threw " + ex.GetType().Name + ": " + ex.Message); }
 
         for (int i = 0; i < tut.Steps.Count; i++)
         {
@@ -48,15 +51,14 @@ public class TutorialProgressionTests
             }
 
             // 2. Doing what it says has to satisfy it.
-            if (!TutorialSolutions.All.TryGetValue(
-                    TutorialSolutions.Key(tutorialId, step.Title), out var solve))
+            if (!TutorialSolutions.Has(tutorialId, step))
             {
                 trouble.Add(where + " — no solution written, so nobody has " +
                             "checked this step can be passed");
                 continue;
             }
 
-            try { solve(w); }
+            try { TutorialSolutions.TrySolve(tutorialId, step, w, scratch); }
             catch (Exception ex)
             {
                 trouble.Add(where + " — doing what it asks threw " +

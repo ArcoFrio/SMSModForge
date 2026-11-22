@@ -287,6 +287,37 @@ public sealed class PublishTests : IDisposable
     }
 
     [Fact]
+    public void WithAutomaticVersionsOffPublishingLeavesTheVersionAsTyped()
+    {
+        // Options > Version the pack automatically, unticked (1.10.0): read by nothing once the version moved from
+        // saving to publishing, so unticking it changed nothing. The control: ticked, the same addition moves it.
+        Seed("1.0.0", "opening");
+
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            vm.OpenPackFromPath(_dir);
+            WindowHarness.Pump();
+            bool was = SMSModForge.Services.EditorPrefs.AutoVersion;
+            try
+            {
+                vm.AddSceneCommand.Execute(null);
+                vm.Scenes.Last().Key = "beach";
+                vm.SavePackCommand.Execute(null);
+
+                SMSModForge.Services.EditorPrefs.AutoVersion = true;
+                Assert.Equal("1.1.0", Proposed(vm).ToString());
+
+                SMSModForge.Services.EditorPrefs.AutoVersion = false;
+                vm.RunPublish(Release("a.zip"), Proposed(vm));
+                _out.WriteLine($"unticked, after an addition -> {vm.Pack.Version}");
+                Assert.Equal("1.0.0", vm.Pack.Version);
+            }
+            finally { SMSModForge.Services.EditorPrefs.AutoVersion = was; }
+        });
+    }
+
+    [Fact]
     public void TheArchiveCarriesTheVersionItIsNamedFor()
     {
         // The number goes into the manifest before the pack is packaged. A zip

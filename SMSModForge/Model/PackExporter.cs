@@ -115,6 +115,8 @@ public static class PackExporter
         long sourceBytes = 0;
         var backups = new List<string>();
         long backupBytes = 0;
+        var tutorialArt = new List<string>();
+        long tutorialArtBytes = 0;
 
         // Optimal compression keeps file size down at the cost of a
         // longer export — fine for a one-off operation. Switching to
@@ -122,7 +124,8 @@ public static class PackExporter
         // hot path during iteration.
         using (var zip = ZipFile.Open(outputSmspackPath, ZipArchiveMode.Create))
         {
-            foreach (var (fullPath, relPath) in EnumerateExportable(packRoot, (rel, bytes) => { backups.Add(rel); backupBytes += bytes; }))
+            foreach (var (fullPath, relPath) in EnumerateExportable(packRoot, (rel, bytes) => { backups.Add(rel); backupBytes += bytes; },
+                                                                    (rel, bytes) => { tutorialArt.Add(rel); tutorialArtBytes += bytes; }))
             {
                 // ZIP entries use forward slashes regardless of platform —
                 // the runtime archive reader normalises both ways but the
@@ -144,7 +147,10 @@ public static class PackExporter
         // Now that the archive is closed, the OS exposes the file's
         // packed size. Read it for the success toast.
         long compressedBytes = new FileInfo(outputSmspackPath).Length;
-        return new ExportResult(fileCount, sourceBytes, compressedBytes, outputSmspackPath, backups, backupBytes);
+        return new ExportResult(fileCount, sourceBytes, compressedBytes, outputSmspackPath, backups, backupBytes)
+        {
+            TutorialArtLeftOut = tutorialArt, TutorialArtBytes = tutorialArtBytes,
+        };
     }
 
     /// <summary>
@@ -155,7 +161,8 @@ public static class PackExporter
     /// The author's own backups are left out and told to
     /// <paramref name="leftOut"/> with their size.
     /// </summary>
-    private static IEnumerable<(string FullPath, string RelPath)> EnumerateExportable(string packRoot, Action<string, long> leftOut)
+    private static IEnumerable<(string FullPath, string RelPath)> EnumerateExportable(string packRoot, Action<string, long> leftOut,
+                                                                                       Action<string, long>? tutorialArt = null)
     {
         // modpack.json first — the runtime requires this entry to exist
         // and putting it at index 0 means it lives at the start of the
@@ -181,9 +188,35 @@ public static class PackExporter
                 leftOut(rel, new FileInfo(fullPath).Length);
                 continue;
             }
+            if (IsShippedTutorialArt(fullPath, rel))
+            {
+                tutorialArt?.Invoke(rel, new FileInfo(fullPath).Length);
+                continue;
+            }
 
             yield return (fullPath, rel);
         }
+    }
+
+    /// <summary>The editor's copy of the tutorials' practice art (Shared/TutorialArt), to tell the pack's unchanged
+    /// copies of it. Null: nothing is told apart.</summary>
+    public static string? ShippedTutorialArt { get; set; } = Tutorials.TutorialAssets.SourceRoot;
+
+    /// <summary>
+    /// A file of the tutorials' practice art, exactly as ModForge ships it (1.10.0): the plugin carries the same
+    /// file and reads it from there, so the pack need not (the author: "I've seen cases of modpacks packed with the
+    /// tutorial art"). A copy the author changed, or a file of their own in that folder, is theirs and ships.
+    /// </summary>
+    internal static bool IsShippedTutorialArt(string fullPath, string rel)
+    {
+        string? shipped = SMSModForge.Shared.TutorialArt.FileIn(ShippedTutorialArt ?? "", rel);
+        if (shipped == null) return false;
+        try
+        {
+            if (new FileInfo(fullPath).Length != new FileInfo(shipped).Length) return false;
+            return File.ReadAllBytes(fullPath).AsSpan().SequenceEqual(File.ReadAllBytes(shipped));
+        }
+        catch (IOException) { return false; }
     }
 
     /// <summary>A backup's name: <c>.bak</c> at the end, perhaps numbered or
@@ -304,6 +337,9 @@ public static class PackExporter
         /// as paths in the pack, and their size.</summary>
         public IReadOnlyList<string> BackupsLeftOut { get; }
         public long BackupBytes { get; }
+        /// <summary>The tutorials' practice art left out, unchanged from what the plugin carries, and its size.</summary>
+        public IReadOnlyList<string> TutorialArtLeftOut { get; init; } = Array.Empty<string>();
+        public long TutorialArtBytes { get; init; }
         public ExportResult(int fileCount, long sourceBytes, long compressedBytes, string outputPath,
                             IReadOnlyList<string>? backupsLeftOut = null, long backupBytes = 0)
         {

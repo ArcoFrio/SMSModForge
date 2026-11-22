@@ -139,11 +139,12 @@ public sealed class ColorPickerTests
     }
 
     [Fact]
-    public void Assigning_without_it_is_what_used_to_be_lost()
+    public void Assigning_without_it_is_still_a_step()
     {
-        // The control. Writing the colour straight onto the object - which is
-        // what every colour button did - leaves nothing to undo, so this test
-        // would pass on the broken code and the one above would not.
+        // Writing the colour straight onto the object - which is what every
+        // colour button did - left nothing to undo before 1.10.0. Since then an
+        // edit nobody announced is found when the editor next looks (Ctrl+Z
+        // looks first), so even that is taken back.
         WindowHarness.Run(window =>
         {
             var vm = (MainViewModel)window.DataContext;
@@ -153,11 +154,16 @@ public sealed class ColorPickerTests
             ui.Nodes[0].Tint = "#FFFFFFFF";
             WindowHarness.Pump();
             vm.Undo.Reset();
+            // Control: nothing changed, nothing to undo.
+            Assert.False(vm.Undo.CanUndo);
 
             ui.Nodes[0].Tint = "#FF0000FF";        // no checkpoint anywhere
             WindowHarness.Pump();
 
-            Assert.False(vm.UndoCommand.CanExecute(null));
+            Assert.True(vm.UndoCommand.CanExecute(null));
+            vm.UndoCommand.Execute(null);
+            WindowHarness.Pump();
+            Assert.Equal("#FFFFFFFF", vm.Uis.Last().Nodes[0].Tint);
         });
     }
 

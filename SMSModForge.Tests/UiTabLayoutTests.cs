@@ -436,15 +436,24 @@ public sealed class UiTabLayoutTests
             var row = ui.Nodes[0].Children.First(c => c.Name == name);
             row.IsHiddenInPreview = true;
 
+            // An object moved is put back where it is (1.10.0): the row stays, hidden as it was.
             vm.Undo.Checkpoint();
             row.PositionX = 123;
+            vm.Undo.Checkpoint();
+            vm.UndoCommand.Execute(null);
+            WindowHarness.Pump();
+            Assert.Same(row, vm.Uis.Single().Nodes[0].Children.First(c => c.Name == name));
+            Assert.NotEqual(123f, row.PositionX);
+            Assert.True(row.IsHiddenInPreview);
+
+            // Something of the screen itself taken back makes every row again: hidden still.
+            ui.StartsOpen = !ui.StartsOpen;
             vm.Undo.Checkpoint();
             vm.UndoCommand.Execute(null);
             WindowHarness.Pump();
 
             var again = vm.Uis.Single().Nodes[0].Children.First(c => c.Name == name);
             Assert.NotSame(row, again);                // the control: it really was made again
-            Assert.NotEqual(123f, again.PositionX);
             Assert.True(again.IsHiddenInPreview);
         });
     }

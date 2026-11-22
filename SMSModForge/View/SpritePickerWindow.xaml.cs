@@ -116,6 +116,7 @@ public partial class SpritePickerWindow : Window
     /// cancelled. Null means leave the object exactly as it was.</summary>
     public static string? Pick(Window owner, string? packRoot, string current)
     {
+        if (Services.TestMode.Active) return null;   // no window under the test harness: answered as a cancel
         var w = new SpritePickerWindow { Owner = owner, _packRoot = packRoot };
         w._all = VanillaUiLibrary.SpriteNames.ToList();
         w.SearchBox.Text = current ?? "";

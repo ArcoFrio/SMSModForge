@@ -33,7 +33,9 @@ internal sealed class RunProgress
         int Done, int Total, int Failed, int Skipped,
         double Fraction, TimeSpan Elapsed, TimeSpan? Left,
         string? Running, TimeSpan RunningFor,
-        IReadOnlyList<string> Failures, bool Finished);
+        IReadOnlyList<string> Failures, bool Finished,
+        // Which part of a run of several the window is in (WholeRun): "Part 2 of 5: ...". Null for one part.
+        string? Part = null);
 
     private readonly object _gate = new();
     private readonly Func<TimeSpan> _clock;
@@ -182,7 +184,13 @@ internal sealed class RunProgress
 /// </summary>
 internal static class Timings
 {
-    public static string DefaultPath => Path.Combine(AppContext.BaseDirectory, "test-timings.tsv");
+    /// <summary>
+    /// The in-game suite's times are kept apart (1.10.0): its tests take minutes when the game is there and
+    /// nothing at all in every other run, where they return at once. In one file each kind of run overwrote the
+    /// other's, and a normal run planned a check of the game as twenty seconds of a tester's share.
+    /// </summary>
+    public static string DefaultPath => Path.Combine(AppContext.BaseDirectory,
+        string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SMSMODFORGE_INGAME")) ? "test-timings.tsv" : "test-timings.ingame.tsv");
 
     public static Dictionary<string, double> Read(string? path = null)
     {

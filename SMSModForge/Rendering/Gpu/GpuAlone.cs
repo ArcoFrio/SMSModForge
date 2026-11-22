@@ -17,12 +17,17 @@ internal sealed class GpuAlone : IDisposable
     private readonly ID3D11ComputeShader _kernel;
     private readonly GpuConstants _cb0, _cb1, _cb;
     private GpuTexture? _art, _mask;
-    private byte[]? _artOf;
+    private byte[]? _artOf, _maskOf;
     private int _artW, _artH;
     private float[]? _artFloats, _maskFloats;
     private ID3D11Buffer? _output, _outputBack;
     private ID3D11UnorderedAccessView? _outputView;
+    private ID3D11ShaderResourceView? _outputRead;
     private int _outW, _outH;
+
+    /// <summary>The picture last drawn, where it is on the card (premultiplied BGRA bytes, rows from the top) and
+    /// its size - for the place's scene drawn there (<see cref="GpuPlaceScene"/>, 1.10.0). Read holding the gate.</summary>
+    public (ID3D11ShaderResourceView? Bytes, int W, int H) OnCard => (_outputRead, _outW, _outH);
 
     /// <summary>The program's constants with the fake GI off (the rest as a
     /// backdrop's: the screen, the light white, HDR emulation 1).</summary>
@@ -72,21 +77,45 @@ internal sealed class GpuAlone : IDisposable
     private byte[]? _coarse;
 
     /// <summary>As JiggleShader.Render with a <see cref="JiggleShader.Sampling"/>:
-    /// a coarser grid drawn on the card, its pixels filling their blocks here.</summary>
+    /// a coarser grid drawn on the card, its pixels filling their blocks here.
+    /// <paramref name="maskStill"/>: the mask is not being painted (it came from the pack's file), so it is
+    /// read and sent to the card once and not with every frame.</summary>
     public void Draw(byte[] baseTex, byte[] maskTex, int srcW, int srcH, JiggleParams p, (float r, float g, float b, float a) tint, float time,
-                     byte[] output, int outW, int outH, JiggleShader.Sampling s)
+                     byte[] output, int outW, int outH, JiggleShader.Sampling s, bool maskStill = false)
     {
-        if (s.Step == 1) { Sampled(baseTex, maskTex, srcW, srcH, p, tint, time, output, outW, outH, s.Across, s.Down); return; }
+        if (s.Step == 1) { Sampled(baseTex, maskTex, srcW, srcH, p, tint, time, output, outW, outH, s.Across, s.Down, maskStill); return; }
         int cw = (outW + s.Step - 1) / s.Step, ch = (outH + s.Step - 1) / s.Step;
         if (_coarse == null || _coarse.Length != cw * ch * 4) _coarse = new byte[cw * ch * 4];
-        Sampled(baseTex, maskTex, srcW, srcH, p, tint, time, _coarse, cw, ch, s.Across, s.Down);
+        Sampled(baseTex, maskTex, srcW, srcH, p, tint, time, _coarse, cw, ch, s.Across, s.Down, maskStill);
         JiggleShader.Enlarge(_coarse, cw, ch, output, outW, outH, s.Step);
     }
 
+    /// <summary>As the Draw above, the picture left on the card (<see cref="OnCard"/>) and not brought back: at
+    /// a coarser sampling its coarse grid, which whoever reads it reads by the nearest pixel (its pixels filling
+    /// their blocks).</summary>
+    public void DrawOnCard(byte[] baseTex, byte[] maskTex, int srcW, int srcH, JiggleParams p, (float r, float g, float b, float a) tint, float time,
+                           int outW, int outH, JiggleShader.Sampling s, bool maskStill = false)
+    {
+        int cw = (outW + s.Step - 1) / s.Step, ch = (outH + s.Step - 1) / s.Step;
+        lock (_gpu.Gate) Run(baseTex, maskTex, srcW, srcH, p, tint, time, cw, ch, s.Across, s.Down, maskStill);
+    }
+
     private void Sampled(byte[] baseTex, byte[] maskTex, int srcW, int srcH, JiggleParams p, (float r, float g, float b, float a) tint, float time,
-                         byte[] output, int outW, int outH, int zoomX, int zoomY)
+                         byte[] output, int outW, int outH, int zoomX, int zoomY, bool maskStill)
     {
         lock (_gpu.Gate)
+        {
+            var ctx = Run(baseTex, maskTex, srcW, srcH, p, tint, time, outW, outH, zoomX, zoomY, maskStill);
+            ctx.CopyResource(_outputBack!, _output!);
+            var map = ctx.Map(_outputBack!, 0, MapMode.Read, Vortice.Direct3D11.MapFlags.None);
+            try { Marshal.Copy(map.DataPointer, output, 0, outW * outH * 4); }
+            finally { ctx.Unmap(_outputBack!, 0); }
+        }
+    }
+
+    private ID3D11DeviceContext Run(byte[] baseTex, byte[] maskTex, int srcW, int srcH, JiggleParams p, (float r, float g, float b, float a) tint, float time,
+                                    int outW, int outH, int zoomX, int zoomY, bool maskStill)
+    {
         {
             var ctx = _gpu.Clean();
             int n = srcW * srcH * 4;
@@ -96,7 +125,7 @@ internal sealed class GpuAlone : IDisposable
                 _art = GpuTexture.Create<float>(_gpu, srcW, srcH, Format.R32G32B32A32_Float, false);
                 _mask = GpuTexture.Create<float>(_gpu, srcW, srcH, Format.R32G32B32A32_Float, false);
                 _artFloats = new float[n]; _maskFloats = new float[n];
-                _artW = srcW; _artH = srcH; _artOf = null;
+                _artW = srcW; _artH = srcH; _artOf = null; _maskOf = null;
             }
             if (!ReferenceEquals(_artOf, baseTex))
             {
@@ -104,14 +133,20 @@ internal sealed class GpuAlone : IDisposable
                 _art.Upload<float>(_gpu, _artFloats);
                 _artOf = baseTex;
             }
-            AsRead(maskTex, srcW, srcH, false, _maskFloats!);     // painted in place: every frame
-            _mask!.Upload<float>(_gpu, _maskFloats);
+            // Painted in place: every frame - unless it is the pack's file, which is read and sent once.
+            if (!maskStill || !ReferenceEquals(_maskOf, maskTex))
+            {
+                AsRead(maskTex, srcW, srcH, false, _maskFloats!);
+                _mask!.Upload<float>(_gpu, _maskFloats);
+                _maskOf = maskStill ? maskTex : null;
+            }
             if (_output == null || _outW != outW || _outH != outH)
             {
-                _outputView?.Dispose(); _output?.Dispose(); _outputBack?.Dispose();
-                _output = _gpu.NewBuffer(new BufferDescription((uint)(outW * outH * 4), BindFlags.UnorderedAccess, ResourceUsage.Default,
+                _outputRead?.Dispose(); _outputView?.Dispose(); _output?.Dispose(); _outputBack?.Dispose();
+                _output = _gpu.NewBuffer(new BufferDescription((uint)(outW * outH * 4), BindFlags.UnorderedAccess | BindFlags.ShaderResource, ResourceUsage.Default,
                                                                          CpuAccessFlags.None, ResourceOptionFlags.BufferStructured, 4));
                 _outputView = _gpu.Device.CreateUnorderedAccessView(_output);
+                _outputRead = _gpu.Device.CreateShaderResourceView(_output);
                 _outputBack = _gpu.Device.CreateBuffer(new BufferDescription((uint)(outW * outH * 4), BindFlags.None, ResourceUsage.Staging, CpuAccessFlags.Read));
                 _outW = outW; _outH = outH;
             }
@@ -141,10 +176,7 @@ internal sealed class GpuAlone : IDisposable
             ctx.Dispatch((uint)((outW + 15) / 16), (uint)((outH + 15) / 16), 1);
             ctx.CSSetUnorderedAccessView(0, null);
             ctx.CSSetShaderResource(0, null); ctx.CSSetShaderResource(1, null);
-            ctx.CopyResource(_outputBack!, _output);
-            var map = ctx.Map(_outputBack!, 0, MapMode.Read, Vortice.Direct3D11.MapFlags.None);
-            try { Marshal.Copy(map.DataPointer, output, 0, outW * outH * 4); }
-            finally { ctx.Unmap(_outputBack!, 0); }
+            return ctx;
         }
     }
 
@@ -153,7 +185,7 @@ internal sealed class GpuAlone : IDisposable
         lock (_gpu.Gate)
         {
             _art?.Dispose(); _mask?.Dispose();
-            _outputView?.Dispose(); _output?.Dispose(); _outputBack?.Dispose();
+            _outputRead?.Dispose(); _outputView?.Dispose(); _output?.Dispose(); _outputBack?.Dispose();
             _cb0.Dispose(); _cb1.Dispose(); _cb.Dispose();
         }
     }

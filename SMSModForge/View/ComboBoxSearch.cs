@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -162,15 +163,31 @@ public static class ComboBoxSearch
         if (GetTyped(box).Length > 0) return;   // a search already under way
         string text = box.Text ?? "";
         if (text.Trim().Length == 0) return;
-        if (box.SelectedItem != null &&
-            string.Equals(Converters.SearchMatchConverter.TextOf(box.SelectedItem, box), text,
-                          StringComparison.CurrentCultureIgnoreCase)) return;
+        if (IsTheChoice(box, text)) return;
         foreach (var item in box.Items)
         {
             if (!Converters.SearchMatchConverter.Matches(item, box, text)) continue;
             SetTyped(box, text);
             return;
         }
+    }
+
+    /// <summary>
+    /// Whether the box's words are the option it holds - then opening it is not a search, and the whole list shows.
+    /// Read as the box shows a choice (its stored word, <c>ToString</c>) as well as by what a search matches it
+    /// against: an option that stores one thing and shows another searches by both ("vanilla:14_Beach" and
+    /// "Vanilla — Beach (14_Beach)"), which never equals either alone. Compared with that alone, every such box that
+    /// held a choice opened onto that choice only - a conversation's Required level showed the Beach and 146 rows
+    /// hidden, so a reader told to "choose your place in it" found no place there (found by following the guide's
+    /// examples by their words, 1.10.0).
+    /// </summary>
+    internal static bool IsTheChoice(ComboBox box, string text)
+    {
+        if (box.SelectedItem is not { } chosen) return false;
+        bool Same(string? a) => string.Equals(a?.Trim(), text.Trim(), StringComparison.CurrentCultureIgnoreCase);
+        if (Same(chosen.ToString())) return true;
+        string searched = Converters.SearchMatchConverter.TextOf(chosen, box);
+        return Same(searched) || searched.Split('\n').Any(Same);
     }
 
     /// <summary>The search ends with the list. Opening it again starts from

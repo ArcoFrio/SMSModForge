@@ -139,5 +139,18 @@ public sealed class SuffixHintBox : Grid
         var caret = _box.GetRectFromCharacterIndex(_box.Text.Length);
         if (caret.IsEmpty || double.IsInfinity(caret.Right)) return;
         _hint.Margin = new Thickness(caret.Right, caret.Top, 0, 0);
+
+        // Cut off at the edge, the whole of it in the box's tooltip - a reader of a tutorial saw only
+        // "Mouth1.png/2.png/3.p" (review of every step, 1.10.0). Only a tooltip of its own: one the box was given
+        // for something else (a borrowed bust, a path outside the pack) is left as it is.
+        bool ours = _box.ToolTip is string shown && ReferenceEquals(shown, _cutTip);
+        if (_box.ToolTip != null && !ours) return;
+        _hint.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        bool cut = _hint.Visibility == Visibility.Visible && caret.Right + _hint.DesiredSize.Width > _box.ActualWidth - 2;
+        if (cut) _box.ToolTip = _cutTip = Text + _hint.Text;
+        else if (ours) { _box.ClearValue(ToolTipProperty); _cutTip = null; }
     }
+
+    /// <summary>The tooltip this box put up for a cut-off hint, so it takes down only its own.</summary>
+    private string? _cutTip;
 }

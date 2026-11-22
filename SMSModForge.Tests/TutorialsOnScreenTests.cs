@@ -95,11 +95,8 @@ public sealed class TutorialsOnScreenTests
             vm.SelectedNode = null;
 
             vm.TutorialRunner.Start(tutorial);
-            for (int i = 0; i < stepAt; i++)
-            {
-                Settle(window, 0);
-                vm.TutorialRunner.NextCommand.Execute(null);   // the Read steps before it
-            }
+            Settle(window, 0);
+            vm.TutorialRunner.GoToCommand.Execute(stepAt);   // by the step list, past the steps before it
             Settle(window, 0.4);
             Assert.Equal(stepAt, vm.TutorialRunner.Index);
             Assert.False(Shows(ring), "a ring with no line chosen - the control does not hold");
@@ -139,6 +136,8 @@ public sealed class TutorialsOnScreenTests
                 using var walker = new TutorialWalker(vm);
 
                 runner.Start(tutorial);
+                // The story so far, by the callout's own button, when it is offered.
+                if (runner.NeedsPreparing) runner.PrepareCommand.Execute(null);
                 for (int i = 0; i < tutorial.Steps.Count; i++)
                 {
                     Settle(window, 0);
@@ -146,10 +145,9 @@ public sealed class TutorialsOnScreenTests
                     bool onArrival = Shows(ring);
                     bool whenDone = onArrival;
 
-                    if (step.IsDone != null
-                        && TutorialSolutions.All.TryGetValue(TutorialSolutions.Key(tutorial.Id, step.Title), out var solve))
+                    if (step.IsDone != null && TutorialSolutions.Has(tutorial.Id, step))
                     {
-                        solve(walker);
+                        TutorialSolutions.TrySolve(tutorial.Id, step, walker, new TutorialScratch());
                         // The runner and the overlay both look every quarter second.
                         var deadline = DateTime.Now.AddSeconds(3);
                         while (!runner.CanAdvance && DateTime.Now < deadline) WindowHarness.Pump();

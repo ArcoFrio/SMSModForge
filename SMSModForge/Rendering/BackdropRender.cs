@@ -309,6 +309,8 @@ internal static class BackdropRender
     internal static void Layer(GamePost.Target target, BackdropScene scene, float[] layer, float[] coverage)
     {
         int w = target.W;
+        // A light on the characters' layer (1.10.0): the bust's program multiplies its colour by that layer's light.
+        var m = scene.CharactersFrame;
         Parallel.For(0, FrameSize, Options, y =>
         {
             int sy = scene.FrameBottom + (FrameSize - 1 - y);
@@ -320,9 +322,11 @@ internal static class BackdropRender
                 if (a <= 0f) continue;
                 int o = (sy * w + scene.Left + x) * 4;
                 float keep = 1f - a;
-                target.Px[o] = layer[i] + target.Px[o] * keep;
-                target.Px[o + 1] = layer[i + 1] + target.Px[o + 1] * keep;
-                target.Px[o + 2] = layer[i + 2] + target.Px[o + 2] * keep;
+                float mr = 1f, mg = 1f, mb = 1f;
+                if (m != null) { int j = (y * FrameSize + x) * 3; mr = m[j]; mg = m[j + 1]; mb = m[j + 2]; }
+                target.Px[o] = layer[i] * mr + target.Px[o] * keep;
+                target.Px[o + 1] = layer[i + 1] * mg + target.Px[o + 1] * keep;
+                target.Px[o + 2] = layer[i + 2] * mb + target.Px[o + 2] * keep;
                 GamePost.ToFrameFormat(target.Px, o);
                 int c = y * FrameSize + x;
                 coverage[c] = a + coverage[c] * keep;
@@ -338,6 +342,7 @@ internal static class BackdropRender
         const int S = JiggleShader.Size, N = FrameSize;
         var lin = scene.Decode;
         int w = target.W;
+        var m = scene.CharactersFrame;   // the characters' layer's light (1.10.0), as on the body
         for (int y = 0; y < N; y++)
         {
             int sy = scene.FrameBottom + (N - 1 - y);
@@ -351,9 +356,11 @@ internal static class BackdropRender
                 if (a <= 0f) continue;
                 int o = (sy * w + scene.Left + x) * 4;
                 float keep = 1f - a;
-                target.Px[o] = lin[overlayStraight[oi + 2]] * a + target.Px[o] * keep;
-                target.Px[o + 1] = lin[overlayStraight[oi + 1]] * a + target.Px[o + 1] * keep;
-                target.Px[o + 2] = lin[overlayStraight[oi]] * a + target.Px[o + 2] * keep;
+                float mr = 1f, mg = 1f, mb = 1f;
+                if (m != null) { int j = (y * N + x) * 3; mr = m[j]; mg = m[j + 1]; mb = m[j + 2]; }
+                target.Px[o] = lin[overlayStraight[oi + 2]] * a * mr + target.Px[o] * keep;
+                target.Px[o + 1] = lin[overlayStraight[oi + 1]] * a * mg + target.Px[o + 1] * keep;
+                target.Px[o + 2] = lin[overlayStraight[oi]] * a * mb + target.Px[o + 2] * keep;
                 GamePost.ToFrameFormat(target.Px, o);
                 int c = y * N + x;
                 coverage[c] = a + coverage[c] * keep;
@@ -386,6 +393,25 @@ internal static class BackdropRender
                 if (a <= 0f) continue;
                 int j = (y * FrameSize + x) * 3, o = (sy * w + scene.Left + x) * 4;
                 target.Px[o] += light[j] * a; target.Px[o + 1] += light[j + 1] * a; target.Px[o + 2] += light[j + 2] * a;
+                GamePost.ToFrameFormat(target.Px, o);
+            }
+        });
+    }
+
+    /// <summary>A place's other lights' glows drawn over the characters (1.10.0): over everything, after the busts, as
+    /// a lamp's own glow over them (<see cref="GameLamp.Glow"/>). Only a backdrop made from a place has them.</summary>
+    internal static void OthersOver(GamePost.Target target, BackdropScene scene)
+    {
+        var glow = scene.Backdrop.OthersOverGlow;
+        if (glow == null) return;
+        int w = target.W;
+        Parallel.For(0, target.H, Options, y =>
+        {
+            for (int x = 0; x < w; x++)
+            {
+                int p = (y * w + x) * 3, o = (y * w + x) * 4;
+                if (glow[p] == 0f && glow[p + 1] == 0f && glow[p + 2] == 0f) continue;
+                target.Px[o] += glow[p]; target.Px[o + 1] += glow[p + 1]; target.Px[o + 2] += glow[p + 2];
                 GamePost.ToFrameFormat(target.Px, o);
             }
         });
@@ -496,6 +522,10 @@ internal sealed class BackdropScene
     /// <summary>The fake GI, null until <see cref="Prepare"/> has made it.</summary>
     public FakeGi? Gi => System.Threading.Volatile.Read(ref _gi);
 
+    /// <summary>What a bust is multiplied by over the frame (RGB, rows top-down): the characters' layer's light
+    /// (1.10.0, <see cref="PreviewBackdrop.CharactersLight"/>); null for the global light alone.</summary>
+    public float[]? CharactersFrame { get; }
+
     private GameLamp? _lamp;
     /// <summary>The room's lamp with a bust's shadow in it (<see cref="GameLamp"/>),
     /// null until <see cref="Prepare"/> has made it, and for a backdrop without one.</summary>
@@ -539,6 +569,19 @@ internal sealed class BackdropScene
                 RoomBytes[bi] = backdrop.Room[ri]; RoomBytes[bi + 1] = backdrop.Room[ri + 1]; RoomBytes[bi + 2] = backdrop.Room[ri + 2]; RoomBytes[bi + 3] = 255;
                 var (lr, lg, lb) = backdrop.LightAt(Left + x + 0.5f, sy + 0.5f);
                 LightFrame[j] = lr; LightFrame[j + 1] = lg; LightFrame[j + 2] = lb;
+            }
+        }
+        if (backdrop.CharactersLight is { } cl)
+        {
+            CharactersFrame = new float[N * N * 3];
+            for (int y = 0; y < N; y++)
+            {
+                int sy = Math.Clamp(FrameBottom + (N - 1 - y), 0, h - 1);
+                for (int x = 0; x < N; x++)
+                {
+                    int sx = Math.Clamp(Left + x, 0, w - 1), j = (y * N + x) * 3, k = (sy * w + sx) * 3;
+                    CharactersFrame[j] = cl[k]; CharactersFrame[j + 1] = cl[k + 1]; CharactersFrame[j + 2] = cl[k + 2];
+                }
             }
         }
     }

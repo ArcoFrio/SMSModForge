@@ -445,6 +445,9 @@ public sealed class NpcPreview : Grid
     /// room's lamp glow or lights and the game's post-processing, by the quality
     /// (PreviewQualityDef). Drawn on the processor.
     /// </summary>
+    /// <summary>What stopped the last frame that could not be drawn, if one could not - for tests to say.</summary>
+    internal string? LastFault { get; private set; }
+
     private void RenderOverBackdrop(BackdropScene scene, Services.PreviewBackdropDef def, byte[] baseSnap, byte[] maskSnap,
                                     SMSModForge.Model.JiggleParams jiggle, (float r, float g, float b, float a) tint, float time, bool eyesShut,
                                     (float width, float height, float left, float bottom) rect)
@@ -453,23 +456,13 @@ public sealed class NpcPreview : Grid
         var quality = Services.PreviewQualityManager.Current;
         var backdrop = scene.Backdrop;
         int sw = _srcW, sh = _srcH;
-        if (!ReferenceEquals(_npcGiOf, backdrop)) { _npcGi = NpcRender.Gi(backdrop); _npcGiOf = backdrop; _npcArtOf = _npcBlinkArtOf = null; }
-        var gi = quality.EdgeGlow ? _npcGi : null;
-        int reach = NpcRender.Reach(backdrop.Gi, sw, sh);
-        if (gi != null && !ReferenceEquals(_npcArtOf, baseSnap)) { _npcArt = new FakeGi.Art(baseSnap, sw, sh, reach); _npcArtOf = baseSnap; }
+        bool edgeGlow = quality.EdgeGlow;
         var blinkSrc = eyesShut ? _blinkSrc : null;
-        if (gi != null && blinkSrc != null && !ReferenceEquals(_npcBlinkArtOf, blinkSrc)) { _npcBlinkArt = new FakeGi.Art(blinkSrc, sw, sh, reach); _npcBlinkArtOf = blinkSrc; }
-        var art = gi != null ? _npcArt : null;
-        var blinkArt = gi != null ? _npcBlinkArt : null;
-        if (!ReferenceEquals(_lightOf, scene)) { _light = new NpcLight(scene); _lightOf = scene; }
-        if (!ReferenceEquals(_targetOf, scene)) { _target = BackdropRender.Scene(scene); _targetOf = scene; }
         int bgLength = backdrop.BackgroundWidth * backdrop.BackgroundHeight * 4;
         if (_scratchBackground == null || _scratchBackground.Length != bgLength) _scratchBackground = new float[bgLength];
         _linear ??= new float[N * N * 4];
         _coverage ??= new float[N * N];
         if (blinkSrc != null) _linearBlink ??= new float[N * N * 4];
-        var light = _light!;
-        var target = _target!;
         var scratch = _scratchBackground;
         var linear = _linear;
         var linearBlink = blinkSrc != null ? _linearBlink : null;
@@ -485,10 +478,26 @@ public sealed class NpcPreview : Grid
         _renderInFlight = true;
         ShaderPasses++;
         bool useCard = Services.PreviewRendererManager.UseCard;
-        var npcGi = _npcGi!;
-        bool giOn = gi != null;
         Task.Run(() =>
             {
+                // What a place's frames share - the room's light and edge glow, the frame's target, the NPC's art
+                // read for the glow - made once per place (or per art) and kept. Made here, not before the frame is
+                // handed over: the first frame in a place took a quarter of a second on the interface's thread, which
+                // was the NPCs tab's first visit (1.10.0, UiDelayTests). Only one frame is ever in flight
+                // (_renderInFlight), so nothing else reads these while they are made.
+                if (!ReferenceEquals(_npcGiOf, backdrop)) { _npcGi = NpcRender.Gi(backdrop); _npcGiOf = backdrop; _npcArtOf = _npcBlinkArtOf = null; }
+                var gi = edgeGlow ? _npcGi : null;
+                int reach = NpcRender.Reach(backdrop.Gi, sw, sh);
+                if (gi != null && !ReferenceEquals(_npcArtOf, baseSnap)) { _npcArt = new FakeGi.Art(baseSnap, sw, sh, reach); _npcArtOf = baseSnap; }
+                if (gi != null && blinkSrc != null && !ReferenceEquals(_npcBlinkArtOf, blinkSrc)) { _npcBlinkArt = new FakeGi.Art(blinkSrc, sw, sh, reach); _npcBlinkArtOf = blinkSrc; }
+                var art = gi != null ? _npcArt : null;
+                var blinkArt = gi != null ? _npcBlinkArt : null;
+                if (!ReferenceEquals(_lightOf, scene)) { _light = new NpcLight(scene); _lightOf = scene; }
+                if (!ReferenceEquals(_targetOf, scene)) { _target = BackdropRender.Scene(scene); _targetOf = scene; }
+                var light = _light!;
+                var target = _target!;
+                var npcGi = _npcGi!;
+                bool giOn = gi != null;
                 // On the graphics card when that draws the previews: the whole frame
                 // there (Rendering.Gpu.GpuFrame.DrawNpc), only its bytes coming back.
                 var card = useCard ? (_gpuFrame ??= Rendering.Gpu.GpuFrame.TryCreate()) : null;
@@ -512,6 +521,7 @@ public sealed class NpcPreview : Grid
             {
                 try
                 {
+                    if (t.IsFaulted) LastFault = t.Exception?.GetBaseException().ToString();
                     if (t.IsCompletedSuccessfully && _framed == true)
                     {
                         bmp.Lock();

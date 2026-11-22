@@ -22,11 +22,22 @@
                     xmlns:l="clr-namespace:SMSModForge.Localization">
 
     <!-- The glow round what is pointed at or focused - Ex.Glow and
-         Ex.GlowSoft - is made by ThemeManager in each theme's accent. -->
+         Ex.GlowSoft - is made by ThemeManager in each theme's accent.
+         It is drawn from "frame", a copy of the control's shape behind it, never from a panel holding words
+         or pictures: an effect renders what it holds through its own pass, and a card's art and text went
+         soft while pointed at (the author, 2026-11-21). The copy follows bd's fill, border and cut. -->
 
     <!-- ══ Buttons ══════════════════════════════════════════════════════ -->
+    <!-- How a menu opens (1.10.0): EX slides it out, Classic fades it in (App.xaml). -->
+    <x:Static x:Key="Theme.MenuPopupAnimation" Member="PopupAnimation.Slide"/>
+
     <ControlTemplate x:Key="Theme.ButtonTemplate" TargetType="Button">
-        <Grid x:Name="frame">
+        <Grid view:Motions.Press="{TemplateBinding IsPressed}">
+            <Grid x:Name="frame" IsHitTestVisible="False" view:Motions.FadeIn="{TemplateBinding IsMouseOver}">
+                <ctl:ChamferBorder SnapsToDevicePixels="True"
+                                   Background="{Binding Background, ElementName=bd}" BorderBrush="{Binding BorderBrush, ElementName=bd}"
+                                   Stroke="{Binding Stroke, ElementName=bd}" Cut="{Binding Cut, ElementName=bd}" Corners="{Binding Corners, ElementName=bd}"/>
+            </Grid>
             <ctl:ChamferBorder x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                                Cut="5" Corners="TopLeft, BottomRight" Padding="{TemplateBinding Padding}"
                                SnapsToDevicePixels="True">
@@ -54,7 +65,12 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="Theme.PrimaryButtonTemplate" TargetType="Button">
-        <Grid x:Name="frame" Effect="{DynamicResource Ex.GlowSoft}">
+        <Grid view:Motions.Press="{TemplateBinding IsPressed}">
+            <Grid x:Name="frame" IsHitTestVisible="False" Effect="{DynamicResource Ex.GlowSoft}">
+                <ctl:ChamferBorder SnapsToDevicePixels="True"
+                                   Background="{Binding Background, ElementName=bd}" BorderBrush="{Binding BorderBrush, ElementName=bd}"
+                                   Stroke="{Binding Stroke, ElementName=bd}" Cut="{Binding Cut, ElementName=bd}" Corners="{Binding Corners, ElementName=bd}"/>
+            </Grid>
             <ctl:ChamferBorder x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                                Cut="7" Corners="TopLeft, BottomRight" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -86,7 +102,12 @@
     <!-- A button that stays in: Normal's, cut at the corners, and the one
          that is in glows in the accent. -->
     <ControlTemplate x:Key="Theme.ToggleButtonTemplate" TargetType="ToggleButton">
-        <Grid x:Name="frame">
+        <Grid view:Motions.Press="{TemplateBinding IsPressed}">
+            <Grid x:Name="frame" IsHitTestVisible="False" view:Motions.FadeIn="{TemplateBinding IsMouseOver}">
+                <ctl:ChamferBorder SnapsToDevicePixels="True"
+                                   Background="{Binding Background, ElementName=bd}" BorderBrush="{Binding BorderBrush, ElementName=bd}"
+                                   Stroke="{Binding Stroke, ElementName=bd}" Cut="{Binding Cut, ElementName=bd}" Corners="{Binding Corners, ElementName=bd}"/>
+            </Grid>
             <ctl:ChamferBorder x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                                Cut="5" Corners="TopLeft, BottomRight" Padding="{TemplateBinding Padding}"
                                SnapsToDevicePixels="True">
@@ -136,8 +157,13 @@
 
     <!-- A picture to pick: cut corners, and the chosen one glows. -->
     <ControlTemplate x:Key="Theme.TileTemplate" TargetType="Button">
-        <Grid x:Name="frame">
-            <ctl:ChamferBorder Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+        <Grid view:Motions.Press="{TemplateBinding IsPressed}">
+            <Grid x:Name="frame" IsHitTestVisible="False">
+                <ctl:ChamferBorder SnapsToDevicePixels="True"
+                                   Background="{Binding Background, ElementName=bd}" BorderBrush="{Binding BorderBrush, ElementName=bd}"
+                                   Stroke="{Binding Stroke, ElementName=bd}" Cut="{Binding Cut, ElementName=bd}" Corners="{Binding Corners, ElementName=bd}"/>
+            </Grid>
+            <ctl:ChamferBorder x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                                Stroke="2" Cut="8" Corners="TopRight, BottomLeft" Padding="{TemplateBinding Padding}"
                                TextElement.Foreground="{TemplateBinding Foreground}">
                 <ContentPresenter/>
@@ -304,12 +330,13 @@
     <!-- ══ Lists and trees: the same bar on the chosen row ═══════════════ -->
     <ControlTemplate x:Key="Theme.ListItemTemplate" TargetType="ListBoxItem">
         <Grid>
-            <Border x:Name="bd" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}"
+            <Border x:Name="bd" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" view:Motions.Wash="{TemplateBinding IsSelected}"
                     SnapsToDevicePixels="True">
                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
             </Border>
-            <Rectangle x:Name="bar" Width="3" HorizontalAlignment="Left" Fill="Transparent"/>
+            <Rectangle x:Name="bar" Width="3" HorizontalAlignment="Left" Fill="Transparent"
+                       view:Motions.Grow="{TemplateBinding IsSelected}" view:Motions.GrowAxis="Y" view:Motions.GrowOnUse="True"/>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -373,15 +400,17 @@
             <ToggleButton x:Name="Expander" Style="{StaticResource Theme.TreeToggle}" ClickMode="Press"
                           IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"/>
             <Grid Grid.Column="1" Grid.ColumnSpan="2" Background="Transparent">
-                <Border x:Name="Bd" Background="{TemplateBinding Background}" MinHeight="18"
+                <Border x:Name="Bd" Background="{TemplateBinding Background}" MinHeight="18" view:Motions.Wash="{TemplateBinding IsSelected}"
                         BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
                         Padding="3,0" SnapsToDevicePixels="True">
                     <ContentPresenter x:Name="PART_Header" ContentSource="Header"
                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
                 </Border>
-                <Rectangle x:Name="bar" Width="3" HorizontalAlignment="Left" Fill="Transparent"/>
+                <Rectangle x:Name="bar" Width="3" HorizontalAlignment="Left" Fill="Transparent"
+                           view:Motions.Grow="{TemplateBinding IsSelected}" view:Motions.GrowAxis="Y" view:Motions.GrowOnUse="True"/>
             </Grid>
-            <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+            <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                            view:Motions.Reveal="{TemplateBinding IsExpanded}"/>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsExpanded" Value="False">
@@ -427,7 +456,7 @@
             <Grid x:Name="frame" Width="15" Height="15" VerticalAlignment="Center">
                 <ctl:ChamferBorder x:Name="box" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                                    Cut="4" Corners="TopRight, BottomLeft"/>
-                <Path x:Name="mark" Data="M3.5,7.5 L6.5,10.5 L11.5,4.5" StrokeThickness="2"
+                <Path x:Name="mark" Data="M3.5,7.5 L6.5,10.5 L11.5,4.5" StrokeThickness="2" view:Motions.Pop="{TemplateBinding IsChecked}"
                       Stroke="{DynamicResource Theme.OnAccent}" Visibility="Collapsed"/>
                 <Rectangle x:Name="dash" Width="7" Height="2" Fill="{DynamicResource Theme.OnAccent}" Visibility="Collapsed"/>
             </Grid>
@@ -470,7 +499,7 @@
             <Grid x:Name="frame" Width="15" Height="15" VerticalAlignment="Center">
                 <Path x:Name="ring" Data="M7.5,0.5 L14.5,7.5 L7.5,14.5 L0.5,7.5 Z" Fill="{TemplateBinding Background}"
                       Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1"/>
-                <Path x:Name="dot" Data="M7.5,4 L11,7.5 L7.5,11 L4,7.5 Z" Fill="{DynamicResource Theme.OnAccent}"
+                <Path x:Name="dot" Data="M7.5,4 L11,7.5 L7.5,11 L4,7.5 Z" Fill="{DynamicResource Theme.OnAccent}" view:Motions.Pop="{TemplateBinding IsChecked}"
                       Visibility="Collapsed"/>
             </Grid>
             <ContentPresenter x:Name="content" Grid.Column="1" Margin="6,0,0,0" VerticalAlignment="Center"
@@ -551,6 +580,381 @@
     </ControlTemplate>
 
     <!-- ══ Tabs: no folder tabs - the open one lit, a glowing line under it ═ -->
+    <!-- The tutorial's coach in EX (1.10.0): the same parts and bindings as Classic's (App.xaml), drawn the EX
+         way - cut corners and the accent's glow, a progress of one segment per step over a filling line, and the
+         steps as a timeline. -->
+    <ControlTemplate x:Key="Theme.TutorialCoachTemplate" TargetType="ctl:TutorialCoach">
+        <Border Background="{DynamicResource Theme.Window}" BorderBrush="{DynamicResource Theme.Accent}" BorderThickness="2,0,0,0">
+            <DockPanel>
+                <Grid DockPanel.Dock="Top" Height="140" ClipToBounds="True">
+                    <Border Background="{DynamicResource Theme.Chrome}"/>
+                    <Image Source="{Binding HeaderArt}" Stretch="UniformToFill" VerticalAlignment="Center" Opacity="0.95"/>
+                    <!-- Diagonal bands in the accent, the EX look's signature, faint over the picture. -->
+                    <Border Opacity="0.22">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="18,18" MappingMode="Absolute" SpreadMethod="Repeat">
+                                <GradientStop Color="#00FFFFFF" Offset="0"/>
+                                <GradientStop Color="#00FFFFFF" Offset="0.5"/>
+                                <GradientStop Color="#66FFFFFF" Offset="0.5"/>
+                                <GradientStop Color="#66FFFFFF" Offset="0.62"/>
+                                <GradientStop Color="#00FFFFFF" Offset="0.62"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+                    <Border>
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#00000000" Offset="0.25"/>
+                                <GradientStop Color="#D8000000" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+                    <StackPanel VerticalAlignment="Bottom" Margin="18,0,52,14">
+                        <Grid HorizontalAlignment="Left">
+                            <!-- The glow from a copy behind the chip: its words stay out of the effect's pass. -->
+                            <Grid IsHitTestVisible="False" Effect="{DynamicResource Ex.GlowSoft}">
+                                <ctl:ChamferBorder Background="{DynamicResource Theme.Accent}" Cut="6" Corners="TopLeft, BottomRight"/>
+                            </Grid>
+                            <ctl:ChamferBorder Background="{DynamicResource Theme.Accent}" Cut="6" Corners="TopLeft, BottomRight" Padding="9,1">
+                                <TextBlock Text="{Binding Heading}" Foreground="{DynamicResource Theme.OnAccent}" FontSize="11" FontWeight="Bold"/>
+                            </ctl:ChamferBorder>
+                        </Grid>
+                        <TextBlock Text="{Binding Tutorial.Title}" Foreground="White" FontSize="21" FontWeight="Black"
+                                   TextWrapping="Wrap" Margin="0,6,0,0"/>
+                    </StackPanel>
+                    <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,8,8,0" Padding="8,2"
+                            Content="&#x2715;" FontSize="12" Command="{Binding ExitCommand}" ToolTip="{l:T tutorialCoach.exit.tip}"/>
+                </Grid>
+
+                <!-- One segment per step, lit as they are reached, over a line that fills. -->
+                <StackPanel DockPanel.Dock="Top" Margin="16,12,16,4">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Right" Text="{Binding Progress}" FontSize="11" FontWeight="SemiBold" Margin="10,0,0,0"
+                                   Foreground="{DynamicResource Theme.Accent}" VerticalAlignment="Center"/>
+                        <ItemsControl ItemsSource="{Binding StepItems}" VerticalAlignment="Center">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate><UniformGrid Rows="1"/></ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Rectangle x:Name="seg" Height="6" Margin="1,0" Fill="{DynamicResource Theme.Border}"/>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding Done}" Value="True">
+                                            <Setter TargetName="seg" Property="Fill" Value="{DynamicResource Theme.Accent}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Current}" Value="True">
+                                            <Setter TargetName="seg" Property="Fill" Value="{DynamicResource Theme.Accent}"/>
+                                            <Setter TargetName="seg" Property="Effect" Value="{DynamicResource Ex.Glow}"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DockPanel>
+                    <Grid Height="2" Margin="0,4,0,0">
+                        <Rectangle Fill="{DynamicResource Theme.Border}" Opacity="0.5"/>
+                        <Rectangle x:Name="PART_Fill" Fill="{DynamicResource Theme.Accent}"/>
+                    </Grid>
+                </StackPanel>
+
+                <Border DockPanel.Dock="Bottom" Background="{DynamicResource Theme.Chrome}" Padding="14,10,14,12">
+                    <StackPanel>
+                        <TextBlock Text="{Binding WaitingLabel}" FontStyle="Italic" FontSize="11" Margin="0,0,0,8"
+                                   Foreground="{DynamicResource Theme.TextMuted}" TextWrapping="Wrap"
+                                   Visibility="{Binding HasWaiting, Converter={x:Static conv:BoolToVisibilityConverter.Instance}}"/>
+                        <DockPanel>
+                            <Button DockPanel.Dock="Left" Content="{l:T tutorialOverlay.back}" Padding="12,4" Command="{Binding BackCommand}"/>
+                            <Button DockPanel.Dock="Right" Content="{Binding NextLabel}" Padding="18,4"
+                                    Style="{DynamicResource Theme.PrimaryButton}" Command="{Binding NextCommand}"/>
+                            <Button HorizontalAlignment="Right" Margin="8,0,8,0" Padding="12,4"
+                                    Content="{l:T tutorialOverlay.doItForMe}" ToolTip="{l:T tutorialOverlay.doItForMe.tip}"
+                                    Command="{Binding DoItForMeCommand}"
+                                    Visibility="{Binding CanDoItForMe, Converter={x:Static conv:BoolToVisibilityConverter.Instance}}"/>
+                        </DockPanel>
+                        <Button Margin="0,10,0,0" Padding="12,6" HorizontalAlignment="Stretch"
+                                Style="{DynamicResource Theme.PrimaryButton}" Content="{Binding NextTutorialLabel}"
+                                Command="{Binding StartNextCommand}"
+                                Visibility="{Binding NextTutorial, Converter={x:Static conv:NullToVisibilityConverter.Instance}}"/>
+                    </StackPanel>
+                </Border>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Margin="14,10,14,14">
+                        <Grid x:Name="PART_Step">
+                            <ctl:ChamferBorder Background="{DynamicResource Theme.Surface}" BorderBrush="{DynamicResource Theme.Accent}"
+                                               Cut="14" Corners="TopLeft, BottomRight" Padding="16,14">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                        <ctl:ChamferBorder Background="{DynamicResource Theme.AccentSoft}" Cut="5" Corners="TopLeft, BottomRight" Padding="9,1">
+                                            <TextBlock Text="{Binding KindLabel}" FontSize="11" FontWeight="Bold"
+                                                       Foreground="{DynamicResource Theme.AccentText}"/>
+                                        </ctl:ChamferBorder>
+                                        <Grid Margin="6,0,0,0" Visibility="{Binding ShowsDone, Converter={x:Static conv:BoolToVisibilityConverter.Instance}}">
+                                            <Grid IsHitTestVisible="False" Effect="{DynamicResource Ex.GlowSoft}">
+                                                <ctl:ChamferBorder Background="{DynamicResource Theme.Accent}" Cut="5" Corners="TopLeft, BottomRight"/>
+                                            </Grid>
+                                            <ctl:ChamferBorder Background="{DynamicResource Theme.Accent}" Cut="5" Corners="TopLeft, BottomRight" Padding="9,1">
+                                                <TextBlock Text="{Binding DoneLabel}" FontSize="11" FontWeight="Bold"
+                                                           Foreground="{DynamicResource Theme.OnAccent}"/>
+                                            </ctl:ChamferBorder>
+                                        </Grid>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding Step.Title}" FontSize="17" FontWeight="Bold" TextWrapping="Wrap"
+                                               Foreground="{DynamicResource Theme.Heading}"/>
+                                    <TextBlock Text="{Binding Step.Body}" FontSize="13.5" LineHeight="21" TextWrapping="Wrap" Margin="0,8,0,0"/>
+                                    <Expander x:Name="PART_More" Header="{l:T tutorialOverlay.more}" Margin="0,10,0,0"
+                                              Visibility="{Binding HasMore, Converter={x:Static conv:BoolToVisibilityConverter.Instance}}">
+                                        <TextBlock Text="{Binding Step.More}" TextWrapping="Wrap" LineHeight="19" FontSize="12.5"
+                                                   Foreground="{DynamicResource Theme.TextMuted}" Margin="18,4,0,0"/>
+                                    </Expander>
+                                    <ctl:ChamferBorder Background="{DynamicResource Theme.AccentSoft}" Cut="8" Corners="TopLeft, BottomRight"
+                                                       Padding="12,10" Margin="0,12,0,0"
+                                                       Visibility="{Binding NeedsPreparing, Converter={x:Static conv:BoolToVisibilityConverter.Instance}}">
+                                        <StackPanel>
+                                            <TextBlock Text="{l:T tutorialOverlay.prepare.note}" TextWrapping="Wrap" FontSize="12"/>
+                                            <Button HorizontalAlignment="Left" Margin="0,8,0,0" Padding="12,4"
+                                                    Style="{DynamicResource Theme.PrimaryButton}" Content="{l:T tutorialOverlay.prepare}"
+                                                    ToolTip="{l:T tutorialOverlay.prepare.tip}" Command="{Binding PrepareCommand}"/>
+                                        </StackPanel>
+                                    </ctl:ChamferBorder>
+                                    <Border Padding="10,8" Margin="0,12,0,0" Background="#26FFC428" BorderBrush="#FFC428" BorderThickness="2,0,0,0"
+                                            Visibility="{Binding ShowHintBox, Converter={x:Static conv:BoolToVisibilityConverter.Instance}}">
+                                        <TextBlock Text="{Binding Step.Hint}" TextWrapping="Wrap" FontSize="12"/>
+                                    </Border>
+                                    <TextBlock Text="{Binding Problem}" TextWrapping="Wrap" FontSize="12" Foreground="#FF7A45" Margin="0,10,0,0"
+                                               Visibility="{Binding HasProblem, Converter={x:Static conv:BoolToVisibilityConverter.Instance}}"/>
+                                </StackPanel>
+                            </ctl:ChamferBorder>
+                        </Grid>
+
+                        <TextBlock Text="{l:T tutorialCoach.steps}" FontWeight="Bold" FontSize="11" Margin="4,18,0,8"
+                                   Foreground="{DynamicResource Theme.Accent}"/>
+                        <!-- The steps as a timeline: a line down the left joining their markers. -->
+                        <ItemsControl x:Name="PART_Steps" ItemsSource="{Binding StepItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Padding="0" Margin="0" HorizontalContentAlignment="Stretch" Cursor="Hand"
+                                            Command="{Binding DataContext.GoToCommand, RelativeSource={RelativeSource AncestorType=ctl:TutorialCoach}}"
+                                            CommandParameter="{Binding}">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="bg" Background="Transparent"><ContentPresenter/></Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="bg" Property="Background" Value="{DynamicResource Theme.Hover}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <Grid MinHeight="30">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Rectangle Width="2" HorizontalAlignment="Center" Fill="{DynamicResource Theme.Border}"/>
+                                            <Rectangle x:Name="mark" Width="12" Height="12" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                       Fill="{DynamicResource Theme.Window}" Stroke="{DynamicResource Theme.Border}" StrokeThickness="2">
+                                                <Rectangle.LayoutTransform><RotateTransform Angle="45"/></Rectangle.LayoutTransform>
+                                            </Rectangle>
+                                            <TextBlock x:Name="title" Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="4,0,4,0">
+                                                <Run x:Name="num" Text="{Binding Number, Mode=OneWay}" Foreground="{DynamicResource Theme.TextMuted}"/><Run
+                                                     Text="  "/><Run Text="{Binding Title, Mode=OneWay}"/>
+                                            </TextBlock>
+                                        </Grid>
+                                    </Button>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding Done}" Value="True">
+                                            <Setter TargetName="mark" Property="Fill" Value="{DynamicResource Theme.Accent}"/>
+                                            <Setter TargetName="mark" Property="Stroke" Value="{DynamicResource Theme.Accent}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Current}" Value="True">
+                                            <Setter TargetName="mark" Property="Stroke" Value="{DynamicResource Theme.Accent}"/>
+                                            <Setter TargetName="mark" Property="Effect" Value="{DynamicResource Ex.Glow}"/>
+                                            <Setter TargetName="title" Property="FontWeight" Value="Bold"/>
+                                            <Setter TargetName="title" Property="Foreground" Value="{DynamicResource Theme.Accent}"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+    </ControlTemplate>
+
+    <!-- ══ The ModForge tab (1.10.0 rework), EX ═══════════════════════════
+         A game's menu more than a tool's page: the strip a HUD bar on the chrome with a glowing line under it,
+         the pages cut-cornered tabs that fill with the accent, cards headed like panels, the picture across Home
+         cut at the corners under the accent's diagonal bands. Every part and binding of the Classic ones. -->
+    <ControlTemplate x:Key="Theme.HomeStripTemplate" TargetType="ContentControl">
+        <Grid>
+            <Border Background="{DynamicResource Theme.Chrome}" Padding="14,8,14,10">
+                <ContentPresenter/>
+            </Border>
+            <Rectangle Height="2" VerticalAlignment="Bottom" Fill="{DynamicResource Theme.Accent}" Effect="{DynamicResource Ex.GlowSoft}"/>
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="Theme.HomeNavTemplate" TargetType="RadioButton">
+        <Grid Margin="0,0,6,0" Background="Transparent" view:Motions.Press="{TemplateBinding IsPressed}">
+            <Grid x:Name="frame" IsHitTestVisible="False" view:Motions.FadeIn="{TemplateBinding IsMouseOver}">
+                <ctl:ChamferBorder SnapsToDevicePixels="True"
+                                   Background="{Binding Background, ElementName=bd}" BorderBrush="{Binding BorderBrush, ElementName=bd}"
+                                   Stroke="{Binding Stroke, ElementName=bd}" Cut="{Binding Cut, ElementName=bd}" Corners="{Binding Corners, ElementName=bd}"/>
+            </Grid>
+            <ctl:ChamferBorder x:Name="bd" Background="Transparent" BorderBrush="{DynamicResource Theme.Border}" Stroke="1"
+                               Cut="8" Corners="TopLeft, BottomRight" Padding="{TemplateBinding Padding}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="glyph" Text="{TemplateBinding Tag}" FontFamily="Segoe MDL2 Assets" FontSize="14"
+                               VerticalAlignment="Center" Margin="0,0,8,0" Foreground="{DynamicResource Theme.Accent}"/>
+                    <ContentPresenter VerticalAlignment="Center">
+                        <ContentPresenter.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
+                </StackPanel>
+            </ctl:ChamferBorder>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.ButtonHover}"/>
+                <Setter TargetName="frame" Property="Effect" Value="{DynamicResource Ex.GlowSoft}"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.Accent}"/>
+                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                <Setter TargetName="glyph" Property="Foreground" Value="{DynamicResource Theme.OnAccent}"/>
+                <Setter TargetName="frame" Property="Effect" Value="{DynamicResource Ex.Glow}"/>
+                <Setter Property="Foreground" Value="{DynamicResource Theme.OnAccent}"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Theme.Text}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="Theme.HomeCardTemplate" TargetType="HeaderedContentControl">
+        <Grid>
+            <Grid x:Name="frame" IsHitTestVisible="False">
+                <ctl:ChamferBorder SnapsToDevicePixels="True"
+                                   Background="{Binding Background, ElementName=bd}" BorderBrush="{Binding BorderBrush, ElementName=bd}"
+                                   Stroke="{Binding Stroke, ElementName=bd}" Cut="{Binding Cut, ElementName=bd}" Corners="{Binding Corners, ElementName=bd}"/>
+            </Grid>
+            <ctl:ChamferBorder x:Name="bd" Background="{DynamicResource Theme.Surface}" BorderBrush="{DynamicResource Theme.Border}" Stroke="1"
+                               Cut="14" Corners="TopRight, BottomLeft">
+                <DockPanel>
+                    <!-- A panel's head: the accent's notch, the glyph, the heading in capitals' weight. -->
+                    <Grid DockPanel.Dock="Top">
+                        <Border Background="{DynamicResource Theme.Chrome}" Opacity="0.85"/>
+                        <DockPanel Margin="0,7,18,7">
+                            <Rectangle DockPanel.Dock="Left" Width="4" Fill="{DynamicResource Theme.Accent}" Margin="0,0,12,0"
+                                       Effect="{DynamicResource Ex.GlowSoft}"/>
+                            <TextBlock DockPanel.Dock="Left" Text="{TemplateBinding Tag}" FontFamily="Segoe MDL2 Assets" FontSize="13"
+                                       Foreground="{DynamicResource Theme.Accent}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <ContentPresenter ContentSource="Header" VerticalAlignment="Center"
+                                              TextElement.FontSize="14" TextElement.FontWeight="Black"
+                                              TextElement.Foreground="{DynamicResource Theme.Heading}"/>
+                        </DockPanel>
+                        <Rectangle Height="1" VerticalAlignment="Bottom" Fill="{DynamicResource Theme.Accent}" Opacity="0.5"/>
+                    </Grid>
+                    <ContentPresenter Margin="{TemplateBinding Padding}"/>
+                </DockPanel>
+            </ctl:ChamferBorder>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="frame" Property="Effect" Value="{DynamicResource Ex.GlowSoft}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="Theme.HomeHeroTemplate" TargetType="ContentControl">
+        <Grid>
+            <!-- Dark under the words in every EX theme, light ones too: the words are white. -->
+            <ctl:ChamferBorder Background="#FF0B0C13" Stroke="0" Cut="22" Corners="TopLeft, BottomRight">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.ColumnSpan="2" Background="{DynamicResource Theme.Accent}">
+                        <Border.OpacityMask>
+                            <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
+                                <GradientStop Color="#50000000" Offset="0"/>
+                                <GradientStop Color="#00000000" Offset="0.6"/>
+                            </LinearGradientBrush>
+                        </Border.OpacityMask>
+                    </Border>
+                    <Border Grid.Column="1">
+                        <Border.Background>
+                            <ImageBrush ImageSource="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Stretch="UniformToFill" AlignmentY="Center"/>
+                        </Border.Background>
+                    </Border>
+                    <Border Grid.ColumnSpan="2" Opacity="0.2">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="22,22" MappingMode="Absolute" SpreadMethod="Repeat">
+                                <GradientStop Color="#00FFFFFF" Offset="0"/>
+                                <GradientStop Color="#00FFFFFF" Offset="0.5"/>
+                                <GradientStop Color="#66FFFFFF" Offset="0.5"/>
+                                <GradientStop Color="#66FFFFFF" Offset="0.6"/>
+                                <GradientStop Color="#00FFFFFF" Offset="0.6"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+                    <Border Grid.Column="1">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#FF0B0C13" Offset="0"/>
+                                <GradientStop Color="#000B0C13" Offset="0.4"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+                    <ContentPresenter Grid.ColumnSpan="2" Margin="{TemplateBinding Padding}"/>
+                </Grid>
+            </ctl:ChamferBorder>
+            <Rectangle Height="3" Width="180" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="22,0,0,0"
+                       Fill="{DynamicResource Theme.Accent}" Effect="{DynamicResource Ex.Glow}"/>
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="Theme.HomeTutorialTemplate" TargetType="ContentControl">
+        <Grid>
+            <Grid x:Name="frame" IsHitTestVisible="False" view:Motions.FadeIn="{TemplateBinding IsMouseOver}">
+                <ctl:ChamferBorder SnapsToDevicePixels="True"
+                                   Background="{Binding Background, ElementName=bd}" BorderBrush="{Binding BorderBrush, ElementName=bd}"
+                                   Stroke="{Binding Stroke, ElementName=bd}" Cut="{Binding Cut, ElementName=bd}" Corners="{Binding Corners, ElementName=bd}"/>
+            </Grid>
+            <ctl:ChamferBorder x:Name="bd" Background="{DynamicResource Theme.Surface}" BorderBrush="{DynamicResource Theme.Border}"
+                               Stroke="1" Cut="12" Corners="TopLeft, BottomRight">
+                <DockPanel>
+                    <Grid DockPanel.Dock="Left" Width="132">
+                        <Border Background="{DynamicResource Theme.Chrome}"/>
+                        <Border>
+                            <Border.Background>
+                                <ImageBrush ImageSource="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Stretch="UniformToFill" AlignmentY="Center"/>
+                            </Border.Background>
+                        </Border>
+                        <Rectangle Width="3" HorizontalAlignment="Right" Fill="{DynamicResource Theme.Accent}"/>
+                    </Grid>
+                    <ContentPresenter Margin="{TemplateBinding Padding}"/>
+                </DockPanel>
+            </ctl:ChamferBorder>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                <Setter TargetName="frame" Property="Effect" Value="{DynamicResource Ex.GlowSoft}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
     <ControlTemplate x:Key="Theme.TabTemplate" TargetType="TabItem">
         <!-- One header for both arrangements, so a tab whose header is a
              control is never put in two places: a strip across the top for a
@@ -564,12 +968,13 @@
                     <!-- On the rail, a number worth noticing on the icon - the
                          ModForge tab's issues - and under the name how many
                          records the tab holds (the author, 1.8.0). -->
-                    <Grid x:Name="icon" Visibility="Collapsed" HorizontalAlignment="Center" Margin="0,0,0,5">
+                    <Grid x:Name="icon" Visibility="Collapsed" HorizontalAlignment="Center" Margin="0,0,0,3">
                         <TextBlock x:Name="glyph" FontFamily="Segoe MDL2 Assets" FontSize="20" HorizontalAlignment="Center"
                                    Text="{Binding (view:TabIcon.Glyph), RelativeSource={RelativeSource TemplatedParent}}"/>
                         <Border x:Name="badge" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Top"
                                 Margin="0,-5,-16,0" Padding="4,0,4,1" CornerRadius="7" MinWidth="14"
-                                Background="{DynamicResource Theme.Danger}">
+                                Background="{DynamicResource Theme.Danger}"
+                                view:Motions.Pulse="{Binding (view:TabIcon.Badge), RelativeSource={RelativeSource TemplatedParent}}">
                             <!-- In the window's colour: white measured 2.46:1 on a dark
                                  theme's light red; the window is dark there and light
                                  where the red is dark. -->
@@ -590,13 +995,15 @@
                                Text="{Binding (view:TabIcon.Count), RelativeSource={RelativeSource TemplatedParent}}"/>
                 </StackPanel>
             </ctl:ChamferBorder>
-            <Rectangle x:Name="bar" Height="2" VerticalAlignment="Bottom" Fill="Transparent" Margin="4,0"/>
+            <Rectangle x:Name="bar" Height="2" VerticalAlignment="Bottom" Fill="Transparent" Margin="4,0"
+                       view:Motions.Grow="{TemplateBinding IsSelected}"/>
         </Grid>
         <ControlTemplate.Triggers>
             <DataTrigger Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType=TabControl}}" Value="Left">
                 <Setter TargetName="root" Property="Width" Value="84"/>
                 <Setter TargetName="root" Property="Margin" Value="0,1"/>
-                <Setter TargetName="bd" Property="Padding" Value="4,10,4,9"/>
+                <!-- Tight enough that every tab fits a 900 px window when none counts records (1.10.0). -->
+                <Setter TargetName="bd" Property="Padding" Value="4,7,4,6"/>
                 <Setter TargetName="bd" Property="Cut" Value="9"/>
                 <Setter TargetName="stack" Property="Orientation" Value="Vertical"/>
                 <Setter TargetName="icon" Property="Visibility" Value="Visible"/>
@@ -608,6 +1015,7 @@
                 <Setter TargetName="bar" Property="Margin" Value="0,6"/>
                 <Setter TargetName="bar" Property="VerticalAlignment" Value="Stretch"/>
                 <Setter TargetName="bar" Property="HorizontalAlignment" Value="Left"/>
+                <Setter TargetName="bar" Property="view:Motions.GrowAxis" Value="Y"/>
             </DataTrigger>
             <!-- After the rail's, so a nought hides what the rail shows. -->
             <Trigger Property="view:TabIcon.Count" Value="0">
@@ -615,6 +1023,12 @@
             </Trigger>
             <Trigger Property="view:TabIcon.Badge" Value="0">
                 <Setter TargetName="badge" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="view:TabIcon.BadgeLevel" Value="warning">
+                <Setter TargetName="badge" Property="Background" Value="{DynamicResource Theme.Warning}"/>
+            </Trigger>
+            <Trigger Property="view:TabIcon.BadgeLevel" Value="info">
+                <Setter TargetName="badge" Property="Background" Value="{DynamicResource Theme.TextMuted}"/>
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
                 <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.TabActive}"/>
@@ -635,6 +1049,41 @@
                 <Setter TargetName="bar" Property="Fill" Value="{DynamicResource Theme.TextMuted}"/>
                 <Setter Property="Foreground" Value="{DynamicResource Theme.TabActiveText}"/>
             </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- The rail's sign that it goes on (Theme.MainTabs below): the rail's own colour fading in over the tabs at
+         that end, and an arrow in the accent that scrolls it. At the top unless it stands at the bottom. -->
+    <ControlTemplate x:Key="Ex.RailMoreTemplate" TargetType="Button">
+        <Grid Height="36" Background="Transparent" Cursor="Hand">
+            <Rectangle x:Name="shade" Fill="{DynamicResource Theme.Chrome}">
+                <Rectangle.OpacityMask>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="Black" Offset="0.4"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.OpacityMask>
+            </Rectangle>
+            <TextBlock x:Name="arrow" Text="{TemplateBinding Tag}" FontFamily="Segoe MDL2 Assets" FontSize="13"
+                       HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,4,0,0"
+                       Foreground="{DynamicResource Theme.Accent}"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="VerticalAlignment" Value="Bottom">
+                <Setter TargetName="shade" Property="OpacityMask">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                            <GradientStop Color="Black" Offset="0.4"/>
+                            <GradientStop Color="Transparent" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="arrow" Property="VerticalAlignment" Value="Bottom"/>
+                <Setter TargetName="arrow" Property="Margin" Value="0,0,0,4"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="arrow" Property="Effect" Value="{DynamicResource Ex.Glow}"/>
+            </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
@@ -661,10 +1110,23 @@
                         </Grid.RowDefinitions>
                         <Border Grid.RowSpan="2" Background="{DynamicResource Theme.Chrome}"
                                 BorderBrush="{DynamicResource Theme.Border}" BorderThickness="0,0,1,0">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">
-                                <TabPanel x:Name="HeaderPanel" IsItemsHost="True" Margin="0,4" Panel.ZIndex="1"
-                                          KeyboardNavigation.TabIndex="1"/>
-                            </ScrollViewer>
+                            <Grid>
+                                <ScrollViewer x:Name="RailScroll" view:ScrollEdges.Watch="True"
+                                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">
+                                    <TabPanel x:Name="HeaderPanel" IsItemsHost="True" Margin="0,4" Panel.ZIndex="1"
+                                              KeyboardNavigation.TabIndex="1"/>
+                                </ScrollViewer>
+                                <!-- More tabs than the window is high (900 px with every tab
+                                     counting its records): the rail fades out where it goes on,
+                                     with an arrow that scrolls it - a scroll bar three pixels
+                                     wide was all there was, and the last tabs looked missing. -->
+                                <Button x:Name="RailMoreAbove" VerticalAlignment="Top" Visibility="Collapsed"
+                                        Command="ScrollBar.PageUpCommand" CommandTarget="{Binding ElementName=RailScroll}"
+                                        Focusable="False" IsTabStop="False" Template="{StaticResource Ex.RailMoreTemplate}" Tag="&#xE70E;"/>
+                                <Button x:Name="RailMoreBelow" VerticalAlignment="Bottom" Visibility="Collapsed"
+                                        Command="ScrollBar.PageDownCommand" CommandTarget="{Binding ElementName=RailScroll}"
+                                        Focusable="False" IsTabStop="False" Template="{StaticResource Ex.RailMoreTemplate}" Tag="&#xE70D;"/>
+                            </Grid>
                         </Border>
                         <DockPanel x:Name="PackHeader" Grid.Column="1" Margin="16,7,16,5" MinHeight="32">
                             <Rectangle DockPanel.Dock="Left" Width="4" Margin="0,3,10,3" Fill="{DynamicResource Theme.Accent}"/>
@@ -722,6 +1184,14 @@
                                               Margin="{TemplateBinding Padding}"/>
                         </Border>
                     </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="RailScroll" Property="view:ScrollEdges.MoreAbove" Value="True">
+                            <Setter TargetName="RailMoreAbove" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger SourceName="RailScroll" Property="view:ScrollEdges.MoreBelow" Value="True">
+                            <Setter TargetName="RailMoreBelow" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -798,18 +1268,12 @@
                         <DockPanel>
                             <Path x:Name="arrow" DockPanel.Dock="Left" Data="M0,0 L5,4.5 L0,9" Margin="2,0,8,0"
                                   Stroke="{DynamicResource Theme.Accent}" StrokeThickness="1.8"
-                                  VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
-                                <Path.RenderTransform><RotateTransform Angle="0"/></Path.RenderTransform>
-                            </Path>
+                                  VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"
+                                  view:Motions.Turn="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"/>
                             <ContentPresenter VerticalAlignment="Center" RecognizesAccessKey="True"/>
                         </DockPanel>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="arrow" Property="RenderTransform">
-                                <Setter.Value><RotateTransform Angle="90"/></Setter.Value>
-                            </Setter>
-                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="bd" Property="Background" Value="{DynamicResource Theme.Hover}"/>
                             <Setter TargetName="arrow" Property="Effect" Value="{DynamicResource Ex.GlowSoft}"/>
@@ -825,7 +1289,8 @@
                           Content="{TemplateBinding Header}"
                           ContentTemplate="{TemplateBinding HeaderTemplate}"
                           IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
-            <ContentPresenter x:Name="content" Visibility="Collapsed" Margin="{TemplateBinding Padding}"/>
+            <ContentPresenter x:Name="content" Visibility="Collapsed" Margin="{TemplateBinding Padding}"
+                              view:Motions.Reveal="{TemplateBinding IsExpanded}"/>
         </DockPanel>
         <ControlTemplate.Triggers>
             <Trigger Property="IsExpanded" Value="True">
@@ -834,9 +1299,101 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <!-- ══ A picture at full size (1.10.0, View/Controls/PictureViewer), EX ═══
+         The rail's dark over the window, the picture held in accent brackets, its name beside an accent bar, and a cut
+         bar of buttons in the accent's glow. -->
+    <ControlTemplate x:Key="Theme.PictureViewerTemplate" TargetType="ctl:PictureViewer">
+        <Grid>
+            <Rectangle Fill="{DynamicResource Theme.Chrome}" Opacity="0.975"/>
+            <Grid x:Name="PART_Root">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <DockPanel Margin="28,14,16,10">
+                    <Button DockPanel.Dock="Right" Command="{x:Static ctl:PictureViewer.Close}" ToolTip="{l:T pictureViewer.close}" Padding="9,5">
+                        <TextBlock Text="&#xE711;" FontFamily="Segoe MDL2 Assets" FontSize="12"/>
+                    </Button>
+                    <Rectangle Width="3" Height="18" Margin="0,0,10,0" Fill="{DynamicResource Theme.Accent}" Effect="{DynamicResource Ex.Glow}"/>
+                    <TextBlock Text="{TemplateBinding Caption}" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"
+                               Foreground="{DynamicResource Theme.Heading}" TextTrimming="CharacterEllipsis"/>
+                </DockPanel>
+                <Grid Grid.Row="1" Margin="28,4">
+                    <Grid x:Name="PART_Stage" Background="Transparent" ClipToBounds="True">
+                        <Image x:Name="PART_Image" Source="{TemplateBinding Source}"/>
+                    </Grid>
+                    <Grid IsHitTestVisible="False" Margin="-6">
+                        <Path Data="M0,16 L0,0 L16,0" HorizontalAlignment="Left" VerticalAlignment="Top" Stroke="{DynamicResource Theme.Accent}" StrokeThickness="2"/>
+                        <Path Data="M0,0 L16,0 L16,16" HorizontalAlignment="Right" VerticalAlignment="Top" Stroke="{DynamicResource Theme.Accent}" StrokeThickness="2"/>
+                        <Path Data="M0,0 L0,16 L16,16" HorizontalAlignment="Left" VerticalAlignment="Bottom" Stroke="{DynamicResource Theme.Accent}" StrokeThickness="2"/>
+                        <Path Data="M16,0 L16,16 L0,16" HorizontalAlignment="Right" VerticalAlignment="Bottom" Stroke="{DynamicResource Theme.Accent}" StrokeThickness="2"/>
+                    </Grid>
+                </Grid>
+                <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,12,0,14">
+                    <Grid HorizontalAlignment="Center">
+                        <Grid IsHitTestVisible="False" Effect="{DynamicResource Ex.GlowSoft}">
+                            <ctl:ChamferBorder Background="{DynamicResource Theme.Surface}" BorderBrush="{DynamicResource Theme.Accent}" Stroke="1"
+                                               Cut="9" Corners="TopLeft, BottomRight"/>
+                        </Grid>
+                        <ctl:ChamferBorder Background="{DynamicResource Theme.Surface}" BorderBrush="{DynamicResource Theme.Accent}" Stroke="1"
+                                           Cut="9" Corners="TopLeft, BottomRight" Padding="8,4">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Command="{x:Static ctl:PictureViewer.ZoomOut}" ToolTip="{l:T pictureViewer.zoomOut}" Padding="9,5" Margin="2,0">
+                                    <TextBlock Text="&#xE71F;" FontFamily="Segoe MDL2 Assets" FontSize="13"/>
+                                </Button>
+                                <TextBlock Text="{TemplateBinding ZoomText}" MinWidth="54" TextAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource Theme.Text}" FontWeight="SemiBold"/>
+                                <Button Command="{x:Static ctl:PictureViewer.ZoomIn}" ToolTip="{l:T pictureViewer.zoomIn}" Padding="9,5" Margin="2,0">
+                                    <TextBlock Text="&#xE8A3;" FontFamily="Segoe MDL2 Assets" FontSize="13"/>
+                                </Button>
+                                <Rectangle Width="1" Margin="8,4" Fill="{DynamicResource Theme.Border}"/>
+                                <Button Command="{x:Static ctl:PictureViewer.Fit}" Content="{l:T pictureViewer.fit}" ToolTip="{l:T pictureViewer.fit.tip}" Padding="10,4" Margin="2,0"/>
+                                <Button Command="{x:Static ctl:PictureViewer.ActualSize}" Content="{l:T pictureViewer.actual}" ToolTip="{l:T pictureViewer.actual.tip}" Padding="10,4" Margin="2,0"/>
+                            </StackPanel>
+                        </ctl:ChamferBorder>
+                    </Grid>
+                    <TextBlock Text="{l:T pictureViewer.hint}" FontSize="11" HorizontalAlignment="Center" Margin="0,7,0,0"
+                               Foreground="{DynamicResource Theme.TextMuted}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </ControlTemplate>
+
+    <!-- A picture that opens at full size: cut corners, the glow and a cut magnifier tab on pointing. -->
+    <ControlTemplate x:Key="Theme.PictureButtonTemplate" TargetType="Button">
+        <Grid view:Motions.Press="{TemplateBinding IsPressed}">
+            <Grid x:Name="frame" IsHitTestVisible="False" view:Motions.FadeIn="{TemplateBinding IsMouseOver}">
+                <ctl:ChamferBorder Background="{Binding Background, ElementName=bd}" BorderBrush="{Binding BorderBrush, ElementName=bd}"
+                                   Stroke="{Binding Stroke, ElementName=bd}" Cut="{Binding Cut, ElementName=bd}" Corners="{Binding Corners, ElementName=bd}"/>
+            </Grid>
+            <ctl:ChamferBorder x:Name="bd" Background="{DynamicResource Theme.Surface}" BorderBrush="{DynamicResource Theme.Border}" Stroke="1"
+                               Cut="10" Corners="TopLeft, BottomRight" Padding="1">
+                <ContentPresenter/>
+            </ctl:ChamferBorder>
+            <ctl:ChamferBorder x:Name="badge" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,6,6,0" Width="28" Height="24"
+                               Cut="6" Corners="TopLeft, BottomRight" Background="{DynamicResource Theme.Accent}" Visibility="Hidden"
+                               view:Motions.FadeIn="{TemplateBinding IsMouseOver}">
+                <TextBlock Text="&#xE8A3;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="{DynamicResource Theme.OnAccent}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </ctl:ChamferBorder>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                <Setter TargetName="frame" Property="Effect" Value="{DynamicResource Ex.GlowSoft}"/>
+                <Setter TargetName="badge" Property="Visibility" Value="Visible"/>
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                <Setter TargetName="badge" Property="Visibility" Value="Visible"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
     <!-- ══ Tooltips: a cut panel with the accent down its edge ═══════════ -->
     <ControlTemplate x:Key="Theme.ToolTipTemplate" TargetType="ToolTip">
-        <Grid>
+        <Grid view:Motions.Appear="True">
             <ctl:ChamferBorder Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                                Cut="7" Corners="BottomRight" Padding="{TemplateBinding Padding}">
                 <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}">

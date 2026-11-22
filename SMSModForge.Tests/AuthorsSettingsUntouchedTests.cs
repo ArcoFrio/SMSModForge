@@ -84,8 +84,11 @@ public sealed class AuthorsSettingsUntouchedTests : IDisposable
         var vm = new MainViewModel();
         vm.OpenPackFromPath(_dir);
 
+        // The author's own list is as it was; the run keeps one of its own (in its own folder), which the start
+        // page's tests read (1.10.0).
         AssertUnchanged();
-        Assert.DoesNotContain(vm.RecentFiles, p => p.Contains("smsmodforge-", StringComparison.OrdinalIgnoreCase));
+        Assert.Contains(vm.RecentFiles, p => string.Equals(p, _dir, StringComparison.OrdinalIgnoreCase));
+        Assert.StartsWith(AppDataFolder.Root, AppDataFolder.PathOf("recent.json"), StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

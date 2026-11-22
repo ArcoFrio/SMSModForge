@@ -37,6 +37,14 @@ public sealed class RunProgressFramework : XunitTestFramework
             var cases = testCases.ToList();
             var last = Timings.Read();
 
+            // Only to plan a part of a run of several (WholeRun): what it will run and for how long, then nothing.
+            if (WholeRun.PlanOnly is { } planFor && Shards.Folder is { Length: > 0 } planIn)
+            {
+                WholeRun.WritePlan(planIn, cases.Select(c => (c.UniqueID, c.TestMethod.TestClass.Class.Name)).ToList(), last, planFor);
+                base.RunTestCases(Array.Empty<IXunitTestCase>(), executionMessageSink, executionOptions);
+                return;
+            }
+
             // Not inside the try below: a tester that could not work out its
             // share must not quietly run everybody's.
             var shard = Shards.FromEnvironment();
@@ -53,13 +61,16 @@ public sealed class RunProgressFramework : XunitTestFramework
             try
             {
                 var run = RunProgress.Begin(cases.Select(c => (c.UniqueID, ShortName(c.DisplayName))), last);
+                // A run of several parts has one window for them all (WholeRun), not one a part.
                 if (shard is not { } sh)
-                    RunProgressWindow.OfferFor(run.Now, testers: 1);
+                {
+                    if (!WholeRun.Hosted) RunProgressWindow.OfferFor(run.Now, testers: 1);
+                }
                 else
                 {
                     _publishing = new System.Threading.Timer(_ => Shards.Write(sh.Index, run), null, 0, 500);
                     // One window for the whole run, the first tester's.
-                    if (sh.Index == 0)
+                    if (sh.Index == 0 && !WholeRun.Hosted)
                         RunProgressWindow.OfferFor(() =>
                         {
                             var others = Enumerable.Range(1, sh.Count - 1).Select(Shards.Read).ToList();

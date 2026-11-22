@@ -52,7 +52,7 @@ public static class Speller
         var found = new List<Bad>();
         try
         {
-            box.Text = text;
+            box.Text = WithoutCodes(text!);
             // Laying out is what runs the speller; without this the box is
             // asked about text it has never looked at and says nothing.
             box.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
@@ -80,6 +80,36 @@ public static class Speller
         Remember(text!, found);
         return found;
     }
+
+    /// <summary>
+    /// The text with the pack's codes blanked out, each by as many spaces as it is long so a mark still falls on
+    /// the right letters: a variable's value ([PV:Confidence]), a name the player chose ({PC}, {M}), a value in an
+    /// action's box ($Mood). They are not words, and a red line under [PV:Confidence] read as the code being wrong
+    /// (found by the review of every tutorial step, 1.10.0).
+    /// </summary>
+    internal static string WithoutCodes(string text)
+        => text.IndexOfAny(CodeStarts) < 0 ? text
+           : Codes.Replace(text, m => new string(' ', m.Length));
+
+    private static readonly char[] CodeStarts = { '[', '{', '$' };
+
+    /// <summary>Whether the text holds a code at all.</summary>
+    internal static bool HasCodes(string text) => text.IndexOfAny(CodeStarts) >= 0 && Codes.IsMatch(text);
+
+    /// <summary>The text in pieces, each code a piece of its own (true), the words between them the others.</summary>
+    internal static IEnumerable<(string Text, bool Code)> CodePieces(string text)
+    {
+        int at = 0;
+        foreach (System.Text.RegularExpressions.Match m in Codes.Matches(text))
+        {
+            if (m.Index > at) yield return (text[at..m.Index], false);
+            yield return (m.Value, true);
+            at = m.Index + m.Length;
+        }
+        if (at < text.Length) yield return (text[at..], false);
+    }
+    private static readonly System.Text.RegularExpressions.Regex Codes =
+        new(@"\[PV:[^\]\s]*\]|\{[A-Za-z][A-Za-z0-9_]*\}|\$[A-Za-z_][A-Za-z0-9_]*", System.Text.RegularExpressions.RegexOptions.Compiled);
 
     // ── What has been asked already ──────────────────────────────────
 
@@ -119,6 +149,8 @@ public static class Speller
     /// spelled right in one and wrong in another.</summary>
     private static string Key(string text) => _language + "\u0001" + text;
 
+    private static string KeyIn(string language, string text) => language + "\u0001" + text;
+
     /// <summary>
     /// The language the words asked about are in, as a tag Windows' speller
     /// knows ("en-US", "pt-BR"). US English until told otherwise, which is what
@@ -151,7 +183,76 @@ public static class Speller
     public static void Forget()
     {
         _known?.Clear();
+        _worker?.BeginInvoke(new Action(() => _known?.Clear()));
         Changed?.Invoke();
+    }
+
+    // ── Asking off the UI thread (1.10.0) ────────────────────────────
+
+    private static System.Windows.Threading.Dispatcher? _worker;
+    private static readonly object WorkerGate = new();
+    private static int _pending;
+
+    /// <summary>Answers asked for and not yet given back (the test harness waits for none).</summary>
+    public static int Pending => System.Threading.Volatile.Read(ref _pending);
+
+    /// <summary>
+    /// The answer for <paramref name="text"/>, given to <paramref name="answered"/> on the thread that asked: at
+    /// once when it is known, otherwise asked on a thread of the speller's own. Asking Windows takes about forty
+    /// milliseconds a line, and asked on the UI thread a conversation's first showing held the window a second
+    /// (UiDelayTests' profile, 2026-11-21); a click in between is now answered straight away. The box, the
+    /// language and the answers are per thread already, so the speller's thread keeps its own; each answer is
+    /// kept on the asking thread too.
+    /// </summary>
+    public static void Ask(string text, Action<IReadOnlyList<Bad>> answered)
+    {
+        if (TryKnown(text, out var known)) { answered(known); return; }
+        var back = System.Windows.Threading.Dispatcher.CurrentDispatcher;
+        string language = _language;
+        var worker = Worker();
+        if (worker == null) { answered(Check(text)); return; }
+        System.Threading.Interlocked.Increment(ref _pending);
+        worker.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
+        {
+            IReadOnlyList<Bad> bad;
+            try
+            {
+                _languageTag = language;
+                bad = Check(text);
+            }
+            catch (Exception) { bad = Array.Empty<Bad>(); }
+            back.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
+            {
+                System.Threading.Interlocked.Decrement(ref _pending);
+                // Kept under the language it was asked in, which the window may have left meanwhile.
+                _known ??= new Dictionary<string, IReadOnlyList<Bad>>(StringComparer.Ordinal);
+                if (_known.Count >= MostRemembered) _known.Clear();
+                _known[KeyIn(language, text)] = bad;
+                answered(bad);
+            }));
+        }));
+    }
+
+    private static System.Windows.Threading.Dispatcher? Worker()
+    {
+        lock (WorkerGate)
+        {
+            if (_worker != null) return _worker;
+            if (System.Windows.Application.Current == null) return null;
+            System.Windows.Threading.Dispatcher? made = null;
+            using var ready = new System.Threading.ManualResetEventSlim();
+            var thread = new System.Threading.Thread(() =>
+            {
+                made = System.Windows.Threading.Dispatcher.CurrentDispatcher;
+                ready.Set();
+                System.Windows.Threading.Dispatcher.Run();
+            })
+            { IsBackground = true, Name = "ModForge speller" };   // English on purpose: a thread's name, seen only in a debugger.
+            thread.SetApartmentState(System.Threading.ApartmentState.STA);
+            thread.Start();
+            ready.Wait();
+            return _worker = made;
+        }
     }
 
     /// <summary>The answers were forgotten; ask again.</summary>

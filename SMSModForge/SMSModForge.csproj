@@ -5,9 +5,9 @@
     <!-- One source of truth for the version. The About line and the title
          bar read it back off the assembly, so they cannot drift from what
          was actually built. -->
-    <Version>1.9.2</Version>
-    <AssemblyVersion>1.9.2.0</AssemblyVersion>
-    <FileVersion>1.9.2.0</FileVersion>
+    <Version>1.10.0</Version>
+    <AssemblyVersion>1.10.0.0</AssemblyVersion>
+    <FileVersion>1.10.0.0</FileVersion>
     <Product>SMSModForge</Product>
     <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>SMSModForge</RootNamespace>
@@ -172,6 +172,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- The tutorials' and the ModForge tab's pictures (1.10.0): made for ModForge in the game's style (Dummy Days). -->
+    <Content Include="Resources\TutorialHeaders\*.jpg;Resources\GuidePictures\**\*.jpg;Resources\GuidePictures\**\*.png;Resources\GuidePictures\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The FX tab's preview pictures (1.10.0): the game's effect pictures, made by Tools/Fx/fx-pictures-from-game.py. -->
+    <Content Include="Resources\VanillaFx\*.png">
+      <Link>VanillaFx\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\VanillaOverlays\*.png;Resources\VanillaOverlays\*.PNG">
       <Link>VanillaOverlays\%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -298,6 +310,7 @@
     <Compile Include="..\Shared\PackOrder.cs" Link="Shared\PackOrder.cs" />
     <Compile Include="..\Shared\PackConflicts.cs" Link="Shared\PackConflicts.cs" />
     <Compile Include="..\Shared\Transitions.cs" Link="Shared\Transitions.cs" />
+    <Compile Include="..\Shared\Effects.cs" Link="Shared\Effects.cs" />
     <Compile Include="..\Shared\RichText.cs" Link="Shared\RichText.cs" />
     <Compile Include="..\Shared\SoundCues.cs" Link="Shared\SoundCues.cs" />
     <Compile Include="..\Shared\TextTemplates.cs" Link="Shared\TextTemplates.cs" />
@@ -325,6 +338,7 @@
     <Compile Include="..\Shared\TextScripts.cs" Link="Shared\TextScripts.cs" />
     <Compile Include="..\Shared\MediaKinds.cs" Link="Shared\MediaKinds.cs" />
     <Compile Include="..\Shared\PackPaths.cs" Link="Shared\PackPaths.cs" />
+    <Compile Include="..\Shared\TutorialArt.cs" Link="Shared\TutorialArt.cs" />
     <Compile Include="..\Shared\TextFile.cs" Link="Shared\TextFile.cs" />
     <Compile Include="..\Shared\PluralRules.cs" Link="Shared\PluralRules.cs" />
     <Compile Include="..\Shared\Texts.cs" Link="Shared\Texts.cs" />

@@ -231,6 +231,16 @@ public sealed class NodeConditionViewModel : ObservableObject
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(DisplayType));
             OnPropertyChanged(nameof(IsVariableFamily));
+            // What the row shows of a variable, read again whichever way the type went (1.10.0). Left as it
+            // was, a row that had compared a yes/no variable went on hiding Negate as whatever it became,
+            // until its list was built again - found by the walk over every control, where the box was there
+            // after an undo and not before it.
+            OnPropertyChanged(nameof(ShowVariableValue));
+            OnPropertyChanged(nameof(VarValueIsBool));
+            OnPropertyChanged(nameof(VarValueIsText));
+            OnPropertyChanged(nameof(VarValueBool));
+            OnPropertyChanged(nameof(VarKind));
+            OnPropertyChanged(nameof(VarKindNote));
             // Seed 'kind' the moment the type becomes GameObjectActive, so the
             // category row opens on a real choice rather than reading a missing
             // param as Direct Path without ever having said so.
@@ -456,6 +466,14 @@ public sealed class NodeConditionViewModel : ObservableObject
         {
             if (value == DisplayType) return;
             Type = value == VariableFamilyType ? NodeConditionTypes.VariableEquals : value;
+            // In the form a row read from the pack has, at once (1.10.0): "Variable" picked wrote the type's
+            // old name, which the next building of the row rewrote - so the pack changed by itself the next
+            // time its list was built again (an undo of anything in the rule, for one).
+            if (value == VariableFamilyType)
+            {
+                NormalizeVariable();
+                OnPropertyChanged(nameof(Type));
+            }
         }
     }
 

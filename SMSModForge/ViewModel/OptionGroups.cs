@@ -203,7 +203,7 @@ public static class OptionGroups
         ("typeGroup.screen", new[]
         {
             NodeActionTypes.Travel, NodeActionTypes.TransitionLevels, NodeActionTypes.Transitions, NodeActionTypes.LeaveUiFaded,
-            NodeActionTypes.EmitSignal, NodeActionTypes.SetWeather,
+            NodeActionTypes.EmitSignal, NodeActionTypes.SetWeather, NodeActionTypes.PlayEffect, NodeActionTypes.StopEffect,
         }),
         ("typeGroup.sound", new[] { NodeActionTypes.SwitchMusic, NodeActionTypes.PlaySFX }),
         ("typeGroup.variables", new[]

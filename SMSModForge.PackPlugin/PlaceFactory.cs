@@ -566,6 +566,14 @@ namespace SMSModForge.PackPlugin
                             "' has a particle colour '" + particles + "' that is not #RRGGBB or #RRGGBBAA.");
                 }
 
+                // Its 2D light (1.10.0): made with an object the pack makes,
+                // changed or switched off on one of the game's.
+                PackLights.Apply(go, ov, pack, asFound, logger, placeKey);
+
+                // Its effect (1.10.0): made under it, shown with it.
+                if (ov["effect"] is JObject effect)
+                    EffectRuntime.Attach(go, effect, pack, logger, placeKey + "/" + name);
+
                 // Authored activation conditions: the object's active state is
                 // driven by them from here on (evaluated per frame), instead of
                 // staying at whatever startActive said. Registering is enough —

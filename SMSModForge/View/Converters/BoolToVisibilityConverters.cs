@@ -18,6 +18,9 @@ namespace SMSModForge.View.Converters;
 /// </summary>
 public sealed class BoolToVisibilityConverter : IValueConverter
 {
+    /// <summary>For templates outside the window's resources (the tutorial coach's, in App.xaml and Ex.xaml).</summary>
+    public static readonly BoolToVisibilityConverter Instance = new();
+
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         => (value is bool b && b) ? Visibility.Visible : Visibility.Collapsed;
 

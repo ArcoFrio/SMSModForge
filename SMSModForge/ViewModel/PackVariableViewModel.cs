@@ -30,6 +30,7 @@ public sealed class PackVariableViewModel : ObservableObject
         set
         {
             if (Model.Type == value) return;
+            var was = Model.Type;
             Model.Type = value;
             // Switching to List: make sure the backing default is a JSON array so
             // the initial-values editor round-trips cleanly.
@@ -62,6 +63,13 @@ public sealed class PackVariableViewModel : ObservableObject
                             System.Globalization.CultureInfo.InvariantCulture, out var dFloat)
                         ? dFloat.ToString(System.Globalization.CultureInfo.InvariantCulture)
                         : "0";
+                    break;
+                case PackVariableType.String:
+                    // What another type started with is no text anybody wrote: a new variable is a Bool, and
+                    // making it a String kept "false" as its starting text (1.10.0, found by the tutorials' review).
+                    if (was == PackVariableType.Bool && bool.TryParse(Model.DefaultValue, out _)
+                        || was == PackVariableType.List && Model.DefaultValue.Trim() == "[]")
+                        Model.DefaultValue = "";
                     break;
             }
             RebuildInitialValuesFromModel();

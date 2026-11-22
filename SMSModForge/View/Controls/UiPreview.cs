@@ -37,6 +37,17 @@ public sealed class UiPreview : Grid
         VerticalAlignment = VerticalAlignment.Center,
     };
 
+    /// <summary>The screen's own ground and edge, behind the picture and the size of it.</summary>
+    private readonly Rectangle _screen = new()
+    {
+        Fill = new SolidColorBrush(Color.FromRgb(0x22, 0x22, 0x22)),
+        Stroke = new SolidColorBrush(Color.FromRgb(0x5A, 0x5A, 0x5A)),
+        StrokeThickness = 1,
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center,
+        IsHitTestVisible = false,
+    };
+
     private readonly TextBlock _message = new()
     {
         HorizontalAlignment = HorizontalAlignment.Center,
@@ -81,8 +92,15 @@ public sealed class UiPreview : Grid
         LocText.Follow(this, Refresh);
 
         RenderOptions.SetBitmapScalingMode(_image, BitmapScalingMode.HighQuality);
+        // The game's screen, framed (1.10.0): its own dark ground with an outline, the space round it darker. Drawn
+        // the same dark as everything, the screen's edges could not be seen in a tall preview, and a tutorial asking
+        // whether an object sits "off the edge" could not be answered (found by the review of every step).
+        _screen.SetBinding(VisibilityProperty, new System.Windows.Data.Binding(nameof(Visibility)) { Source = _image });
+        _image.SizeChanged += (_, e) => { _screen.Width = e.NewSize.Width + 2; _screen.Height = e.NewSize.Height + 2; };
         Children.Add(_image);
         Children.Add(_message);
+        Panel.SetZIndex(_screen, -1);   // behind the picture, the picture and the message staying the first two
+        Children.Add(_screen);
 
         _grips = _gripKinds.Select(MakeGrip).ToArray();
         _overlay.Children.Add(_box);
@@ -113,7 +131,8 @@ public sealed class UiPreview : Grid
         // The same dark ground the other previews use. A UI surface is mostly
         // transparent, so whatever sits behind it is what an author judges the
         // art against - and the game's own background is dark, not white.
-        Background = new SolidColorBrush(Color.FromRgb(0x22, 0x22, 0x22));
+        // Round the screen a shade darker still, so its edges show (_screen keeps the screen itself at this ground).
+        Background = new SolidColorBrush(Color.FromRgb(0x14, 0x14, 0x14));
 
         // Draw once on the way in. Refresh otherwise only runs when BaseToken
         // CHANGES, and its default is the empty string - so a control that is
@@ -547,8 +566,12 @@ public sealed class UiPreview : Grid
         double scale = _image.ActualWidth / CanvasWidth;
         var origin = _image.TranslatePoint(new Point(0, 0), this);
         var s = screen.Value;
+        // An object narrower than nothing - a size typed below zero, or one stretched inside a parent smaller
+        // than its margins - has no area, and a Rect of less than none is an error: the editor stopped with
+        // "Width and Height must be non-negative" (1.10.0, found by the walk over every control). Its handles
+        // sit on a point.
         return new Rect(origin.X + s.X * scale, origin.Y + s.Y * scale,
-                        s.Width * scale, s.Height * scale);
+                        Math.Max(0, s.Width * scale), Math.Max(0, s.Height * scale));
     }
 
     private void PlaceGizmo()
@@ -621,14 +644,26 @@ public sealed class UiPreview : Grid
         return UiGeometry.Pick(Roots(), x, y, CanvasWidth, CanvasHeight);
     }
 
+    // The mouse's three moments - pressed on the box or a grip, moved, let go - are each a method of their own
+    // that the mouse's handler calls with where the pointer is (1.10.0): a test drags an object through the
+    // very same code. (The desktop tests run on has no mouse.)
+
     private void OverlayDown(object sender, MouseButtonEventArgs e)
     {
         var kind = GripOf(e.OriginalSource);
         if (kind == UiGrip.None || Highlight == null) return;
+        BeginDrag(kind, e.GetPosition(this));
+        _overlay.CaptureMouse();
+        e.Handled = true;
+    }
 
+    /// <summary>The box (to move) or one of its grips (to resize) pressed, the pointer at <paramref name="from"/>.</summary>
+    internal void BeginDrag(UiGrip kind, Point from)
+    {
+        if (kind == UiGrip.None || Highlight == null) return;
         _dragNode = Highlight;
         _dragging = kind;
-        _dragFrom = e.GetPosition(this);
+        _dragFrom = from;
 
         // A press inside the box has not committed to anything yet: it becomes
         // a move once the pointer travels, and a selection if it does not. A
@@ -640,9 +675,6 @@ public sealed class UiPreview : Grid
         // wanders about and comes back lands exactly where it started.
         var rect = UiGeometry.ScreenRectOf(AuthoredRoot, _dragNode, CanvasWidth, CanvasHeight);
         _dragStart = UiDragStart.Of(_dragNode, rect ?? default);
-
-        _overlay.CaptureMouse();
-        e.Handled = true;
     }
 
     private UiGrip GripOf(object? source)
@@ -654,13 +686,18 @@ public sealed class UiPreview : Grid
 
     private void OverlayMove(object sender, MouseEventArgs e)
     {
-        if (_dragging == UiGrip.None || _dragNode == null) return;
-        if (_image.ActualWidth <= 0 || CanvasWidth <= 0) return;
+        if (DragTo(e.GetPosition(this))) e.Handled = true;
+    }
+
+    /// <summary>What is held, dragged to <paramref name="now"/>. False when nothing is held, or the pointer has
+    /// not gone far enough yet for the press to be a drag.</summary>
+    internal bool DragTo(Point now)
+    {
+        if (_dragging == UiGrip.None || _dragNode == null) return false;
+        if (_image.ActualWidth <= 0 || CanvasWidth <= 0) return false;
 
         double scale = _image.ActualWidth / CanvasWidth;
-        if (scale <= 0) return;
-
-        var now = e.GetPosition(this);
+        if (scale <= 0) return false;
 
         if (!_moved)
         {
@@ -668,7 +705,7 @@ public sealed class UiPreview : Grid
             // stays a click rather than nudging the object a pixel.
             var travelled = now - _dragFrom;
             if (Math.Abs(travelled.X) < SystemParameters.MinimumHorizontalDragDistance &&
-                Math.Abs(travelled.Y) < SystemParameters.MinimumVerticalDragDistance) return;
+                Math.Abs(travelled.Y) < SystemParameters.MinimumVerticalDragDistance) return false;
 
             _moved = true;
             EditBeginning?.Invoke();
@@ -685,24 +722,32 @@ public sealed class UiPreview : Grid
         PlaceGizmo();
         RequestRefresh();
         RectEdited?.Invoke(_dragNode);
-        e.Handled = true;
+        return true;
     }
 
     private void OverlayUp(object sender, MouseButtonEventArgs e)
+    {
+        if (_dragging == UiGrip.None) return;
+        _overlay.ReleaseMouseCapture();
+        EndDrag(e.GetPosition(this));
+        e.Handled = true;
+    }
+
+    /// <summary>Let go, the pointer at <paramref name="at"/>: a drag ended, or - the pointer never having
+    /// travelled - a click, which picks what is under it.</summary>
+    internal void EndDrag(Point at)
     {
         if (_dragging == UiGrip.None) return;
 
         bool wasDrag = _moved;
         _dragging = UiGrip.None;
         _dragNode = null;
-        _overlay.ReleaseMouseCapture();
 
         if (!wasDrag)
         {
             // A click, not a drag: pick whatever is actually under the pointer.
-            var picked = NodeAt(e.GetPosition(this));
+            var picked = NodeAt(at);
             if (picked != null && !ReferenceEquals(picked, Highlight)) NodePicked?.Invoke(picked);
-            e.Handled = true;
             return;
         }
 
@@ -710,7 +755,6 @@ public sealed class UiPreview : Grid
         // where the object actually finished rather than the last frame that
         // happened to get drawn.
         Refresh();
-        e.Handled = true;
     }
 
     /// <summary>

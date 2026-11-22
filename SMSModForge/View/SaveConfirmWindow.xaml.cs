@@ -30,6 +30,8 @@ public partial class SaveConfirmWindow : Window
     public static bool Ask(Window? owner, IReadOnlyList<PackChange> changes, string? packRoot,
                            out bool suppressFuturePrompts)
     {
+        // No window under the test harness: a save goes ahead, as nobody stopped it, and nothing is remembered.
+        if (Services.TestMode.Active) { suppressFuturePrompts = false; return true; }
         var window = new SaveConfirmWindow { Owner = owner };
         window.Populate(changes, packRoot);
         bool ok = window.ShowDialog() == true;

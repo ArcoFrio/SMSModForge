@@ -105,7 +105,29 @@ internal static class VanillaArtSizes
         if (w <= 0 || h <= 0) return img;
         if (img.PixelWidth == w && img.PixelHeight == h) return img;
 
-        return SmoothUpscale(img, w, h);
+        // The same file, the same size: made once (1.10.0). A place shown again did it all again each time.
+        string made = absPath + "|" + w + "x" + h + "|" + Stamp(absPath);
+        lock (_upscaled)
+            if (_upscaled.TryGetValue(made, out var known)) return known;
+        var result = SmoothUpscale(img, w, h);
+        lock (_upscaled)
+        {
+            if (_upscaled.Count > 48) _upscaled.Clear();
+            _upscaled[made] = result;
+        }
+        return result;
+    }
+
+    private static readonly Dictionary<string, BitmapSource> _upscaled = new(StringComparer.OrdinalIgnoreCase);
+
+    private static string Stamp(string path)
+    {
+        try
+        {
+            var info = new System.IO.FileInfo(path);
+            return info.Exists ? info.Length + ":" + info.LastWriteTimeUtc.Ticks : "";
+        }
+        catch (Exception) { return ""; }
     }
 
     /// <summary>

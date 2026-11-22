@@ -159,6 +159,7 @@ public sealed class ExpressionSyncTests : IDisposable
             var outfit = kiki.Outfits.Single();
             var preview = new JigglePreview { PackRoot = _dir };
             preview.Outfit = outfit;
+            WindowHarness.Pump();   // the bust's pictures arrive a moment after it is chosen (loaded off the interface's thread)
             _out.WriteLine("bust offers: " + string.Join(", ", preview.ExpressionChoices.Select(c => c.Key)));
             Assert.Contains(preview.ExpressionChoices, c => c.Key == "SmirkFace");
 

@@ -382,6 +382,18 @@ public sealed class ModPack
     public bool ShouldSerializeQuestFolders() => QuestFolders != null && QuestFolders.Count > 0;
 
     /// <summary>
+    /// The pack's effects (the FX tab, 1.10.0): particles, the social points, a flash, words that float up -
+    /// made from a template, played by an action or by what happens in the game. See <see cref="EffectDef"/>.
+    /// </summary>
+    [JsonProperty(SMSModForge.Shared.Effects.ListKey, Order = 32)]
+    public List<EffectDef> Effects { get; set; } = new();
+    public bool ShouldSerializeEffects() => Effects != null && Effects.Count > 0;
+
+    [JsonProperty(SMSModForge.Shared.Effects.FoldersKey, Order = 33)]
+    public List<UnitFolderDef> EffectFolders { get; set; } = new();
+    public bool ShouldSerializeEffectFolders() => EffectFolders != null && EffectFolders.Count > 0;
+
+    /// <summary>
     /// Conditions the pack takes out of the game's own scripts - a room's
     /// branch that plays a conversation, most often. Edited from the Quests
     /// tab (a place that starts or resets a quest) and the Dialogues tab (what

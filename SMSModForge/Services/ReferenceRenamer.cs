@@ -36,6 +36,9 @@ public enum RefKind
     /// <summary>A pack quest's key - what the Quest action and the quest
     /// conditions name it by.</summary>
     Quest,
+
+    /// <summary>A pack effect's key - what Play effect and Stop effect name it by (1.10.0).</summary>
+    Effect,
 }
 
 /// <summary>
@@ -73,6 +76,7 @@ public static class ReferenceRenamer
         [RefKind.Scene] = new[] { ParamType.SceneRef },
         [RefKind.Music] = new[] { ParamType.MusicRef },
         [RefKind.Sfx] = new[] { ParamType.SfxRef },
+        [RefKind.Effect] = new[] { ParamType.EffectRef },
         [RefKind.Place] = Array.Empty<ParamType>(),
         [RefKind.Dialogue] = new[] { ParamType.DialogueRef },
         [RefKind.Npc] = Array.Empty<ParamType>(),

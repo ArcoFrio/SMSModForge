@@ -756,6 +756,20 @@ namespace SMSModForge.PackPlugin
                         return false;
                     }
 
+                case SMSModForge.Shared.Effects.PlayAction:
+                    {
+                        // An effect of the pack's: where it says, or where this row says.
+                        float? fx = null, fy = null;
+                        float v;
+                        if (p[SMSModForge.Shared.Effects.XField] != null && float.TryParse((string)p[SMSModForge.Shared.Effects.XField], NumberStyles.Float, CultureInfo.InvariantCulture, out v)) fx = v;
+                        if (p[SMSModForge.Shared.Effects.YField] != null && float.TryParse((string)p[SMSModForge.Shared.Effects.YField], NumberStyles.Float, CultureInfo.InvariantCulture, out v)) fy = v;
+                        EffectRuntime.Play(ctx, (string)p[SMSModForge.Shared.Effects.EffectParam], fx, fy);
+                        return false;
+                    }
+                case SMSModForge.Shared.Effects.StopAction:
+                    EffectRuntime.Stop(ctx, (string)p[SMSModForge.Shared.Effects.EffectParam]);
+                    return false;
+
                 case SMSModForge.Shared.Transitions.ActionType:
                     {
                         // In, on screen, out - one row for what used to be two
@@ -1675,6 +1689,8 @@ namespace SMSModForge.PackPlugin
         public WallpaperRegistry Wallpapers;
         public SfxRegistry Sfx;
         public UpdateRulesRegistry UpdateRules;
+        /// <summary>The pack's effects (the FX tab, 1.10.0).</summary>
+        internal EffectsRegistry Effects;
 
         /// <summary>GameObjects whose active state is driven by authored
         /// <c>activeConditions</c>. Populated by <see cref="PlaceFactory"/>.</summary>

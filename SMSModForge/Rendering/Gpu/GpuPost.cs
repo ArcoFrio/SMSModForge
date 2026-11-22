@@ -350,8 +350,8 @@ internal sealed class GpuPost : IDisposable
         });
         lock (_gpu.Gate)
         {
-            var ctx = _gpu.Clean();
-            var bloom = _noBloom;
+            _gpu.Clean();
+            GpuTexture? screenFrame = null;
             if (screenFloats != null)
             {
                 if (_lookFrame == null || _lookFrame.W != sw || _lookFrame.H != sh)
@@ -360,18 +360,46 @@ internal sealed class GpuPost : IDisposable
                     _lookFrame = GpuTexture.Create<float>(_gpu, sw, sh, Format.R32G32B32A32_Float, false);
                 }
                 _lookFrame.Upload<float>(_gpu, screenFloats);
-                bloom = BloomAndFlares(_lookFrame, b.Post, parts.Flares);
+                screenFrame = _lookFrame;
             }
             if (_viewScene == null || _viewScene.W != vw || _viewScene.H != vh)
             {
-                _viewScene?.Dispose(); _viewOutView?.Dispose(); _viewOut?.Dispose(); _viewBack?.Dispose();
+                _viewScene?.Dispose();
                 _viewScene = GpuTexture.Create<float>(_gpu, vw, vh, Format.R32G32B32A32_Float, false);
+            }
+            _viewScene.Upload<float>(_gpu, view);
+            LookFromCard(_viewScene, screenFrame, vw, vh, ax, bx, ay, by, scene, parts, output);
+        }
+    }
+
+    private int _viewOutW, _viewOutH;
+
+    /// <summary>
+    /// The look over a view from pictures already on the card (1.10.0,
+    /// <see cref="GpuPlaceScene"/>): <paramref name="viewScene"/> the view in the
+    /// camera's format (rows from the top), <paramref name="screenFrame"/> the
+    /// whole screen at the game's size (rows from the bottom; null for no bloom) -
+    /// the bloom from the screen, the compose and the grading at every pixel of
+    /// the view, back into <paramref name="output"/>. The caller holds the
+    /// device's gate.
+    /// </summary>
+    internal void LookFromCard(GpuTexture viewScene, GpuTexture? screenFrame, int vw, int vh, float ax, float bx, float ay, float by,
+                               BackdropScene scene, BackdropRender.PostParts parts, byte[] output)
+    {
+        var b = scene.Backdrop;
+        {
+            var ctx = _gpu.Clean();
+            bool withBloom = parts.Bloom && screenFrame != null;
+            var bloom = withBloom ? BloomAndFlares(screenFrame!, b.Post, parts.Flares) : _noBloom;
+            if (_viewOut == null || _viewOutW != vw || _viewOutH != vh)
+            {
+                _viewOutView?.Dispose(); _viewOut?.Dispose(); _viewBack?.Dispose();
                 _viewOut = _gpu.NewBuffer(new BufferDescription((uint)(vw * vh * 4), BindFlags.UnorderedAccess, ResourceUsage.Default,
                                                                           CpuAccessFlags.None, ResourceOptionFlags.BufferStructured, 4));
                 _viewOutView = _gpu.Device.CreateUnorderedAccessView(_viewOut);
                 _viewBack = _gpu.Device.CreateBuffer(new BufferDescription((uint)(vw * vh * 4), BindFlags.None, ResourceUsage.Staging, CpuAccessFlags.Read));
+                _viewOutW = vw; _viewOutH = vh;
             }
-            _viewScene.Upload<float>(_gpu, view);
             if (!ReferenceEquals(_tableOf, b.GradingTable))
             {
                 _table?.Dispose();
@@ -382,13 +410,13 @@ internal sealed class GpuPost : IDisposable
             _cb0.Upload(_gpu, GamePost.ComposeConstants(b.Post));
             float U(int v) => BitConverter.Int32BitsToSingle(v);
             var lut = b.Post.LutParams;
-            _presentCb.Upload(_gpu, new[] { U(0), U(0), U(parts.Colour ? 1 : 0), U(parts.Bloom && screenFloats != null ? 1 : 0), lut.x, lut.y, lut.z, lut.w,
+            _presentCb.Upload(_gpu, new[] { U(0), U(0), U(parts.Colour ? 1 : 0), U(withBloom ? 1 : 0), lut.x, lut.y, lut.z, lut.w,
                                             U(vw), U(vh), U(1), b.Post.BloomIntensity, ax, bx, ay, by, U(1), 0f, 0f, 0f });
             _blitCb.Upload(_gpu, new[] { U(0), U(0), U(0), U(0), 0f, 0f, U(1), 0f });
             ctx.CSSetShader(_present);
             ctx.CSSetConstantBuffer(0, _cb0.Buffer); ctx.CSSetConstantBuffer(1, _cb1.Buffer);
             ctx.CSSetConstantBuffer(2, _blitCb.Buffer); ctx.CSSetConstantBuffer(3, _presentCb.Buffer);
-            ctx.CSSetShaderResource(0, _viewScene.Read); ctx.CSSetShaderResource(1, bloom.Read);
+            ctx.CSSetShaderResource(0, viewScene.Read); ctx.CSSetShaderResource(1, bloom.Read);
             ctx.CSSetShaderResource(2, _table!.Read); ctx.CSSetShaderResource(3, _srgbView);
             ctx.CSSetUnorderedAccessView(1, _viewOutView!);
             ctx.Dispatch((uint)((vw + 15) / 16), (uint)((vh + 15) / 16), 1);

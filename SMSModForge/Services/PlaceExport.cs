@@ -140,7 +140,7 @@ public static class PlaceExport
                     MaskSprite = vm.MaskSprite, SecondaryMaskSprite = vm.SecondaryMaskSprite,
                     LevelArtOrder = vm.BaseSortingOrder, LevelArtSecondaryOrder = vm.SecondarySortingOrder,
                     GameObjects = vm.GameObjects, NpcCatalog = npcs, Shaders = false, ParallaxPreview = false, AsTheGameShows = true,
-                    DimInactive = false, DimUnderInactiveParent = false, LightsOfLevel = VanillaLevelCatalog.PackPlacePrototype,
+                    DimInactive = false, DimUnderInactiveParent = false,
                 };
                 Write(manifest, folder, Make, Groups(vm.GameObjects, null), token, place.DisplayName, "pack", log);
             }

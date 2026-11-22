@@ -119,6 +119,60 @@ public sealed class ComboBoxSearchTests
         });
     }
 
+    /// <summary>
+    /// A box holding a choice whose option shows one thing and stores another (a level: the box reads
+    /// "vanilla:14_Beach", the list "Vanilla — Beach (14_Beach)") opens onto the whole list. It opened onto the Beach
+    /// alone: the box's words were compared with what the option is searched by - both halves on two lines - which
+    /// never equals the stored word alone, so the opening was taken for a search. A conversation's Required level
+    /// offered no place of the pack's (found by following the guide's examples by their words, 1.10.0).
+    /// Control: the same box with words typed that are no choice still narrows.
+    /// </summary>
+    [Fact]
+    public void ABoxHoldingAStoredWordOpensOntoTheWholeList()
+    {
+        WindowHarness.Run(_ =>
+        {
+            var options = new[]
+            {
+                new ViewModel.NavigatorTargetOption("vanilla:14_Beach", "Vanilla — Beach (14_Beach)"),
+                new ViewModel.NavigatorTargetOption("vanilla:5_MyRoom", "Vanilla — My room (5_MyRoom)"),
+                new ViewModel.NavigatorTargetOption("place:Gallery", "This pack — Gallery (place:Gallery)"),
+            };
+            var box = new ComboBox { IsEditable = true, ItemsSource = options, Width = 260 };
+            var window = new Window { Width = 320, Height = 200, Left = -10000, Top = -10000, ShowInTaskbar = false, Content = box };
+            window.Show();
+            box.ApplyTemplate();
+            WindowHarness.Pump();
+            int Shown()
+            {
+                WindowHarness.Pump();
+                return Enumerable.Range(0, box.Items.Count)
+                    .Count(i => box.ItemContainerGenerator.ContainerFromIndex(i) is ComboBoxItem { Visibility: Visibility.Visible });
+            }
+            try
+            {
+                box.SelectedItem = options[0];
+                WindowHarness.Pump();
+                Assert.Equal("vanilla:14_Beach", box.Text);
+                WindowHarness.SetOpen(box, true);
+                Assert.Equal("", ComboBoxSearch.GetTyped(box));
+                Assert.Equal(3, Shown());
+                WindowHarness.SetOpen(box, false);
+
+                // Control: words that are not the choice are a search.
+                box.SelectedItem = null;
+                WindowHarness.Pump();
+                box.Text = "Gallery";
+                WindowHarness.Pump();
+                WindowHarness.SetOpen(box, true);
+                _out.WriteLine($"control: text \"{box.Text}\", chosen {box.SelectedItem ?? "nothing"}, typed \"{ComboBoxSearch.GetTyped(box)}\"");
+                Assert.Equal(1, Shown());
+                WindowHarness.SetOpen(box, false);
+            }
+            finally { window.Close(); }
+        });
+    }
+
     [Fact]
     public void NothingTypedShowsEverything()
     {

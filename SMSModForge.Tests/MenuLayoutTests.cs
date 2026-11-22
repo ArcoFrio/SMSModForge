@@ -71,8 +71,10 @@ public sealed class MenuLayoutTests
             Assert.Contains(Loc.T("menu.previewBackdrop"), groups[Loc.T("menu.heading.look")]);
             Assert.Contains(Loc.T("menu.previewRenderer"), groups[Loc.T("menu.heading.look")]);
             Assert.Contains(Loc.T("menu.showPreviewFps"), groups[Loc.T("menu.heading.look")]);
-            // The fourteen it had, none lost, Themes, and those three.
-            Assert.Equal(18, groups.Values.Sum(g => g.Count));
+            // Animations (1.10.0): the editor's movements, with the look's.
+            Assert.Contains(Loc.T("menu.animations"), groups[Loc.T("menu.heading.look")]);
+            // The fourteen it had, none lost, Themes, those three and Animations.
+            Assert.Equal(19, groups.Values.Sum(g => g.Count));
         });
     }
 

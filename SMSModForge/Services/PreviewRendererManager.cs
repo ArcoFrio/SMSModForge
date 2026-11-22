@@ -76,11 +76,14 @@ public static class PreviewRendererManager
 
     private static string FilePath => AppDataFolder.PathOf("preview-renderer.json");
 
+    private static bool _chosen;
+
     public static void Apply(PreviewRendererDef def)
     {
         if (def == null) return;
         foreach (var d in All) d.IsCurrent = ReferenceEquals(d, def);
         Current = def;
+        _chosen = true;
         if (TestMode.Active) return;
         try
         {
@@ -94,6 +97,10 @@ public static class PreviewRendererManager
     /// both in the background. Call once at startup.</summary>
     public static void ApplySaved()
     {
+        // Under the test suite a choice already made in this process stands (as the backdrop's): the run's own
+        // (SMSMODFORGE_TEST_RENDERER, WindowHarness), which the app's start-up inside the harness put back to
+        // Automatic - a run "on the card" drew every preview on the processor (1.10.0, HarnessRendererTests).
+        if (TestMode.Active && _chosen) return;
         string? name = null;
         if (!TestMode.Active)
         {

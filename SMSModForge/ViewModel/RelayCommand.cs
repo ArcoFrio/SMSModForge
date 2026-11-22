@@ -44,8 +44,9 @@ public sealed class RelayCommand : ICommand
     public void Execute(object? parameter)
     {
         Executing?.Invoke();
-        _execute(parameter);
-        Executed?.Invoke();
+        // Whatever becomes of the command: what counts commands in and out (the undo steps) must hear both.
+        try { _execute(parameter); }
+        finally { Executed?.Invoke(); }
     }
 
     public event EventHandler? CanExecuteChanged

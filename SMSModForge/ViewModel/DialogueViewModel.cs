@@ -1200,6 +1200,56 @@ public sealed class DialogueViewModel : ObservableObject
     }
 
     /// <summary>
+    /// The lines made what <paramref name="step"/> has, where they are (1.10.0, an undo or a redo): a line of
+    /// both is kept - the very object, and its row - and given the step's values if it differs; a line only
+    /// the step has is taken in, with a row; a line it has not goes, with its row; and the lines hang as the
+    /// step hangs them. The rows of every other line are not touched, which is what makes putting back a line
+    /// added, removed or moved cost what it changed and not the whole conversation drawn again.
+    /// <para/>
+    /// False when two lines share a number or a line cannot take the step's values: the caller then puts the
+    /// dialogue back whole. The rows whose line was given other values are in <paramref name="changed"/>, to
+    /// be told to read themselves again.
+    /// </summary>
+    public bool ReadLinesAgain(DialogueDef step, out List<DialogueNodeViewModel> changed)
+    {
+        changed = new List<DialogueNodeViewModel>();
+        var mine = new Dictionary<int, DialogueNodeDef>();
+        foreach (var node in Model.Nodes)
+            if (!mine.TryAdd(node.Id, node)) return false;
+        var rows = new Dictionary<DialogueNodeDef, DialogueNodeViewModel>(ReferenceEqualityComparer.Instance);
+        foreach (var row in Nodes) rows[row.Model] = row;
+
+        var wanted = new List<DialogueNodeDef>(step.Nodes.Count);
+        var seen = new HashSet<int>();
+        foreach (var want in step.Nodes)
+        {
+            if (!seen.Add(want.Id)) return false;
+            if (!mine.TryGetValue(want.Id, out var have)) { wanted.Add(want); continue; }
+            wanted.Add(have);
+            if (string.Equals(ModelAssign.Written(have), ModelAssign.Written(want), StringComparison.Ordinal)) continue;
+            if (!rows.TryGetValue(have, out var row) || !ModelAssign.Into(have, want)) return false;
+            changed.Add(row);
+        }
+
+        _recountHold++;
+        try
+        {
+            var kept = new HashSet<DialogueNodeDef>(wanted, ReferenceEqualityComparer.Instance);
+            for (int i = Nodes.Count - 1; i >= 0; i--)
+                if (!kept.Contains(Nodes[i].Model)) Nodes.RemoveAt(i);
+            Model.Nodes.Clear();
+            Model.Nodes.AddRange(wanted);
+            foreach (var node in wanted)
+                if (!rows.ContainsKey(node)) Nodes.Add(new DialogueNodeViewModel(node));
+            Model.RootNodeIds = step.RootNodeIds.ToList();
+        }
+        finally { _recountHold--; }
+        // Each where it hangs now, and the list in that order - as after any line added or moved by hand.
+        RecomputeDepths();
+        return true;
+    }
+
+    /// <summary>
     /// Walks the tree in DFS preorder from <see cref="DialogueDef.RootNodeIds"/>,
     /// assigning each <see cref="DialogueNodeViewModel.Depth"/>. Nodes that
     /// aren't reachable from any root (orphans) keep depth 0 and surface in

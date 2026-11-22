@@ -47,6 +47,10 @@ internal sealed class GameLamp
     private readonly float[] _albedo;
     /// <summary>The room as captured: without the glow, and as seen. RGB.</summary>
     private readonly float[] _noGlow, _room;
+    /// <summary>A place's other lights (1.10.0, <see cref="PreviewBackdrop.LampBase"/>): the light texture without the
+    /// lamp, per texel, and their glows drawn with the room, per screen pixel; null for a captured backdrop (the
+    /// global light alone).</summary>
+    private readonly float[]? _base, _othersGlow;
 
     public GameLamp(PreviewBackdrop backdrop) : this(backdrop, null) { }
 
@@ -63,6 +67,7 @@ internal sealed class GameLamp
         (_gr, _gg, _gb) = lamp.Global;
         _intensity = lamp.ShadowIntensity; _volumeIntensity = lamp.ShadowVolumeIntensity;
         _noGlow = backdrop.RoomNoGlowHdr; _room = backdrop.RoomHdr;
+        _base = backdrop.LampBase; _othersGlow = backdrop.OthersBehindGlow;
         GlowWithTheRoom = glowWithTheRoom ?? lamp.GlowWithTheRoom;
 
         // URP's light lookup texture (half floats) and its falloff curve.
@@ -104,9 +109,11 @@ internal sealed class GameLamp
         });
 
         // The room's colour: between what the lamp-off capture and the lit one
-        // (without the glow) allow, each a truncated 11-bit value.
+        // (without the glow) allow, each a truncated 11-bit value - or, for a
+        // place of the pack's, as the preview drew it (1.10.0).
         var lit = new float[_tw * _th * 3];
         LightTexture(null, lit);
+        if (backdrop.Albedo is { } known) { _albedo = known; return; }
         _albedo = new float[ScreenWidth * ScreenHeight * 3];
         var off = backdrop.UnlitHdr;
         Parallel.For(0, ScreenHeight, y =>
@@ -136,9 +143,10 @@ internal sealed class GameLamp
         {
             float s = shadow == null ? 0f : shadow[k];
             float keep = 1f - s, dim = (1f - _intensity) * s;
-            texel[o] = GamePost.Small(_gr + (_lampTexel[o] * keep + _lampTexel[o] * dim), 6);
-            texel[o + 1] = GamePost.Small(_gg + (_lampTexel[o + 1] * keep + _lampTexel[o + 1] * dim), 6);
-            texel[o + 2] = GamePost.Small(_gb + (_lampTexel[o + 2] * keep + _lampTexel[o + 2] * dim), 5);
+            float br = _base?[o] ?? _gr, bg = _base?[o + 1] ?? _gg, bb = _base?[o + 2] ?? _gb;
+            texel[o] = GamePost.Small(br + (_lampTexel[o] * keep + _lampTexel[o] * dim), 6);
+            texel[o + 1] = GamePost.Small(bg + (_lampTexel[o + 1] * keep + _lampTexel[o + 1] * dim), 6);
+            texel[o + 2] = GamePost.Small(bb + (_lampTexel[o + 2] * keep + _lampTexel[o + 2] * dim), 5);
         }
     }
 
@@ -243,6 +251,13 @@ internal sealed class GameLamp
                 target.Px[t + 1] = GamePost.Small(_albedo[p + 1] * lg, 6);
                 target.Px[t + 2] = GamePost.Small(_albedo[p + 2] * lb, 5);
                 target.Px[t + 3] = 1f;
+                // A place's other lights' glows, drawn with the room and cast no shadow (1.10.0).
+                if (_othersGlow != null)
+                {
+                    target.Px[t] = GamePost.Small(target.Px[t] + _othersGlow[p], 6);
+                    target.Px[t + 1] = GamePost.Small(target.Px[t + 1] + _othersGlow[p + 1], 6);
+                    target.Px[t + 2] = GamePost.Small(target.Px[t + 2] + _othersGlow[p + 2], 5);
+                }
                 if (GlowWithTheRoom) AddGlow(target, Shadow.At(shadow!, x, y), p, t);
             }
         });

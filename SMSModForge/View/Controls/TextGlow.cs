@@ -26,13 +26,14 @@ public sealed class TextGlow : FrameworkElement
     private const double Strength = 0.55;
 
     public static readonly DependencyProperty TargetProperty =
-        DependencyProperty.Register(nameof(Target), typeof(MarkupTextBox), typeof(TextGlow),
+        DependencyProperty.Register(nameof(Target), typeof(FrameworkElement), typeof(TextGlow),
             new FrameworkPropertyMetadata(null, OnTargetChanged));
 
-    /// <summary>The box whose coloured words glow.</summary>
-    public MarkupTextBox? Target
+    /// <summary>What shows the line whose coloured words glow: a line box, or a row of the Dialogues list
+    /// (anything that says which runs it is drawn in, <see cref="ILineRuns"/>).</summary>
+    public FrameworkElement? Target
     {
-        get => (MarkupTextBox?)GetValue(TargetProperty);
+        get => (FrameworkElement?)GetValue(TargetProperty);
         set => SetValue(TargetProperty, value);
     }
 
@@ -49,14 +50,14 @@ public sealed class TextGlow : FrameworkElement
     private static void OnTargetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var glow = (TextGlow)d;
-        if (e.OldValue is MarkupTextBox old)
+        if (e.OldValue is FrameworkElement old)
         {
-            old.Rendered -= glow.Again;
+            if (old is ILineRuns oldLine) oldLine.Rendered -= glow.Again;
             old.SizeChanged -= glow.OnTargetResized;
         }
-        if (e.NewValue is MarkupTextBox box)
+        if (e.NewValue is FrameworkElement box)
         {
-            box.Rendered += glow.Again;
+            if (box is ILineRuns line) line.Rendered += glow.Again;
             box.SizeChanged += glow.OnTargetResized;
         }
         glow.Again();
@@ -72,9 +73,9 @@ public sealed class TextGlow : FrameworkElement
         var box = Target;
         // Dark EX themes only: on a light background a blurred colour under
         // the words reads as a smudge, not as light (the author, 1.8.0).
-        if (box == null || !ThemeManager.Current.IsEx || !ThemeManager.Current.IsDark || !box.IsLoaded) return;
+        if (box is not ILineRuns line || !ThemeManager.Current.IsEx || !ThemeManager.Current.IsDark || !box.IsLoaded) return;
         double dpi = VisualTreeHelper.GetDpi(this).PixelsPerDip;
-        foreach (var run in box.Document.Blocks.OfType<Paragraph>().SelectMany(p => p.Inlines.OfType<Run>()))
+        foreach (var run in line.LineRuns)
         {
             if (!ReferenceEquals(run.Tag, MarkupTextBox.Glows) || string.IsNullOrEmpty(run.Text)) continue;
             var typeface = new Typeface(run.FontFamily, run.FontStyle, run.FontWeight, run.FontStretch);

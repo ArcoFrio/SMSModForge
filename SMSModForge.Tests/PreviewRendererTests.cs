@@ -54,6 +54,8 @@ public sealed class PreviewRendererTests : IDisposable
         var wasBackdrop = PreviewBackdropManager.Current;
         try
         {
+            // Automatic, whatever the run itself draws on (SMSMODFORGE_TEST_RENDERER, 1.10.0).
+            PreviewRendererManager.Apply(PreviewRendererManager.All.First(r => r.Name == "Automatic"));
             Assert.False(PreviewRendererManager.UseCard, "Automatic draws on the card under the test suite");
             PreviewBackdropManager.Apply(PreviewBackdropManager.All.First(d => d.Name == "MyRoom"));
             PreviewQualityManager.Apply(PreviewQualityManager.All.First(q => q.Name == "Ultra"));

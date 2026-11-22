@@ -67,23 +67,27 @@ public sealed class NodeRowDrawsOnceTests
             window.UpdateLayout();
             WindowHarness.Pump();
 
-            var rows = Descendants<MarkupTextBox>(window).Where(b => b.Name == "NodeRowText" && b.IsVisible).ToList();
+            var rows = Descendants<MarkupTextBlock>(window).Where(b => b.Name == "NodeRowText" && b.IsVisible).ToList();
             // Under a loaded machine the rows can still be coming: wait for them
             // (what each has drawn does not depend on when it is counted).
             for (int t = 0; t < 60 && rows.Count < lines.Nodes.Count; t++)
             {
                 WindowHarness.Wait(TimeSpan.FromMilliseconds(50));
                 window.UpdateLayout();
-                rows = Descendants<MarkupTextBox>(window).Where(b => b.Name == "NodeRowText" && b.IsVisible).ToList();
+                rows = Descendants<MarkupTextBlock>(window).Where(b => b.Name == "NodeRowText" && b.IsVisible).ToList();
             }
             _out.WriteLine($"{rows.Count} rows; draws: {string.Join(",", rows.Select(r => r.Draws))}");
             Assert.True(rows.Count >= lines.Nodes.Count, "the rows were not built, so this proves nothing");
             Assert.All(rows, r => Assert.Equal(1, r.Draws));
 
+            // Plain words in the theme's own text colour, as the line box the rows used drew them.
+            var text = ((SolidColorBrush)window.FindResource(SMSModForge.Services.ThemeManager.KeyText)).Color;
+            Assert.All(rows, r => Assert.Contains(r.LineRuns, run => run.Foreground is SolidColorBrush b && b.Color == text));
+
             foreach (var row in rows)
             {
                 var node = (DialogueNodeViewModel)row.DataContext;
-                string shown = new TextRange(row.Document.ContentStart, row.Document.ContentEnd).Text.TrimEnd('\r', '\n');
+                string shown = new TextRange(row.ContentStart, row.ContentEnd).Text.TrimEnd('\r', '\n');
                 Assert.DoesNotContain("<b>", shown);
                 Assert.StartsWith(node.Text.Substring(0, node.Text.IndexOf(':') + 1), shown);
             }

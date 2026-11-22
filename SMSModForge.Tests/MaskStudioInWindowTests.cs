@@ -93,6 +93,89 @@ public sealed class MaskStudioInWindowTests : IDisposable
         return counter() - before;
     }
 
+    /// <summary>
+    /// The painter slides in from the right as the tabs go out to the left, and back the other way on closing
+    /// (1.10.0, the author: "animations for the mask editors ... sliding horizontally into view and out"), measured
+    /// from where each is drawn with the movements on (four times slower, Motions.SlowForTests). The tabs stay up
+    /// while they go and are put away once gone; on closing, the painter stays in the window until it has left it.
+    /// The rest of the studio's behaviour, with the movements off, is the test after this one.
+    /// </summary>
+    [Fact]
+    [Trait("Timing", "Alone")]
+    public void ThePainterSlidesInAndBackOut_TheTabsGoingTheOtherWay()
+    {
+        if (!SystemParameters.ClientAreaAnimation)
+        {
+            _out.WriteLine("Windows' own Animation effects are off on this machine: nothing moves - nothing to hold");
+            return;
+        }
+        WindowHarness.Run(window =>
+        {
+            var vm = APack(window, "Characters");
+            vm.SelectedCharacter = vm.Characters.First(c => c.Model.Key == "anna");
+            vm.SelectedOutfit = vm.SelectedCharacter.Outfits.First();
+            WindowHarness.Pump();
+            window.UpdateLayout();
+            var tabs = (TabControl)window.FindName("MainTabs");
+            var host = (ContentControl)window.FindName("MaskStudioHost");
+            var area = (FrameworkElement)window.Content;
+            double X(UIElement e) => e.TransformToAncestor(area).Transform(new Point()).X;
+            bool was = EditorPrefs.Animations;
+            Motion.ForTests = true;
+            Motions.SlowForTests = 4;
+            vm.Animations = true;
+            try
+            {
+                WindowHarness.Wait(TimeSpan.FromMilliseconds(400));
+                Click(window, "EditMaskButton");
+                var studio = ((MainWindow)window).CurrentMaskStudio!;
+                Assert.Equal(Visibility.Visible, tabs.Visibility);   // going, not gone
+                double studioFrom = 0, tabsTo = 0;
+                var until = DateTime.UtcNow + TimeSpan.FromMilliseconds(500);
+                while (DateTime.UtcNow < until)
+                {
+                    WindowHarness.Wait(TimeSpan.FromMilliseconds(8));
+                    studioFrom = Math.Max(studioFrom, X(host));
+                    if (tabs.IsVisible) tabsTo = Math.Min(tabsTo, X(tabs));
+                }
+                WindowHarness.Wait(TimeSpan.FromMilliseconds(1600));
+                _out.WriteLine($"{ThemeManager.Current.Name}: the painter came from {studioFrom:0} px right, the tabs went {tabsTo:0} px left; area {area.ActualWidth:0}");
+                Assert.True(studioFrom > 40, "the painter did not slide in from the right");
+                Assert.True(tabsTo < -40, "the tabs did not slide out to the left");
+                Assert.Equal(Visibility.Collapsed, tabs.Visibility);
+                Assert.Equal(0, X(host), 1);
+
+                // Closing: the tabs come back from the left; the painter leaves to the right and only then the window.
+                studio.AnswerUnsaved = () => MessageBoxResult.No;
+                Assert.True(studio.TryClose());
+                Assert.Equal(Visibility.Visible, tabs.Visibility);
+                Assert.Same(studio, host.Content);   // still there, on its way out
+                double tabsFrom = 0, studioTo = 0;
+                until = DateTime.UtcNow + TimeSpan.FromMilliseconds(500);
+                while (DateTime.UtcNow < until)
+                {
+                    WindowHarness.Wait(TimeSpan.FromMilliseconds(8));
+                    tabsFrom = Math.Min(tabsFrom, X(tabs));
+                    if (host.IsVisible) studioTo = Math.Max(studioTo, X(host));
+                }
+                WindowHarness.Wait(TimeSpan.FromMilliseconds(1600));
+                _out.WriteLine($"closing: the tabs came from {tabsFrom:0} px, the painter went {studioTo:0} px right");
+                Assert.True(tabsFrom < -40, "the tabs did not come back from the left");
+                Assert.True(studioTo > 40, "the painter did not leave to the right");
+                Assert.Null(host.Content);
+                Assert.Equal(Visibility.Collapsed, host.Visibility);
+                Assert.Equal(0, X(tabs), 1);
+                Assert.True(tabs.IsHitTestVisible);
+            }
+            finally
+            {
+                Motion.ForTests = false;
+                Motions.SlowForTests = 1;
+                vm.Animations = was;
+            }
+        });
+    }
+
     [Fact]
     public void ThePainterOpensInTheMainWindow_TheTabsPreviewStopsWhileItsOwnDraws_AndItAllComesBack()
     {
@@ -450,6 +533,9 @@ public sealed class MaskStudioInWindowTests : IDisposable
             var tab = (JigglePreview)window.FindName("PreviewControl");
             tab.Breathing = false;
             tab.IntroNow = () => 100;
+            // Its first picture, however long that takes: on the graphics card the bust's program is compiled the
+            // first time (7 s, measured, with the empty cache every test process starts with).
+            Assert.True(WindowHarness.Until(() => tab.FramesShown > 0, TimeSpan.FromSeconds(60)), "the tab's preview never drew (" + tab.LastFault + ")");
             WindowHarness.Wait(TimeSpan.FromMilliseconds(600));
             Assert.True(tab.OverBackdrop, "the tab's preview does not draw over the backdrop");
             var tabTop = TopRow(tab);
@@ -458,6 +544,7 @@ public sealed class MaskStudioInWindowTests : IDisposable
             var preview = Descendants<JigglePreview>(studio).Single();
             preview.Breathing = false;
             preview.IntroNow = () => 100;                     // past the fade-in
+            Assert.True(WindowHarness.Until(() => preview.FramesShown > 0, TimeSpan.FromSeconds(60)), "the painter's preview never drew (" + preview.LastFault + ")");
             WindowHarness.Wait(TimeSpan.FromMilliseconds(600));
             Assert.True(preview.OverBackdrop, "the painter's preview does not draw over the backdrop");
             var top = TopRow(preview);

@@ -367,6 +367,10 @@ public sealed partial class PlacePreview : Grid
         _canvas.Children.Add(_lookImage);
         _canvas.Children.Add(_overlayImage);
         _canvas.Children.Add(_buttonLayer);
+        // The place's objects' effects (1.10.0), playing over the picture at each object.
+        _canvas.Children.Add(_effectLayer);
+        // The lights' suns (1.10.0): over the picture, never in it.
+        _canvas.Children.Add(_lightLayer);
         _canvas.Children.Add(_gizmoLayer);
 
         Canvas.SetLeft(_canvas, 0);
@@ -417,6 +421,7 @@ public sealed partial class PlacePreview : Grid
             if (!IsVisible) StopShaders();
             else if (_shaderTargets.Count > 0) SyncShaderTimer();
             SyncLook();
+            SyncParallaxFollow();
         };
 
         Refresh();
@@ -566,7 +571,7 @@ public sealed partial class PlacePreview : Grid
         _extentScale.ScaleX = _extentScale.ScaleY = s;
         // A new view: the game's look worked out for it at once, and the NPCs'
         // pictures sized for it (TrackShader) once the zoom settles.
-        _lookSame = 0;
+        LookAgain();
         ScheduleShaderResize();
     }
 
@@ -623,24 +628,19 @@ public sealed partial class PlacePreview : Grid
 
     private void OnViewMouseMove(object sender, MouseEventArgs e)
     {
-        // Drift follows the cursor whenever it is over the preview and not
-        // dragging it around; a pan is a camera move, not a look.
-        if (ParallaxPreview && !_panning && _activeHandle == GizmoHandle.None)
-            ApplyParallax(e.GetPosition(_canvas));
-
+        // The drift follows the cursor wherever it is on the screen (PlacePreview.Parallax.cs), not only here.
         if (!_panning) return;
         if (e.MiddleButton != MouseButtonState.Pressed) { EndPan(); return; }
         var now = e.GetPosition(_viewport);
         _viewPan.X = _panStartX + (now.X - _panStart.X);
         _viewPan.Y = _panStartY + (now.Y - _panStart.Y);
-        _lookSame = 0;
+        LookAgain();
     }
 
-    /// <summary>Cursor gone: settle back to the neutral, authored position
-    /// rather than freezing the scene wherever it happened to be pointing.</summary>
+    /// <summary>The cursor off the preview: nothing to do - the drift goes on following it over the rest of the
+    /// screen (1.10.0; it used to settle back here, the preview being all it was read over).</summary>
     private void OnViewMouseLeave(object sender, MouseEventArgs e)
     {
-        if (ParallaxPreview) ResetParallax();
     }
 
     private void OnViewMouseUp(object sender, MouseButtonEventArgs e)
@@ -862,10 +862,10 @@ public sealed partial class PlacePreview : Grid
         string? absBack = string.IsNullOrWhiteSpace(backPath)
             ? null : Path.Combine(root, Normalize(backPath));
 
-        _secondaryImage.Source = absBack != null && File.Exists(absBack) ? TryLoad(absBack) : null;
+        _secondaryImage.Source = absBack != null && File.Exists(absBack) ? LoadArt(absBack) : null;
         _secondaryImage.Visibility = _secondaryImage.Source != null ? Visibility.Visible : Visibility.Collapsed;
 
-        _baseImage.Source = absFront != null && File.Exists(absFront) ? TryLoad(absFront) : null;
+        _baseImage.Source = absFront != null && File.Exists(absFront) ? LoadArt(absFront) : null;
         _baseImage.Visibility = _baseImage.Source != null ? Visibility.Visible : Visibility.Collapsed;
 
         if (_baseImage.Source == null && _secondaryImage.Source == null && !objectsOnly)
@@ -888,7 +888,7 @@ public sealed partial class PlacePreview : Grid
 
         _viewport.Visibility = Visibility.Visible;
         _placeholder.Visibility = Visibility.Collapsed;
-        _lookSame = 0;
+        LookAgain();
         SyncLook();
     }
 
@@ -1142,8 +1142,36 @@ public sealed partial class PlacePreview : Grid
             self.Refresh();
     }
 
-    private void OnOverlayTreeChanged(object? sender, NotifyCollectionChangedEventArgs e) => RebuildOverlayGos();
-    private void OnOverlayItemChanged(object? sender, PropertyChangedEventArgs e) => RebuildOverlayGos();
+    private void OnOverlayTreeChanged(object? sender, NotifyCollectionChangedEventArgs e) => QueueRebuild();
+    private void OnOverlayItemChanged(object? sender, PropertyChangedEventArgs e) => QueueRebuild();
+
+    private bool _rebuildQueued;
+
+    /// <summary>
+    /// Something in the tree changed: the scene is built again once, as soon as whatever is changing it has
+    /// finished (1.10.0) - before anything is drawn and before the next mouse move is looked at. Until then every
+    /// notification rebuilt the whole scene on the spot, and one change is several: an object's X says "X" and
+    /// then "differs from the game's", so dragging one across the place rebuilt it four times for every move of
+    /// the mouse (measured: 42 ms a rebuild with the shaders on, some 170 ms a move).
+    /// </summary>
+    private void QueueRebuild()
+    {
+        if (_rebuildQueued) return;
+        _rebuildQueued = true;
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, new Action(FlushRebuild));
+    }
+
+    /// <summary>The rebuild that is waiting, now: for whatever is about to read the scene.</summary>
+    private void FlushRebuild()
+    {
+        if (_rebuildQueued) RebuildOverlayGos();
+        // Laid out before anything reads the world layer: a picture the rebuild has just put there has no size until
+        // the next layout pass, and the look took it as nothing - then, the scene's list being the same on the next
+        // tick, kept that picture. An object of the pack's own was missing from the lit preview after any change to
+        // it until something forced the look to start again (found by the tutorials' pictures, 1.10.0). Nothing to
+        // do when nothing has changed.
+        _worldLayer.UpdateLayout();
+    }
 
     /// <summary>Everything currently subscribed for tree changes, so a rebuild
     /// can cleanly re-subscribe the whole (possibly restructured) tree.</summary>
@@ -1372,7 +1400,7 @@ public sealed partial class PlacePreview : Grid
 
     private static void OnParallaxPreviewChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is PlacePreview p && !(bool)e.NewValue) p.ResetParallax();
+        if (d is PlacePreview p) p.SyncParallaxFollow();
     }
 
     /// <summary>
@@ -1599,19 +1627,46 @@ public sealed partial class PlacePreview : Grid
     /// which renders behind the base.</summary>
     private const int LevelSecondarySortingOrder = -5;
 
+    /// <summary>Where the scene's rebuilds spend their time, summed since last cleared - for the performance
+    /// tests (a rebuild is every step of a drag: the interface's thread is held for the whole of it).</summary>
+    internal sealed class RebuildTimes
+    {
+        public static readonly string[] Names = { "tree", "scene", "lights", "level", "objects", "NPCs", "layer", "shaders", "handles", "list" };
+        public readonly long[] Part = new long[Names.Length];
+        public int Count;
+        public void Clear() { Array.Clear(Part); Count = 0; }
+    }
+
+    internal RebuildTimes RebuildTime { get; } = new();
+
     private void RebuildOverlayGos()
     {
+        long mark = System.Diagnostics.Stopwatch.GetTimestamp();
+        void Mark(int part)
+        {
+            long now = System.Diagnostics.Stopwatch.GetTimestamp();
+            RebuildTime.Part[part] += now - mark;
+            mark = now;
+        }
+        RebuildTime.Count++;
+        _rebuildQueued = false;
         ResubscribeOverlayTree();
         _worldLayer.Children.Clear();
         _wetMarkers.Clear();
+        Mark(0);
 
         double minX = 0, minY = 0, maxX = CanvasWidth, maxY = CanvasHeight;
 
         string root = PackRoot ?? "";
         _scene = BuildScene();
+        Mark(1);
         // The place's own lights, from what it shows on arrival (1.9.2).
         UpdateLights();
         SyncLook();
+        DrawLightMarkers();
+        DrawEffects();
+        ScheduleStandIn();
+        Mark(2);
 
         // One ordered list of everything that lives in the level's sorting
         // layer. Ties keep the level sprites underneath the overlays, matching
@@ -1620,7 +1675,15 @@ public sealed partial class PlacePreview : Grid
         var drawables = new System.Collections.Generic.List<(int Order, int Tie, UIElement Element)>();
 
         _parallaxTargets.Clear();
+        // The level's two pictures outlive this rebuild, and are placed by Canvas.Left/Top alone: whatever transform
+        // they carry now is the last drift, never where they were made. Tracked from it, every rebuild while drifted
+        // added the drift again - switching places with Preview parallax on walked the art away from the objects
+        // (the author, 2026-11-21; PlaceParallaxFollowsTheScreenTests.SwitchingPlacesWhileDrifted...).
+        _secondaryImage.RenderTransform = Transform.Identity;
+        _baseImage.RenderTransform = Transform.Identity;
         _unlitElements.Clear();
+        _shadersBefore.Clear();
+        _shadersBefore.AddRange(_shaderTargets);
         _shaderTargets.Clear();
 
         double baseGain = ParallaxGain(LevelParallax, LevelParallaxReversed, PixelsPerUnit);
@@ -1659,6 +1722,7 @@ public sealed partial class PlacePreview : Grid
         if (!levelShaded && _baseImage.Source is WriteableBitmap && !string.IsNullOrWhiteSpace(root)
             && !string.IsNullOrWhiteSpace(BaseSprite))
             _baseImage.Source = LoadCachedBitmap(Path.Combine(root, Normalize(BaseSprite)));
+        Mark(3);
 
         if (!string.IsNullOrEmpty(root) && _placeholder.Visibility != Visibility.Visible)
         {
@@ -1742,10 +1806,12 @@ public sealed partial class PlacePreview : Grid
             }
         }
 
+        Mark(4);
         // Placed NPCs (pose + shadow + particle marker) go into the same sorted
         // world layer, so their sorting orders interleave with the level art and
         // overlays exactly as at runtime.
         CollectNpcDrawables(root, drawables, ref minX, ref minY, ref maxX, ref maxY);
+        Mark(5);
 
         // Stable sort: equal orders keep authored sequence, which is what the
         // runtime does for two overlays built back-to-back at the same order.
@@ -1753,10 +1819,15 @@ public sealed partial class PlacePreview : Grid
             _worldLayer.Children.Add(d.Element);
 
         UpdateWetTimer();
+        Mark(6);
+        AdoptCardPasses();
         SyncShaderTimer();
+        Mark(7);
         RefreshGizmo();
+        Mark(8);
         // The object set only changes on structural rebuilds, not per drag frame.
         if (_activeHandle == GizmoHandle.None) RefreshObjectMenu();
+        Mark(9);
 
         // The canvas stays at the origin. It used to be shifted by the content's
         // negative overhang so a scroll extent could cover it, with the scroll
@@ -1985,14 +2056,50 @@ public sealed partial class PlacePreview : Grid
         public Rendering.Gpu.GpuAlone? Card;
         /// <summary>A level layer's pass on the graphics card, made on first use there.</summary>
         public Rendering.Gpu.GpuMilking? Milk;
+        /// <summary>Its picture where the card's own drawing of the scene reads it (1.10.0).</summary>
+        public Rendering.Gpu.PlaceCardPicture? OnCard;
         public (float r, float g, float b, float a) Tint;
         public WriteableBitmap Bitmap = null!;
         /// <summary>An NPC's canvas units per pixel of its art, each way: what its
         /// picture is sized from, at the view's scale (1.9.1).</summary>
         public double CanvasPerArtX, CanvasPerArtY;
+        /// <summary>What it was made from (1.10.0): the art's picture, the mask's file as it was on disk (or
+        /// "live" for one being painted), the tint as written. A rebuild that finds a shader over the same three
+        /// keeps it - its buffers, its picture, its pass on the card - rather than making it again.</summary>
+        public BitmapSource? BaseSource;
+        public string MaskKey = "", TintKey = "";
+        /// <summary>Its picture has been drawn at least once: there is something in its bitmap to show.</summary>
+        public bool Shown;
     }
 
     private readonly List<ShaderTarget> _shaderTargets = new();
+    /// <summary>The shaders of the scene being replaced, while it is rebuilt: what the new scene's may take over.</summary>
+    private readonly List<ShaderTarget> _shadersBefore = new();
+
+    /// <summary>A file as it is on disk now - its path, when it was written, its size - or "" when it is not there.</summary>
+    private static string FileKey(string abs)
+    {
+        try
+        {
+            var info = new FileInfo(abs);
+            return info.Exists ? abs + "|" + info.LastWriteTimeUtc.Ticks + "|" + info.Length : "";
+        }
+        catch (Exception) { return ""; }
+    }
+
+    /// <summary>One of the shaders of the scene being replaced that <paramref name="fits"/>, taken out of the
+    /// list so no other takes it; null for none.</summary>
+    private ShaderTarget? TakeBefore(Func<ShaderTarget, bool> fits)
+    {
+        for (int i = 0; i < _shadersBefore.Count; i++)
+        {
+            var t = _shadersBefore[i];
+            if (!fits(t)) continue;
+            _shadersBefore.RemoveAt(i);
+            return t;
+        }
+        return null;
+    }
     private readonly System.Diagnostics.Stopwatch _shaderClock = new();
 
     // The shaders' clock (1.9.1): the display's own frames, as the bust
@@ -2016,11 +2123,45 @@ public sealed partial class PlacePreview : Grid
     /// </summary>
     private bool TrackShader(Image img, string poseAbs, string maskAbs, JiggleParams p, Matrix toCanvas)
     {
-        var basePx = LoadBgraAtNative(poseAbs, out int w, out int h);
+        var baseSource = LoadCachedBitmap(poseAbs);
+        string maskKey = FileKey(maskAbs);
+        if (baseSource == null || maskKey.Length == 0) return false;
+        string tintKey = p.Tint ?? "";
+        double perArtX = Math.Sqrt(toCanvas.M11 * toCanvas.M11 + toCanvas.M12 * toCanvas.M12);
+        double perArtY = Math.Sqrt(toCanvas.M21 * toCanvas.M21 + toCanvas.M22 * toCanvas.M22);
+
+        // The shader this NPC had before the rebuild, when nothing it reads has changed (1.10.0): kept whole.
+        // Every step of a drag rebuilds the scene, and each rebuild read the mask's file again, copied the
+        // art's pixels and made new buffers and a new picture for every NPC.
+        var kept = TakeBefore(t => t.Params != null && ReferenceEquals(t.Params, p) && ReferenceEquals(t.BaseSource, baseSource)
+                                   && t.MaskKey == maskKey && t.TintKey == tintKey);
+        if (kept != null)
+        {
+            double wasX = kept.CanvasPerArtX, wasY = kept.CanvasPerArtY;
+            kept.CanvasPerArtX = perArtX; kept.CanvasPerArtY = perArtY;
+            var (nw, nh) = NpcPictureSize(kept);
+            bool sized = Math.Abs(nw - kept.OutW) > Math.Max(2, kept.OutW / 8) || Math.Abs(nh - kept.OutH) > Math.Max(2, kept.OutH / 8);
+            // New buffers only while nothing is drawing into the old ones.
+            if (!sized || (!_shaderInFlight && !_lookInFlight))
+            {
+                kept.Image = img;
+                if (sized) SizeNpcPicture(kept, nw, nh);
+                else img.Source = kept.Bitmap;
+                _shaderTargets.Add(kept);
+                return true;
+            }
+            kept.CanvasPerArtX = wasX; kept.CanvasPerArtY = wasY;
+            _shadersBefore.Add(kept);      // its art and mask are still taken over below
+        }
+
+        // The art's pixels and the mask from a shader of the scene before over the same files, else read now.
+        var same = _shadersBefore.Find(t => t.Params != null && ReferenceEquals(t.BaseSource, baseSource));
+        int w = baseSource.PixelWidth, h = baseSource.PixelHeight;
+        var basePx = same?.Base ?? CopyBgra(baseSource, w, h);
         if (basePx == null || w <= 0 || h <= 0) return false;
         // The mask has to land on the pose's grid: the CPU port samples both
         // from one array shape, where the GPU would resample in UV space.
-        var maskPx = LoadBgraScaled(maskAbs, w, h);
+        var maskPx = same != null && same.MaskKey == maskKey ? same.Mask : LoadBgraScaled(maskAbs, w, h);
         if (maskPx == null) return false;
 
         var (tr, tg, tb, ta) = BustComposer.ParseTint(p.Tint);
@@ -2028,8 +2169,8 @@ public sealed partial class PlacePreview : Grid
         {
             Image = img, Base = basePx, Mask = maskPx, SrcW = w, SrcH = h,
             Params = p, Tint = (tr, tg, tb, ta),
-            CanvasPerArtX = Math.Sqrt(toCanvas.M11 * toCanvas.M11 + toCanvas.M12 * toCanvas.M12),
-            CanvasPerArtY = Math.Sqrt(toCanvas.M21 * toCanvas.M21 + toCanvas.M22 * toCanvas.M22),
+            CanvasPerArtX = perArtX, CanvasPerArtY = perArtY,
+            BaseSource = baseSource, MaskKey = maskKey, TintKey = tintKey,
         };
         var (outW, outH) = NpcPictureSize(target);
         SizeNpcPicture(target, outW, outH);
@@ -2059,6 +2200,7 @@ public sealed partial class PlacePreview : Grid
         t.Output = new byte[w * 4 * h];
         t.Bitmap = new WriteableBitmap(w, h, 96, 96, PixelFormats.Pbgra32, null);
         t.Image.Source = t.Bitmap;
+        t.Shown = false;
     }
 
     private System.Windows.Threading.DispatcherTimer? _shaderResize;
@@ -2100,8 +2242,29 @@ public sealed partial class PlacePreview : Grid
     /// </summary>
     private bool TrackLevelShader(Image img, string baseAbs, string maskAbs, byte[]? liveMask)
     {
-        var basePx = LoadBgraAtNative(baseAbs, out int w, out int h);
-        if (basePx == null || w <= 0 || h <= 0) return false;
+        var baseSource = LoadCachedBitmap(baseAbs);
+        if (baseSource == null) return false;
+        int w = baseSource.PixelWidth, h = baseSource.PixelHeight;
+        if (w <= 0 || h <= 0) return false;
+        bool live = liveMask != null && liveMask.Length == Rendering.MaskBuffer.Size * Rendering.MaskBuffer.Size * 4;
+        string maskKey = live ? "live" : FileKey(maskAbs);   // English on purpose: a key, never shown
+        if (maskKey.Length == 0) return false;
+
+        // The layer's shader as it was before the rebuild, when nothing it reads has changed (1.10.0): kept
+        // whole - its buffers, its picture (which goes on showing the last frame drawn), its pass on the card.
+        // Every step of a drag rebuilds the scene, and each rebuild copied the art's nine megabytes, read the
+        // mask's file again and made a new picture of the art's size for each layer.
+        var kept = TakeBefore(t => t.Params == null && ReferenceEquals(t.Image, img) && ReferenceEquals(t.BaseSource, baseSource)
+                                   && t.MaskKey == maskKey && (!live || ReferenceEquals(t.Mask, liveMask)));
+        if (kept != null)
+        {
+            img.Source = kept.Bitmap;
+            _shaderTargets.Add(kept);
+            return true;
+        }
+        var same = _shadersBefore.Find(t => t.Params == null && ReferenceEquals(t.BaseSource, baseSource));
+        var basePx = same?.Base ?? CopyBgra(baseSource, w, h);
+        if (basePx == null) return false;
 
         // A mask being painted right now wins over the one on disk, and is used
         // AT ITS OWN SIZE — the pass samples in UV space, so the editor's square
@@ -2110,10 +2273,14 @@ public sealed partial class PlacePreview : Grid
         // so the running loop shows each one without being told.
         int maskW, maskH;
         byte[]? maskPx;
-        if (liveMask != null && liveMask.Length == Rendering.MaskBuffer.Size * Rendering.MaskBuffer.Size * 4)
+        if (live)
         {
             maskPx = liveMask;
             maskW = maskH = Rendering.MaskBuffer.Size;
+        }
+        else if (same != null && same.MaskKey == maskKey && !same.LiveMask)
+        {
+            maskPx = same.Mask; maskW = same.MaskW; maskH = same.MaskH;
         }
         else
         {
@@ -2141,8 +2308,54 @@ public sealed partial class PlacePreview : Grid
             MaskW = maskW, MaskH = maskH, LiveMask = liveMask != null,
             OutW = outW, OutH = outH, Output = new byte[outW * 4 * outH],
             Params = null, Milking = MilkingShader.Settings.Level, Bitmap = bmp,
+            BaseSource = baseSource, MaskKey = maskKey,
         });
         return true;
+    }
+
+    private readonly List<(IDisposable Pass, long At)> _retiredPasses = new();
+
+    /// <summary>
+    /// The shaders' passes on the card handed on from the scene before to the one just built (1.10.0). Every
+    /// rebuild - one for each step of a drag - makes its shaders anew, and each made itself a new pass on the card
+    /// on first use: its art sent to the card again (nine megabytes for a level's), and the old pass never let
+    /// go of (a picture on the card is only freed when told to be). Here a shader over the same art takes the
+    /// old one's pass, art and all; a pass nothing took is let go of a little later, once no draw still under way
+    /// can be reading it.
+    /// </summary>
+    private void AdoptCardPasses()
+    {
+        long now = System.Diagnostics.Stopwatch.GetTimestamp();
+        var before = _shadersBefore.ToArray();     // those the new scene did not keep whole
+        _shadersBefore.Clear();
+        foreach (var old in before)
+        {
+            if (old.Card == null && old.Milk == null) continue;
+            ShaderTarget? heir = null;
+            foreach (var s in _shaderTargets)
+                if (ReferenceEquals(s.Base, old.Base) && (s.Params != null) == (old.Params != null) && s.Card == null && s.Milk == null)
+                {
+                    heir = s;
+                    break;
+                }
+            if (heir != null) { heir.Card = old.Card; heir.Milk = old.Milk; }
+            else
+            {
+                if (old.Card != null) _retiredPasses.Add((old.Card, now));
+                if (old.Milk != null) _retiredPasses.Add((old.Milk, now));
+            }
+        }
+        if (_retiredPasses.Count == 0) return;
+        long grace = System.Diagnostics.Stopwatch.Frequency * 2;
+        List<IDisposable>? gone = null;
+        for (int i = _retiredPasses.Count - 1; i >= 0; i--)
+        {
+            if (now - _retiredPasses[i].At < grace) continue;
+            (gone ??= new()).Add(_retiredPasses[i].Pass);
+            _retiredPasses.RemoveAt(i);
+        }
+        // Off the interface's thread: letting go waits for the card.
+        if (gone != null) System.Threading.Tasks.Task.Run(() => { foreach (var pass in gone) pass.Dispose(); });
     }
 
     /// <summary>Start or stop the animation loop to match what was just built.</summary>
@@ -2166,7 +2379,22 @@ public sealed partial class PlacePreview : Grid
         }
         _shaderPacer.Restart();
         _shaderPacer.Due(Rendering.DisplayRefresh.RateOf(this));
-        StepShaders();          // draw once now rather than on the next frame
+        // A shader with no picture yet is drawn once now rather than on the next frame - not one kept from the
+        // scene before (its picture shows its last frame), and none while the card draws the scene for the look
+        // over it (it draws them with it).
+        if (_cardLookCovers || _shaderInFlight) return;
+        bool any = false;
+        float t = (float)_shaderClock.Elapsed.TotalSeconds;
+        bool useCard = Services.PreviewRendererManager.UseCard;
+        var sampling = Services.PreviewQualityManager.Current.Sampling;
+        foreach (var target in _shaderTargets)
+        {
+            if (target.Shown) continue;
+            Draw(target, t, useCard, sampling);
+            Show(target);
+            any = true;
+        }
+        if (any) ShaderSteps++;
     }
 
     /// <summary>The shaders' clock off: off screen, or nothing to animate.</summary>
@@ -2181,6 +2409,9 @@ public sealed partial class PlacePreview : Grid
     /// interface's thread, when the pacer says so and the last pass is in.</summary>
     private void OnShaderFrame(object? sender, EventArgs e)
     {
+        // While the card draws the scene for the look over it, it draws the shaders' pictures with it and keeps
+        // them (1.10.0): nothing to bring back or put on screen here.
+        if (_cardLookCovers) return;
         if (_shaderInFlight || !IsVisible || _shaderTargets.Count == 0) return;
         if (!_shaderPacer.Due(Rendering.DisplayRefresh.RateOf(this))) return;
         var targets = _shaderTargets.ToArray();
@@ -2223,21 +2454,25 @@ public sealed partial class PlacePreview : Grid
     /// NPC tab's with no backdrop), a level layer's at its art's own grid.</summary>
     private static void Draw(ShaderTarget s, float t, bool useCard, JiggleShader.Sampling sampling)
     {
+        // An NPC's mask is the pack's file, and a level's unless it is being painted: sent to the card once (1.10.0).
         var card = s.Params != null && useCard ? (s.Card ??= Rendering.Gpu.GpuAlone.TryCreate()) : null;
         if (card != null)
-            card.Draw(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params!, s.Tint, t, s.Output, s.OutW, s.OutH, sampling);
+            card.Draw(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params!, s.Tint, t, s.Output, s.OutW, s.OutH, sampling, maskStill: true);
         else if (s.Params != null)
             JiggleShader.Render(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params, s.Tint, t,
                                 s.Output, s.OutW, s.OutH, sampling);
         else if (useCard && (s.Milk ??= Rendering.Gpu.GpuMilking.TryCreate()) is { } milk)
-            milk.Draw(s.Base, s.SrcW, s.SrcH, s.Mask, s.MaskW, s.MaskH, s.Milking, t, s.Output, s.OutW, s.OutH);
+            milk.Draw(s.Base, s.SrcW, s.SrcH, s.Mask, s.MaskW, s.MaskH, s.Milking, t, s.Output, s.OutW, s.OutH, maskStill: !s.LiveMask);
         else
             MilkingShader.Render(s.Base, s.SrcW, s.SrcH, s.Mask, s.MaskW, s.MaskH,
                                  s.Milking, t, s.Output, s.OutW, s.OutH);
     }
 
     private static void Show(ShaderTarget s)
-        => s.Bitmap.WritePixels(new Int32Rect(0, 0, s.OutW, s.OutH), s.Output, s.OutW * 4, 0);
+    {
+        s.Bitmap.WritePixels(new Int32Rect(0, 0, s.OutW, s.OutH), s.Output, s.OutW * 4, 0);
+        s.Shown = true;
+    }
 
     /// <summary>Register an element to drift, unless it has no reason to.</summary>
     private void TrackParallax(UIElement element, double gain)
@@ -2245,6 +2480,14 @@ public sealed partial class PlacePreview : Grid
         if (Math.Abs(gain) < 1e-6) return;
         var m = (element.RenderTransform as MatrixTransform)?.Matrix ?? Matrix.Identity;
         _parallaxTargets.Add((element, m, gain));
+        // Built again while the place is drifted: drifted from the start, not shown where it was made until
+        // the cursor next moves.
+        if (Drift is { } drift)
+        {
+            var drifted = m;
+            drifted.Translate(gain * drift.Across, gain * drift.Down * 0.5);
+            element.RenderTransform = new MatrixTransform(drifted);
+        }
     }
 
     /// <summary>
@@ -2284,7 +2527,7 @@ public sealed partial class PlacePreview : Grid
     private List<SceneEntry> BuildScene()
     {
         var entries = new List<SceneEntry>();
-        WalkScene(GameObjects, "", 0, Aff.Identity, false, false, new List<bool>(), entries);
+        WalkScene(GameObjects, "", 0, Aff.Identity, false, false, new List<bool>(), entries, worldToLevel: WorldToLevel);
         ApplyHiddenFlags(entries);
         ApplyParallaxGains(entries);
         return entries;
@@ -2391,11 +2634,29 @@ public sealed partial class PlacePreview : Grid
         => node.Components.Any(c => c.Type == "RandomChildActivator")
            || (node.Baseline?.Components?.Contains("RandomChildActivator") ?? false);
 
+    /// <summary>
+    /// The game's world in the level's own units (under its root, which the canvas draws through
+    /// <see cref="WorldPpu"/>): an object the pack makes stands at its X and Y in the WORLD (the plugin sets
+    /// <c>transform.position</c>), while its size is the level root's child's. Measured in the game (1.10.0,
+    /// InGameSuiteTests.S11 and the light objects' places): before, the preview put such an object at X and Y
+    /// in the level's units - 0.79 of the way out from the middle - while its own handle and the game had it
+    /// at X and Y in the world.
+    /// </summary>
+    private Aff WorldToLevel
+    {
+        get
+        {
+            double s = LevelScale > 0 ? LevelScale : 1.0;
+            return new Aff(1 / s, 0, 0, 1 / s, -LevelPositionX / s, -LevelPositionY / s);
+        }
+    }
+
     private static void WalkScene(IEnumerable? items, string prefix, int depth,
                                   Aff parentWorld, bool inNpcSubtree, bool parentInactive,
                                   List<bool> ancestorHasMore, List<SceneEntry> into, bool parentConditional = false,
-                                  string? parentChoice = null, bool parentPicks = false)
+                                  string? parentChoice = null, bool parentPicks = false, Aff? worldToLevel = null)
     {
+        var toLevel = worldToLevel ?? Aff.Identity;
         if (items == null) return;
         // Materialised so each row knows whether it is its parent's last child —
         // which is what tells an elbow from a tee, and a tee is the only thing
@@ -2417,8 +2678,13 @@ public sealed partial class PlacePreview : Grid
             bool composed = inNpcSubtree || o.IsNpcRoot || o.Bind || o.IsCopy;
 
             Aff local = NodeAff(o);
-            Aff world = composed ? parentWorld.Then(local) : local;
-            Aff frameParent = composed ? parentWorld : Aff.Identity;
+            // A pack's own object stands at its X and Y in the world, sized as a child of the level's root:
+            // its place taken into the level's units, its turn and size left as they are (see WorldToLevel).
+            Aff world = composed ? parentWorld.Then(local)
+                      : new Aff(local.A, local.B, local.C, local.D,
+                                toLevel.A * local.Tx + toLevel.C * local.Ty + toLevel.Tx,
+                                toLevel.B * local.Tx + toLevel.D * local.Ty + toLevel.Ty);
+            Aff frameParent = composed ? parentWorld : toLevel;
             bool npc = composed;
 
             bool conditional = parentConditional || o.Model.ActiveConditions.Count > 0;
@@ -2460,12 +2726,13 @@ public sealed partial class PlacePreview : Grid
                 ancestorHasMore.Add(!npcLast);
                 WalkScene(pl.Children, npcPath, depth + 2,
                           world.Then(LeafAff(pl.Body)), true,
-                          childrenInactive || !pl.StartActive, ancestorHasMore, into, npcConditional, npcChoice);
+                          childrenInactive || !pl.StartActive, ancestorHasMore, into, npcConditional, npcChoice,
+                          worldToLevel: toLevel);
                 ancestorHasMore.RemoveAt(ancestorHasMore.Count - 1);
             }
 
             WalkScene(o.Children, path, depth + 1, world, npc, childrenInactive,
-                      ancestorHasMore, into, conditional, choice, picks);
+                      ancestorHasMore, into, conditional, choice, picks, toLevel);
             ancestorHasMore.RemoveAt(ancestorHasMore.Count - 1);
         }
     }
@@ -2881,7 +3148,7 @@ public sealed partial class PlacePreview : Grid
             if (it is NpcViewModel n) n.PropertyChanged -= OnNpcItemChanged;
     }
 
-    private void OnNpcItemChanged(object? sender, PropertyChangedEventArgs e) => RebuildOverlayGos();
+    private void OnNpcItemChanged(object? sender, PropertyChangedEventArgs e) => QueueRebuild();
 
     // ══ Transform gizmo ═════════════════════════════════════════════════
     //
@@ -2907,9 +3174,10 @@ public sealed partial class PlacePreview : Grid
         remove => RemoveHandler(EditCommittedEvent, value);
     }
 
-    private enum GizmoMode { Move, Rotate, Scale }
-    private enum GizmoPart { Body, Shadow, Blink, Wet, Reflection }
-    private enum GizmoHandle { None, MoveX, MoveY, MoveFree, RotZ, RotX, RotY, ScaleX, ScaleY, ScaleUniform }
+    internal enum GizmoMode { Move, Rotate, Scale }
+    internal enum GizmoPart { Body, Shadow, Blink, Wet, Reflection }
+    internal enum GizmoHandle { None, MoveX, MoveY, MoveFree, RotZ, RotX, RotY, ScaleX, ScaleY, ScaleUniform,
+                                LightOuter, LightInner, LightOuterAngle, LightInnerAngle, LightPoint }
 
     /// <summary>One editable transform, abstracted so the gizmo drives NPC parts
     /// and overlays through the same handles. Channels are LOCAL (parent-space).</summary>
@@ -3063,6 +3331,24 @@ public sealed partial class PlacePreview : Grid
 
     // ── Selection ───────────────────────────────────────────────────────
 
+    /// <summary>
+    /// Pick an object, or a character standing in the place, as a click on it in the picture or on its row
+    /// picks it: the row and where it is in the tree, handed to the same method. False when it is not in the
+    /// place. (For tests: the mouse has no place on the desktop they run on.)
+    /// </summary>
+    internal bool Pick(object row)
+    {
+        foreach (var entry in BuildScene())
+        {
+            if (entry.Node != null && ReferenceEquals(entry.Node, row)) { SelectNode(entry.Node, entry.Path); return true; }
+            if (entry.Npc != null && ReferenceEquals(entry.Npc, row)) { SelectPlacement(entry.Npc, entry.Path); return true; }
+        }
+        return false;
+    }
+
+    /// <summary>Whether something is picked and has handles to drag.</summary>
+    internal bool HasHandles => _gizmoTarget != null;
+
     private void SelectPlacement(NpcPlacementViewModel pl, string path)
     {
         _selPlacement = pl;
@@ -3076,6 +3362,16 @@ public sealed partial class PlacePreview : Grid
     /// <summary>Select a GameObject node (sprite object, container, or the forced
     /// NPCs root) — all three edit through the same Move / Rotate / Scale
     /// handles, in whatever frame their parent chain resolves to.</summary>
+    /// <summary>Pick an object of the scene, as a click on it does (a tutorial step, 1.10.0). False when the
+    /// object is not in this preview's scene.</summary>
+    internal bool PickNode(GameObjectViewModel o)
+    {
+        FlushRebuild();
+        foreach (var e in _scene)
+            if (ReferenceEquals(e.Node, o)) { SelectNode(o, e.Path); return true; }
+        return false;
+    }
+
     private void SelectNode(GameObjectViewModel o, string path)
     {
         _selNode = o;
@@ -3169,15 +3465,19 @@ public sealed partial class PlacePreview : Grid
             .FirstOrDefault(n => n.Key == pl.Npc);
     }
 
+    /// <summary>The handles' frame: a parent's transform (in the level's units) on the canvas, through
+    /// <see cref="WorldPpu"/> as everything is drawn (1.10.0: through the camera's 100 px a unit before, so an
+    /// object's handle sat 1/0.79 as far from the middle as the object it moves, and a drag ran ahead of it).</summary>
     private GizmoFrame FrameFromParent(in Aff p) => new(
-        new Point(WorldOriginX + p.Tx * PixelsPerUnit, WorldOriginY - p.Ty * PixelsPerUnit),
-        new Vector(p.A * PixelsPerUnit, -p.B * PixelsPerUnit),
-        new Vector(p.C * PixelsPerUnit, -p.D * PixelsPerUnit));
+        new Point(WorldOriginX + p.Tx * WorldPpu, WorldOriginY - p.Ty * WorldPpu),
+        new Vector(p.A * WorldPpu, -p.B * WorldPpu),
+        new Vector(p.C * WorldPpu, -p.D * WorldPpu));
 
     private bool _deselectScheduled;
 
     private void RefreshGizmo()
     {
+        FlushRebuild();
         // Toolbar first. Which chips apply can change without the selection
         // changing - switching an NPC's reflection off is the case that matters,
         // and its chip would otherwise sit there until something else was
@@ -3185,8 +3485,18 @@ public sealed partial class PlacePreview : Grid
         UpdateGizmoToolbar();
 
         bool hasSelection = _selPlacement != null || _selNode != null;
+        var nodeWas = _selNode;
+        var placementWas = _selPlacement;
         if (hasSelection && TryResolveSelection(out var target, out var frame))
         {
+            // The place's views were made again (an undo, a redo) and the picked object is the new one at the
+            // same place in the tree: what is beside the picture shows the new one too (1.10.0). It was left on
+            // the object that had been replaced - the light's panel most of all: after every undo its sliders
+            // showed the light as it was before the undo, and moving one changed a light that was no longer the
+            // place's.
+            if (!ReferenceEquals(nodeWas, _selNode) || !ReferenceEquals(placementWas, _selPlacement)
+                || !ReferenceEquals(_lightPanel.DataContext, _selPlacement == null ? _selNode?.Light : null))
+                UpdateGizmoToolbar();
             _gizmoTarget = target;
             _gizmoFrame = frame;
             DrawGizmo();
@@ -3268,6 +3578,9 @@ public sealed partial class PlacePreview : Grid
                 AddSquare(o, GUniform, GizmoHandle.MoveFree, GizmoSquare + 4);
                 break;
         }
+
+        // The picked object's light (1.10.0), over its other handles.
+        DrawLightHandles();
     }
 
     private void AddArrow(Point o, Vector u, Brush col, GizmoHandle h)
@@ -3336,6 +3649,10 @@ public sealed partial class PlacePreview : Grid
 
     // ── Interaction ─────────────────────────────────────────────────────
 
+    // The mouse's three moments - a handle taken, dragged, let go - are each a method of their own that the
+    // mouse's handler calls with where the pointer is (1.10.0): a test drags a handle through the very same
+    // code, with a place of its own for the pointer. (The desktop tests run on has no mouse.)
+
     private void StartHandle(GizmoHandle h, MouseButtonEventArgs e)
     {
         if (_gizmoTarget == null) return;
@@ -3343,22 +3660,37 @@ public sealed partial class PlacePreview : Grid
         // that was mid-edit, and means the post-drag Ctrl+Z reaches the app
         // rather than a still-focused text box's own undo.
         Focus();
+        BeginHandle(h, e.GetPosition(_canvas));
+        _gizmoLayer.CaptureMouse();
+        e.Handled = true;
+    }
+
+    /// <summary>A handle taken, the pointer at <paramref name="at"/> in the picture's own units.</summary>
+    internal void BeginHandle(GizmoHandle h, Point at)
+    {
+        if (_gizmoTarget == null) return;
         _activeHandle = h;
-        _dragStartMouse = e.GetPosition(_canvas);
+        _dragStartMouse = at;
         _dragOrigin = _gizmoFrame.OriginFor(_gizmoTarget.X, _gizmoTarget.Y);
         _dragUx = _gizmoFrame.Ux; _dragUy = _gizmoFrame.Uy;
         _startX = _gizmoTarget.X; _startY = _gizmoTarget.Y;
         _startRotZ = _gizmoTarget.RotZ; _startRotX = _gizmoTarget.RotX; _startRotY = _gizmoTarget.RotY;
         _startScaleX = _gizmoTarget.ScaleX; _startScaleY = _gizmoTarget.ScaleY;
-        _gizmoLayer.CaptureMouse();
-        e.Handled = true;
+        if (IsLightHandle(h)) StartLightHandle();
     }
 
     private void OnGizmoMouseMove(object? sender, MouseEventArgs e)
     {
         if (_activeHandle == GizmoHandle.None || _gizmoTarget == null) return;
+        DragHandleTo(e.GetPosition(_canvas));
+        e.Handled = true;
+    }
+
+    /// <summary>The handle that is held, dragged to <paramref name="p"/>.</summary>
+    internal void DragHandleTo(Point p)
+    {
+        if (_activeHandle == GizmoHandle.None || _gizmoTarget == null) return;
         var t = _gizmoTarget;
-        Point p = e.GetPosition(_canvas);
         Vector dm = p - _dragStartMouse;
 
         switch (_activeHandle)
@@ -3380,16 +3712,25 @@ public sealed partial class PlacePreview : Grid
                 double f = UniformScaleFactor(_dragStartMouse, p, _dragUx, _dragUy);
                 t.ScaleX = _startScaleX * f; t.ScaleY = _startScaleY * f;
                 break;
+            default:
+                if (IsLightHandle(_activeHandle)) DragLightHandle(p);
+                break;
         }
-        e.Handled = true;
     }
 
     private void OnGizmoMouseUp(object? sender, MouseButtonEventArgs e)
     {
         if (_activeHandle == GizmoHandle.None) return;
-        _activeHandle = GizmoHandle.None;
         _gizmoLayer.ReleaseMouseCapture();
         e.Handled = true;
+        EndHandle();
+    }
+
+    /// <summary>The handle let go: the drag is one undo step.</summary>
+    internal void EndHandle()
+    {
+        if (_activeHandle == GizmoHandle.None) return;
+        _activeHandle = GizmoHandle.None;
         // Rebuild so the Wet droplets (suppressed mid-drag) come back.
         RebuildOverlayGos();
         // One undo step per completed drag.
@@ -3478,6 +3819,8 @@ public sealed partial class PlacePreview : Grid
         _gizmoBody.Children.Add(_gizmoTitle);
         _gizmoBody.Children.Add(_partRow);
         _gizmoBody.Children.Add(_modeRow);
+        _gizmoBody.Children.Add(BuildLightPanel());
+        _gizmoBody.Children.Add(BuildEffectPanel());
         _gizmoBody.Children.Add(close);
 
         // Said while nothing is picked, so the panel beside the picture is
@@ -3486,6 +3829,8 @@ public sealed partial class PlacePreview : Grid
         LocText.Bind(_gizmoHint, TextBlock.TextProperty, "preview.place.selectHint");
 
         var stack = new StackPanel();
+        // A character standing in the place (1.10.0): chosen here, whatever is picked.
+        stack.Children.Add(BuildStandInRow());
         stack.Children.Add(_gizmoHint);
         stack.Children.Add(_gizmoBody);
 
@@ -3537,14 +3882,14 @@ public sealed partial class PlacePreview : Grid
         return b;
     }
 
-    private void SetPart(GizmoPart part)
+    internal void SetPart(GizmoPart part)
     {
         _selPart = part;
         UpdateGizmoToolbar();
         RefreshGizmo();
     }
 
-    private void SetMode(GizmoMode mode)
+    internal void SetMode(GizmoMode mode)
     {
         if (_gizmoTarget != null && ((mode == GizmoMode.Rotate && !_gizmoTarget.CanRotate)
                                   || (mode == GizmoMode.Scale && !_gizmoTarget.CanScale)))
@@ -3567,6 +3912,8 @@ public sealed partial class PlacePreview : Grid
         bool picked = _selPlacement != null || _selNode != null;
         _gizmoHint.Visibility = picked ? Visibility.Collapsed : Visibility.Visible;
         _gizmoBody.Visibility = picked ? Visibility.Visible : Visibility.Collapsed;
+        UpdateLightPanel();
+        UpdateEffectPanel();
         if (!picked) return;
 
         bool isNpc = _selPlacement != null;
@@ -3633,7 +3980,7 @@ public sealed partial class PlacePreview : Grid
             Margin = new Thickness(0, 0, 6, 0),
             VerticalAlignment = VerticalAlignment.Stretch,
             Visibility = Visibility.Collapsed,
-            Child = new ScrollViewer
+            Child = _objectMenuScroll = new ScrollViewer
             {
                 VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
@@ -3643,11 +3990,15 @@ public sealed partial class PlacePreview : Grid
         RefreshObjectMenu();
     }
 
+    /// <summary>The list's own scroller: the row of + buttons wraps at what it shows (see AddLightButton).</summary>
+    private ScrollViewer? _objectMenuScroll;
+
     /// <summary>Rebuild the left-side hierarchy: every GameObject and NPC in the
     /// place, in tree order and indented by depth, highlighting the current gizmo
     /// selection. Clicking a row selects that object.</summary>
     private void RefreshObjectMenu()
     {
+        FlushRebuild();
         _objectMenuList.Children.Clear();
 
         var scene = _scene.Count > 0 ? _scene : BuildScene();
@@ -3661,6 +4012,7 @@ public sealed partial class PlacePreview : Grid
             Text = Loc.T("preview.place.hierarchy"), FontWeight = FontWeights.Bold, FontSize = 11, Foreground = Brushes.White,
             Margin = new Thickness(2, 0, 0, 3),
         });
+        if (AddLightButton() is { } addLight) _objectMenuList.Children.Add(addLight);
 
         // The scene list is already in tree order, so a row has children exactly
         // when the next one is deeper, and a collapsed row's subtree is every
@@ -3699,8 +4051,9 @@ public sealed partial class PlacePreview : Grid
 
             if (entry.Node is GameObjectViewModel node)
             {
-                // ◈ the forced NPCs root, ▦ a sprite object, ⌗ a bare container.
-                string icon = node.IsNpcRoot ? "◈" : (string.IsNullOrWhiteSpace(node.Sprite) ? "⌗" : "▦");
+                // ◈ the forced NPCs root, ▦ a sprite object, ☼ a light, ✦ an effect (1.10.0), ⌗ a bare container.
+                string icon = node.IsNpcRoot ? "◈" : !string.IsNullOrWhiteSpace(node.Sprite) ? "▦"
+                            : node.HasLight || node.LightRemoved ? "☼" : node.HasEffect ? "✦" : "⌗";
                 var n = node; var p = entry.Path;
                 _objectMenuList.Children.Add(MenuRow(
                     icon + "  " + node.Display, entry,
@@ -3742,6 +4095,20 @@ public sealed partial class PlacePreview : Grid
     /// line up column to column in a fixed-width font, and the labels stay in
     /// the UI font where they belong.
     /// </summary>
+    // What every row shares, made once (1.10.0): a font and three inks were made anew for every row of every
+    // rebuild, and setting them was most of a rebuild's time (the Places tab's first visit, UiDelayTests).
+    private static readonly FontFamily RowMono = new("Consolas, Courier New, monospace");   // English on purpose: fonts' names.
+    private static readonly SolidColorBrush RowInk = Frozen(Color.FromArgb(0xE6, 0xB0, 0xB6, 0xBE));
+    private static readonly SolidColorBrush RowHiddenByParentInk = Frozen(Color.FromArgb(0x66, 0xB0, 0xB6, 0xBE));
+    private static readonly SolidColorBrush RowHiddenInk = Frozen(Color.FromArgb(0x77, 0xB0, 0xB6, 0xBE));
+
+    private static SolidColorBrush Frozen(Color c)
+    {
+        var b = new SolidColorBrush(c);
+        b.Freeze();
+        return b;
+    }
+
     private Button MenuRow(string text, SceneEntry entry, bool selected, System.Action onClick,
                            bool collapsed = false, System.Action? onToggle = null,
                            System.Action? onHide = null)
@@ -3756,11 +4123,11 @@ public sealed partial class PlacePreview : Grid
             row.Children.Add(new TextBlock
             {
                 Text = guides.ToString(),
-                FontFamily = new FontFamily("Consolas, Courier New, monospace"),
+                FontFamily = RowMono,
                 // Dimmer than the labels: structure should be readable without
                 // competing with the names for attention. 90%, not the 60% it
                 // was: on the panel's dark grey that measured 2.97:1 (1.8.0).
-                Foreground = new SolidColorBrush(Color.FromArgb(0xE6, 0xB0, 0xB6, 0xBE)),
+                Foreground = RowInk,
                 VerticalAlignment = VerticalAlignment.Center,
             });
         }
@@ -3770,7 +4137,7 @@ public sealed partial class PlacePreview : Grid
         var arrow = new TextBlock
         {
             Text = onToggle == null ? "  " : collapsed ? "▸ " : "▾ ",
-            FontFamily = new FontFamily("Consolas, Courier New, monospace"),
+            FontFamily = RowMono,
             Foreground = ChipText,
             VerticalAlignment = VerticalAlignment.Center,
         };
@@ -3793,10 +4160,10 @@ public sealed partial class PlacePreview : Grid
             var eye = new TextBlock
             {
                 Text = entry.Hidden ? "○ " : "◉ ",
-                FontFamily = new FontFamily("Consolas, Courier New, monospace"),
+                FontFamily = RowMono,
                 Foreground = entry.HiddenBySelf ? ChipText
-                           : entry.Hidden ? new SolidColorBrush(Color.FromArgb(0x66, 0xB0, 0xB6, 0xBE))
-                           : new SolidColorBrush(Color.FromArgb(0xE6, 0xB0, 0xB6, 0xBE)),   // shown: readable (was 3.31:1)
+                           : entry.Hidden ? RowHiddenByParentInk
+                           : RowInk,   // shown: readable (was 3.31:1)
                 VerticalAlignment = VerticalAlignment.Center,
                 Cursor = Cursors.Hand,
                 ToolTip = entry.HiddenBySelf ? Loc.T("preview.place.hidden.tip")
@@ -3815,7 +4182,7 @@ public sealed partial class PlacePreview : Grid
             // A hidden row's label fades with it, so the tree shows at a glance
             // what is being left out of the picture.
             Foreground = entry.Hidden
-                ? new SolidColorBrush(Color.FromArgb(0x77, 0xB0, 0xB6, 0xBE)) : ChipText,
+                ? RowHiddenInk : ChipText,
             TextTrimming = TextTrimming.CharacterEllipsis,
             VerticalAlignment = VerticalAlignment.Center,
         });
@@ -3947,6 +4314,52 @@ public sealed partial class PlacePreview : Grid
         }
         catch { /* fall through to system fallback */ }
         return new FontFamily(fallback);
+    }
+
+    // ── The level's own art, decoded once per version of the file (1.10.0) ─────────────────────────
+    //
+    // A place's front and back art (2048x1136) was decoded afresh on every refresh, on the interface's thread: a
+    // tenth of a second and more each time, which was most of the Places tab's first visit. Kept now by the file's
+    // size and time of writing, so art the author saves again is read again and the same art is not; a few levels'
+    // worth (each about 9 MB decoded). PrefetchArt decodes the art a pack is likely to show first on a worker as the
+    // pack opens.
+
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, BitmapSource?> _artCache = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly System.Collections.Concurrent.ConcurrentQueue<string> _artOrder = new();
+    private const int ArtKept = 12;
+
+    private static string ArtKey(string path)
+    {
+        var info = new FileInfo(path);
+        return info.Exists ? path + "|" + info.Length + "|" + info.LastWriteTimeUtc.Ticks : path + "|-";
+    }
+
+    /// <summary>The art at <paramref name="path"/>, from the cache when this version of the file was read before.</summary>
+    internal static BitmapSource? LoadArt(string path)
+    {
+        string key = ArtKey(path);
+        if (_artCache.TryGetValue(key, out var known)) return known;
+        var bmp = File.Exists(path) ? TryLoad(path) : null;
+        if (_artCache.TryAdd(key, bmp))
+        {
+            _artOrder.Enqueue(key);
+            while (_artOrder.Count > ArtKept && _artOrder.TryDequeue(out var oldest)) _artCache.TryRemove(oldest, out _);
+        }
+        return bmp;
+    }
+
+    /// <summary>Decode these files' art on a worker, so the place they belong to shows at once when chosen.</summary>
+    internal static System.Threading.Tasks.Task PrefetchArt(IEnumerable<string> paths)
+    {
+        var list = paths.Where(p => !string.IsNullOrWhiteSpace(p)).Distinct(StringComparer.OrdinalIgnoreCase).Take(ArtKept).ToList();
+        return System.Threading.Tasks.Task.Run(() =>
+        {
+            foreach (var p in list)
+            {
+                try { LoadArt(p); }
+                catch (Exception) { /* a picture that cannot be read ahead is read, and reported, when shown */ }
+            }
+        });
     }
 
     private static BitmapSource? TryLoad(string path)

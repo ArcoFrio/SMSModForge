@@ -26,6 +26,7 @@ public partial class TextPromptWindow : Window
     /// <summary>Show a modal prompt; returns the entered text, or null if cancelled.</summary>
     public static string? Prompt(Window owner, string title, string message, string initial = "")
     {
+        if (Services.TestMode.Active) return null;   // no window under the test harness: answered as a cancel
         var w = new TextPromptWindow { Owner = owner, Title = title };
         w.PromptLabel.Text = message;
         w.InputBox.Text = initial;

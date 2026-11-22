@@ -326,6 +326,16 @@ public static class EditorPrefs
         set => SetBool(KeyGameLookNodeRows, value);
     }
 
+    private const string KeyAnimations = "animations";
+
+    /// <summary>Whether pages come in with a short movement (Services.Motion, 1.10.0). On by default; off here,
+    /// or off in Windows' own Animation effects, and there are none.</summary>
+    public static bool Animations
+    {
+        get => GetBool(KeyAnimations, defaultValue: true);
+        set => SetBool(KeyAnimations, value);
+    }
+
     private const string KeyTextTokenTips = "showTextTokenTips";
 
     /// <summary>
@@ -462,6 +472,19 @@ public static class EditorPrefs
         }
         all.Add(id + "@" + (revision > 0 ? revision : 1));
         SetString(KeyTutorialsDone, string.Join(",", all));
+    }
+
+    /// <summary>Forget that a tutorial was finished, any version of it (tests put the record back with it).</summary>
+    internal static void ForgetTutorial(string id)
+    {
+        var kept = new List<string>();
+        foreach (var entry in CompletedTutorials)
+        {
+            int at = entry.LastIndexOf('@');
+            string entryId = at > 0 ? entry.Substring(0, at) : entry;
+            if (!string.Equals(entryId, id, StringComparison.Ordinal)) kept.Add(entry);
+        }
+        SetString(KeyTutorialsDone, string.Join(",", kept));
     }
 
     /// <summary>The Characters tab's bust preview was sized from a picker

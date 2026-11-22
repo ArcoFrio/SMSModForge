@@ -40,11 +40,78 @@ public sealed class TutorialRunner : ObservableObject
         NextCommand = new RelayCommand(Next, () => CanAdvance);
         BackCommand = new RelayCommand(Back, () => Index > 0);
         ExitCommand = new RelayCommand(Stop);
+        DoItForMeCommand = new RelayCommand(DoItForMe, () => CanDoItForMe);
+        PrepareCommand = new RelayCommand(PrepareStory, () => NeedsPreparing);
+        StartNextCommand = new RelayCommand(StartNext, () => NextTutorial != null);
+        GoToCommand = new RelayCommand(p => { if (p is int i) GoTo(i); else if (p is StepItem item) GoTo(item.Index); });
     }
 
     public RelayCommand NextCommand { get; }
     public RelayCommand BackCommand { get; }
     public RelayCommand ExitCommand { get; }
+
+    /// <summary>The step done for the reader (TutorialStep.Solve, 1.10.0).</summary>
+    public RelayCommand DoItForMeCommand { get; }
+
+    /// <summary>What the tutorials before this one made, brought in (TutorialDef.Prepare, 1.10.0).</summary>
+    public RelayCommand PrepareCommand { get; }
+
+    /// <summary>The tutorial after this one, from its last step (1.10.0).</summary>
+    public RelayCommand StartNextCommand { get; }
+
+    /// <summary>Any step, from the step list (parameter: its index or its row).</summary>
+    public RelayCommand GoToCommand { get; }
+
+    /// <summary>Which tutorial follows another: given by the catalog's order (MainViewModel).</summary>
+    public Func<TutorialDef, TutorialDef?>? FollowingTutorial { get; set; }
+
+    /// <summary>One row of the step list: its number and title, and whether it is done or showing.</summary>
+    public sealed record StepItem(int Index, string Title, bool Done, bool Current)
+    {
+        public string Label => (Index + 1) + ".  " + Title;
+        public int Number => Index + 1;
+        public string Mark => Current ? "▶" : Done ? "✓" : "";
+    }
+
+    /// <summary>The steps of the tutorial, to jump to any of them.</summary>
+    public System.Collections.Generic.IReadOnlyList<StepItem> StepItems
+    {
+        get
+        {
+            var list = new System.Collections.Generic.List<StepItem>();
+            if (_tutorial == null) return list;
+            for (int i = 0; i < _tutorial.Steps.Count; i++)
+                list.Add(new StepItem(i, _tutorial.Steps[i].Title, _done.Contains(i), i == _index));
+            return list;
+        }
+    }
+
+    /// <summary>The steps seen through (a Read step read, a Do step done), for the step list's ticks.</summary>
+    private readonly System.Collections.Generic.HashSet<int> _done = new();
+
+    /// <summary>A Do step with a way through it, not done yet.</summary>
+    public bool CanDoItForMe => Step is { Kind: not StepKind.Read, Solve: not null } && !IsSatisfied;
+
+    /// <summary>The tutorial carries on from earlier ones whose work the open pack has not got - offered on its
+    /// first step (<see cref="StoryPack"/>).</summary>
+    public bool NeedsPreparing
+    {
+        get
+        {
+            if (_tutorial == null || _index != 0) return false;
+            try { return StoryPack.Missing(_vm, _tutorial).Count > 0; }
+            catch { return false; }
+        }
+    }
+
+    /// <summary>The tutorial after this one, offered on the last step.</summary>
+    public TutorialDef? NextTutorial => _tutorial != null && IsLastStep ? FollowingTutorial?.Invoke(_tutorial) : null;
+
+    public string NextTutorialLabel => NextTutorial is { } next ? Loc.F("tutorialOverlay.nextTutorial", "title", next.Title) : "";
+
+    private string _problem = "";
+    /// <summary>What went wrong doing a step for the reader, said in the callout (cleared on the next step).</summary>
+    public string Problem { get => _problem; private set { if (SetField(ref _problem, value)) OnPropertyChanged(nameof(HasProblem)); } }
 
     /// <summary>Raised when the step changes, so the overlay can re-anchor and
     /// flash the new target. Carries the step that is now showing.</summary>
@@ -95,6 +162,10 @@ public sealed class TutorialRunner : ObservableObject
             if (!SetField(ref _satisfied, value)) return;
             OnPropertyChanged(nameof(CanAdvance));
             OnPropertyChanged(nameof(WaitingLabel));
+            OnPropertyChanged(nameof(HasWaiting));
+            OnPropertyChanged(nameof(CanDoItForMe));
+            OnPropertyChanged(nameof(IsDone));
+            OnPropertyChanged(nameof(ShowsDone));
             // RelayCommand refreshes off CommandManager.RequerySuggested, which
             // fires on user input — and this change comes from a timer, not a
             // click. Without the nudge the button stays greyed until the author
@@ -116,16 +187,152 @@ public sealed class TutorialRunner : ObservableObject
     public bool ShowHint
     {
         get => _showHint;
-        private set => SetField(ref _showHint, value);
+        private set { if (SetField(ref _showHint, value)) OnPropertyChanged(nameof(ShowHintBox)); }
     }
 
-    public void Start(TutorialDef tutorial)
+    // ── What the coach panel shows (1.10.0) ──────────────────────────────────
+
+    /// <summary>"Tutorial 4 · Places": where this tutorial sits.</summary>
+    public string Heading => _tutorial == null ? "" : Loc.F("tutorialCoach.heading", "level", _tutorial.Level, "group", _tutorial.Group);
+
+    /// <summary>How far through the tutorial the step showing is, 0 to 1.</summary>
+    public double ProgressFraction => _tutorial == null || _tutorial.Steps.Count == 0 ? 0 : (double)(_index + 1) / _tutorial.Steps.Count;
+
+    /// <summary>What kind of step this is, in a word: to read, to do, or the reader's call.</summary>
+    /// <summary>A step that asked for something has it: the coach marks it "Done" (a Read step is never marked -
+    /// there was nothing to do).</summary>
+    public bool ShowsDone => Step is { Kind: not StepKind.Read } && IsSatisfied;
+
+    public string DoneLabel => "✓ " + Loc.T("tutorialCoach.done");
+
+    public string KindLabel => Step == null ? "" : Loc.T(Step.Kind switch
+    {
+        StepKind.Read => "tutorialCoach.kind.read",
+        StepKind.Do => "tutorialCoach.kind.do",
+        _ => "tutorialCoach.kind.free",
+    });
+
+    public bool HasMore => Step is { More.Length: > 0 };
+    public bool ShowHintBox => ShowHint && Step is { Hint.Length: > 0 };
+    public bool HasProblem => Problem.Length > 0;
+    public bool HasWaiting => WaitingLabel.Length > 0;
+    public bool CanGoBack => _index > 0;
+
+    /// <summary>The step showing is done: a Read step read, a Do step's work there.</summary>
+    public bool IsDone => Step != null && (Step.Kind == StepKind.Read || IsSatisfied);
+
+    /// <summary>The tutorial's picture for the coach's header (Resources/TutorialHeaders: the tutorial's own, else
+    /// its group's), or null for the theme's own.</summary>
+    public System.Windows.Media.ImageSource? HeaderArt => _tutorial == null ? null : HeaderArtFor(_tutorial);
+
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, System.Windows.Media.ImageSource?> _headerArt = new();
+
+    /// <summary>
+    /// Every tutorial's picture decoded on a worker thread as the editor starts (1.10.0): the Tutorials page decoded
+    /// them one by one on the UI thread the first time it showed, most of its 700 ms (UiDelayTests). A frozen
+    /// picture can be handed across threads; a name asked for before its turn is decoded where it is asked.
+    /// </summary>
+    internal static void PreloadArt(System.Collections.Generic.IEnumerable<string> names)
+    {
+        var list = System.Linq.Enumerable.ToList(names);
+        System.Threading.Tasks.Task.Run(() =>
+        {
+            foreach (string n in list)
+            {
+                try { ArtNamed(n); } catch (Exception) { }
+            }
+        });
+    }
+
+    internal static System.Windows.Media.ImageSource? HeaderArtFor(TutorialDef t)
+    {
+        foreach (string name in new[] { t.Id, t.GroupKey.Replace("tutorial.group.", "") })
+            if (ArtNamed(name) is { } art) return art;
+        return null;
+    }
+
+    /// <summary>A picture of Resources/TutorialHeaders by its name (.jpg or .png), read once; null when none.</summary>
+    internal static System.Windows.Media.ImageSource? ArtNamed(string name)
+    {
+        {
+            if (_headerArt.TryGetValue(name, out var known)) return known;
+            System.Windows.Media.ImageSource? found = null;
+            foreach (string ext in new[] { ".jpg", ".png" })
+            {
+                string path = System.IO.Path.Combine(AppContext.BaseDirectory, "Resources", "TutorialHeaders", name + ext);
+                if (!System.IO.File.Exists(path)) continue;
+                try
+                {
+                    var bmp = new System.Windows.Media.Imaging.BitmapImage();
+                    bmp.BeginInit();
+                    bmp.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+                    bmp.UriSource = new Uri(path);
+                    bmp.EndInit();
+                    bmp.Freeze();
+                    found = bmp;
+                }
+                catch (Exception) { found = null; }
+                break;
+            }
+            _headerArt.TryAdd(name, found);
+            return _headerArt[name];
+        }
+    }
+
+    public void Start(TutorialDef tutorial) => Start(tutorial, 0);
+
+    /// <summary>Start at a step (a search hit on one, 1.10.0).</summary>
+    public void Start(TutorialDef tutorial, int step)
     {
         _scratch.Clear();
+        _done.Clear();
         Tutorial = tutorial;
-        Index = 0;
+        Index = Math.Clamp(step, 0, Math.Max(0, tutorial.Steps.Count - 1));
         EnterStep();
         _poll.Start();
+    }
+
+    /// <summary>Any step: what it needs that is not there yet, "Do it for me" puts there.</summary>
+    public void GoTo(int index)
+    {
+        if (_tutorial == null || index < 0 || index >= _tutorial.Steps.Count || index == _index) return;
+        if (IsSatisfied || Step?.Kind == StepKind.Read) _done.Add(_index);
+        Index = index;
+        EnterStep();
+    }
+
+    private void DoItForMe()
+    {
+        if (Step is not { Solve: { } solve }) return;
+        try { solve(_vm, _scratch); }
+        catch (Exception ex) { Problem = Loc.F("tutorials.doItFailed", "error", ex.Message); }
+        // What it changed is a step of the pack's history like any other edit (Ctrl+Z takes it back).
+        _vm.Undo.Checkpoint();
+        IsSatisfied = Evaluate();
+        OnPropertyChanged(nameof(CanDoItForMe));
+        if (Step is TutorialStep s) StepChanged?.Invoke(s);
+    }
+
+    private void PrepareStory()
+    {
+        if (_tutorial == null) return;
+        try { StoryPack.BringIn(_vm, _tutorial); }
+        catch (Exception ex) { Problem = Loc.F("tutorials.doItFailed", "error", ex.Message); }
+        _vm.Undo.Checkpoint();
+        OnPropertyChanged(nameof(NeedsPreparing));
+        // The pack may be another one now: the step's baselines are taken again from it.
+        string problem = Problem;
+        EnterStep();
+        Problem = problem;
+    }
+
+    private void StartNext()
+    {
+        if (_tutorial == null || NextTutorial is not { } next) return;
+        Services.EditorPrefs.MarkTutorialComplete(_tutorial.Id, _tutorial.Revision);
+        _poll.Stop();
+        Ended?.Invoke();
+        Start(next);
     }
 
     public void Stop()
@@ -152,6 +359,7 @@ public sealed class TutorialRunner : ObservableObject
             Stop();
             return;
         }
+        _done.Add(_index);
         Index++;
         EnterStep();
     }
@@ -159,6 +367,7 @@ public sealed class TutorialRunner : ObservableObject
     private void Back()
     {
         if (_tutorial == null || _index == 0) return;
+        if (IsSatisfied || Step?.Kind == StepKind.Read) _done.Add(_index);
         Index--;
         EnterStep();
     }
@@ -166,6 +375,7 @@ public sealed class TutorialRunner : ObservableObject
     private void EnterStep()
     {
         _stepShownAt = DateTime.UtcNow;
+        Problem = "";
         ShowHint = false;
         // Before the first evaluation: a step that measures a change needs its
         // baseline taken while the step is still unsatisfied.
@@ -175,7 +385,18 @@ public sealed class TutorialRunner : ObservableObject
         // to move forward would be nonsense.
         IsSatisfied = Evaluate();
         System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-        if (Step is TutorialStep s) StepChanged?.Invoke(s);
+        if (Step is TutorialStep s)
+        {
+            StepChanged?.Invoke(s);
+            // Once its tab has come up and been laid out (StepChanged switches to it).
+            if (s.OnShown is { } shown)
+                System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (!ReferenceEquals(Step, s)) return;
+                    try { shown(_vm); } catch { }
+                    IsSatisfied = Evaluate();
+                }), System.Windows.Threading.DispatcherPriority.ContextIdle);
+        }
     }
 
     private void Poll()
@@ -202,5 +423,20 @@ public sealed class TutorialRunner : ObservableObject
         OnPropertyChanged(nameof(NextLabel));
         OnPropertyChanged(nameof(CanAdvance));
         OnPropertyChanged(nameof(WaitingLabel));
+        OnPropertyChanged(nameof(CanDoItForMe));
+        OnPropertyChanged(nameof(NeedsPreparing));
+        OnPropertyChanged(nameof(NextTutorial));
+        OnPropertyChanged(nameof(NextTutorialLabel));
+        OnPropertyChanged(nameof(StepItems));
+        OnPropertyChanged(nameof(Heading));
+        OnPropertyChanged(nameof(ProgressFraction));
+        OnPropertyChanged(nameof(KindLabel));
+        OnPropertyChanged(nameof(ShowsDone));
+        OnPropertyChanged(nameof(HasMore));
+        OnPropertyChanged(nameof(ShowHintBox));
+        OnPropertyChanged(nameof(HasWaiting));
+        OnPropertyChanged(nameof(CanGoBack));
+        OnPropertyChanged(nameof(IsDone));
+        OnPropertyChanged(nameof(HeaderArt));
     }
 }

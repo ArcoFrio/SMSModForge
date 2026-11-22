@@ -29,6 +29,19 @@ public sealed class JigglePreview : Image
         set => SetValue(OutfitProperty, value);
     }
 
+    /// <summary>
+    /// A backdrop of its own instead of the one chosen under Options (1.10.0): the place preview stands a character
+    /// in a place of the pack's with it (<see cref="Rendering.PreviewBackdrop.ForPlace"/>). Null: the chosen one.
+    /// </summary>
+    internal static readonly DependencyProperty SceneOverrideProperty =
+        DependencyProperty.Register(nameof(SceneOverride), typeof(object), typeof(JigglePreview), new PropertyMetadata(null));
+
+    internal Rendering.BackdropScene? SceneOverride
+    {
+        get => GetValue(SceneOverrideProperty) as Rendering.BackdropScene;
+        set => SetValue(SceneOverrideProperty, value);
+    }
+
     public static readonly DependencyProperty PackRootProperty =
         DependencyProperty.Register(nameof(PackRoot), typeof(string), typeof(JigglePreview),
             new PropertyMetadata(null, (d, e) => ((JigglePreview)d).ReloadTextures()));
@@ -162,7 +175,7 @@ public sealed class JigglePreview : Image
     private void PublishExpressionChoices()
     {
         var choices = new System.Collections.Generic.List<ExpressionChoice>
-            { new("", Localization.Loc.T("characters.none")) };
+            { new("", Localization.Loc.T("expressionIcon.neutral")) };   // the line editor's word for the plain face (it said None here)
 
         // Canonical order first - the four the game has, in the order the
         // editor names them everywhere else - then anything else the pack
@@ -263,6 +276,9 @@ public sealed class JigglePreview : Image
     }
 
     private readonly WriteableBitmap _bitmap;
+
+    /// <summary>Why the last frame that failed failed - for tests.</summary>
+    internal Exception? LastFault { get; private set; }
     private readonly byte[] _jiggleOutput = new byte[JiggleShader.RenderStride * JiggleShader.RenderSize];
 
     // Over a backdrop (1.9.1): the frame in linear light, the intro's
@@ -530,52 +546,126 @@ public sealed class JigglePreview : Image
     {
         TextureLoads++;
         LoadTextures();
-
-        // After every route through the load, including the ones that return
-        // early having cleared everything: the picker beside the preview is
-        // driven by what got loaded, so a bust with nothing to load has to say
-        // so rather than keep the last bust's faces on offer.
-        PublishExpressionChoices();
     }
+
+    // ── Loading the bust's pictures (off the interface's thread since 1.10.0) ──────────────────────
+    //
+    // Decoding a bust's PNGs - base, mask, blink, four mouths, every face - took a fifth of a second and more on the
+    // interface's thread, so choosing a character waited for it (measured by UiDelayTests: "character You" 320 to
+    // 780 ms). What to load is read here, on that thread, into plain values (the pack is being edited on it); the
+    // decoding runs on a worker; the set is put in when it is done, unless another bust was asked for meanwhile.
+    // Until then the preview shows nothing rather than the bust chosen before.
+
+    /// <summary>Everything the preview draws a bust from, as one set put in at once.</summary>
+    private sealed class TextureSet
+    {
+        public byte[]? Base, Mask, Blink;
+        public readonly byte[]?[] Mouth = new byte[]?[5];
+        public readonly System.Collections.Generic.Dictionary<string, byte[]> Faces = new();
+        public bool PackReplacedMask;
+        public JiggleParams? VanillaJiggle;
+    }
+
+    /// <summary>What a load reads, copied off the outfit on the interface's thread.</summary>
+    private sealed record TextureInputs(
+        string? VanillaBustKey, string PackRoot,
+        string BaseSprite, string MaskSprite, string BlinkSprite,
+        bool MouthEnabled, string MouthPrefix, bool ExpressionEnabled, string ExpressionPrefix,
+        System.Collections.Generic.IReadOnlyList<string> PackFaces,
+        System.Collections.Generic.IReadOnlyList<(string Slot, string Sprite)> Overrides);
+
+    private Task<TextureSet>? _loading;
+
+    /// <summary>Loads under way in every preview - the test harness waits for them as a person would for the picture.</summary>
+    internal static int PendingLoads;
 
     private void LoadTextures()
     {
         _renderGeneration++;
-        _packReplacedMask = false;
-        _vanillaJiggle = null;
-        if (!string.IsNullOrWhiteSpace(VanillaBustKey)) { ReloadVanillaTextures(); return; }
-        if (Outfit == null || PackRoot == null)
+        bool vanilla = !string.IsNullOrWhiteSpace(VanillaBustKey);
+        if (!vanilla && (Outfit == null || PackRoot == null))
         {
             // Clear the cached buffers too: leaving them set is what let a
             // half-configured bust keep showing its predecessor's sprites.
-            _base = _mask = _blink = null;
-            for (int i = 1; i <= 4; i++) _mouth[i] = null;
-            _expressions.Clear();
+            _loading = null;
+            Put(new TextureSet());
             return;
         }
-        var m = Outfit.Model;
-        _base = LoadIfExists(Path.Combine(PackRoot, Normalize(m.BaseSprite)));
-        _mask = Shared.GameArt.IsBorrowed(m.MaskSprite)
-            ? LoadBorrowed(m.MaskSprite, "Mask.PNG")
-            : LoadIfExists(Path.Combine(PackRoot, Normalize(m.MaskSprite)));
-        _blink = Shared.GameArt.IsBorrowed(m.BlinkSprite)
-            ? LoadBorrowed(m.BlinkSprite, "Blink.PNG")
-            : LoadIfExists(Path.Combine(PackRoot, Normalize(m.BlinkSprite)));
-        for (int i = 1; i <= 4; i++)
-            _mouth[i] = !m.Mouth.Enabled ? null
-                : Shared.GameArt.IsBorrowed(m.Mouth.Prefix) ? LoadBorrowed(m.Mouth.Prefix, "Mouth" + i + ".PNG")
-                : LoadIfExists(Path.Combine(PackRoot, Normalize(m.Mouth.Prefix) + i + ".PNG"));
+        var m = Outfit?.Model;
+        var inputs = new TextureInputs(
+            vanilla ? VanillaBustKey : null, PackRoot ?? "",
+            m?.BaseSprite ?? "", m?.MaskSprite ?? "", m?.BlinkSprite ?? "",
+            m?.Mouth.Enabled ?? false, m?.Mouth.Prefix ?? "", m?.Expression.Enabled ?? false, m?.Expression.Prefix ?? "",
+            Outfit?.PackFaces.ToList() ?? new System.Collections.Generic.List<string>(),
+            m?.SpriteOverrides.Where(o => o != null).Select(o => (o.Slot ?? "", o.Sprite ?? "")).ToList()
+                ?? new System.Collections.Generic.List<(string, string)>());
+
+        // Nothing of the bust chosen before stays on screen while this one loads.
+        Put(new TextureSet(), publish: false);
+        var task = Task.Run(() => Load(inputs));
+        _loading = task;
+        System.Threading.Interlocked.Increment(ref PendingLoads);
+        task.ContinueWith(_ => Dispatcher.BeginInvoke(new Action(() =>
+        {
+            try { Finish(task); }
+            finally { System.Threading.Interlocked.Decrement(ref PendingLoads); }
+        })), TaskScheduler.Default);
+    }
+
+    /// <summary>Put in a finished load, unless a later one took its place.</summary>
+    private void Finish(Task<TextureSet> task)
+    {
+        if (!ReferenceEquals(_loading, task)) return;
+        _loading = null;
+        Put(task.IsCompletedSuccessfully ? task.Result : new TextureSet());
+    }
+
+    private void Put(TextureSet set, bool publish = true)
+    {
+        _base = set.Base;
+        _mask = set.Mask;
+        _blink = set.Blink;
+        for (int i = 1; i <= 4; i++) _mouth[i] = set.Mouth[i];
         _expressions.Clear();
+        foreach (var face in set.Faces) _expressions[face.Key] = face.Value;
+        _packReplacedMask = set.PackReplacedMask;
+        _vanillaJiggle = set.VanillaJiggle;
+        _renderGeneration++;
+        // After every route through the load, including the ones that end with
+        // everything cleared: the picker beside the preview is driven by what
+        // got loaded, so a bust with nothing to load has to say so rather than
+        // keep the last bust's faces on offer.
+        if (publish) PublishExpressionChoices();
+    }
+
+    /// <summary>The set, on a worker: the pack's own art, or the game's with the pack's replacements over it.</summary>
+    private static TextureSet Load(TextureInputs i)
+    {
+        var set = new TextureSet();
+        if (i.VanillaBustKey != null) { LoadVanilla(i, set); return set; }
+        string Pack(string relative) => Path.Combine(i.PackRoot, Normalize(relative));
+        set.Base = LoadIfExists(Pack(i.BaseSprite));
+        set.Mask = Shared.GameArt.IsBorrowed(i.MaskSprite)
+            ? LoadBorrowed(i.MaskSprite, "Mask.PNG")
+            : LoadIfExists(Pack(i.MaskSprite));
+        set.Blink = Shared.GameArt.IsBorrowed(i.BlinkSprite)
+            ? LoadBorrowed(i.BlinkSprite, "Blink.PNG")
+            : LoadIfExists(Pack(i.BlinkSprite));
+        for (int n = 1; n <= 4; n++)
+            set.Mouth[n] = !i.MouthEnabled ? null
+                : Shared.GameArt.IsBorrowed(i.MouthPrefix) ? LoadBorrowed(i.MouthPrefix, "Mouth" + n + ".PNG")
+                : LoadIfExists(Pack(i.MouthPrefix) + n + ".PNG");
         // Every face the game will build this bust with - the four, and each
         // one the character declares - not the four alone, which left a face
         // the pack invented out of the list beside this picture while the game
         // showed it.
-        if (m.Expression.Enabled)
-            foreach (var name in Outfit.PackFaces)
-                _expressions[name] = (Shared.GameArt.IsBorrowed(m.Expression.Prefix)
-                                         ? LoadBorrowed(m.Expression.Prefix, "Expression" + name + ".PNG")
-                                         : LoadIfExists(Path.Combine(PackRoot, Normalize(m.Expression.Prefix) + name + ".PNG")))
-                                     ?? Empty();
+        if (i.ExpressionEnabled)
+            foreach (var name in i.PackFaces)
+                set.Faces[name] = (Shared.GameArt.IsBorrowed(i.ExpressionPrefix)
+                                      ? LoadBorrowed(i.ExpressionPrefix, "Expression" + name + ".PNG")
+                                      : LoadIfExists(Pack(i.ExpressionPrefix) + name + ".PNG"))
+                                  ?? Empty();
+        return set;
     }
 
     /// <summary>
@@ -604,19 +694,14 @@ public sealed class JigglePreview : Image
     /// as zero displacement, so a vanilla bust simply does not jiggle here —
     /// preferable to inventing motion the game does not have.
     /// </summary>
-    private void ReloadVanillaTextures()
+    private static void LoadVanilla(TextureInputs i, TextureSet set)
     {
-        _base = _mask = _blink = null;
-        for (int i = 1; i <= 4; i++) _mouth[i] = null;
-        _expressions.Clear();
-        _packReplacedMask = false;
-
         string? root = Rendering.VanillaArtResolver.FindArtRoot();
-        string? dir = root == null ? null : Path.Combine(root, VanillaBustKey);
+        string? dir = root == null ? null : Path.Combine(root, i.VanillaBustKey!);
         if (dir != null && Directory.Exists(dir))
         {
-            LoadGameArt(dir);
-            _vanillaJiggle = LoadJiggleSettings(Path.Combine(dir, "Jiggle.txt"));
+            LoadGameArt(dir, set);
+            set.VanillaJiggle = LoadJiggleSettings(Path.Combine(dir, "Jiggle.txt"));
         }
 
         // Whatever the pack paints over it - AFTER the game's art, because it
@@ -624,26 +709,37 @@ public sealed class JigglePreview : Image
         // pack's own file and does not stop existing when the shipped art is
         // missing. An editor with no extraction beside it still has something
         // true to show for a texture the author supplied.
-        LoadPackReplacements();
+        LoadPackReplacements(i, set);
     }
 
     /// <summary>The bust as the game draws it.</summary>
-    private void LoadGameArt(string dir)
+    private static void LoadGameArt(string dir, TextureSet set)
     {
-        _base  = LoadIfExists(Path.Combine(dir, "Base.PNG"));
+        set.Base  = LoadIfExists(Path.Combine(dir, "Base.PNG"));
         // Absent on art exported before the mask was added, in which case the
         // bust simply holds still — the shader reads a missing mask as zero
         // displacement, so nothing needs a version check.
-        _mask  = LoadIfExists(Path.Combine(dir, "Mask.PNG"));
-        _blink = LoadIfExists(Path.Combine(dir, "Blink.PNG"));
-        for (int i = 1; i <= 4; i++)
-            _mouth[i] = LoadIfExists(Path.Combine(dir, "Mouth" + i + ".PNG"));
+        set.Mask  = LoadIfExists(Path.Combine(dir, "Mask.PNG"));
+        set.Blink = LoadIfExists(Path.Combine(dir, "Blink.PNG"));
+        for (int n = 1; n <= 4; n++)
+            set.Mouth[n] = LoadIfExists(Path.Combine(dir, "Mouth" + n + ".PNG"));
         foreach (var name in ExpressionSpec.Names)
         {
             var px = LoadIfExists(Path.Combine(dir, "Expression" + name + ".PNG"));
-            if (px != null) _expressions[name] = px;
+            if (px != null) set.Faces[name] = px;
         }
     }
+
+    /// <summary>
+    /// Whether the pack's own mask actually landed on this bust.
+    /// <para/>
+    /// Set while loading rather than read off the manifest, because the runtime
+    /// applies the pack's jiggle exactly when the mask override LANDS - a row
+    /// ticked with no file, or naming a file that is not there, replaces
+    /// nothing and leaves the game's motion alone. Deciding that from the
+    /// manifest alone would be a second opinion about the same question.
+    /// </summary>
+    private bool _packReplacedMask;
 
     /// <summary>
     /// Paint the pack's replacement textures over the game's own, one slot at
@@ -660,44 +756,30 @@ public sealed class JigglePreview : Image
     /// ticked with no art chosen yet changes nothing — the game keeps its own,
     /// and the picture should say so rather than going blank.
     /// </summary>
-    /// <summary>
-    /// Whether the pack's own mask actually landed on this bust.
-    /// <para/>
-    /// Set while loading rather than read off the manifest, because the runtime
-    /// applies the pack's jiggle exactly when the mask override LANDS - a row
-    /// ticked with no file, or naming a file that is not there, replaces
-    /// nothing and leaves the game's motion alone. Deciding that from the
-    /// manifest alone would be a second opinion about the same question.
-    /// </summary>
-    private bool _packReplacedMask;
-
-    private void LoadPackReplacements()
+    private static void LoadPackReplacements(TextureInputs i, TextureSet set)
     {
-        var model = Outfit?.Model;
-        if (model == null || PackRoot == null) return;
-
-        foreach (var entry in model.SpriteOverrides)
+        if (string.IsNullOrEmpty(i.PackRoot)) return;
+        foreach (var (slot, sprite) in i.Overrides)
         {
-            if (entry == null || string.IsNullOrWhiteSpace(entry.Sprite)) continue;
+            if (string.IsNullOrWhiteSpace(sprite)) continue;
 
-            var px = LoadIfExists(Path.Combine(PackRoot, Normalize(entry.Sprite)));
+            var px = LoadIfExists(Path.Combine(i.PackRoot, Normalize(sprite)));
             if (px == null) continue;   // named but not there; the game's stands
 
-            string slot = entry.Slot ?? "";
-            if (slot == SMSModForge.Shared.SpriteSlotNames.Base) { _base = px; continue; }
+            if (slot == SMSModForge.Shared.SpriteSlotNames.Base) { set.Base = px; continue; }
             if (slot == SMSModForge.Shared.SpriteSlotNames.Mask)
             {
-                _mask = px;
-                _packReplacedMask = true;
+                set.Mask = px;
+                set.PackReplacedMask = true;
                 continue;
             }
-            if (slot == SMSModForge.Shared.SpriteSlotNames.Blink) { _blink = px; continue; }
+            if (slot == SMSModForge.Shared.SpriteSlotNames.Blink) { set.Blink = px; continue; }
 
             int frame = SMSModForge.Shared.SpriteSlotNames.MouthFrame(slot);
-            if (frame >= 1 && frame <= 4) { _mouth[frame] = px; continue; }
+            if (frame >= 1 && frame <= 4) { set.Mouth[frame] = px; continue; }
 
             string? face = SMSModForge.Shared.SpriteSlotNames.ExpressionOf(slot);
-            if (!string.IsNullOrEmpty(face)) _expressions[face!] = px;
+            if (!string.IsNullOrEmpty(face)) set.Faces[face!] = px;
         }
     }
 
@@ -790,7 +872,11 @@ public sealed class JigglePreview : Image
     /// </summary>
     internal (byte[]? Base, byte[]? Mask, byte[]? Blink, byte[]?[] Mouth,
               System.Collections.Generic.IReadOnlyDictionary<string, byte[]> Faces) Loaded()
-        => (_base, _mask, _blink, _mouth, _expressions);
+    {
+        // A load under way is finished first, by the same step that puts it in when it arrives.
+        if (_loading is { } task) { task.Wait(); Finish(task); }
+        return (_base, _mask, _blink, _mouth, _expressions);
+    }
 
     private static byte[] Empty() => new byte[JiggleShader.Stride * JiggleShader.Size];
 
@@ -977,7 +1063,7 @@ public sealed class JigglePreview : Image
         // breathing moving the bust over it (whole pixels: the Pixel Perfect
         // Camera), its fake GI - but not at Low, the cheapest that still shows
         // the bust as it is.
-        var scene = Services.PreviewBackdropManager.Current.Scene;
+        var scene = SceneOverride ?? Services.PreviewBackdropManager.Current.Scene;
         OverBackdrop = scene != null;
         int bustBottom = 0;
         float shadowY = 0f;
@@ -1029,7 +1115,9 @@ public sealed class JigglePreview : Image
         bool exactGlow = quality.EdgeGlowExact;
         var sampling = quality.Sampling;
 
-        bool useCard = Services.PreviewRendererManager.UseCard;
+        // A light on the characters (1.10.0) multiplies the bust between its program and the blend, which the card's
+        // whole-frame pass does not do: such a frame is drawn on the processor.
+        bool useCard = Services.PreviewRendererManager.UseCard && scene?.Backdrop.IsPlace != true;
         // The breathing's whole pixels for a bust drawn alone (over a backdrop it is bustBottom's).
         int bobAlone = scene == null && Breathing ? (int)Math.Round(Math.Sin(time * BreathingSpeed) * BreathingAmplitude) : 0;
 
@@ -1092,7 +1180,11 @@ public sealed class JigglePreview : Image
                 if (mouth != null) Rendering.BackdropRender.OverlayLayer(sceneTarget!, scene, mouth, bustBottom, coverage!);
                 if (blink != null) Rendering.BackdropRender.OverlayLayer(sceneTarget!, scene, blink, bustBottom, coverage!);
                 if (linearSilhouette != null) Rendering.BackdropRender.Layer(sceneTarget!, scene, linearSilhouette, coverage!);
-                if (lamp != null) lamp.Glow(sceneTarget!, shadowTexture, Rendering.BackdropRender.Covered(scene, coverage!));
+                if (lamp != null)
+                {
+                    lamp.Glow(sceneTarget!, shadowTexture, Rendering.BackdropRender.Covered(scene, coverage!));
+                    Rendering.BackdropRender.OthersOver(sceneTarget!, scene);
+                }
                 else Rendering.BackdropRender.Lamps(sceneTarget!, scene, coverage!);
                 // The game's post-processing: on the card too when it draws.
                 var cardPost = useCard ? (_gpuPost ??= Rendering.Gpu.GpuPost.TryCreate()) : null;
@@ -1152,6 +1244,9 @@ public sealed class JigglePreview : Image
         {
             try
             {
+                // A frame that failed is not shown - and is said, for tests: a picture that silently stops coming
+                // reads exactly like one that was never asked for.
+                if (t.IsFaulted) LastFault = t.Exception?.GetBaseException();
                 if (t.IsCompletedSuccessfully && generation == _renderGeneration)
                 {
                     _bitmap.Lock();

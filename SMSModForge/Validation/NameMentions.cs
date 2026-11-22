@@ -65,6 +65,10 @@ public static class NameMentions
             string text = site.Text;
             if (string.IsNullOrEmpty(text)) continue;
             string where = TranslationValidation.Where(site, pack, gameQuests);
+            // What the author chose to keep as plain words in this line (the x on a name, 1.10.0) is theirs.
+            var keptPlain = site.Kind == PackTexts.Kind.Line && site.Holder[DialogueNodeDef.PlainNamesKey] is JArray kept
+                ? new HashSet<string>(kept.Select(k => (string?)k ?? ""), StringComparer.Ordinal)
+                : null;
 
             foreach (var token in NameTokens.FindAll(text))
                 if (Whom(pack, token.Key) == null)
@@ -74,6 +78,7 @@ public static class NameMentions
 
             foreach (var (start, name, key) in Mentions(text, names))
             {
+                if (keptPlain?.Contains(name) == true) continue;
                 string token = NameTokens.Make(key);
                 issues.Add(new ValidationIssue(Severity.Info, where,
                     Loc.F("validation.names.plainMention", "name", name, "line", Around(text, start, name.Length),
@@ -127,6 +132,57 @@ public static class NameMentions
             p => p.Value.Count == 1 && games.Contains(p.Value.First()) && !VanillaNameWords.IsDescription(p.Key)
                 ? p.Value.First() : null,
             StringComparer.Ordinal);
+    }
+
+    /// <summary>
+    /// The names a line box makes into a character's name token as they are typed (1.10.0, the author: "there
+    /// should be some level of automatic detection when the user types in a character's name ... Yep, all
+    /// characters"): every name a character of the pack answers to - its own and the game's, a new name given
+    /// to one of the game's included - with the key it means; or null where it is nobody's in particular (two
+    /// characters answer to it), or a description standing in for a name (the game's "Cop": "the Cop arrived"
+    /// is no place for a token a rename would turn into "the Officer Dan arrived"). Those are still matched, so
+    /// the longest name wins. The player is not among them: theirs is {PC}.
+    /// </summary>
+    public static Dictionary<string, string?> Detectable(ModPack pack)
+    {
+        var claims = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+        void Claim(string? name, string key)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return;
+            name = name.Trim();
+            if (!claims.TryGetValue(name, out var keys)) claims[name] = keys = new(StringComparer.OrdinalIgnoreCase);
+            keys.Add(key);
+        }
+        foreach (var c in pack.Characters)
+        {
+            if (c.IsPlayer) continue;
+            Claim(c.DisplayName, c.Key);
+            if (c.IsVanillaCharacter) Claim(c.NewName, c.Key);
+        }
+        return claims.ToDictionary(
+            p => p.Key,
+            p => p.Value.Count == 1 && !VanillaNameWords.IsDescription(p.Key) ? p.Value.First() : null,
+            StringComparer.Ordinal);
+    }
+
+    /// <summary>
+    /// Each name of <paramref name="names"/> (<see cref="Detectable"/>) in <paramref name="text"/> that becomes
+    /// its character's token: a whole word, outside tags, tokens and variables, the longest where two overlap -
+    /// and not stuttered ("A-Anna": the token cannot carry the stutter), nor one the author chose to keep as
+    /// plain words in this line (<paramref name="keptPlain"/>).
+    /// </summary>
+    public static List<(int Start, int Length, string Key)> Find(string text, Dictionary<string, string?> names,
+                                                                  ICollection<string>? keptPlain = null)
+    {
+        var found = new List<(int Start, int Length, string Key)>();
+        if (string.IsNullOrEmpty(text)) return found;
+        foreach (var (start, name, key) in Mentions(text, names))
+        {
+            if (keptPlain != null && keptPlain.Contains(name)) continue;
+            if (NameStutters.Stuttered(text, start, name)) continue;
+            found.Add((start, name.Length, key));
+        }
+        return found;
     }
 
     /// <summary>Each listed name in <paramref name="text"/> as a whole word, outside tags

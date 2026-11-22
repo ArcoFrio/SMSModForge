@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
@@ -287,6 +288,38 @@ public sealed class GameObjectDef
     [JsonProperty("overrideParallax", Order = 29)]
     public bool OverrideParallax { get; set; }
 
+    /// <summary>
+    /// A 2D light on this object (1.10.0), or null for none. On an object the
+    /// pack makes, the light is made with it. On a bound one (the template
+    /// level's light in a pack place, a lamp of the game's in a vanilla
+    /// extension) the editor seeds it from the catalog (<see cref="VanillaDelta.Rebase"/>)
+    /// and the manifest carries it only when it differs: the game's light is
+    /// then given every setting here and keeps the rest (its layers, shadows).
+    /// </summary>
+    [JsonProperty("light", Order = 30, NullValueHandling = NullValueHandling.Ignore)]
+    public LightDef? Light { get; set; }
+
+    /// <summary>Switch off the light the bound object already has (a lamp of
+    /// the game's, the template level's light) - the object itself stays.
+    /// Only meaningful with <see cref="Bind"/> or a copy.</summary>
+    [JsonProperty("removeLight", Order = 31)]
+    public bool RemoveLight { get; set; }
+
+    /// <summary>
+    /// An effect this object plays (1.10.0, the author: "some effects are actual level-related ones, similar to
+    /// the seagulls we offer for Places. Do you think we could implement those options for Places too?"), or null
+    /// for none: one of the FX tab's templates, at the object, shown while the object is - with its place, and by
+    /// its own conditions. Its key, name and when-it-plays are the object's own, so none is written.
+    /// </summary>
+    [JsonProperty("effect", Order = 32, NullValueHandling = NullValueHandling.Ignore)]
+    public EffectDef? Effect { get; set; }
+
+    /// <summary>The light the game's object has, as the catalog read it: null
+    /// for an object the pack makes, or one of the game's with no light.</summary>
+    [JsonIgnore]
+    public LightDef? BaselineLight => Baseline?.ComponentValues
+        .Where(c => c.Type == "Light2D").Select(c => LightDef.FromCatalog(c.Params)).FirstOrDefault(l => l != null);
+
     /// <summary>A copy of one of the game's objects (and not bound, which
     /// takes precedence: a bound object is the original itself).</summary>
     [JsonIgnore]
@@ -323,6 +356,17 @@ public sealed class GameObjectDef
     [JsonIgnore]
     public VanillaLevelCatalog.Node? Baseline { get; set; }
 
+    /// <summary>
+    /// The name of that object of the game's, in the editor's own copies of the pack only (an undo step, a
+    /// record copied; never in the file - see VanillaPlaceExtensionDef.Working). A row renamed, or told it
+    /// is no longer the game's, is still the row that was filled in from that object: read back, it is found
+    /// by this, and the game's object is not filled in a second time beside it (1.10.0).
+    /// </summary>
+    [JsonProperty("baselineName", Order = 98)]
+    public string? BaselineName { get; set; }
+
+    public bool ShouldSerializeBaselineName() => !string.IsNullOrEmpty(BaselineName) && !WritingTheFile;
+
     /// <summary>True for the forced NPCs-container node.</summary>
     [JsonIgnore]
     public bool IsNpcRoot => Role == RoleNpcRoot;
@@ -355,6 +399,10 @@ public sealed class GameObjectDef
     /// <summary>Mark the enclosing serialization as a manifest write, so bound
     /// nodes reduce to their delta. Dispose restores the previous state.</summary>
     public static IDisposable SaveScope() => new DeltaScope();
+
+    /// <summary>Whether what is being written now is the pack's file (see <see cref="SaveScope"/>), rather
+    /// than the editor's own copy of the pack - an undo step, a record copied.</summary>
+    internal static bool WritingTheFile => _pruningForSave;
 
     private sealed class DeltaScope : IDisposable
     {
@@ -417,4 +465,5 @@ public sealed class GameObjectDef
     public bool ShouldSerializeCopyBeside() => IsCopy && CopyBeside;
     public bool ShouldSerializeParticleColor() => !string.IsNullOrWhiteSpace(ParticleColor);
     public bool ShouldSerializeOverrideParallax() => KeepsWhatItFinds && OverrideParallax;
+    public bool ShouldSerializeRemoveLight() => KeepsWhatItFinds && RemoveLight;
 }

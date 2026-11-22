@@ -53,7 +53,12 @@ what happened: two separate hangs, each found by a person watching the suite sit
 still rather than by the suite failing.
 
 `MainViewModel` routes its notices through `Tell(...)` and its questions through
-`Ask(..., whenNobodyIsThere)`, which handle this. Use them rather than calling
+`Ask(..., whenNobodyIsThere)`, which handle this. `MainWindow`'s message boxes go
+through `Box(...)`, and each dialog window guards its own static entry
+(`ColorPickerWindow.Pick`, `SaveConfirmWindow.Ask`, ...). `ModalsAreGuardedTests`
+reads the editor's source and fails on a window opened without a guard: two had
+slipped through until 1.10.0 (a conversation's Reset all, every colour button),
+found only when the walk over every control pressed them in EX. Use them rather than calling
 `MessageBox` directly; pick the unattended answer per question, since some should
 carry on (a save proceeds) and some should not (a discard is refused).
 
@@ -65,6 +70,54 @@ appears over that person's work. It looks exactly like a hang.
 The same applies to anything else the editor does for a person's benefit rather
 than the pack's: writing window layout, prompting about unsaved changes, opening
 a browser. `Services.TestMode` is one switch for all of it.
+
+## Undo and redo: nothing to add for a new feature
+
+The author's rule (2026-11-20): "we need to also make sure we don't have to do
+additional fixes to the undo/redo system for new future UI features". Undo was
+rebuilt in 1.10.0 so that a feature gets it by being there:
+
+- **A step is the whole pack**, taken piece by piece and compared
+  (`Model/PackPieces`, `Services/UndoService`). Anything a control writes into
+  the pack's model is in the next step. Nothing registers itself.
+- **Steps are cut by the window** (`MainWindow.History.cs`): the mouse let go,
+  a key let go outside a box, typing cut where a person would cut it, a command
+  run. A new control needs no step code.
+- **Ctrl+Z is the window's, wherever the keyboard is.** Text boxes' own memory
+  is switched off as they take the keyboard.
+- **An undo goes to the tab and the record of its step and marks what
+  changed**, found by looking: any `Selected...` that holds a record's view and
+  has a list of them beside it is followed (`MainViewModel.OtherPicksOf`).
+- **A step is put back by what differs.** The quick ways (a line, an object of
+  a place, a level or a screen, put back where it is) hold themselves to the
+  step and give way to the general one, which reads the entries that differ
+  and makes their rows again. That one needs to know nothing about a feature.
+
+So a new feature **must not**:
+
+- **Keep an author's work anywhere but the pack's model.** A value only a view
+  model holds is in no step.
+- **Keep something on a record that is not saved** (`[JsonIgnore]` with a
+  setter) without saying how a record read back from a step gets it again: a
+  step is text. `UndoNeedsNothingNewTests` fails on a new one and says the two
+  ways (kept in the editor's own copies as `LightDef.GameLayersKept` is, or
+  given back where the record is read back).
+- **Answer Ctrl+Z itself**, or put a text box in the main window that keeps
+  its own undo.
+- **Give a row rows of its own** (what a click does, components) that its
+  read-again does not make again: the same test holds the three kinds of row
+  that are put back in place to it.
+
+And the tests find a new feature by themselves. `UndoEveryControlTests` walks
+every control of every tab - none is listed - edits it as a person would,
+presses the real keys (`RealKeys`: the key goes down WPF's own route; running
+the window's shortcut by hand passed for weeks while Ctrl+Z in a text box did
+nothing) and holds the pack, the history and the page. What the walk cannot
+find by itself fails `UndoNeedsNothingNewTests` with what to do: a new list of
+records with no record in the walk's pack, a new tab the walk does not go to.
+
+When one of those fails, do what it says. Do not add the feature to a list to
+make it pass unless the list's own comment says that is the answer.
 
 ## Write the changelog as you go
 
@@ -124,8 +177,10 @@ That reads the bytes of the packaged DLL, because nothing in the ordinary suite
 can see this: the tests compile in Debug, and the plugin is a separate assembly
 for a different framework.
 
-**Play it in the game.** `powershell -File Tools/Game/ingame-suite.ps1` runs
-ModForge's in-game suite (`InGameSuiteTests`, 1.8.0): every feature checked in
+**Play it in the game.** The in-game suite (`InGameSuiteTests`, 1.8.0) is the
+last part of the one pre-release run, `powershell -File Tools/Testing/pre-release.ps1`
+(see Tests below); `Tools/Game/ingame-suite.ps1` runs it on its own, or one area
+of it. It is every feature checked in
 the test copy of the game itself - built by the editor's own code, read back
 from the game, each check with a control that must come out the other way.
 About ten minutes, one game on a desktop of its own, the test save only
@@ -159,8 +214,27 @@ does.
 ```
 dotnet test --filter "Speed!=Slow"                       # the edit loop: seconds
 powershell -File Tools/Testing/run-tests.ps1             # the full suite: about a minute and a half
-powershell -File Tools/Testing/run-tests.ps1 -WithEx     # and the window tests again in EX: before anything ships
+powershell -File Tools/Testing/run-tests.ps1 -WithEx     # and the window tests again in EX
+powershell -File Tools/Testing/pre-release.ps1           # before anything ships: -WithEx and the in-game suite
 ```
+
+**A run is made of parts, in one window** (1.10.0). Every test; the timing
+tests alone; with `-WithEx` both again in EX; with `-InGame` the in-game suite
+last (`pre-release.ps1` is `-WithEx -InGame`). They used to open a progress
+window each, each saying only how long IT had left; the author asked for "all
+of the pre-release tests ... on a single prompt ... so I have a correct
+estimate of time". Now the runner starts the test assembly as a program to
+hold one window for the whole run (`WholeRun.cs`, `Entry`); before anything
+runs, each part is planned by a test process that works out its tests and
+their last times and runs none (`SMSMODFORGE_PLAN_ONLY`), so the estimate
+covers the parts still to come from the first second. What the tests' times
+leave out - starting processes, building windows, launching the game - is
+learned per part from the last run (`bin/.../test-parts.tsv`). The in-game
+suite's times are kept in a file of their own (`test-timings.ingame.tsv`):
+in the shared file its checks of minutes and their instant early returns in
+every other run overwrote each other, and a normal run planned a game check
+as twenty seconds of a tester's share. `--whole-run-state <run folder>` prints
+what the window would show, for looking into a run.
 
 **EX is a second set of templates over the same window** (1.8.0,
 `View/Themes/Ex.xaml`). Every control style in App.xaml reaches its template
@@ -182,8 +256,8 @@ under EX's rows. `HarnessThemeTests` holds every run to the theme it asked for.
 testers by default, `-Testers N` for more or fewer, `-Filter` as `dotnet test`
 takes it - and prints one result. Each tester keeps its share of the classes
 (dealt out by what they took last time, `Shards.cs`), works on a desktop of its
-own, and shows nothing; the first tester's progress window covers the whole run
-and stays until the last tester is done. Measured on the author's machine
+own, and shows nothing; the run's one window (above) reads the testers' notes
+in the run's folder, one folder a part. Measured on the author's machine
 (2026-10-22): one process 40:32, 12 testers 1:29, 16 testers 1:17. A plain
 `dotnet test` still runs everything in one process, slowly - and slower than
 the sum of its parts: a long-lived test process slows itself down, and the same

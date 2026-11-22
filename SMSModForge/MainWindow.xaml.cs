@@ -48,6 +48,17 @@ public partial class MainWindow : Window
         // colour in the editor uses. Never under the harness: a dialog there
         // stops the suite, so nothing is picked and nothing is written, the
         // same as cancelling.
+        // Names typed in the line become their characters' tokens (1.10.0): which words are names is the pack's
+        // to say, and which the author kept as plain words is the line's.
+        NodeTextBox.FindNames = text => DataContext is MainViewModel names ? names.NamesToMakeTokens(text)
+                                                                            : Array.Empty<(int, int, string)>();
+        NodeTextBox.KeepPlain = name => (DataContext as MainViewModel)?.SelectedNode?.KeepNamePlain(name);
+
+        // New asks for the pack's name and folder together (1.10.0), starting where the last pack was opened from.
+        if (DataContext is MainViewModel creating)
+            creating.ChooseNewPack = () => View.NewPackWindow.Ask(this,
+                Services.DialogFoldersService.Get(Services.DialogFoldersService.Key.Open));
+
         NodeTextBox.PickColor = current =>
         {
             if (Services.TestMode.Active) return null;
@@ -85,13 +96,41 @@ public partial class MainWindow : Window
                     MainTabs.SelectedIndex = i;
                 };
                 Tutorial.Attach(vm.TutorialRunner);
+                // The coach docked beside the editor (1.10.0); the dim keeps clear of it, so its buttons stay lit.
+                Coach.Attach(vm.TutorialRunner);
+                // The ModForge tab's pages come in gently (1.10.0): the page shown, and a guide topic read.
+                vm.PropertyChanged += (_, e) =>
+                {
+                    switch (e.PropertyName)
+                    {
+                        case nameof(MainViewModel.ShowHomeHome) when vm.ShowHomeHome: Services.Motion.Enter(HomePageHome); break;
+                        case nameof(MainViewModel.ShowHomeTutorials) when vm.ShowHomeTutorials: Services.Motion.Enter(HomePageTutorials); break;
+                        case nameof(MainViewModel.ShowHomeGuide) when vm.ShowHomeGuide: Services.Motion.Enter(HomePageGuide); break;
+                        case nameof(MainViewModel.ShowHomeIssues) when vm.ShowHomeIssues: Services.Motion.Enter(HomePageIssues); break;
+                        case nameof(MainViewModel.SelectedGuideEntry):
+                            GuideReader.ScrollToTop();
+                            Services.Motion.Enter(GuideReader);
+                            break;
+                    }
+                };
+                vm.PreviewPickRequested += node =>
+                {
+                    foreach (var preview in FindVisualChildren<View.Controls.PlacePreview>(this))
+                        if (preview.IsVisible && preview.PickNode(node)) break;
+                };
+                Coach.SizeChanged += (_, _) => KeepDimOffCoach();
+                Coach.IsVisibleChanged += (_, _) => KeepDimOffCoach();
             }
         };
         if (DataContext is MainViewModel vm)
         {
             vm.Saved += OnPackSaved;
-            vm.PromptForText = (title, label, initial) => TextPromptWindow.Prompt(this, title, label, initial);
-            vm.ShowInfo = (title, message) => MessageBox.Show(this, message, title,
+            // Never under the harness (1.10.0): a prompt there stops the run, waiting for a name nobody
+            // types - the pencils and Rename reached it unguarded until the walk over every control
+            // (UndoEveryControlTests) was about to press them. Nothing entered is the same as Cancel; a
+            // test that renames by prompt puts its own answer here.
+            vm.PromptForText = (title, label, initial) => Services.TestMode.Active ? null : TextPromptWindow.Prompt(this, title, label, initial);
+            vm.ShowInfo = (title, message) => Box( message, title,
                 MessageBoxButton.OK, MessageBoxImage.Information);
             vm.ShowNotice = ShowNotice;
             // Another pack, or a new one, asks the mask studio first.
@@ -129,13 +168,52 @@ public partial class MainWindow : Window
                 if (!ReferenceEquals(e.OriginalSource, MainTabs)) return;   // ignore inner selectors
                 NoteTabChange();
                 CommitPendingEdits();
+                // The page that comes in, comes in (Services.Motion, 1.10.0).
+                Services.Motion.Enter(MainTabs.Template?.FindName("PART_SelectedContentHost", MainTabs) as UIElement);
+                // Its tab in sight: on EX's rail in a short window a tab chosen elsewhere (a tutorial, an issue)
+                // could be under the fold. Nothing moves where every tab is shown.
+                (MainTabs.ItemContainerGenerator.ContainerFromItem(MainTabs.SelectedItem) as FrameworkElement
+                    ?? MainTabs.SelectedItem as FrameworkElement)?.BringIntoView();
+            };
+            // And the tabs as a pack opens, the start page as none is.
+            vm.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName != nameof(MainViewModel.IsPackOpen)) return;
+                Services.Motion.Enter(vm.IsPackOpen ? PackArea : StartPage);
+                // The pack's views built while the person is still looking at the first one (MainWindow.WarmUp).
+                if (vm.IsPackOpen) WarmUpSoon();
+            };
+            // A bust picked by anything but its row lights its row (1.10.0): a tutorial's "her outfit is chosen"
+            // showed no row chosen. Once the picks have settled, and again when the tree comes into view.
+            vm.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName is nameof(MainViewModel.SelectedOutfit) or nameof(MainViewModel.SelectedCharacter))
+                    FollowInCharacterTreeSoon();
+            };
+            CharacterTree.IsVisibleChanged += (_, _) => { if (CharacterTree.IsVisible) FollowInCharacterTreeSoon(); };
+            // A record just made opens at its top, where its name is (MainViewModel.RecordMade).
+            vm.RecordMade += made => Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
+            {
+                foreach (var pane in FindVisualChildren<ScrollViewer>(MainTabs))
+                    if (ReferenceEquals(pane.DataContext, made) && pane.IsVisible) pane.ScrollToTop();
+            }));
+            // Every view built ahead, once the window is drawn; and the tutorials' pictures decoded off the UI thread.
+            ContentRendered += (_, _) =>
+            {
+                ViewModel.TutorialRunner.PreloadArt(Tutorials.TutorialCatalog.All.Select(t => t.Id)
+                    .Concat(Tutorials.TutorialCatalog.All.Select(t => t.GroupKey.Replace("tutorial.group.", "")))
+                    .Append("home").Distinct());
+                WarmUpSoon();
             };
             MainTabs.Loaded += (_, _) => KeepTabsClearOfLanguage();
             EditingLanguageBar.SizeChanged += (_, _) => KeepTabsClearOfLanguage();
             // A theme between Normal and EX rebuilds the tabs' frame, and the
             // room has to be made again in the new one, once it is laid out.
-            Action retheme = () => Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded,
-                                                          new Action(KeepTabsClearOfLanguage));
+            Action retheme = () =>
+            {
+                Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(KeepTabsClearOfLanguage));
+                WarmUpSoon();   // a new look's templates, built ahead as the first look's were
+            };
             Services.ThemeManager.Changed += retheme;
             Closed += (_, _) => Services.ThemeManager.Changed -= retheme;
 
@@ -160,6 +238,10 @@ public partial class MainWindow : Window
             // we snapshot the undo history in response (one step per drag).
             AddHandler(PlacePreview.EditCommittedEvent,
                 new RoutedEventHandler((_, _) => vm.Undo.Checkpoint()), handledEventsToo: true);
+
+            // One history, wherever the keyboard is; a step where a person would say one ends; and the
+            // keyboard kept where it was across an undo (1.10.0) - see MainWindow.History.cs.
+            WireHistory(vm);
 
             WireUpdates(vm);
 
@@ -186,6 +268,25 @@ public partial class MainWindow : Window
     /// an install would be two things writing the same folder.</summary>
     private readonly SMSModForge.Services.UpdateRunner _updates = new();
 
+
+    /// <summary>Every element of a type under <paramref name="root"/>, depth first.</summary>
+    private static System.Collections.Generic.IEnumerable<T> FindVisualChildren<T>(DependencyObject root) where T : DependencyObject
+    {
+        for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(root); i++)
+        {
+            var child = System.Windows.Media.VisualTreeHelper.GetChild(root, i);
+            if (child is T t) yield return t;
+            foreach (var deeper in FindVisualChildren<T>(child)) yield return deeper;
+        }
+    }
+
+    /// <summary>The tutorial's dim stops where the coach panel starts, so the panel is never dimmed or blocked.</summary>
+    private void KeepDimOffCoach()
+    {
+        double w = Coach.IsVisible ? Coach.ActualWidth : 0;
+        var m = new Thickness(0, 0, w, 0);
+        if (Tutorial.Margin != m) Tutorial.Margin = m;
+    }
     private void WireUpdates(MainViewModel vm)
     {
         _updates.Say  = text => ShowUpdateToast(text);
@@ -197,7 +298,7 @@ public partial class MainWindow : Window
         _updates.Problem = message =>
         {
             HideUpdateToast();
-            MessageBox.Show(this, message, Loc.T("update.problem.title"), MessageBoxButton.OK, MessageBoxImage.Warning);
+            Box( message, Loc.T("update.problem.title"), MessageBoxButton.OK, MessageBoxImage.Warning);
         };
 
         _updates.Ask = release =>
@@ -232,7 +333,7 @@ public partial class MainWindow : Window
             // window is up, so it is said over the new look, not before it.
             if (Services.ThemeManager.MovedAtStart is { } moved && !Services.TestMode.Active)
                 _ = Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ContextIdle, new Action(() =>
-                    MessageBox.Show(this,
+                    Box(
                         Loc.F("theme.moved.body", "from", moved.From.DisplayName, "to", moved.To.DisplayName),
                         Loc.T("theme.moved.title"), MessageBoxButton.OK, MessageBoxImage.Information)));
 
@@ -456,7 +557,7 @@ public partial class MainWindow : Window
         if (string.IsNullOrEmpty(code)) return;
         if (TranslationFiles.NativeName(code) == null)
         {
-            MessageBox.Show(this, Loc.F("language.new.unknownCode", "code", code), Loc.T("language.new.title"),
+            Box( Loc.F("language.new.unknownCode", "code", code), Loc.T("language.new.title"),
                             MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
@@ -464,13 +565,13 @@ public partial class MainWindow : Window
         try
         {
             var (path, existed) = TranslationFiles.CreateOrUpdate(code, Loc.UserFolder, Loc.ShippedFolder);
-            MessageBox.Show(this, Loc.F(existed ? "language.new.updated" : "language.new.created", "path", path),
+            Box( Loc.F(existed ? "language.new.updated" : "language.new.created", "path", path),
                             Loc.T("language.new.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             System.Diagnostics.Process.Start("explorer.exe", "/select,\"" + path + "\"");
         }
         catch (System.Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
         {
-            MessageBox.Show(this, ex.Message, Loc.T("language.new.title"), MessageBoxButton.OK, MessageBoxImage.Error);
+            Box( ex.Message, Loc.T("language.new.title"), MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -490,7 +591,7 @@ public partial class MainWindow : Window
         var file = Loc.Read(dialog.FileName);
         if (file == null)
         {
-            MessageBox.Show(this, Loc.F("language.check.unreadable", "path", dialog.FileName),
+            Box( Loc.F("language.check.unreadable", "path", dialog.FileName),
                             Loc.T("language.check.dialogTitle"), MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
@@ -504,7 +605,7 @@ public partial class MainWindow : Window
         if (!fix) return;
 
         int done = TranslationFiles.PutKeysBack(dialog.FileName, result);
-        MessageBox.Show(this, Loc.P("language.check.fixed", done, "backup", System.IO.Path.GetFileName(dialog.FileName) + ".bak"),
+        Box( Loc.P("language.check.fixed", done, "backup", System.IO.Path.GetFileName(dialog.FileName) + ".bak"),
                         Loc.T("language.check.dialogTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
@@ -516,7 +617,7 @@ public partial class MainWindow : Window
     {
         string? root = ((MainViewModel)DataContext).PackRoot;
         if (root == null)
-            MessageBox.Show(this, Loc.T("packText.saveFirst"), Loc.T("packText.title"),
+            Box( Loc.T("packText.saveFirst"), Loc.T("packText.title"),
                             MessageBoxButton.OK, MessageBoxImage.Information);
         return root;
     }
@@ -534,7 +635,7 @@ public partial class MainWindow : Window
         if (string.IsNullOrEmpty(code)) return;
         if (TranslationFiles.NativeName(code) == null)
         {
-            MessageBox.Show(this, Loc.F("language.new.unknownCode", "code", code), Loc.T("packText.title"),
+            Box( Loc.F("language.new.unknownCode", "code", code), Loc.T("packText.title"),
                             MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
@@ -543,13 +644,13 @@ public partial class MainWindow : Window
         {
             var (path, existed) = ((MainViewModel)DataContext).WithTranslationFilesCurrent(
                 pack => PackTranslations.CreateOrUpdate(pack, root, code));
-            MessageBox.Show(this, Loc.F(existed ? "packText.new.updated" : "packText.new.created", "path", path),
+            Box( Loc.F(existed ? "packText.new.updated" : "packText.new.created", "path", path),
                             Loc.T("packText.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             System.Diagnostics.Process.Start("explorer.exe", "/select,\"" + path + "\"");
         }
         catch (System.Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
         {
-            MessageBox.Show(this, ex.Message, Loc.T("packText.title"), MessageBoxButton.OK, MessageBoxImage.Error);
+            Box( ex.Message, Loc.T("packText.title"), MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -572,6 +673,18 @@ public partial class MainWindow : Window
             var window = new View.TranslatePackWindow(pack, root) { Owner = this };
             return window.ShowDialog();
         });
+    }
+
+    /// <summary>
+    /// A guide picture clicked: open at full size, to zoom into (1.10.0). Its name over it is the section's heading
+    /// or the topic's title (the button's Tag); the keyboard comes back to the picture on closing.
+    /// </summary>
+    private void GuidePicture_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button { Content: Image { Source: { } picture } } button) return;
+        string caption = button.Tag as string is { Length: > 0 } heading ? heading
+            : (DataContext as MainViewModel)?.GuideTopic?.Title ?? "";
+        PictureViewer.Open(picture, caption, button);
     }
 
     /// <summary>
@@ -604,6 +717,8 @@ public partial class MainWindow : Window
     {
         if (DataContext is not MainViewModel vm) return;
         vm.SelectedTabIndex = MainTab.ModForge;
+        if (vm.IsDocSearchActive) vm.DocQuery = "";
+        vm.HomePage = SMSModForge.ViewModel.HomePage.Issues;
         Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
         {
             IssueList.BringIntoView();
@@ -661,7 +776,7 @@ public partial class MainWindow : Window
             pack => PackTranslations.CheckAll(pack, root));
         if (all.Count == 0)
         {
-            MessageBox.Show(this, Loc.T("packText.check.none"), Loc.T("packText.title"),
+            Box( Loc.T("packText.check.none"), Loc.T("packText.title"),
                             MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
@@ -692,7 +807,7 @@ public partial class MainWindow : Window
             done += put;
             backups.Add(System.IO.Path.GetFileName(c.Path) + ".bak");
         }
-        MessageBox.Show(this, Loc.P("language.check.fixed", done, "backup", Loc.JoinAnd(backups)),
+        Box( Loc.P("language.check.fixed", done, "backup", Loc.JoinAnd(backups)),
                         Loc.T("packText.title"), MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
@@ -719,7 +834,7 @@ public partial class MainWindow : Window
     {
         // A check somebody asked for answers in a dialog, because they are
         // waiting for the answer. The automatic one uses the toast.
-        _updates.Report = message => MessageBox.Show(this, message, Loc.T("update.report.title"),
+        _updates.Report = message => Box( message, Loc.T("update.report.title"),
             MessageBoxButton.OK, MessageBoxImage.Information);
         try { await _updates.OnDemandAsync(); }
         finally { _updates.Report = ToastReport; }
@@ -745,7 +860,7 @@ public partial class MainWindow : Window
         // notices the folder has never been set. Both have to agree about what
         // counts as a game folder - see View.GameFolderPrompt.
         if (View.GameFolderPrompt.Ask(this))
-            MessageBox.Show(this, Loc.T("gameFolder.saved"),
+            Box( Loc.T("gameFolder.saved"),
                 Loc.T("gameFolder.title"), MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
@@ -788,7 +903,7 @@ public partial class MainWindow : Window
 
         if (pending.Count == 0)
         {
-            MessageBox.Show(this,
+            Box(
                 Loc.T("spelling.allKnown"),
                 Loc.T("spelling.addNames.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
@@ -804,7 +919,7 @@ public partial class MainWindow : Window
             .GroupBy(x => x.i / perLine)
             .Select(g => string.Join(", ", g.Select(x => x.w))));
 
-        var answer = MessageBox.Show(this,
+        var answer = Box(
             Loc.P("spelling.addNames.ask", pending.Count, "names", list),
             Loc.T("spelling.addNames.title"), MessageBoxButton.OKCancel, MessageBoxImage.Question);
         if (answer != MessageBoxResult.OK) return;
@@ -812,7 +927,7 @@ public partial class MainWindow : Window
         int added = SMSModForge.Services.SpellingDictionary.AddToWindowsDictionary(pending);
         if (added < 0)
         {
-            MessageBox.Show(this,
+            Box(
                 Loc.F("spelling.writeFailed", "path", SMSModForge.Services.SpellingDictionary.WindowsUserDictionaryPath),
                 Loc.T("spelling.addNames.title"), MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
@@ -837,7 +952,7 @@ public partial class MainWindow : Window
         };
         timer.Start();
 
-        MessageBox.Show(this, Loc.P("spelling.added", added),
+        Box( Loc.P("spelling.added", added),
             Loc.T("spelling.addNames.title"), MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
@@ -1053,7 +1168,7 @@ public partial class MainWindow : Window
             {
                 if (!SMSModForge.Services.SpellingDictionary.AddToWindowsDictionary(word))
                 {
-                    MessageBox.Show(this,
+                    Box(
                         Loc.F("spelling.writeFailed", "path", SMSModForge.Services.SpellingDictionary.WindowsUserDictionaryPath),
                         Loc.T("spelling.addToDictionary"), MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
@@ -1152,9 +1267,10 @@ public partial class MainWindow : Window
     private void OnAnyLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
     {
         if (DataContext is not MainViewModel vm) return;
-        if (e.OldFocus is System.Windows.Controls.TextBox tb)
-            tb.GetBindingExpression(System.Windows.Controls.TextBox.TextProperty)?.UpdateSource();
-        vm.Undo.Checkpoint();
+        if (e.OldFocus is System.Windows.Controls.TextBox tb) WriteIfTyped(tb.GetBindingExpression(System.Windows.Controls.TextBox.TextProperty));
+        // Only when something has been said to edit the pack since the last step (1.10.0): this comes with every
+        // move of the keyboard's focus, and looking at the whole pack each time was 63 ms of it on a large pack.
+        vm.Undo.CheckpointIfTouched();
     }
 
     /// <summary>
@@ -1197,11 +1313,30 @@ public partial class MainWindow : Window
         // MainViewModel.NodeKeysActive.
         Bind(vm.DuplicateHereCommand, Key.D, ModifierKeys.Control);
 
-        // Undo/redo. BindFlush commits the focused field first so a not-yet-left
+        // Undo/redo. What is being typed is committed first, so a not-yet-left
         // edit is captured before the snapshot; the command itself checkpoints
-        // (via RelayCommand.Executing) then undoes/redoes.
-        BindFlush(vm.UndoCommand, Key.Z, ModifierKeys.Control);
-        BindFlush(vm.RedoCommand, Key.Y, ModifierKeys.Control);
+        // (via RelayCommand.Executing) then undoes/redoes. The keys are the
+        // window's whether or not there is anything to undo yet (1.10.0): that
+        // is only known once what is being typed is in the pack - asked before,
+        // Ctrl+Z in a box whose text is written as it is left did nothing.
+        void BindHistory(RelayCommand command, Key key, ModifierKeys modifiers)
+            => InputBindings.Add(new KeyBinding(new PassThroughCommand(() => History(command), () => true), key, modifiers));
+        BindHistory(vm.UndoCommand, Key.Z, ModifierKeys.Control);
+        BindHistory(vm.RedoCommand, Key.Y, ModifierKeys.Control);
+        BindHistory(vm.RedoCommand, Key.Z, ModifierKeys.Control | ModifierKeys.Shift);
+
+        // And the Undo and Redo commands themselves, which is how the key arrives from a text box: a box maps
+        // Ctrl+Z and Ctrl+Y to its own Undo and Redo before the window's keys are asked, and WPF marks a key
+        // mapped to a command as dealt with whether or not the command could run. With the boxes' own memory
+        // off (MainWindow.History.cs) theirs never can - so the key, pressed in a box, did nothing at all,
+        // which only a key really pressed showed (RealKeys, 1.10.0). A command nobody below could run comes
+        // up to here, and here it always can.
+        void AnswerHistory(RoutedUICommand asked, RelayCommand command)
+            => CommandBindings.Add(new CommandBinding(asked,
+                (_, e) => { History(command); e.Handled = true; },
+                (_, e) => { e.CanExecute = true; e.Handled = true; }));
+        AnswerHistory(ApplicationCommands.Undo, vm.UndoCommand);
+        AnswerHistory(ApplicationCommands.Redo, vm.RedoCommand);
     }
 
     /// <summary>
@@ -1542,17 +1677,31 @@ public partial class MainWindow : Window
         if (Keyboard.FocusedElement is not DependencyObject focused) return;
 
         if (focused is System.Windows.Controls.TextBox tb)
-            tb.GetBindingExpression(System.Windows.Controls.TextBox.TextProperty)?.UpdateSource();
+            WriteIfTyped(tb.GetBindingExpression(System.Windows.Controls.TextBox.TextProperty));
 
         // Walk ancestors for an editable ComboBox hosting that TextBox.
         for (DependencyObject? d = focused; d != null; d = System.Windows.Media.VisualTreeHelper.GetParent(d))
         {
             if (d is System.Windows.Controls.ComboBox cb && cb.IsEditable)
             {
-                cb.GetBindingExpression(System.Windows.Controls.ComboBox.TextProperty)?.UpdateSource();
+                WriteIfTyped(cb.GetBindingExpression(System.Windows.Controls.ComboBox.TextProperty));
                 break;
             }
         }
+    }
+
+    /// <summary>
+    /// Write a box's text into the pack when something was typed in it that is not there yet - and only then.
+    /// Written whether or not anything had been typed (until 1.10.0), a box that shows a number shorter than
+    /// the pack holds it (two decimals of a slider's 0.1234), or shows a value the pack leaves unsaid (a
+    /// volume of 1), changed the pack just by losing the keyboard or by a shortcut being pressed in it: a
+    /// step in the history nobody made - which, coming before Ctrl+Y, threw away what there was to redo.
+    /// Found by the walk over every control (UndoEveryControlTests): Ctrl+Z in such a box, then Ctrl+Y, and
+    /// nothing came back.
+    /// </summary>
+    private static void WriteIfTyped(System.Windows.Data.BindingExpression? binding)
+    {
+        if (binding != null && binding.IsDirty) binding.UpdateSource();
     }
 
     /// <summary>
@@ -1656,7 +1805,7 @@ public partial class MainWindow : Window
 
         if (DataContext is MainViewModel vm && vm.HasUnsavedChanges)
         {
-            var choice = MessageBox.Show(this,
+            var choice = Box(
                 Loc.T("unsaved.beforeClosing"),
                 Loc.T("unsaved.title"), MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
 
@@ -1911,7 +2060,7 @@ public partial class MainWindow : Window
         {
             // Nothing to key a type-wide rule on. Say so rather than silently
             // doing the single-issue thing under a menu item that promised more.
-            MessageBox.Show(this,
+            Box(
                 Loc.T("issues.noCode"),
                 Loc.T("issues.ignoreKind.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
@@ -1928,7 +2077,7 @@ public partial class MainWindow : Window
     private void ClearIgnoredIssues_Click(object sender, RoutedEventArgs e)
     {
         if (DataContext is not MainViewModel vm) return;
-        if (MessageBox.Show(this,
+        if (Box(
                 Loc.P("issues.unignoreAll.ask", vm.IgnoredIssueCount),
                 Loc.T("issues.unignoreAll.title"), MessageBoxButton.OKCancel,
                 MessageBoxImage.Question) == MessageBoxResult.OK)
@@ -2026,7 +2175,7 @@ public partial class MainWindow : Window
         if (string.IsNullOrWhiteSpace(vm.PackRoot))
         {
             if (!Services.TestMode.Active)
-                MessageBox.Show(this, Loc.T(saveFirstKey), Loc.T("mask.title"), MessageBoxButton.OK, MessageBoxImage.Information);
+                Box( Loc.T(saveFirstKey), Loc.T("mask.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         if (_studio != null)
@@ -2041,9 +2190,14 @@ public partial class MainWindow : Window
         _studio = studio;
         _languageBarWas = EditingLanguageBar.Visibility;
         EditingLanguageBar.Visibility = Visibility.Collapsed;
-        MainTabs.Visibility = Visibility.Collapsed;
         MaskStudioHost.Content = studio;
         MaskStudioHost.Visibility = Visibility.Visible;
+        // In from the right while the tabs go out to the left (1.10.0); they are put away once gone - at once with
+        // the movements off - unless this studio closed again on the way.
+        Services.Motion.Slide(MaskStudioHost, MainTabs, fromRight: true, () =>
+        {
+            if (ReferenceEquals(_studio, studio)) MainTabs.Visibility = Visibility.Collapsed;
+        });
     }
 
     private void PutTheTabsBack(MaskStudio studio)
@@ -2051,10 +2205,16 @@ public partial class MainWindow : Window
         if (!ReferenceEquals(_studio, studio)) return;
         _studio = null;
         LetGoOfThePreviews(studio);
-        MaskStudioHost.Content = null;
-        MaskStudioHost.Visibility = Visibility.Collapsed;
         MainTabs.Visibility = Visibility.Visible;
         EditingLanguageBar.Visibility = _languageBarWas;
+        // The studio goes back out to the right as the tabs come in from the left; it leaves the window once gone,
+        // unless another studio took its place on the way.
+        Services.Motion.Slide(MainTabs, MaskStudioHost, fromRight: false, () =>
+        {
+            if (!ReferenceEquals(MaskStudioHost.Content, studio)) return;
+            MaskStudioHost.Content = null;
+            MaskStudioHost.Visibility = Visibility.Collapsed;
+        });
         Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(KeepTabsClearOfLanguage));
     }
 
@@ -2338,6 +2498,13 @@ public partial class MainWindow : Window
         if (PickHex(node.OutlineColor) is { } picked) WithUndo(() => node.OutlineColor = picked);
     }
 
+    /// <summary>The FX tab's colour: the picker on the effect's own (1.10.0).</summary>
+    private void PickEffectColor_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { DataContext: EffectViewModel effect }) return;
+        if (PickHex(string.IsNullOrEmpty(effect.Color) ? "#FFFFFFFF" : effect.Color) is { } picked) WithUndo(() => effect.Color = picked);
+    }
+
     /// <summary>Win32 RGB picker seeded with <paramref name="current"/>; null on cancel.</summary>
     private System.Windows.Media.Color? PickColor(System.Windows.Media.Color current)
     {
@@ -2356,6 +2523,24 @@ public partial class MainWindow : Window
     /// than being carried over, since it can finally be chosen.</summary>
     private string? PickHex(string? current)
         => View.ColorPickerWindow.Pick(this, current);
+
+    /// <summary>
+    /// A message box - or, under the test harness, the answer nobody being there gives: OK to a notice, and no
+    /// to a question, so nothing is discarded and nothing outside the editor is written. CLAUDE.md: a window a
+    /// test run raises does not fail it, it STOPS it, on the screen of whoever started it. Every box of this
+    /// window goes through here (ModalsAreGuardedTests holds the editor to it).
+    /// </summary>
+    private MessageBoxResult Box(string text, string title, MessageBoxButton buttons, MessageBoxImage image)
+    {
+        if (Services.TestMode.Active)
+            return buttons switch
+            {
+                MessageBoxButton.OK => MessageBoxResult.OK,
+                MessageBoxButton.YesNo => MessageBoxResult.No,
+                _ => MessageBoxResult.Cancel,
+            };
+        return MessageBox.Show(this, text, title, buttons, image);
+    }
 
     /// <summary>Apply an edit made by a dialog as one undo step. Every colour
     /// button goes through this - without it a picked colour was not a step at
@@ -2520,7 +2705,7 @@ public partial class MainWindow : Window
         var dialogue = vm.SelectedDialogue;
         if (dialogue == null || !dialogue.IsVanillaBased) return;
 
-        if (MessageBox.Show(this,
+        if (Box(
                 Loc.T("dialogues.reset.ask") + Environment.NewLine + Environment.NewLine
                 + Loc.F("dialogues.reset.discarded", "changes", dialogue.ChangeSummary),
                 Loc.T("dialogues.reset.title"), MessageBoxButton.OKCancel, MessageBoxImage.Question)
@@ -2543,7 +2728,7 @@ public partial class MainWindow : Window
         if (quest == null || !quest.IsVanillaExtension || !quest.HasChanges) return;
 
         if (!Services.TestMode.Active
-            && MessageBox.Show(this,
+            && Box(
                    Loc.T("quests.reset.ask") + Environment.NewLine + Environment.NewLine
                    + Loc.F("quests.reset.discarded", "changes", quest.ChangeSummary),
                    Loc.T("quests.reset.title"), MessageBoxButton.OKCancel, MessageBoxImage.Question)
@@ -2992,6 +3177,10 @@ public partial class MainWindow : Window
                 MainTabs.SelectedIndex = TabWallpapers;
                 SelectUnit(vm.Wallpapers.FirstOrDefault(x => x.Key == inner), vm.WallpaperTree, v => vm.SelectedWallpaper = v, field);
                 break;
+            case "effects":
+                MainTabs.SelectedIndex = MainTab.Fx;
+                SelectUnit(vm.Effects.FirstOrDefault(x => x.Key == inner), vm.EffectTree, v => vm.SelectedEffect = v, field);
+                break;
             case "integrationRules":
             {
                 MainTabs.SelectedIndex = TabIntegration;
@@ -3236,6 +3425,34 @@ public partial class MainWindow : Window
     /// <summary>A tag matches its field, or stands in for an indexed/sub-field family ("mouth" ↦ "mouth[2]", "jiggle" ↦ "jiggle.strength").</summary>
     private static bool FieldMatches(string tag, string field)
         => field == tag || field.StartsWith(tag + "[") || field.StartsWith(tag + ".");
+
+    private bool _characterFollowPending;
+
+    private void FollowInCharacterTreeSoon()
+    {
+        if (_characterFollowPending) return;
+        _characterFollowPending = true;
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
+        {
+            _characterFollowPending = false;
+            FollowInCharacterTree();
+        }));
+    }
+
+    /// <summary>
+    /// Light the row of the bust picked, when the tree lights another or none. A character's own row stands for
+    /// the bust they enter in, which is what picking it shows, so that is left lit.
+    /// </summary>
+    private void FollowInCharacterTree()
+    {
+        if (DataContext is not MainViewModel vm || !CharacterTree.IsVisible) return;
+        var character = vm.SelectedCharacter;
+        if (character == null) return;
+        var outfit = vm.SelectedOutfit is { } o && character.Outfits.Contains(o) ? o : null;
+        var lit = CharacterTree.SelectedItem;
+        if (outfit != null ? ReferenceEquals(lit, outfit) || ReferenceEquals(lit, character) : ReferenceEquals(lit, character)) return;
+        SelectInTree(character, outfit);
+    }
 
     /// <summary>Expand the character and select the offending outfit in the tree; returns the selected tree item (for fallback flashing).</summary>
     private FrameworkElement? SelectInTree(CharacterViewModel character, OutfitViewModel? outfit)

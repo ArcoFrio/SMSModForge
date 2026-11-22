@@ -126,7 +126,8 @@ internal sealed class GpuDevice : IDisposable
         {
             Vortice.DXGI.Format.R32G32B32A32_Float => 16,
             Vortice.DXGI.Format.R16G16B16A16_Float => 8,
-            Vortice.DXGI.Format.R8G8B8A8_UInt or Vortice.DXGI.Format.R8G8B8A8_UNorm or Vortice.DXGI.Format.R32_Float or Vortice.DXGI.Format.R32_UInt => 4,
+            Vortice.DXGI.Format.R8G8B8A8_UInt or Vortice.DXGI.Format.R8G8B8A8_UNorm or Vortice.DXGI.Format.B8G8R8A8_UNorm
+                or Vortice.DXGI.Format.R32_Float or Vortice.DXGI.Format.R32_UInt => 4,
             _ => throw new NotSupportedException("a test's fill for " + desc.Format),   // English on purpose: a test's own failure
         };
         int pitch = (int)desc.Width * bytesPerTexel;
@@ -140,11 +141,22 @@ internal sealed class GpuDevice : IDisposable
     public ID3D11ComputeShader Kernel(string source, string entry, string name)
         => _kernels.GetOrAdd(entry + "\n" + source, _ => Device.CreateComputeShader(Bytecode(source, entry, name)));
 
+    private readonly ConcurrentDictionary<string, ID3D11VertexShader> _vertex = new();
+    private readonly ConcurrentDictionary<string, ID3D11PixelShader> _pixel = new();
+
+    /// <summary>A vertex program (the place's scene, 1.10.0: the card draws its pictures as the game's own
+    /// renderer does, as triangles), compiled once and kept on disk as the kernels are.</summary>
+    public ID3D11VertexShader Vertex(string source, string entry, string name)
+        => _vertex.GetOrAdd(entry + "\n" + source, _ => Device.CreateVertexShader(Bytecode(source, entry, name, "vs_5_0")));
+
+    /// <summary>A pixel program, as <see cref="Vertex"/>.</summary>
+    public ID3D11PixelShader Pixel(string source, string entry, string name)
+        => _pixel.GetOrAdd(entry + "\n" + source, _ => Device.CreatePixelShader(Bytecode(source, entry, name, "ps_5_0")));
+
     /// <summary>The compiled program: from the disk cache when this source was
     /// compiled before, else compiled now and kept.</summary>
-    internal static byte[] Bytecode(string source, string entry, string name)
+    internal static byte[] Bytecode(string source, string entry, string name, string Profile = "cs_5_0")
     {
-        const string Profile = "cs_5_0";
         string key = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(Profile + "\n" + entry + "\n" + source)))[..32];
         string cached = Services.AppDataFolder.PathOf("ShaderCache", name + "-" + entry + "-" + key + ".cso");
         try { if (File.Exists(cached)) return File.ReadAllBytes(cached); }
@@ -174,6 +186,10 @@ internal sealed class GpuDevice : IDisposable
     {
         foreach (var k in _kernels.Values) k.Dispose();
         _kernels.Clear();
+        foreach (var v in _vertex.Values) v.Dispose();
+        _vertex.Clear();
+        foreach (var p in _pixel.Values) p.Dispose();
+        _pixel.Clear();
         Context.Dispose();
         Device.Dispose();
     }

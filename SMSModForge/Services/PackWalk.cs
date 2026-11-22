@@ -103,6 +103,11 @@ public static class PackWalk
                          new Spot(Loc.F("walk.wallpaperUnlock", "name", w.Key), $"wallpapers[{w.Key}]")))
                 yield return hit;
 
+        foreach (var e in pack.Effects)
+            foreach (var hit in Flatten(e.Conditions,
+                         new Spot(Loc.F("walk.effect", "name", e.Key), $"effects[{e.Key}]")))
+                yield return hit;
+
         foreach (var q in pack.Quests)
         {
             foreach (var hit in Flatten(q.StartConditions, Quest("walk.questStart", q)))

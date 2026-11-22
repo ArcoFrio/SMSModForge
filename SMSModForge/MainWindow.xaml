@@ -269,6 +269,9 @@
             <Setter Property="IsSynchronizedWithCurrentItem" Value="False"/>
             <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
             <Setter Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="True"/>
+            <!-- What a box's stored word names, faintly at its right (place:TheGallery: "This pack — The
+                 Gallery"). Only on an editable box holding a word one of its options, or a scene, names. -->
+            <Setter Property="view:TokenNote.Show" Value="True"/>
         </Style>
         <!--
             Visibility converters for the Integration tab's picker /
@@ -1299,6 +1302,32 @@
             </Grid>
         </DataTemplate>
 
+        <!-- One of the pack's effects (Play effect / Stop effect, 1.10.0). -->
+        <DataTemplate x:Key="EffectRefParamTemplate" DataType="{x:Type vm:ParamRowViewModel}">
+            <Grid Style="{StaticResource ParamRowGrid}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="*" MaxWidth="440"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                <ComboBox view:KnownValue.Check="True" Grid.Column="1"
+                          ItemsSource="{Binding DataContext.EffectKeyOptions, RelativeSource={RelativeSource AncestorType=Window}}"
+                          IsEditable="True"
+                          Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding Tooltip}"/>
+            </Grid>
+        </DataTemplate>
+
+        <!-- The FX tab's rows: a label, then what sets it. -->
+        <Style x:Key="EffectRow" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Margin" Value="0,2,0,2"/>
+        </Style>
+        <Style x:Key="EffectLabel" TargetType="TextBlock">
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
         <DataTemplate x:Key="SfxRefParamTemplate" DataType="{x:Type vm:ParamRowViewModel}">
             <Grid Style="{StaticResource ParamRowGrid}">
                 <Grid.ColumnDefinitions>
@@ -1382,6 +1411,7 @@
                                         SignalRefTemplate="{StaticResource SignalRefParamTemplate}"
                                         MusicRefTemplate="{StaticResource MusicRefParamTemplate}"
                                         SfxRefTemplate="{StaticResource SfxRefParamTemplate}"
+                                        EffectRefTemplate="{StaticResource EffectRefParamTemplate}"
                                         GameObjectPathTemplate="{StaticResource GameObjectPathParamTemplate}"
                                           SpriteRefTemplate="{StaticResource SpriteRefParamTemplate}"
                                         ChoiceTemplate="{StaticResource ChoiceParamTemplate}"
@@ -3226,7 +3256,7 @@
                         <!-- Names the colour cast, so "this one is the game's"
                              doesn't rely on spotting a tint. -->
                         <Border Padding="4,0" Margin="4,0,0,0" CornerRadius="2" VerticalAlignment="Center"
-                                Background="#805B8FCB"
+                                Background="{DynamicResource Theme.VanillaChip}"
                                 Visibility="{Binding Bind, Converter={StaticResource BoolToVisibility}}"
                                 ToolTip="{l:T gameObject.objectVanillaLevelAlready.tip}">
                             <TextBlock Text="{l:T gameObject.vanilla}" FontSize="10"/>
@@ -3237,7 +3267,7 @@
                                 Background="{DynamicResource Theme.Accent}"
                                 Visibility="{Binding HasVanillaChange, Converter={StaticResource BoolToVisibility}}"
                                 ToolTip="{l:T gameObject.differsVanillaObjectS.tip}">
-                            <TextBlock Text="{l:T gameObject.changed}" FontSize="10"/>
+                            <TextBlock Text="{l:T gameObject.changed}" FontSize="10" Foreground="{DynamicResource Theme.OnAccent}"/>
                         </Border>
                         <Button Content="{l:T gameObject.resetToVanilla}" Width="50" Height="22" Padding="0" Margin="4,0,0,0"
                                 Command="{Binding ResetToVanillaCommand}"
@@ -4247,6 +4277,9 @@
                 <MenuItem Header="{l:T menu.dialogueRowsLookLike}" IsCheckable="True"
                           IsChecked="{Binding GameLookNodeRows, Mode=TwoWay}"
                           ToolTip="{l:T menu.dialogueRowsLookLike.tip}"/>
+                <MenuItem x:Name="AnimationsMenuItem" Header="{l:T menu.animations}" IsCheckable="True"
+                          IsChecked="{Binding Animations, Mode=TwoWay}"
+                          ToolTip="{l:T menu.animations.tip}"/>
                 <MenuItem Header="{l:T menu.previewQuality}" ItemsSource="{Binding PreviewQualities}"
                           ToolTip="{l:T menu.previewQuality.tip}">
                     <MenuItem.ItemContainerStyle>
@@ -4381,12 +4414,21 @@
             </TextBlock>
         </StatusBar>
 
+        <!-- The running tutorial's coach (1.10.0): docked at the right while a tutorial runs, so its words and
+             buttons never cover the work. Collapsed otherwise. -->
+        <ctl:TutorialCoach x:Name="Coach" DockPanel.Dock="Right" Width="384"/>
+
         <!-- The tabs, with the language the pack is being edited in at the right
              end of their row, under the game version. It changes every tab at
              once - every text a player reads, everywhere, shows the chosen
              language - so it sits over all of them rather than in one. The tab
              headers are kept clear of it (MainWindow.KeepTabsClearOfLanguage). -->
         <Grid>
+        <!-- No pack open (1.10.0): the start page - New, Open, the packs opened lately - in place of the tabs,
+             which are not there until a pack is (MainViewModel.IsPackOpen). -->
+        <view:StartPage x:Name="StartPage"
+                        Visibility="{Binding IsPackOpen, Converter={StaticResource InverseBoolToVisibility}}"/>
+        <Grid x:Name="PackArea" Visibility="{Binding IsPackOpen, Converter={StaticResource BoolToVisibility}}">
         <!-- The theme's arrangement of the tabs: a strip across the top in
              Normal, a rail down the side with each tab's icon in EX (1.8.0,
              View/Themes/Ex.xaml). The same tabs either way, picked the same way. -->
@@ -4398,399 +4440,770 @@
                  unit list, so the per-tab copy/paste/rename/delete
                  dispatches deliberately no-op here.
                  ════════════════════════════════════════════════════ -->
-            <TabItem view:TabIcon.Glyph="&#xE80F;" view:TutorialAnchor.Id="tab:modforge" view:TabIcon.Badge="{Binding Issues.Count}" Header="{l:T home.modforge}" Style="{StaticResource HomeTabItem}"
+            <TabItem view:TabIcon.Glyph="&#xE80F;" view:TutorialAnchor.Id="tab:modforge" view:TabIcon.Badge="{Binding Issues.Count}" view:TabIcon.BadgeLevel="{Binding IssueLevel}" Header="{l:T home.modforge}" Style="{StaticResource HomeTabItem}"
                      ToolTip="{l:T home.modforge.tip}">
-                <Grid Margin="8">
-                    <!-- Help fills ~2/3 on the left; the issues panel sits on
-                         the right at ~1/3 width. -->
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <!-- RIGHT: validation issues (moved from the Busts tab) -->
-                    <DockPanel Grid.Column="2">
-                        <!-- The pack's own version: what a player sees beside its
-                             name in the main menu. Only shown when there is a pack
-                             to number - an empty editor has nothing to version. -->
-                        <GroupBox DockPanel.Dock="Top" Header="{l:T home.packVersion}" Margin="0,0,0,6"
-                                  Visibility="{Binding HasPack, Converter={StaticResource BoolToVisibility}}">
-                            <StackPanel>
+                <!-- The ModForge tab, reworked for 1.10.0 ("make it look much cleaner, and make it so an entry level
+                     user is able to get the information they need"): pages in a strip - Home, Tutorials, the Guide
+                     as a reader, Issues - with one search whose results take the page's place while it has words.
+                     Classic and EX draw it through the Theme.Home* templates (App.xaml, View/Themes/Ex.xaml). -->
+                <DockPanel TextElement.FontWeight="Normal">
+                    <DockPanel.Resources>
+                        <!-- A tutorial as a card, on the Tutorials page and in the search's results. -->
+                        <DataTemplate x:Key="HomeTutorialCard">
+                            <DockPanel>
+                            <!-- A tutorial that goes deeper into the one above it: indented under it, with a line down
+                                 to it (the author, 2026-11-21: "indented on the base ones"). -->
+                            <Grid DockPanel.Dock="Left" Width="40" Visibility="{Binding IsDeeper, Converter={StaticResource BoolToVisibility}}">
+                                <Path Data="M16,-8 L16,40 L36,40" Stroke="{DynamicResource Theme.Accent}" StrokeThickness="2" Opacity="0.55"
+                                      VerticalAlignment="Top"/>
+                            </Grid>
+                            <ContentControl Style="{DynamicResource Theme.HomeTutorial}" Tag="{Binding Art}"
+                                            view:HoverReveal.Reveals="{Binding ElementName=TutorialPeek}">
                                 <DockPanel>
-                                    <TextBlock DockPanel.Dock="Left" Text="{l:T home.version}" Width="60"
-                                               VerticalAlignment="Center"/>
-                                    <TextBox Text="{Binding PackVersionText, UpdateSourceTrigger=PropertyChanged}"
-                                             VerticalAlignment="Center"
-                                             ToolTip="{l:T home.threeNumbersMajorMinor.tip}"/>
+                                    <Button DockPanel.Dock="Right" Content="{Binding ActionLabel}" Padding="16,5" MinWidth="88"
+                                            ToolTip="{Binding ActionTip}"
+                                            VerticalAlignment="Center" Margin="12,0,0,0"
+                                            Command="{Binding DataContext.StartTutorialCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsComplete}" Value="False">
+                                                        <Setter Property="Template" Value="{DynamicResource Theme.PrimaryButtonTemplate}"/>
+                                                        <Setter Property="Background" Value="{DynamicResource Theme.Accent}"/>
+                                                        <Setter Property="Foreground" Value="{DynamicResource Theme.OnAccent}"/>
+                                                        <Setter Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <Border HorizontalAlignment="Left" Padding="7,0,7,1" Margin="0,0,0,3" CornerRadius="3"
+                                                Background="{DynamicResource Theme.AccentSoft}" ToolTip="{l:T home.tutorials.deeper.tip}"
+                                                Visibility="{Binding IsDeeper, Converter={StaticResource BoolToVisibility}}">
+                                            <TextBlock Text="{l:T home.tutorials.deeper}" FontSize="10.5" FontWeight="Bold"
+                                                       Foreground="{DynamicResource Theme.AccentText}"/>
+                                        </Border>
+                                        <TextBlock TextWrapping="Wrap" FontSize="14" FontWeight="SemiBold">
+                                            <Run Text="{Binding LevelPrefix, Mode=OneWay}" Foreground="{DynamicResource Theme.Accent}"/><Run
+                                                 Text="{Binding Title, Mode=OneWay}"/><Run
+                                                 Text="  "/><Run Text="{Binding Mark, Mode=OneWay}" Foreground="{DynamicResource Theme.Accent}"/>
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding Summary}" TextWrapping="Wrap" Foreground="{DynamicResource Theme.TextMuted}"
+                                                   Margin="0,3,0,0"/>
+                                        <!-- What it adds and where (the author: "a summary of what tabs and changes they
+                                             involve, so the user understands if they want to check the tutorial"). -->
+                                        <TextBlock x:Name="TutorialAdds" TextWrapping="Wrap" FontSize="12" Margin="0,5,0,0"
+                                                   Visibility="{Binding HasMakes, Converter={StaticResource BoolToVisibility}}">
+                                            <Run Text="{l:T home.tutorials.adds}" FontWeight="SemiBold" Foreground="{DynamicResource Theme.Accent}"/><Run
+                                                 Text=" "/><Run Text="{Binding Makes, Mode=OneWay}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="11" Margin="0,4,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Theme.TextMuted}">
+                                            <Run Text="{Binding TabsLabel, Mode=OneWay}"/><Run Text="  ·  "/><Run
+                                                 Text="{Binding StepsLabel, Mode=OneWay}"/><Run Text="  "/><Run
+                                                 Text="{Binding UpdatedNote, Mode=OneWay}" Foreground="{DynamicResource Theme.Warning}"/>
+                                        </TextBlock>
+                                        <!-- More of it when the mouse rests on the card half a second (the author, 2026-11-21:
+                                             "a bit more detail about it and a very short 1-line version of each of
+                                             its steps"); view:HoverReveal opens it gently, and folds it on leaving. -->
+                                        <Border x:Name="TutorialPeek" Margin="0,8,0,0" Padding="0,8,0,2" BorderThickness="0,1,0,0"
+                                                BorderBrush="{DynamicResource Theme.Border}" ClipToBounds="True">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Intro}" TextWrapping="Wrap" FontSize="12" LineHeight="18" Margin="0,0,0,8"/>
+                                                <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <ItemsControl Grid.Column="0" ItemsSource="{Binding StepLinesLeft}" Margin="0,0,14,0">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock FontSize="11.5" TextTrimming="CharacterEllipsis" Margin="0,1,0,1" ToolTip="{Binding Full}">
+                                                                <Run Text="{Binding NumberText, Mode=OneWay}" FontWeight="SemiBold" Foreground="{DynamicResource Theme.Accent}"/><Run
+                                                                     Text="{Binding Title, Mode=OneWay}" FontWeight="SemiBold"/><Run
+                                                                     Text="{Binding Dash, Mode=OneWay}"/><Run
+                                                                     Text="{Binding Gist, Mode=OneWay}" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                                            </TextBlock>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                                <ItemsControl Grid.Column="1" ItemsSource="{Binding StepLinesRight}" Margin="0">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock FontSize="11.5" TextTrimming="CharacterEllipsis" Margin="0,1,0,1" ToolTip="{Binding Full}">
+                                                                <Run Text="{Binding NumberText, Mode=OneWay}" FontWeight="SemiBold" Foreground="{DynamicResource Theme.Accent}"/><Run
+                                                                     Text="{Binding Title, Mode=OneWay}" FontWeight="SemiBold"/><Run
+                                                                     Text="{Binding Dash, Mode=OneWay}"/><Run
+                                                                     Text="{Binding Gist, Mode=OneWay}" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                                            </TextBlock>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
                                 </DockPanel>
-                                <TextBlock Foreground="{DynamicResource Theme.Danger}" FontSize="10"
-                                           Margin="60,2,0,0" TextWrapping="Wrap"
-                                           Text="{l:T home.notVersionThreeNumbers}"
-                                           Visibility="{Binding PackVersionIsValid, Converter={StaticResource InverseBoolToVisibility}}"/>
-                                <TextBlock Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" Margin="60,2,0,0"
-                                           TextWrapping="Wrap"
-                                           Text="{Binding AutoVersionNote}"
-                                           Visibility="{Binding AutoVersionOn, Converter={StaticResource BoolToVisibility}}"/>
-                                <!-- The language the pack's own words are in, with a
-                                     line under it saying what that means: the word
-                                     alone reads like the language the editor is in. -->
-                                <StackPanel view:TutorialAnchor.Id="panel:packLanguage" Margin="0,6,0,0">
-                                    <DockPanel>
-                                        <TextBlock DockPanel.Dock="Left" Text="{l:T home.packLanguage}" Width="60"
-                                                   VerticalAlignment="Center" TextWrapping="Wrap"/>
-                                        <ComboBox x:Name="PackLanguagePicker"
-                                                  ItemsSource="{Binding PackLanguageOptions}"
-                                                  DisplayMemberPath="Label" SelectedValuePath="Code"
-                                                  SelectedValue="{Binding PackLanguage}"
-                                                  IsEnabled="{Binding IsEditingTranslation, Converter={StaticResource InverseBoolConverter}}"
-                                                  VerticalAlignment="Center"
-                                                  ToolTip="{l:T home.packLanguage.tip}"/>
-                                    </DockPanel>
-                                    <TextBlock Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" Margin="60,2,0,0" TextWrapping="Wrap"
-                                               Text="{l:T home.packLanguage.note}"/>
-                                </StackPanel>
-                                <!-- File > Load this pack on start, here too (the author, 1.9.0). -->
-                                <CheckBox x:Name="LoadPackOnStartBox" Margin="0,8,0,0" Content="{l:T menu.loadPackOnStart}"
-                                          IsChecked="{Binding LoadPackOnStart, Mode=TwoWay}"
-                                          IsEnabled="{Binding CanChooseLoadPackOnStart}"
-                                          ToolTip="{l:T menu.loadPackOnStart.tip}"/>
-                            </StackPanel>
-                        </GroupBox>
+                            </ContentControl>
+                            </DockPanel>
+                        </DataTemplate>
 
-                        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,6">
-                            <Button view:TutorialAnchor.Id="btn:validate" DockPanel.Dock="Right" Content="{l:T home.validate}" Padding="10,3"
+                        <!-- A guide's bullet: its label, its short text, the rest folded away. -->
+                        <DataTemplate x:Key="HomeDocBullet">
+                            <StackPanel Margin="0,0,0,8">
+                                <DockPanel>
+                                    <!-- The red number its section's picture boxes this control with, or the usual dot. -->
+                                    <Grid DockPanel.Dock="Left" Width="20" Margin="0,0,6,0" VerticalAlignment="Top">
+                                        <Ellipse Width="6" Height="6" Fill="{DynamicResource Theme.Accent}" HorizontalAlignment="Left"
+                                                 VerticalAlignment="Top" Margin="2,7,0,0"
+                                                 Visibility="{Binding HasMark, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                        <Border Width="18" Height="18" CornerRadius="9" Background="#E53935" HorizontalAlignment="Left"
+                                                VerticalAlignment="Top" Margin="0,1,0,0"
+                                                Visibility="{Binding HasMark, Converter={StaticResource BoolToVisibility}}">
+                                            <TextBlock Text="{Binding Mark}" Foreground="White" FontWeight="Bold" FontSize="11"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </Grid>
+                                    <TextBlock TextWrapping="Wrap" LineHeight="20">
+                                        <Run Text="{Binding Term, Mode=OneWay}" FontWeight="SemiBold"/><Run
+                                             Text="{Binding Dash, Mode=OneWay}"/><Run Text="{Binding Text, Mode=OneWay}"/>
+                                    </TextBlock>
+                                </DockPanel>
+                                <Expander Header="{l:T docs.more}" FontSize="11" Margin="16,2,0,0"
+                                          IsExpanded="{Binding MoreOpen, Mode=OneTime}"
+                                          Visibility="{Binding HasMore, Converter={StaticResource BoolToVisibility}}">
+                                    <TextBlock Text="{Binding More}" TextWrapping="Wrap" FontSize="12" Opacity="0.85" Margin="4,2,0,2" LineHeight="18"/>
+                                </Expander>
+                            </StackPanel>
+                        </DataTemplate>
+
+                        <!-- A topic's sections, in the reader and in the search's results. -->
+                        <DataTemplate x:Key="HomeDocSection">
+                            <StackPanel Margin="0,0,0,10">
+                                <TextBlock Text="{Binding Heading}" FontWeight="Bold" FontSize="14" Margin="0,6,0,6"
+                                           Foreground="{DynamicResource Theme.Heading}"
+                                           Visibility="{Binding HasHeading, Converter={StaticResource BoolToVisibility}}"/>
+                                <!-- Where it is: the part of the editor the section is about, marked. -->
+                                <Button x:Name="SectionPicture" Margin="0,0,0,8" Style="{DynamicResource Theme.PictureButton}"
+                                        Tag="{Binding Heading}" Click="GuidePicture_Click"
+                                        Visibility="{Binding HasPicture, Converter={StaticResource BoolToVisibility}}">
+                                    <Image Source="{Binding Picture}" MaxWidth="620" MaxHeight="300" Stretch="Uniform" StretchDirection="DownOnly"
+                                           RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Button>
+                                <ItemsControl ItemsSource="{Binding Bullets}" ItemTemplate="{StaticResource HomeDocBullet}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DockPanel.Resources>
+
+                    <!-- ── The strip: the pages, the one search, Validate ── -->
+                    <ContentControl DockPanel.Dock="Top" Style="{DynamicResource Theme.HomeStrip}" Focusable="False">
+                        <DockPanel>
+                            <Button view:TutorialAnchor.Id="btn:validate" DockPanel.Dock="Right" Content="{l:T home.validate}" Padding="14,4"
+                                    Margin="10,0,0,0" VerticalAlignment="Center"
                                     Command="{Binding ValidateCommand}"
                                     ToolTip="{l:T home.validate.tip}"/>
-                            <TextBlock FontWeight="Bold" FontSize="14" VerticalAlignment="Center">
-                                <Run Text="{Binding Issues.Count, Mode=OneWay, Converter={x:Static l:FormatConverter.Instance}, ConverterParameter=home.issuesCount}"/>
-                            </TextBlock>
-                        </DockPanel>
-                        <!-- Each issue is one line; double-click jumps to the tab and
-                             selects the exact thing it refers to. Full text on hover. -->
-                        <!-- Condition-debug tracking. The flag is a checkbox
-                             buried in each dialogue's editor, so it is easy to
-                             leave on and then wonder why the in-game log is
-                             full of one dialogue's conditions. Docked at the
-                             bottom so it only takes space when something is
-                             actually tracked. -->
-                        <GroupBox DockPanel.Dock="Bottom" Margin="0,6,0,0"
-                                  Visibility="{Binding HasDebuggedDialogues, Converter={StaticResource BoolToVisibility}}">
-                            <GroupBox.Header>
-                                <DockPanel>
-                                    <Button DockPanel.Dock="Right" Content="{l:T home.clearDebugDialogues}" Padding="8,0" Margin="8,0,0,0"
-                                            Command="{Binding ClearDebugDialoguesCommand}"
-                                            ToolTip="{l:T home.clearDebugDialogues.tip}"/>
-                                    <TextBlock VerticalAlignment="Center">
-                                        <Run Text="{Binding DebuggedDialogues.Count, Mode=OneWay, Converter={x:Static l:FormatConverter.Instance}, ConverterParameter=home.debuggedDialogues}"/>
+                            <!-- One search for the tutorials and the guide: its results take the page's place. -->
+                            <Grid DockPanel.Dock="Right" Width="320" VerticalAlignment="Center">
+                                <TextBox x:Name="HomeSearchBox" Text="{Binding DocQuery, UpdateSourceTrigger=PropertyChanged, Delay=150}"
+                                         Padding="26,4,26,4" VerticalContentAlignment="Center"
+                                         ToolTip="{l:T home.searchReferenceMatchesTopic.tip}"/>
+                                <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="12" IsHitTestVisible="False"
+                                           Foreground="{DynamicResource Theme.TextMuted}" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                <TextBlock Text="{l:T home.search}" IsHitTestVisible="False" Margin="28,0,0,0" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource Theme.TextMuted}" FontStyle="Italic"
+                                           Visibility="{Binding IsDocSearchActive, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                <Button HorizontalAlignment="Right" Margin="0,0,3,0" Padding="6,0" Content="&#x2715;" FontSize="10"
+                                        VerticalAlignment="Center" Command="{Binding ClearDocSearchCommand}"
+                                        ToolTip="{l:T home.clearDocSearch}"
+                                        Visibility="{Binding IsDocSearchActive, Converter={StaticResource BoolToVisibility}}"/>
+                            </Grid>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <RadioButton x:Name="HomeNavHome" Style="{DynamicResource Theme.HomeNav}" GroupName="HomePages" Tag="&#xE80F;"
+                                             Content="{l:T home.nav.home}" IsChecked="{Binding IsHomeHome, Mode=TwoWay}"/>
+                                <RadioButton x:Name="HomeNavTutorials" Style="{DynamicResource Theme.HomeNav}" GroupName="HomePages" Tag="&#xE7BE;"
+                                             IsChecked="{Binding IsHomeTutorials, Mode=TwoWay}">
+                                    <TextBlock>
+                                        <Run Text="{l:T home.guidedTutorials}"/><Run Text="  "/><Run
+                                             Text="{Binding TutorialsDone, Mode=OneWay}" FontSize="11"/><Run Text="/" FontSize="11"/><Run
+                                             Text="{Binding TutorialsTotal, Mode=OneWay}" FontSize="11"/>
                                     </TextBlock>
-                                </DockPanel>
-                            </GroupBox.Header>
-                            <ItemsControl ItemsSource="{Binding DebuggedDialogues}" MaxHeight="150">
-                                <ItemsControl.Template>
-                                    <ControlTemplate TargetType="ItemsControl">
-                                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                            <ItemsPresenter/>
-                                        </ScrollViewer>
-                                    </ControlTemplate>
-                                </ItemsControl.Template>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <DockPanel Margin="0,1">
-                                            <Button DockPanel.Dock="Right" Content="{l:T home.untrackDebugDialogue}" Padding="6,0"
-                                                    Command="{Binding DataContext.UntrackDebugDialogueCommand,
-                                                              RelativeSource={RelativeSource AncestorType=Window}}"
-                                                    CommandParameter="{Binding}"
-                                                    ToolTip="{l:T home.untrackDebugDialogue.tip}"/>
-                                            <TextBlock Text="{Binding Display}" VerticalAlignment="Center"
-                                                       TextTrimming="CharacterEllipsis" ToolTip="{Binding Display}"/>
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </GroupBox>
-
-                        <!-- Same idea for integration rules, but a separate list
-                             because a flagged rule logs CONTINUOUSLY rather than
-                             on an F12 press — one left on is noisier than a
-                             dialogue left on, so it is worth its own count. -->
-                        <GroupBox DockPanel.Dock="Bottom" Margin="0,6,0,0"
-                                  Visibility="{Binding HasDebuggedRules, Converter={StaticResource BoolToVisibility}}">
-                            <GroupBox.Header>
-                                <DockPanel>
-                                    <Button DockPanel.Dock="Right" Content="{l:T home.clearDebugDialogues}" Padding="8,0" Margin="8,0,0,0"
-                                            Command="{Binding ClearDebugRulesCommand}"
-                                            ToolTip="{l:T home.clearDebugDialogues.tip2}"/>
-                                    <TextBlock VerticalAlignment="Center">
-                                        <Run Text="{Binding DebuggedRules.Count, Mode=OneWay, Converter={x:Static l:FormatConverter.Instance}, ConverterParameter=home.debuggedRules}"/>
-                                    </TextBlock>
-                                </DockPanel>
-                            </GroupBox.Header>
-                            <ItemsControl ItemsSource="{Binding DebuggedRules}" MaxHeight="150">
-                                <ItemsControl.Template>
-                                    <ControlTemplate TargetType="ItemsControl">
-                                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                            <ItemsPresenter/>
-                                        </ScrollViewer>
-                                    </ControlTemplate>
-                                </ItemsControl.Template>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <DockPanel Margin="0,1">
-                                            <Button DockPanel.Dock="Right" Content="{l:T home.untrackDebugDialogue}" Padding="6,0"
-                                                    Command="{Binding DataContext.UntrackDebugRuleCommand,
-                                                              RelativeSource={RelativeSource AncestorType=Window}}"
-                                                    CommandParameter="{Binding}"
-                                                    ToolTip="{l:T home.untrackDebugDialogue.tip2}"/>
-                                            <TextBlock Text="{Binding Display}" VerticalAlignment="Center"
-                                                       TextTrimming="CharacterEllipsis" ToolTip="{Binding Display}"/>
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </GroupBox>
-
-                        <GroupBox>
-                            <GroupBox.Header>
-                                <DockPanel LastChildFill="False">
-                                    <TextBlock Text="{l:T home.doubleClickIssueJump}" VerticalAlignment="Center"/>
-                                    <!-- Silenced issues are hidden, so say they exist. A count
-                                         nobody can see is how an ignore list turns into a place
-                                         problems go to be forgotten. -->
-                                    <Button DockPanel.Dock="Right" Content="{l:T home.clearIgnoredIssues}"
-                                            Padding="8,0" Margin="8,0,0,0"
-                                            Click="ClearIgnoredIssues_Click"
-                                            Visibility="{Binding HasIgnoredIssues, Converter={StaticResource BoolToVisibility}}"
-                                            ToolTip="{l:T home.clearIgnoredIssues.tip}"/>
-                                    <CheckBox DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0"
-                                              IsChecked="{Binding ShowIgnoredIssues}"
-                                              Visibility="{Binding HasIgnoredIssues, Converter={StaticResource BoolToVisibility}}"
-                                              ToolTip="{l:T home.listIssuesHaveSilenced.tip}">
-                                        <TextBlock>
-                                            <Run Text="{Binding IgnoredIssueCount, Mode=OneWay, Converter={x:Static l:PluralConverter.Instance}, ConverterParameter=home.showIgnored}"/>
-                                        </TextBlock>
-                                    </CheckBox>
-                                </DockPanel>
-                            </GroupBox.Header>
-                            <ListBox x:Name="IssueList"
-                                     ItemsSource="{Binding Issues}"
-                                     HorizontalContentAlignment="Stretch"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                     MouseDoubleClick="IssueList_MouseDoubleClick"
-                                     ContextMenuOpening="IssueList_ContextMenuOpening">
-                                <!-- The three entries are enabled by what the selected row IS,
-                                     in IssueList_ContextMenuOpening. All three used to be offered
-                                     on every row, including "Stop ignoring this" on rows that are
-                                     not ignored — which reads as an action with no way to reach
-                                     it, since silenced issues are hidden until the Show checkbox
-                                     above lists them. -->
-                                <ListBox.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem x:Name="MenuIgnoreIssue" Header="{l:T home.menuIgnoreIssue}" Click="IgnoreIssue_Click"
-                                                  ToolTip="{l:T home.menuIgnoreIssue.tip}"/>
-                                        <MenuItem x:Name="MenuIgnoreCode" Header="{l:T home.menuIgnoreCode}" Click="IgnoreIssueCode_Click"
-                                                  ToolTip="{l:T home.menuIgnoreCode.tip}"/>
-                                        <Separator/>
-                                        <MenuItem x:Name="MenuUnignoreIssue" Header="{l:T home.menuUnignoreIssue}" Click="UnignoreIssue_Click"
-                                                  ToolTip="{l:T home.menuUnignoreIssue.tip}"/>
-                                        <!-- An issue that can be put right for the author (1.9.0): a
-                                             game character's name typed out, switched to the token. -->
-                                        <Separator x:Name="MenuFixSeparator"/>
-                                        <MenuItem x:Name="MenuFixIssue" Header="{l:T home.menuUseNameToken.none}" Click="FixIssue_Click"
-                                                  ToolTip="{l:T home.menuUseNameToken.tip}"/>
-                                    </ContextMenu>
-                                </ListBox.ContextMenu>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <!-- Dimmed and marked when the row is one of the silenced ones,
-                                             which only appear at all while Show ignored is ticked. Without
-                                             the marking the list mixes dealt-with and outstanding issues
-                                             with nothing to tell them apart. -->
-                                        <Grid ToolTip="{Binding Message}" Cursor="Hand"
-                                              Background="Transparent">
-                                            <Grid.Style>
-                                                <Style TargetType="Grid">
+                                </RadioButton>
+                                <RadioButton x:Name="HomeNavGuide" Style="{DynamicResource Theme.HomeNav}" GroupName="HomePages" Tag="&#xE82D;"
+                                             Content="{l:T home.documentation}" IsChecked="{Binding IsHomeGuide, Mode=TwoWay}"/>
+                                <RadioButton x:Name="HomeNavIssues" Style="{DynamicResource Theme.HomeNav}" GroupName="HomePages" Tag="&#xE7BA;"
+                                             IsChecked="{Binding IsHomeIssues, Mode=TwoWay}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{l:T home.nav.issues}" VerticalAlignment="Center"/>
+                                        <!-- The count as a notification: red with errors, amber with warnings, muted with notes. -->
+                                        <Border x:Name="IssueCountPill" Margin="7,0,0,0" Padding="6,0,6,1" CornerRadius="9" MinWidth="18"
+                                                VerticalAlignment="Center" view:Motions.Pulse="{Binding Issues.Count}"
+                                                Visibility="{Binding HasIssues, Converter={StaticResource BoolToVisibility}}">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="{DynamicResource Theme.Danger}"/>
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Ignored}" Value="True">
-                                                            <Setter Property="Opacity" Value="0.55"/>
+                                                        <DataTrigger Binding="{Binding IssueLevel}" Value="warning">
+                                                            <Setter Property="Background" Value="{DynamicResource Theme.Warning}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IssueLevel}" Value="info">
+                                                            <Setter Property="Background" Value="{DynamicResource Theme.TextMuted}"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </Grid.Style>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="60"/>
-                                                <ColumnDefinition Width="260"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="{Binding Severity}" FontWeight="Bold"/>
-                                            <!-- Where it is, in the pack's own names (IssuePlace) - the
-                                                 path the editor finds it by meant nothing to an author,
-                                                 and showed only its first twenty letters. -->
-                                            <TextBlock Grid.Column="1" Text="{Binding Place}" Foreground="{DynamicResource Theme.TextMuted}" TextTrimming="CharacterEllipsis"
-                                                       Margin="0,0,8,0" ToolTip="{Binding Place}"/>
-                                            <TextBlock Grid.Column="2" Text="{l:T home.ignoredMark}" Foreground="{DynamicResource Theme.TextMuted}" FontStyle="Italic" Margin="0,0,8,0"
-                                                       Visibility="{Binding Ignored, Converter={StaticResource BoolToVisibility}}"/>
-                                            <TextBlock Grid.Column="3" Text="{Binding Message}" TextTrimming="CharacterEllipsis"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </GroupBox>
-                    </DockPanel>
+                                            </Border.Style>
+                                            <TextBlock Text="{Binding Issues.Count}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"
+                                                       Foreground="{DynamicResource Theme.Window}"/>
+                                        </Border>
+                                    </StackPanel>
+                                </RadioButton>
+                            </StackPanel>
+                        </DockPanel>
+                    </ContentControl>
 
-                    <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
+                    <Grid>
+                        <!-- ══ HOME ══════════════════════════════════════════════ -->
+                        <ScrollViewer x:Name="HomePageHome" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                      Visibility="{Binding ShowHomeHome, Converter={StaticResource BoolToVisibility}}">
+                            <StackPanel Margin="22,18,22,22" MaxWidth="1180">
+                                <!-- The welcome, across the top. -->
+                                <ContentControl Style="{DynamicResource Theme.HomeHero}" Tag="{Binding HomeHeroArt}" MinHeight="170">
+                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" MaxWidth="560">
+                                        <TextBlock Text="{l:T home.hero.title}" Foreground="White" FontSize="26" FontWeight="Bold" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{l:T home.authorModPacksStarmaker}" Foreground="#E0FFFFFF" FontSize="13"
+                                                   TextWrapping="Wrap" Margin="0,6,0,0" LineHeight="19"/>
+                                        <TextBlock Text="{Binding GameVersionHeader}" Foreground="#B0FFFFFF" FontSize="11" Margin="0,8,0,0"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,14,0,0"
+                                                    Visibility="{Binding HasPack, Converter={StaticResource InverseBoolToVisibility}}">
+                                            <Button Style="{DynamicResource Theme.PrimaryButton}" Padding="16,6" Margin="0,0,8,0"
+                                                    Content="{l:T home.newPack}" Command="{Binding NewPackCommand}"/>
+                                            <Button Padding="16,6" Content="{l:T home.openPack}" Command="{Binding OpenPackCommand}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </ContentControl>
 
-                    <!-- LEFT: usage help. Tutorial/documentation sections are
-                         templates to be fleshed out — keep the structure, fill
-                         the bodies in later. -->
-                    <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
-                        <StackPanel Margin="0,0,8,0">
-                            <TextBlock FontWeight="Bold" FontSize="16" Text="{l:T home.smsmodforge}"/>
-                            <TextBlock Foreground="{DynamicResource Theme.TextMuted}" Margin="0,0,0,8"
-                                       Text="{Binding GameVersionHeader}"/>
-                            <TextBlock TextWrapping="Wrap" Margin="0,0,0,12"
-                                       Text="{l:T home.authorModPacksStarmaker}"/>
+                                <Grid Margin="0,16,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="16"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                            <Expander Header="{l:T home.gettingStarted}" IsExpanded="True" Margin="0,0,0,6">
-                                <StackPanel Margin="16,4,0,4">
-                                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
-                                               Text="{l:T home.1FileNewPack}"/>
-                                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
-                                               Text="{l:T home.2WorkLeftRight}"/>
-                                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
-                                               Text="{l:T home.3ValidateF5Fix}"/>
-                                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
-                                               Text="{l:T home.4FileExportPack}"/>
-                                </StackPanel>
-                            </Expander>
+                                    <!-- The pack: its name, version, language, and how it stands. -->
+                                    <HeaderedContentControl Grid.Column="0" Style="{DynamicResource Theme.HomeCard}" Tag="&#xE7B8;"
+                                                            Header="{l:T home.pack.heading}">
+                                        <StackPanel>
+                                            <StackPanel Visibility="{Binding HasPack, Converter={StaticResource InverseBoolToVisibility}}">
+                                                <TextBlock Text="{l:T home.pack.none}" TextWrapping="Wrap" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                                    <Button Style="{DynamicResource Theme.PrimaryButton}" Padding="14,5" Margin="0,0,8,0"
+                                                            Content="{l:T home.newPack}" Command="{Binding NewPackCommand}"/>
+                                                    <Button Padding="14,5" Content="{l:T home.openPack}" Command="{Binding OpenPackCommand}"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <StackPanel Visibility="{Binding HasPack, Converter={StaticResource BoolToVisibility}}">
+                                                <TextBlock Text="{Binding PackName}" FontSize="20" FontWeight="Bold" TextTrimming="CharacterEllipsis"
+                                                           Margin="0,0,0,10"/>
+                                                <!-- The pack's own version: what a player sees beside its name in the main menu. -->
+                                                <DockPanel Margin="0,0,0,2">
+                                                    <TextBlock DockPanel.Dock="Left" Text="{l:T home.version}" Width="90" VerticalAlignment="Center"
+                                                               Foreground="{DynamicResource Theme.TextMuted}"/>
+                                                    <TextBox Text="{Binding PackVersionText, UpdateSourceTrigger=PropertyChanged}" Width="120"
+                                                             HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                             ToolTip="{l:T home.threeNumbersMajorMinor.tip}"/>
+                                                </DockPanel>
+                                                <TextBlock Foreground="{DynamicResource Theme.Danger}" FontSize="11" Margin="90,2,0,0" TextWrapping="Wrap"
+                                                           Text="{l:T home.notVersionThreeNumbers}"
+                                                           Visibility="{Binding PackVersionIsValid, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                                <TextBlock Foreground="{DynamicResource Theme.TextMuted}" FontSize="11" Margin="90,2,0,0" TextWrapping="Wrap"
+                                                           Text="{Binding AutoVersionNote}"
+                                                           Visibility="{Binding AutoVersionOn, Converter={StaticResource BoolToVisibility}}"/>
+                                                <!-- The language the pack's own words are in, with what that means under it. -->
+                                                <StackPanel view:TutorialAnchor.Id="panel:packLanguage" Margin="0,8,0,0">
+                                                    <DockPanel>
+                                                        <TextBlock DockPanel.Dock="Left" Text="{l:T home.packLanguage}" Width="90"
+                                                                   VerticalAlignment="Center" TextWrapping="Wrap" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                                        <ComboBox x:Name="PackLanguagePicker" Width="200" HorizontalAlignment="Left"
+                                                                  ItemsSource="{Binding PackLanguageOptions}"
+                                                                  DisplayMemberPath="Label" SelectedValuePath="Code"
+                                                                  SelectedValue="{Binding PackLanguage}"
+                                                                  IsEnabled="{Binding IsEditingTranslation, Converter={StaticResource InverseBoolConverter}}"
+                                                                  VerticalAlignment="Center"
+                                                                  ToolTip="{l:T home.packLanguage.tip}"/>
+                                                    </DockPanel>
+                                                    <TextBlock Foreground="{DynamicResource Theme.TextMuted}" FontSize="11" Margin="90,3,0,0" TextWrapping="Wrap"
+                                                               Text="{l:T home.packLanguage.note}"/>
+                                                </StackPanel>
+                                                <!-- File > Load this pack on start, here too (the author, 1.9.0). -->
+                                                <CheckBox x:Name="LoadPackOnStartBox" Margin="0,10,0,0" Content="{l:T menu.loadPackOnStart}"
+                                                          IsChecked="{Binding LoadPackOnStart, Mode=TwoWay}"
+                                                          IsEnabled="{Binding CanChooseLoadPackOnStart}"
+                                                          ToolTip="{l:T menu.loadPackOnStart.tip}"/>
+                                                <!-- How it stands: no issues, or how many and a way to them. -->
+                                                <Border Margin="0,14,0,0" Padding="10,8" CornerRadius="6" Background="{DynamicResource Theme.SurfaceAlt}">
+                                                    <DockPanel>
+                                                        <Button DockPanel.Dock="Right" Content="{l:T home.issues.see}" Padding="12,3" Margin="10,0,0,0"
+                                                                VerticalAlignment="Center"
+                                                                Command="{Binding ShowHomePageCommand}" CommandParameter="Issues"
+                                                                Visibility="{Binding HasIssues, Converter={StaticResource BoolToVisibility}}"/>
+                                                        <TextBlock DockPanel.Dock="Left" FontFamily="Segoe MDL2 Assets" FontSize="14" Margin="0,0,10,0"
+                                                                   VerticalAlignment="Center" Foreground="{DynamicResource Theme.Accent}">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Text" Value="&#xE73E;"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding HasIssues}" Value="True">
+                                                                            <Setter Property="Text" Value="&#xE7BA;"/>
+                                                                            <Setter Property="Foreground" Value="{DynamicResource Theme.Warning}"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                        <TextBlock Text="{Binding IssuesSummary}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                                    </DockPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </HeaderedContentControl>
 
-                            <Expander Header="{l:T home.guidedTutorials}" IsExpanded="True" Margin="0,0,0,6">
-                                <!--
-                                    Grouped by the part of the editor they teach, because that
-                                    is how someone picks what to learn next: they are working on
-                                    rooms and want the rest of the room tutorials, not the next
-                                    entry in one long list. Level orders them within a group and
-                                    is shown as a badge, so a first tutorial reads as one.
-                                -->
-                                <ItemsControl Margin="16,4,0,4">
-                                    <ItemsControl.ItemsSource>
-                                        <Binding Path="TutorialsView"/>
-                                    </ItemsControl.ItemsSource>
+                                    <!-- What to learn next. -->
+                                    <HeaderedContentControl Grid.Column="2" Style="{DynamicResource Theme.HomeCard}" Tag="&#xE7BE;"
+                                                            Header="{l:T home.learn.heading}">
+                                        <StackPanel>
+                                            <StackPanel Visibility="{Binding HasNextTutorial, Converter={StaticResource BoolToVisibility}}">
+                                                <ContentControl Style="{DynamicResource Theme.HomeHero}" Tag="{Binding NextTutorialArt}" Height="112" Padding="16,12">
+                                                    <StackPanel VerticalAlignment="Bottom">
+                                                        <TextBlock Text="{Binding NextTutorialItem.Group}" Foreground="#D0FFFFFF" FontSize="11" FontWeight="SemiBold"/>
+                                                        <TextBlock Text="{Binding NextTutorialItem.Title}" Foreground="White" FontSize="17" FontWeight="Bold"
+                                                                   TextWrapping="Wrap"/>
+                                                    </StackPanel>
+                                                </ContentControl>
+                                                <TextBlock Text="{Binding NextTutorialItem.Summary}" TextWrapping="Wrap" Margin="0,10,0,0"
+                                                           Foreground="{DynamicResource Theme.TextMuted}"/>
+                                            </StackPanel>
+                                            <TextBlock Text="{l:T home.learn.allDone}" TextWrapping="Wrap"
+                                                       Visibility="{Binding AllTutorialsDone, Converter={StaticResource BoolToVisibility}}"/>
+                                            <!-- How far through all of them. -->
+                                            <DockPanel Margin="0,12,0,0">
+                                                <TextBlock DockPanel.Dock="Right" Text="{Binding TutorialsProgressText}" FontSize="11" Margin="10,0,0,0"
+                                                           Foreground="{DynamicResource Theme.TextMuted}" VerticalAlignment="Center"/>
+                                                <Grid Height="6" VerticalAlignment="Center">
+                                                    <Border CornerRadius="3" Background="{DynamicResource Theme.Border}"/>
+                                                    <Border CornerRadius="3" Background="{DynamicResource Theme.Accent}" RenderTransformOrigin="0,0.5">
+                                                        <Border.RenderTransform>
+                                                            <ScaleTransform ScaleX="{Binding TutorialsFraction}"/>
+                                                        </Border.RenderTransform>
+                                                    </Border>
+                                                </Grid>
+                                            </DockPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                                <Button Style="{DynamicResource Theme.PrimaryButton}" Padding="18,6" Margin="0,0,8,0"
+                                                        Content="{l:T home.learn.continue}" Command="{Binding ContinueLearningCommand}"
+                                                        Visibility="{Binding HasNextTutorial, Converter={StaticResource BoolToVisibility}}"/>
+                                                <Button Padding="14,6" Content="{l:T home.learn.seeAll}"
+                                                        Command="{Binding ShowHomePageCommand}" CommandParameter="Tutorials"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </HeaderedContentControl>
+                                </Grid>
+
+                                <!-- How a pack is made, in four steps. -->
+                                <HeaderedContentControl Margin="0,16,0,0" Style="{DynamicResource Theme.HomeCard}" Tag="&#xE8FD;"
+                                                        Header="{l:T home.gettingStarted}">
+                                    <UniformGrid Columns="4">
+                                        <DockPanel Margin="0,0,16,0">
+                                            <Border DockPanel.Dock="Top" HorizontalAlignment="Left" Width="30" Height="30" CornerRadius="15"
+                                                    Background="{DynamicResource Theme.Accent}" Margin="0,0,0,8">
+                                                <TextBlock Text="1" Foreground="{DynamicResource Theme.OnAccent}" FontWeight="Bold" FontSize="14"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <TextBlock DockPanel.Dock="Top" Text="{l:T home.start.1.title}" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
+                                            <TextBlock Text="{l:T home.start.1}" TextWrapping="Wrap" LineHeight="19" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                        </DockPanel>
+                                        <DockPanel Margin="0,0,16,0">
+                                            <Border DockPanel.Dock="Top" HorizontalAlignment="Left" Width="30" Height="30" CornerRadius="15"
+                                                    Background="{DynamicResource Theme.Accent}" Margin="0,0,0,8">
+                                                <TextBlock Text="2" Foreground="{DynamicResource Theme.OnAccent}" FontWeight="Bold" FontSize="14"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <TextBlock DockPanel.Dock="Top" Text="{l:T home.start.2.title}" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
+                                            <TextBlock Text="{l:T home.start.2}" TextWrapping="Wrap" LineHeight="19" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                        </DockPanel>
+                                        <DockPanel Margin="0,0,16,0">
+                                            <Border DockPanel.Dock="Top" HorizontalAlignment="Left" Width="30" Height="30" CornerRadius="15"
+                                                    Background="{DynamicResource Theme.Accent}" Margin="0,0,0,8">
+                                                <TextBlock Text="3" Foreground="{DynamicResource Theme.OnAccent}" FontWeight="Bold" FontSize="14"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <TextBlock DockPanel.Dock="Top" Text="{l:T home.start.3.title}" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
+                                            <TextBlock Text="{l:T home.start.3}" TextWrapping="Wrap" LineHeight="19" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                        </DockPanel>
+                                        <DockPanel Margin="0,0,16,0">
+                                            <Border DockPanel.Dock="Top" HorizontalAlignment="Left" Width="30" Height="30" CornerRadius="15"
+                                                    Background="{DynamicResource Theme.Accent}" Margin="0,0,0,8">
+                                                <TextBlock Text="4" Foreground="{DynamicResource Theme.OnAccent}" FontWeight="Bold" FontSize="14"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <TextBlock DockPanel.Dock="Top" Text="{l:T home.start.4.title}" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
+                                            <TextBlock Text="{l:T home.start.4}" TextWrapping="Wrap" LineHeight="19" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                        </DockPanel>
+                                    </UniformGrid>
+                                </HeaderedContentControl>
+
+                                <!-- The guide, a door to it. -->
+                                <HeaderedContentControl Margin="0,16,0,0" Style="{DynamicResource Theme.HomeCard}" Tag="&#xE82D;"
+                                                        Header="{l:T home.guide.heading}">
+                                    <DockPanel>
+                                        <Button DockPanel.Dock="Right" Padding="16,6" VerticalAlignment="Center" Margin="14,0,0,0"
+                                                Content="{l:T home.guide.open}" Command="{Binding ShowHomePageCommand}" CommandParameter="Guide"/>
+                                        <TextBlock Text="{l:T home.guide.text}" TextWrapping="Wrap" VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource Theme.TextMuted}"/>
+                                    </DockPanel>
+                                </HeaderedContentControl>
+
+                                <!-- Condition debugging left on: easy to forget, so said here. A flagged rule logs all
+                                     the time, so it has its own list. -->
+                                <GroupBox Margin="0,16,0,0"
+                                          Visibility="{Binding HasDebuggedDialogues, Converter={StaticResource BoolToVisibility}}">
+                                    <GroupBox.Header>
+                                        <DockPanel>
+                                            <Button DockPanel.Dock="Right" Content="{l:T home.clearDebugDialogues}" Padding="8,0" Margin="8,0,0,0"
+                                                    Command="{Binding ClearDebugDialoguesCommand}"
+                                                    ToolTip="{l:T home.clearDebugDialogues.tip}"/>
+                                            <TextBlock VerticalAlignment="Center">
+                                                <Run Text="{Binding DebuggedDialogues.Count, Mode=OneWay, Converter={x:Static l:FormatConverter.Instance}, ConverterParameter=home.debuggedDialogues}"/>
+                                            </TextBlock>
+                                        </DockPanel>
+                                    </GroupBox.Header>
+                                    <ItemsControl ItemsSource="{Binding DebuggedDialogues}" MaxHeight="150">
+                                        <ItemsControl.Template>
+                                            <ControlTemplate TargetType="ItemsControl">
+                                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                    <ItemsPresenter/>
+                                                </ScrollViewer>
+                                            </ControlTemplate>
+                                        </ItemsControl.Template>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <DockPanel Margin="0,1">
+                                                    <Button DockPanel.Dock="Right" Content="{l:T home.untrackDebugDialogue}" Padding="6,0"
+                                                            Command="{Binding DataContext.UntrackDebugDialogueCommand,
+                                                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                                                            CommandParameter="{Binding}"
+                                                            ToolTip="{l:T home.untrackDebugDialogue.tip}"/>
+                                                    <TextBlock Text="{Binding Display}" VerticalAlignment="Center"
+                                                               TextTrimming="CharacterEllipsis" ToolTip="{Binding Display}"/>
+                                                </DockPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </GroupBox>
+                                <GroupBox Margin="0,10,0,0"
+                                          Visibility="{Binding HasDebuggedRules, Converter={StaticResource BoolToVisibility}}">
+                                    <GroupBox.Header>
+                                        <DockPanel>
+                                            <Button DockPanel.Dock="Right" Content="{l:T home.clearDebugDialogues}" Padding="8,0" Margin="8,0,0,0"
+                                                    Command="{Binding ClearDebugRulesCommand}"
+                                                    ToolTip="{l:T home.clearDebugDialogues.tip2}"/>
+                                            <TextBlock VerticalAlignment="Center">
+                                                <Run Text="{Binding DebuggedRules.Count, Mode=OneWay, Converter={x:Static l:FormatConverter.Instance}, ConverterParameter=home.debuggedRules}"/>
+                                            </TextBlock>
+                                        </DockPanel>
+                                    </GroupBox.Header>
+                                    <ItemsControl ItemsSource="{Binding DebuggedRules}" MaxHeight="150">
+                                        <ItemsControl.Template>
+                                            <ControlTemplate TargetType="ItemsControl">
+                                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                    <ItemsPresenter/>
+                                                </ScrollViewer>
+                                            </ControlTemplate>
+                                        </ItemsControl.Template>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <DockPanel Margin="0,1">
+                                                    <Button DockPanel.Dock="Right" Content="{l:T home.untrackDebugDialogue}" Padding="6,0"
+                                                            Command="{Binding DataContext.UntrackDebugRuleCommand,
+                                                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                                                            CommandParameter="{Binding}"
+                                                            ToolTip="{l:T home.untrackDebugDialogue.tip2}"/>
+                                                    <TextBlock Text="{Binding Display}" VerticalAlignment="Center"
+                                                               TextTrimming="CharacterEllipsis" ToolTip="{Binding Display}"/>
+                                                </DockPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </GroupBox>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <!-- ══ TUTORIALS ═════════════════════════════════════════ -->
+                        <ScrollViewer x:Name="HomePageTutorials" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                      Visibility="{Binding ShowHomeTutorials, Converter={StaticResource BoolToVisibility}}">
+                            <StackPanel Margin="22,18,22,22" MaxWidth="980">
+                                <TextBlock Text="{l:T home.tutorials.heading}" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource Theme.Heading}"/>
+                                <TextBlock Text="{l:T home.tutorials.text}" TextWrapping="Wrap" Margin="0,6,0,4" LineHeight="19"
+                                           Foreground="{DynamicResource Theme.TextMuted}"/>
+                                <TextBlock Text="{Binding TutorialsProgressText}" FontSize="11" Margin="0,0,0,12" Foreground="{DynamicResource Theme.Accent}"/>
+                                <!-- Grouped by the part of the editor they teach, in the ladder's order. -->
+                                <ItemsControl ItemsSource="{Binding TutorialsView}" ItemTemplate="{StaticResource HomeTutorialCard}">
                                     <ItemsControl.GroupStyle>
                                         <GroupStyle>
                                             <GroupStyle.HeaderTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold"
-                                                               Margin="0,8,0,4" Opacity="0.75"/>
+                                                    <DockPanel Margin="0,12,0,8">
+                                                        <Rectangle DockPanel.Dock="Left" Width="4" Height="16" Fill="{DynamicResource Theme.Accent}" Margin="0,0,10,0"/>
+                                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="15" VerticalAlignment="Center"
+                                                                   Foreground="{DynamicResource Theme.Heading}"/>
+                                                    </DockPanel>
                                                 </DataTemplate>
                                             </GroupStyle.HeaderTemplate>
                                         </GroupStyle>
                                     </ItemsControl.GroupStyle>
-                                    <ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <!-- ══ GUIDE: topics down the side, the one chosen to read ═ -->
+                        <Grid x:Name="HomePageGuide" Visibility="{Binding ShowHomeGuide, Converter={StaticResource BoolToVisibility}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="270"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" BorderBrush="{DynamicResource Theme.Border}" BorderThickness="0,0,1,0">
+                                <ListBox x:Name="GuideTopicList" ItemsSource="{Binding GuideView}" SelectedItem="{Binding SelectedGuideEntry, Mode=TwoWay}"
+                                         BorderThickness="0" Background="Transparent" Padding="6,8"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                    <ListBox.GroupStyle>
+                                        <GroupStyle>
+                                            <GroupStyle.HeaderTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="11" Margin="8,12,0,4"
+                                                               Foreground="{DynamicResource Theme.Accent}"/>
+                                                </DataTemplate>
+                                            </GroupStyle.HeaderTemplate>
+                                        </GroupStyle>
+                                    </ListBox.GroupStyle>
+                                    <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <Border BorderThickness="1" CornerRadius="4" Margin="0,0,0,6"
-                                                    Padding="10,8"
-                                                    BorderBrush="{DynamicResource Theme.Accent}"
-                                                    Background="{DynamicResource Theme.Surface}">
-                                                <DockPanel>
-                                                    <Button DockPanel.Dock="Right"
-                                                            Content="{Binding ActionLabel}"
-                                                            Padding="14,4" VerticalAlignment="Center"
-                                                            Margin="10,0,0,0"
-                                                            Command="{Binding DataContext.StartTutorialCommand,
+                                            <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" Padding="4,3" ToolTip="{Binding Title}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Border>
+                            <ScrollViewer x:Name="GuideReader" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                <StackPanel Margin="30,20,30,24" MaxWidth="860" HorizontalAlignment="Left">
+                                    <TextBlock Text="{Binding GuidePartName}" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource Theme.Accent}"/>
+                                    <TextBlock Text="{Binding GuideTopic.Title}" FontSize="24" FontWeight="Bold" TextWrapping="Wrap"
+                                               Foreground="{DynamicResource Theme.Heading}" Margin="0,2,0,0"/>
+                                    <TextBlock Text="{Binding GuidePosition}" FontSize="11" Foreground="{DynamicResource Theme.TextMuted}" Margin="0,2,0,10"/>
+                                    <TextBlock Text="{Binding GuideTopic.Summary}" TextWrapping="Wrap" FontSize="14" LineHeight="21" Margin="0,0,0,14"/>
+                                    <!-- A picture of the part of the editor the topic is about, when there is one. -->
+                                    <Button x:Name="GuideTopicPicture" Margin="0,0,0,16" Style="{DynamicResource Theme.PictureButton}"
+                                            Tag="{Binding GuideTopic.Title}" Click="GuidePicture_Click"
+                                            Visibility="{Binding HasGuidePicture, Converter={StaticResource BoolToVisibility}}">
+                                        <Image Source="{Binding GuidePicture}" MaxHeight="380" Stretch="Uniform" StretchDirection="DownOnly"
+                                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                                    </Button>
+                                    <ItemsControl ItemsSource="{Binding GuideTopic.Sections}" ItemTemplate="{StaticResource HomeDocSection}"/>
+                                    <!-- On to the next topic, or back. -->
+                                    <DockPanel Margin="0,18,0,0">
+                                        <Button DockPanel.Dock="Left" Padding="12,5" Command="{Binding GuidePreviousCommand}"
+                                                Visibility="{Binding HasGuidePrevious, Converter={StaticResource BoolToVisibility}}">
+                                            <TextBlock>
+                                                <Run Text="&#x2190; "/><Run Text="{Binding GuidePrevious.Title, Mode=OneWay}"/>
+                                            </TextBlock>
+                                        </Button>
+                                        <Button DockPanel.Dock="Right" HorizontalAlignment="Right" Padding="12,5" Command="{Binding GuideNextCommand}"
+                                                Style="{DynamicResource Theme.PrimaryButton}"
+                                                Visibility="{Binding HasGuideNext, Converter={StaticResource BoolToVisibility}}">
+                                            <TextBlock Foreground="{DynamicResource Theme.OnAccent}">
+                                                <Run Text="{Binding GuideNext.Title, Mode=OneWay}"/><Run Text=" &#x2192;"/>
+                                            </TextBlock>
+                                        </Button>
+                                    </DockPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+
+                        <!-- ══ ISSUES ════════════════════════════════════════════ -->
+                        <DockPanel x:Name="HomePageIssues" Margin="22,18,22,18"
+                                   Visibility="{Binding ShowHomeIssues, Converter={StaticResource BoolToVisibility}}">
+                            <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+                                <TextBlock FontSize="22" FontWeight="Bold" Foreground="{DynamicResource Theme.Heading}">
+                                    <Run Text="{Binding Issues.Count, Mode=OneWay, Converter={x:Static l:FormatConverter.Instance}, ConverterParameter=home.issuesCount}"/>
+                                </TextBlock>
+                                <TextBlock Text="{Binding IssuesSummary}" Margin="0,4,0,0" Foreground="{DynamicResource Theme.TextMuted}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border DockPanel.Dock="Top" Padding="18,16" CornerRadius="8" Background="{DynamicResource Theme.SurfaceAlt}"
+                                    Visibility="{Binding HasIssues, Converter={StaticResource InverseBoolToVisibility}}">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Left" Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="22"
+                                               Foreground="{DynamicResource Theme.Accent}" Margin="0,0,14,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{l:T home.issues.empty}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                </DockPanel>
+                            </Border>
+                            <GroupBox>
+                                <GroupBox.Style>
+                                    <Style TargetType="GroupBox" BasedOn="{StaticResource {x:Type GroupBox}}">
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding HasIssues}" Value="False"/>
+                                                    <Condition Binding="{Binding HasIgnoredIssues}" Value="False"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </GroupBox.Style>
+                                <GroupBox.Header>
+                                    <DockPanel LastChildFill="False">
+                                        <TextBlock Text="{l:T home.doubleClickIssueJump}" VerticalAlignment="Center"/>
+                                        <!-- Silenced issues are hidden, so say they exist. A count nobody can see is how an
+                                             ignore list turns into a place problems go to be forgotten. -->
+                                        <Button DockPanel.Dock="Right" Content="{l:T home.clearIgnoredIssues}"
+                                                Padding="8,0" Margin="8,0,0,0"
+                                                Click="ClearIgnoredIssues_Click"
+                                                Visibility="{Binding HasIgnoredIssues, Converter={StaticResource BoolToVisibility}}"
+                                                ToolTip="{l:T home.clearIgnoredIssues.tip}"/>
+                                        <CheckBox DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0"
+                                                  IsChecked="{Binding ShowIgnoredIssues}"
+                                                  Visibility="{Binding HasIgnoredIssues, Converter={StaticResource BoolToVisibility}}"
+                                                  ToolTip="{l:T home.listIssuesHaveSilenced.tip}">
+                                            <TextBlock>
+                                                <Run Text="{Binding IgnoredIssueCount, Mode=OneWay, Converter={x:Static l:PluralConverter.Instance}, ConverterParameter=home.showIgnored}"/>
+                                            </TextBlock>
+                                        </CheckBox>
+                                    </DockPanel>
+                                </GroupBox.Header>
+                                <ListBox x:Name="IssueList"
+                                         ItemsSource="{Binding Issues}"
+                                         HorizontalContentAlignment="Stretch"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         MouseDoubleClick="IssueList_MouseDoubleClick"
+                                         ContextMenuOpening="IssueList_ContextMenuOpening">
+                                    <!-- The entries are enabled by what the selected row IS, in IssueList_ContextMenuOpening. -->
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem x:Name="MenuIgnoreIssue" Header="{l:T home.menuIgnoreIssue}" Click="IgnoreIssue_Click"
+                                                      ToolTip="{l:T home.menuIgnoreIssue.tip}"/>
+                                            <MenuItem x:Name="MenuIgnoreCode" Header="{l:T home.menuIgnoreCode}" Click="IgnoreIssueCode_Click"
+                                                      ToolTip="{l:T home.menuIgnoreCode.tip}"/>
+                                            <Separator/>
+                                            <MenuItem x:Name="MenuUnignoreIssue" Header="{l:T home.menuUnignoreIssue}" Click="UnignoreIssue_Click"
+                                                      ToolTip="{l:T home.menuUnignoreIssue.tip}"/>
+                                            <!-- An issue that can be put right for the author (1.9.0): a game character's name
+                                                 typed out, switched to the token. -->
+                                            <Separator x:Name="MenuFixSeparator"/>
+                                            <MenuItem x:Name="MenuFixIssue" Header="{l:T home.menuUseNameToken.none}" Click="FixIssue_Click"
+                                                      ToolTip="{l:T home.menuUseNameToken.tip}"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <!-- Dimmed and marked when the row is one of the silenced ones. -->
+                                            <Grid ToolTip="{Binding Message}" Cursor="Hand" Background="Transparent" Margin="0,2">
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Ignored}" Value="True">
+                                                                <Setter Property="Opacity" Value="0.55"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="70"/>
+                                                    <ColumnDefinition Width="260"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="{Binding Severity}" FontWeight="Bold"/>
+                                                <!-- Where it is, in the pack's own names (IssuePlace). -->
+                                                <TextBlock Grid.Column="1" Text="{Binding Place}" Foreground="{DynamicResource Theme.TextMuted}" TextTrimming="CharacterEllipsis"
+                                                           Margin="0,0,8,0" ToolTip="{Binding Place}"/>
+                                                <TextBlock Grid.Column="2" Text="{l:T home.ignoredMark}" Foreground="{DynamicResource Theme.TextMuted}" FontStyle="Italic" Margin="0,0,8,0"
+                                                           Visibility="{Binding Ignored, Converter={StaticResource BoolToVisibility}}"/>
+                                                <TextBlock Grid.Column="3" Text="{Binding Message}" TextTrimming="CharacterEllipsis"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </GroupBox>
+                        </DockPanel>
+
+                        <!-- ══ SEARCH: what the box found, in tutorials and in the guide ═ -->
+                        <ScrollViewer x:Name="HomePageSearch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                      Visibility="{Binding ShowSearchResults, Converter={StaticResource BoolToVisibility}}">
+                            <StackPanel Margin="22,18,22,22" MaxWidth="980">
+                                <TextBlock Text="{Binding DocSearchHeading}" FontSize="22" FontWeight="Bold" TextWrapping="Wrap"
+                                           Foreground="{DynamicResource Theme.Heading}"/>
+                                <TextBlock Text="{Binding DocSearchSummary}" Margin="0,4,0,12" Foreground="{DynamicResource Theme.TextMuted}"/>
+
+                                <!-- Tutorials: the steps that mention it, each startable there, then the tutorials. -->
+                                <TextBlock Text="{l:T home.search.tutorials}" FontSize="15" FontWeight="Bold" Margin="0,6,0,8"
+                                           Foreground="{DynamicResource Theme.Heading}"/>
+                                <TextBlock TextWrapping="Wrap" Opacity="0.7" FontStyle="Italic" Margin="2,0,0,8"
+                                           Text="{l:T tutorials.search.none}"
+                                           Visibility="{Binding HasNoTutorialResults, Converter={StaticResource BoolToVisibility}}"/>
+                                <HeaderedContentControl Style="{DynamicResource Theme.HomeCard}" Tag="&#xE7BE;" Margin="0,0,0,12"
+                                                        Header="{l:T tutorials.search.found}"
+                                                        Visibility="{Binding HasTutorialStepHits, Converter={StaticResource BoolToVisibility}}">
+                                    <ItemsControl ItemsSource="{Binding TutorialStepHits}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <DockPanel Margin="0,0,0,6">
+                                                    <Button DockPanel.Dock="Right" Content="{l:T tutorials.search.go}" Padding="12,2"
+                                                            Margin="10,0,0,0" VerticalAlignment="Center"
+                                                            ToolTip="{l:T tutorials.search.go.tip}"
+                                                            Command="{Binding DataContext.StartTutorialAtCommand,
                                                                       RelativeSource={RelativeSource AncestorType=Window}}"
                                                             CommandParameter="{Binding}"/>
-                                                    <StackPanel>
-                                                        <TextBlock FontWeight="Bold">
-                                                            <Run Text="{Binding Mark, Mode=OneWay}"
-                                                                 Foreground="{DynamicResource Theme.Accent}"/><Run
-                                                                 Text=" "/><Run Text="{Binding LevelLabel, Mode=OneWay}"
-                                                                 Foreground="{DynamicResource Theme.Accent}"/><Run
-                                                                 Text=" "/><Run Text="{Binding Title, Mode=OneWay}"/>
-                                                        </TextBlock>
-                                                        <TextBlock Text="{Binding Summary}" TextWrapping="Wrap"
-                                                                   Opacity="0.7" FontSize="11" Margin="0,2,0,0"/>
-                                                    </StackPanel>
+                                                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center">
+                                                        <Run Text="{Binding Tutorial, Mode=OneWay}" FontWeight="SemiBold"/><Run
+                                                             Text="   "/><Run Text="{Binding Step, Mode=OneWay}" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                                    </TextBlock>
                                                 </DockPanel>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </Expander>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </HeaderedContentControl>
+                                <ItemsControl ItemsSource="{Binding TutorialsView}" ItemTemplate="{StaticResource HomeTutorialCard}"/>
 
-                            <Expander Header="{l:T home.documentation}" IsExpanded="False" Margin="0,0,0,6">
-                              <StackPanel Margin="16,4,0,4">
-                                <!-- Search. Filters titles and content alike; a
-                                     topic matched by its title keeps all of its
-                                     bullets, one matched only by content keeps
-                                     just the bullets that hit. -->
-                                <DockPanel Margin="0,0,0,2">
-                                    <Button DockPanel.Dock="Right" Content="{l:T home.clearDocSearch}" Padding="8,1" Margin="6,0,0,0"
-                                            Command="{Binding ClearDocSearchCommand}"
-                                            Visibility="{Binding IsDocSearchActive,
-                                                         Converter={StaticResource BoolToVisibility}}"/>
-                                    <TextBox Text="{Binding DocQuery, UpdateSourceTrigger=PropertyChanged, Delay=150}"
-                                             ToolTip="{l:T home.searchReferenceMatchesTopic.tip}"/>
-                                </DockPanel>
-                                <TextBlock Text="{Binding DocSearchSummary}" Opacity="0.65" FontSize="11"
-                                           Margin="2,0,0,6"
-                                           Visibility="{Binding IsDocSearchActive,
-                                                        Converter={StaticResource BoolToVisibility}}"/>
-                                <TextBlock TextWrapping="Wrap" Opacity="0.65" FontStyle="Italic" Margin="2,4,0,4"
+                                <!-- The guide: each topic that has it, with what it says there. -->
+                                <TextBlock Text="{l:T home.search.guide}" FontSize="15" FontWeight="Bold" Margin="0,16,0,8"
+                                           Foreground="{DynamicResource Theme.Heading}"/>
+                                <TextBlock TextWrapping="Wrap" Opacity="0.7" FontStyle="Italic" Margin="2,0,0,8"
                                            Text="{l:T home.noTopicMentionsTry}"
-                                           Visibility="{Binding HasNoDocResults,
-                                                        Converter={StaticResource BoolToVisibility}}"/>
+                                           Visibility="{Binding HasNoDocResults, Converter={StaticResource BoolToVisibility}}"/>
                                 <ItemsControl ItemsSource="{Binding DocParts}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <StackPanel Margin="0,0,0,8">
-                                                <TextBlock Text="{Binding Name}" FontWeight="Bold"
-                                                           Opacity="0.75" Margin="0,4,0,4"/>
-                                                <ItemsControl ItemsSource="{Binding Topics}">
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <Expander Header="{Binding Title}" Margin="0,0,0,2"
-                                                                      IsExpanded="{Binding StartExpanded, Mode=OneTime}">
-                                                                <StackPanel Margin="16,4,0,6">
-                                                                    <TextBlock Text="{Binding Summary}" TextWrapping="Wrap"
-                                                                               FontStyle="Italic" Opacity="0.7" Margin="0,0,0,6"/>
-                                                                    <ItemsControl ItemsSource="{Binding Sections}">
-                                                                        <ItemsControl.ItemTemplate>
-                                                                            <DataTemplate>
-                                                                                <StackPanel Margin="0,0,0,6">
-                                                                                    <TextBlock Text="{Binding Heading}" FontWeight="Bold"
-                                                                                               Margin="0,2,0,3"
-                                                                                               Visibility="{Binding HasHeading,
-                                                                                                            Converter={StaticResource BoolToVisibility}}"/>
-                                                                                    <ItemsControl ItemsSource="{Binding Bullets}">
-                                                                                        <ItemsControl.ItemTemplate>
-                                                                                            <DataTemplate>
-                                                                                                <TextBlock TextWrapping="Wrap" Margin="0,0,0,3">
-                                                                                                    <Run Text="•  "/><Run Text="{Binding Term, Mode=OneWay}" FontWeight="Bold"/><Run
-                                                                                                         Text="{Binding Dash, Mode=OneWay}"/><Run Text="{Binding Text, Mode=OneWay}"/>
-                                                                                                </TextBlock>
-                                                                                            </DataTemplate>
-                                                                                        </ItemsControl.ItemTemplate>
-                                                                                    </ItemsControl>
-                                                                                </StackPanel>
-                                                                            </DataTemplate>
-                                                                        </ItemsControl.ItemTemplate>
-                                                                    </ItemsControl>
-                                                                </StackPanel>
-                                                            </Expander>
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ItemsControl>
-                                            </StackPanel>
+                                            <ItemsControl ItemsSource="{Binding Topics}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <HeaderedContentControl Style="{DynamicResource Theme.HomeCard}" Tag="&#xE82D;" Margin="0,0,0,12"
+                                                                                Header="{Binding Title}">
+                                                            <StackPanel>
+                                                                <ItemsControl ItemsSource="{Binding Sections}" ItemTemplate="{StaticResource HomeDocSection}"/>
+                                                                <Button HorizontalAlignment="Left" Padding="12,3" Margin="0,4,0,0"
+                                                                        Content="{l:T home.search.read}"
+                                                                        Command="{Binding DataContext.OpenGuideTopicCommand,
+                                                                                  RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                        CommandParameter="{Binding}"/>
+                                                            </StackPanel>
+                                                        </HeaderedContentControl>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                              </StackPanel>
-                            </Expander>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Grid>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </DockPanel>
             </TabItem>
 
             <!-- ════════════════════════════════════════════════════
@@ -4809,10 +5222,10 @@
                                  would leave it filed under the wrong heading
                                  until the tab was rebound. -->
                             <CollectionViewSource.LiveGroupingProperties>
-                                <sys:String>BustSource</sys:String>
+                                <sys:String>ListGroup</sys:String>
                             </CollectionViewSource.LiveGroupingProperties>
                             <CollectionViewSource.GroupDescriptions>
-                                <PropertyGroupDescription PropertyName="BustSource"/>
+                                <PropertyGroupDescription PropertyName="ListGroup"/>
                             </CollectionViewSource.GroupDescriptions>
                             <!-- Sorted WITHIN each heading. The Characters
                                  collection's own default view is sorted too, but
@@ -4854,7 +5267,7 @@
                                           DeleteKeyCommand="{Binding DeleteItemCommand}">
                             <Button ctl:NavigatorBar.AfterAdd="True" Content="{l:T characters.addVoiceCharacter}" Command="{Binding AddVoiceCharacterCommand}"
                                     ToolTip="{l:T characters.addVoiceCharacter.tip}"/>
-                            <Button ctl:NavigatorBar.AfterAdd="True" Content="{l:T characters.addOutfit}" Command="{Binding AddOutfitCommand}"
+                            <Button view:TutorialAnchor.Id="btn:addOutfit" ctl:NavigatorBar.AfterAdd="True" Content="{l:T characters.addOutfit}" Command="{Binding AddOutfitCommand}"
                                     ToolTip="{l:T characters.addOutfit.tip}"/>
                             <Button ctl:NavigatorBar.Keys="{l:T menu.deleteItem.keys}" Content="{l:T characters.removeOutfit}" Command="{Binding RemoveOutfitCommand}"
                                     ToolTip="{l:T characters.removeOutfit.tip}"/>
@@ -5116,7 +5529,7 @@
                                                     IsEnabled="{Binding CanEditNameColor}">
                                             <Border Width="22" Height="18" BorderBrush="{DynamicResource Theme.ControlBorder}" BorderThickness="1"
                                                     Background="{Binding NameColorBrush}" VerticalAlignment="Center"/>
-                                            <TextBox Text="{Binding NameColor, UpdateSourceTrigger=PropertyChanged}" Width="90" Margin="6,0,0,0"
+                                            <TextBox view:TutorialAnchor.Id="field:nameColour" Text="{Binding NameColor, UpdateSourceTrigger=PropertyChanged}" Width="90" Margin="6,0,0,0"
                                                      ToolTip="{l:T characters.speakerNameTintHex.tip}"/>
                                             <Button Content="{l:T characters.pickCharacterColor}" Margin="6,0,0,0" Padding="8,0"
                                                     Click="PickCharacterColor_Click"
@@ -5142,6 +5555,7 @@
 
                                         <TextBlock Text="{l:T characters.bustSource}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
                                         <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,2" HorizontalAlignment="Left" Width="220"
+                                                  view:TutorialAnchor.Id="field:bustSource"
                                                   SelectedValue="{Binding BustSource}" SelectedValuePath="Tag"
                                                   IsEnabled="{Binding CanEditBustSource}"
                                                   ToolTip="{l:T characters.whereCharacterSBust.tip}">
@@ -5166,7 +5580,7 @@
                                         <ComboBox x:Name="DefaultOutfitPicker" Grid.Row="4" Grid.Column="1" Margin="0,2,58,2" IsEditable="True"
                                                   Visibility="{Binding HasBust, Converter={StaticResource BoolToVisibility}}"
                                                   ItemsSource="{Binding WearableBusts}"
-                                                  SelectedItem="{Binding DefaultOutfit}"
+                                                  SelectedItem="{Binding DefaultOutfit}" view:TutorialAnchor.Id="field:defaultOutfit"
                                                   IsEnabled="{Binding CanEditDefaultOutfit}"
                                                   ToolTip="{l:T characters.defaultOutfitPicker.tip}"/>
                                     </Grid>
@@ -5189,7 +5603,7 @@
                                              wear both kinds at once now - the busts the game gave them,
                                              whose name is simply which bust it is, and a bust this pack
                                              drew for them, which is named like any other outfit. -->
-                                        <TextBox ToolTip="{l:T characters.outfitName.tip}"  Grid.Row="0" Grid.Column="1" Margin="0,2"
+                                        <TextBox view:TutorialAnchor.Id="field:outfitName" ToolTip="{l:T characters.outfitName.tip}"  Grid.Row="0" Grid.Column="1" Margin="0,2"
                                                   Text="{Binding GameObjectName, UpdateSourceTrigger=PropertyChanged}"
                                                   Visibility="{Binding CanEditName, Converter={StaticResource BoolToVisibility}}"/>
                                         <TextBox Grid.Row="0" Grid.Column="1" Margin="0,2" IsReadOnly="True" IsEnabled="False"
@@ -5634,7 +6048,7 @@
                                 </Grid>
                             </GroupBox>
 
-                            <GroupBox Header="{l:T characters.jiggleMaskDrivenShader}"
+                            <GroupBox Header="{l:T characters.jiggleMaskDrivenShader}" view:TutorialAnchor.Id="field:jiggle"
                                       Visibility="{Binding ShowsPackArt, Converter={StaticResource BoolToVisibility}, FallbackValue=Collapsed}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -5660,7 +6074,7 @@
                                     <Slider ToolTip="{l:T characters.speed.tip}" Value="{Binding JiggleSpeed}"    Minimum="0" Maximum="10" Grid.Row="0" Grid.Column="1"/>
                                     <TextBox Style="{StaticResource NumberBox}" ToolTip="{l:T characters.speed.tip}" Text="{Binding JiggleSpeed, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="2"/>
                                     <TextBlock Text="{l:T characters.strength}"     Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" ToolTip="{l:T characters.strength.tip}"/>
-                                    <Slider ToolTip="{l:T characters.strength.tip}" view:TutorialAnchor.Id="field:jiggle" view:IssueTarget.Field="jiggle.strength" Value="{Binding JiggleStrength}" Minimum="-0.5" Maximum="0.5" Grid.Row="1" Grid.Column="1"/>
+                                    <Slider ToolTip="{l:T characters.strength.tip}" view:IssueTarget.Field="jiggle.strength" Value="{Binding JiggleStrength}" Minimum="-0.5" Maximum="0.5" Grid.Row="1" Grid.Column="1"/>
                                     <TextBox ToolTip="{l:T characters.strength.tip}" Text="{Binding JiggleStrength, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2"/>
                                     <TextBlock Text="{l:T characters.waveFrequency}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" ToolTip="{l:T characters.waveFrequency.tip}"/>
                                     <Slider ToolTip="{l:T characters.waveFrequency.tip}" Value="{Binding JiggleFrequency}" Minimum="0" Maximum="40" Grid.Row="2" Grid.Column="1"/>
@@ -6274,6 +6688,9 @@
                                                           DimUnderInactiveParent="{Binding IsChecked, ElementName=ExtDimParent}"
                                                           DimInactive="{Binding IsChecked, ElementName=ExtDimSelf}"
                                                           GameObjects="{Binding GameObjects}"
+                                                          AddLightCommand="{Binding AddLightCommand}" AddEffectCommand="{Binding AddEffectCommand}"
+                                                          Characters="{Binding DataContext.Characters,
+                                                                     RelativeSource={RelativeSource AncestorType=Window}}"
                                                           NpcCatalog="{Binding DataContext.Npcs,
                                                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         <!-- Why the game's level is soft (the author, 1.9.0): only while
@@ -6403,6 +6820,9 @@
                                                       DimUnderInactiveParent="{Binding IsChecked, ElementName=PlaceDimParent}"
                                                       DimInactive="{Binding IsChecked, ElementName=PlaceDimSelf}"
                                                       GameObjects="{Binding GameObjects}"
+                                                      AddLightCommand="{Binding AddLightCommand}" AddEffectCommand="{Binding AddEffectCommand}"
+                                                      Characters="{Binding DataContext.Characters,
+                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
                                                       LevelArtOrder="{Binding BaseSortingOrder}"
                                                       LevelArtSecondaryOrder="{Binding SecondarySortingOrder}"
                                                       LevelParallax="{Binding ParallaxStrength}"
@@ -6415,7 +6835,6 @@
                                                       LookFlares="{Binding IsChecked, ElementName=PlaceLookFlares}"
                                                       LookColour="{Binding IsChecked, ElementName=PlaceLookColour}"
                                                       LookLights="{Binding IsChecked, ElementName=PlaceLookLights}"
-                                                      LightsOfLevel="{x:Static model:VanillaLevelCatalog.PackPlacePrototype}"
                                                       NpcCatalog="{Binding DataContext.Npcs,
                                                                  RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
@@ -6459,7 +6878,7 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="{l:T places.displayNameButton}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox ToolTip="{l:T places.whatCalledEditorS.tip}"  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="{l:T places.whatCalledEditorS.tip}" view:TutorialAnchor.Id="field:placeName" Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="{l:T places.usedGameMapButton}"
                                                Grid.Row="1" Grid.Column="1" Foreground="{DynamicResource Theme.TextMuted}" FontSize="10"/>
                                     <TextBlock Text="{l:T places.runtimeName}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
@@ -6599,10 +7018,12 @@
                                                  IsEnabled="{Binding ParallaxSecondaryLinked, Converter={StaticResource InverseBoolConverter}}"/>
                                     </StackPanel>
                                     <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,4,0,0">
-                                        <CheckBox Content="{l:T places.reverseBack}" IsChecked="{Binding ParallaxReversed}"
-                                                  ToolTip="{l:T places.reverseBack.tip}"/>
-                                        <CheckBox Content="{l:T places.reverseFront}" IsChecked="{Binding ParallaxSecondaryReversed}" Margin="12,0,0,0"
+                                        <!-- ParallaxReversed is the MAIN sprite's, which is the front one (baseSprite);
+                                             the two ticks were each labelled for the other layer until 1.10.0. -->
+                                        <CheckBox Content="{l:T places.reverseFront}" IsChecked="{Binding ParallaxReversed}"
                                                   ToolTip="{l:T places.reverseFront.tip}"/>
+                                        <CheckBox Content="{l:T places.reverseBack}" IsChecked="{Binding ParallaxSecondaryReversed}" Margin="12,0,0,0"
+                                                  ToolTip="{l:T places.reverseBack.tip}"/>
                                     </StackPanel>
                                     <TextBlock Text="{l:T places.equalValuesSlideLevel}"
                                                Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" Margin="0,2,0,0"/>
@@ -6613,7 +7034,7 @@
                                               IsChecked="{Binding KeepSeagulls}" ToolTip="{l:T places.keepSeagullsParticleSystem.tip}"
                                               Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,4,0,0"/>
                                     <TextBlock Text="{l:T places.weather}" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="0,6,0,0"/>
-                                    <ComboBox SelectedItem="{Binding WeatherType}" ToolTip="{l:T places.whetherGameSRain.tip}"
+                                    <ComboBox SelectedItem="{Binding WeatherType}" ToolTip="{l:T places.whetherGameSRain.tip}" view:TutorialAnchor.Id="field:weather"
                                               Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,6,0,0">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
@@ -6830,7 +7251,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition x:Name="DlgListCol" Width="2*" MinWidth="180"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition x:Name="DlgMiddleCol" Width="3*" MinWidth="260"/>
+                        <ColumnDefinition x:Name="DlgMiddleCol" Width="3*" MinWidth="300"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="6*"/>
                     </Grid.ColumnDefinitions>
@@ -7050,11 +7471,11 @@
                                        ToolTip="{l:T dialogues.vanillaDialogues.tip}"/>
                             <ctl:NavigatorBar Style="{StaticResource Navigator}" List="{Binding ElementName=VanillaDialogueList}"
                                               KeysActive="{Binding NodeKeysActive, Converter={StaticResource InverseBoolConverter}}"
-                                              AddText="{l:T dialogues.addVanillaDialogue}" AddCommand="{Binding AddVanillaDialogueCommand}" AddTip="{l:T dialogues.addVanillaDialogue.tip}"
+                                              AddAnchor="btn:addVanillaDialogue" AddText="{l:T dialogues.addVanillaDialogue}" AddCommand="{Binding AddVanillaDialogueCommand}" AddTip="{l:T dialogues.addVanillaDialogue.tip}"
                                               DeleteText="{l:T dialogues.removeDialogue}" DeleteCommand="{Binding RemoveVanillaDialogueCommand}" DeleteTip="{l:T dialogues.removeDialogue.tip2}"/>
                             <ListBox x:Name="VanillaDialogueList" ItemsSource="{Binding VanillaDialogues}"
                                      SelectedItem="{Binding SelectedVanillaDialogue, Mode=TwoWay}"
-                                     HorizontalContentAlignment="Stretch">
+                                     HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="{x:Type vm:DialogueViewModel}">
                                         <DockPanel ToolTip="{Binding ChangeSummary}">
@@ -7151,7 +7572,7 @@
                             <!-- Identity and Start conditions fold, each per dialogue
                                  and remembered, so the node list can have their room;
                                  folded, they still say what they hold (the author, 1.8.0). -->
-                            <GroupBox x:Name="DialogueIdentityBox">
+                            <GroupBox x:Name="DialogueIdentityBox" view:TutorialAnchor.Id="panel:dialogueIdentity">
                                 <GroupBox.Header>
                                     <ToggleButton x:Name="DialogueIdentityFold" Style="{StaticResource FoldHeader}"
                                                   Content="{l:T dialogues.identity}" IsChecked="{Binding IdentityOpen}"/>
@@ -7190,7 +7611,7 @@
                                          Greyed and unbordered when so, matching the runtime
                                          name below - a box that looks typeable and silently
                                          is not reads as broken. -->
-                                    <TextBox Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBox Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" view:TutorialAnchor.Id="field:dialogueName"
                                              Grid.Row="0" Grid.Column="1"
                                              IsReadOnly="{Binding NameIsReadOnly}"
                                              IsReadOnlyCaretVisible="False"
@@ -7599,32 +8020,22 @@
                                                                             RelativeSource={RelativeSource AncestorType=Window},
                                                                             Converter={StaticResource BoolToVisibility}}"/>
                                                     <!--
-                                                        The line itself is a TextBox, not a TextBlock, purely so
-                                                        Windows will squiggle misspellings here too — WPF only
-                                                        spell-checks TextBox/RichTextBox.
+                                                        The line as the player reads it: formatting applied,
+                                                        markup GONE rather than greyed - this row is for scanning
+                                                        what a conversation says, and in a column this narrow four
+                                                        characters of a tag cost real words.
 
-                                                        It must stay EDITABLE: IsReadOnly="True" silently turns
-                                                        spell checking off. Focusable + IsHitTestVisible false is
-                                                        what makes it inert instead — clicks fall through to the
-                                                        row so selection and drag-and-drop still work, and there
-                                                        is no way to put a caret in it. The binding is OneWay as
-                                                        a second guard.
+                                                        A text block (MarkupTextBlock, 1.10.0), not the line box:
+                                                        the rows were rich text boxes so that Windows would
+                                                        squiggle misspellings, at 3 to 5 ms a row - two-thirds of
+                                                        a second to show a conversation of a hundred lines. The
+                                                        marks now come from the one speller every row shares
+                                                        (Services.Speller), drawn by the row.
 
-                                                        Padding/Margin/MinHeight are zeroed because App.xaml's
-                                                        TextBox style adds 4,2 padding and a 2px margin, which
-                                                        would make every row taller and push the text out of
-                                                        line with the glyph.
-
-                                                        Known trade-off: neither has TextTrimming, so a long
-                                                        line clips at the column edge instead of ending in "…".
-                                                        The full text is on the row ToolTip.
-
-                                                        HidesTags: the line as the player reads it. Formatting
-                                                        applied, markup GONE rather than greyed — this row is
-                                                        for scanning what a conversation says, and in a column
-                                                        this narrow four characters of a tag cost real words.
-                                                        That also makes the control display-only, which suits a
-                                                        row that was already inert.
+                                                        Focusable + IsHitTestVisible false: clicks fall through to
+                                                        the row so selection and drag-and-drop still work. Known
+                                                        trade-off: no trimming, so a long line wraps; the full
+                                                        text is on the row ToolTip.
                                                     -->
                                                     <!-- With a very slight glow under its coloured
                                                          words in EX (TextGlow, the author, 1.8.0). -->
@@ -7636,18 +8047,17 @@
                                                              when the line arrives, so the row draws it once
                                                              (it drew it three times: with its tags, without,
                                                              then in readable colours - 1.9.0). -->
-                                                        <ctl:MarkupTextBox x:Name="NodeRowText"
-                                                                 HidesTags="True" ReadableColours="True"
+                                                        <!-- A text block, not the line box (1.10.0): a tenth of
+                                                             the cost a row, the same words and colours - see
+                                                             MarkupTextBlock. -->
+                                                        <ctl:MarkupTextBlock x:Name="NodeRowText"
                                                                  ToolTip="{Binding Display}"
                                                                  Focusable="False" IsHitTestVisible="False"
-                                                                 IsTabStop="False"
-                                                                 Background="Transparent" BorderThickness="0"
-                                                                 Padding="0" Margin="0" MinHeight="0"
-                                                                 VerticalContentAlignment="Center"
+                                                                 Margin="0" VerticalAlignment="Center"
                                                                  Language="{Binding DataContext.TextLanguage, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                                 SpellCheck.IsEnabled="{Binding DataContext.SpellCheckNodeText,
-                                                                                        RelativeSource={RelativeSource AncestorType=Window}}"
-                                                                 Text="{Binding TextPreview, Mode=OneWay}"/>
+                                                                 ChecksSpelling="{Binding DataContext.SpellCheckNodeText,
+                                                                                  RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                 Line="{Binding TextPreview, Mode=OneWay}"/>
                                                     </Grid>
                                                     <!--
                                                         The same line, drawn the way the game draws it:
@@ -8205,7 +8615,7 @@
                                 all an author needs; an older pack's on-start actions
                                 still run, and validation points them out.
                             -->
-                            <GroupBox Header="{l:T dialogues.actionsStart}"
+                            <GroupBox view:TutorialAnchor.Id="panel:actionsOnStartBox" Header="{l:T dialogues.actionsStart}"
                                       Visibility="{Binding IsChoiceChild,
                                                    Converter={StaticResource InverseBoolToVisibility}}">
                                 <DockPanel>
@@ -8326,7 +8736,7 @@
                          changes to the game's conversations: these are the
                          game's, found by where they sit, and folders mean
                          nothing to them. -->
-                    <DockPanel Grid.Row="2">
+                    <DockPanel Grid.Row="2" view:TutorialAnchor.Id="panel:gameScenes">
                         <TextBlock DockPanel.Dock="Top" Text="{l:T scenes.game.list}"
                                    FontWeight="Bold" Margin="6,4,0,2"
                                    ToolTip="{l:T scenes.game.list.tip}"/>
@@ -9046,6 +9456,252 @@
             </TabItem>
 
             <!-- ════════════════════════════════════════════════════
+                 FX TAB (1.10.0): the pack's effects - made from a template
+                 (one of the game's effects, or one ModForge builds), with
+                 what the author changed on it, and when it plays.
+                 ═══════════════════════════════════════════════════ -->
+            <TabItem view:TabIcon.Glyph="&#xE706;" view:TabIcon.Count="{Binding Effects.Count}" Header="{l:T fx.fx}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" MinWidth="180"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="8*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <DockPanel Grid.Column="0">
+                        <TextBlock DockPanel.Dock="Top" Text="{l:T fx.fx}" FontWeight="Bold" Margin="6,4,0,2"/>
+                        <ctl:NavigatorBar Style="{StaticResource ListNavigator}" List="{Binding ElementName=EffectTreeView}"
+                                          AddAnchor="btn:addEffect" AddText="{l:T fx.addEffect}" AddCommand="{Binding AddEffectCommand}"
+                                          FolderText="{l:T fx.addFolder}" FolderParameter="{Binding EffectTree}" FolderTip="{l:T fx.addFolder.tip}"
+                                          DeleteText="{l:T fx.removeEffect}" DeleteCommand="{Binding RemoveEffectCommand}" DeleteTip="{l:T fx.removeEffect.tip}"/>
+                        <ContentControl DockPanel.Dock="Top" Focusable="False"
+                                        DataContext="{Binding EffectTree.Filter}"
+                                        Template="{StaticResource SidebarSearchTemplate}"/>
+                        <TreeView x:Name="EffectTreeView"
+                                  ItemsSource="{Binding EffectTree.Tree}"
+                                  ItemContainerStyle="{StaticResource UnitTreeItemStyle}"
+                                  AllowDrop="True"
+                                  ToolTip="{l:T fx.list.tip}"/>
+                    </DockPanel>
+                    <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
+
+                    <TextBlock Grid.Column="2" Margin="16" TextWrapping="Wrap" Foreground="{DynamicResource Theme.TextMuted}"
+                               Text="{l:T fx.empty}" MaxWidth="520" HorizontalAlignment="Left"
+                               Visibility="{Binding SelectedEffect, Converter={x:Static conv:NullToVisibilityConverter.Instance}, ConverterParameter=invert}"/>
+
+                    <ScrollViewer view:TutorialAnchor.Id="panel:effectDetail" Grid.Column="2" VerticalScrollBarVisibility="Auto"
+                                  DataContext="{Binding SelectedEffect}"
+                                  Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
+                        <StackPanel Margin="8">
+                            <!-- ── Preview ── near enough to judge: the template's shape with these settings, over the
+                                 game's bedroom. Not the game's renderer. -->
+                            <GroupBox Header="{l:T fx.preview}" HorizontalAlignment="Center">
+                                <StackPanel>
+                                    <ctl:PreviewFrame Key="effect">
+                                        <ctl:EffectPreview x:Name="EffectPreviewControl"
+                                                           Effect="{Binding Model}" Version="{Binding LookVersion}"
+                                                           PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                    </ctl:PreviewFrame>
+                                    <TextBlock Text="{l:T fx.preview.note}" Foreground="{DynamicResource Theme.TextMuted}" FontSize="11"
+                                               TextWrapping="Wrap" MaxWidth="640" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox Header="{l:T fx.identity}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="140"/>
+                                        <ColumnDefinition Width="*" MaxWidth="440"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{l:T fx.displayName}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBox ToolTip="{l:T fx.displayName.tip}" Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBlock Text="{l:T fx.runtimeName}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" ToolTip="{l:T fx.runtimeName.tip}"/>
+                                    <DockPanel Grid.Row="1" Grid.Column="1">
+                                        <Button Style="{StaticResource RuntimeNameEditButton}"/>
+                                        <TextBox Text="{Binding Key, Mode=OneWay}" VerticalAlignment="Center"
+                                                 IsReadOnly="True" IsReadOnlyCaretVisible="False"
+                                                 BorderThickness="0" Background="Transparent" Padding="0"
+                                                 Foreground="{DynamicResource Theme.TextMuted}" Cursor="Arrow"
+                                                 ToolTip="{l:T fx.runtimeName.tip}"/>
+                                    </DockPanel>
+                                </Grid>
+                            </GroupBox>
+
+                            <!-- ── The template ── -->
+                            <GroupBox Header="{l:T fx.template}">
+                                <StackPanel>
+                                    <ComboBox x:Name="EffectTemplateBox" HorizontalAlignment="Left" MinWidth="320"
+                                              Style="{StaticResource GroupedComboBox}" IsSynchronizedWithCurrentItem="False"
+                                              ItemsSource="{x:Static vm:EffectViewModel.TemplateOptionsGrouped}"
+                                              SelectedItem="{Binding TemplateOption}" ToolTip="{l:T fx.template.tip}">
+                                        <ComboBox.GroupStyle>
+                                            <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                                        </ComboBox.GroupStyle>
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" ToolTip="{Binding Description}">
+                                                    <TextBlock Text="{Binding Name}"/>
+                                                    <TextBlock Text="{Binding Origin}" Margin="8,0,0,0" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <TextBlock Text="{Binding TemplateDescription}" TextWrapping="Wrap" MaxWidth="640" HorizontalAlignment="Left"
+                                               Foreground="{DynamicResource Theme.TextMuted}" Margin="0,4,0,0"/>
+                                    <CheckBox Content="{l:T fx.changesGame}" IsChecked="{Binding ChangesGame}" Margin="0,6,0,0"
+                                              ToolTip="{l:T fx.changesGame.tip}"
+                                              Visibility="{Binding CanChangeGames, Converter={StaticResource BoolToVisibility}}"/>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <!-- ── How it looks ── only the rows the template takes. -->
+                            <GroupBox Header="{l:T fx.look}">
+                                <StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowTexture, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.texture}" Style="{StaticResource EffectLabel}"/>
+                                        <ctl:PathPickerBox Width="300" ToolTip="{l:T fx.texture.tip}" PathText="{Binding Texture, UpdateSourceTrigger=PropertyChanged}"
+                                                           PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowTexture, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.gameTexture}" Style="{StaticResource EffectLabel}"/>
+                                        <ComboBox Width="300" ItemsSource="{x:Static vm:EffectViewModel.GameTextureChoices}" SelectedItem="{Binding GameTexture}"
+                                                  ToolTip="{l:T fx.gameTexture.tip}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowColor, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.color}" Style="{StaticResource EffectLabel}"/>
+                                        <TextBox Width="110" Text="{Binding Color, UpdateSourceTrigger=PropertyChanged}" ToolTip="{l:T fx.color.tip}"/>
+                                        <Button Content="{l:T fx.pickColor}" Padding="8,1" Margin="6,0,0,0" Click="PickEffectColor_Click" ToolTip="{l:T fx.pickColor.tip}"/>
+                                    </StackPanel>
+                                    <CheckBox Content="{l:T fx.glow}" IsChecked="{Binding Glow}" Margin="0,2,0,4" ToolTip="{l:T fx.glow.tip}"
+                                              Visibility="{Binding ShowGlow, Converter={StaticResource BoolToVisibility}}"/>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowAmount, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{Binding AmountLabel}" Style="{StaticResource EffectLabel}"/>
+                                        <Slider Width="200" Minimum="0" Maximum="{Binding AmountMaximum}" Value="{Binding Amount}" ToolTip="{l:T fx.amount.tip}"/>
+                                        <TextBox Width="60" Margin="6,0,0,0" Text="{Binding Amount, StringFormat=0.##, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowSize, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.size}" Style="{StaticResource EffectLabel}"/>
+                                        <Slider Width="200" Minimum="0.1" Maximum="5" Value="{Binding Size}" ToolTip="{l:T fx.size.tip}"/>
+                                        <TextBox Width="60" Margin="6,0,0,0" Text="{Binding Size, StringFormat=0.##, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowScale, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.scale}" Style="{StaticResource EffectLabel}"/>
+                                        <Slider Width="200" Minimum="0.1" Maximum="5" Value="{Binding Scale}" ToolTip="{l:T fx.scale.tip}"/>
+                                        <TextBox Width="60" Margin="6,0,0,0" Text="{Binding Scale, StringFormat=0.##, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowSpeed, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.speed}" Style="{StaticResource EffectLabel}"/>
+                                        <Slider Width="200" Minimum="0" Maximum="5" Value="{Binding Speed}" ToolTip="{l:T fx.speed.tip}"/>
+                                        <TextBox Width="60" Margin="6,0,0,0" Text="{Binding Speed, StringFormat=0.##, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowLifetime, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.lifetime}" Style="{StaticResource EffectLabel}"/>
+                                        <Slider Width="200" Minimum="0.1" Maximum="5" Value="{Binding Lifetime}" ToolTip="{l:T fx.lifetime.tip}"/>
+                                        <TextBox Width="60" Margin="6,0,0,0" Text="{Binding Lifetime, StringFormat=0.##, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowGravity, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.gravity}" Style="{StaticResource EffectLabel}"/>
+                                        <TextBox Width="60" Text="{Binding GravityText, UpdateSourceTrigger=LostFocus}" ToolTip="{l:T fx.gravity.tip}"/>
+                                        <TextBlock Text="{l:T fx.emptyIsTemplates}" Foreground="{DynamicResource Theme.TextMuted}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowSeconds, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.seconds}" Style="{StaticResource EffectLabel}"/>
+                                        <TextBox Width="60" Text="{Binding SecondsText, UpdateSourceTrigger=LostFocus}" ToolTip="{l:T fx.seconds.tip}"/>
+                                        <TextBlock Text="{l:T fx.emptyIsTemplates}" Foreground="{DynamicResource Theme.TextMuted}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowText, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.text}" Style="{StaticResource EffectLabel}"/>
+                                        <TextBox Width="300" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" ToolTip="{l:T fx.text.tip}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowSpread, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.spread}" Style="{StaticResource EffectLabel}"/>
+                                        <Slider Width="200" Minimum="0" Maximum="2" Value="{Binding Spread}" ToolTip="{l:T fx.spread.tip}"/>
+                                        <TextBox Width="60" Margin="6,0,0,0" Text="{Binding Spread, StringFormat=0.##, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowTimes, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.floatSeconds}" Style="{StaticResource EffectLabel}"/>
+                                        <Slider Width="200" Minimum="0" Maximum="5" Value="{Binding FloatSeconds}" ToolTip="{l:T fx.floatSeconds.tip}"/>
+                                        <TextBox Width="60" Margin="6,0,0,0" Text="{Binding FloatSeconds, StringFormat=0.##, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowTimes, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.travelSeconds}" Style="{StaticResource EffectLabel}"/>
+                                        <Slider Width="200" Minimum="0" Maximum="5" Value="{Binding TravelSeconds}" ToolTip="{l:T fx.travelSeconds.tip}"/>
+                                        <TextBox Width="60" Margin="6,0,0,0" Text="{Binding TravelSeconds, StringFormat=0.##, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <!-- ── Where ── -->
+                            <GroupBox Header="{l:T fx.where}" Visibility="{Binding ShowPosition, Converter={StaticResource BoolToVisibility}}">
+                                <StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}">
+                                        <TextBlock Text="{l:T fx.x}" Style="{StaticResource EffectLabel}"/>
+                                        <Slider Width="200" Minimum="0" Maximum="1" Value="{Binding X}" ToolTip="{l:T fx.x.tip}"/>
+                                        <TextBox Width="60" Margin="6,0,0,0" Text="{Binding X, StringFormat=0.###, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}">
+                                        <TextBlock Text="{l:T fx.y}" Style="{StaticResource EffectLabel}"/>
+                                        <Slider Width="200" Minimum="0" Maximum="1.1" Value="{Binding Y}" ToolTip="{l:T fx.y.tip}"/>
+                                        <TextBox Width="60" Margin="6,0,0,0" Text="{Binding Y, StringFormat=0.###, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowGamesPlace, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Style="{StaticResource EffectLabel}"/>
+                                        <Button Content="{l:T fx.useGamesPlace}" Padding="8,1" Command="{Binding UseGamesPlaceCommand}" ToolTip="{l:T fx.useGamesPlace.tip}"/>
+                                        <TextBlock Text="{l:T fx.atGamesPlace}" Foreground="{DynamicResource Theme.TextMuted}" Margin="8,0,0,0" VerticalAlignment="Center"
+                                                   Visibility="{Binding AtGamesPlace, Converter={StaticResource BoolToVisibility}}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowEnd, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.endX}" Style="{StaticResource EffectLabel}"/>
+                                        <Slider Width="200" Minimum="-0.2" Maximum="1.2" Value="{Binding EndX}" ToolTip="{l:T fx.end.tip}"/>
+                                        <TextBox Width="60" Margin="6,0,0,0" Text="{Binding EndX, StringFormat=0.###, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowEnd, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.endY}" Style="{StaticResource EffectLabel}"/>
+                                        <Slider Width="200" Minimum="-0.2" Maximum="1.2" Value="{Binding EndY}" ToolTip="{l:T fx.end.tip}"/>
+                                        <TextBox Width="60" Margin="6,0,0,0" Text="{Binding EndY, StringFormat=0.###, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowLayer, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.layer}" Style="{StaticResource EffectLabel}"/>
+                                        <ComboBox Width="200" ItemsSource="{x:Static vm:EffectViewModel.LayerChoices}" SelectedItem="{Binding Layer}" ToolTip="{l:T fx.layer.tip}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <!-- ── When ── -->
+                            <GroupBox Header="{l:T fx.when}" Visibility="{Binding ShowWhen, Converter={StaticResource BoolToVisibility}}">
+                                <StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}">
+                                        <TextBlock Text="{l:T fx.playWhen}" Style="{StaticResource EffectLabel}"/>
+                                        <ComboBox Width="360" ItemsSource="{x:Static vm:EffectViewModel.PlayWhenChoices}" SelectedItem="{Binding PlayWhen}" ToolTip="{l:T fx.playWhen.tip}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource EffectRow}" Visibility="{Binding ShowUnder, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{l:T fx.under}" Style="{StaticResource EffectLabel}"/>
+                                        <ComboBox Width="360" IsEditable="True" ItemsSource="{x:Static vm:EffectViewModel.UnderSuggestions}"
+                                                  Text="{Binding Under, UpdateSourceTrigger=LostFocus}" ToolTip="{l:T fx.under.tip}"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{l:T fx.onActionNote}" TextWrapping="Wrap" MaxWidth="640" HorizontalAlignment="Left"
+                                               Foreground="{DynamicResource Theme.TextMuted}" Margin="0,2,0,6"/>
+                                    <DockPanel Visibility="{Binding ShowConditions, Converter={StaticResource BoolToVisibility}}">
+                                        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,6,0,0">
+                                            <Button Content="{l:T fx.addCondition}" Margin="0,0,4,0" Padding="8,2" Command="{Binding AddConditionCommand}"/>
+                                            <Button Content="{l:T fx.addConditionGroup}" Padding="8,2" Command="{Binding AddConditionGroupCommand}"
+                                                    ToolTip="{l:T fx.addConditionGroup.tip}"/>
+                                        </StackPanel>
+                                        <TextBlock DockPanel.Dock="Top" Text="{l:T fx.conditions}" FontWeight="SemiBold" Margin="0,0,0,2"/>
+                                        <ItemsControl ItemsSource="{Binding Conditions}" ItemTemplateSelector="{StaticResource ConditionTemplateSelector}"/>
+                                    </DockPanel>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+
+            <!-- ════════════════════════════════════════════════════
                  UI TAB (index 12 — deliberately last)
                  Added after Integration rather than beside Places so
                  every existing tab keeps its index. Several tests
@@ -9095,7 +9751,7 @@
                                               DeleteText="{l:T ui.removeUi}" DeleteCommand="{Binding RemoveUiCommand}">
                                 <Menu ctl:NavigatorBar.AfterAdd="True" Background="Transparent">
                                 </Menu>
-                                <Button ctl:NavigatorBar.AfterAdd="True" Content="{l:T ui.addVanillaUi}" Command="{Binding AddVanillaUiCommand}"
+                                <Button ctl:NavigatorBar.AfterAdd="True" Content="{l:T ui.addVanillaUi}" Command="{Binding AddVanillaUiCommand}" view:TutorialAnchor.Id="btn:addVanillaUi"
                                         ToolTip="{l:T ui.addVanillaUi.tip}"/>
                             </ctl:NavigatorBar>
                         </StackPanel>
@@ -10291,7 +10947,7 @@
                              the pack's own because they are a different kind of thing:
                              these are the game's, named by the game, and folders mean
                              nothing to them. -->
-                        <DockPanel Grid.Row="2">
+                        <DockPanel Grid.Row="2" view:TutorialAnchor.Id="panel:vanillaQuests">
                             <TextBlock DockPanel.Dock="Top" Text="{l:T quests.vanillaQuests}"
                                        FontWeight="Bold" Margin="6,4,0,2"
                                        ToolTip="{l:T quests.vanillaQuests.tip}"/>
@@ -11270,7 +11926,7 @@
                                   DataContext="{Binding SelectedIntegrationRule}"
                                   Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel Margin="8">
-                            <GroupBox Header="{l:T integration.identity}">
+                            <GroupBox Header="{l:T integration.identity}" view:TutorialAnchor.Id="panel:ruleIdentity">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="140"/>
@@ -11331,7 +11987,7 @@
                             <!-- Parameterization: run the same rule once per value, substituting
                                  {name} through its conditions and actions. Turns "one rule per
                                  subject" into one authored rule. -->
-                            <GroupBox Header="{l:T integration.repeatEachOptional}">
+                            <GroupBox view:TutorialAnchor.Id="panel:ruleForEach" Header="{l:T integration.repeatEachOptional}">
                                 <StackPanel>
                                     <ctl:HelpText Key="integration.runsWholeRuleOnce" Margin="0,0,0,6" Text="{l:T integration.runsWholeRuleOnce}"/>
                                     <Grid>
@@ -11437,7 +12093,7 @@
                                  conditions pass supplies the actions that fire. A branch with
                                  no conditions is a plain Else. Rows reuse the same
                                  conditions+actions group template as place enter/exit hooks. -->
-                            <GroupBox Header="{l:T integration.elseIfBranchesFirst}"
+                            <GroupBox view:TutorialAnchor.Id="panel:ruleBranches" Header="{l:T integration.elseIfBranchesFirst}"
                                       Visibility="{Binding CodeMode, Converter={StaticResource InverseBoolToVisibility}}">
                                 <DockPanel>
                                     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
@@ -11498,6 +12154,7 @@
                         ToolTipService.ShowOnDisabled="True"
                         Command="{Binding OpenPackFolderCommand}"/>
             </StackPanel>
+        </Grid>
             <!-- The mask studio (1.9.0): the painter and the live preview of what it
                  paints, in place of the tabs while a mask is open. The tabs are
                  collapsed meanwhile (MainWindow.OpenMaskStudio), so their previews
@@ -11548,6 +12205,8 @@
                            VerticalAlignment="Center"/>
             </StackPanel>
         </Border>
+        <!-- A picture at full size over everything (the guide's, 1.10.0): View/Controls/PictureViewer. -->
+        <ctl:PictureViewer x:Name="PictureViewer" Panel.ZIndex="150"/>
         <Border x:Name="SaveToast"
                 HorizontalAlignment="Right" VerticalAlignment="Top"
                 Margin="0,30,16,0" Padding="10,5"

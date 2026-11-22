@@ -164,8 +164,18 @@ namespace SMSModForge.PackPlugin
         public void DumpConditionDebug()
         {
             foreach (var b in _built)
+                if (b.DebugConditions) DumpConditionDebug(b);
+        }
+#endif
+
+        /// <summary>
+        /// One flagged dialogue's breakdown. Called when its start conditions flip and the first time they are
+        /// looked at after the world loads (1.10.0) - no key needed, so the tick works in a Release build too - and
+        /// on F12 in a Debug build.
+        /// </summary>
+        private void DumpConditionDebug(DialogueBuilder.BuiltDialogue b)
+        {
             {
-                if (!b.DebugConditions) continue;
                 bool all = ConditionEvaluator.All(b.StartConditions, _ctx.Vars, _ctx.Log, _ctx.PackId);
                 bool playing = IsAnyDialoguePlaying();
                 bool blocked = IsStartBlocked();
@@ -190,7 +200,6 @@ namespace SMSModForge.PackPlugin
 
         private void DumpCondition(JObject c, string indent)
             => ConditionEvaluator.DumpCondition(c, _ctx, indent);
-#endif
 
         /// <summary>Called every frame by <see cref="Plugin.Update"/> while in CoreGameScene.</summary>
         public void Tick()
@@ -506,6 +515,13 @@ namespace SMSModForge.PackPlugin
             foreach (var b in _built)
             {
                 bool nowPassing = ConditionEvaluator.All(b.StartConditions, _ctx.Vars, _ctx.Log, _ctx.PackId);
+                // Condition debugging (1.10.0): said when the answer changes, as a rule's is, so it is a handful of
+                // lines rather than one a frame.
+                if (b.DebugConditions && (!b.DebugLogged || nowPassing != b.LastConditionsPassed))
+                {
+                    b.DebugLogged = true;
+                    try { DumpConditionDebug(b); } catch (System.Exception ex) { _ctx.Log?.LogWarning("[CondDebug] " + b.Key + ": " + ex.Message); }
+                }
                 if (b.LastConditionsPassed && !nowPassing)
                 {
                     // Falling edge → the player left; a queued dialogue that was

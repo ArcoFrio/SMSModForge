@@ -21,4 +21,11 @@ namespace SMSModForge.Services;
 public static class TestMode
 {
     public static bool Active { get; set; }
+
+    /// <summary>
+    /// Under the harness, whether a window starts as the editor does for a person - on the start page, no pack
+    /// open (1.10.0) - instead of on an untitled pack ready to edit, as every test written before the start page
+    /// expects. Set by the tests of the start page for the window they build, and put back after.
+    /// </summary>
+    public static bool StartsWithNoPack { get; set; }
 }

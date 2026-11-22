@@ -82,8 +82,13 @@ internal static class DisplayRefresh
     /// <summary>The refresh rate of the monitor <paramref name="visual"/>'s
     /// window is on, frames a second (the primary display's while it is in no
     /// window). Call it on the visual's thread.</summary>
+    /// <summary>A display's rate for a test to draw at, whatever the test's own monitor runs at (the author's
+    /// main one is 165 Hz, the suite's desktop is wherever it falls); null outside tests.</summary>
+    internal static int? RateForTests { get; set; }
+
     public static int RateOf(Visual? visual)
     {
+        if (RateForTests is int forTests) return forTests;
         IntPtr hwnd = visual != null && PresentationSource.FromVisual(visual) is HwndSource source ? source.Handle : IntPtr.Zero;
         IntPtr monitor = hwnd != IntPtr.Zero ? MonitorFromWindow(hwnd, MonitorDefaultToNearest) : IntPtr.Zero;
         if (monitor == IntPtr.Zero) return Rate;

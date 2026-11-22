@@ -53,9 +53,21 @@ internal static class Xaml
     private static readonly Regex TabRe =
         new(@"<TabItem[^>]*?Header\s*=\s*""([^""]+)""", RegexOptions.Compiled | RegexOptions.Singleline);
 
-    /// <summary>Every anchor id the window declares.</summary>
+    /// <summary>An anchor a control's code gives a part it builds (the place preview's + Light, 1.10.0).</summary>
+    public static readonly Regex CodeAnchorRe =
+        new(@"TutorialAnchor\.SetId\([^,]+,\s*""([^""]+)""\)", RegexOptions.Compiled);
+
+    /// <summary>Every anchor id the window declares - in its own markup, in the pages it shows in place of
+    /// the tabs (the start page, 1.10.0, where the first tutorial begins), and on the parts its controls build.</summary>
     public static HashSet<string> AnchorIds()
-        => new(AnchorRe.Matches(Text).Select(m => m.Groups[1].Value), StringComparer.Ordinal);
+    {
+        var ids = new HashSet<string>(AnchorRe.Matches(Text).Select(m => m.Groups[1].Value), StringComparer.Ordinal);
+        string view = Path.Combine(Path.GetDirectoryName(MainWindowPath)!, "View");
+        foreach (Match m in AnchorRe.Matches(File.ReadAllText(Path.Combine(view, "StartPage.xaml")))) ids.Add(m.Groups[1].Value);
+        foreach (string code in Directory.GetFiles(view, "*.cs", SearchOption.AllDirectories))
+            foreach (Match m in CodeAnchorRe.Matches(File.ReadAllText(code))) ids.Add(m.Groups[1].Value);
+        return ids;
+    }
 
     /// <summary>Tab headers in the order they appear, which is the order the
     /// TabControl indexes them.</summary>

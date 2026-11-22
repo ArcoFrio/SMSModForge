@@ -288,6 +288,8 @@ public class TranslationScreenTests
         foreach (var d in WorldMapDistricts.All) { Add(d.DisplayName); Add(d.GoName); }
         foreach (var q in VanillaQuests.All) { Add(q.Name); Add(q.Title); }
         foreach (string n in VanillaMusic.All) Add(n);
+        // The lamp every place of a pack's is lit by is the game's own object, named as the game names it (1.10.0).
+        Add(TemplateLight.ObjectName);
         // A language is named as its own speakers write it - "Español",
         // "English" - whatever language the editor is in, so a reader can
         // find theirs. Never translated, on purpose.

@@ -145,6 +145,25 @@ public sealed class UiDef
     [JsonProperty("nodes", Order = 8)]
     public List<UiNodeDef> Nodes { get; set; } = new();
 
+    /// <summary>
+    /// Set by the editor while <see cref="Nodes"/> is the whole of a game's screen as it is worked on - every
+    /// object of the game's, with the pack's changes on them - rather than what a pack on disk holds: only the
+    /// objects it changed, each saying which of its values it means (the Override flags, worked out as the file
+    /// is written). Written in the editor's own copies of the pack - an undo step, a record copied - and never
+    /// in the file: read back from one of those, the tree is used as it is.
+    /// <para/>
+    /// Without it (up to 1.9.2) a tree read back was laid over the game's screen again as a file's is, and
+    /// since nothing in a working tree says which values it means, every place, size, picture, word and
+    /// showing the pack had changed on one of the game's objects came back as the game's - on every undo of
+    /// anything, anywhere in the pack, and on a copy of the screen. Found by the walk over every control
+    /// (UndoEveryControlTests, 1.10.0): the pack was not what it had been after an undo that touched nothing
+    /// of the screen.
+    /// </summary>
+    [JsonProperty("working", Order = 99)]
+    public bool Working { get; set; }
+
+    public bool ShouldSerializeWorking() => Working && !GameObjectDef.WritingTheFile;
+
     /// <summary>Conditions gating whether this UI can be shown at all.</summary>
     [JsonProperty("openConditions", Order = 9)]
     public List<NodeConditionDef> OpenConditions { get; set; } = new();

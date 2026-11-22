@@ -98,6 +98,34 @@ public class TranslationKeyUseTests
         "CanvasGroup", "alpha", "interactable", "blocksRaycasts",
     };
 
+    /// <summary>
+    /// Every text a tutorial step names is in the English file. A step whose hint named a key nobody wrote showed
+    /// the key itself, "tutorial.deeperMoves.swap.hint", to a reader who had waited for help (found by the review
+    /// of every tutorial step, 1.10.0); the scan below finds only what the file has and nothing uses.
+    /// </summary>
+    [Fact]
+    public void EveryTextATutorialStepNamesIsWritten()
+    {
+        var missing = new List<string>();
+        int named = 0;
+        foreach (var tutorial in SMSModForge.Tutorials.TutorialCatalog.All)
+            for (int i = 0; i < tutorial.Steps.Count; i++)
+            {
+                var step = tutorial.Steps[i];
+                foreach (string key in new[] { step.TitleKey, step.BodyKey, step.MoreKey, step.HintKey })
+                {
+                    if (string.IsNullOrEmpty(key)) continue;
+                    named++;
+                    if (!Loc.English.Has(key)) missing.Add($"{tutorial.Id}, step {i + 1}: {key}");
+                }
+            }
+        foreach (string m in missing) _out.WriteLine(m);
+        // The control: a scan that read no step would pass.
+        Assert.True(named > 500, $"only {named} texts named");
+        Assert.False(Loc.English.Has("tutorial.deeperMoves.swap.nothingHere"));
+        Assert.Empty(missing);
+    }
+
     [Fact]
     public void EveryChoiceADropdownListsHasItsText()
     {
@@ -214,6 +242,12 @@ public class TranslationKeyUseTests
         foreach (var v in SMSModForge.Model.VanillaGameVariables.All)
             used.Add(SMSModForge.Model.VanillaVariableHints.TextKeyOf(v.List, v.Name));
         foreach (var k in InputKeys.All) { used.Add(k.Name); used.Add(k.GroupKey); }
+        foreach (string k in EffectViewModel.ComposedTextKeys()) used.Add(k);
+        // A guide bullet's fold-out: its text's key with ".more" (1.10.0).
+        foreach (var part in SMSModForge.Documentation.DocTopics.Parts)
+            foreach (var topic in part.Topics)
+                foreach (var section in topic.Sections)
+                    foreach (var bullet in section.Bullets) used.Add(bullet.MoreKey);
         foreach (var (field, option, _) in ChoicesShown()) used.Add(ParamSchema.ChoiceKey(field, option));
         foreach (var type in typeof(MainViewModel).Assembly.GetTypes().Where(t => t.IsEnum))
             foreach (Enum value in Enum.GetValues(type))

@@ -163,6 +163,66 @@ public sealed class HelpAndRailTests : IDisposable
         });
     }
 
+    /// <summary>
+    /// The EX rail in a short window (1.10.0): at 900 px its last tabs were cut off and only a scroll bar three
+    /// pixels wide said it went on. Now every tab fits 900 px when few count records, and where they cannot fit
+    /// the rail fades with an arrow at the end that goes on; a tab chosen from elsewhere is brought into sight.
+    /// Measured from where the tabs are drawn.
+    /// </summary>
+    [Fact]
+    public void TheExRailFitsA900PxWindow_AndSaysWhenItGoesOn()
+    {
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            var was = ThemeManager.Current;
+            try
+            {
+                ThemeManager.Apply(ThemeManager.All.First(t => t.Name == "Neon"));
+                window.Width = 1400; window.Height = 900;
+                Open(window, vm);
+                var tabs = (TabControl)window.FindName("MainTabs");
+                var scroll = (ScrollViewer)tabs.Template.FindName("RailScroll", tabs);
+                var above = (Button)tabs.Template.FindName("RailMoreAbove", tabs);
+                var below = (Button)tabs.Template.FindName("RailMoreBelow", tabs);
+                var items = tabs.Items.OfType<TabItem>().ToList();
+                void Settle() { WindowHarness.Pump(); window.UpdateLayout(); WindowHarness.Pump(); }
+                bool InSight(TabItem tab)
+                {
+                    var r = tab.TransformToAncestor(scroll).TransformBounds(new Rect(tab.RenderSize));
+                    return r.Top >= -0.5 && r.Bottom <= scroll.ViewportHeight + 0.5;
+                }
+                Settle();
+                Assert.True(scroll.ViewportHeight > 0, "the rail was never laid out");
+                Assert.All(items, t => Assert.True(InSight(t), $"\"{t.Header}\" is cut off on the rail at 900 px"));
+                Assert.False(above.IsVisible);
+                Assert.False(below.IsVisible, "the rail says it goes on with every tab in sight");
+
+                // The window's smallest height: the rail cannot hold them all, and says so at the end that goes on.
+                window.Height = 640;
+                Settle();
+                Assert.False(InSight(items[^1]), "at 640 px every tab still fits, which proves nothing");
+                Assert.True(below.IsVisible, "tabs under the fold, and nothing says so");
+                Assert.False(above.IsVisible);
+
+                // Chosen from elsewhere (a tutorial, an issue): its tab comes into sight, and the top says it goes on.
+                vm.SelectedTabIndex = items.Count - 1;
+                Settle();
+                Assert.True(InSight(items[^1]), "the chosen tab stayed under the fold");
+                Assert.True(above.IsVisible, "scrolled down, and the top does not say there is more");
+                Assert.False(below.IsVisible);
+
+                // The arrow scrolls: clicked as a button is (its OnClick, which runs its command).
+                double offset = scroll.VerticalOffset;
+                ((System.Windows.Automation.Provider.IInvokeProvider)new System.Windows.Automation.Peers.ButtonAutomationPeer(above)
+                    .GetPattern(System.Windows.Automation.Peers.PatternInterface.Invoke)).Invoke();
+                Settle();
+                Assert.True(scroll.VerticalOffset < offset, "the arrow at the top did not scroll the rail");
+            }
+            finally { ThemeManager.Apply(was); }
+        });
+    }
+
     [Fact]
     public void TheExHeaderSaves_AndSaysWhileThereIsSomethingToSave()
     {

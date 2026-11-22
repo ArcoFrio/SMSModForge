@@ -16,6 +16,15 @@ public partial class App : Application
         if (!TestMode.Active)
             Localization.Loc.Use(Localization.Loc.StartingCode(EditorPrefs.Language));
 
+        // What the first pack needs and takes long to make, made on a worker while the window is built (1.10.0,
+        // UiDelayTests' profile): Windows' list of every language a pack can be written in, and every language's
+        // words for a new item's name. Both are made once, whichever thread asks first.
+        System.Threading.Tasks.Task.Run(() =>
+        {
+            try { ViewModel.MainViewModel.AllPackLanguages(); } catch (System.Exception) { }
+            try { Localization.NewNames.In("en", "characters.newName"); } catch (System.Exception) { }
+        });
+
         // Started by the previous version to replace it. There is no editor to
         // show: this process IS the new build, running from where it was staged,
         // and its whole job is to copy itself over the install and start that.

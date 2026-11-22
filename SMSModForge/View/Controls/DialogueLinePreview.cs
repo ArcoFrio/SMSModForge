@@ -723,14 +723,14 @@ public sealed class DialogueLinePreview : Control
     {
         if (_checking == shown) return;
         _checking = shown;
-        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
+        // Asked on the speller's own thread (1.10.0), behind whatever the window is doing.
+        Services.Speller.Ask(shown, _ =>
         {
             if (_checking != shown) return;   // the row moved on to other words
             _checking = null;
-            Services.Speller.Check(shown);
             _cached = null;
             InvalidateVisual();
-        }));
+        });
     }
 
     /// <summary>

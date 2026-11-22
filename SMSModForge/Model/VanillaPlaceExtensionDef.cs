@@ -44,4 +44,21 @@ public sealed class VanillaPlaceExtensionDef
     [JsonProperty("gameObjects", Order = 3)]
     public List<GameObjectDef> GameObjects { get; set; } = new();
     public bool ShouldSerializeGameObjects() => GameObjects.Count > 0;
+
+    /// <summary>
+    /// Set by the editor while <see cref="GameObjects"/> is the whole level as it is worked on - every object
+    /// of the game's, with the pack's changes on them - rather than what a pack on disk holds: only what it
+    /// changed, each object saying whether it means its own place and showing (worked out as the file is
+    /// written). In the editor's own copies of the pack - an undo step, a record copied - and never in the
+    /// file: read back from one of those, the objects keep what they have.
+    /// <para/>
+    /// Without it a level read back was filled in from the game's again as a file's is, and an object the pack
+    /// had moved, hidden or given another drift went back to the game's - nothing on a working object says
+    /// the pack means its values - whenever an undo or a redo built the level again (1.10.0, found by the walk
+    /// over every control; the same as Model.UiDef.Working for the game's screens).
+    /// </summary>
+    [JsonProperty("working", Order = 99)]
+    public bool Working { get; set; }
+
+    public bool ShouldSerializeWorking() => Working && !GameObjectDef.WritingTheFile;
 }

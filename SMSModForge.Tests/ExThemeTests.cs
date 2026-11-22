@@ -69,7 +69,11 @@ public sealed class ExThemeTests
                 var vmHere = (MainViewModel)window.DataContext;
                 Assert.Equal(new System.Windows.Input.ICommand[] { vmHere.SavePackCommand, vmHere.ValidateCommand, vmHere.ExportPackCommand },
                              extra.Select(b => b.Command));
-                Assert.Equal(buttons, Descendants<Button>(window).Count(b => b.IsVisible && !extra.Contains(b)));
+                // And the rail's arrows (1.10.0), shown only while it has more tabs than room: EX's own way of
+                // drawing a scroll bar, not a control Normal lacks.
+                var railArrows = new[] { "RailMoreAbove", "RailMoreBelow" }.Select(n => tabsHere.Template.FindName(n, tabsHere)).ToList();
+                Assert.All(railArrows, Assert.NotNull);
+                Assert.Equal(buttons, Descendants<Button>(window).Count(b => b.IsVisible && !extra.Contains(b) && !railArrows.Contains(b)));
                 Assert.Contains("Bahnschrift", window.FontFamily.Source);
 
                 // Another arrangement, the same navigation: the window's tabs in a
@@ -77,7 +81,8 @@ public sealed class ExThemeTests
                 var tabs = (TabControl)window.FindName("MainTabs");
                 Assert.Equal(Dock.Left, tabs.TabStripPlacement);
                 var headers = tabs.Items.OfType<TabItem>().ToList();
-                Assert.Equal(14, headers.Count);
+                // Every tab MainTab lists (the FX tab, 1.10.0, made it 15; a count of its own here went stale).
+                Assert.Equal(MainTab.Integration + 1, headers.Count);
                 double lastY = double.MinValue;
                 foreach (var tab in headers)
                 {

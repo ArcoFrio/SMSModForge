@@ -197,12 +197,37 @@ public sealed class UnitTreeController : ObservableObject
             if (_selected != null && !ReferenceEquals(_selected, value))
                 _selected.IsSelected = false;
 
+            // The control answering Follow's highlight: the record is picked already, and picking it again
+            // would read its whole page again.
+            bool echo = value != null && ReferenceEquals(value, _selected) && ReferenceEquals(value, _followed);
+            _followed = null;
             _selected = value;
             if (value != null) value.IsSelected = true;
 
             OnPropertyChanged();
-            if (value is UnitLeafNode leaf) _onLeafSelected(leaf.Item);
+            if (!echo && value is UnitLeafNode leaf) _onLeafSelected(leaf.Item);
         }
+    }
+
+    private UnitTreeItem? _followed;
+
+    /// <summary>
+    /// Light the row of <paramref name="item"/>, picked somewhere else - a tutorial, an undo, a link - opening
+    /// the folders it is in, without picking it again. The page showed one record and the list lit another, or
+    /// none: a tutorial's "her outfit is chosen" with no row chosen (found by the review of every tutorial step,
+    /// 1.10.0). Nothing when it is lit already or is not in this tree.
+    /// </summary>
+    public void Follow(object? item)
+    {
+        if (item == null) return;
+        if (_selected is UnitLeafNode now && ReferenceEquals(now.Item, item)) return;
+        if (FindLeaf(item) is not { } leaf) return;
+        if (_selected != null) _selected.IsSelected = false;
+        TreePlace.OpenTo<UnitTreeItem>(Tree, leaf, Inside, folder => folder.IsExpanded = true);
+        _selected = leaf;
+        _followed = leaf;
+        leaf.IsSelected = true;
+        OnPropertyChanged(nameof(Selected));
     }
 
     /// <summary>
@@ -227,6 +252,11 @@ public sealed class UnitTreeController : ObservableObject
     /// item list. Items not claimed by any folder land at the root.</summary>
     public void Build(System.Collections.IEnumerable items)
     {
+        // What is picked, by where it is: every node is about to be another (see TreePlace).
+        var picked = _selected;
+        var pickedFolder = picked is UnitFolderNode ? TreePlace.FoldersTo<UnitTreeItem>(Tree, picked, Inside, FolderName) : null;
+        string? pickedKey = picked is UnitLeafNode pickedLeaf ? _keyOf(pickedLeaf.Item) : null;
+
         Tree.Clear();
         var byKey = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         foreach (var it in items)
@@ -247,7 +277,21 @@ public sealed class UnitTreeController : ObservableObject
         // A rebuild replaces every node, so a live search box has to be
         // re-applied or the new nodes all show regardless of the filter.
         Filter.Reapply();
+
+        if (picked != null)
+        {
+            UnitTreeItem? again = pickedFolder != null ? TreePlace.FolderAt<UnitTreeItem>(Tree, pickedFolder, Inside, FolderName)
+                : !string.IsNullOrEmpty(pickedKey) ? TreePlace.First<UnitTreeItem>(Tree, Inside, n => n is UnitLeafNode l && string.Equals(_keyOf(l.Item), pickedKey, StringComparison.OrdinalIgnoreCase))
+                : null;
+            // The highlight only: what the tab shows is the tab's to pick.
+            _selected = again;
+            if (again != null) again.IsSelected = true;
+            OnPropertyChanged(nameof(Selected));
+        }
     }
+
+    private static IEnumerable<UnitTreeItem>? Inside(UnitTreeItem node) => (node as UnitFolderNode)?.Children;
+    private static string? FolderName(UnitTreeItem node) => (node as UnitFolderNode)?.Name;
 
     private UnitFolderNode BuildFolder(UnitFolderDef def, Dictionary<string, object> byKey, HashSet<string> placed)
     {
@@ -361,7 +405,11 @@ public sealed class UnitTreeController : ObservableObject
         Sort();
         SyncToModel();
         Selected = leaf;
+        Made?.Invoke(itemVm);
     }
+
+    /// <summary>A record was just made and picked (see <see cref="MainViewModel.RecordMade"/>).</summary>
+    public Action<object>? Made { get; set; }
 
     public UnitLeafNode? FindLeaf(object itemVm) => FindLeafIn(Tree, itemVm);
 

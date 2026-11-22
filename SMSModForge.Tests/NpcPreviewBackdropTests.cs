@@ -91,11 +91,13 @@ public sealed class NpcPreviewBackdropTests : IDisposable
                 // beside other testers: drawing is counted from there.
                 int applied = npc.FramesShown;
                 var first = System.Diagnostics.Stopwatch.StartNew();
-                while (npc.FramesShown == applied && first.Elapsed < TimeSpan.FromSeconds(10)) WindowHarness.Wait(TimeSpan.FromMilliseconds(50));
+                // A minute: drawn on the card (SMSMODFORGE_TEST_RENDERER, 1.10.0) its first frame compiles the
+                // game's own program for this run - ten seconds and more beside other tests.
+                while (npc.FramesShown == applied && first.Elapsed < TimeSpan.FromSeconds(60)) WindowHarness.Wait(TimeSpan.FromMilliseconds(50));
                 int before = npc.FramesShown;
                 WindowHarness.Wait(TimeSpan.FromSeconds(1.5));
                 Assert.True(npc.OverBackdrop, "the NPC preview does not draw over the backdrop");
-                Assert.True(npc.FramesShown > before + 5, $"the NPC preview drew {npc.FramesShown - before} frames over the backdrop in 1.5 s");
+                Assert.True(npc.FramesShown > before + 5, $"the NPC preview drew {npc.FramesShown - before} frames over the backdrop in 1.5 s ({npc.LastFault})");
                 var (w, h, px) = Drawn(npc);
                 int Grey(int x, int y)
                 {

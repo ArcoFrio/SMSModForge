@@ -28,6 +28,8 @@ public partial class ExportSizeWindow : Window
     /// </summary>
     public static Answer Ask(Window? owner, int files, double megabytes, string folder)
     {
+        // No window under the test harness: the export goes ahead, as nobody stopped it, and nothing is remembered.
+        if (Services.TestMode.Active) return new Answer(true, false);
         var window = new ExportSizeWindow { Owner = owner };
         WindowOwnership.ReturnFocusToOwner(window);
 

@@ -15,13 +15,19 @@ using Xunit.Abstractions;
 namespace SMSModForge.Tests;
 
 /// <summary>
-/// The dialogue line's own undo, and its colours.
+/// The dialogue line's undo, and its colours.
 /// <para/>
 /// Undo is driven through the real window with real keystrokes, because the
 /// fault was an interaction: the box redraws its document whenever the styling
 /// moves, WPF recorded every redraw as an edit, and so every other Ctrl+Z did
 /// nothing and a redo never survived an undo. Nothing short of typing, a
 /// formatting button and the undo command together shows that.
+/// <para/>
+/// In the editor's window the steps are the editor's own since 1.10.0 (one
+/// history for everything, MainWindow.History.cs): the box says where each of
+/// its steps begins and Ctrl+Z is the window's. The same steps are held here,
+/// taken that way; the box's own history, which it keeps anywhere else, is
+/// held on a box in a window of its own.
 /// <para/>
 /// Colour is measured on both places a line is drawn - the Text box's runs and
 /// the game-look row's pixels - because the fault there was the two reading the
@@ -89,14 +95,18 @@ public sealed class MarkupUndoAndColourTests
 
             // Ctrl+Z, three times: the second run of typing, the tag, the first
             // run. Every press does something - the fault was every OTHER one.
+            // The key itself, pressed with the keyboard in the box (RealKeys).
+            var line = vm.SelectedNode!;
             string[] back = { "hello <b>world</b>", "hello world", "" };
             foreach (string expected in back)
             {
-                Assert.True(box.ApplyShortcut(Key.Z, ModifierKeys.Control), "Ctrl+Z did nothing");
+                RealKeys.Press(window, Key.Z, ModifierKeys.Control);
                 WindowHarness.Pump();
-                _out.WriteLine($"undo -> '{box.Text}' (node '{vm.SelectedNode!.Text}')");
+                _out.WriteLine($"undo -> '{box.Text}' (node '{vm.SelectedNode?.Text}')");
+                Assert.Same(line, vm.SelectedNode);
                 Assert.Equal(expected, box.Text);
-                Assert.Equal(expected, vm.SelectedNode.Text);
+                Assert.Equal(expected, line.Text);
+                Assert.True(box.IsKeyboardFocusWithin, "the keyboard left the line's box");
             }
 
             // ...and Ctrl+Y brings each one back, which the redraw used to
@@ -104,11 +114,56 @@ public sealed class MarkupUndoAndColourTests
             string[] forward = { "hello world", "hello <b>world</b>", "hello <b>world</b>!" };
             foreach (string expected in forward)
             {
-                Assert.True(box.ApplyShortcut(Key.Y, ModifierKeys.Control), "Ctrl+Y did nothing");
+                RealKeys.Press(window, Key.Y, ModifierKeys.Control);
                 WindowHarness.Pump();
                 _out.WriteLine($"redo -> '{box.Text}'");
                 Assert.Equal(expected, box.Text);
+                Assert.Equal(expected, line.Text);
             }
+        });
+    }
+
+    [Fact]
+    public void ABoxOnItsOwnKeepsItsOwnSteps()
+    {
+        // Anywhere but the editor's window there is no history but the box's.
+        WindowHarness.Run(_ =>
+        {
+            var box = Box("");
+            Keys(box, "hello world");
+            box.Select(6, 5);
+            Assert.True(box.ApplyShortcut(Key.B, ModifierKeys.Control));
+            box.CaretIndex = box.Text.Length;
+            Keys(box, "!");
+            Assert.Equal("hello <b>world</b>!", box.Text);
+
+            foreach (string expected in new[] { "hello <b>world</b>", "hello world", "" })
+            {
+                Assert.True(box.ApplyShortcut(Key.Z, ModifierKeys.Control), "Ctrl+Z did nothing");
+                WindowHarness.Pump();
+                Assert.Equal(expected, box.Text);
+            }
+            foreach (string expected in new[] { "hello world", "hello <b>world</b>", "hello <b>world</b>!" })
+            {
+                Assert.True(box.ApplyShortcut(Key.Y, ModifierKeys.Control), "Ctrl+Y did nothing");
+                WindowHarness.Pump();
+                Assert.Equal(expected, box.Text);
+            }
+
+            // The command, as a menu sends it, takes the same steps.
+            ApplicationCommands.Undo.Execute(null, box);
+            WindowHarness.Pump();
+            Assert.Equal("hello <b>world</b>", box.Text);
+            ApplicationCommands.Redo.Execute(null, box);
+            WindowHarness.Pump();
+            Assert.Equal("hello <b>world</b>!", box.Text);
+
+            // And an edit after an undo drops what could have been redone.
+            Assert.True(box.Undo());
+            Assert.True(box.CanRedoLine);
+            box.CaretIndex = box.Text.Length;
+            Keys(box, "?");
+            Assert.False(box.CanRedoLine, "a redo survived a new edit, and would overwrite it");
         });
     }
 
@@ -118,7 +173,7 @@ public sealed class MarkupUndoAndColourTests
         // The menu and anything else that sends Undo rather than the key.
         WindowHarness.Run(window =>
         {
-            var (_, box) = EmptyLine(window);
+            var (vm, box) = EmptyLine(window);
             Keys(box, "one two");
             box.Select(4, 3);
             Click(window, "MarkupItalicButton");
@@ -127,22 +182,26 @@ public sealed class MarkupUndoAndColourTests
             ApplicationCommands.Undo.Execute(null, box);
             WindowHarness.Pump();
             Assert.Equal("one two", box.Text);
+            Assert.Equal("one two", vm.SelectedNode!.Text);
 
             ApplicationCommands.Redo.Execute(null, box);
             WindowHarness.Pump();
             Assert.Equal("one <i>two</i>", box.Text);
+            Assert.Equal("one <i>two</i>", vm.SelectedNode!.Text);
         });
     }
 
     [Fact]
-    public void WithNothingOfTheLinesToUndoTheKeyIsLeftForTheEditor()
+    public void InTheEditorsWindowTheKeyIsNeverTheBoxsOwn()
     {
-        // Not swallowed: from any other field Ctrl+Z reaches the editor's own
-        // undo, and a box that ate it with nothing to show for it would be the
-        // one place that did not.
+        // The box's own answer first was the fault of 1.10.0's rework: a line
+        // typed, left and come back to was taken back by the box, which the
+        // editor then saw as a new edit.
         WindowHarness.Run(window =>
         {
             var (_, box) = EmptyLine(window);
+            Assert.False(box.KeepsOwnHistory);
+            Keys(box, "typed");
             Assert.False(box.CanUndoLine);
             Assert.False(box.ApplyShortcut(Key.Z, ModifierKeys.Control));
             Assert.False(box.ApplyShortcut(Key.Y, ModifierKeys.Control));
@@ -150,23 +209,37 @@ public sealed class MarkupUndoAndColourTests
     }
 
     [Fact]
-    public void AnotherLineStartsAHistoryOfItsOwn()
+    public void AnotherLinesTypingIsTakenBackOnItsOwnLine()
     {
         // Stepping back from here into the previous node's edits would write
-        // them onto this one.
+        // them onto this one: an undo goes to the line the typing was on.
         WindowHarness.Run(window =>
         {
             var (vm, box) = EmptyLine(window);
+            var first = vm.SelectedNode!;
             Keys(box, "first line");
-            Assert.True(box.CanUndoLine);
 
             vm.AddDialogueRootNodeCommand.Execute(null);
             WindowHarness.Pump();
             vm.SelectedNode = vm.SelectedDialogue!.Nodes.Last();
             WindowHarness.Pump();
+            var second = vm.SelectedNode!;
+            Assert.NotSame(first, second);
+            int lines = vm.SelectedDialogue.Nodes.Count;
+            box.Focus();
+            WindowHarness.Pump();
 
-            _out.WriteLine($"now showing '{box.Text}', can undo {box.CanUndoLine}");
-            Assert.False(box.CanUndoLine, "the history followed the box to a different line");
+            // Once: the line added goes. Again: the typing, on the line it was typed on.
+            RealKeys.Press(window, Key.Z, ModifierKeys.Control);
+            WindowHarness.Pump();
+            Assert.Equal(lines - 1, vm.SelectedDialogue!.Nodes.Count);
+            Assert.Equal("first line", first.Text);
+            RealKeys.Press(window, Key.Z, ModifierKeys.Control);
+            WindowHarness.Pump();
+            _out.WriteLine($"now showing '{box.Text}' of line '{vm.SelectedNode?.Text}'");
+            Assert.Same(first, vm.SelectedNode);
+            Assert.Equal("", first.Text);
+            Assert.Equal("", box.Text);
         });
     }
 
@@ -175,16 +248,22 @@ public sealed class MarkupUndoAndColourTests
     {
         WindowHarness.Run(window =>
         {
-            var (_, box) = EmptyLine(window);
+            var (vm, box) = EmptyLine(window);
             Keys(box, "abc");
             box.Select(0, 3);
             Click(window, "MarkupBoldButton");
-            Assert.True(box.Undo());
-            Assert.True(box.CanRedoLine);
+            RealKeys.Press(window, Key.Z, ModifierKeys.Control);
+            WindowHarness.Pump();
+            Assert.Equal("abc", box.Text);
+            Assert.True(vm.Undo.CanRedo);
 
             box.CaretIndex = box.Text.Length;
             Keys(box, "d");
-            Assert.False(box.CanRedoLine, "a redo survived a new edit, and would overwrite it");
+            vm.Undo.Checkpoint();
+            Assert.False(vm.Undo.CanRedo, "a redo survived a new edit, and would overwrite it");
+            RealKeys.Press(window, Key.Y, ModifierKeys.Control);
+            WindowHarness.Pump();
+            Assert.Equal("abcd", box.Text);
         });
     }
 

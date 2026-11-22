@@ -23,6 +23,7 @@ public partial class UpdateWindow : Window
     /// place and the Options menu hears about it — see MainWindow.WireUpdates.</param>
     public static bool Ask(Window owner, ReleaseInfo release, ref bool checkOnStart)
     {
+        if (Services.TestMode.Active) return false;   // no window under the test harness, and nothing installed
         var win = new UpdateWindow { Owner = owner };
         win.StopChecking.IsChecked = !checkOnStart;
 

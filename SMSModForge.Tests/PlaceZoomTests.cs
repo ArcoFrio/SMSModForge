@@ -148,7 +148,8 @@ public sealed class PlaceZoomTests : IDisposable
                 pan.Y = viewport.ActualHeight / 2 - 540 * s;
                 int before = place.LookPasses;
                 var clock = System.Diagnostics.Stopwatch.StartNew();
-                while ((place.LookPasses == before || NpcPictureWidth() == fittedNpc) && clock.Elapsed < TimeSpan.FromSeconds(10)) WindowHarness.Wait(TimeSpan.FromMilliseconds(100));
+                // Up to half a minute: beside other testers on a held machine the picture took more than ten seconds (1.10.0).
+                while ((place.LookPasses == before || NpcPictureWidth() == fittedNpc) && clock.Elapsed < TimeSpan.FromSeconds(30)) WindowHarness.Wait(TimeSpan.FromMilliseconds(100));
                 WindowHarness.Wait(TimeSpan.FromMilliseconds(500));
                 Assert.True(place.LookShown, "the game's look is not drawn over the place");
                 var (w, h, px) = Drawn(viewport);

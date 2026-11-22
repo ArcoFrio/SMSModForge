@@ -758,6 +758,27 @@ namespace SMSModForge.PackPlugin
                 wrote++;
             }
 
+            // A UnityEvent keeps what it calls in a private field of its BASE
+            // class, which GetFields on the event's own type does not return:
+            // every Game Creator "Invoke Methods" dumped as an empty event, and
+            // what sets off the game's social-media points could not be read
+            // (2026-11-20). Its calls - target, method, argument - are written
+            // here; the call itself is a plain serialised object.
+            if (value is UnityEngine.Events.UnityEventBase)
+            {
+                var callsField = typeof(UnityEngine.Events.UnityEventBase).GetField(
+                    "m_PersistentCalls", BindingFlags.Instance | BindingFlags.NonPublic);
+                object calls = null;
+                try { calls = callsField?.GetValue(value); }
+                catch { calls = null; }
+                if (calls != null)
+                {
+                    w.Write(", \"m_PersistentCalls\": ");
+                    Value(w, calls, depth + 1, run);
+                    wrote++;
+                }
+            }
+
             // Nothing came out, so Unity's rule does not describe this type.
             // That is what a plain .NET container looks like from here: a
             // KeyValuePair keeps its Key and Value as PROPERTIES over private

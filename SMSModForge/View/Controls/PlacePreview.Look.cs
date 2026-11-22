@@ -53,15 +53,6 @@ public sealed partial class PlacePreview
     /// </summary>
     public bool LookLights { get => (bool)GetValue(LookLightsProperty); set => SetValue(LookLightsProperty, value); }
 
-    /// <summary>The game level a place is built from whose own lights it keeps (a
-    /// pack's place: the Beach, "14_Beach" - the plugin keeps its "Light 2D"),
-    /// standing under this place's root. Empty: none (one of the game's levels
-    /// has its lights among its own objects).</summary>
-    public static readonly DependencyProperty LightsOfLevelProperty =
-        DependencyProperty.Register(nameof(LightsOfLevel), typeof(string), typeof(PlacePreview), new PropertyMetadata("", OnInputChanged));
-
-    public string LightsOfLevel { get => (string)GetValue(LightsOfLevelProperty); set => SetValue(LightsOfLevelProperty, value); }
-
     private PlaceLights? _placeLights;
 
     /// <summary>The game's unlit sprite material: what is drawn with it, its lamps leave as it is.</summary>
@@ -151,43 +142,49 @@ public sealed partial class PlacePreview
     internal PlaceLights? PlaceLightsNow => LookLights ? _placeLights : null;
 
     /// <summary>
-    /// The place's lights, from what it shows on arrival: each object of the game's
-    /// whose Light2D the catalog has, where it stands (the scene's walk) - not one
-    /// switched off, under one, waiting on conditions, or hidden from the preview -
-    /// and those of <see cref="LightsOfLevel"/>'s root. Made again only when they
-    /// change.
+    /// The place's lights, from what it shows on arrival: each object's light
+    /// (<see cref="Model.GameObjectDef.Light"/>: the pack's own, the game's lamps
+    /// and a pack place's template light, seeded from the catalog, 1.10.0), where
+    /// it stands and how it is turned (the scene's walk) - not one switched off,
+    /// under one, waiting on conditions, or hidden from the preview. Made again
+    /// only when they change.
     /// </summary>
     private void UpdateLights()
     {
         var found = new System.Collections.Generic.List<PlaceLights.Light>();
+        // The place's own base light (1.10.0): the last one on, as the game's last switched on.
+        Model.LightDef? ambient = null;
         foreach (var entry in _scene)
         {
             var node = entry.Node;
-            if (node?.Model.Baseline is not { } baseline || entry.Hidden) continue;
+            if (node?.Model.Light is not { } def || node.Model.RemoveLight || entry.Hidden) continue;
             if (entry.ParentInactive || entry.Conditional || !node.StartActive || entry.Choice != null) continue;
-            foreach (var c in baseline.ComponentValues)
+            if (def.IsAmbient) { ambient = def; continue; }
+            if (!def.IsRound)
             {
-                if (c.Type != "Light2D") continue;
-                var (sx, sy) = ScreenPoint(entry.World.Tx, entry.World.Ty);
-                if (PlaceLights.FromComponent(c.Params, sx, sy) is { } light) found.Add(light);
+                if (ShapeOf(def, entry) is { } shape && PlaceLights.FromShaped(def, shape) is { } shaped) found.Add(shaped);
+                continue;
             }
+            var (sx, sy) = ScreenPoint(entry.World.Tx, entry.World.Ty);
+            if (PlaceLights.FromLight(def, sx, sy, WorldRotation(entry.World)) is { } light) found.Add(light);
         }
-        if (!string.IsNullOrWhiteSpace(LightsOfLevel) && Model.VanillaLevelCatalog.FindLevel(LightsOfLevel)?.Hierarchy is { } root)
-            foreach (var child in root.Children)
-            {
-                if (!child.ActiveSelf) continue;
-                foreach (var c in child.ComponentValues)
-                {
-                    if (c.Type != "Light2D") continue;
-                    var (sx, sy) = ScreenPoint(child.X, child.Y);
-                    if (PlaceLights.FromComponent(c.Params, sx, sy) is { } light) found.Add(light);
-                }
-            }
-        if (_placeLights != null && System.Linq.Enumerable.SequenceEqual(_placeLights.Lights, found)) return;
-        _placeLights = found.Count == 0 ? null
-            : new PlaceLights(found, (1f, 1f, 1f), Services.PreviewBackdropManager.GameLook?.Backdrop.LookupDecode);
-        _lookSame = 0;
+        var global = (1f, 1f, 1f);
+        var charactersGlobal = (1f, 1f, 1f);
+        if (ambient != null)
+        {
+            var (ar, ag, ab) = ambient.Rgb();
+            global = (ar * ambient.Strength, ag * ambient.Strength, ab * ambient.Strength);
+            if (ambient.LightsCharacters) charactersGlobal = global;
+        }
+        if (_placeLights != null && System.Linq.Enumerable.SequenceEqual(_placeLights.Lights, found)
+            && _placeLights.Global == global && _placeLights.CharactersGlobal == charactersGlobal) return;
+        _placeLights = found.Count == 0 && ambient == null ? null
+            : new PlaceLights(found, global, charactersGlobal, Services.PreviewBackdropManager.GameLook?.Backdrop.LookupDecode);
+        LookAgain();
     }
+
+    /// <summary>How far an object is turned on screen, degrees anticlockwise: its world transform's x axis.</summary>
+    private static float WorldRotation(in Aff world) => (float)(Math.Atan2(world.B, world.A) * 180.0 / Math.PI);
 
     /// <summary>A point in the level's own units (under its root) on the game's 960x540 screen, pixels from the
     /// bottom left - where the canvas draws it.</summary>
@@ -248,7 +245,7 @@ public sealed partial class PlacePreview
 
     private static void OnLookChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is PlacePreview p) { p._lookSame = 0; p.SyncLook(); }
+        if (d is PlacePreview p) { p.LookAgain(); p.SyncLook(); }
     }
 
     /// <summary>What of the game's look is drawn now: the tick boxes, within
@@ -267,9 +264,10 @@ public sealed partial class PlacePreview
         {
             LookClock(false);
             _lookImage.Visibility = Visibility.Collapsed;
+            CardLookOver();
             return;
         }
-        if (!_lookClockOn) { _lookSame = 0; _lookPacer.Restart(); LookClock(true); }
+        if (!_lookClockOn) { LookAgain(); _lookPacer.Restart(); LookClock(true); }
     }
 
     private void LookClock(bool on)
@@ -280,12 +278,11 @@ public sealed partial class PlacePreview
         _lookClockOn = on;
     }
 
-    /// <summary>A display frame: the look is taken when the pacer says so -
-    /// while the place stays still, up to five times a second.</summary>
+    /// <summary>A display frame: the look is worked out when the pacer says so
+    /// and the scene is not what the look already shows (<see cref="LookTick"/>).</summary>
     private void OnLookFrame(object? sender, EventArgs e)
     {
         if (!_lookPacer.Due(DisplayRefresh.RateOf(this))) return;
-        if (_lookSame > 30 && System.Diagnostics.Stopwatch.GetTimestamp() < _lookNextAt) return;
         LookTick();
     }
 
@@ -298,6 +295,7 @@ public sealed partial class PlacePreview
     /// </summary>
     internal byte[]? RenderStill(bool look = true, bool lights = true)
     {
+        FlushRebuild();
         var placeLights = lights && LookLights ? _placeLights : null;
         int w = (int)CanvasWidth, h = (int)CanvasHeight;
         var shot = new DrawingVisual();
@@ -350,10 +348,26 @@ public sealed partial class PlacePreview
         return output;
     }
 
+    /// <summary>Where the look's time goes, summed since it was last cleared - for the performance tests.
+    /// Stopwatch ticks: on the interface's thread taking the pictures (Capture), the lit masks (Mask), comparing
+    /// and copying (Compare) and putting the picture on screen (Present); off it working the look out (Work).</summary>
+    internal sealed class LookTimes
+    {
+        public long Capture, Mask, Compare, Work, Present;
+        public int Ticks, Same, Busy;
+        public void Clear() { Capture = Mask = Compare = Work = Present = 0; Ticks = Same = Busy = 0; }
+        public static double Ms(long ticks) => ticks * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
+    }
+
+    internal LookTimes LookTime { get; } = new();
+
     /// <summary>Take the scene layer; if it or the parts changed, put it through the look.</summary>
     private void LookTick()
     {
+        if (_lookInFlight) LookTime.Busy++;
         if (_lookInFlight || !IsVisible) return;
+        FlushRebuild();
+        long t0 = System.Diagnostics.Stopwatch.GetTimestamp();
         var parts = LookParts();
         var scene = Services.PreviewBackdropManager.GameLook;
         if (scene == null) return;                      // the game's settings are still loading
@@ -361,6 +375,7 @@ public sealed partial class PlacePreview
         if (!parts.Bloom && !parts.Flares && !parts.Colour && lights == null)
         {
             _lookImage.Visibility = Visibility.Collapsed;
+            CardLookOver();
             return;
         }
         // What the view shows: the canvas (the game's 1920x1080 screen) through the
@@ -373,6 +388,39 @@ public sealed partial class PlacePreview
         int vh = Math.Clamp((int)Math.Round(vhDip * dpi.DpiScaleY), 1, LookViewMax);
         var rect = new Rect(-_viewPan.X / sc, -_viewPan.Y / sc, vwDip / sc, vhDip / sc);
         if (vw != _lookVw || vh != _lookVh) { _lookVw = vw; _lookVh = vh; _lookViewTaken = null; _lookViewLast = null; }
+
+        // What the scene draws now, read off the world layer (1.10.0, PlacePreview.Card.cs): the card draws from
+        // it, and a place that draws the same as the look shown is still - nothing is taken or worked out.
+        bool useCard = Services.PreviewRendererManager.UseCard && !_cardBroken;
+        var next = _frameNext;
+        next.Clear();
+        bool described = DescribeScene(next, useCard);
+        // Captures that keep coming out the same are taken up to five times a second (the processor's way).
+        bool resting = _lookSame > 30 && System.Diagnostics.Stopwatch.GetTimestamp() < _lookNextAt;
+        if (described)
+        {
+            Frame(next, rect, vw, vh, parts, scene, lights);
+            if (!_lookForce && _frameLastSet && _lookImage.Visibility == Visibility.Visible && next.SameAs(_frameLast))
+            {
+                LookTime.Ticks++; LookTime.Same++;
+                LookTime.Capture += System.Diagnostics.Stopwatch.GetTimestamp() - t0;
+                return;
+            }
+            // Only the shaders' clock has moved, and what they move has not shown in the captures: at rest still.
+            if (resting && !useCard && !_lookForce && _frameLastSet && next.SameAs(_frameLast, butStamp: true)) return;
+        }
+        // Not put as a list: found still by its captures alone, as before.
+        else if (resting) return;
+        _lookForce = false;
+        if (described && useCard)
+        {
+            KeepFrame(true);
+            LookTime.Ticks++;
+            LookTime.Capture += System.Diagnostics.Stopwatch.GetTimestamp() - t0;
+            CardLook(_frameLast, rect, vw, vh);
+            return;
+        }
+        CardLookOver();
         var shot = new DrawingVisual();
         using (var dc = shot.RenderOpen())
         {
@@ -396,6 +444,7 @@ public sealed partial class PlacePreview
             _lookTaken ??= new byte[LookW * LookH * 4];
             _lookCapture.CopyPixels(_lookTaken, LookW * 4, 0);
         }
+        long t1 = System.Diagnostics.Stopwatch.GetTimestamp();
         // The scene's lit mask, while lamps light it and something in it is unlit (WithSilhouettes): reused buffers,
         // as the captures' - nothing is taken again while a look is being worked out.
         bool masked = lights != null && WithSilhouettes(() =>
@@ -412,14 +461,19 @@ public sealed partial class PlacePreview
                 screenMask.CopyPixels(_lookScreenLit, LookW * 4, 0);
             }
         });
+        long t2 = System.Diagnostics.Stopwatch.GetTimestamp();
+        LookTime.Ticks++; LookTime.Capture += t1 - t0; LookTime.Mask += t2 - t1;
         bool same = _lookViewLast != null && parts == _lookLastParts && rect == _lookViewLastRect && ReferenceEquals(lights, _lookLastLights)
                     && _lookViewTaken.AsSpan().SequenceEqual(_lookViewLast)
                     && (!parts.Bloom || (_lookLast != null && _lookTaken!.AsSpan().SequenceEqual(_lookLast)));
+        // The scene as just taken is what the look shows, or is about to: the next list is held against this one.
+        KeepFrame(described);
         if (same && _lookImage.Visibility == Visibility.Visible)
         {
             // Still: look again less often, up to five times a second.
             _lookSame++;
             _lookNextAt = System.Diagnostics.Stopwatch.GetTimestamp() + System.Diagnostics.Stopwatch.Frequency / 5;
+            LookTime.Same++; LookTime.Compare += System.Diagnostics.Stopwatch.GetTimestamp() - t2;
             return;
         }
         _lookSame = 0;
@@ -446,32 +500,26 @@ public sealed partial class PlacePreview
         var work = _lookWork;
         _lookInFlight = true;
         var ui = TaskScheduler.FromCurrentSynchronizationContext();
-        bool useCard = Services.PreviewRendererManager.UseCard;
+        // The card for the look alone (its bloom and compose) when it draws the previews but not this scene.
+        bool postOnCard = Services.PreviewRendererManager.UseCard;
+        LookTime.Compare += System.Diagnostics.Stopwatch.GetTimestamp() - t2;
         Task.Run(() =>
             {
+                long w0 = System.Diagnostics.Stopwatch.GetTimestamp();
                 // On the graphics card when that draws the previews: the exact passes there.
-                var card = useCard ? (_lookCard ??= Rendering.Gpu.GpuPost.TryCreate()) : null;
+                var card = postOnCard ? CardPost() : null;
                 if (card != null) card.LookOverView(screen, LookW, LookH, view, vw, vh, ax, bx, ay, by, scene, parts, output, lights, screenLit, viewLit);
                 else GamePost.LookOverView(screen, frame, view, vw, vh, ax, bx, ay, by, scene.Backdrop.Post, scene.Backdrop.GradingTable, scene.Decode,
                                            parts, work, output, lights, screenLit, viewLit);
                 LookOnCard = card != null;
+                System.Threading.Interlocked.Add(ref LookTime.Work, System.Diagnostics.Stopwatch.GetTimestamp() - w0);
             })
             .ContinueWith(t =>
             {
                 _lookInFlight = false;
-                if (t.IsFaulted || !IsVisible) return;
-                if (_lookBitmap == null || _lookBitmap.PixelWidth != vw || _lookBitmap.PixelHeight != vh)
-                {
-                    _lookBitmap = new WriteableBitmap(vw, vh, 96, 96, PixelFormats.Bgra32, null);
-                    _lookImage.Source = _lookBitmap;
-                }
-                _lookBitmap.WritePixels(new Int32Rect(0, 0, vw, vh), output, vw * 4, 0);
-                // Over exactly what the view showed: one picture pixel a screen pixel.
-                Canvas.SetLeft(_lookImage, rect.X); Canvas.SetTop(_lookImage, rect.Y);
-                _lookImage.Width = rect.Width; _lookImage.Height = rect.Height;
-                _lookViewRect = rect;
-                _lookImage.Visibility = Visibility.Visible;
-                LookPasses++;
+                if (t.IsFaulted) { _frameLastSet = false; return; }
+                if (!IsVisible) return;
+                ShowLook(output, vw, vh, rect);
             }, ui);
     }
 }

@@ -57,6 +57,25 @@ public static class VanillaDelta
             restores.Add(() => target.GameObjects = original);
             ext.GameObjects = pruned;
         }
+
+        // A pack place's template light (1.10.0): only the one node, the others
+        // of a pack place are its own - and a bound node of its that the editor
+        // never anchored would compare its unread transform against the catalog.
+        var template = TemplateLight.Baseline;
+        if (template != null && pack.Places != null)
+            foreach (var place in pack.Places)
+            {
+                int at = place.GameObjects.FindIndex(n => TemplateLight.Is(n) && n.Baseline != null);
+                if (at < 0) continue;
+                var kept = Prune(place.GameObjects[at], template);
+                if (ReferenceEquals(kept, place.GameObjects[at])) continue;
+                var original = place.GameObjects;
+                var pruned = new List<GameObjectDef>(original);
+                if (kept == null) pruned.RemoveAt(at); else pruned[at] = kept;
+                var target = place;
+                restores.Add(() => target.GameObjects = original);
+                place.GameObjects = pruned;
+            }
         return () => { foreach (var r in restores) r(); };
     }
 
@@ -195,7 +214,14 @@ public static class VanillaDelta
     /// </summary>
     public static bool AltersItsTarget(GameObjectDef n)
         => n.Components.Count > 0 || n.ActiveConditions.Count > 0
-           || !string.IsNullOrWhiteSpace(n.ParticleColor) || n.OverrideParallax;
+           || !string.IsNullOrWhiteSpace(n.ParticleColor) || n.OverrideParallax
+           || n.RemoveLight || LightDiffers(n);
+
+    /// <summary>Whether a bound node gives its object a light other than the one
+    /// the game has (1.10.0): changed, or added to an object with none. One
+    /// with no baseline to compare against counts whenever it has one.</summary>
+    public static bool LightDiffers(GameObjectDef n)
+        => !n.RemoveLight && n.Light != null && (n.Baseline == null || !n.Light.SameLightAs(n.BaselineLight));
 
     /// <summary>
     /// LIVE test of whether a bound node currently changes its vanilla target —
@@ -231,12 +257,28 @@ public static class VanillaDelta
     /// transform is never applied to anything. It exists so the comparison, the
     /// preview and the gizmo all read the object the game actually has.
     /// </summary>
+    /// <param name="keepsItsOwn">The node comes from the editor's own copy of the level, with every value it
+    /// had while it was worked on (VanillaPlaceExtensionDef.Working): only what is never written anywhere is
+    /// worked out again - which of the game's objects it is, its art and that art's scale and pivot.</param>
     public static void Rebase(GameObjectDef node,
                               VanillaLevelCatalog.Node baseline,
-                              VanillaLevelCatalog.Level level)
+                              VanillaLevelCatalog.Level level,
+                              bool keepsItsOwn = false)
     {
         if (node == null || baseline == null) return;
         node.Baseline = baseline;
+        node.BaselineName = baseline.Name;
+
+        if (keepsItsOwn)
+        {
+            node.VanillaArtPath = VanillaLevelCatalog.FindNodeArt(level, baseline);
+            float own = baseline.SpriteRenderer?.PixelsPerUnit ?? 0f;
+            if (own > 0f) node.SpritePpu = own;
+            node.SpritePivotX = baseline.SpriteRenderer?.PivotX ?? 0.5f;
+            node.SpritePivotY = baseline.SpriteRenderer?.PivotY ?? 0.5f;
+            if (node.BaselineLight is { } games && node.Light != null) node.Light.GameLayers = games.GameLayers;
+            return;
+        }
 
         // Preview-only and dropped for every bound node, so always re-derived.
         node.VanillaArtPath = VanillaLevelCatalog.FindNodeArt(level, baseline);
@@ -280,6 +322,16 @@ public static class VanillaDelta
             node.ScaleY = baseline.ScaleY;
         }
         if (!node.OverrideActive) node.StartActive = baseline.ActiveSelf;
+
+        // Its light (1.10.0): the game's own unless the pack changed it or
+        // switched it off; what the game's lights, which the pack never changes,
+        // is kept for the preview either way.
+        var light = node.BaselineLight;
+        if (light != null)
+        {
+            if (node.Light == null && !node.RemoveLight) node.Light = light;
+            else if (node.Light != null) node.Light.GameLayers = light.GameLayers;
+        }
     }
 
     /// <summary>
@@ -303,6 +355,8 @@ public static class VanillaDelta
         node.ScaleY = b.ScaleY;
         node.StartActive = b.ActiveSelf;
         node.SortingOrder = b.SpriteRenderer?.SortingOrder ?? 0;
+        node.RemoveLight = false;
+        node.Light = node.BaselineLight;
         return true;
     }
 
@@ -378,6 +432,8 @@ public static class VanillaDelta
         copy.OverrideTransform = transformDiffers;
         copy.OverrideActive = activeDiffers;
         copy.Children = prunedChildren;
+        // The game's light as it is need not be written (1.10.0).
+        if (!LightDiffers(node)) copy.Light = null;
         return copy;
     }
 
@@ -423,5 +479,7 @@ public static class VanillaDelta
         ParticleColor = n.ParticleColor,
         CopyOf = n.CopyOf,
         CopyBeside = n.CopyBeside,
+        Light = n.Light,
+        RemoveLight = n.RemoveLight,
     };
 }

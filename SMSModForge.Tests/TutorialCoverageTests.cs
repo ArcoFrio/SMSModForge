@@ -217,7 +217,8 @@ public class TutorialCoverageTests
         // the game perfectly and simply is not there. Getting started is where
         // somebody learns what the end looks like.
         var first = TutorialCatalog.All.First(t => t.IsOnLadder);
-        string prose = string.Join("\n", first.Steps.Select(s => s.Title + "\n" + s.Body));
+        // The whole explanation counts: a step's fold-out (1.10.0) is where the full story is told.
+        string prose = string.Join("\n", first.Steps.Select(s => s.Title + "\n" + s.Body + "\n" + s.More));
 
         _out.WriteLine($"checking {first.Id} ({first.Steps.Count} steps)");
 

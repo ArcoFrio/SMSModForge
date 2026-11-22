@@ -75,6 +75,8 @@ public static class OptionNotes
         [NodeActionTypes.Travel] = "note.action.travel",
         [NodeActionTypes.TransitionLevels] = "note.action.transitionLevels",
         [NodeActionTypes.Transitions] = "note.action.transitions",
+        [NodeActionTypes.PlayEffect] = "note.action.playEffect",
+        [NodeActionTypes.StopEffect] = "note.action.stopEffect",
         [NodeActionTypes.LeaveUiFaded] = "note.action.leaveUiFaded",
         [NodeActionTypes.EmitSignal] = "note.action.emitSignal",
         [NodeActionTypes.SetWeather] = "note.action.setWeather",

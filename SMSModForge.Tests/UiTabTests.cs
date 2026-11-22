@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Windows.Controls;
 using SMSModForge.Model;
@@ -20,7 +20,7 @@ public class UiTabTests
     private readonly ITestOutputHelper _out;
     public UiTabTests(ITestOutputHelper o) => _out = o;
 
-    /// <summary>The UI tab stands where MainTab says - after Wallpapers, with
+    /// <summary>The UI tab stands where MainTab says - after VFX (Wallpapers until 1.10.0), with
     /// Quests after it and Variables and Integration last (1.8.0). Tests and
     /// code address tabs by their place, all through MainTab, and a silent
     /// renumbering would leave them asserting about the wrong screen while
@@ -36,7 +36,7 @@ public class UiTabTests
 
             _out.WriteLine(string.Join(" | ", headers));
             Assert.Equal("UI", headers[MainTab.Ui]);
-            Assert.Equal("Wallpapers", headers[MainTab.Ui - 1]);
+            Assert.Equal("VFX", headers[MainTab.Ui - 1]);   // 1.10.0: the VFX tab stands between Wallpapers and UI
 
             // The places the focus sweep relies on.
             Assert.Equal("Characters", headers[MainTab.Characters]);

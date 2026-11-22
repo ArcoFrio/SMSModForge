@@ -175,6 +175,51 @@ public sealed class GpuNewContentTests
         Same("a place's art", With(0u, Milk), With(Fill, Milk));
     }
 
+    /// <summary>A place's scene drawn by the card itself (1.10.0, GpuPlaceScene): every kind of picture, under its
+    /// lights and without, each part of the look - and the scene alone, as the character in the place takes it.</summary>
+    [Fact]
+    public void APlacesSceneDrawnByTheCard()
+    {
+        var scene = Scene("MyRoom");
+        foreach (var parts in Parts)
+            foreach (bool lights in new[] { true, false })
+            {
+                byte[] Draw()
+                {
+                    using var milking = GpuMilking.TryCreate();
+                    using var card = GpuPlaceScene.TryCreate();
+                    using var post = GpuPost.TryCreate();
+                    Assert.True(card != null && milking != null && post != null, "no graphics card device: " + GpuDevice.SharedFailure);
+                    var frame = PlaceFrameSamples.Make(scene, milking!, parts, lights);
+                    var output = new byte[frame.Vw * frame.Vh * 4];
+                    card!.Draw(frame, post!, output);
+                    return output;
+                }
+                Same($"a place's scene, {(lights ? "lit" : "no lights")}, {parts}", With(0u, Draw), With(Fill, Draw));
+            }
+        byte[] Capture()
+        {
+            using var milking = GpuMilking.TryCreate();
+            using var card = GpuPlaceScene.TryCreate();
+            Assert.True(card != null && milking != null, "no graphics card device: " + GpuDevice.SharedFailure);
+            var frame = PlaceFrameSamples.Make(scene, milking!, new BackdropRender.PostParts(false, false, false));
+            var both = new byte[frame.Vw * frame.Vh * 8];
+            var colour = new byte[frame.Vw * frame.Vh * 4];
+            var lit = new byte[frame.Vw * frame.Vh * 4];
+            card!.Capture(frame, colour, lit);
+            colour.CopyTo(both, 0);
+            lit.CopyTo(both, colour.Length);
+            return both;
+        }
+        var plain = With(0u, Capture);
+        Same("a place's scene as drawn, and its lit mask", plain, With(Fill, Capture));
+        // Control: something is drawn, and something of it is unlit and something lit.
+        int n = plain.Length / 2;
+        Assert.Contains(Enumerable.Range(0, n / 4), i => plain[i * 4 + 3] == 255 && plain[i * 4 + 1] > 40);
+        Assert.Contains(Enumerable.Range(0, n / 4), i => plain[n + i * 4 + 2] == 255);
+        Assert.Contains(Enumerable.Range(0, n / 4), i => plain[n + i * 4 + 3] == 255 && plain[n + i * 4 + 2] < 128);
+    }
+
     [Fact]
     public void ThePlacesLook_OverTheScreenAndOverAView()
     {

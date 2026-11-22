@@ -40,6 +40,13 @@ public sealed class PlaceViewModel : ObservableObject, IDerivesKey
     public RelayCommand AddGameObjectCommand { get; }
     public RelayCommand AddNpcCommand { get; }
 
+    /// <summary>A light object (1.10.0), from the preview window's "+ Light":
+    /// its parameter is where (float[] { x, y }).</summary>
+    public RelayCommand AddLightCommand { get; }
+
+    /// <summary>An effect object (1.10.0), from the preview's "+ Effect": its parameter is where (float[] { x, y }).</summary>
+    public RelayCommand AddEffectCommand { get; }
+
     public PlaceViewModel(PlaceDef model)
     {
         Model = model;
@@ -57,8 +64,11 @@ public sealed class PlaceViewModel : ObservableObject, IDerivesKey
             npcsDef = new GameObjectDef { Name = "NPCs", Role = GameObjectDef.RoleNpcRoot };
             model.GameObjects.Add(npcsDef);
         }
-        GameObjects = new ObservableCollection<GameObjectViewModel>(
-            model.GameObjects.Select(g => new GameObjectViewModel(g, RemoveGameObject)));
+        // The light the template level gives every pack place (1.10.0), as a
+        // light the author can change or remove: in memory until they do.
+        TemplateLight.Seed(model);
+        GameObjects = new ObservableCollection<GameObjectViewModel>();
+        foreach (var g in model.GameObjects) GameObjects.Add(Row(g));
         NpcsNode = GameObjects.First(g => g.IsNpcRoot);
 
         OnEnterHooks = new ObservableCollection<LevelHookViewModel>(
@@ -81,6 +91,8 @@ public sealed class PlaceViewModel : ObservableObject, IDerivesKey
         // New NPCs hang under the forced NPCs-root node (the runtime home for
         // the NPC hierarchy), next to the "Add GameObject" button.
         AddNpcCommand = new RelayCommand(() => NpcsNode.AddNpc());
+        AddLightCommand = new RelayCommand(at => LightObjects.Dress(AddGameObject(), GameObjects, at));
+        AddEffectCommand = new RelayCommand(at => LightObjects.DressAsEffect(AddGameObject(), GameObjects, at));
     }
 
     /// <summary>Adds a top-level GameObject (a sprite object or a container),
@@ -91,9 +103,26 @@ public sealed class PlaceViewModel : ObservableObject, IDerivesKey
         int idx = Model.GameObjects.FindIndex(g => g.IsNpcRoot);
         if (idx < 0) idx = Model.GameObjects.Count;
         Model.GameObjects.Insert(idx, def);
-        var vm = new GameObjectViewModel(def, RemoveGameObject);
+        var vm = Row(def);
         GameObjects.Insert(idx, vm);
         return vm;
+    }
+
+    /// <summary>The row of one of the place's own objects: among the place's rows, in the place's list.</summary>
+    private GameObjectViewModel Row(GameObjectDef def) => new(def, RemoveGameObject, false, GameObjects, Model.GameObjects);
+
+    /// <summary>
+    /// The place's objects made what a step has, where they are (1.10.0; see <see cref="GameObjectRows"/>).
+    /// An object only the step has is made a row here when it is the pack's own through and through: one that
+    /// keeps something of the game's beside what is saved is put back with the whole place, which is where
+    /// that is read.
+    /// </summary>
+    internal bool ReadObjectsAgain(SplitPiece from, SplitPiece to)
+    {
+        static bool OwnThroughout(GameObjectDef def)
+            => !def.KeepsWhatItFinds && !def.IsNpcRoot && string.IsNullOrEmpty(def.BaselineName)
+               && def.Children.All(OwnThroughout) && def.Npcs.All(n => n.Children.All(OwnThroughout));
+        return GameObjectRows.ReadAgain(from, to, GameObjects, Model.GameObjects, Row, OwnThroughout, out _);
     }
 
     public void RemoveGameObject(GameObjectViewModel g)

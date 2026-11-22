@@ -4,6 +4,7 @@
 #   powershell -File Tools\Game\ingame-suite.ps1 -Filter "FullyQualifiedName~.B"   # one area (B: places)
 #   ... -Detailed                                                     # and what each check printed, passed or not
 #
+# Before a release, run it as part of the one pre-release run instead: Tools\Testing\pre-release.ps1.
 # Builds the plugin's Debug build - the one with the test bridge - into the TEST COPY (never the author's
 # game), brings the test copy's plugin languages up to date, and runs InGameSuiteTests with
 # SMSMODFORGE_INGAME pointing at the copy. Those start the copy through launch.ps1 - its own desktop, muted,
@@ -18,19 +19,8 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path (Split-Path $PSScriptRoot)
-if (-not (Test-Path "$Test\Starmaker Story.exe")) { throw "No test copy at $Test - run setup-test-game.ps1 -Build" }
-if (Get-Process -Name 'Starmaker Story' -ErrorAction SilentlyContinue | Where-Object { $_.Path -like "$Test*" }) {
-    throw "The test copy is running; stop.ps1 first."
-}
-
-$log = Join-Path ([IO.Path]::GetTempPath()) 'SMSModForge-ingame-build.txt'
-dotnet build "$repo\SMSModForge.PackPlugin\SMSModForge.PackPlugin.csproj" -c Debug "-p:PluginOutputPath=$Test\BepInEx\plugins\\" > $log
-if ($LASTEXITCODE -ne 0) { Get-Content $log | Select-String ' error ' ; throw "The plugin did not build (see $log)." }
-"plugin (Debug, with the bridge) built into the test copy"
-
-$languages = "$Test\BepInEx\plugins\SMSModForge\Languages"
-New-Item -ItemType Directory -Force $languages | Out-Null
-Get-ChildItem "$repo\SMSModForge\Languages\*.txt" | Where-Object { $_.Name -ne 'en.txt' } | Copy-Item -Destination $languages -Force
+# The checks, the plugin's Debug build into the test copy, its languages (shared with run-tests.ps1 -InGame).
+& (Join-Path $PSScriptRoot 'ingame-prepare.ps1') -Test $Test
 
 $env:SMSMODFORGE_INGAME = $Test
 $which = 'FullyQualifiedName~InGameSuiteTests'

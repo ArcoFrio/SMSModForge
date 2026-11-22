@@ -21,7 +21,7 @@ public sealed class MainTabOrderTests
         (MainTab.Npcs, "npcs.npcs"), (MainTab.Places, "places.places"),
         (MainTab.MapButtons, "mapButtons.mapButtons"), (MainTab.Dialogues, "dialogues.dialogues"),
         (MainTab.Scenes, "scenes.scenes"), (MainTab.Music, "music.music"), (MainTab.Sfx, "sfx.sfx"),
-        (MainTab.Wallpapers, "wallpapers.wallpapers"), (MainTab.Ui, "ui.ui"), (MainTab.Quests, "quests.quests"),
+        (MainTab.Wallpapers, "wallpapers.wallpapers"), (MainTab.Fx, "fx.fx"), (MainTab.Ui, "ui.ui"), (MainTab.Quests, "quests.quests"),
         (MainTab.Variables, "variables.variables"), (MainTab.Integration, "integration.integration"),
     };
 
@@ -38,6 +38,8 @@ public sealed class MainTabOrderTests
 
             Assert.Equal(Loc.T("variables.variables"), headers[^2]);
             Assert.Equal(Loc.T("integration.integration"), headers[^1]);
+            // The names text uses for each tab (a tutorial's card, 1.10.0) are the window's own.
+            Assert.Equal(headers, Enumerable.Range(0, headers.Count).Select(MainTab.Name).ToList());
 
             // Picking a tab by its place opens that tab.
             var vm = (MainViewModel)window.DataContext;

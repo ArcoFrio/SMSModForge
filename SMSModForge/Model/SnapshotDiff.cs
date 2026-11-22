@@ -34,6 +34,10 @@ public static class SnapshotDiff
         /// <summary>The entry's text in each snapshot, without the comma after it.</summary>
         public string From = "";
         public string To = "";
+
+        /// <summary>The entry as the step to go to keeps it, when it is known that way: read from it without
+        /// its whole text being put together first (an entry kept in parts, Model.SplitPiece).</summary>
+        public PackPiece? ToPiece;
     }
 
     /// <summary>

@@ -115,6 +115,10 @@ public static class ConditionSchemas
         {
             new ParamSchema("target", "param.label.target", ParamType.GameObjectPath, "",
                 "condition.gameObjectActive.target.tip"),
+            // 1.10.0, the author: "whenever a child of GONAME is activated" - true while anything under the
+            // object is on (one of the game's photos under the always-on photos' manager).
+            new ParamSchema(Shared.Effects.UnderParam, "param.label.anythingUnderIt", ParamType.Bool, "false",
+                "condition.gameObjectActive.under.tip"),
         },
 
         // Device / key / phase are drawn by the shared input row instead, the

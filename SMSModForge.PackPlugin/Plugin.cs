@@ -2126,6 +2126,12 @@ namespace SMSModForge.PackPlugin
                     try { _contexts[i].Wallpapers?.Tick(Logger); }
                     catch (System.Exception ex) { FailedThisFrame("Wallpapers of " + _contexts[i].PackId, ex); }
                 }
+                // The packs' effects: played and stopped by their conditions, and gone when done.
+                for (int i = 0; i < _contexts.Count; i++)
+                {
+                    try { EffectRuntime.Tick(_contexts[i]); }
+                    catch (System.Exception ex) { FailedThisFrame("Effects of " + _contexts[i].PackId, ex); }
+                }
                 // ...and every mod's wallpaper buttons kept on the screen, however
                 // many there are.
                 try { WallpaperListFit.Tick(Logger); } catch (System.Exception ex) { FailedThisFrame("Wallpaper list", ex); }
@@ -3072,6 +3078,10 @@ namespace SMSModForge.PackPlugin
             // runs against the loaded scene rather than against a prefab.
             try { UiFactory.BuildAll(m, ctx, Logger); }
             catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] UI build failed in " + m.PackId + ": " + ex); }
+
+            // The pack's effects (the FX tab, 1.10.0): registered, and the game's own changed where a pack says.
+            try { EffectRuntime.BuildAll(ctx, Logger); }
+            catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Effects build failed in " + m.PackId + ": " + ex); }
 
             // Build integration rules (Integration tab in the editor).
             // Done after everything else so a rule that references a

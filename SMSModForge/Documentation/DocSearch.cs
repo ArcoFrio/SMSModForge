@@ -55,9 +55,14 @@ public static class DocSearch
                     // A heading match keeps its whole section, for the same
                     // reason a title match keeps its whole topic.
                     bool wholeSection = headingHit || Has(section.Heading, query);
-                    var bullets = wholeSection
-                        ? section.Bullets.ToArray()
-                        : section.Bullets.Where(b => Has(b.Term, query) || Has(b.Text, query)).ToArray();
+                    // A hit only in a bullet's fold-out opens it: a result still to be found is barely one.
+                    var bullets = (wholeSection
+                            ? section.Bullets
+                            : section.Bullets.Where(b => Has(b.Term, query) || Has(b.Text, query) || Has(b.More, query)))
+                        .Select(b => Has(b.More, query) && !Has(b.Term, query) && !Has(b.Text, query)
+                            ? new DocBullet(b.TermKey, b.TextKey) { MoreOpen = true }
+                            : b)
+                        .ToArray();
 
                     if (bullets.Length > 0) sections.Add(new DocSection(section.HeadingKey, bullets));
                 }
@@ -80,7 +85,11 @@ public static class DocSearch
         return kept;
     }
 
-    private static bool Has(string? haystack, string needle)
-        => !string.IsNullOrEmpty(haystack) &&
+    private static bool Has(string? haystack, string needle) => Matches(haystack, needle);
+
+    /// <summary>Whether a text holds what was searched for - the guide's rule, which the tutorials' search on the
+    /// ModForge tab shares (1.10.0).</summary>
+    public static bool Matches(string? haystack, string needle)
+        => !string.IsNullOrEmpty(haystack) && needle.Length > 0 &&
            haystack!.IndexOf(needle, StringComparison.OrdinalIgnoreCase) >= 0;
 }

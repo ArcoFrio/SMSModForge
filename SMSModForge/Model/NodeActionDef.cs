@@ -297,6 +297,14 @@ public static class NodeActionTypes
     /// </summary>
     public const string Transitions = Shared.Transitions.ActionType;
 
+    /// <summary>Play one of the pack's effects (the FX tab, 1.10.0): where the effect says, or at <c>x</c>,
+    /// <c>y</c> (fractions of the screen) when this row gives them. Params: <c>effect</c>, <c>x</c>, <c>y</c>.</summary>
+    public const string PlayEffect = Shared.Effects.PlayAction;
+
+    /// <summary>Stop one of the pack's effects: its particles stop coming and those out finish. Params:
+    /// <c>effect</c>.</summary>
+    public const string StopEffect = Shared.Effects.StopAction;
+
     /// <summary>
     /// Pick a random element from a list and write it into a target
     /// variable. The <c>source</c> param can be:
@@ -423,6 +431,7 @@ public static class NodeActionTypes
         Travel, TransitionLevels, FadeSprite, SetComponentProperty, MoveGameObject, SpinGameObject, TransformGameObject,
         SwitchMusic, PlaySFX,
         Wait, Transitions, PlayDialogue,
+        PlayEffect, StopEffect,
         PickRandomFromList, AddToList, RemoveFromList, ClearList, CountList,
         DiceRoll, SetWeather,
         Quest,

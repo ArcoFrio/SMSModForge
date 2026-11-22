@@ -38,7 +38,9 @@ namespace SMSModForge.PackPlugin
     /// ModForge's save warning, if it is up, and its words.</item>
     /// <item><c>members &lt;type&gt;</c>: what one of the game's types offers.</item>
     /// <item><c>fields &lt;component&gt; &lt;path&gt;</c>: every field a component on
-    /// the object holds, private ones too.</item>
+    /// the object holds, private ones too. <c>call &lt;component&gt; &lt;method&gt;
+    /// &lt;argument|-&gt; &lt;path&gt;</c>: one of its methods run, as the game's
+    /// "Invoke Methods" would.</item>
     /// <item><c>find-text &lt;words&gt;</c> / <c>press-text &lt;words&gt;</c>: the
     /// same, for the object those words are written on - a button by what it
     /// says, as a player finds it (two of a pack's navigator buttons to one
@@ -540,6 +542,35 @@ namespace SMSModForge.PackPlugin
                     if (target == null || !bool.TryParse(all.Substring(cut + 1), out on)) { Say("error set-active: " + all); return true; }
                     target.SetActive(on);
                     Say("ok set-active " + FullPath(target.transform) + " " + on);
+                    return true;
+                }
+                case "call":
+                {
+                    // call <component> <method> <argument|-> <path>: one of a
+                    // game component's methods run, with one int, float, bool or
+                    // string argument or none (-) - an effect set off the way the
+                    // game's own "Invoke Methods" does (the points burst's
+                    // TriggerExplosion), to see it, 1.10.0's FX research.
+                    var words = rest.Split(new[] { ' ' }, 3);
+                    if (words.Length < 3) { Say("error call: call <component> <method> <argument|-> <path>"); return true; }
+                    var target = FindPath(words[2]);
+                    if (target == null) { Say("error call: no " + words[2]); return true; }
+                    var component = target.GetComponents<Component>().FirstOrDefault(c => c != null && c.GetType().Name == a);
+                    if (component == null) { Say("error call: no " + a + " on " + words[2]); return true; }
+                    var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic;
+                    var method = component.GetType().GetMethods(flags).FirstOrDefault(m => m.Name == words[0]
+                        && m.GetParameters().Length == (words[1] == "-" ? 0 : 1));
+                    if (method == null) { Say("error call: no " + a + "." + words[0] + " taking " + (words[1] == "-" ? "nothing" : "one argument")); return true; }
+                    object[] args = null;
+                    if (words[1] != "-")
+                    {
+                        var kind = method.GetParameters()[0].ParameterType;
+                        try { args = new[] { Convert.ChangeType(words[1], kind, System.Globalization.CultureInfo.InvariantCulture) }; }
+                        catch (Exception) { Say("error call: " + words[1] + " is not a " + kind.Name); return true; }
+                    }
+                    try { method.Invoke(component, args); }
+                    catch (Exception e) { Say("error call: " + (e.InnerException ?? e).Message); return true; }
+                    Say("ok call " + a + "." + words[0] + "(" + (words[1] == "-" ? "" : words[1]) + ") on " + FullPath(target.transform));
                     return true;
                 }
                 case "fields":

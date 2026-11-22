@@ -73,7 +73,23 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     /// an entry that counts as untouched here is exactly the entry that will be
     /// dropped from the manifest. So the tag is a promise the file keeps.
     /// </summary>
-    public bool IsModified => Model.IsVanillaCharacter && !VanillaCastSeed.IsUntouched(Model);
+    public bool IsModified
+    {
+        get
+        {
+            if (!Model.IsVanillaCharacter) return false;
+            // Known until something about the character changes (1.10.0): asked by every row's bindings, and each
+            // asking wrote the character out as text - a quarter of a second as a pack opened (UiDelayTests).
+            if (!_modifiedKnown)
+            {
+                _modified = !VanillaCastSeed.IsUntouched(Model);
+                _modifiedKnown = true;
+            }
+            return _modified;
+        }
+    }
+
+    private bool _modifiedKnown;
 
     /// <summary>
     /// One of the game's characters this pack has not touched — the ones a
@@ -307,6 +323,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         OnPropertyChanged(nameof(CanEditPronouns));
         OnPropertyChanged(nameof(NeedsPronouns));
         OnPropertyChanged(nameof(BustSource));
+        OnPropertyChanged(nameof(ListGroup));
         OnPropertyChanged(nameof(DefaultOutfit));
         OnPropertyChanged(nameof(WearableBusts));
         OnPropertyChanged(nameof(NameColor));
@@ -412,6 +429,9 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         OnPropertyChanged(nameof(CanResetEverything));
         OnPropertyChanged(nameof(ResetEverythingSummary));
         OnPropertyChanged(nameof(ChangedFields));
+        // The banner with Reset character shows by this one: never raised, it stayed hidden after a game character's
+        // first change until another character was chosen and this one again (found following the guide, 1.10.0).
+        OnPropertyChanged(nameof(HasChangedFields));
         OnPropertyChanged(nameof(CanResetFrequency));
         OnPropertyChanged(nameof(CanResetPitchMin));
         OnPropertyChanged(nameof(CanResetPitchMax));
@@ -471,9 +491,10 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     {
         if (!Model.IsVanillaCharacter) return;
 
+        bool before = _modified;
+        _modifiedKnown = false;
         bool now = IsModified;
-        if (now == _modified) return;
-        _modified = now;
+        if (now == before) return;
         OnPropertyChanged(nameof(IsModified));
         OnPropertyChanged(nameof(IsQuietVanilla));
     }
@@ -580,6 +601,9 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
             if (CanRename) { NameBox = value; return; }
             Model.DisplayName = value;
             OnPropertyChanged();
+            // The name box shows this too: set from code (a tutorial's "Do it for me", an undo), it kept showing
+            // the old name while the list and the speakers had the new one.
+            OnPropertyChanged(nameof(NameBox));
             OnPropertyChanged(nameof(Display));
             if (_namesFollowDisplay) DeriveNames();
         }
@@ -813,8 +837,15 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     private void DeriveNames()
     {
         var others = _siblings().Where(c => !ReferenceEquals(c, this)).ToList();
+        string wasName = Model.Name;
         Model.Key = CharacterDef.UniqueIdentifier(Model.DisplayName, others.Select(c => c.Model.Key));
         Model.Name = CharacterDef.UniqueIdentifier(Model.DisplayName, others.Select(c => c.Model.Name));
+        // The first outfit is named after the character as it is made ("NewCharacter"); while the character is new,
+        // an outfit still carrying that name follows the name it is given (1.10.0: it stayed "NewCharacter", and
+        // every outfit button in a line said so).
+        if (!string.IsNullOrEmpty(wasName) && wasName != Model.Name)
+            foreach (var o in Outfits)
+                if (string.Equals(o.Model.GameObjectName, wasName, StringComparison.Ordinal)) o.GameObjectName = Model.Name;
         OnPropertyChanged(nameof(Key));
         OnPropertyChanged(nameof(Name));
         OnPropertyChanged(nameof(Display));
@@ -832,6 +863,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
             if (Model.BustSource == value) return;
             Model.BustSource = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(ListGroup));
             OnPropertyChanged(nameof(IsPackBust));
             OnPropertyChanged(nameof(IsVanillaBust));
             OnPropertyChanged(nameof(HasNoBust));
@@ -841,6 +873,15 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
             BustSourceChanged?.Invoke(this, EventArgs.Empty);
         }
     }
+
+    /// <summary>
+    /// The heading the character list files it under: where its bust comes from, except that a character of the
+    /// pack's own stays under the pack's heading when it wears one of the game's busts. Filed by its bust alone, the
+    /// gallery owner of the tutorials - the pack's, in a borrowed bust - vanished from THIS PACK'S CHARACTERS into
+    /// the game's 118 the moment her Bust source was set (found by the review of every tutorial step, 1.10.0).
+    /// </summary>
+    public BustSource ListGroup
+        => !Model.IsPlayer && !Model.IsVanillaCharacter && Model.BustSource == BustSource.Vanilla ? BustSource.Pack : Model.BustSource;
 
     /// <summary>Whether the bust source may be changed. Fixed for one of the
     /// game's characters, who is a vanilla bust by definition, and for the

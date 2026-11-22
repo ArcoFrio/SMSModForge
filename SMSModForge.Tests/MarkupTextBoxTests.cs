@@ -583,8 +583,9 @@ public sealed class MarkupTextBoxTests
             var runs = Runs(box);
 
             _out.WriteLine(string.Join(" | ", runs.Select(r => $"'{r.Text}'")));
-            Assert.Single(runs);
-            Assert.Null(runs[0].ReadLocalValue(TextElement.BackgroundProperty) as Brush);
+            // Its braces may be a run of their own, kept from the speller (1.10.0); none is marked as a token.
+            Assert.Equal("Morning, {PCC}.", string.Concat(runs.Select(r => r.Text)));
+            Assert.All(runs, r => Assert.Null(r.ReadLocalValue(TextElement.BackgroundProperty) as Brush));
         });
     }
 
@@ -599,6 +600,39 @@ public sealed class MarkupTextBoxTests
             var editing = Box("say <b>this</b> now");
             Assert.Equal("say <b>this</b> now", string.Concat(Runs(editing).Select(r => r.Text)));
             Assert.Contains(Runs(editing), r => r.Text == "<b>");
+        });
+    }
+
+    /// <summary>
+    /// The pack's codes are not underlined as misspellings in the line's box: [PV:Confidence] had Windows' red line
+    /// under it, which reads as the code being wrong (found by the review of every tutorial step, 1.10.0). A word
+    /// spelled wrong beside them still is: the control, or a box that checked nothing would pass.
+    /// </summary>
+    [Fact]
+    public void CodesInTheLineAreNotMisspellings_AWrongWordStillIs()
+    {
+        WindowHarness.Run(_ =>
+        {
+            var box = Box("I'm at [PV:Confidence] of 10, {PC}, says $Mood - a wrnog word.");
+            box.Language = System.Windows.Markup.XmlLanguage.GetLanguage("en-US");
+            SpellCheck.SetIsEnabled(box, true);
+
+            TextPointer Inside(string piece)
+            {
+                var run = Runs(box).First(r => r.Text.Contains(piece));
+                return run.ContentStart.GetPositionAtOffset(run.Text.IndexOf(piece) + 2)!;
+            }
+
+            // Windows' speller answers when the box is idle.
+            var deadline = System.DateTime.Now.AddSeconds(10);
+            while (box.GetSpellingError(Inside("wrnog")) == null && System.DateTime.Now < deadline)
+                WindowHarness.Wait(System.TimeSpan.FromMilliseconds(100));
+
+            Assert.NotNull(box.GetSpellingError(Inside("wrnog")));
+            foreach (string code in new[] { "[PV:Confidence]", "{PC}", "$Mood" })
+                Assert.Null(box.GetSpellingError(Inside(code)));
+            // And the line reads back as it was written, codes and all.
+            Assert.Equal("I'm at [PV:Confidence] of 10, {PC}, says $Mood - a wrnog word.", box.Text);
         });
     }
 }

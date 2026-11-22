@@ -188,6 +188,20 @@ public static class ActionSchemas
             new ParamSchema("seconds", "param.label.seconds", ParamType.Float, "0.5",
                 "action.wait.seconds.tip"),
         },
+        [NodeActionTypes.PlayEffect] = new[]
+        {
+            new ParamSchema(Shared.Effects.EffectParam, "param.label.effect", ParamType.EffectRef, "",
+                "action.playEffect.effect.tip"),
+            new ParamSchema(Shared.Effects.XField, "param.label.atX", ParamType.String, "",
+                "action.playEffect.x.tip"),
+            new ParamSchema(Shared.Effects.YField, "param.label.atY", ParamType.String, "",
+                "action.playEffect.y.tip"),
+        },
+        [NodeActionTypes.StopEffect] = new[]
+        {
+            new ParamSchema(Shared.Effects.EffectParam, "param.label.effect", ParamType.EffectRef, "",
+                "action.stopEffect.effect.tip"),
+        },
         [NodeActionTypes.Transitions] = new[]
         {
             new ParamSchema(Shared.Transitions.StyleParam, "param.label.transition", ParamType.Choice,

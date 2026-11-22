@@ -34,6 +34,7 @@ public class TutorialCheckTests
     {
         var tut = TutorialCatalog.All.First(t => t.Id == tutorialId);
         var w = new TutorialWalker();
+        w.BringInStory(tut);
 
         foreach (var st in tut.Steps)
         {
@@ -41,7 +42,7 @@ public class TutorialCheckTests
             st.OnEnter?.Invoke(w.Vm, scratch);
             if (st.Title == stepTitle) return (w, st, scratch);
             if (st.IsDone == null) continue;
-            TutorialSolutions.All[TutorialSolutions.Key(tutorialId, st.Title)](w);
+            TutorialSolutions.TrySolve(tutorialId, st, w, scratch);
         }
 
         w.Dispose();
@@ -53,7 +54,7 @@ public class TutorialCheckTests
     [Fact]
     public void Gating_a_line_wants_the_condition_finished_not_merely_added()
     {
-        var (w, step, scratch) = Reach(Tutorial, "Gate it on something real");
+        var (w, step, scratch) = Reach(Tutorial, "Only when it's on show");
         using var _ = w;
 
         var n = w.Vm.SelectedNode!;
@@ -86,10 +87,37 @@ public class TutorialCheckTests
             "the finished condition does not pass the step");
     }
 
+    /// <summary>
+    /// A new place starts with the game's light as an object of its own (1.10.0), first in its list. "Name and
+    /// picture" looked at the first object, so the reader naming the object they had just added was never done -
+    /// and the way through named the light instead, so nothing noticed until the pictures of every step showed a
+    /// light called Vase. Done as a person does it: the object they added, named and pictured.
+    /// </summary>
+    [Fact]
+    public void Naming_the_object_you_added_is_what_the_step_wants_not_the_places_own_light()
+    {
+        var (w, step, scratch) = Reach("dressing-the-room", "Add an object");
+        using var _ = w;
+        var place = w.Vm.SelectedPlace!;
+        Assert.Contains(place.GameObjects, g => g.HasLight);   // the case: the place's own light comes first
+        place.AddGameObject();
+        var added = place.GameObjects.Last(g => !g.IsNpcRoot && !g.HasLight);
+
+        var naming = TutorialCatalog.All.First(t => t.Id == "dressing-the-room").Steps
+            .First(s => s.Title == Localization.Loc.T("tutorial.dressingTheRoom.giveNamePicture.title"));
+        var fresh = new TutorialScratch();
+        naming.OnEnter?.Invoke(w.Vm, fresh);
+        Assert.False(naming.IsDone!(w.Vm, fresh), "passes before the object is named");
+        added.Name = "Vase";
+        added.Sprite = TutorialAssets.Prop;
+        Assert.True(naming.IsDone!(w.Vm, fresh), "naming and picturing the object you added does not pass");
+        Assert.All(place.GameObjects.Where(g => g.HasLight), g => Assert.NotEqual("Vase", g.Name));
+    }
+
     [Fact]
     public void Placing_an_npc_wants_one_actually_chosen()
     {
-        var (w, step, scratch) = Reach("populating", "Put them in the room");
+        var (w, step, scratch) = Reach("populating", "Into the gallery");
         using var _ = w;
 
         // The + button on its own gives an empty row: a placement of nobody,
@@ -107,7 +135,7 @@ public class TutorialCheckTests
     [Fact]
     public void Rejoining_branches_wants_the_jump_to_go_forward()
     {
-        var (w, step, scratch) = Reach(Tutorial, "Letting one option say more");
+        var (w, step, scratch) = Reach(Tutorial, "One answer earns more");
         using var _ = w;
 
         var d = w.Vm.SelectedDialogue!;
@@ -155,7 +183,7 @@ public class TutorialCheckTests
     [Fact]
     public void Naming_a_character_sees_the_placeholder_in_the_editors_language()
     {
-        var (w, step, scratch) = Reach("first-steps", "Give them a name");
+        var (w, step, scratch) = Reach("first-steps", "Name her");
         using var _ = w;
         try
         {
@@ -179,7 +207,7 @@ public class TutorialCheckTests
     [Fact]
     public void Naming_a_scene_sees_the_placeholder_in_the_editors_language()
     {
-        var (w, step, scratch) = Reach("rules", "Make one");
+        var (w, step, scratch) = Reach("rules", "Her pose");
         using var _ = w;
         try
         {
