@@ -12,7 +12,40 @@ namespace SMSModForge.Rendering;
 /// </summary>
 public static class BustComposer
 {
-    public static byte[] LoadPng(string absPath)
+    public static byte[] LoadPng(string absPath) => LoadPngOnArt(absPath, 0, 0);
+
+    /// <summary>
+    /// The rectangle of the bust frame's <see cref="JiggleShader.Size"/>² grid that
+    /// art of this shape is drawn over: the whole frame for square art, a band
+    /// across its middle for wide art, down its middle for tall - one scale both
+    /// ways, centred, as the plugin's FittedSprite draws it.
+    /// </summary>
+    public static (int x, int y, int w, int h) RectOnFrame(int artW, int artH)
+    {
+        const int size = JiggleShader.Size;
+        double scale = ArtFit.BustScale(artW, artH);
+        if (artW <= 0 || artH <= 0 || scale <= 0) return (0, 0, size, size);
+        int dw = Math.Min(size, Math.Max(1, (int)Math.Round(artW / scale)));
+        int dh = Math.Min(size, Math.Max(1, (int)Math.Round(artH / scale)));
+        return ((size - dw) / 2, (size - dh) / 2, dw, dh);
+    }
+
+    /// <summary>
+    /// A mask on the frame's grid as the game lays it over art of this shape.
+    /// <para/>
+    /// The game reads a bust's or an NPC's mask at the ART's uv (the plugin cuts
+    /// the sprite from its whole texture and binds the mask to its _MaskTex, and
+    /// the bust program reads it at uv x _MaskTex_ST), so the mask is spread over
+    /// the art whatever shape either has: a square mask over 512x256 art covers
+    /// the art's rectangle in the middle of the frame, not the frame. Fitting the
+    /// mask by its own shape instead (<see cref="LoadPng"/>) put the top quarter
+    /// of such a mask in the empty band above the art. For art and a mask of one
+    /// shape the two are the same, byte for byte.
+    /// <para/>
+    /// <paramref name="artW"/> / <paramref name="artH"/> of 0: the picture's own
+    /// shape - <see cref="LoadPng"/>.
+    /// </summary>
+    public static byte[] LoadPngOnArt(string absPath, int artW, int artH)
     {
         if (string.IsNullOrEmpty(absPath) || !File.Exists(absPath))
             return new byte[JiggleShader.Stride * JiggleShader.Size];
@@ -23,7 +56,8 @@ public static class BustComposer
 
         // Force to 256×256 BGRA32.
         var converted = new FormatConvertedBitmap(frame, System.Windows.Media.PixelFormats.Bgra32, null, 0);
-        if (converted.PixelWidth == JiggleShader.Size && converted.PixelHeight == JiggleShader.Size)
+        if (artW <= 0 || artH <= 0) { artW = converted.PixelWidth; artH = converted.PixelHeight; }
+        if (converted.PixelWidth == JiggleShader.Size && converted.PixelHeight == JiggleShader.Size && artW == artH)
         {
             var buf = new byte[JiggleShader.Stride * JiggleShader.Size];
             converted.CopyPixels(buf, JiggleShader.Stride, 0);
@@ -53,16 +87,9 @@ public static class BustComposer
         var outBuf = new byte[JiggleShader.Stride * JiggleShader.Size];
 
         // The larger ratio wins, so the art fits INSIDE the frame rather than
-        // overflowing it — matching FittedSprite in the plugin.
-        double scale = ArtFit.BustScale(sw, sh);
-        if (scale <= 0) return outBuf;
-
-        int dw = System.Math.Max(1, (int)System.Math.Round(sw / scale));
-        int dh = System.Math.Max(1, (int)System.Math.Round(sh / scale));
-        if (dw > JiggleShader.Size) dw = JiggleShader.Size;
-        if (dh > JiggleShader.Size) dh = JiggleShader.Size;
-        int ox = (JiggleShader.Size - dw) / 2;
-        int oy = (JiggleShader.Size - dh) / 2;
+        // overflowing it — matching FittedSprite in the plugin. The rectangle is
+        // the ART's, which the picture is spread over (a mask: LoadPngOnArt).
+        var (ox, oy, dw, dh) = RectOnFrame(artW, artH);
 
         for (int y = 0; y < dh; y++)
         {
@@ -83,6 +110,79 @@ public static class BustComposer
             }
         }
         return outBuf;
+    }
+
+    /// <summary>
+    /// A picture spread over the whole <see cref="JiggleShader.Size"/>² grid, each
+    /// axis on its own: the grid every mask is read on, the art's own uv. The
+    /// game reads a place's, a bust's and an NPC's mask at the uv of the art it
+    /// moves (the plugin cuts each sprite from its whole texture and binds the mask
+    /// to its material), so a mask texel covers the same share of the art whatever
+    /// shape either has: a 2048x1136 place's art over 256x256 texels, each 8 art
+    /// pixels wide and 4.4 high; a 512x1024 pose's, 2 wide and 4 high.
+    /// <para/>
+    /// Until this the mask studio read the art, and any mask it opened, with
+    /// <see cref="LoadPng"/>, which fits a bust INSIDE the square (1.1.0) - a
+    /// place's art then sat in the middle 142 of the 256 rows, between bands the
+    /// game spreads over its top and bottom fifths, and a tall pose in the middle
+    /// half of the columns: a stroke on the art moved a stretch nearly twice as
+    /// big and closer to the middle, the art's edges could not be reached at all,
+    /// and a mask the size of the art came back squeezed when saved.
+    /// <para/>
+    /// Point-sampled at each texel's centre - the texel the game's point-filtered
+    /// mask gives at that uv - so a mask read here and saved again keeps its
+    /// edges where they were.
+    /// </summary>
+    public static byte[] LoadPngOverGrid(string absPath)
+    {
+        const int size = JiggleShader.Size;
+        if (string.IsNullOrEmpty(absPath) || !File.Exists(absPath))
+            return new byte[JiggleShader.Stride * size];
+
+        using var stream = File.OpenRead(absPath);
+        var decoder = new PngBitmapDecoder(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+        var converted = new FormatConvertedBitmap(decoder.Frames[0], System.Windows.Media.PixelFormats.Bgra32, null, 0);
+        int sw = converted.PixelWidth, sh = converted.PixelHeight, srcStride = sw * 4;
+        var src = new byte[srcStride * sh];
+        converted.CopyPixels(src, srcStride, 0);
+        if (sw == size && sh == size) return src;
+
+        var outBuf = new byte[JiggleShader.Stride * size];
+        for (int y = 0; y < size; y++)
+        {
+            int sy = Math.Min(sh - 1, (int)((y + 0.5) * sh / size));
+            for (int x = 0; x < size; x++)
+            {
+                int sx = Math.Min(sw - 1, (int)((x + 0.5) * sw / size));
+                Buffer.BlockCopy(src, sy * srcStride + sx * 4, outBuf, (y * size + x) * 4, 4);
+            }
+        }
+        return outBuf;
+    }
+
+    /// <summary>
+    /// A mask on the art's uv grid (the mask studio's buffer, <see cref="LoadPngOverGrid"/>)
+    /// laid on the bust frame's grid over art of this shape, into
+    /// <paramref name="into"/>: as <see cref="LoadPngOnArt"/> lays a mask file,
+    /// texel for texel, and nothing outside the art. Square art covers the whole
+    /// frame, so the buffer itself comes back.
+    /// </summary>
+    public static byte[] PlaceOnArt(byte[] uvGrid, int artW, int artH, byte[] into)
+    {
+        const int size = JiggleShader.Size;
+        var (ox, oy, dw, dh) = RectOnFrame(artW, artH);
+        if (dw == size && dh == size) return uvGrid;
+        Array.Clear(into);
+        for (int y = 0; y < dh; y++)
+        {
+            int gy = Math.Min(size - 1, (int)((long)y * size / dh));
+            for (int x = 0; x < dw; x++)
+            {
+                int gx = Math.Min(size - 1, (int)((long)x * size / dw));
+                Buffer.BlockCopy(uvGrid, (gy * size + gx) * 4, into, ((y + oy) * size + x + ox) * 4, 4);
+            }
+        }
+        return into;
     }
 
     /// <summary>

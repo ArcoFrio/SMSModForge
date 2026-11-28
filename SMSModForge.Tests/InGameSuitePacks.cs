@@ -919,6 +919,10 @@ internal static class InGameSuitePacks
         public const string Star = "Effects/star.png";
         /// <summary>The kitchen's objects: one with an effect, one without.</summary>
         public const string Hearth = "FxHearth", Plain = "FxPlain";
+        /// <summary>The kitchen's object whose effect is away from it and bigger (S27): the object twice as big, its
+        /// effect this far from it in its own units and this many times the game's size.</summary>
+        public const string Moved = "FxMoved";
+        public const float MovedX = 1.5f, MovedY = 0.75f, MovedScale = 3f;
 
         /// <summary>
         /// Where they stand: the house's kitchen, which no other check looks at. Every pack of the suite is in for
@@ -975,6 +979,14 @@ internal static class InGameSuitePacks
                 {
                     new GameObjectDef { Name = Hearth, X = -3f, Y = -2f, Effect = new EffectDef { Key = "", DisplayName = "", Template = SMSModForge.Shared.Effects.VanillaPrefix + "campfire", Color = "#80C0FFFF" } },
                     new GameObjectDef { Name = Plain, X = 3f, Y = -2f },
+                    // ...and one twice as big whose effect was moved away from it and made bigger in the place
+                    // preview's Effect part (S27, after 1.10.0).
+                    new GameObjectDef
+                    {
+                        Name = Moved, X = 0f, Y = 1f, ScaleX = 2f, ScaleY = 2f,
+                        Effect = new EffectDef { Key = "", DisplayName = "", Template = SMSModForge.Shared.Effects.VanillaPrefix + "campfire",
+                                                 LocalX = MovedX, LocalY = MovedY, Scale = MovedScale },
+                    },
                 },
             });
             pack.IntegrationRules.Add(new UpdateRuleDef
@@ -1324,6 +1336,7 @@ internal static class InGameSuitePacks
         /// smooth edges, as a pack's art has: what a bust's shadow and its edge
         /// glow are measured on (S6). Still (no mask), coloured as the art.</summary>
         public const string FigureBust = "SuiteLookFigure";
+        public const string WetFigureBust = "SuiteLookWetFigure";
 
         public static Color FigureAt(int x, int y)
         {
@@ -1394,6 +1407,28 @@ internal static class InGameSuitePacks
             };
             figure.Particles.Clear();
             look.Outfits.Add(figure);
+            // ...and the same figure wet (S20, after 1.10.0: "busts can carry the same wet drops in dialogues, and the
+            // bust preview doesn't show them yet" - "yes"): its Wet particle on from the start.
+            var wet = new OutfitDef
+            {
+                Key = "wetfigure", GameObjectName = WetFigureBust, BlinkEnabled = false,
+                BaseSprite = PngOf(folder, "Busts/figure.png", Size, Size, FigureAt),
+                Mouth = { Enabled = false }, Expression = { Enabled = false },
+            };
+            wet.Particles.Clear();
+            wet.Particles.Add(new ParticleRef { Preset = "Wet", Active = true });
+            look.Outfits.Add(wet);
+            // ...and under the shower's (S22, after 1.10.0: "there should be a toggle between the two wet types for both
+            // busts and npcs").
+            var showered = new OutfitDef
+            {
+                Key = "showerfigure", GameObjectName = ShowerFigureBust, BlinkEnabled = false,
+                BaseSprite = PngOf(folder, "Busts/figure.png", Size, Size, FigureAt),
+                Mouth = { Enabled = false }, Expression = { Enabled = false },
+            };
+            showered.Particles.Clear();
+            showered.Particles.Add(new ParticleRef { Preset = ParticleRef.PresetShower, Active = true });
+            look.Outfits.Add(showered);
             foreach (var (key, bust, grey) in Greys)
             {
                 var flat = new OutfitDef
@@ -1532,6 +1567,290 @@ internal static class InGameSuitePacks
                     },
                 },
             });
+            // ...one whose lamps drift with the cursor (S15, after 1.10.0): with the back picture (drifting apart from
+            // the front, and the other way), by a strength of their own, and one made before lamps could drift.
+            string driftWall = PngOf(folder, "Places/drift-wall.png", 64, 64, (_, _) => Color.FromRgb(0x80, 0x70, 0x60));
+            pack.Places.Add(new PlaceDef
+            {
+                Key = DriftPlaceKey, InternalName = DriftPlaceObject, DisplayName = "Drift Place",
+                BaseSprite = lightArt,
+                SecondarySprite = PngOf(folder, "Places/drift-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x50, 0x50, 0x50)),
+                ParallaxStrength = 0.75f, ParallaxSecondaryStrength = 1.2f, ParallaxSecondaryReversed = true,
+                GameObjects =
+                {
+                    new GameObjectDef { Name = DriftBackLamp, X = -4f, ParallaxDisabled = false,
+                                        Light = new LightDef { Color = "#FFE0B0", Strength = 0.6f, OuterRadius = 2f } },
+                    new GameObjectDef { Name = DriftOwnLamp, X = 0f, ParallaxDisabled = false, ParallaxStrength = 0.3f,
+                                        Light = new LightDef { Color = "#B0E0FF", Strength = 0.6f, OuterRadius = 2f } },
+                    new GameObjectDef { Name = DriftFrontLamp, X = 4f,
+                                        Light = new LightDef { Color = "#FFB0B0", Strength = 0.6f, OuterRadius = 2f } },
+                    // ...one of its own set not to be reversed, and pictures of the pack's (cloned from the back picture)
+                    // by a strength of their own, one unset and one not reversed (after 1.10.0, FROM-PACK-TESTING #21).
+                    new GameObjectDef { Name = DriftForwardLamp, X = 2f, ParallaxDisabled = false, ParallaxStrength = 0.3f, ParallaxReversed = false,
+                                        Light = new LightDef { Color = "#B0FFB0", Strength = 0.6f, OuterRadius = 2f } },
+                    new GameObjectDef { Name = DriftOwnWall, X = -2f, Y = 2f, Sprite = driftWall, ParallaxDisabled = false, ParallaxStrength = 0.55f },
+                    new GameObjectDef { Name = DriftForwardWall, X = 2f, Y = 2f, Sprite = driftWall, ParallaxDisabled = false, ParallaxStrength = 0.55f,
+                                        ParallaxReversed = false },
+                    // ...and characters standing in it the same three ways (S16, after 1.10.0).
+                    new GameObjectDef
+                    {
+                        Name = "NPCs", Role = GameObjectDef.RoleNpcRoot,
+                        Npcs =
+                        {
+                            new NpcPlacementDef { Npc = "looknpc", Name = DriftBackCharacter, StartActive = true, ParallaxDisabled = false,
+                                                  Body = new NpcTransform { X = -4f, Y = -2f } },
+                            new NpcPlacementDef { Npc = "looknpc", Name = DriftOwnCharacter, StartActive = true, ParallaxDisabled = false,
+                                                  ParallaxStrength = 0.3f, Body = new NpcTransform { X = 0f, Y = -2f } },
+                            new NpcPlacementDef { Npc = "looknpc", Name = DriftFrontCharacter, StartActive = true,
+                                                  Body = new NpcTransform { X = 4f, Y = -2f } },
+                            new NpcPlacementDef { Npc = "looknpc", Name = DriftForwardCharacter, StartActive = true, ParallaxDisabled = false,
+                                                  ParallaxStrength = 0.3f, ParallaxReversed = false, Body = new NpcTransform { X = 2f, Y = -2f } },
+                        },
+                    },
+                },
+            });
+            // ...one whose NPCs object drifts, with the back picture, and a character standing in it (S16).
+            pack.Places.Add(new PlaceDef
+            {
+                Key = CrowdPlaceKey, InternalName = CrowdPlaceObject, DisplayName = "Crowd Place",
+                BaseSprite = lightArt,
+                SecondarySprite = PngOf(folder, "Places/crowd-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x50, 0x50, 0x50)),
+                ParallaxStrength = 0.75f, ParallaxSecondaryStrength = 1.2f, ParallaxSecondaryReversed = true,
+                GameObjects =
+                {
+                    new GameObjectDef
+                    {
+                        Name = "NPCs", Role = GameObjectDef.RoleNpcRoot, ParallaxDisabled = false,
+                        Npcs = { new NpcPlacementDef { Npc = "looknpc", Name = CrowdCharacter, StartActive = true, Body = new NpcTransform { Y = -2f } } },
+                    },
+                },
+            });
+            // ...one where wet characters stand (S17, after 1.10.0, the author: "a proper preview of the wet effects"):
+            // the game's drops (cloned from Anna_Towel) over a dark floor with nothing in front - one as the editor
+            // makes it under a body twice the size, one whose drops are scaled on their own, one whose drops are turned.
+            pack.Npcs.Add(new NpcDef
+            {
+                Key = WetNpc, DisplayName = "Wet NPC",
+                Sprite = PngOf(folder, "Npcs/wet.png", 32, 32, (_, _) => Color.FromRgb(0x30, 0x30, 0x30)),
+                Shadow = { Enabled = false },
+                Wet = { Enabled = true, StartActive = true },
+            });
+            string wetFloor = PngOf(folder, "Places/wet.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x10, 0x10, 0x10));
+            pack.Places.Add(new PlaceDef
+            {
+                Key = WetPlaceKey, InternalName = WetPlaceObject, DisplayName = "Wet Place",
+                BaseSprite = wetFloor,
+                SecondarySprite = PngOf(folder, "Places/wet-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x10, 0x10, 0x10)),
+                GameObjects =
+                {
+                    new GameObjectDef
+                    {
+                        Name = "NPCs", Role = GameObjectDef.RoleNpcRoot,
+                        Npcs =
+                        {
+                            new NpcPlacementDef { Npc = WetNpc, Name = WetPlain, StartActive = true,
+                                                  Body = new NpcTransform { X = -7f, Y = -4f, ScaleX = 2f, ScaleY = 2f } },
+                            // With an area of its own (the author: "make sure we're not actually changing the droplet size
+                            // by doing that, just the area of the effect"): wide and low, turned with the Wet object.
+                            new NpcPlacementDef { Npc = WetNpc, Name = WetTurned, StartActive = true,
+                                                  Body = new NpcTransform { X = 0f, Y = -4f },
+                                                  Wet = new NpcTransform { X = 0f, Y = 5f, RotZ = 45f },
+                                                  WetEffect = new WetEffectDef { Width = WetTurnedAreaW, Height = WetTurnedAreaH } },
+                            new NpcPlacementDef { Npc = WetNpc, Name = WetScaled, StartActive = true,
+                                                  Body = new NpcTransform { X = 7f, Y = -4f },
+                                                  Wet = new NpcTransform { X = 0f, Y = 5f, ScaleX = 2f, ScaleY = 0.5f } },
+                        },
+                        // Nested as SMSAndroids' bathroom showers are (the author: "the wet effects on previously edited
+                        // NPCs (like the Anis ones on the bathroom) now show with a much larger area than before. Did we
+                        // test this in game"): in a group scaled 0.745, the body 1.36, the Wet off its middle.
+                        Children =
+                        {
+                            new GameObjectDef
+                            {
+                                Name = WetGroup, X = -0.655f, Y = -0.389f, ScaleX = 0.745f, ScaleY = 0.745f,
+                                Npcs =
+                                {
+                                    new NpcPlacementDef { Npc = WetNpc, Name = WetNested, StartActive = true,
+                                                          Body = new NpcTransform { X = -2.5f, Y = -1.94f, ScaleX = 1.36f, ScaleY = 1.36f },
+                                                          Wet = new NpcTransform { X = 1.57f, Y = 5.79f } },
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+            // ...and two showers (S21, after 1.10.0, the author: "I think the shower one might actually be the one that
+            // resembles an actual shower ... we might only want to apply the top and bottom settings to that one"): the
+            // game's AnnaInShower system as it is, and one with every setting - its look set on its NPC and one of them
+            // changed by the placement over it, its box the placement's ("NPC sets them, placements can change").
+            pack.Npcs.Add(new NpcDef
+            {
+                Key = ShowerNpc, DisplayName = "Shower NPC",
+                Sprite = PngOf(folder, "Npcs/shower.png", 32, 32, (_, _) => Color.FromRgb(0x30, 0x30, 0x30)),
+                Shadow = { Enabled = false },
+                Wet = ShowerNpcWet,
+            });
+            pack.Places.Add(new PlaceDef
+            {
+                Key = ShowerPlaceKey, InternalName = ShowerPlaceObject, DisplayName = "Shower Place",
+                BaseSprite = PngOf(folder, "Places/shower.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x48, 0x48, 0x48)),
+                SecondarySprite = PngOf(folder, "Places/shower-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x48, 0x48, 0x48)),
+                GameObjects =
+                {
+                    new GameObjectDef
+                    {
+                        Name = "NPCs", Role = GameObjectDef.RoleNpcRoot,
+                        Npcs =
+                        {
+                            new NpcPlacementDef { Npc = WetNpc, Name = ShowerPlain, StartActive = true,
+                                                  Body = new NpcTransform { X = -5f, Y = -4f },
+                                                  WetEffect = new WetEffectDef { Kind = WetEffectDef.KindShower } },
+                            new NpcPlacementDef { Npc = ShowerNpc, Name = ShowerSet, StartActive = true,
+                                                  Body = new NpcTransform { X = 4f, Y = -4f },
+                                                  Wet = new NpcTransform { X = 0f, Y = 7f, ScaleX = 1.2f, ScaleY = 1.2f },
+                                                  WetEffect = ShowerSetOwn },
+                        },
+                    },
+                },
+            });
+            // ...one whose objects move by masks of their own (S19, after 1.10.0, the author: "a way to add masks to other
+            // GOs in the place ... choose between the jiggle and level masks"): still, with the back layer's mask, by a
+            // level's mask, by a jiggle's - the back layer with a mask of its own, so the back layer's differs from still.
+            string checker = PngOf(folder, "Places/mask-checker.png", 256, 256,
+                                   (x, y) => ((x / 8 + y / 8) % 2 == 0) ? Color.FromRgb(0xF0, 0xF0, 0xF0) : Color.FromRgb(0x20, 0x20, 0x20));
+            string full = PngOf(folder, "Places/mask-full.png", 64, 64, (_, _) => Color.FromArgb(255, 255, 255, 255));
+            string jiggleMask = PngOf(folder, "Places/mask-jiggle.png", 64, 64, (_, _) => Color.FromArgb(255, 0, 255, 255));
+            pack.Places.Add(new PlaceDef
+            {
+                Key = MaskPlaceKey, InternalName = MaskPlaceObject, DisplayName = "Mask Place",
+                BaseSprite = PngOf(folder, "Places/mask.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x30, 0x30, 0x30)),
+                SecondarySprite = PngOf(folder, "Places/mask-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x30, 0x30, 0x30)),
+                SecondaryMaskSprite = full,
+                GameObjects =
+                {
+                    new GameObjectDef { Name = MaskStill, Sprite = checker, X = -6f, Y = 1f, SortingOrder = 5 },
+                    new GameObjectDef { Name = MaskBack, Sprite = checker, X = -2f, Y = 1f, SortingOrder = 5, MaskKind = GameObjectDef.MaskBackLayer },
+                    new GameObjectDef { Name = MaskLevel, Sprite = checker, X = 2f, Y = 1f, SortingOrder = 5, Mask = full },
+                    new GameObjectDef { Name = MaskJiggle, Sprite = checker, X = 6f, Y = 1f, SortingOrder = 5, Mask = jiggleMask,
+                                        MaskKind = GameObjectDef.MaskJiggle, Jiggle = NpcDef.NewNpcJiggle() },
+                },
+            });
+            // ...one with eleven navigator buttons (S18, after 1.10.0, the author: "do a proper render there instead of
+            // just a PNG slapped onto it"): two rows, a button without words, numbers past nine.
+            var hud = new PlaceDef
+            {
+                Key = HudPlaceKey, InternalName = HudPlaceObject, DisplayName = "Hud Place",
+                BaseSprite = PngOf(folder, "Places/hud.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x60, 0x70, 0x60)),
+                SecondarySprite = PngOf(folder, "Places/hud-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x60, 0x70, 0x60)),
+            };
+            foreach (var (target, label) in HudButtons) hud.NavigatorButtons.Add(new NavigatorButtonDef { Target = target, Label = label });
+            pack.Places.Add(hud);
+            // ...one where a picture floats (S24, after 1.10.0, the author: "monsters in vats ... move up and down in a
+            // smooth way"): a unit up and down over two seconds, from its middle going up, a child riding on it, and one
+            // beside it that does not float.
+            string floaterArt = PngOf(folder, "Places/floater.png", 64, 64, (_, _) => Color.FromRgb(0xC0, 0x40, 0x40));
+            pack.Places.Add(new PlaceDef
+            {
+                Key = FloatPlaceKey, InternalName = FloatPlaceObject, DisplayName = "Float Place",
+                BaseSprite = PngOf(folder, "Places/float.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x40, 0x48, 0x50)),
+                SecondarySprite = PngOf(folder, "Places/float-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x40, 0x48, 0x50)),
+                GameObjects =
+                {
+                    new GameObjectDef
+                    {
+                        Name = Floater, Sprite = floaterArt, X = -3f, Y = 0f, SortingOrder = 5,
+                        Components = { FloaterComponent },
+                        Children = { new GameObjectDef { Name = FloaterRider, Sprite = floaterArt, X = 0f, Y = 1f, SortingOrder = 6 } },
+                    },
+                    new GameObjectDef { Name = NotFloating, Sprite = floaterArt, X = 3f, Y = 0f, SortingOrder = 5 },
+                },
+            });
+            // ...one where components play (S25, after 1.10.0, the author: "for the components that show something
+            // visually, would we be able to see what they do in real time?"): ModForge's fades, blink and random child,
+            // and the game's CinemaSpriteChanger, ConcertLightSwing, CarInteriorShake (started and not) and
+            // RandomSpriteBlender, set as PlaceComponentPreviewTests sets them.
+            string thing = PngOf(folder, "Places/anim-thing.png", 50, 50, (_, _) => Color.FromRgb(0xC0, 0x80, 0x40));
+            GameObjectDef Thing(string name, float x, float y, params ComponentDef[] components)
+            {
+                var g = new GameObjectDef { Name = name, Sprite = thing, X = x, Y = y, SortingOrder = 5 };
+                g.Components.AddRange(components);
+                return g;
+            }
+            ComponentDef Game(string type, params (string Key, object Value)[] values)
+            {
+                var c = new ComponentDef { Type = type };
+                foreach (var (k, v) in values) c.Params[k] = Newtonsoft.Json.Linq.JToken.FromObject(v);
+                return c;
+            }
+            var anim = new PlaceDef
+            {
+                Key = AnimPlaceKey, InternalName = AnimPlaceObject, DisplayName = "Anim Place",
+                BaseSprite = PngOf(folder, "Places/anim.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x30, 0x30, 0x38)),
+                SecondarySprite = PngOf(folder, "Places/anim-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x30, 0x30, 0x38)),
+            };
+            anim.GameObjects.Add(Thing("FadeIn", -6, 3, new ComponentDef { Type = PackComponentType.FadeInSprite, StartDelay = 0.5f, FadeDuration = 1f, TargetAlpha = 0.8f }));
+            var fadeOut = Thing("FadeOut", -4, 3, new ComponentDef { Type = PackComponentType.FadeOutSprite, StartDelay = 0f, Duration = 1f, DeactivateOnComplete = true });
+            fadeOut.Children.Add(Thing("FadeOutChild", 0, 1));
+            anim.GameObjects.Add(fadeOut);
+            anim.GameObjects.Add(Thing("Blink", -2, 3, new ComponentDef { Type = PackComponentType.BlinkingSprite, BlinkInterval = 0.5f, MinAlpha = 0.2f, MaxAlpha = 0.9f }));
+            var pickerObj = Thing("Picker", 0, 3, new ComponentDef { Type = PackComponentType.RandomChildActivator });
+            for (int i = 0; i < 3; i++) pickerObj.Children.Add(Thing("Pick" + i, i, 0));
+            anim.GameObjects.Add(pickerObj);
+            var cinemaObj = Thing("Cinema", 4, 3, Game("CinemaSpriteChanger", ("activationInterval", 0.5)));
+            for (int i = 0; i < 3; i++) cinemaObj.Children.Add(Thing("Frame" + i, i, 0));
+            anim.GameObjects.Add(cinemaObj);
+            anim.GameObjects.Add(Thing("Swing", -6, -2, Game("ConcertLightSwing", ("minAngle", -30), ("maxAngle", 30), ("swingSpeed", 0.5), ("useEasing", false),
+                                                            ("speedVariation", 0), ("randomizeStartPhase", false))));
+            anim.GameObjects.Add(Thing("Shake", -2, -2, Game("CarInteriorShake", ("shakeOnStart", true), ("shakeIntensity", 0.5), ("shakeSpeed", 10))));
+            anim.GameObjects.Add(Thing("NoShake", 0, -2, Game("CarInteriorShake", ("shakeIntensity", 0.5), ("shakeSpeed", 10))));
+            var blenderObj = Thing("Blender", 3, -2, Game("RandomSpriteBlender", ("blendDuration", 0.3), ("minDelay", 0.3), ("maxDelay", 0.5)));
+            for (int i = 0; i < 2; i++) blenderObj.Children.Add(Thing("Blended" + i, i, 0));
+            anim.GameObjects.Add(blenderObj);
+            pack.Places.Add(anim);
+            // ...and one with nothing but a striped picture that scrolls its texture (S26): does the game's
+            // OffsetScrolling move a sprite's picture at all? (It scrolls its renderer's shared material.)
+            var scroll = new PlaceDef
+            {
+                Key = ScrollPlaceKey, InternalName = ScrollPlaceObject, DisplayName = "Scroll Place",
+                BaseSprite = PngOf(folder, "Places/scroll.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x20, 0x20, 0x20)),
+                SecondarySprite = PngOf(folder, "Places/scroll-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x20, 0x20, 0x20)),
+            };
+            var striped = new GameObjectDef
+            {
+                Name = "Striped", SortingOrder = 5,
+                Sprite = PngOf(folder, "Places/striped.png", 128, 64, (x, _) => (x / 8) % 2 == 0 ? Color.FromRgb(0xF0, 0xF0, 0xF0) : Color.FromRgb(0x10, 0x10, 0xF0)),
+            };
+            striped.Components.Add(Game("OffsetScrolling", ("scrollSpeed", 0.37)));
+            scroll.GameObjects.Add(striped);
+            pack.Places.Add(scroll);
+            // ...one with a copy of the player's room's buttons (S23, after 1.10.0, the author: "I don't see the player
+            // room buttons in the preview of the Bedroom for Androids at all"), as the Androids Bedroom has it: the
+            // Sleep button moved, the Calendar switched off, the drift set to nothing so the cursor moves nothing.
+            pack.Places.Add(new PlaceDef
+            {
+                Key = ButtonsPlaceKey, InternalName = ButtonsPlaceObject, DisplayName = "Buttons Place",
+                BaseSprite = PngOf(folder, "Places/buttons.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x58, 0x60, 0x70)),
+                SecondarySprite = PngOf(folder, "Places/buttons-back.png", PlaceW, PlaceH, (_, _) => Color.FromRgb(0x58, 0x60, 0x70)),
+                GameObjects =
+                {
+                    new GameObjectDef
+                    {
+                        Name = RoomButtonsObject, CopyOf = RoomButtons, StartActive = true, OverrideActive = true,
+                        Children =
+                        {
+                            new GameObjectDef
+                            {
+                                Name = "Player_Room_Buttons", Bind = true, OverrideParallax = true, ParallaxStrength = 0f,
+                                Children =
+                                {
+                                    new GameObjectDef { Name = "SleepButton", Bind = true, OverrideTransform = true, X = RoomSleepAt[0], Y = RoomSleepAt[1] },
+                                    new GameObjectDef { Name = "CalendarButton", Bind = true, OverrideActive = true, StartActive = false },
+                                },
+                            },
+                        },
+                    },
+                },
+            });
             // ...and one whose template light is removed (S12): switched off in the game.
             pack.Places.Add(new PlaceDef
             {
@@ -1553,6 +1872,70 @@ internal static class InGameSuitePacks
         public const string ShadowPlaceKey = "shadowplace", ShadowPlaceObject = "ShadowPlace";
         /// <summary>A place whose template light is removed (S12).</summary>
         public const string DarkPlaceKey = "darkplace", DarkPlaceObject = "DarkPlace";
+        /// <summary>A place whose lamps drift with the cursor (S15): with the back picture, by their own strength, and
+        /// one made before lamps could drift.</summary>
+        public const string DriftPlaceKey = "driftplace", DriftPlaceObject = "DriftPlace",
+                            DriftBackLamp = "BackLamp", DriftOwnLamp = "OwnLamp", DriftFrontLamp = "FrontLamp",
+                            DriftForwardLamp = "ForwardLamp", DriftOwnWall = "OwnWall", DriftForwardWall = "ForwardWall";
+        /// <summary>The characters standing in the drift place (S16), the same three ways as its lamps, and one by its own
+        /// strength set not to be reversed.</summary>
+        public const string DriftBackCharacter = "BackGuest", DriftOwnCharacter = "OwnGuest", DriftFrontCharacter = "FrontGuest",
+                            DriftForwardCharacter = "ForwardGuest";
+        /// <summary>A place whose NPCs object drifts with the back picture, and the character standing in it (S16).</summary>
+        public const string CrowdPlaceKey = "crowdplace", CrowdPlaceObject = "CrowdPlace", CrowdCharacter = "CrowdGuest";
+        /// <summary>The place whose objects move by masks (S19), and its four objects.</summary>
+        public const string MaskPlaceKey = "maskplace", MaskPlaceObject = "MaskPlace",
+                            MaskStill = "Still", MaskBack = "BackLayers", MaskLevel = "OwnLevel", MaskJiggle = "OwnJiggle";
+        /// <summary>The place with eleven navigator buttons (S18): where each goes and its words.</summary>
+        public const string HudPlaceKey = "hudplace", HudPlaceObject = "HudPlace";
+        /// <summary>The place with a picture whose texture scrolls (S26).</summary>
+        public const string ScrollPlaceKey = "scrollplace", ScrollPlaceObject = "ScrollPlace";
+        /// <summary>The place where components play (S25).</summary>
+        public const string AnimPlaceKey = "animplace", AnimPlaceObject = "AnimPlace";
+        /// <summary>The place where a picture floats (S24).</summary>
+        public const string FloatPlaceKey = "floatplace", FloatPlaceObject = "FloatPlace", Floater = "Floater", FloaterRider = "Rider",
+                            NotFloating = "Still";
+        public static ComponentDef FloaterComponent => new()
+        {
+            Type = PackComponentType.FloatingSprite, FloatHeight = 1f, FloatPeriod = 2f, FloatSway = 0f, FloatStart = 0f, FloatRandomStart = false,
+        };
+        /// <summary>The place with a copy of the player's room's buttons (S23).</summary>
+        public const string ButtonsPlaceKey = "buttonsplace", ButtonsPlaceObject = "ButtonsPlace",
+                            RoomButtons = "5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas", RoomButtonsObject = "PlayerRoom_ButtonCanvas";
+        /// <summary>Where the copy's Sleep button is moved to: canvas pixels from the middle of its parent.</summary>
+        public static readonly float[] RoomSleepAt = { 0f, -140f };
+        public static readonly (string Target, string Label)[] HudButtons =
+        {
+            ("vanilla:5_MyRoom", ""), ("self:" + WetPlaceKey, "Wet Place"), ("self:" + DriftPlaceKey, "Drift"),
+            ("self:" + CrowdPlaceKey, "Back to the Crowd"), ("self:" + LightPlaceKey, "Light"), ("self:" + DarkPlaceKey, "Dark"),
+            ("self:" + NightPlaceKey, "Night"), ("self:" + ShadowPlaceKey, "Shadow"), ("self:" + CharacterPlaceKey, "Character"),
+            ("vanilla:14_Beach", "Beach"), ("vanilla:5_MyRoom", "Hallway"),
+        };
+        /// <summary>The place where wet characters stand (S17): the NPC, and its three placements.</summary>
+        public const string WetPlaceKey = "wetplace", WetPlaceObject = "WetPlace", WetNpc = "wetnpc",
+                            WetPlain = "WetPlain", WetTurned = "WetTurned", WetScaled = "WetScaled",
+                            WetGroup = "Shower", WetNested = "WetNested";
+        public const float WetTurnedAreaW = 8f, WetTurnedAreaH = 2f;
+        /// <summary>The shower place (S21): the game's shower as it is, and one with every setting.</summary>
+        public const string ShowerPlaceKey = "showerplace", ShowerPlaceObject = "ShowerPlace", ShowerPlain = "ShowerPlain", ShowerSet = "ShowerSet",
+                            ShowerNpc = "showernpc";
+        /// <summary>What the set shower is in the end: its NPC's look (<see cref="ShowerNpcWet"/>) with its placement's
+        /// own values over it (<see cref="ShowerSetOwn"/>) - the game must merge them as the editor does.</summary>
+        public static WetEffectDef ShowerSettings => new()
+        {
+            Kind = WetEffectDef.KindShower, Width = 3f, Height = 3f, FromTop = true, Floor = true,
+            Tint = "#FFA080C0", Amount = 0.5f, Size = 1.5f, Fall = 0.8f,
+        };
+        /// <summary>The set shower's NPC: the kind, the tint, the size and the fall; twice the drops, which its placement
+        /// halves and halves again.</summary>
+        public static NpcWetDef ShowerNpcWet => new()
+        {
+            Enabled = true, StartActive = true, Kind = WetEffectDef.KindShower, Tint = "#FFA080C0", Amount = 2f, Size = 1.5f, Fall = 0.8f,
+        };
+        /// <summary>What the set shower's placement says itself: the box, the top and the floor, and its own amount.</summary>
+        public static WetEffectDef ShowerSetOwn => new() { Width = 3f, Height = 3f, FromTop = true, Floor = true, Amount = 0.5f };
+        /// <summary>The figure with the shower's drops (S22).</summary>
+        public const string ShowerFigureBust = "SuiteLookShowerFigure";
         public static readonly string[] LightObjects = { TemplateLight.ObjectName, "LampA", "Window", "Pattern" };
 
         /// <summary>The picture light's picture: warm and cool stripes, fading out to the right, a see-through square in the middle.</summary>

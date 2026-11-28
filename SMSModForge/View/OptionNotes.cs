@@ -146,6 +146,55 @@ public static class OptionNotes
         [PackComponentType.FadeOutSprite] = "note.component.fadeOut",
         [PackComponentType.RandomChildActivator] = "note.component.randomChild",
         [PackComponentType.BlinkingSprite] = "note.component.blinking",
+        [PackComponentType.FloatingSprite] = "note.component.floating",
+        // The game's scripts and Unity's, each by what it does (after 1.10.0, the author: "can we add hints for all
+        // components available ... For the Unity ones' hints, I think we don't need to mention that they're Unity's
+        // on every hint. Just saying what they do"). English on purpose: the types' own names.
+        ["Actions"] = "note.component.actions",
+        ["ButtonInstructions"] = "note.component.buttonInstructions",
+        ["CFXR_Effect"] = "note.component.cfxrEffect",
+        ["CFXR_ParticleText"] = "note.component.cfxrParticleText",
+        ["CarInteriorShake"] = "note.component.carInteriorShake",
+        ["CharacterIntroFade"] = "note.component.characterIntroFade",
+        ["CinemaSpriteChanger"] = "note.component.cinemaSpriteChanger",
+        ["ConcertLightSwing"] = "note.component.concertLightSwing",
+        ["Conditions"] = "note.component.conditions",
+        ["Dialogue"] = "note.component.dialogue",
+        ["DisableChildren"] = "note.component.disableChildren",
+        ["EnableChildren"] = "note.component.enableChildren",
+        ["MapVariationActivator"] = "note.component.mapVariationActivator",
+        ["OffsetScrolling"] = "note.component.offsetScrolling",
+        ["ParallaxMouseEffect"] = "note.component.parallaxMouseEffect",
+        ["RadioSimulator"] = "note.component.radioSimulator",
+        ["RandomSpriteBlender"] = "note.component.randomSpriteBlender",
+        ["Trigger"] = "note.component.trigger",
+        ["UIHoverActivator"] = "note.component.uiHoverActivator",
+        ["AudioDistortionFilter"] = "note.component.audioDistortionFilter",
+        ["AudioLowPassFilter"] = "note.component.audioLowPassFilter",
+        ["AudioSource"] = "note.component.audioSource",
+        ["BoxCollider2D"] = "note.component.boxCollider2D",
+        ["Canvas"] = "note.component.canvas",
+        ["CanvasGroup"] = "note.component.canvasGroup",
+        ["CanvasRenderer"] = "note.component.canvasRenderer",
+        ["CanvasScaler"] = "note.component.canvasScaler",
+        ["CircleCollider2D"] = "note.component.circleCollider2D",
+        ["GraphicRaycaster"] = "note.component.graphicRaycaster",
+        ["Image"] = "note.component.image",
+        ["Light"] = "note.component.light",
+        ["Light2D"] = "note.component.light2D",
+        ["LineRenderer"] = "note.component.lineRenderer",
+        ["MeshCollider"] = "note.component.meshCollider",
+        ["MeshFilter"] = "note.component.meshFilter",
+        ["MeshRenderer"] = "note.component.meshRenderer",
+        ["ParticleSystem"] = "note.component.particleSystem",
+        ["ParticleSystemRenderer"] = "note.component.particleSystemRenderer",
+        ["Shadow"] = "note.component.shadow",
+        ["ShadowCaster2D"] = "note.component.shadowCaster2D",
+        ["SpriteMask"] = "note.component.spriteMask",
+        ["SpriteRenderer"] = "note.component.spriteRenderer",
+        ["TextMeshProUGUI"] = "note.component.textMeshProUgui",
+        ["VideoPlayer"] = "note.component.videoPlayer",
+        ["Volume"] = "note.component.volume",
     };
 
     /// <summary>Whether this kind of list is one of variables, whose notes the
@@ -170,8 +219,7 @@ public static class OptionNotes
             case VariableOperation: return Keyed(OperationNotes, text);
             case Component:
                 if (text == null) return "";
-                if (ComponentNotes.TryGetValue(text, out var key)) return Loc.T(key);
-                return VanillaComponentCatalog.Find(text)?.IsEngineComponent == true ? Loc.T("note.component.engine") : "";
+                return ComponentNotes.TryGetValue(text, out var key) ? Loc.T(key) : "";
             case GameScreen:
                 return item is VanillaUiCatalog.Base screen ? screen.Summary : "";
             case GameQuest:

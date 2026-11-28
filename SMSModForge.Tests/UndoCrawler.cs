@@ -91,6 +91,9 @@ internal sealed class UndoCrawler
 
     public void Done() => _watch.Dispose();
 
+    /// <summary>The window walked: for a walk that picks something in it as a person clicks (the place preview).</summary>
+    public MainWindow Window => _window;
+
     private static void Pump()
     {
         WindowHarness.Pump();
@@ -222,6 +225,103 @@ internal sealed class UndoCrawler
     private static List<string> Snap(List<Target> targets) => targets.Select(t => t.Signature + " = " + Shown(t)).ToList();
 
     private Target? Find(string signature) => Targets().FirstOrDefault(t => t.Signature == signature);
+
+    // ── The page held still ─────────────────────────────────────────────
+
+    /// <summary>Where a control was drawn in the window as a key was pressed, and whether a person saw it there.</summary>
+    private sealed class Sight
+    {
+        public bool Seen;
+        public Point? At;
+        public string Scrolled = "";
+        public List<(double Offset, double Range)> Scrolls = new();
+        public string Above = "";
+    }
+
+    /// <summary>What is laid out before the control, as far as the scrolled area it is in: each panel on the way
+    /// up, and the size of what comes before it there - what grew or shrank when the control was moved.</summary>
+    private static string AboveOf(FrameworkElement? fe)
+    {
+        var parts = new List<string>();
+        DependencyObject? child = fe;
+        for (var at = fe == null ? null : VisualTreeHelper.GetParent(fe); at != null && at is not ScrollContentPresenter; child = at, at = VisualTreeHelper.GetParent(at))
+        {
+            if (at is not Panel panel) continue;
+            var before = new List<string>();
+            foreach (UIElement c in panel.Children)
+            {
+                if (ReferenceEquals(c, child)) break;
+                if (c is FrameworkElement f && f.IsVisible) before.Add(f.GetType().Name + " " + f.ActualHeight.ToString("0", CultureInfo.InvariantCulture));
+            }
+            if (before.Count > 0) parts.Insert(0, panel.GetType().Name + ": " + string.Join(", ", before));
+        }
+        return string.Join(" | ", parts);
+    }
+
+    /// <summary>How far each scrolled area the control is in is scrolled, and how far it can be, outermost first.</summary>
+    private static List<(double Offset, double Range)> ScrollsOf(FrameworkElement? fe)
+    {
+        var scrolls = new List<(double, double)>();
+        for (DependencyObject? at = fe == null ? null : VisualTreeHelper.GetParent(fe); at != null; at = VisualTreeHelper.GetParent(at))
+            if (at is ScrollViewer sv) scrolls.Insert(0, (sv.VerticalOffset, sv.ScrollableHeight));
+        return scrolls;
+    }
+
+    private static string ScrolledAt(FrameworkElement? fe)
+        => string.Join(" > ", ScrollsOf(fe).Where(s => s.Range > 0).Select(s => s.Offset.ToString("0", CultureInfo.InvariantCulture) + "/" + s.Range.ToString("0", CultureInfo.InvariantCulture)));
+
+    /// <summary>
+    /// Nothing was scrolled by the press: each area is where it was, or came up only as far as its content now
+    /// ends (what was below the view went away). A control drawn elsewhere then is the step's own doing - a line
+    /// above it that the value shows or hides ("differs from the game's") - not the page taken somewhere.
+    /// </summary>
+    private static bool NotScrolled(List<(double Offset, double Range)> pressed, List<(double Offset, double Range)> after)
+    {
+        if (pressed.Count != after.Count) return false;
+        for (int i = 0; i < pressed.Count; i++)
+        {
+            if (Math.Abs(pressed[i].Offset - after[i].Offset) < 0.5) continue;
+            if (after[i].Offset < pressed[i].Offset && Math.Abs(after[i].Offset - after[i].Range) < 0.5) continue;
+            return false;
+        }
+        return true;
+    }
+
+    private Point? At(FrameworkElement? fe)
+        => fe != null && fe.IsVisible && PresentationSource.FromVisual(fe) != null && fe.IsDescendantOf(_window) ? fe.TranslatePoint(new Point(0, 0), _window) : null;
+
+    /// <summary>The control being held, as it was before it was edited.</summary>
+    private Sight? _untouched;
+
+    private Sight Look(FrameworkElement? fe) => new() { Seen = fe != null && _window.InView(fe), At = At(fe), Scrolled = ScrolledAt(fe), Scrolls = ScrollsOf(fe), Above = AboveOf(fe) };
+
+    private static bool Near(Point? a, Point? b) => a is { } p && b is { } q && Math.Abs(p.X - q.X) < 1.5 && Math.Abs(p.Y - q.Y) < 1.5;
+
+    /// <summary>The control itself while it is on the page, else the one of its signature that took its place.</summary>
+    private FrameworkElement? Alive(FrameworkElement fe, string signature)
+        => fe.IsVisible && PresentationSource.FromVisual(fe) != null ? fe : Find(signature)?.Control;
+
+    /// <summary>
+    /// The page where it was: the control edited - on screen as the key was pressed, showing what the step
+    /// changes - drawn where it was then, or where the edit or the step itself put it (the rows it changed above
+    /// it). An undo that moved the page from what it was changing in front of the author was the author's
+    /// finding after 1.10.0: Ctrl+Z on an object dragged in the place preview "brings into view the fields for
+    /// the GOs at the bottom instead of staying on the preview". A button shows nothing of what it changes; its
+    /// step may go to what it changed.
+    /// </summary>
+    private string? Held(Target t, Sight pressed, FrameworkElement? after, params Point?[] alsoRight)
+    {
+        if (t.Kind == "button" || !pressed.Seen || pressed.At is not { } was) return null;
+        if (At(after) is not { } now) return null;   // gone from the page: the page's own check says so
+        if (Near(now, was) || alsoRight.Any(r => Near(now, r))) return null;
+        if (NotScrolled(pressed.Scrolls, ScrollsOf(after))) return null;
+        return $"the page moved: the control, on screen as the key was pressed, was drawn {was.Y:0} px from the window's top and is drawn {now.Y:0} px from it"
+               + (_window.InView(after!) ? "" : ", out of sight")
+               + (alsoRight.Length > 0 ? " (it was drawn at " + string.Join(" and ", alsoRight.Select(r => r is { } p ? p.Y.ToString("0", CultureInfo.InvariantCulture) : "nowhere")) + " before and once edited)" : "")
+               + $"; scrolled {pressed.Scrolled} as the key was pressed, {ScrolledAt(after)} after"
+               + (AboveOf(after) is var above && above != pressed.Above ? $"; before it as the key was pressed: {pressed.Above}; after: {above}" + (_untouched != null && _untouched.Above != pressed.Above ? $"; before the edit: {_untouched.Above}, scrolled {_untouched.Scrolled}" : "") : "")
+               + "; marked: " + string.Join(", ", _window.LastMarked.Select(m => m.GetType().Name + (_window.InView(m) ? "" : " (out of sight)")));
+    }
 
     // ── What the page shows must be the pack's ──────────────────────────
 
@@ -547,9 +647,16 @@ internal sealed class UndoCrawler
 
     private static string FirstDifference(List<string> a, List<string> b)
     {
+        // And everything that went and came: the first difference alone says where, not what.
+        string Whole()
+        {
+            var gone = a.Except(b).Take(8).Select(Short).ToList();
+            var came = b.Except(a).Take(8).Select(Short).ToList();
+            return (gone.Count > 0 ? "; gone: " + string.Join(" | ", gone) : "") + (came.Count > 0 ? "; new: " + string.Join(" | ", came) : "");
+        }
         for (int i = 0; i < Math.Min(a.Count, b.Count); i++)
-            if (a[i] != b[i]) return $"\"{Short(a[i])}\" is \"{Short(b[i])}\"";
-        return a.Count == b.Count ? "nothing" : $"{a.Count} controls are {b.Count}" + (a.Count > b.Count ? " (gone: " + Short(a[b.Count]) + ")" : " (new: " + Short(b[a.Count]) + ")");
+            if (a[i] != b[i]) return $"\"{Short(a[i])}\" is \"{Short(b[i])}\"" + Whole();
+        return a.Count == b.Count ? "nothing" : $"{a.Count} controls are {b.Count}" + (a.Count > b.Count ? " (gone: " + Short(a[b.Count]) + ")" : " (new: " + Short(b[a.Count]) + ")") + Whole();
     }
 
     private static string Short(string s) => s.Length <= 150 ? s : s.Substring(0, 150) + "...";
@@ -610,6 +717,9 @@ internal sealed class UndoCrawler
         _vm.Undo.Checkpoint();
         var before = Now(targets);
         string shown = Shown(t);
+        // Where it is once it has the keyboard, as a person sees it when they start editing it.
+        if (t.Kind != "button") { Focus(t.Control); Pump(); }
+        var untouched = _untouched = Look(t.Control);
 
         if (!Edit(t)) { Skipped++; return; }
         Pump();
@@ -635,14 +745,20 @@ internal sealed class UndoCrawler
         string shownEdited = Find(editedSignature) is { } nowShown ? Shown(nowShown) : "";
 
         // 1. Ctrl+Z where the keyboard is.
+        var editedControl = Alive(t.Control, editedSignature);
+        var pressed = Look(editedControl);
+        var onceEdited = pressed.At;
         Press(Key.Z);
         string way = _vm.LastRestore;
         string? wrong = Differs(before);
+        wrong ??= Held(t, pressed, Alive(t.Control, t.Signature), untouched.At, onceEdited);
         if (wrong != null) { Fail(t, "Ctrl+Z straight after the edit: " + wrong); return; }
 
         // 2. Ctrl+Y: the pack as edited, and the control showing what it showed. (Not the whole page: a row
         // that was "just added" when the edit was made - its name not yet settled, say - is an ordinary row
         // once it has been put back.)
+        var undone = Alive(t.Control, t.Signature);
+        pressed = Look(undone);
         Press(Key.Y);
         wrong = Differs(edited, page: false);
         if (wrong == null && t.Kind != "button")
@@ -650,6 +766,7 @@ internal sealed class UndoCrawler
             var redone = Find(editedSignature);
             if (redone == null) wrong = "the control is gone from the page";
             else if (Shown(redone) != shownEdited) wrong = $"it shows \"{Short(Shown(redone))}\", showed \"{Short(shownEdited)}\" once edited";
+            else wrong = Held(t, pressed, Alive(undone ?? t.Control, editedSignature), untouched.At, onceEdited);
         }
         if (wrong != null) { Fail(t, "Ctrl+Y after that: " + wrong); return; }
 
@@ -659,21 +776,27 @@ internal sealed class UndoCrawler
         if (again == null && t.Kind != "button") { Fail(t, "after undo and redo the control is gone from the page"); return; }
         if (again != null) Focus(again.Control);
         Pump();
+        pressed = Look(again?.Control);
         Press(Key.Z);
         wrong = Differs(before);
+        if (wrong == null && again != null) wrong = Held(t, pressed, Alive(again.Control, t.Signature), untouched.At, onceEdited);
         if (wrong != null) { Fail(t, "left, come back to, Ctrl+Z: " + wrong); return; }
 
         // 4. Edited again: the pack changes again.
         again = Find(t.Signature);
         if (again == null) { Fail(t, "after the second undo the control is gone from the page"); return; }
         if (Shown(again) != shown) { Fail(t, $"after undo it shows \"{Short(Shown(again))}\", was \"{Short(shown)}\""); return; }
+        var beforeAgain = Look(again.Control);
         if (!Edit(again)) { Fail(t, "after undo it cannot be edited again"); return; }
         Pump();
         Commit();
         if (State() == before.State) { Fail(t, "edited again after undo, nothing of the pack changed: what is on screen is not the pack's"); return; }
         LeaveTheControl();
+        var editedAgain = Alive(again.Control, editedSignature);
+        pressed = Look(editedAgain);
         Press(Key.Z);
         wrong = Differs(before, page: false);
+        wrong ??= Held(t, pressed, Alive(editedAgain ?? again.Control, t.Signature), beforeAgain.At, untouched.At);
         if (wrong != null) { Fail(t, "the second edit undone with the keyboard elsewhere: " + wrong); return; }
 
         Ways[way] = Ways.TryGetValue(way, out int n) ? n + 1 : 1;

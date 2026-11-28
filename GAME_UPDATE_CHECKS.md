@@ -396,3 +396,30 @@ update, check, in the test copy through the bridge (DebugBridgeFx.cs):
 - The pop-up words use `Curse Casual SDF Outline`.
 - The editor's preview pictures (`Resources/VanillaFx`) come from the game: `png-save` and `fx-icon` into the
   bridge's shots folder, then `python -I Tools/Fx/fx-pictures-from-game.py <shots folder>`.
+
+## The wet effects (after 1.10.0)
+
+Every wet NPC and pack bust clones game objects by name; the preview's numbers are theirs. In-game checks S17 (an
+NPC's towel), S20 (a bust's towel), S21 (an NPC's shower, every setting, the floor) and S22 (a bust's shower) fail
+if any of this moves. Read them with the bridge's `particles <path>` and `particles-live <parent>`:
+
+- [ ] **The towel**: `2_Bust_Manager/Anna_Towel/MBase1/Particle System` (rate 2, life 5, size3D 0.04 x 0.5, Box
+      3.21 x 8.45, local 0,0, Particles/Standard Unlit, Bust/10) and `.../Particle System (1)` (rate 6, size3D
+      0.08 x 0.8, local 0,-0.51 under MBase1 scaled 4). `WetDrops.TowelFirst/TowelSecond`, `WetEffects.TowelSecondShift`.
+- [ ] **The shower**: `5_Levels/4_Bath/AnnaInShower/Particle System (1)` - by its whole path:
+      `8_Room_Talk/Bath/AnnaInShower` is a talk's condition with the same name and no drops. Rate 200, max 400,
+      life 2, prewarm, gravity 0.7, size3D 0.01..0.005 x 0.5..0.2, colour #2B3C6F3C..#6D81A4AC, alpha 1 to 0.77,
+      Box 2 x 1 at -0.3,7.7, own scale 1.05321, Sprite-Lit-Default, Default/15. `WetDrops.Shower`.
+- [ ] Both scale Local and simulate Local: only their own object's scale is in the box and the drops.
+
+## A level's own canvases over the place preview (after 1.10.0)
+
+The place preview draws a level's screen canvases - a copy of one in a pack's place, or the game's own in an
+extension of its level - from the UI extraction (`Rendering/LevelCanvas`, `PlacePreview.LevelCanvas`). In-game check
+S23 (a copy of the player's room's buttons, one moved, one switched off) fails if any of this moves:
+
+- [ ] **The player's room's buttons**: `5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas`, Screen Space Overlay, 1920x1080,
+      sort order -3 (the interface, `9_MainCanvas`, is 0), its CanvasGroup faded in on arrival; under it
+      `Player_Room_Buttons` (ParallaxMouseEffect) with `SleepButton`, `SkipToFridayButton`, `PCButton` ("Sit down"),
+      `CalendarButton`, each anchored at its parent's middle, so a pack's X and Y (localPosition) are its anchored
+      position. Re-extract the UI (`VanillaUi`) after an update, then run S23.

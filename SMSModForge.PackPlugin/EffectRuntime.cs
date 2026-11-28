@@ -339,7 +339,7 @@ namespace SMSModForge.PackPlugin
                 // An object's effect: at the object, as big as the game has it, starting with the object.
                 copy.transform.SetParent(under, false);
                 UnityEngine.Object.Destroy(hold);
-                copy.transform.localPosition = Vector3.zero;
+                copy.transform.localPosition = Offset(e.Def);
                 copy.transform.rotation = source.transform.rotation;
                 var parent = under.lossyScale;
                 var want = source.transform.lossyScale * scale;
@@ -407,7 +407,7 @@ namespace SMSModForge.PackPlugin
             {
                 // An object's effect: at the object, at the game's scale whatever the object's, starting with it.
                 var parent = under.lossyScale;
-                go.transform.localPosition = Vector3.zero;
+                go.transform.localPosition = Offset(e.Def);
                 go.transform.localScale = new Vector3(Div(scale, parent.x), Div(scale, parent.y), Div(scale, parent.z));
                 Adjust(e, ctx, systems, scale, forge: true);
                 go.SetActive(true);
@@ -695,6 +695,11 @@ namespace SMSModForge.PackPlugin
                     ?? TMP_Settings.defaultFontAsset;
             return _font;
         }
+
+        /// <summary>An object's effect: where under the object it plays, in the object's own units (its box moved in
+        /// the place preview, after 1.10.0); at the object when not given.</summary>
+        private static Vector3 Offset(JObject def)
+            => new Vector3(F(def, FX.LocalXField, 0f), F(def, FX.LocalYField, 0f), 0f);
 
         internal static float F(JObject def, string field, float otherwise)
         {

@@ -161,10 +161,15 @@ namespace SMSModForge.PackPlugin
                 sr.material = mat;
             }
 
+            // Its own drift (after 1.10.0): off unless asked, and then the effect an object of the pack's is given.
+            // Its parts below and its children ride on it.
+            if (!((bool?)pl["parallaxDisabled"] ?? true))
+                PlaceFactory.GiveDrift(go, level, (float?)pl["parallaxStrength"], (bool?)pl["parallaxReversed"]);
+
             BuildReflection(go.transform, def["reflection"] as JObject, sr);
             BuildBlink(go.transform, def["blink"] as JObject, pl["blink"] as JObject, pack, sr);
             BuildShadow(go.transform, def["shadow"] as JObject, pl["shadow"] as JObject);
-            BuildWet(go.transform, def["wet"] as JObject, pl["wet"] as JObject);
+            BuildWet(go.transform, def["wet"] as JObject, pl["wet"] as JObject, pl["wetEffect"] as JObject);
 
             // Authored GameObjects parented under the NPC (props that ride along
             // with the pose), built LOCAL so they compose with the body.
@@ -333,19 +338,14 @@ namespace SMSModForge.PackPlugin
                 sr.color = col;
         }
 
-        /// <summary>The "Wet" droplet particle, cloned from the same vanilla
-        /// source busts use, at its (placement) emitter transform.</summary>
-        private static void BuildWet(Transform npc, JObject wetDef, JObject wetTr)
+        /// <summary>The "Wet" droplet particle: the game's towel or shower effect
+        /// (<see cref="WetEffects"/>), at its (placement) emitter transform, with
+        /// the placement's effect settings.</summary>
+        private static void BuildWet(Transform npc, JObject wetDef, JObject wetTr, JObject wetEffect)
         {
             if (wetDef != null && (bool?)wetDef["enabled"] == false) return;
-
-            var anna = TransformExtensions.FindGlobalIncludingInactive("Anna_Towel");
-            var source = anna?.transform.Find("MBase1")?.Find("Particle System")?.gameObject;
-            if (source == null) return;
-
-            var p = Object.Instantiate(source, npc);
-            p.name = "Wet";
-            ApplyTransform(p.transform, wetTr);
+            var p = WetEffects.BuildNpc(npc, "Wet", WetEffects.Merged(wetDef, wetEffect), t => ApplyTransform(t, wetTr));
+            if (p == null) return;
             p.SetActive(wetDef == null || (bool?)wetDef["startActive"] != false);
         }
 

@@ -367,7 +367,7 @@ namespace SMSModForge.PackPlugin
             var particles = o["particles"] as JArray;
             if (particles == null || particles.Count == 0)
             {
-                AttachWetParticle(mBase, "Wet");
+                WetEffects.AttachBust(mBase, "Wet", false, false);
             }
             else
             {
@@ -376,8 +376,9 @@ namespace SMSModForge.PackPlugin
                     string preset = (string)((JObject)p)["preset"] ?? "Wet";
                     string pname  = (string)((JObject)p)["name"];
                     bool active   = (bool?)((JObject)p)["active"] ?? false;
-                    if (string.Equals(preset, "Wet", System.StringComparison.OrdinalIgnoreCase))
-                        AttachWetParticle(mBase, string.IsNullOrEmpty(pname) ? "Wet" : pname, active);
+                    bool shower = string.Equals(preset, "Shower", System.StringComparison.OrdinalIgnoreCase);
+                    if (shower || string.Equals(preset, "Wet", System.StringComparison.OrdinalIgnoreCase))
+                        WetEffects.AttachBust(mBase, string.IsNullOrEmpty(pname) ? "Wet" : pname, active, shower);
                     // Future presets ("Custom" particle JSON) land here.
                 }
             }
@@ -666,18 +667,6 @@ namespace SMSModForge.PackPlugin
             catch { return false; }
         }
 
-        private static void AttachWetParticle(GameObject mBase, string name, bool active = false)
-        {
-            // Anna_Towel is a vanilla bust and is normally inactive at load time,
-            // so GameObject.Find (active-only) would miss it — use the
-            // include-inactive search so the wet-particle source resolves.
-            var anna = TransformExtensions.FindGlobalIncludingInactive("Anna_Towel");
-            var source = anna?.transform.Find("MBase1")?.Find("Particle System")?.gameObject;
-            if (source == null) return;
-            var p = Object.Instantiate(source, mBase.transform);
-            p.name = name;
-            p.SetActive(active);
-        }
 
         /// <summary>
         /// Removes the first component on <paramref name="go"/> whose runtime

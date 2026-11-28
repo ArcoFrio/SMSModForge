@@ -72,7 +72,7 @@ public sealed partial class PlacePreview
         label.FontSize = 11;
         label.Margin = new Thickness(0, 0, 0, 2);
         LocText.Bind(label, ToolTipProperty, "preview.standIn.tip");
-        _standInBox = new ComboBox { FontSize = 11, Margin = new Thickness(0, 0, 0, 8), MinWidth = 140 };
+        _standInBox = new ComboBox { FontSize = 11, MinWidth = 140 };
         LocText.Bind(_standInBox, ToolTipProperty, "preview.standIn.tip");
         _standInBox.SelectionChanged += (_, _) => { if (!_refreshingChoices) SetStandIn((_standInBox.SelectedItem as StandInChoice)?.Outfit); };
         // Outfits added or renamed since: the list as it is when it opens.
@@ -80,7 +80,7 @@ public sealed partial class PlacePreview
         var row = new StackPanel();
         TutorialAnchor.SetId(row, "panel:standIn");
         row.Children.Add(label);
-        row.Children.Add(_standInBox);
+        row.Children.Add(OnThemeSurface(_standInBox, new Thickness(0, 0, 0, 8)));
         RefreshStandInChoices();
         return row;
     }
@@ -173,7 +173,7 @@ public sealed partial class PlacePreview
         FlushRebuild();
         int generation = ++_standInGeneration;   // only the latest pass is shown
         const int W = PlaceLights.ScreenW, H = PlaceLights.ScreenH;
-        var lights = LookLights ? _placeLights : null;
+        var lights = LookLights ? LightsNow() : null;
         var screen = new byte[W * H * 4];
         byte[]? lit = null;
         // The scene at the game's screen size. Drawing on the card, the card draws it from the scene's list

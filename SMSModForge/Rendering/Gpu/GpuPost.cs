@@ -309,7 +309,7 @@ internal sealed class GpuPost : IDisposable
     /// </summary>
     public void LookOverView(byte[]? screenPbgra, int sw, int sh, byte[] viewPbgra, int vw, int vh, float ax, float bx, float ay, float by,
                              BackdropScene scene, BackdropRender.PostParts parts, byte[] output, PlaceLights? lights = null,
-                             byte[]? screenLit = null, byte[]? viewLit = null)
+                             byte[]? screenLit = null, byte[]? viewLit = null, WetDrops.Over? drops = null)
     {
         var b = scene.Backdrop;
         var decode = scene.Decode;
@@ -327,9 +327,12 @@ internal sealed class GpuPost : IDisposable
                     int i = src + x * 4, o = (y * sw + x) * 4;
                     sf[o] = decode[screenPbgra[i + 2]]; sf[o + 1] = decode[screenPbgra[i + 1]]; sf[o + 2] = decode[screenPbgra[i]]; sf[o + 3] = 1f;
                     GamePost.ToFrameFormat(sf, o);
+                    // A shower's drops: lit with the place, so into it before its lights (WetDrops).
+                    drops?.Screen(ref sf[o], ref sf[o + 1], ref sf[o + 2], x, y, sw, sh, lit: true);
                     // The level's own lights (1.9.2), as on the processor (GamePostFast.LookOverView).
                     lights?.Apply(ref sf[o], ref sf[o + 1], ref sf[o + 2], (x + 0.5f) * PlaceLights.ScreenW / sw, (y + 0.5f) * PlaceLights.ScreenH / sh,
                                   screenLit == null ? 1f : screenLit[i + 2] / 255f);
+                    drops?.Screen(ref sf[o], ref sf[o + 1], ref sf[o + 2], x, y, sw, sh);
                 }
             });
         }
@@ -342,10 +345,12 @@ internal sealed class GpuPost : IDisposable
                 int i = (y * vw + x) * 4;
                 view[i] = decode[viewPbgra[i + 2]]; view[i + 1] = decode[viewPbgra[i + 1]]; view[i + 2] = decode[viewPbgra[i]]; view[i + 3] = 1f;
                 GamePost.ToFrameFormat(view, i);
+                drops?.View(ref view[i], ref view[i + 1], ref view[i + 2], ax * (x + 0.5f) + bx, ay * (y + 0.5f) + by, ax * drops.CanvasW, lit: true);
                 if (lights != null)
                     lights.Apply(ref view[i], ref view[i + 1], ref view[i + 2],
                                  (ax * (x + 0.5f) + bx) * PlaceLights.ScreenW, (ay * (y + 0.5f) + by) * PlaceLights.ScreenH,
                                  viewLit == null ? 1f : viewLit[i + 2] / 255f);
+                drops?.View(ref view[i], ref view[i + 1], ref view[i + 2], ax * (x + 0.5f) + bx, ay * (y + 0.5f) + by, ax * drops.CanvasW);
             }
         });
         lock (_gpu.Gate)

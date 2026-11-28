@@ -79,7 +79,11 @@ public sealed class PlaceParallaxFollowsTheScreenTests : IDisposable
             vm.OpenPackFromPath(_dir);
             ((TabControl)window.FindName("MainTabs")).SelectedIndex = MainTab.Places;
             WindowHarness.Pump();
-            var place = vm.Places.OrderByDescending(p => p.GameObjects.Count).First();
+            // The fullest place whose objects nothing else moves: components play in the preview (after 1.10.0), and
+            // what they move is not the drift this measures.
+            static bool Plays(System.Collections.Generic.IEnumerable<GameObjectDef> nodes)
+                => nodes.Any(n => n.Components.Count > 0 || n.Npcs.Any(c => c.Components.Count > 0) || Plays(n.Children));
+            var place = vm.Places.Where(p => !Plays(p.Model.GameObjects)).OrderByDescending(p => p.GameObjects.Count).First();
             vm.SelectedPlace = place;
             WindowHarness.Pump();
             // Something of the pack's own that drifts, whatever else the place has.

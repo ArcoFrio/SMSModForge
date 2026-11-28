@@ -208,6 +208,147 @@ namespace SMSModForge.PackPlugin
                     Say("ok fx-clear " + n);
                     return true;
                 }
+                case "particles-live":
+                {
+                    // particles-live <path>: every live particle under the object - how old, where (as the system
+                    // keeps it, and in the world with the system's own scale only or with its parents' too), how
+                    // big, what colour - to a file. What the editor's wet drops are held to (2026-11-27).
+                    var target = FindPath(all);
+                    if (target == null) { Say("error particles-live: no " + all); return true; }
+                    var cam = Camera.main;
+                    var w = new StringBuilder();
+                    if (cam != null)
+                        w.AppendLine("camera " + V3p(cam.transform.position) + " ortho " + N(cam.orthographicSize, "0.#####")
+                                     + " pixels " + cam.pixelWidth + "x" + cam.pixelHeight + " screen " + Screen.width + "x" + Screen.height);
+                    w.AppendLine("gravity " + V3p(Gravity()));
+                    int total = 0;
+                    foreach (var ps in target.GetComponentsInChildren<ParticleSystem>(true))
+                    {
+                        var main = ps.main;
+                        var buf = new ParticleSystem.Particle[Math.Max(1, main.maxParticles)];
+                        int n = ps.GetParticles(buf);
+                        total += n;
+                        var tr = ps.transform;
+                        bool world = main.simulationSpace == ParticleSystemSimulationSpace.World;
+                        w.AppendLine("== " + FullPath(tr) + " n=" + n + " playing=" + ps.isPlaying + " paused=" + ps.isPaused
+                                     + " time=" + N(ps.time, "0.####") + " at " + V3p(tr.position) + " rot " + V3p(tr.eulerAngles)
+                                     + " scale " + V3p(tr.localScale) + " lossy " + V3p(tr.lossyScale)
+                                     + " space=" + main.simulationSpace + " scaling=" + main.scalingMode
+                                     + " shape " + V3p(ps.shape.scale));
+                        for (int i = 0; i < n; i++)
+                        {
+                            var p = buf[i];
+                            Vector3 own = world ? p.position : tr.position + tr.rotation * Vector3.Scale(tr.localScale, p.position);
+                            Vector3 hier = world ? p.position : tr.TransformPoint(p.position);
+                            w.AppendLine("p age=" + N(p.startLifetime - p.remainingLifetime, "0.#####") + " life=" + N(p.startLifetime, "0.###")
+                                         + " pos=" + V3p(p.position) + " worldOwn=" + V3p(own) + " worldHier=" + V3p(hier)
+                                         + " size=" + V3p(p.GetCurrentSize3D(ps)) + " start=" + V3p(p.startSize3D)
+                                         + " colour=" + Rgba(p.GetCurrentColor(ps)) + " vel=" + V3p(p.velocity)
+                                         + " rot=" + N(p.rotation, "0.##") + " seed=" + p.randomSeed);
+                        }
+                    }
+                    string label = new string(target.name.Select(ch => char.IsLetterOrDigit(ch) ? ch : '_').ToArray());
+                    string file = Path.Combine(_dir, "particles-live-" + label + ".txt");
+                    File.WriteAllText(file, w.ToString());
+                    Say("ok particles-live " + total + " " + file);
+                    return true;
+                }
+                case "particles-pause":
+                case "particles-play":
+                {
+                    // Every system under the object held where it is (to photograph its particles and read them at
+                    // the same moment), or let go again.
+                    var target = FindPath(all);
+                    if (target == null) { Say("error " + verb + ": no " + all); return true; }
+                    int n = 0;
+                    foreach (var ps in target.GetComponentsInChildren<ParticleSystem>(true))
+                    {
+                        if (verb == "particles-pause") ps.Pause(false); else ps.Play(false);
+                        n++;
+                    }
+                    Say("ok " + verb + " " + n);
+                    return true;
+                }
+                case "material":
+                {
+                    // material <path>: the object's sprite renderer's material - its name, shader, the mask it reads
+                    // (_MaskTex) - and where it is drawn on the screen (pixels, rows from the top): how an object's
+                    // mask is set up in the game (after 1.10.0, objects' masks).
+                    var target = FindPath(all);
+                    var sr = target != null ? target.GetComponent<SpriteRenderer>() : null;
+                    if (sr == null) { Say("error material: no sprite renderer at " + all); return true; }
+                    var m = sr.sharedMaterial;
+                    string mask = m == null || !m.HasProperty("_MaskTex") ? "(no _MaskTex)"
+                                : m.GetTexture("_MaskTex") is Texture t && t != null ? t.name + " " + t.width + "x" + t.height : "(none bound)";
+                    var cam = Camera.main;
+                    string rect = "";
+                    if (cam != null)
+                    {
+                        var b = sr.bounds;
+                        var lo = cam.WorldToViewportPoint(b.min);
+                        var hi = cam.WorldToViewportPoint(b.max);
+                        rect = " screen " + N(lo.x * Screen.width, "0") + "," + N((1 - hi.y) * Screen.height, "0") + " to "
+                               + N(hi.x * Screen.width, "0") + "," + N((1 - lo.y) * Screen.height, "0");
+                    }
+                    Say("ok material " + FullPath(target.transform) + ": " + (m != null ? m.name : "(none)") + " shader="
+                        + (m != null && m.shader != null ? m.shader.name : "?") + " mask=" + mask + rect);
+                    return true;
+                }
+                case "legacy-text":
+                {
+                    // legacy-text <path>: every old-style UI Text under the object (the HUD's money and day are Game
+                    // Creator's TextPropertyString, one of them) - its words and how they are set: font, size, style,
+                    // alignment, best fit, line spacing, colour, rectangle, whether shown.
+                    var target = FindPath(all);
+                    if (target == null) { Say("error legacy-text: no " + all); return true; }
+                    var found = new List<string>();
+                    foreach (var t in target.GetComponentsInChildren<UnityEngine.UI.Text>(true))
+                    {
+                        var rt = t.rectTransform;
+                        found.Add(FullPath(t.transform) + " [" + t.GetType().Name + (t.gameObject.activeInHierarchy ? "" : ", off") + "] '"
+                                  + t.text.Replace("\n", "\\n") + "' font=" + (t.font != null ? t.font.name : "(none)") + " size=" + t.fontSize
+                                  + " style=" + t.fontStyle + " align=" + t.alignment + " bestFit=" + t.resizeTextForBestFit
+                                  + (t.resizeTextForBestFit ? "(" + t.resizeTextMinSize + ".." + t.resizeTextMaxSize + ")" : "")
+                                  + " line=" + N(t.lineSpacing, "0.##") + " colour=" + Rgba(t.color) + " rect " + N(rt.rect.width, "0.##") + "x"
+                                  + N(rt.rect.height, "0.##") + " anchored " + N(rt.anchoredPosition.x, "0.##") + "," + N(rt.anchoredPosition.y, "0.##")
+                                  + " scale " + N(rt.localScale.x, "0.##") + " richText=" + t.supportRichText);
+                    }
+                    Say("ok legacy-text " + found.Count + ": " + string.Join(" | ", found.ToArray()));
+                    return true;
+                }
+                case "stat":
+                {
+                    // stat <attribute> [value]: one of the player's Game Creator Stats attributes (11_PlayerData's
+                    // Traits), read - or set, then read back. The navigator's pink bar is PhotoXPCurrent.
+                    var player = FindPath("11_PlayerData");
+                    var traits = player == null ? null
+                        : player.GetComponents<Component>().FirstOrDefault(c => c != null && c.GetType().Name == "Traits");
+                    if (traits == null) { Say("error stat: no Traits on 11_PlayerData"); return true; }
+                    var attributes = traits.GetType().GetProperty("RuntimeAttributes")?.GetValue(traits, null);
+                    var get = attributes?.GetType().GetMethod("Get", new[] { typeof(string) });
+                    // By its id, or by its asset's name (what AttributeUI shows: PhotoXPCurrent), whose id is asked.
+                    string id = a;
+                    var asset = Resources.FindObjectsOfTypeAll<ScriptableObject>()
+                        .FirstOrDefault(o => o != null && o.name == a && o.GetType().Name == "Attribute");
+                    var idValue = asset?.GetType().GetProperty("ID")?.GetValue(asset, null);
+                    if (idValue != null)
+                        id = (idValue.GetType().GetProperty("String")?.GetValue(idValue, null) as string) ?? idValue.ToString();
+                    object data;
+                    try { data = get?.Invoke(attributes, new object[] { id }); }
+                    catch (Exception e) { Say("error stat: " + (e.InnerException ?? e).Message + " (id '" + id + "')"); return true; }
+                    if (data == null) { Say("error stat: no attribute " + a); return true; }
+                    if (rest.Trim().Length > 0)
+                    {
+                        var value = data.GetType().GetProperty("Value");
+                        if (value == null || !value.CanWrite) { Say("error stat: " + a + " has no Value to set"); return true; }
+                        value.SetValue(data, Convert.ChangeType(rest.Trim(), value.PropertyType, CultureInfo.InvariantCulture), null);
+                    }
+                    var shown = data.GetType().GetProperties()
+                        .Where(p => p.GetIndexParameters().Length == 0 && (p.PropertyType.IsPrimitive || p.PropertyType == typeof(string)))
+                        .Select(p => { object v; try { v = p.GetValue(data, null); } catch (Exception) { v = "?"; } return p.Name + "=" + Show(v); });
+                    Say("ok stat " + a + ": " + string.Join("; ", shown.ToArray()));
+                    return true;
+                }
                 case "png-save":
                 {
                     // png-save <texture name, spaces and all> <file>
@@ -279,10 +420,40 @@ namespace SMSModForge.PackPlugin
             return s.ToString();
         }
 
+        /// <summary>The 3D physics' gravity, which particles fall by (their gravity modifier times it) - read through
+        /// reflection, the physics module not being one the plugin is built against.</summary>
+        private static Vector3 Gravity()
+        {
+            var physics = Type.GetType("UnityEngine.Physics, UnityEngine.PhysicsModule");
+            var g = physics?.GetProperty("gravity", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+            return g != null ? (Vector3)g.GetValue(null, null) : new Vector3(float.NaN, float.NaN, float.NaN);
+        }
+
+        private static string V3p(Vector3 v) => N(v.x, "0.#####") + "," + N(v.y, "0.#####") + "," + N(v.z, "0.#####");
+
+        /// <summary>How a material blends and what it switches on: what decides how a particle is laid over what is
+        /// behind it.</summary>
+        private static string MaterialDetail(Material m)
+        {
+            if (m == null) return "";
+            var s = new StringBuilder(" queue=" + m.renderQueue + " keywords=[" + string.Join(",", m.shaderKeywords) + "]");
+            foreach (var prop in new[] { "_Mode", "_Surface", "_Blend", "_BlendOp", "_SrcBlend", "_DstBlend", "_ZWrite", "_Cull",
+                                         "_ColorMode", "_SoftParticlesEnabled", "_CameraFadingEnabled", "_DistortionEnabled",
+                                         "_FlipbookMode", "_LightingEnabled", "_EmissionEnabled", "_Cutoff" })
+                if (m.HasProperty(prop)) s.Append(" " + prop + "=" + N(m.GetFloat(prop), "0.###"));
+            if (m.shader != null) s.Append(" passes=" + m.passCount + " tag=" + m.GetTag("RenderType", false, "-"));
+            return s.ToString();
+        }
+
         private static void Describe(StringBuilder w, ParticleSystem ps)
         {
             var main = ps.main;
             w.AppendLine("== " + FullPath(ps.transform) + (ps.gameObject.activeInHierarchy ? "" : " (off)"));
+            if (main.startSize3D)
+                w.AppendLine("  size3D x=" + Curve(main.startSizeX) + " y=" + Curve(main.startSizeY) + " z=" + Curve(main.startSizeZ)
+                             + " gravity " + V3p(Gravity()) + " seed=" + (ps.useAutoRandomSeed ? "auto" : ps.randomSeed.ToString()));
+            else
+                w.AppendLine("  gravity " + V3p(Gravity()) + " seed=" + (ps.useAutoRandomSeed ? "auto" : ps.randomSeed.ToString()));
             w.AppendLine("  transform local " + V3(ps.transform.localPosition) + " scale " + V3(ps.transform.localScale)
                          + " lossy " + V3(ps.transform.lossyScale) + " rot " + V3(ps.transform.localEulerAngles));
             w.AppendLine("  main duration=" + N(main.duration, "0.###") + " loop=" + main.loop + " prewarm=" + main.prewarm
@@ -344,7 +515,8 @@ namespace SMSModForge.PackPlugin
             if (r != null)
                 w.AppendLine("  renderer " + On(r.enabled) + " " + r.renderMode + " align=" + r.alignment + " sort=" + r.sortMode
                              + " layer=" + r.sortingLayerName + "/" + r.sortingOrder + " minSize=" + N(r.minParticleSize, "0.###")
-                             + " maxSize=" + N(r.maxParticleSize, "0.###") + " " + MaterialSummary(r.sharedMaterial)
+                             + " maxSize=" + N(r.maxParticleSize, "0.###") + " pivot=" + V3p(r.pivot) + " flip=" + V3p(r.flip)
+                             + " " + MaterialSummary(r.sharedMaterial) + MaterialDetail(r.sharedMaterial)
                              + (ps.trails.enabled && r.trailMaterial != null ? " trail " + MaterialSummary(r.trailMaterial) : ""));
         }
 

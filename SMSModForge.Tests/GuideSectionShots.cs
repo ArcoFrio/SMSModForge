@@ -196,7 +196,7 @@ public sealed class GuideSectionShots
             ["Sections/modPack.packOneFolderEverything"] = new(MainTab.ModForge, v => v.HomePage = HomePage.Home, w => ByHeading(Tabs(w), "Your pack")),
             ["Sections/modPack.heading.worthKnowing"] = new(MainTab.ModForge, v => v.HomePage = HomePage.Home, w => ByHeading(Tabs(w), "Getting started")),
             ["Sections/orderWork.fileThenNewPack"] = new(MainTab.Characters, Her, w => Up(Below(Tabs(w)).OfType<TabItem>().FirstOrDefault(Shown)), 16),
-            ["Sections/orderWork.heading.worthKnowing"] = new(MainTab.Places, null, w => Anchor(w, "btn:addNpcToPlace"), 60),
+            ["Sections/orderWork.heading.worthKnowing"] = new(MainTab.Places, null, w => Anchor(w, "btn:addPlaceCharacter"), 60),
             ["Sections/thingsPointEachOther.mostReferencesJustOther"] = new(MainTab.Dialogues, null, w => Anchor(w, "panel:nodeEditor")),
             // A dropdown showing the stored word with its readable name beside it.
             ["Sections/thingsPointEachOther.heading.worthKnowing"] = new(MainTab.MapButtons, null, w => Anchor(w, "panel:mapButtonList"), 16)
@@ -281,7 +281,7 @@ public sealed class GuideSectionShots
             ["Sections/npcs.heading.list"] = new(MainTab.Npcs, null, w => Up(Anchor(w, "btn:addNpc"), 2), 16),
             ["Sections/npcs.heading.preview"] = new(MainTab.Npcs, null, w => Holder(ByText(Tabs(w), "Preview (live jiggle + shadow + blink)"))),
             ["Sections/places.heading.twoLists"] = new(MainTab.Places, null, w => Anchor(w, "panel:placeList"), 16),
-            ["Sections/places.heading.contents"] = new(MainTab.Places, null, w => ByHeading(Tabs(w), "GameObjects")),
+            ["Sections/places.heading.contents"] = new(MainTab.Places, null, w => Anchor(w, "panel:placeHierarchy"), 16),
             ["Sections/places.heading.lights"] = new(MainTab.Places, null, w => Up(Anchor(w, "btn:addLight")), 40),
             ["Sections/places.heading.enterExit"] = new(MainTab.Places, null, w => ByHeading(Tabs(w), "On enter")),
             ["Sections/dialogues.heading.starts"] = new(MainTab.Dialogues, null, w => ByHeading(Tabs(w), "Start conditions")),
@@ -604,6 +604,17 @@ public sealed class GuideSectionShots
 
     /// <summary>Puts the part on screen and writes it: what is around it dimmed, and the controls the text names boxed
     /// in red - numbered when there are several, an arrow when one is the thing to click.</summary>
+    /// <summary>Where the last picture was cut from the window: the report says which pictures hold the game's HUD.</summary>
+    internal static Rect LastCrop { get; private set; }
+
+    /// <summary>Whether the last picture shows a place preview with the game's HUD drawn on it.</summary>
+    private static bool HudInLastPicture(MainWindow window)
+    {
+        var host = (FrameworkElement)window.Content;
+        return Below(window).OfType<View.Controls.PlacePreview>()
+                            .Any(p => Shown(p) && p.HudDrawn && Bounds(p, host) is { } b && b.IntersectsWith(LastCrop));
+    }
+
     internal static bool Picture(MainWindow window, FrameworkElement part, string file, double around,
                                  IReadOnlyList<(Rect R, int N)>? marks = null, bool numbered = true, bool arrow = false)
     {
@@ -638,6 +649,7 @@ public sealed class GuideSectionShots
             crop = new Rect(crop.X, top, crop.Width, tallest);
         }
         crop = new Rect(Math.Floor(crop.X), Math.Floor(crop.Y), Math.Ceiling(crop.Width), Math.Ceiling(crop.Height));
+        LastCrop = crop;
 
         var surface = (window.TryFindResource("Theme.Surface") as SolidColorBrush)?.Color ?? Colors.White;
         var accent = (window.TryFindResource("Theme.Accent") as SolidColorBrush)?.Color ?? Colors.DodgerBlue;
@@ -801,7 +813,8 @@ public sealed class GuideSectionShots
                     window.UpdateLayout();
                     var marks = MarksFor(part, spot, section, out bool arrow);
                     bool ok = Picture(window, part, file, around, marks, numbered: true, arrow);
-                    report.Add((ok ? "OK     " : "HIDDEN ") + $"{name}  {part.GetType().Name} {part.ActualWidth:0}x{part.ActualHeight:0}  marks {marks.Count}");
+                    report.Add((ok ? "OK     " : "HIDDEN ") + $"{name}  {part.GetType().Name} {part.ActualWidth:0}x{part.ActualHeight:0}  marks {marks.Count}"
+                               + (ok && HudInLastPicture(window) ? "  HUD" : ""));
                 }
                 if (studio) window.CurrentMaskStudio?.TryClose();
                 if (spot?.After != null) { spot.After(vm); WindowHarness.Pump(); }

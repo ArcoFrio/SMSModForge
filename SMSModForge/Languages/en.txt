@@ -1468,8 +1468,41 @@ gameObject.reversed = Reversed
 # Tick box
 gameObject.uiSpace = UI space
 
-# Text
-gameObject.maskOpt = Mask (opt):
+# Text: the label of how an object's picture moves
+gameObject.maskOpt = Moves by:
+
+# Tooltip on the choice of how an object's picture moves
+gameObject.maskKind.tip = How this object's picture moves in the game. Paint its own mask with Edit, the same way as a place's or an NPC's.
+
+# Choice: the object's picture stays still
+gameObject.maskKind.none = Nothing (still)
+
+# Tooltip on a choice
+gameObject.maskKind.none.tip = The picture stays still.
+
+# Choice: the object moves with the place's back layer's mask
+gameObject.maskKind.backLayer = The back layer's mask
+
+# Tooltip on a choice
+gameObject.maskKind.backLayer.tip = Moves with the place's back layer's mask, read over this object's own picture (as if the mask were laid over it, not over the place). What objects without a mask used to do when the back layer had one.
+
+# Choice: the object moves by a mask of its own, like a place's water or foliage
+gameObject.maskKind.level = Its own mask, like a place
+
+# Tooltip on a choice
+gameObject.maskKind.level.tip = Moves by a mask of its own, the way a place's picture moves: water, leaves, curtains. One layer (how much), painted in the mask studio.
+
+# Choice: the object moves by a mask of its own, like a character's jiggle
+gameObject.maskKind.jiggle = Its own mask, like a character
+
+# Tooltip on a choice
+gameObject.maskKind.jiggle.tip = Moves by a mask of its own, the way an NPC's body moves: bounce, wave and noise (red, green and blue), with the settings below.
+
+# Button: opens the mask studio on this object's mask
+gameObject.editMask = Edit
+
+# Tooltip on a button
+gameObject.editMask.tip = Paint this object's mask in the mask studio, over its picture, with the place preview beside it.
 
 # Button
 gameObject.addComponent = + Component
@@ -1520,7 +1553,7 @@ gameObject.copy.tip = Copy this GameObject to the editor clipboard
 gameObject.paste.tip = Paste the clipboard's GameObject as a sibling below this one
 
 # Tooltip on a button
-gameObject.remove.tip = Remove this GameObject
+gameObject.remove.tip = Remove this GameObject. It goes to the place's recycle bin, under the hierarchy beside the preview, with everything under it, to be put back if you need it. One of the game's own objects is switched off where it stands instead, and the bin switches it back on.
 
 # Tooltip on "This GameObject already exists (bind, don't create)"
 gameObject.gameobjectAlreadyExistsBind.tip = On: the Name above is looked up in the scene (a bare name or a A > B > C path) and only what you author here is applied to it — the way to modify a vanilla level you don't own. Off: this pack creates the GameObject.
@@ -1574,19 +1607,19 @@ gameObject.startActive.tip = Uncheck for overlays a dialogue reveals later (Flas
 gameObject.initialAlpha01.tip = Initial alpha 0..1 (start at 0 for fade-in overlays like the Portal).
 
 # Tooltip on "Drift with the level"
-gameObject.driftLevel.tip = On (the default) keeps the level's own strength, which is what a created object always did. Turn it off to set this object's depth independently.
+gameObject.driftLevel.tip = On (the default): drift as the place's back picture does, which is what a created object does in the game. Turn it off to set this object's depth independently.
 
 # Tooltip on a text box
 gameObject.depthRelativeLevelS.tip = Depth relative to the level's main sprite, which every vanilla level fixes at 0.75: lower sits further away and lags behind the room, higher sits nearer and overshoots. Vanilla objects use 0.1, 0.5, 0.75 and 1.5.
 
 # Tooltip on "Reversed"
-gameObject.reversed.tip = Drift WITH the cursor instead of against it.
+gameObject.reversed.tip = Drift WITH the cursor instead of against it. Until you change it, the object drifts the way the place's back picture does, so this starts ticked where the back picture is reversed.
 
 # Tooltip on "UI space"
 gameObject.uiSpace.tip = Only for an object under a Canvas — it switches the effect to canvas coordinates. A pack's own GameObjects are world sprites, so leave this off unless you're binding to a canvas object.
 
 # Tooltip on a part of the window
-gameObject.optionalPackRelativeMask.tip = Optional pack-relative mask PNG bound to _MaskTex, for shader-masked overlays (a cameo).
+gameObject.optionalPackRelativeMask.tip = The mask: a PNG in the pack, made in the mask studio (Edit) or elsewhere.
 
 # Tooltip on "+ Component"
 gameObject.addComponent.tip = Attach a generic utility component (fade, disappear, random child, blink) to this GameObject.
@@ -1634,6 +1667,39 @@ component.reshuffleEveryTimeS = Reshuffle every time it's activated
 
 # Text
 component.togglesSpriterendererSAlpha = Toggles a SpriteRenderer's alpha between min and max on a fixed interval (blink / pulse).
+
+# Text explaining a component's settings
+component.floatExplain = Floats the object up and down, smoothly, for ever - everything under it with it. Several with Random start move out of step.
+
+# Label in front of a text box
+component.floatHeight = Height
+
+# Tooltip on a text box
+component.floatHeight.tip = How far it travels from its lowest point to its highest, in units (the size of the object's parent's units).
+
+# Label in front of a text box
+component.floatPeriod = Time (s)
+
+# Tooltip on a text box
+component.floatPeriod.tip = Seconds for one whole rise and fall. Higher is slower and calmer.
+
+# Label in front of a text box
+component.floatSway = Sideways
+
+# Tooltip on a text box
+component.floatSway.tip = How far it also sways from side to side, in units. 0 keeps it straight up and down. The sway is a little slower than the rise, so the path keeps changing.
+
+# Label in front of a text box
+component.floatStart = Start at
+
+# Tooltip on a text box
+component.floatStart.tip = Where in its rise and fall it starts, from 0 to 1: 0 in the middle going up, 0.25 at the top, 0.5 in the middle going down, 0.75 at the bottom. Used when Random start is off.
+
+# Tick box
+component.floatRandomStart = Random start
+
+# Tooltip on a tick box
+component.floatRandomStart.tip = Each one starts somewhere at random in its rise and fall, so several floating side by side do not move together.
 
 # Text
 component.interval = Interval
@@ -1688,6 +1754,84 @@ npcPlacement.blink = Blink
 # Heading
 npcPlacement.wetParticle = Wet (particle)
 
+# Heading
+npcPlacement.wetEffect = Wet effect
+
+# Label in front of a dropdown
+npcPlacement.wetKind = Kind
+
+# Tooltip on a dropdown
+npcPlacement.wetKind.tip = Which of the game's two wet effects. Same as the NPC: the kind set in the NPC's Wet particles box on the NPCs tab. Wet: Anna's towel look - a few thin white drops over the body, drawn over everything. Shower: the bathroom shower - many fine blue-grey drops falling from a small box, lit by the room's lamps.
+
+# Choice in a dropdown: the kind the NPC itself has
+npcPlacement.wetKindNpc = Same as the NPC
+
+# Choice in a dropdown
+npcPlacement.wetKindWet = Wet
+
+# Choice in a dropdown
+npcPlacement.wetKindShower = Shower
+
+# Label in front of a text box
+npcPlacement.wetWidth = Box width
+
+# Tooltip on a text box
+npcPlacement.wetWidth.tip = How wide the box the drops start in is, in the Wet part's own units (its scale still multiplies it). The game's: 3.21 for Wet, 2 for Shower. You can also drag the box's sides in the preview.
+
+# Label in front of a text box
+npcPlacement.wetHeight = Box height
+
+# Tooltip on a text box
+npcPlacement.wetHeight.tip = How tall the box the drops start in is, in the Wet part's own units (its scale still multiplies it). The game's: 8.45 for Wet, 1 for Shower. You can also drag the box's sides in the preview.
+
+# Tick box
+npcPlacement.wetFromTop = Drops start along the top
+
+# Tooltip on a tick box
+npcPlacement.wetFromTop.tip = The drops start on the box's top side only, like a shower head as wide as the box, instead of anywhere in it.
+
+# Tick box
+npcPlacement.wetFloor = Drops stop at the box's floor
+
+# Tooltip on a tick box
+npcPlacement.wetFloor.tip = A drop disappears the moment it reaches the bottom of the box, instead of falling off the screen. Drag the box's bottom side down to where the floor is.
+
+# Label in front of a text box
+npcPlacement.wetTint = Tint
+
+# Tooltip on a text box
+npcPlacement.wetTint.tip = The drops' own colour is multiplied by it: white keeps them as they are, a colour tints them, a lower alpha makes them fainter. #RRGGBB or #RRGGBBAA. Empty: the NPC's tint (set on the NPCs tab).
+
+# Button
+npcPlacement.wetPickTint = Pick…
+
+# Tooltip on a button
+npcPlacement.wetPickTint.tip = Choose the tint.
+
+# Label in front of a text box
+npcPlacement.wetAmount = Amount
+
+# Tooltip on a text box
+npcPlacement.wetAmount.tip = Times the game's number of drops a second: 2 makes twice as many, 0.5 half as many. Empty: the NPC's (set on the NPCs tab).
+
+# Label in front of a text box
+npcPlacement.wetSize = Drop size
+
+# Tooltip on a text box
+npcPlacement.wetSize.tip = Times the game's drop size. The drops only - the box stays as it is. Empty: the NPC's (set on the NPCs tab).
+
+# Label in front of a text box
+npcPlacement.wetFall = Fall speed
+
+# Tooltip on a text box
+npcPlacement.wetFall.tip = Times the game's fall: lower falls slower, higher faster. Empty: the NPC's (set on the NPCs tab).
+
+# Button
+npcPlacement.wetReset = Reset
+
+# Tooltip on a button
+npcPlacement.wetReset.tip = Takes back everything set here: the kind and the drops' settings go back to the NPC's, the box to the game's own for that kind.
+
 # Tick box
 npcPlacement.startActive = Start active
 
@@ -1722,7 +1866,7 @@ npcPlacement.children = Children
 npcPlacement.keyNPCNpcsTab.tip = Key of an NPC from the NPCs tab.
 
 # Tooltip on a button
-npcPlacement.remove.tip = Remove this NPC.
+npcPlacement.remove.tip = Remove this NPC. It goes to the place's recycle bin, under the hierarchy beside the preview, to be put back if you need it.
 
 # Tooltip on a text box
 npcPlacement.gameobjectNameSetgameobjectactiveTarget.tip = GameObject name (SetGameObjectActive target). Blank = the NPC key.
@@ -2872,6 +3016,18 @@ characters.outfitParticles = Particles
 # Tick box
 characters.wetParticleActiveSpawn = Wet particle active on spawn
 
+# Label in front of a dropdown
+characters.wetKind = Kind
+
+# Tooltip on a dropdown
+characters.wetKind.tip = Which of the game's two wet effects. Wet: Anna's towel look - a few thin white drops round the middle of the bust. Shower: fine blue-grey drops falling from the top of the bust's picture.
+
+# Choice in a dropdown
+characters.wetKindWet = Wet
+
+# Choice in a dropdown
+characters.wetKindShower = Shower
+
 # Text
 characters.wetPresetAlwaysAttached = (The Wet preset is always attached — this controls whether it starts playing.)
 
@@ -3233,11 +3389,53 @@ npcs.colourHexRGBA = Colour (hex RGBA):
 # Box heading
 npcs.npcWet = Wet particles (optional)
 
+# Label in front of a dropdown
+npcs.wetKind = Kind
+
+# Tooltip on a dropdown
+npcs.wetKind.tip = Which of the game's two wet effects this NPC has wherever it is placed. Wet: Anna's towel look - a few thin white drops over the body, drawn over everything. Shower: the bathroom shower - many fine blue-grey drops falling from a small box, lit by the room's lamps. A placement can pick the other kind for itself.
+
+# Choice in a dropdown
+npcs.wetKindWet = Wet
+
+# Choice in a dropdown
+npcs.wetKindShower = Shower
+
+# Label in front of a text box
+npcs.wetTint = Tint
+
+# Tooltip on a text box
+npcs.wetTint.tip = The drops' own colour is multiplied by it: white keeps them as they are, a colour tints them, a lower alpha makes them fainter. #RRGGBB or #RRGGBBAA. Empty: the game's colours.
+
+# Button
+npcs.wetPickTint = Pick…
+
+# Tooltip on a button
+npcs.wetPickTint.tip = Choose the tint.
+
+# Label in front of a text box
+npcs.wetAmount = Amount
+
+# Tooltip on a text box
+npcs.wetAmount.tip = Times the game's number of drops a second: 2 makes twice as many, 0.5 half as many.
+
+# Label in front of a text box
+npcs.wetSize = Drop size
+
+# Tooltip on a text box
+npcs.wetSize.tip = Times the game's drop size. The drops only - the box they start in stays as it is.
+
+# Label in front of a text box
+npcs.wetFall = Fall speed
+
+# Tooltip on a text box
+npcs.wetFall.tip = Times the game's fall: lower falls slower, higher faster.
+
 # Tick box
 npcs.startActive = Start active
 
 # Text
-npcs.emitterOffsetRotationScale = Emitter offset / rotation / scale are per-placement — edit the Wet transform on the Places tab.
+npcs.emitterOffsetRotationScale = Where the drops stand (offset / rotation / scale), the box they start in and a shower's top and floor are set for each placement - edit the Wet part on the Places tab. A placement can also change the settings above for itself.
 
 # Tooltip on the divider between the NPC's fields and its preview
 npcs.previewSplitter.tip = Drag to give the preview more or less of the tab: the NPC scales to fit, no bigger than the size its corner is dragged to. Remembered.
@@ -3430,20 +3628,8 @@ places.extNavigatorButtons = Navigator buttons (added to this vanilla place's st
 # Button
 places.addVanillaExtensionButton = + Add navigator button
 
-# Box heading
-places.gameobjectsLayeredVanillaPlace = GameObjects (layered on this vanilla place)
-
-# Button
-places.addVanillaExtensionGameObject = + Add GameObject
-
-# Button
-places.addNpc = + Add NPC
-
 # Button
 places.seedFromCatalog = Fill from vanilla hierarchy
-
-# Text
-places.gameobjectsInstantiatedUnderVanilla = GameObjects instantiated under the vanilla level (props, decorations, animated layers) — the pack decorates the level without owning it. Same authoring surface as a pack place's GameObjects: nest children, attach utility components, and target by Name from dialogue actions. Use 'Fill from vanilla hierarchy' to pull in the level's real objects as bound nodes you can modify; anything you leave untouched is dropped on save, so the pack only ever stores what it actually changes.
 
 # Box heading
 places.identity = Identity
@@ -3554,12 +3740,6 @@ places.navigatorButtons = Navigator buttons (visible while this place is active)
 places.up12ButtonsPer = Up to 12 buttons per place. Order = runtime instantiation order = on-screen left→right; use ▲▼ to reorder. The preview shows them numbered in this order. The mod-side loader resolves target names into level indices at load time, so two mods can both add buttons without colliding.
 
 # Box heading
-places.placeGameObjects = GameObjects (this place's scene hierarchy)
-
-# Text
-places.everythingPlaceBuildsUnder = Everything this place builds under its level, as one hierarchy. A GameObject with a Sprite is a layered sprite object (backdrop, prop, animated layer); leave the Sprite blank for a pure container that just groups children. Every node takes utility components (fade, disappear, random child, blink), nested children, and NPC placements. The NPCs node is the level's own NPCs object — always present, and the home for the NPC hierarchy; its subtree composes local transforms down the chain, so moving a container moves everything under it. Target any node from dialogue by Name with SetGameObjectActive / FadeSprite / MoveGameObject / SpinGameObject. Lower sorting draws further back.
-
-# Box heading
 places.enterOncePerLevel = On enter (once per level activation)
 
 # Button
@@ -3604,9 +3784,6 @@ places.extShaders.tip = Run the real JiggleSprite pass over NPCs that have a jig
 # Tooltip on a dropdown
 places.whichGameSOwn.tip = Which of the game's own places this extension attaches to. What you add below appears when the player is there.
 
-# Tooltip on "+ Add NPC"
-places.addNpc.tip = Place an NPC under this vanilla level's own NPCs object. To hang it under a specific container instead, use the NPCs section on that container.
-
 # Tooltip on "Fill from vanilla hierarchy"
 places.seedFromCatalog.tip = Add a bound node for every object the extracted catalog says this level has, seeded with its real transform. Existing entries are left alone, so it's safe to re-run — it just tops up anything new.
 
@@ -3615,6 +3792,18 @@ places.extParallaxPreview.tip2 = Drift the scene with the cursor, as the game do
 
 # Tooltip on "Apply shaders"
 places.extShaders.tip2 = Run the real JiggleSprite pass over NPCs that have a jiggle mask, using this pack's own uniforms — the same code and the same numbers the game runs. Animated, so it costs a little CPU; leave off while positioning.
+
+# Button beside the place preview's tick boxes
+places.fullScreen = Full screen
+
+# Tooltip on a button
+places.fullScreen.tip = Shows this preview over the whole screen: the hierarchy and the picked object's settings over its sides, and the preview's tick boxes and quality under the hierarchy, everything working as here. Esc or F11 brings it back. On the Places tab F11 also opens it.
+
+# Button in the corner of the place preview shown over the whole screen
+places.leaveFullScreen = Leave full screen
+
+# Tooltip on a button
+places.leaveFullScreen.tip = Puts the preview back on the page. Esc or F11 does the same.
 
 # Tooltip on a text box
 places.whatCalledEditorS.tip = What this is called in the editor's own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself.
@@ -3690,9 +3879,6 @@ places.whetherGameSRain.tip = Whether the game's rain and snow run here. None is
 
 # Tooltip on a text
 places.maximum12NavigatorButtons.tip = Maximum 12 navigator buttons per place.
-
-# Tooltip on "+ Add NPC"
-places.addNpc.tip2 = Place an NPC under this level's NPCs object. To hang it under a specific container instead, use the NPCs section on that container.
 
 # Tooltip on a count beside a place
 places.gameObjectsChanged.one = Changes {count} existing vanilla GameObject — moved, switched, gated, or given components
@@ -6871,6 +7057,9 @@ maskStudio.kind.gameBust = Jiggle mask on one of the game's busts, in place of t
 # Under the title, for a level's mask
 maskStudio.kind.level = Level mask: one strength, painted over the level's art.
 
+# The studio's title for an object of a place: {name} is the object's name
+maskStudio.object = {name} (object)
+
 # In the title, after a level's name: which of its two masks
 maskStudio.layer.front = front layer
 
@@ -6939,6 +7128,15 @@ maskStudio.sampled = Opacity taken: {value}
 
 # In the status line: where the pointer is on the mask, and the strength there ({value}, a percentage)
 maskStudio.cursor = {x}, {y}: {value}
+
+# In the status line, after the pointer's place: the part under the pointer is hidden by {name}, drawn in front of what is painted
+maskStudio.coveredBy = under {name}: what moves here can't be seen
+
+# In the status line, once, when part of what is painted is hidden by pictures drawn in front of it
+maskStudio.coverNote = Something is drawn in front of part of this. The preview shows it see-through while you paint, but in the game it hides what moves behind it: point at a spot to see what covers it, and give that object a mask of its own.
+
+# What the mask studio calls a picture in front that has no name
+preview.place.coverUnnamed = a picture in front
 
 # In the status line: the tool and the layer it paints ({layer})
 maskStudio.status.brush = Brush on {layer}
@@ -7494,6 +7692,12 @@ docs.maskPainter.mirror.term = Mirror
 
 # Docs: a point in the topic
 docs.maskPainter.mirror = Paints both halves at once, mirrored about the middle, with a line marking the middle and a second ring showing where the twin stroke lands.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+docs.maskPainter.covered.term = See-through in the preview
+
+# Docs: a point in the topic: on a place's or an object's mask, the parts hidden behind something drawn in front
+docs.maskPainter.covered = On a place's layer or an object, the place preview beside the studio draws everything in front of what you paint see-through, so you can watch it move behind. The line at the bottom names what covers the spot under the pointer: in the game, that is what shows there, and the layer's movement is hidden. To move those parts in the game, give the object in front a mask of its own.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 docs.maskPainter.livePreview.term = Live preview
@@ -8306,6 +8510,12 @@ docs.characters.startWetEffectAlready.term = Wet particle active on spawn
 # Docs: a point in the topic
 docs.characters.startWetEffectAlready = Start the wet effect already running. Normally only for swimwear or wet variants.
 
+# Docs: the bold label in front of the next text, usually a name on screen
+docs.characters.wetKind.term = Kind
+
+# Docs: a point in the topic
+docs.characters.wetKind = Which of the game's two wet effects the outfit has: Wet, Anna's thin white streaks round the middle of the bust, or Shower, fine blue-grey streaks falling from the top of the bust's picture.
+
 # Docs: a heading inside the topic
 docs.characters.heading.preview = Preview
 
@@ -8491,6 +8701,12 @@ docs.npcs.whetherNPCHasWet.term = Enabled / Start active
 # Docs: a point in the topic
 docs.npcs.whetherNPCHasWet = Whether the NPC has the wet effect at all, and whether it is already running when the room loads.
 
+# Docs: the bold label in front of the next text, usually a name on screen
+docs.npcs.wetEffect.term = Wet effect
+
+# Docs: a point in the topic
+docs.npcs.wetEffect = How an NPC's wet effect looks is set in its Wet particles box: Kind, Tint, Amount, Drop size and Fall speed. Wet is Anna's, a few thin white streaks over the body; Shower is the bathroom's, fine blue-grey streaks from a small box, lit by the room. Every placement of the NPC starts from those; on the Places tab, pick the NPC in the place preview, then its Wet part, to change any of them for that placement alone (empty keeps the NPC's). The box is the placement's: drag the outlined box's sides to change where the drops start. For a shower, tick Drops start along the top and Drops stop at the box's floor to have it fall from the top of the box to its floor.
+
 # Docs: a heading inside the topic
 docs.npcs.heading.preview = Preview
 
@@ -8626,10 +8842,10 @@ docs.places.addButtonPlaceS.term = + Add navigator button
 docs.places.addButtonPlaceS = Add a button to this place's strip, leading somewhere else. Twelve at most per place — the count beside the button says how many you have used, and it stops offering once you are at the limit.
 
 # Docs: the bold label in front of the next text, usually a name on screen
-docs.places.addObjectRoomArt.term = + Add GameObject
+docs.places.addObjectRoomArt.term = + Object
 
 # Docs: a point in the topic
-docs.places.addObjectRoomArt = Add an object to the room — art, a prop, a container for other objects.
+docs.places.addObjectRoomArt = Over the hierarchy beside the preview: add an object to the room — art, a prop, a container for other objects. It arrives in the middle of the picture, picked, with its settings to the right of it.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 docs.places.copyOfGameObject.term = Copy of
@@ -8641,16 +8857,25 @@ docs.places.copyOfGameObject = Make an object a copy of one of the game's, by it
 docs.places.copyOfGameObject.more = The copy is made each time the game loads, in your place or beside the original, and keeps how the original was unless you override it; children with Bind change its parts, and a particle colour recolours the game's effects.
 
 # Docs: the bold label in front of the next text, usually a name on screen
-docs.places.placeOneNpcsInto.term = + Add NPC
+docs.places.objectMask.term = Moves by
+
+# Docs: a point in the topic: how a place's object moves
+docs.places.objectMask = In the panel beside the picture: how the object's picture moves. Nothing keeps it still; the back layer's mask moves it with the place's back layer's, read over its own picture; its own mask moves it like a place (water, leaves, curtains: one layer) or like a character (bounce, wave and noise, with the settings under it). Edit paints the mask in the mask studio, with the place preview beside it.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+docs.places.placeOneNpcsInto.term = + Character
 
 # Docs: a point in the topic
-docs.places.placeOneNpcsInto = Place one of your NPCs into the room. To hang it under a particular container instead, use that container's own NPCs section.
+docs.places.placeOneNpcsInto = Over the hierarchy beside the preview: place one of your NPCs into the room. It goes on the picked object when that can hold characters (an object under NPCs), otherwise under the place's NPCs object; choose its NPC to the right of the picture.
+
+# Docs: the fold-out under the text above
+docs.places.placeOneNpcsInto.more = Picked, Moves with says how the character drifts as the cursor moves: Front stays on the floor they stand on, as the game's own characters do; Back drifts with the place's back picture, like someone far away; Own drifts by a strength you set. Their shadow, blink and reflection go with them. Parallax on the NPCs object drifts every character in it together.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 docs.places.vanillaExtensionAddEntry.term = Fill from vanilla hierarchy
 
 # Docs: a point in the topic
-docs.places.vanillaExtensionAddEntry = On a vanilla extension, add an entry for every object the game's version of this place already has, each with its real position. Existing entries are left alone, so it is safe to run again later to pick up anything new.
+docs.places.vanillaExtensionAddEntry = On a vanilla extension, over the hierarchy beside the preview: add an entry for every object the game's version of this place already has, each with its real position. Existing entries are left alone, so it is safe to run again later to pick up anything new.
 
 # Docs: a heading inside the topic
 docs.places.heading.enterExit = On enter / On exit
@@ -8687,6 +8912,12 @@ docs.places.runRealJigglePass.term = Apply shaders
 
 # Docs: a point in the topic
 docs.places.runRealJigglePass = Run the real jiggle pass over NPCs that have a mask, using this pack's own numbers. Costs a little processor time, so leave it off while positioning.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+docs.places.fullScreen.term = Full screen
+
+# Docs: a point in the topic
+docs.places.fullScreen = Full screen, beside the Preview heading, shows the preview over the whole screen: the hierarchy and the picked object's settings over its sides, the preview's tick boxes and quality under the hierarchy. Everything works there as on the page, Ctrl+Z included. Esc, F11 or Leave full screen at its top brings it back. F11 on the Places tab opens it too.
 
 [Docs: Map Buttons]
 
@@ -10745,7 +10976,7 @@ docs.example.rainyVisitor.s1.do = On the NPCs tab, click + NPC, name it "Wet vis
 docs.example.rainyVisitor.s2 = 2. Into the place
 
 # A step of a guide example: what to do
-docs.example.rainyVisitor.s2.do = On the Places tab, choose your place and click + Add NPC. Choose Wet visitor as its NPC, then drag it in the preview to where it should stand.
+docs.example.rainyVisitor.s2.do = On the Places tab, choose your place and click + Character over the hierarchy beside the preview. Choose Wet visitor as its NPC to the right of the picture, then drag it in the preview to where it should stand.
 
 # A step's heading in a guide example, numbered
 docs.example.rainyVisitor.s3 = 3. Only when it rains
@@ -11120,13 +11351,13 @@ docs.places.navRow = Target is where it leads, and the arrows move it left or ri
 docs.places.activeWhen.term = Active when
 
 # Docs: a point in the topic
-docs.places.activeWhen = On an object: + Condition, and the game shows it only while they pass - no rule needed, so objects with opposite conditions take turns by themselves. Untick Switch back off when the conditions stop matching for a one-way reveal.
+docs.places.activeWhen = On an object, in the panel to the right of the picture: + Condition, and the game shows it only while they pass - no rule needed, so objects with opposite conditions take turns by themselves. Untick Switch back off when the conditions stop matching for a one-way reveal.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 docs.places.children.term = + Add child, + Add NPC child, + Component
 
 # Docs: a point in the topic
-docs.places.children = On an object: an object inside it, one of your NPCs placed inside it, or a small helper on it - a fade, a random child shown, a blink.
+docs.places.children = On an object, in the panel to the right of the picture: an object inside it, one of your NPCs placed inside it, or a small helper on it - a fade, a random child shown, a blink, a smooth float up and down (FloatingSprite: its Height, Time, Sideways and start are yours to set). Components that change what you see play in the place preview as you edit them: fades (replayed after a pause), blinks, floats, a random child (a new pick every few seconds), and the game's swing, shake, sprite blender and cinema changer. The component list is grouped as ModForge's own, Vanilla (the game's scripts) and Unity, each with a line saying what it does.
 
 # A bullet's fold-out in the guide
 docs.places.children.more = A child switches on and off with its parent, and Active when or a RandomChildActivator on the parent decides for all of them. Its place does not follow the parent: an object of yours stands at its own X and Y in the room, so give each child its own. (A child bound to one of the game's objects, or a copy of one, sits relative to its parent, as the game has it.)
@@ -11578,19 +11809,19 @@ tutorial.dressingTheRoom.summary = Put a golden vase in her gallery as an object
 tutorial.dressingTheRoom.addObject.title = Add an object
 
 # Tutorials: what the step says
-tutorial.dressingTheRoom.addObject.body = Under GameObjects, scroll to the bottom and click + Add GameObject. Light 2D and NPCs are in every place already - leave them as they are.
+tutorial.dressingTheRoom.addObject.body = In the hierarchy beside the preview, click + Object. Light 2D and NPCs are in every place already - leave them as they are.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-tutorial.dressingTheRoom.addObject.hint = + Add GameObject is at the bottom of the GameObjects box: scroll down to it.
+tutorial.dressingTheRoom.addObject.hint = + Object is at the top of the hierarchy, beside the picture.
 
 # Tutorials: the heading of a step
 tutorial.dressingTheRoom.giveNamePicture.title = Name and picture
 
 # Tutorials: what the step says
-tutorial.dressingTheRoom.giveNamePicture.body = In the new card, named GameObject, type Vase over its Name, and choose TutorialArt/Locations/Vase.png as its Sprite.
+tutorial.dressingTheRoom.giveNamePicture.body = The new object, named GameObject, is picked: in the panel to the right of the picture, type Vase over its Name, and choose TutorialArt/Locations/Vase.png as its Sprite.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-tutorial.dressingTheRoom.giveNamePicture.hint = The new card is called GameObject: type Vase in its Name, then fill in its Sprite.
+tutorial.dressingTheRoom.giveNamePicture.hint = The panel to the right of the picture shows the picked object: type Vase in its Name, then fill in its Sprite.
 
 # Tutorials: the heading of a step
 tutorial.dressingTheRoom.putWhereWant.title = Put it in place
@@ -11605,10 +11836,10 @@ tutorial.dressingTheRoom.putWhereWant.hint = Click the vase in the preview, then
 tutorial.dressingTheRoom.decideStandsFront.title = Between the pictures
 
 # Tutorials: what the step says
-tutorial.dressingTheRoom.decideStandsFront.body = Set its Sort to -11 - the box after Scale X/Y on the vase's row.
+tutorial.dressingTheRoom.decideStandsFront.body = Set its Sort to -11 - the box after Scale X/Y, in the panel to the right of the picture.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-tutorial.dressingTheRoom.decideStandsFront.hint = Sort, on the vase's row under GameObjects.
+tutorial.dressingTheRoom.decideStandsFront.hint = Sort, in the panel to the right of the picture, with the vase picked.
 
 # Tutorials: the heading of a step
 tutorial.dressingTheRoom.leaveSwitchedOff.title = Hidden for now
@@ -12216,19 +12447,19 @@ tutorial.populating.giveThemSomeLife.hint = Edit Mask, beside the Jiggle mask fi
 tutorial.populating.putThemRoom.title = Into the gallery
 
 # Tutorials: what the step says
-tutorial.populating.putThemRoom.body = On the Places tab, with The Gallery chosen, click + Add NPC and pick Mannequin in the new row's NPC box.
+tutorial.populating.putThemRoom.body = On the Places tab, with The Gallery chosen, click + Character in the hierarchy beside the preview and pick Mannequin as its NPC in the panel to the right of the picture.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-tutorial.populating.putThemRoom.hint = + Add NPC under GameObjects, then Mannequin in the row's NPC box.
+tutorial.populating.putThemRoom.hint = + Character over the hierarchy, then Mannequin as its NPC to the right of the picture.
 
 # Tutorials: the heading of a step
 tutorial.populating.switchThem.title = Show her
 
 # Tutorials: what the step says
-tutorial.populating.switchThem.body = Tick Start active on the placement's row - below Part transforms, beside Sorting order. It shows the whole figure; the droplets have their own Enabled, which stays off. A new placement starts hidden.
+tutorial.populating.switchThem.body = Tick Start active in the panel to the right of the picture - below Part transforms, beside Sorting order. It shows the whole figure; the droplets have their own Enabled, which stays off. A new placement starts hidden.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-tutorial.populating.switchThem.hint = Start active, below Part transforms on the placement's row under GameObjects.
+tutorial.populating.switchThem.hint = Start active, below Part transforms in the panel to the right of the picture.
 
 # Tutorials: the heading of a step
 tutorial.populating.placeThemProperly.title = Put her in place
@@ -12258,13 +12489,13 @@ tutorial.populating.sitThemFloor.more = Colour sets how dark it is; Sorting orde
 tutorial.populating.giveThemSomeLife.more = The same mask as a bust's. A figure with none is completely still, and reads as a cardboard cut-out the moment anything else on screen moves.
 
 # The fold-out under a tutorial step: the whole explanation
-tutorial.populating.putThemRoom.more = A row with no NPC chosen is a placement of nobody: it shows nothing and breaks nothing, which is why it's easy to leave behind. The same NPC can stand in as many rooms as you like - each placement is a copy.
+tutorial.populating.putThemRoom.more = A character with no NPC chosen is a placement of nobody: it shows nothing and breaks nothing, which is why it's easy to leave behind. The same NPC can stand in as many rooms as you like - each placement is a copy.
 
 # The fold-out under a tutorial step: the whole explanation
 tutorial.populating.switchThem.more = Hidden is the usual start: a figure that a rule shows later, like one who arrives at night. This one should simply be there.
 
 # The fold-out under a tutorial step: the whole explanation
-tutorial.populating.placeThemProperly.more = Click a figure and its tools appear in the panel to the right of the picture. The first row picks what moves - Body, Shadow, Blink or Wet - and the second how: Move, Rotate or Scale. All four belong to this placement, not to the NPC, so they change in this room only. The same numbers are on the row under Part transforms.
+tutorial.populating.placeThemProperly.more = Click a figure and its tools appear in the panel to the right of the picture. The first row picks what moves - Body, Shadow, Blink or Wet - and the second how: Move, Rotate or Scale. All four belong to this placement, not to the NPC, so they change in this room only. The same numbers are lower in that panel, under Part transforms.
 
 # The fold-out under a tutorial step: the whole explanation
 tutorial.populating.seeWhetherRoomReads.more = A place with figures in it stops looking like artwork. Standing in it is the only way to judge them. Next: a whole row of them.
@@ -12276,7 +12507,7 @@ tutorial.populating.shadow.title = Her shadow
 tutorial.populating.shadow.body = Her shadow starts where the game's own figures have theirs - here, hidden behind her legs. Click her in the preview, choose Shadow in the panel to the right of the picture, and drag the shadow down under her feet.
 
 # The fold-out under a tutorial step: the whole explanation
-tutorial.populating.shadow.more = A shadow is what stands a figure on the floor. Every placement has its own, so it fits that spot - half behind a table, on a step. Under Part transforms on her row, Shadow's X and Y are the same numbers to type; Scale Y squashes it flatter.
+tutorial.populating.shadow.more = A shadow is what stands a figure on the floor. Every placement has its own, so it fits that spot - half behind a table, on a step. Under Part transforms, lower in the panel to the right of the picture, Shadow's X and Y are the same numbers to type; Scale Y squashes it flatter.
 
 # Tutorial hint, shown when a step has waited a while
 tutorial.populating.shadow.hint = Click her in the preview, then Shadow in the panel to the right of the picture, then drag.
@@ -12299,19 +12530,19 @@ tutorial.npcsThatBelong.definitionNotAppearance.body = One mannequin is a displa
 tutorial.npcsThatBelong.putSamePersonTwice.title = A second one
 
 # Tutorials: what the step says
-tutorial.npcsThatBelong.putSamePersonTwice.body = On the Places tab, add Mannequin to The Gallery again with + Add NPC.
+tutorial.npcsThatBelong.putSamePersonTwice.body = On the Places tab, add Mannequin to The Gallery again with + Character.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-tutorial.npcsThatBelong.putSamePersonTwice.hint = + Add NPC on The Gallery, then Mannequin in the NPC box.
+tutorial.npcsThatBelong.putSamePersonTwice.hint = + Character over the hierarchy on The Gallery, then Mannequin as its NPC to the right of the picture.
 
 # Tutorials: the heading of a step
 tutorial.npcsThatBelong.tellThemApart.title = Tell them apart
 
 # Tutorials: what the step says
-tutorial.npcsThatBelong.tellThemApart.body = Scroll down to the two Mannequin rows under GameObjects. The lower row is the new one, the one you dragged left: tick its Start active and name it MannequinLeft. Name the upper row MannequinRight.
+tutorial.npcsThatBelong.tellThemApart.body = Both Mannequins are under NPCs in the hierarchy beside the picture. The new one, the one you dragged left, is picked: tick its Start active and name it MannequinLeft in the panel to the right of the picture. Then pick the other one and name it MannequinRight.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-tutorial.npcsThatBelong.tellThemApart.hint = Both Mannequin rows are at the bottom of the GameObjects box: give each its own Name.
+tutorial.npcsThatBelong.tellThemApart.hint = Pick each Mannequin under NPCs in the hierarchy and give it its own Name in the panel to the right of the picture.
 
 # Tutorials: the heading of a step
 tutorial.npcsThatBelong.backDefinition.title = Change them both
@@ -13670,7 +13901,7 @@ tutorial.deeperPlaces.summary = The gallery after dark: a poster of her that goe
 tutorial.deeperPlaces.story.title = What a place holds
 
 # Tutorial step: what to do, in a sentence or two
-tutorial.deeperPlaces.story.body = A place is its art and the objects in it: props, lights, effects and NPCs, each in the GameObjects box and the hierarchy beside the preview. Her gallery is chosen.
+tutorial.deeperPlaces.story.body = A place is its art and the objects in it: props, lights, effects and NPCs, each in the hierarchy beside the preview, with its settings to the right of the picture once you pick it. Her gallery is chosen.
 
 # Tutorial step: the whole explanation, under Tell me more
 tutorial.deeperPlaces.story.more = Each object has its own picture, its own spot and size, its own order in front of or behind the others, and its own Active when: conditions that show it and hide it as they change. Objects can hold objects - move the parent and its children move with it.
@@ -13679,25 +13910,25 @@ tutorial.deeperPlaces.story.more = Each object has its own picture, its own spot
 tutorial.deeperPlaces.poster.title = Her poster
 
 # Tutorial step: what to do, in a sentence or two
-tutorial.deeperPlaces.poster.body = Scroll to the bottom of the GameObjects box and click + Add GameObject. Name the new object "Poster", give it TutorialArt/Locations/Poster.png as its Sprite and set its Sort to -11, like the vase. Then scroll up and drag it onto the wall in the preview.
+tutorial.deeperPlaces.poster.body = In the hierarchy beside the preview, click + Object. In the panel to the right of the picture, name the new object "Poster", give it TutorialArt/Locations/Poster.png as its Sprite and set its Sort to -11, like the vase. Then drag it onto the wall in the preview.
 
 # Tutorial step: the whole explanation, under Tell me more
-tutorial.deeperPlaces.poster.more = The picture is a framed portrait of her: around the frame it is see-through (a PNG), so only the frame and the portrait cover the wall. Sort -11 draws it between the room's back picture (-12) and its front one (-10). Size it with Scale, in the panel beside the preview or on its row.
+tutorial.deeperPlaces.poster.more = The picture is a framed portrait of her: around the frame it is see-through (a PNG), so only the frame and the portrait cover the wall. Sort -11 draws it between the room's back picture (-12) and its front one (-10). Size it with Scale, in the panel to the right of the picture.
 
 # Tutorial step: where to click, when the step waits
-tutorial.deeperPlaces.poster.hint = + Add GameObject is at the bottom of the GameObjects box; Name, Sprite and Sort are on the new object's row.
+tutorial.deeperPlaces.poster.hint = + Object is at the top of the hierarchy; Name, Sprite and Sort are in the panel to the right of the picture.
 
 # Tutorial step title
 tutorial.deeperPlaces.posterWhen.title = Up once she's braver
 
 # Tutorial step: what to do, in a sentence or two
-tutorial.deeperPlaces.posterWhen.body = Scroll down to the Poster row - the last one. Under its Active when, click + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 3. Leave Start active as it is.
+tutorial.deeperPlaces.posterWhen.body = The Poster is picked. Under its Active when, in the panel to the right of the picture, click + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 3. Leave Start active as it is.
 
 # Tutorial step: the whole explanation, under Tell me more
 tutorial.deeperPlaces.posterWhen.more = Active when is checked all the time, so the poster appears the moment her confidence reaches 3 and goes again if it drops - some nights cost her one (tutorial 21, Rules, in depth), and your visits win it back. Start active says what it is before any condition is met.
 
 # Tutorial step: where to click, when the step waits
-tutorial.deeperPlaces.posterWhen.hint = Active when is on the poster's row in the GameObjects box.
+tutorial.deeperPlaces.posterWhen.hint = Active when is in the panel to the right of the picture, with the poster picked.
 
 # Tutorial step title
 tutorial.deeperPlaces.order.title = What is drawn over what
@@ -13724,13 +13955,13 @@ tutorial.deeperPlaces.visitor.hint = + NPC is above the list of NPCs.
 tutorial.deeperPlaces.placeVisitor.title = In the gallery
 
 # Tutorial step: what to do, in a sentence or two
-tutorial.deeperPlaces.placeVisitor.body = On the Places tab, with The Gallery chosen, click + Add NPC and pick Visitor in the new row's NPC box. Then scroll up to the preview and drag her to the right of the gallery.
+tutorial.deeperPlaces.placeVisitor.body = On the Places tab, with The Gallery chosen, click + Character in the hierarchy beside the preview and pick Visitor as its NPC in the panel to the right of the picture. Then drag her to the right of the gallery.
 
 # Tutorial step: the whole explanation, under Tell me more
 tutorial.deeperPlaces.placeVisitor.more = A placement is one appearance of an NPC in one place: where she stands, how big, her shadow, and when she is there. The same NPC can be placed in many places, and twice in one.
 
 # Tutorial step: where to click, when the step waits
-tutorial.deeperPlaces.placeVisitor.hint = + Add NPC is under the GameObjects box.
+tutorial.deeperPlaces.placeVisitor.hint = + Character is at the top of the hierarchy; pick Visitor as its NPC in the panel to the right of the picture.
 
 # Tutorial step title
 tutorial.deeperPlaces.visitorShadow.title = Her shadow
@@ -13748,13 +13979,13 @@ tutorial.deeperPlaces.visitorShadow.hint = Click her in the preview, then Shadow
 tutorial.deeperPlaces.visitorWhen.title = Once she's on show
 
 # Tutorial step: what to do, in a sentence or two
-tutorial.deeperPlaces.visitorWhen.body = Scroll down to the visitor's row - the last one. Under its Active when, + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 5. Visitors come once the Dummy is sure of herself.
+tutorial.deeperPlaces.visitorWhen.body = The visitor is picked. Under her Active when, in the panel to the right of the picture, + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 5. Visitors come once the Dummy is sure of herself.
 
 # Tutorial step: the whole explanation, under Tell me more
 tutorial.deeperPlaces.visitorWhen.more = An NPC placement has its own Active when, as any object does: the same visitor could stand in her gallery on some days and in a cafe on others. Leave "Switch back off when the conditions stop matching" ticked, so she leaves again if the Dummy loses her nerve.
 
 # Tutorial step: where to click, when the step waits
-tutorial.deeperPlaces.visitorWhen.hint = Active when is on the visitor's row in the GameObjects box.
+tutorial.deeperPlaces.visitorWhen.hint = Active when is in the panel to the right of the picture, with the visitor picked.
 
 # Tutorial step title
 tutorial.deeperPlaces.theGames.title = The game's own places
@@ -14696,7 +14927,7 @@ tutorial.deeperRooms.weather.hint = The ringed Weather box, in the Behaviour pan
 tutorial.deeperRooms.sign.title = A neon star
 
 # A tutorial step's instruction (short)
-tutorial.deeperRooms.sign.body = Add a GameObject "Star sign" with Sprite TutorialArt/Locations/NeonStar.png, Sort -11, high on her gallery's back wall, and click + Component: BlinkingSprite.
+tutorial.deeperRooms.sign.body = Click + Object over the hierarchy and name it "Star sign", with Sprite TutorialArt/Locations/NeonStar.png and Sort -11, high on her gallery's back wall. Then click + Component: BlinkingSprite.
 
 # A tutorial step's fold-out: the rest of its explanation
 tutorial.deeperRooms.sign.more = A component makes an object do something by itself. BlinkingSprite switches its picture's opacity between two values on a fixed beat, like a sign on a bad wire.
@@ -14705,10 +14936,22 @@ tutorial.deeperRooms.sign.more = A component makes an object do something by its
 tutorial.deeperRooms.sign.hint = + Component is in the object's panel.
 
 # A tutorial step's title
+tutorial.deeperRooms.float.title = A vase that floats
+
+# A tutorial step's instruction (short)
+tutorial.deeperRooms.float.body = Click + Object and name it "Floating vase", with Sprite TutorialArt/Locations/Vase.png and Sort -10, in the middle of her gallery. Then click + Component: FloatingSprite.
+
+# A tutorial step's fold-out: the rest of its explanation
+tutorial.deeperRooms.float.more = FloatingSprite moves an object up and down smoothly for ever, and everything under it with it: a sculpture hovering over its stand, a monster in a tank, a toy bobbing in water. Height is how far it travels and Time how long one rise and fall takes; the preview plays it as you change them.
+
+# A tutorial step's hint: where to find what it asks for
+tutorial.deeperRooms.float.hint = + Component is in the object's panel; FloatingSprite is in its ModForge group.
+
+# A tutorial step's title
 tutorial.deeperRooms.flowers.title = Flowers for the visit
 
 # A tutorial step's instruction (short)
-tutorial.deeperRooms.flowers.body = Add a GameObject "Flowers" with no Sprite. Give it three children - Roses, Sunflowers and Lavender - each with its picture from TutorialArt/Locations, Sort -9, X -3.4 and Y -3.6 (on the floor beside the vase). Then give "Flowers" the component RandomChildActivator.
+tutorial.deeperRooms.flowers.body = Click + Object and name it "Flowers", with no Sprite. Give it three children with + Add child - Roses, Sunflowers and Lavender - each with its picture from TutorialArt/Locations, Sort -9, X -3.4 and Y -3.6 (on the floor beside the vase). Then pick "Flowers" again and give it the component RandomChildActivator.
 
 # A tutorial step's fold-out: the rest of its explanation
 tutorial.deeperRooms.flowers.more = RandomChildActivator shows one of its object's children, picked at random, each time the object is switched on. A different pot each visit, with no rule. Each child gets its own X and Y: an object of yours stands at its own place in the room, wherever its parent is.
@@ -14720,7 +14963,7 @@ tutorial.deeperRooms.flowers.hint = + Add child is in the object's panel.
 tutorial.deeperRooms.copy.title = Sparkles of the game's
 
 # A tutorial step's instruction (short)
-tutorial.deeperRooms.copy.body = Add a GameObject "Loving sparkles" and set Copy of to 6_Effects/CFXR2 Expression Loving (Timed).
+tutorial.deeperRooms.copy.body = Click + Object, name it "Loving sparkles" and set Copy of to 6_Effects/CFXR2 Expression Loving (Timed).
 
 # A tutorial step's fold-out: the rest of its explanation
 tutorial.deeperRooms.copy.more = Copy of makes the object a copy of one of the game's, by its path in the game's scene: a level effect, a prop, a whole panel. The original is untouched.
@@ -14732,7 +14975,7 @@ tutorial.deeperRooms.freeLight.title = A glow on the floor
 tutorial.deeperRooms.freeLight.body = Click + Light over the preview's list, name it "Floor glow", set its shape to Free shape and its colour to #9AB8FF. Drag its corners in the preview to shape it.
 
 # A tutorial step's fold-out: the rest of its explanation
-tutorial.deeperRooms.freeLight.more = A free shape lights the area you draw, with a soft edge: a pool of light on the floor, a lit doorway. Drag the + halfway along a side to add a corner.
+tutorial.deeperRooms.freeLight.more = A free shape lights the area you draw at full strength and shines out from all of its edge, as far as the dashed line round it: a pool of light on the floor, a lit doorway. Drag the + halfway along a side to add a corner, and the knob on the dashed line to make it reach further.
 
 # A tutorial step's hint: where to find what it asks for
 tutorial.deeperRooms.freeLight.hint = + Light is over the hierarchy beside the preview.
@@ -14903,13 +15146,13 @@ tutorial.deeperGently.talk.hint = Both ticks are in the conversation's Identity 
 tutorial.deeperRooms.fades.title = In and out
 
 # A tutorial step's instruction (short)
-tutorial.deeperRooms.fades.body = Scroll down to her Poster and give it the component FadeInSprite. Then add FadeOutSprite to the Visitor's placement, with Delay 20, Duration 2 and Deactivate on complete ticked - and, on that placement itself, untick Switch back off when the conditions stop matching.
+tutorial.deeperRooms.fades.body = Her Poster is picked: give it the component FadeInSprite in the panel to the right of the picture. Then pick the Visitor's placement in the hierarchy and add FadeOutSprite to it, with Delay 20, Duration 2 and Deactivate on complete ticked - and, on that placement itself, untick Switch back off when the conditions stop matching.
 
 # A tutorial step's fold-out: the rest of its explanation
 tutorial.deeperRooms.fades.more = FadeInSprite fades an object in each time it is switched on, so her poster appears softly. FadeOutSprite fades one out after a delay; with Deactivate on complete, it is switched off once gone - the visitor stays a while, then leaves. Switch back off is unticked because, ticked, Active when puts its answer back every moment, and would switch her straight on again. Unticked, she also stays if the Dummy's confidence falls below 5 again (tutorial 23): the fade-out is what sends her away now.
 
 # A tutorial step's hint: where to find what it asks for
-tutorial.deeperRooms.fades.hint = An NPC placement takes components too, under its own panel.
+tutorial.deeperRooms.fades.hint = Components are in the panel to the right of the picture, for what is picked; an NPC placement takes them too.
 
 # A tutorial step's hint: where to find what it asks for
 tutorial.deeperWatching.whilePassing.hint = Trigger mode is the rule's first box; WhilePassing is in its list.
@@ -15020,7 +15263,7 @@ tutorial.deeperVoices.owner.hint = Select the Announcer's line and click + Sibli
 tutorial.deeperJournal.counter.hint = QuestCounter is in the condition Type list; choose her quest, then the counted task.
 
 # A tutorial step's hint: where to find what it asks for
-tutorial.deeperRooms.copy.hint = + Add GameObject is at the bottom of the GameObjects box; Copy of is in the object's panel.
+tutorial.deeperRooms.copy.hint = + Object is at the top of the hierarchy; Copy of is in the object's panel, to the right of the picture.
 
 # A tutorial step's hint: where to find what it asks for
 tutorial.deeperRooms.pictureLight.hint = + Light is over the hierarchy beside the preview; the shape list has Picture.
@@ -15817,13 +16060,13 @@ typeGroup.world = Places and objects
 typeGroup.chance = Chance, time and keys
 
 # Heading in the list of component types
-componentGroup.pack = Made for packs
+componentGroup.pack = ModForge
 
 # Heading in the list of component types
-componentGroup.game = The game's scripts
+componentGroup.game = Vanilla
 
 # Heading in the list of component types
-componentGroup.unity = Unity's own
+componentGroup.unity = Unity
 
 # A note beside an action type in its dropdown, saying what it does
 note.action.characterFocus = Lift the busts above a scene, or put them back
@@ -16009,7 +16252,142 @@ note.component.randomChild = Shows one of its children at random
 note.component.blinking = Blinks on and off
 
 # A note beside a component type in its dropdown
-note.component.engine = Unity's own - most settings can't be set by name
+note.component.floating = Floats up and down smoothly
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.actions = A list of the game's instructions, run when something starts it
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.buttonInstructions = A button that runs the game's instructions when clicked
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.cfxrEffect = Fades a particle effect out and cleans it up when it ends
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.cfxrParticleText = Words made of particles, popping up
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.carInteriorShake = Shakes it gently, as if riding in a car
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.characterIntroFade = Fades a character in as it is shown, its blink and face with it
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.cinemaSpriteChanger = Shows one of its children at random, a new one every few seconds
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.concertLightSwing = Swings it from side to side, like a stage light
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.conditions = The game's checks for whether something may happen
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.dialogue = One of the game's conversations
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.disableChildren = Switches all its children off when the game tells it to
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.enableChildren = Switches all its children on when the game tells it to
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.mapVariationActivator = Switches on every Map_Variation object under it when shown
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.offsetScrolling = Scrolls a 3D shape's texture sideways; does nothing to a picture
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.parallaxMouseEffect = Drifts it a little as the mouse moves
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.radioSimulator = Plays a radio: songs, with talk between them
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.randomSpriteBlender = Fades its children's pictures in and out at random
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.trigger = Starts the game's instructions when something happens (a click, the start)
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.uiHoverActivator = Shows one object while the mouse is over a picture, another while not
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.audioDistortionFilter = Distorts the sound playing beside it
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.audioLowPassFilter = Muffles the sound playing beside it
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.audioSource = Plays a sound
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.boxCollider2D = A box that clicks and bumps can hit
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.canvas = Draws interface pictures and words
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.canvasGroup = Fades interface objects together, or stops clicks on them
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.canvasRenderer = Draws one interface object on its canvas
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.canvasScaler = Sizes an interface to the screen
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.circleCollider2D = A circle that clicks and bumps can hit
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.graphicRaycaster = Lets the mouse click an interface
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.image = An interface picture
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.light = A light for 3D objects
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.light2D = A light that lights the pictures round it
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.lineRenderer = Draws a line through points
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.meshCollider = A 3D shape that bumps can hit
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.meshFilter = Holds a 3D shape to draw
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.meshRenderer = Draws a 3D shape
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.particleSystem = Gives off particles: sparks, drops, dust
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.particleSystemRenderer = Draws a particle system's particles
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.shadow = A drop shadow behind interface pictures and words
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.shadowCaster2D = Casts a shadow from the lights round it
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.spriteMask = Shows pictures only inside its shape, or only outside
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.spriteRenderer = Draws a picture
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.textMeshProUgui = Interface words
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.videoPlayer = Plays a video
+
+# A note beside a component type in its dropdown, saying what it does
+note.component.volume = Screen effects: glow, colour and the like
 
 # The editor's title bar; {game} is the game's version, {pack} the pack's id
 window.title = SMSModForge {version} for {game} — {pack}
@@ -16220,7 +16598,7 @@ docs.places.light.term = + Light
 docs.places.light = A light for the place, put in the middle of what the preview shows; drag it where you want it. Picked, its Colour, Strength, Reach and Cone are in the panel to the right of the picture.
 
 # Guide bullet: the rest, folded away
-docs.places.light.more = Every place of yours starts with the light of the level it is built on: change it there, or remove it. Back to the game's puts the game's light back as it was. Soft edge and Full cone make a spotlight's edge harder or softer; a cone points the way its object is turned (Rotate).
+docs.places.light.more = Every place of yours starts with the light of the level it is built on: change it there, or remove it. Back to the game's puts the game's light back as it was. Full strength to and Full cone make a spotlight's edge harder or softer; a cone points the way its object is turned (Rotate). A free shape shines out from its edge as far as its Reach, the dashed line round it. Moves with is how a light drifts as the cursor moves: with the place's back picture (what a new light does), with its front (the game's own lamps), or by a strength of its own.
 
 # Guide: a light's shapes
 docs.places.lightShape.term = Round, Free shape, Picture
@@ -16255,17 +16633,29 @@ docs.places.giveIt.term = Give it a light, Give it an effect
 # Guide bullet
 docs.places.giveIt = On an object you picked: it carries a light or an effect where it stands, shown whenever the object is - so its conditions switch both together.
 
+# Guide: three buttons' labels, over an object picked in the place preview
+docs.places.objectParts.term = Object, Light, Effect
+
+# Guide bullet
+docs.places.objectParts = An object with a picture and a light, or with an effect, has its parts to pick over its handles, as a character has Body and Shadow. Object moves, turns and sizes the object. Light shows only the light's handles (clicking its sun in the picture picks it too). Effect draws a box round where its particles start: drag inside it to move the effect away from the object - it still moves with it - and drag a corner or a side to make it bigger or smaller. A light on its own keeps its handles together, as before.
+
 # Guide: a box's label
 docs.places.standIn.term = Character in the place
 
 # Guide bullet
 docs.places.standIn = Shows one of your characters where the game shows a character in a conversation, to see how the place's lights fall on her. Preview only: nothing is saved.
 
+# Guide: what part of the place the player sees, as the preview marks it
+docs.places.playersView.term = What the player sees
+
+# Guide bullet
+docs.places.playersView = The game always shows the same part of a place, 19.2 by 10.8 units round its middle, on any screen. That is exactly what the preview shows when the picture fits the view, with the game's interface over it. Your pictures are bigger, so their edges only come into sight as the cursor drifts the place: zoom out or drag the view and what the player can't see is a little darker, with a thin line round the rest.
+
 # Guide: picking an object in the preview
 docs.places.picking.term = Picking
 
 # Guide bullet
-docs.places.picking = Click an object in the picture or in the hierarchy beside it. The panel to the right of the picture then moves, turns or scales it; an NPC's first row picks the part - Body, Shadow, Blink, Wet or Reflection.
+docs.places.picking = Click an object in the picture or in the hierarchy beside it. The panel to the right of the picture then moves, turns or scales it, and below that has all of its settings; an NPC's first row picks the part - Body, Shadow, Blink, Wet or Reflection.
 
 # Guide: a box's heading
 docs.places.hierarchy.term = Hierarchy
@@ -18096,8 +18486,56 @@ setup.uninstall.go = Uninstall
 # Heading when it has uninstalled
 setup.uninstall.done = ModForge has been uninstalled.
 
+# Note under a place's preview: where its objects are made and set
+places.placeObjectsHelp = Everything this place builds is in the hierarchy beside the picture. + Object adds art, a prop, or a container that groups other objects; + Character places one of your NPCs. Click an object in the picture or in the hierarchy and all of its settings are to the right of the picture: its picture, where it stands and how big, its components, Active when, and + Add child and + Add NPC child to put more under it. Dialogues reach an object by its Name, and a lower Sort draws it further back. NPCs is the place's own object, where every character stands.
+
+# Note under a game level's preview: where its objects are made and set
+places.levelObjectsHelp = The hierarchy beside the picture is the game's level as it is, with what your pack adds to it. + Object and + Character add your own, and Fill from vanilla hierarchy brings in any of the game's objects not listed yet. Click one and its settings are to the right of the picture. Your pack keeps only what it changes: the game's objects you leave alone are not saved.
+
 # Heading of the object list in the place preview
 preview.place.hierarchy = Hierarchy
+
+# Button over the object list in the place preview: adds an object
+preview.object.add = + Object
+
+# Tooltip on "+ Object"
+preview.object.add.tip = Add an object to the place, in the middle of the picture: art, a prop, or a container for other objects. It is picked, with its settings to the right of the picture.
+
+# Button over the object list in the place preview: places an NPC
+preview.character.add = + Character
+
+# Tooltip on "+ Character"
+preview.character.add.tip = Place one of your NPCs here: on the picked object when it can hold characters (an object under NPCs), otherwise under the place's NPCs object. It is picked: choose its NPC to the right of the picture, then drag it where it should stand.
+
+# Tooltip on the heading of the object list in the place preview: its keys
+preview.place.keys.tip = Keys, after a click on the picture or on this list: Ctrl+C copies the object picked, with everything under it. Ctrl+V pastes it under the object picked (with nothing picked, among the place's own). Ctrl+D duplicates the object picked beside itself. Delete sends it to the recycle bin at the bottom of this list. On the game's own objects, a copy of a light is a light of your own and a copy of anything else is a copy of the game's object, and Delete switches the game's object off where it stands. The NPCs object is the place's one: paste characters under it.
+
+# Heading of the recycle bin at the bottom of the place preview's object list; {count} is how many it holds
+preview.place.bin = Recycle bin ({count})
+
+# Tooltip on the recycle bin's heading
+preview.place.bin.tip = What you delete from this place waits here, with everything that was under it, until you put it back or empty the bin. It is saved with the pack and left out of what you export. Click to show or hide what it holds.
+
+# Tooltip on the arrow beside something in the recycle bin
+preview.place.bin.restore.tip = Put it back where it was, under the same object
+
+# Tooltip on the cross beside something in the recycle bin
+preview.place.bin.forget.tip = Delete it for good. Ctrl+Z still brings it back.
+
+# Button under what the recycle bin holds
+preview.place.bin.empty = Empty the bin
+
+# Tooltip on "Empty the bin"
+preview.place.bin.empty.tip = Delete everything in the bin for good. Ctrl+Z still brings it back.
+
+# Tooltip on something in the recycle bin; {path} is the objects it was under, top first
+preview.place.bin.under = Was under {path}
+
+# Tooltip on something in the recycle bin that was one of the place's top objects
+preview.place.bin.top = Was one of the place's own objects, at the top of the list
+
+# Tooltip on one of the game's own objects in the recycle bin
+preview.place.bin.switchedOff = One of the game's own, switched off where it stands: the game's object cannot be taken out of the game. The arrow switches it back on as it was.
 
 # Tooltip on the arrow beside an object in the hierarchy
 preview.place.fold.tip = Fold this object's children
@@ -18132,6 +18570,22 @@ preview.gizmo.move = Move
 preview.gizmo.rotate = Rotate
 # On the toolbar over what is selected in the place preview: what dragging the handles does
 preview.gizmo.scale = Scale
+# On the toolbar over an object selected in the place preview that has a light or an effect: the handles move the object itself
+preview.gizmo.object = Object
+# Tooltip on "Object"
+preview.gizmo.object.tip = Move, turn and size the object itself.
+# On the toolbar over an object selected in the place preview: the handles are for the object's light
+preview.gizmo.light = Light
+# Tooltip on "Light"
+preview.gizmo.light.tip = The object's light: drag its reach, how far it stays full and its cone. The light stays where the object is.
+# On the toolbar over an object selected in the place preview: the handles are for the effect the object plays
+preview.gizmo.effect = Effect
+# Tooltip on "Effect"
+preview.gizmo.effect.tip = The effect the object plays: drag inside its box to move it away from the object, drag a corner or a side to make it bigger or smaller.
+# Tooltip inside the box drawn round an object's effect in the place preview
+preview.effect.box.tip = Drag to move the effect away from its object. It moves with the object.
+# Tooltip on the small squares on the box round an object's effect in the place preview
+preview.effect.grip.tip = Drag to make the effect bigger or smaller (its Scale).
 
 # Beside the place preview: which character to show standing in the place
 preview.standIn = Character in the place
@@ -18204,7 +18658,7 @@ preview.light.shape.round.tip = A light that shines all round from its middle, o
 preview.light.shape.free = Free shape
 
 # Tooltip on the free light shape
-preview.light.shape.free.tip = A light in the exact shape you draw, point by point, with a soft edge around it.
+preview.light.shape.free.tip = A light in the shape you draw, point by point: full strength inside it, shining out from all of its edge as far as its reach.
 
 # Button beside the place preview: the light's shape
 preview.light.shape.picture = Picture
@@ -18281,11 +18735,71 @@ preview.light.point.tip = Drag to move this corner of the light's shape. Right-c
 # Tooltip on the + half way along a side of a free-shape light in the place preview
 preview.light.addPoint.tip = Drag to add a corner here.
 
-# Label beside the place preview: the width of a free-shape light's soft edge
-preview.light.edge = Soft edge
+# Label beside the place preview: how far a free-shape light shines out from its shape
+preview.light.edge = Reach
 
-# Tooltip on a free-shape light's soft edge
-preview.light.edge.tip = How far outside its shape the light fades to nothing, in the game's units.
+# Tooltip on a free-shape light's reach
+preview.light.edge.tip = How far the light shines out from its shape, fading as it goes - as a round light fades from its middle, and round at the corners - in the game's units. Drag the knob on the dashed line in the preview.
+
+# Tooltip on the knob on a free-shape light's dashed reach line in the place preview
+preview.light.edge.drag.tip = Drag to set how far the light shines out from its shape.
+
+# Label beside the place preview: how a light drifts as the cursor moves (with the place's back picture, its front, or its own)
+preview.light.drift = Moves with
+
+# Tooltip on "Moves with"
+preview.light.drift.tip = How the light drifts with the place as the cursor moves (its parallax): with the place's back picture, with its front picture, or by a strength of its own. It is its object's drift, so a picture on the same object drifts with it. The game's own lamps keep what the game gave them.
+
+# Button beside the place preview: the light drifts with the place's back picture
+preview.light.drift.back = Back
+
+# Tooltip on "Back"
+preview.light.drift.back.tip = Drift with the place's back picture, as something far away does: the moon, a street lamp seen through a window. What a new light does.
+
+# Tooltip on "Back" on a level of the game's that has no back picture to drift with
+preview.light.drift.noBack.tip = This level of the game's has no back picture of the kind a pack place has, so there is none to drift with. Front, or a strength of its own, can match how any of its pictures drifts.
+
+# Button beside the place preview: the light drifts with the place's front picture
+preview.light.drift.front = Front
+
+# Tooltip on "Front"
+preview.light.drift.front.tip = Drift with the place's front picture: the light stays on the lamp, window or screen it shines from. What every light made before this did, and what the game's own lamps do.
+
+# Button beside the place preview: the light drifts by a strength of its own
+preview.light.drift.own = Own
+
+# Tooltip on "Own"
+preview.light.drift.own.tip = Drift by a strength of its own, set below. It starts where the light drifts now.
+
+# Label beside the place preview: how far a light drifts by its own strength
+preview.light.drift.strength = Drift strength
+
+# Tooltip on "Drift strength"
+preview.light.drift.strength.tip = How far the light drifts as the cursor moves, on top of the place's front picture: 0 drifts with the front, higher drifts further. The game's own pictures use 0.1 to 1.5.
+
+# Tick box beside the place preview: the light drifts the other way
+preview.light.drift.reversed = Reversed
+
+# Tooltip on "Reversed"
+preview.light.drift.reversed.tip = Drift with the cursor instead of against it. Until you change it, this is the way the place's back picture drifts, so it starts ticked where the back picture is reversed.
+
+# Tooltip on "Moves with" beside the place preview, for a character standing in the place
+preview.character.drift.tip = How the character drifts with the place as the cursor moves (their parallax): with the place's front picture, as the floor they stand on does, with its back picture, or by a strength of their own. Their shadow, blink, reflection and anything they hold drift with them.
+
+# Tooltip on "Back", for a character
+preview.character.drift.back.tip = Drift with the place's back picture, as someone far away does: a figure on a distant hill, a crowd seen through a window.
+
+# Tooltip on "Back" for a character, on a level of the game's with no back picture to drift with
+preview.character.drift.noBack.tip = This level of the game's has no back picture of the kind a pack place has, so there is none to drift with. Front, or a strength of their own, can match how any of its pictures drifts.
+
+# Tooltip on "Front", for a character
+preview.character.drift.front.tip = Drift with the place's front picture: the character stays on the floor they stand on. What every character placed before this did, and what the game's own characters do.
+
+# Tooltip on "Own", for a character
+preview.character.drift.own.tip = Drift by a strength of their own, set below. It starts where the character drifts now.
+
+# Tooltip on "Drift strength", for a character
+preview.character.drift.strength.tip = How far the character drifts as the cursor moves, on top of what they stand under: 0 drifts with it, higher drifts further. The game's own pictures use 0.1 to 1.5.
 
 # Label beside the place preview: the picture a picture light is made of
 preview.light.picture = Picture
@@ -18666,6 +19180,15 @@ migration.cueVolumes = lines whose sounds now play louder or softer to match the
 
 # In the list of what opening a pack changed: lines with more than one sound, their timing written down so they play as before
 migration.cueTiming = lines with more than one sound given their timing, so each keeps playing when it did
+
+# In the list of what opening a pack changed: places and game levels now following the new rules for their objects' masks
+migration.objectMasks = places whose objects now stay still unless given a mask (each object keeps moving as it did)
+
+# In the list of what opening a pack changed: objects that moved with the back layer's mask, now set to say so
+migration.objectMasksBackLayer = objects that moved with the place's back layer's mask, now set to "The back layer's mask" so they keep moving
+
+# In the list of what opening a pack changed: objects with a mask of their own that did nothing in the game, because the place's back layer had no mask, and are now set to stay still as they did
+migration.objectMasksOwn = objects with a mask of their own that the game left still (the place's back layer had no mask), now set to "Nothing (still)" - choose "Its own mask" to make them move
 
 # One line of the list of what was brought up to date
 migration.versionGiven = Given a version to start from ({version})

@@ -59,8 +59,14 @@ public sealed class VanillaUiSurface
         [JsonProperty("spriteKey")] public string SpriteKey { get; set; } = "";
         [JsonProperty("border")] public float[] Border { get; set; } = new float[4];
         [JsonProperty("spritePixelsPerUnit")] public float SpritePixelsPerUnit { get; set; } = 100f;
+        /// <summary>A Filled image: which way it fills (Horizontal, Vertical, Radial...), how much of it, from which
+        /// end (0 the left or the bottom). The navigator's pink photo-XP bar is one.</summary>
+        [JsonProperty("fillMethod")] public string FillMethod { get; set; } = "";
+        [JsonProperty("fillAmount")] public float FillAmount { get; set; } = 1f;
+        [JsonProperty("fillOrigin")] public int FillOrigin { get; set; }
 
         public bool IsSliced => string.Equals(Type, "Sliced", StringComparison.OrdinalIgnoreCase);
+        public bool IsFilled => string.Equals(Type, "Filled", StringComparison.OrdinalIgnoreCase);
     }
 
     public sealed class Text
@@ -194,6 +200,9 @@ public sealed class VanillaUiSurface
     {
         [JsonProperty("enabled")] public bool Enabled { get; set; } = true;
         [JsonProperty("renderMode")] public string RenderMode { get; set; } = "";
+        /// <summary>Its order among the canvases drawn over the screen: the game's interface 0, the player's room's
+        /// buttons -3 (under it).</summary>
+        [JsonProperty("sortingOrder")] public int SortingOrder { get; set; }
         [JsonProperty("referencePixelsPerUnit")] public float ReferencePixelsPerUnit { get; set; } = 100f;
         [JsonProperty("rect")] public float[] Rect { get; set; } = new float[2];
     }

@@ -222,22 +222,78 @@ public sealed class UndoEveryControl_PlacesTests : UndoEveryControlBase
     [Fact]
     public void PlacesOfThePack() => Crawl((crawl, vm) =>
     {
-        for (int i = 0; i < Math.Min(vm.Places.Count, 4); i++)
+        var shapes = new HashSet<string>(StringComparer.Ordinal);
+        for (int i = 0; i < vm.Places.Count; i++)
         {
             int p = i;
-            crawl.Explore(MainTab.Places, "place " + p, () => vm.SelectedPlace = vm.Places[p]);
+            if (p < 4) crawl.Explore(MainTab.Places, "place " + p, () => vm.SelectedPlace = vm.Places[p]);
+            ExplorePicked(crawl, "place " + p, () => vm.SelectedPlace = vm.Places[p], () => vm.Places[p].GameObjects, "PlacePreviewMain", shapes);
         }
     });
 
     [Fact]
     public void LevelsOfTheGameExtended() => Crawl((crawl, vm) =>
     {
-        for (int i = 0; i < Math.Min(vm.VanillaExtensions.Count, 2); i++)
+        var shapes = new HashSet<string>(StringComparer.Ordinal);
+        for (int i = 0; i < vm.VanillaExtensions.Count; i++)
         {
             int e = i;
-            crawl.Explore(MainTab.Places, "extension " + e, () => vm.SelectedVanillaExtension = vm.VanillaExtensions[e]);
+            if (e < 2) crawl.Explore(MainTab.Places, "extension " + e, () => vm.SelectedVanillaExtension = vm.VanillaExtensions[e]);
+            ExplorePicked(crawl, "extension " + e, () => vm.SelectedVanillaExtension = vm.VanillaExtensions[e],
+                          () => vm.VanillaExtensions[e].GameObjects, "ExtPreview", shapes);
         }
     });
+
+    /// <summary>A place's objects and the characters standing in it, its whole tree, in order.</summary>
+    private static IEnumerable<object> Rows(IEnumerable<GameObjectViewModel> nodes)
+    {
+        foreach (var n in nodes)
+        {
+            yield return n;
+            foreach (var pl in n.Npcs)
+            {
+                yield return pl;
+                foreach (var c in Rows(pl.Children)) yield return c;
+            }
+            foreach (var c in Rows(n.Children)) yield return c;
+        }
+    }
+
+    /// <summary>The most picks a test makes: one of each shape of object and character is plenty.</summary>
+    private const int MostPicks = 40;
+
+    /// <summary>
+    /// Each object and character of <paramref name="tree"/> of a shape not met yet, picked in the place preview as a
+    /// click picks it, and the panel beside the picture then walked: its settings, a character's part transforms and
+    /// wet effect, an object's light and effect. That panel took over from the GameObjects list under the preview
+    /// (after 1.10.0) and the walk, which picked nothing, stopped meeting its controls - the wet effect's included.
+    /// The row is found again by its place in the tree each time: an undo makes rows anew.
+    /// </summary>
+    private static void ExplorePicked(UndoCrawler crawl, string where, Action select, Func<IEnumerable<GameObjectViewModel>> tree,
+                                      string previewName, HashSet<string> shapes)
+    {
+        var rows = Rows(tree()).ToList();
+        for (int k = 0; k < rows.Count && shapes.Count < MostPicks; k++)
+        {
+            object model = rows[k] switch
+            {
+                GameObjectViewModel g => g.Model,
+                NpcPlacementViewModel pl => pl.Model,
+                _ => rows[k],
+            };
+            if (!shapes.Add(rows[k].GetType().Name + ":" + ShapeOf(model))) continue;
+            int r = k;
+            string what = rows[k] is NpcPlacementViewModel ? "character" : "object";
+            crawl.Explore(MainTab.Places, $"{where}, {what} {r} picked", () =>
+            {
+                select();
+                WindowHarness.Pump();
+                var row = Rows(tree()).ElementAtOrDefault(r);
+                var preview = (SMSModForge.View.Controls.PlacePreview)crawl.Window.FindName(previewName);
+                Assert.True(row != null && preview.Pick(row), $"{where}: {what} {r} is not in the preview to pick");
+            });
+        }
+    }
 
     [Fact]
     public void MapButtons() => Crawl((crawl, vm) =>

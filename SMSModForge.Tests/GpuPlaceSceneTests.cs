@@ -143,8 +143,8 @@ public sealed class GpuPlaceSceneTests : IDisposable
             WindowHarness.Pump();
             var place = (PlacePreview)window.FindName("PlacePreviewMain");
             Assert.True(WindowHarness.Until(() => PreviewBackdropManager.GameLook != null, TimeSpan.FromSeconds(20)), "the game's look did not load");
-            // The spray's drops move: stopped where they are, so both pictures are of the same moment.
-            typeof(PlacePreview).GetMethod("StopWetTimer", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(place, null);
+            // The spray's drops are held at one moment under tests (PlacePreview.Wet): both pictures have the same.
+            Assert.True(place.SprayCount > 0, "the guard's wet drops are not in the preview");
             WindowHarness.Pump();
             const int W = 1920, H = 1080;
 
@@ -168,17 +168,14 @@ public sealed class GpuPlaceSceneTests : IDisposable
             // Something drawn with the unlit material: the lit mask is read.
             place.LevelArtUnlit = true;
             WindowHarness.Pump();
-            typeof(PlacePreview).GetMethod("StopWetTimer", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(place, null);
             Hold("the art unlit, the look", look: true, 0.97, 0.995);
             place.LevelArtUnlit = false;
             WindowHarness.Pump();
-            typeof(PlacePreview).GetMethod("StopWetTimer", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(place, null);
 
             // Control: one object a unit to the side is not the same place.
             var before = place.RenderStill(true, true)!;
             vm.SelectedPlace!.GameObjects.Single(g => g.Name == "Turned").X += 1;
             WindowHarness.Pump();
-            typeof(PlacePreview).GetMethod("StopWetTimer", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(place, null);
             var moved = place.RenderStillOnCard(true, true)!;
             var (c1, c3, cmax) = Compare(before, moved);
             _out.WriteLine($"control, an object moved: {c1:P2} within a level, {c3:P2} within three, the furthest {cmax}");
@@ -235,6 +232,8 @@ public sealed class GpuPlaceSceneTests : IDisposable
                     controlWithin = Compare(processor, unlit).within3;
                     lines.Add($"control, {level.GoName} drawn by the card without its lamps: {controlWithin:P2} within three levels of the processor's with them");
                 }
+                // Each level's card scene let go before the next: kept, the 146 grew this process past 14 GB.
+                preview.ReleaseCard();
             }
         });
         foreach (var line in lines) _out.WriteLine(line);

@@ -88,6 +88,12 @@ rebuilt in 1.10.0 so that a feature gets it by being there:
 - **An undo goes to the tab and the record of its step and marks what
   changed**, found by looking: any `Selected...` that holds a record's view and
   has a list of them beside it is followed (`MainViewModel.OtherPicksOf`).
+  It scrolls to what it marked only when none of it is in sight
+  (`MainWindow.InView`): a value shown twice, beside a preview and in a
+  record below it, took the page to whichever came first. The control with
+  the keyboard is marked whenever the step changed what it shows, and the
+  keyboard is put back without scrolling. The walk over every control holds
+  each one to staying where it is drawn.
 - **A step is put back by what differs.** The quick ways (a line, an object of
   a place, a level or a screen, put back where it is) hold themselves to the
   step and give way to the general one, which reads the entries that differ

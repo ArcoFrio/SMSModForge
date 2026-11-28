@@ -61,8 +61,14 @@ public sealed class GameObjectCopyWindowTests : IDisposable
                 return found[0].IsVisible;
             }
 
+            // An object's settings are beside the place preview's picture, for the object picked (after 1.10.0: the
+            // GameObjects list below it, which showed every object's, is gone).
+            var preview = (SMSModForge.View.Controls.PlacePreview)window.FindName("PlacePreviewMain");
             foreach (var (name, copy) in new[] { ("Copied", true), ("Own", false) })
             {
+                Assert.True(preview.Pick(vm.Places.Single().GameObjects.Single(g => g.Name == name)), $"'{name}' is not in the preview");
+                WindowHarness.Pump();
+                window.UpdateLayout();
                 Assert.True(Shown<TextBox>(name, "CopyOf", TextBox.TextProperty), $"'{name}' has no Copy of box");
                 Assert.Equal(copy, Shown<CheckBox>(name, "CopyBeside", ToggleButton.IsCheckedProperty));
                 Assert.Equal(copy, Shown<CheckBox>(name, "OverrideParallax", ToggleButton.IsCheckedProperty));

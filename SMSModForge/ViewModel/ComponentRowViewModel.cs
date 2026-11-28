@@ -115,6 +115,7 @@ public sealed class ComponentRowViewModel : ObservableObject
             OnPropertyChanged(nameof(IsFadeOut));
             OnPropertyChanged(nameof(IsRandom));
             OnPropertyChanged(nameof(IsBlinking));
+            OnPropertyChanged(nameof(IsFloating));
             OnPropertyChanged(nameof(IsGameComponent));
             OnPropertyChanged(nameof(TypeNote));
             OnPropertyChanged(nameof(Display));
@@ -126,6 +127,7 @@ public sealed class ComponentRowViewModel : ObservableObject
     public bool IsFadeOut  => Model.Type == PackComponentType.FadeOutSprite;
     public bool IsRandom   => Model.Type == PackComponentType.RandomChildActivator;
     public bool IsBlinking => Model.Type == PackComponentType.BlinkingSprite;
+    public bool IsFloating => Model.Type == PackComponentType.FloatingSprite;
 
     // ── A component the GAME defines ──────────────────────────────────────
 
@@ -182,6 +184,13 @@ public sealed class ComponentRowViewModel : ObservableObject
     public float BlinkInterval { get => Model.BlinkInterval; set { Model.BlinkInterval = value; OnPropertyChanged(); } }
     public float MinAlpha      { get => Model.MinAlpha;      set { Model.MinAlpha = value;      OnPropertyChanged(); } }
     public float MaxAlpha      { get => Model.MaxAlpha;      set { Model.MaxAlpha = value;      OnPropertyChanged(); } }
+
+    // ── FloatingSprite ────────────────────────────────────────────────
+    public float FloatHeight { get => Model.FloatHeight; set { Model.FloatHeight = value; OnPropertyChanged(); } }
+    public float FloatPeriod { get => Model.FloatPeriod; set { if (value > 0) Model.FloatPeriod = value; OnPropertyChanged(); } }
+    public float FloatSway   { get => Model.FloatSway;   set { Model.FloatSway = value;   OnPropertyChanged(); } }
+    public float FloatStart  { get => Model.FloatStart;  set { Model.FloatStart = value;  OnPropertyChanged(); } }
+    public bool FloatRandomStart { get => Model.FloatRandomStart; set { Model.FloatRandomStart = value; OnPropertyChanged(); } }
 
     public string Display => Type.ToString();
 }

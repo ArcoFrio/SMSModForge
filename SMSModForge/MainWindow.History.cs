@@ -157,6 +157,8 @@ public partial class MainWindow
         public int Ordinal;
         public int Tab;
         public string? Text;
+        /// <summary>What the control showed as the step was put back, as <see cref="ShownBy"/> says it.</summary>
+        public string Shown = "";
     }
 
     private KeyboardPlace? _keyboardWas;
@@ -209,6 +211,7 @@ public partial class MainWindow
 
     private void RememberKeyboard()
     {
+        foreach (var preview in FindVisualChildren<View.Controls.PlacePreview>(this)) preview.UndoBegins();
         _keyboardWas = null;
         if (Keyboard.FocusedElement is not FrameworkElement focused || TabPage is not { } page || !IsUnder(focused, page)) return;
         var owner = OwnerOf(focused);
@@ -226,6 +229,7 @@ public partial class MainWindow
             Ordinal = ordinal,
             Tab = MainTabs.SelectedIndex,
             Text = (focused as TextBox)?.Text,
+            Shown = ShownBy(owner),
         };
     }
 
@@ -238,10 +242,26 @@ public partial class MainWindow
         _pageBefore = null;
         Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
         {
+            // An object the step put back, picked again in the place preview if it was picked as it went.
+            foreach (var preview in FindVisualChildren<View.Controls.PlacePreview>(this)) preview.PickAgainAfterUndo();
             ListsShowWhatIsBound();
             if (was != null) PutKeyboardBack(was);
-            if (page != null) MarkWhatChanged(page);
+            if (page != null) MarkWhatChanged(page, ChangedUnderTheKeyboard(was));
         }));
+    }
+
+    /// <summary>
+    /// The control with the keyboard, put back where it was, when the step changed what it shows: what was being
+    /// edited, under the author's hand. The pages before and after the step are held side by side by what their
+    /// controls show, and a page built again can match it to another that shows the same - an action's kind put
+    /// back to "Variable" taken for a "Variable" nested in the dice roll it had been - and then all that was
+    /// marked was out of sight below it, and the page went down to it (the walk over every control, after 1.10.0).
+    /// </summary>
+    private FrameworkElement? ChangedUnderTheKeyboard(KeyboardPlace? was)
+    {
+        if (was == null || Keyboard.FocusedElement is not FrameworkElement focused || TabPage is not { } page || !IsUnder(focused, page)) return null;
+        var owner = OwnerOf(focused);
+        return Shows(owner) && IdentityOf(owner) == was.Identity && ShownBy(owner) != was.Shown ? owner : null;
     }
 
     // ── What the step changed, marked ───────────────────────────────────
@@ -277,7 +297,22 @@ public partial class MainWindow
     private void NotePage()
     {
         MainTabs.UpdateLayout();
-        _pageBefore = ValuesOnPage().Select(fe => IdentityOf(fe) + "=" + ShownBy(fe)).ToList();
+        _pageBefore = ValuesOnPage().Select(MarkKeyOf).ToList();
+    }
+
+    /// <summary>
+    /// A control as the two pages are held side by side by: what it is, how deep in the page it is, and what it
+    /// shows. The depth tells a record's own list from the same list of a record nested in it: an action's kind
+    /// put back to "Variable" from a dice roll was taken for a "Variable" action nested in the dice roll, marked
+    /// nothing, and the page went to what was marked out of sight below it (the walk over every control, after
+    /// 1.10.0).
+    /// </summary>
+    private string MarkKeyOf(FrameworkElement fe)
+    {
+        int depth = 0;
+        var page = TabPage;
+        for (DependencyObject? at = VisualTreeHelper.GetParent(fe); at != null && !ReferenceEquals(at, page); at = VisualTreeHelper.GetParent(at)) depth++;
+        return IdentityOf(fe) + "@" + depth.ToString(System.Globalization.CultureInfo.InvariantCulture) + "=" + ShownBy(fe);
     }
 
     /// <summary>
@@ -288,18 +323,18 @@ public partial class MainWindow
     /// row after it. A page that is another altogether (a record that did not exist) marks nothing: what is
     /// picked says it.
     /// </summary>
-    private void MarkWhatChanged(List<string> before)
+    private void MarkWhatChanged(List<string> before, FrameworkElement? atTheKeyboard = null)
     {
         LastMarked.Clear();
         var now = ValuesOnPage();
-        var keys = now.Select(fe => IdentityOf(fe) + "=" + ShownBy(fe)).ToList();
+        var keys = now.Select(MarkKeyOf).ToList();
         // What the two pages start and end with alike is set aside: nearly all of both, nearly always.
         int head = 0;
         while (head < before.Count && head < keys.Count && before[head] == keys[head]) head++;
         int tail = 0;
         while (tail < before.Count - head && tail < keys.Count - head && before[before.Count - 1 - tail] == keys[keys.Count - 1 - tail]) tail++;
         int n = before.Count - head - tail, m = keys.Count - head - tail;
-        if (m == 0 || (long)n * m > 1_000_000) return;
+        if ((long)n * m > 1_000_000) return;
         // Of the rest, the longest run of controls the two share, in order: what is left over on this page changed.
         var same = new int[n + 1, m + 1];
         for (int i = n - 1; i >= 0; i--)
@@ -312,10 +347,45 @@ public partial class MainWindow
             else if (i < n && same[i + 1, j] >= same[i, j + 1]) i++;
             else changed.Add(now[head + j++]);
         }
+        // And what was being edited, whatever the two pages were matched to.
+        if (atTheKeyboard != null && atTheKeyboard.IsEnabled && !changed.Contains(atTheKeyboard))
+        {
+            int at = now.IndexOf(atTheKeyboard);
+            changed.Insert(at < 0 ? changed.Count : changed.Count(c => now.IndexOf(c) < at), atTheKeyboard);
+        }
         if (changed.Count == 0 || changed.Count > 12) return;
-        changed[0].BringIntoView();
+        // Where everything is, first: a page the step built again is not all laid out yet, and a control not yet
+        // given its place is in sight nowhere.
+        UpdateLayout();
+        // Brought into view only when none of it is in view already. A value is often shown twice - an object's
+        // place beside the picture and in its record below it - and the first in the page's order is not the one
+        // being looked at: an object dragged in the place preview, Ctrl+Z, and the page went down to its record
+        // (the author, after 1.10.0: "brings into view the fields for the GOs at the bottom instead of staying
+        // on the preview"); typed in the record, and up to the panel beside the picture.
+        if (!changed.Any(InView)) changed[0].BringIntoView();
         foreach (var fe in changed) Glimmer(fe);
         LastMarked.AddRange(changed);
+    }
+
+    /// <summary>
+    /// Whether <paramref name="fe"/> is where a person sees it now: half of it, or 40 px of it, inside the
+    /// window and inside every scrolled area it is in - the page, and a panel scrolled within the page.
+    /// </summary>
+    internal bool InView(FrameworkElement fe)
+    {
+        if (!fe.IsVisible || fe.ActualHeight <= 0 || PresentationSource.FromVisual(fe) == null || !fe.IsDescendantOf(this)) return false;
+        Rect seen = fe.TransformToAncestor(this).TransformBounds(new Rect(0, 0, fe.ActualWidth, fe.ActualHeight));
+        double whole = seen.Height;
+        seen.Intersect(new Rect(0, 0, ActualWidth, ActualHeight));
+        for (DependencyObject? at = VisualTreeHelper.GetParent(fe); at != null && !seen.IsEmpty; at = VisualTreeHelper.GetParent(at))
+        {
+            if (at is not ScrollViewer scroller) continue;
+            // What it shows of its content, its bars left out (a list scrolled by rows counts its viewport in rows).
+            var shows = scroller.Template?.FindName("PART_ScrollContentPresenter", scroller) as FrameworkElement ?? scroller;
+            if (!shows.IsDescendantOf(this)) continue;
+            seen.Intersect(shows.TransformToAncestor(this).TransformBounds(new Rect(0, 0, shows.ActualWidth, shows.ActualHeight)));
+        }
+        return !seen.IsEmpty && seen.Height >= Math.Min(whole / 2, 40) && seen.Width > 0;
     }
 
     /// <summary>A soft glow in the theme's accent, gone in under a second.</summary>
@@ -389,8 +459,18 @@ public partial class MainWindow
         {
             FrameworkElement to = target is ComboBox { IsEditable: true } combo && combo.Template?.FindName("PART_EditableTextBox", combo) is TextBox inner ? inner : target;
             if (!to.Focusable) return;
-            to.Focus();
-            Keyboard.Focus(to);
+            // Without the page scrolling to it, as WPF scrolls to whatever takes the keyboard: the keyboard put
+            // back where it was is no reason to move the page (a list at the page's bottom edge, built again by
+            // the step, Ctrl+Z, and the page went down to show the whole of it). What the step changed is brought
+            // into view, when it is out of sight, by MarkWhatChanged.
+            RequestBringIntoViewEventHandler still = (_, e) => e.Handled = true;
+            to.AddHandler(RequestBringIntoViewEvent, still);
+            try
+            {
+                to.Focus();
+                Keyboard.Focus(to);
+            }
+            finally { to.RemoveHandler(RequestBringIntoViewEvent, still); }
         }
         // The caret where the change was, as a box of Windows' own leaves it after its own undo.
         if (Keyboard.FocusedElement is TextBox box && was.Text != null && box.Text != was.Text)

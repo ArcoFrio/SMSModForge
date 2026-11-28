@@ -128,7 +128,8 @@ public sealed class PlaceStandInTests : IDisposable
             ((System.Windows.Automation.Provider.IInvokeProvider)new System.Windows.Automation.Peers.ButtonAutomationPeer(row)
                 .GetPattern(System.Windows.Automation.Peers.PatternInterface.Invoke)!).Invoke();
             WindowHarness.Pump();
-            var tick = Descendants(Field<StackPanel>(preview, "_lightFields")).OfType<CheckBox>().Single();
+            var tick = Descendants(Field<StackPanel>(preview, "_lightFields")).OfType<CheckBox>()
+                .Single(c => System.Windows.Data.BindingOperations.GetBinding(c, System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty)?.Path.Path == nameof(LightViewModel.LightsCharacters));
             int built = preview.StandInBuilt;
             tick.IsChecked = true;
             WindowHarness.Pump();

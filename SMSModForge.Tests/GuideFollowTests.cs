@@ -293,11 +293,12 @@ public sealed class GuideFollowTests : IDisposable
             ui.Click("+ NPC");
             NameIt(ui, "Wet visitor");
             ui.Type("Pose sprite", "TutorialArt/NPCs/Visitor/Visitor0.png");
-            // s2: "On the Places tab, choose your place and click + Add NPC. Choose Wet visitor as its NPC, then drag it
-            //      in the preview to where it should stand."
+            // s2: "On the Places tab, choose your place and click + Character over the hierarchy beside the preview.
+            //      Choose Wet visitor as its NPC to the right of the picture, then drag it in the preview to where it
+            //      should stand."
             ui.Tab("Places");
             ChooseYourPlaceInTheList(ui, where);
-            ui.Click("+ Add NPC");
+            ui.Click("+ Character");
             PickNamed(ui, "NPC", "Wet visitor", null, "rainyVisitor s2");
             // (dragging in the preview: the mouse is not driven here; where it stands does not change what it does)
             // s3: "On the placement, under Active when, add a condition: Weather, Raining."

@@ -156,7 +156,7 @@ namespace SMSModForge.PackPlugin
             // The place's whole GameObject hierarchy: layered sprite objects,
             // containers, the level's own NPCs object, and the NPC placements
             // nested under it — one authored tree, one build pass.
-            BuildGameObjectList(p["gameObjects"] as JArray, pack, level, key, logger, npcCtx);
+            BuildGameObjectList(p["gameObjects"] as JArray, pack, level, key, logger, npcCtx, objectMasks: (int?)p["objectMasks"] ?? 0);
 
             // No per-place map button here. Navigation buttons are owned by
             // NavigatorRuntime, which creates one per authored
@@ -321,6 +321,94 @@ namespace SMSModForge.PackPlugin
 
         private static Material _plainLit;
 
+        /// <summary>The rules the objects being built follow (<c>objectMasks</c> on their place or extension): 0 those
+        /// of a pack exported before them. Set by the outermost <see cref="BuildGameObjectList"/>.</summary>
+        private static int _objectMasks;
+
+        /// <summary>
+        /// How an object's picture moves (after 1.10.0, the author: "a way to add masks to other GOs in the place ...
+        /// choose between the jiggle and level masks"). An object is cloned from the level's back layer and so starts
+        /// with its material. Under the rules (<c>objectMasks</c> 1), <c>maskKind</c>: <c>none</c> (or no mask) a plain
+        /// material where the clone's carries a mask; <c>backLayer</c> the back layer's, as cloned; <c>level</c> the
+        /// level's own pass (14_Beach's, whatever the back layer has) with its mask; <c>jiggle</c> the characters'
+        /// jiggle (an NPC's) with its mask and settings. Before them (a pack exported then): its own mask on the
+        /// clone's material - which moved only when the back layer had a mask - and none keeping the back layer's.
+        /// </summary>
+        private static void ApplyObjectMask(SpriteRenderer sr, JObject ov, PackManifest pack, GameObject level, NpcFactory.Context npcCtx)
+        {
+            string maskRel = (string)ov["mask"];
+            bool hasMask = !string.IsNullOrEmpty(maskRel) && pack.Has(maskRel);
+            string kind = (string)ov["maskKind"];
+            if (_objectMasks <= 0 && string.IsNullOrEmpty(kind))
+            {
+                if (!hasMask) return;
+                // Own material so the mask doesn't bleed to siblings.
+                var mat = new Material(sr.material);
+                mat.SetTexture("_MaskTex", ObjectMaskTexture(pack, maskRel));
+                sr.material = mat;
+                return;
+            }
+            if (string.IsNullOrEmpty(kind)) kind = hasMask ? "level" : "none";
+            if (kind == "backLayer") return;
+            if (kind == "level" && hasMask && LevelPassMaterial() is Material levelPass)
+            {
+                var mat = new Material(levelPass);
+                mat.SetTexture("_MaskTex", ObjectMaskTexture(pack, maskRel));
+                sr.material = mat;
+                return;
+            }
+            if (kind == "jiggle" && hasMask && (npcCtx?.JiggleProto ?? JigglePassMaterial()) is Material jigglePass)
+            {
+                var mat = new Material(jigglePass);
+                mat.SetTexture("_MaskTex", ObjectMaskTexture(pack, maskRel));
+                if (ov["jiggle"] is JObject j) BustFactory.ApplyJiggle(mat, j);
+                sr.material = mat;
+                return;
+            }
+            // Still: the back layer's material only when it moves nothing.
+            var cloned = sr.sharedMaterial;
+            if (cloned != null && cloned.HasProperty("_MaskTex"))
+            {
+                var plain = PlainLitMaterial(level.transform);
+                if (plain != null) sr.sharedMaterial = plain;
+            }
+        }
+
+        /// <summary>An object's mask: one per mask while the packs load (LoadedArt), linear (data, not colour), not
+        /// readable (only the shader reads a mask, 1.9.0), its nearest texel read.</summary>
+        private static Texture2D ObjectMaskTexture(PackManifest pack, string maskRel)
+            => LoadedArt.Texture(pack, maskRel, "overlay-mask", () =>
+            {
+                var t = new Texture2D(2, 2, TextureFormat.RGBA32, false, true);
+                byte[] mb = pack.ReadBytes(maskRel);
+                if (mb != null) t.LoadImage(mb, true);
+                t.filterMode = FilterMode.Point;
+                return t;
+            });
+
+        private static Material _levelPass, _jigglePass;
+
+        /// <summary>The level's own moving material: the Beach's, which every pack place is made from.</summary>
+        private static Material LevelPassMaterial()
+        {
+            if (_levelPass != null) return _levelPass;
+            var beach = TransformExtensions.FindGlobalIncludingInactive("14_Beach");
+            var sr = beach != null ? beach.GetComponent<SpriteRenderer>() : null;
+            _levelPass = sr != null ? sr.sharedMaterial : null;
+            return _levelPass;
+        }
+
+        /// <summary>The characters' jiggle material, where an NPC's comes from (a bust's body) - for an extension
+        /// built without the pack's NPC context.</summary>
+        private static Material JigglePassMaterial()
+        {
+            if (_jigglePass != null) return _jigglePass;
+            var anna = TransformExtensions.FindGlobalIncludingInactive("Anna_Towel");
+            var sr = anna != null ? anna.transform.Find("MBase1")?.GetComponent<SpriteRenderer>() : null;
+            _jigglePass = sr != null ? sr.sharedMaterial : null;
+            return _jigglePass;
+        }
+
         private static Material PlainLitMaterial(Transform level)
         {
             foreach (var sr in level.GetComponentsInChildren<SpriteRenderer>(true))
@@ -345,7 +433,8 @@ namespace SMSModForge.PackPlugin
         public static void BuildGameObjectList(JArray nodes, PackManifest pack, GameObject level,
                                                string ownerLabel, ManualLogSource logger,
                                                NpcFactory.Context npcCtx = null,
-                                               Transform parentOverride = null, bool localPos = false)
+                                               Transform parentOverride = null, bool localPos = false,
+                                               int objectMasks = -1)
         {
             if (nodes == null || nodes.Count == 0 || level == null) return;
 
@@ -353,9 +442,16 @@ namespace SMSModForge.PackPlugin
             // a plain one, else nothing - see SpritePrototype.
             Transform proto = SpritePrototype(level.transform);
 
-            Transform parent = parentOverride != null ? parentOverride : level.transform;
-            foreach (var o in nodes)
-                BuildNodeRecursive((JObject)o, pack, parent, proto, level, ownerLabel, logger, npcCtx, localPos);
+            // The rules for objects' masks: the place's or extension's (-1: a tree under one of them, as it was).
+            int rulesBefore = _objectMasks;
+            if (objectMasks >= 0) _objectMasks = objectMasks;
+            try
+            {
+                Transform parent = parentOverride != null ? parentOverride : level.transform;
+                foreach (var o in nodes)
+                    BuildNodeRecursive((JObject)o, pack, parent, proto, level, ownerLabel, logger, npcCtx, localPos);
+            }
+            finally { _objectMasks = rulesBefore; }
         }
 
         /// <summary>
@@ -496,24 +592,7 @@ namespace SMSModForge.PackPlugin
                     float alpha = (float?)ov["startAlpha"] ?? 1f;
                     var c = sr.color; c.a = alpha; sr.color = c;
 
-                    string maskRel = (string)ov["mask"];
-                    if (!string.IsNullOrEmpty(maskRel) && pack.Has(maskRel))
-                    {
-                        // Own material so the mask doesn't bleed to siblings.
-                        Material mat = new Material(sr.material);
-                        // One per mask while the packs load (LoadedArt), and not
-                        // readable: only the shader reads a mask (1.9.0).
-                        var maskTex = LoadedArt.Texture(pack, maskRel, "overlay-mask", () =>
-                        {
-                            var t = new Texture2D(2, 2, TextureFormat.RGBA32, false, true);   // linear: data, not colour
-                            byte[] mb = pack.ReadBytes(maskRel);
-                            if (mb != null) t.LoadImage(mb, true);
-                            t.filterMode = FilterMode.Point;
-                            return t;
-                        });
-                        mat.SetTexture("_MaskTex", maskTex);
-                        sr.material = mat;
-                    }
+                    ApplyObjectMask(sr, ov, pack, level, npcCtx);
                 }
 
                 // Parallax belongs to the existing object as well — a bound node
@@ -529,6 +608,14 @@ namespace SMSModForge.PackPlugin
                 {
                     bool parallaxDisabled = (bool?)ov["parallaxDisabled"] ?? true;
                     var pe = go.GetComponent("ParallaxMouseEffect");
+                    // An object that is no clone of the back picture - a light, a group, a picture in a level of the
+                    // game's with no plain back picture - gets the effect when it asks to drift (after 1.10.0): the
+                    // back picture's, copied, or one of its own for a strength of its own. It had none, and stayed
+                    // with the level while the editor's preview drifted it - and a light set to drift with the back
+                    // picture would not have. The NPCs object too: its Parallax drifted every character in the
+                    // preview and none in the game.
+                    if (pe == null && !parallaxDisabled)
+                        pe = AddDrift(go, proto, ov["parallaxStrength"] != null && ov["parallaxStrength"].Type != JTokenType.Null);
                     if (pe is Behaviour b) b.enabled = !parallaxDisabled;
                     // Nulls inherit: an unset field keeps whatever the cloned
                     // level sprite had, so an overlay in a 0.05 room drifts with
@@ -705,6 +792,60 @@ namespace SMSModForge.PackPlugin
                 tex.filterMode = FilterMode.Point;
                 return tex;
             });
+        }
+
+        /// <summary>
+        /// Give <paramref name="go"/> the level's drift (after 1.10.0): a copy of its back picture's
+        /// <c>ParallaxMouseEffect</c> (<paramref name="proto"/>'s, what a new sprite is cloned from), as a clone of it
+        /// would have it - or, with no back picture, a new one when the object has a strength of its own. Null when
+        /// there is nothing to drift by: the object stays with what it is under, as the editor's preview shows it.
+        /// </summary>
+        private static Component AddDrift(GameObject go, Transform proto, bool ownStrength)
+        {
+            var back = proto != null ? proto.GetComponent("ParallaxMouseEffect") : null;
+            if (back == null && !ownStrength) return null;
+            var type = back != null ? back.GetType() : ParallaxType();
+            if (type == null) return null;
+            var made = go.AddComponent(type);
+            if (made != null && back != null)
+                foreach (var name in new[] { "parallaxStrength", "reversed", "isUI" })
+                {
+                    var field = type.GetField(name);
+                    field?.SetValue(made, field.GetValue(back));
+                }
+            return made;
+        }
+
+        /// <summary>
+        /// A character set to drift (after 1.10.0): the effect an object of the pack's is given (see
+        /// <see cref="AddDrift"/>) - the level's back picture's, unless it has a strength of its own - then its own
+        /// strength and reversal on it. An unset reversal is left as the back picture's, as the editor's preview
+        /// draws it; a "false" is not reversed (it was read as unset until after 1.10.0, so a character in a place
+        /// whose back picture is reversed could not be made to drift forward).
+        /// </summary>
+        internal static void GiveDrift(GameObject go, GameObject level, float? strength, bool? reversed)
+        {
+            if (go == null || level == null) return;
+            var made = AddDrift(go, SpritePrototype(level.transform), strength.HasValue);
+            if (made is Behaviour b) b.enabled = true;
+            SetParallax(go, strength, reversed, null);
+        }
+
+        private static System.Type _parallaxType;
+        private static bool _parallaxLooked;
+
+        /// <summary>The game's <c>ParallaxMouseEffect</c>, found by its name as the rest of this file reaches it.</summary>
+        private static System.Type ParallaxType()
+        {
+            if (_parallaxLooked) return _parallaxType;
+            _parallaxLooked = true;
+            foreach (var asm in System.AppDomain.CurrentDomain.GetAssemblies())
+            {
+                System.Type t = null;
+                try { t = asm.GetType("ParallaxMouseEffect"); } catch { }
+                if (t != null && typeof(Component).IsAssignableFrom(t)) { _parallaxType = t; break; }
+            }
+            return _parallaxType;
         }
 
         private static void SetParallax(GameObject go, float? strength, bool? reversed, bool? isUI)

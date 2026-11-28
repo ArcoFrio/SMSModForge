@@ -133,6 +133,15 @@ internal static class NpcRender
     /// </summary>
     public static void Compose(BackdropScene scene, GamePost.Target target, float[] scratchBackground, float[] coverage,
                                BackdropRender.PostParts parts, byte[] output, params float[]?[] layers)
+        => Compose(scene, target, scratchBackground, coverage, parts, output, null, layers);
+
+    /// <summary>
+    /// As the other, the NPC's wet drops (<paramref name="drops"/>, the screen's canvas) blended in as a wet bust's
+    /// are (JigglePreview): with a lamp before its glow, each drop's pixels counted as drawn over; without one after
+    /// what the place's lights add, over everything. A shower's drops come already lit (NpcPreview.WetDropsNow).
+    /// </summary>
+    public static void Compose(BackdropScene scene, GamePost.Target target, float[] scratchBackground, float[] coverage,
+                               BackdropRender.PostParts parts, byte[] output, WetDrops.Over? drops, params float[]?[] layers)
     {
         var lamp = scene.Lamp;
         if (lamp != null) lamp.Room(null, target, scratchBackground, scene.Backdrop.BackgroundWidth, scene.Backdrop.BackgroundHeight);
@@ -140,8 +149,16 @@ internal static class NpcRender
         Array.Clear(coverage);
         foreach (var layer in layers)
             if (layer != null) BackdropRender.Layer(target, scene, layer, coverage);
-        if (lamp != null) lamp.Glow(target, null, BackdropRender.Covered(scene, coverage), onTheRoomsLayer: true);
-        else BackdropRender.Lamps(target, scene, coverage);
+        if (lamp != null)
+        {
+            if (drops != null) WetDrops.BlendInto(target, drops, scene, coverage);
+            lamp.Glow(target, null, BackdropRender.Covered(scene, coverage), onTheRoomsLayer: true);
+        }
+        else
+        {
+            BackdropRender.Lamps(target, scene, coverage);
+            if (drops != null) WetDrops.BlendInto(target, drops);
+        }
         BackdropRender.Present(target, scene, parts, output);
     }
 }

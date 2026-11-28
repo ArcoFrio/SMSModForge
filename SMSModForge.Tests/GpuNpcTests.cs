@@ -103,4 +103,80 @@ public sealed class GpuNpcTests
         Assert.True(overOne <= cpu.Length / 5000, $"the card's NPC frame is more than a level from the processor's at {overOne} bytes");
         Assert.True(same > cpu.Length * 0.98, $"only {same} of {cpu.Length} bytes are the processor's");
     }
+
+    /// <summary>
+    /// The NPC's own wet drops (after 1.10.0: the NPCs tab's preview shows them) on the card as on the processor:
+    /// with a lamp before its glow, counted as drawn over; without one over everything. The towel's and the shower's
+    /// (lit by the room layer's light where each one is), from the drops the preview makes (NpcPreview.DropsFor).
+    /// Control: the card's frame without the drops is visibly not the processor's with them.
+    /// </summary>
+    [Theory]
+    [InlineData("MyRoom", false)]
+    [InlineData("MyRoom", true)]
+    [InlineData("Forest", false)]
+    [InlineData("Forest", true)]
+    public void TheCardsWetNpcFrameIsTheProcessors(string backdropName, bool shower)
+    {
+        using var card = GpuFrame.TryCreate();
+        Assert.True(card != null, "no graphics card device: " + GpuDevice.SharedFailure);
+        var scene = new BackdropScene(PreviewBackdrop.Load(Path.Combine(GameRun.RepoRoot(), "SMSModForge", "Resources", "Backdrops", backdropName)));
+        scene.Prepare();
+        const int W = 240, H = 480, N = BackdropRender.FrameSize;
+        var art = new byte[W * H * 4];
+        var mask = new byte[W * H * 4];
+        for (int y = 0; y < H; y++)
+            for (int x = 0; x < W; x++)
+            {
+                var c = InGameSuitePacks.Looks.FigureAt(x * 256 / W, y * 256 / H);
+                int i = (y * W + x) * 4;
+                art[i] = c.B; art[i + 1] = c.G; art[i + 2] = c.R; art[i + 3] = c.A;
+            }
+        var p = new JiggleParams();
+        var tint = (1f, 1f, 1f, 1f);
+        const float Time = 3.7f;
+        var gi = NpcRender.Gi(scene.Backdrop);
+        var giArt = new FakeGi.Art(art, W, H, NpcRender.Reach(scene.Backdrop.Gi, W, H));
+        var light = new NpcLight(scene);
+        float scale = NpcRender.ScreenPerArtPixel(0.79f), width = W * scale, height = H * scale;
+        float inLeft = MathF.Round((N - width) / 2f * 2f) / 2f, inBottom = MathF.Round((N - height) / 2f * 2f) / 2f;
+        float left = scene.Left + inLeft, bottom = scene.FrameBottom + inBottom;
+        int zoom = JiggleShader.GameZoom;
+        var parts = BackdropRender.PostParts.All;
+        var wet = new NpcWetDef { Enabled = true, Kind = shower ? WetEffectDef.KindShower : null };
+        var drops = SMSModForge.View.Controls.NpcPreview.DropsFor(wet, "guard", scene, 0.79f, (width, height, inLeft, inBottom),
+                                                                  WetDrops.TestTime, light, out _);
+        Assert.True(drops is { Count: > 0 }, "no drops to draw (the particle texture missing?)");
+
+        var body = new float[N * N * 4];
+        NpcRender.Body(art, mask, W, H, p, tint, Time, gi, giArt, light.At, left, bottom, width, height, scene.Left, scene.FrameBottom, body, true, scene.Decode, zoom);
+        var cpu = new byte[N * N * 4];
+        NpcRender.Compose(scene, BackdropRender.Scene(scene), new float[scene.Backdrop.BackgroundWidth * scene.Backdrop.BackgroundHeight * 4], new float[N * N],
+                          parts, cpu, drops, body);
+        byte[] Card(WetDrops.Over? with)
+        {
+            var output = new byte[N * N * 4];
+            card!.DrawNpc(scene, gi, true, light, art, null, mask, W, H, p, tint, Time, left, bottom, width, height, parts, zoom, output, with);
+            return output;
+        }
+        var onCard = Card(drops);
+        var dry = Card(null);
+        int same = 0, overOne = 0;
+        for (int i = 0; i < cpu.Length; i++)
+        {
+            int d = Math.Abs(cpu[i] - onCard[i]);
+            if (d == 0) same++;
+            if (d > 1) overOne++;
+        }
+        int dryOff = Enumerable.Range(0, cpu.Length).Count(i => Math.Abs(cpu[i] - dry[i]) > 1);
+        // What the frame is off by without any drops: the drops are held to adding next to nothing to it.
+        var cpuDry = new byte[N * N * 4];
+        NpcRender.Compose(scene, BackdropRender.Scene(scene), new float[scene.Backdrop.BackgroundWidth * scene.Backdrop.BackgroundHeight * 4], new float[N * N],
+                          parts, cpuDry, (WetDrops.Over?)null, body);
+        int baseline = Enumerable.Range(0, cpu.Length).Count(i => Math.Abs(cpuDry[i] - dry[i]) > 1);
+        _out.WriteLine($"{backdropName}, {(shower ? "the shower" : "the towel")}: {drops!.Count} drops; {same} of {cpu.Length} bytes the processor's, "
+                       + $"{overOne} more than a level off ({baseline} without any drops); the card's frame without the drops {dryOff} over a level");
+        Assert.True(dryOff > 50, "control: the card's frame without the drops passes for the processor's with them");
+        Assert.True(overOne <= baseline + dryOff / 50,
+                    $"the card's wet NPC frame is more than a level from the processor's at {overOne} bytes, {baseline} without drops");
+    }
 }

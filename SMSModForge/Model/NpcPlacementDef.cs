@@ -43,6 +43,15 @@ public sealed class NpcPlacementDef
     [JsonProperty("wet", Order = 7)]
     public NpcTransform Wet { get; set; } = new() { X = -0.3f, Y = 7.7f };
 
+    /// <summary>
+    /// How the Wet emitter looks (<see cref="WetEffectDef"/>): which of the game's two wet effects, the box its drops
+    /// start in (dragged by its sides in the place preview - after 1.10.0, the author: "make sure we're not actually
+    /// changing the droplet size by doing that, just the area of the effect"), and its settings. Null: the towel's
+    /// own, as every placement before it.
+    /// </summary>
+    [JsonProperty("wetEffect", Order = 7, NullValueHandling = NullValueHandling.Ignore)]
+    public WetEffectDef? WetEffect { get; set; }
+
     /// <summary>Whether the NPC GameObject starts active. False for the
     /// usual "parked variant a rule activates" pattern.</summary>
     [JsonProperty("startActive", Order = 8)]
@@ -88,6 +97,32 @@ public sealed class NpcPlacementDef
     /// <summary>Switch back off when the conditions stop matching.</summary>
     [JsonProperty("deactivateWhenUnmet", Order = 12)]
     public bool DeactivateWhenUnmet { get; set; } = true;
+
+    /// <summary>
+    /// How the character drifts as the cursor moves (after 1.10.0, the author asked for "parallax settings for
+    /// individual NPCs"), as an object's are read (<see cref="GameObjectDef.ParallaxDisabled"/>): off (the default,
+    /// and every character placed before) it stays with what it stands under - the NPCs object, which moves with
+    /// the level's front picture, as the game's own crowds do. On, it drifts by <see cref="ParallaxStrength"/>, or
+    /// with the level's back picture when that is unset. Its shadow, blink, reflection and children go with it.
+    /// <para/>
+    /// Written only when on, so a pack whose characters do not drift saves as it did.
+    /// </summary>
+    [JsonProperty("parallaxDisabled", Order = 13)]
+    public bool ParallaxDisabled { get; set; } = true;
+
+    /// <summary>Its own strength; null drifts with the level's back picture (none where the level has none).</summary>
+    [JsonProperty("parallaxStrength", Order = 14, NullValueHandling = NullValueHandling.Ignore)]
+    public float? ParallaxStrength { get; set; }
+
+    /// <summary>Drift with the cursor instead of against it. Null: as the level's back picture's drift has it (not
+    /// reversed where the level has none), as for an object (<see cref="GameObjectDef.ParallaxReversed"/>); written
+    /// whenever it is set, false too.</summary>
+    [JsonProperty("parallaxReversed", Order = 15, NullValueHandling = NullValueHandling.Ignore)]
+    public bool? ParallaxReversed { get; set; }
+
+    public bool ShouldSerializeParallaxDisabled() => !ParallaxDisabled;
+    public bool ShouldSerializeParallaxStrength() => !ParallaxDisabled && ParallaxStrength.HasValue;
+    public bool ShouldSerializeParallaxReversed() => !ParallaxDisabled && ParallaxReversed.HasValue;
 
     public bool ShouldSerializeComponents() => Components.Count > 0;
     public bool ShouldSerializeChildren() => Children.Count > 0;

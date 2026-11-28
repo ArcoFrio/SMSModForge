@@ -274,6 +274,11 @@ public sealed partial class PlacePreview : Grid
     {
         Width = CanvasWidth,
         Height = CanvasHeight,
+        // At the picture's top left, whatever its size: centred (WPF's way with a child of a set size), a picture
+        // wider than the canvas's 1920 - its corner dragged out, or over the whole screen - had the view 86 pixels
+        // right and 48 down of it before the scale, its right and bottom cut off (after 1.10.0).
+        HorizontalAlignment = HorizontalAlignment.Left,
+        VerticalAlignment = VerticalAlignment.Top,
     };
     /// <summary>
     /// Viewport. Clips, so a zoomed-in scene doesn't spill over the editor pane,
@@ -365,6 +370,12 @@ public sealed partial class PlacePreview : Grid
         // one of its pixels a screen pixel, so never smoothed.
         RenderOptions.SetBitmapScalingMode(_lookImage, BitmapScalingMode.NearestNeighbor);
         _canvas.Children.Add(_lookImage);
+        // An NPC's wet drops while the look is off (PlacePreview.Wet): over the scene, under the interface.
+        AddWetLayer();
+        // What the player sees of the place: outside it a little darker (PlacePreview.View).
+        AddPlayersView();
+        // The level's own canvases over the screen (the player's room's buttons): under the interface (PlacePreview.LevelCanvas).
+        AddLevelCanvasLayer();
         _canvas.Children.Add(_overlayImage);
         _canvas.Children.Add(_buttonLayer);
         // The place's objects' effects (1.10.0), playing over the picture at each object.
@@ -396,6 +407,12 @@ public sealed partial class PlacePreview : Grid
         _viewport.MouseMove += OnViewMouseMove;
         _viewport.MouseLeave += OnViewMouseLeave;
         _viewport.MouseUp += OnViewMouseUp;
+        // A click on the picture puts the keyboard here, for its keys (PlacePreview.Keys).
+        _viewport.PreviewMouseLeftButtonDown += (_, _) => TakeKeyboard();
+        // And the click stays the picture's: a click on the room's empty floor, left unhandled, went on up to
+        // the page, which took the keyboard for itself - and the keys went with it (PlaceObjectKeysTests).
+        _viewport.MouseLeftButtonDown += (_, e) => e.Handled = true;
+        KeyDown += OnObjectKeys;
 
         SetColumn(_viewport, 1);
         SetColumn(_placeholder, 1);
@@ -406,18 +423,21 @@ public sealed partial class PlacePreview : Grid
         BuildGizmoToolbar();
         SetColumn(_gizmoToolbar, 2);
         Children.Add(_gizmoToolbar);
+        // What the tutorials point at, now that every object's settings are here (after 1.10.0).
+        TutorialAnchor.SetId(_objectMenu, "panel:placeHierarchy");
+        TutorialAnchor.SetId(_gizmoToolbar, "panel:placeSettings");
         BuildSizeGrip();
 
-        // The Wet droplet markers animate only while the control is actually
-        // visible (not on a hidden/unselected tab).
+        // The wet drops move only while the control is actually visible (not on a
+        // hidden/unselected tab).
         FpsBadge.Attach(this, () => FramesShown);
         IsVisibleChanged += (_, _) =>
         {
-            _isLoaded = IsVisible;
-            UpdateWetTimer();
+            SyncWetClock();
             // The shaders' clock too (1.9.0): it ticked on behind another tab or
             // the mask studio, waking the editor 30 times a second to draw
             // nothing. Back on screen, it starts again where the shaders are.
+            SyncAnimClock();
             if (!IsVisible) StopShaders();
             else if (_shaderTargets.Count > 0) SyncShaderTimer();
             SyncLook();
@@ -440,22 +460,63 @@ public sealed partial class PlacePreview : Grid
         // ListMin each, and only then the picture (the author, 1.8.0).
         double room = availableSize.Width;
         bool lists = _objectMenu.Visibility == Visibility.Visible;
-        double left = lists ? NaturalWidth(_objectMenu) : 0;
+        // Over the picture (filling the screen) the panels are given their widths below: measured free of them.
+        if (FillsRoom) { _objectMenu.ClearValue(WidthProperty); _gizmoToolbar.ClearValue(WidthProperty); }
+        double left = lists ? HierarchyNaturalWidth() : 0;
         double right = lists ? Math.Max(SelectionMinWidth, NaturalSelectionWidth()) : 0;
         bool roomKnown = !double.IsInfinity(room) && !double.IsNaN(room) && room > 0;
         // Not dragged: as large as fits beside the lists at their full width,
         // up to its own size. Dragged: that size, the lists giving way.
+        bool tallKnown = !double.IsInfinity(availableSize.Height) && !double.IsNaN(availableSize.Height) && availableSize.Height > 0;
+        // Filling the screen: the picture as large as the room both ways, the panels over its sides at their widths
+        // (after 1.10.0, the author: "the canvas should span the whole screen, while the left and right menus overlay it").
+        if (FillsRoom && roomKnown)
+        {
+            double whole = Math.Max(PictureMin, Math.Min(room, tallKnown ? availableSize.Height * Aspect : room));
+            if (lists)
+            {
+                // The hierarchy, and under it the page's tick boxes when they are here: one column, as wide as the
+                // widest of the two, the hierarchy taking the height the boxes leave (PlacePreview.Panels).
+                double column = Math.Max(ListMin, left - 8);
+                if (_extrasHost.Visibility == Visibility.Visible)
+                {
+                    column = Math.Max(column, ExtrasLeast());
+                    _extrasHost.Width = column;
+                    _extrasHost.Measure(new Size(column, double.PositiveInfinity));
+                    _objectMenu.Margin = new Thickness(8, 8, 0, 8 + _extrasHost.DesiredSize.Height + 8);
+                }
+                else _objectMenu.Margin = new Thickness(8, 8, 0, 8);
+                _objectMenu.Width = column;
+                _gizmoToolbar.Width = Math.Max(ListMin, right - _settingsMargin.Left - _settingsMargin.Right);
+            }
+            SetWidth(0, 0);
+            SetWidth(1, whole);
+            SetWidth(2, 0);
+            base.MeasureOverride(new Size(whole, whole / Aspect));
+            return new Size(whole, whole / Aspect);
+        }
         double picture = !double.IsNaN(_pictureScale) ? FixedWidth * _pictureScale
                        : roomKnown ? Math.Max(PictureMin, Math.Min(FixedWidth, room - left - right))
                        : FixedWidth;
         if (roomKnown && picture + left + right > room)
         {
             double listsNow = left + right;
-            double listsCan = Math.Max(Math.Min(listsNow, lists ? 2 * ListMin : 0), room - picture);
+            // Each list's least is the panel's own, its margin beside it.
+            double leftLeast = Math.Min(left, ListMin + _objectMenu.Margin.Left + _objectMenu.Margin.Right);
+            double rightLeast = Math.Min(right, ListMin + _gizmoToolbar.Margin.Left + _gizmoToolbar.Margin.Right);
+            double listsCan = Math.Max(lists ? leftLeast + rightLeast : 0, room - picture);
             if (listsNow > 0 && listsCan < listsNow)
             {
-                left *= listsCan / listsNow;
-                right *= listsCan / listsNow;
+                // Each gives way by what it has above its least, so neither goes below it: in proportion to
+                // their widths, the narrow hierarchy went under it once the selection beside the picture held
+                // the picked one's settings and was twice as wide (after 1.10.0).
+                double leftCan = Math.Max(0, left - leftLeast), rightCan = Math.Max(0, right - rightLeast);
+                if (leftCan + rightCan > 0)
+                {
+                    double share = Math.Min(1, (listsNow - listsCan) / (leftCan + rightCan));
+                    left -= leftCan * share;
+                    right -= rightCan * share;
+                }
             }
             picture = Math.Max(PictureMin, room - left - right);
         }
@@ -478,6 +539,37 @@ public sealed partial class PlacePreview : Grid
     {
         var def = ColumnDefinitions[column];
         if (Math.Abs(def.Width.Value - width) > 0.5 || !def.Width.IsAbsolute) def.Width = new GridLength(width);
+    }
+
+    /// <summary>The row of + buttons over the hierarchy, as last made: it wraps at the width the list shows.</summary>
+    private FrameworkElement? _addRow;
+
+    /// <summary>
+    /// The hierarchy's width with all the room it wants: its widest row - the + buttons counted by their widest one,
+    /// since they wrap at the width the list shows. Counted at the width they had wrapped to, the list kept whatever
+    /// width it last had: widened to fit the tick boxes under it over the whole screen, it stayed that wide back on the
+    /// page (after 1.10.0, PlacePreviewFullScreenTests).
+    /// </summary>
+    private double HierarchyNaturalWidth()
+    {
+        double widest = 0;
+        var infinite = new Size(double.PositiveInfinity, double.PositiveInfinity);
+        foreach (UIElement row in _objectMenuList.Children)
+        {
+            if (ReferenceEquals(row, _addRow) && row is Panel buttons)
+            {
+                foreach (UIElement b in buttons.Children)
+                {
+                    b.Measure(infinite);
+                    widest = Math.Max(widest, b.DesiredSize.Width + buttons.Margin.Left + buttons.Margin.Right);
+                }
+                continue;
+            }
+            row.Measure(infinite);
+            widest = Math.Max(widest, row.DesiredSize.Width);
+        }
+        var m = _objectMenu.Margin; var pad = _objectMenu.Padding; var border = _objectMenu.BorderThickness;
+        return widest + pad.Left + pad.Right + border.Left + border.Right + m.Left + m.Right;
     }
 
     /// <summary>What a panel would take with all the room it wants: its
@@ -506,6 +598,11 @@ public sealed partial class PlacePreview : Grid
         // of moving side by side, which read best on one line.
         double widest = Math.Max(_partRow.Children.OfType<Button>().Select(Chip).DefaultIfEmpty().Max(),
                                  _modeRow.Children.OfType<Button>().Sum(Chip));
+        // An object's parts, side by side as well (PlacePreview.ObjectParts).
+        widest = Math.Max(widest, _objPartRow.Children.OfType<Button>().Sum(Chip));
+        // And as wide as the picked one's settings are laid out (after 1.10.0), picked or not:
+        // picking something must not move the picture.
+        widest = Math.Max(widest, SettingsWidth);
         // The panel's padding, border and margin, and a scrollbar's room.
         return widest + 12 + 2 + 6 + SystemParameters.VerticalScrollBarWidth;
     }
@@ -519,9 +616,29 @@ public sealed partial class PlacePreview : Grid
 
     private const string SizeKey = "place";
 
+    /// <summary>
+    /// The picture as large as the room it is given, wide and tall, its corner's size set aside: while the preview is
+    /// over the whole screen (MainWindow.FullScreen, after 1.10.0: "can we also add a fullscreen button for the Places
+    /// preview?"). Its corner is not there to drag meanwhile.
+    /// </summary>
+    public bool FillsRoom
+    {
+        get => _fillsRoom;
+        set
+        {
+            if (_fillsRoom == value) return;
+            _fillsRoom = value;
+            if (_sizeGrip != null) _sizeGrip.Visibility = value ? Visibility.Collapsed : Visibility.Visible;
+            PanelsOver(value);
+        }
+    }
+
+    private bool _fillsRoom;
+    private System.Windows.Controls.Primitives.Thumb? _sizeGrip;
+
     private void BuildSizeGrip()
     {
-        var grip = new System.Windows.Controls.Primitives.Thumb
+        var grip = _sizeGrip = new System.Windows.Controls.Primitives.Thumb
         {
             Width = PreviewFrame.GripSize, Height = PreviewFrame.GripSize,
             HorizontalAlignment = HorizontalAlignment.Right,
@@ -569,6 +686,8 @@ public sealed partial class PlacePreview : Grid
         double s = _fitScale * _zoom;
         _displayScale = s;
         _extentScale.ScaleX = _extentScale.ScaleY = s;
+        SizePlayersView();
+        SharpenWhenEnlarged();
         // A new view: the game's look worked out for it at once, and the NPCs'
         // pictures sized for it (TrackShader) once the zoom settles.
         LookAgain();
@@ -588,23 +707,28 @@ public sealed partial class PlacePreview : Grid
     /// </summary>
     private void OnViewWheel(object sender, MouseWheelEventArgs e)
     {
-        double sOld = _fitScale * _zoom;
-        if (sOld <= 0) return;
+        ZoomAt(e.GetPosition(_viewport), e.Delta > 0 ? 1 : -1);
+        e.Handled = true;
+    }
 
-        var p = e.GetPosition(_viewport);
+    /// <summary>The wheel's zoom: <paramref name="steps"/> notches in (or out, below 0) at <paramref name="p"/> of the
+    /// picture - what the wheel runs, and tests with it.</summary>
+    internal void ZoomAt(Point p, int steps)
+    {
+        double sOld = _fitScale * _zoom;
+        if (sOld <= 0 || steps == 0) return;
         double localX = (p.X - _viewPan.X) / sOld;
         double localY = (p.Y - _viewPan.Y) / sOld;
 
         // Multiplicative steps: a fixed increment feels coarse when zoomed out
         // and glacial when zoomed in.
-        double factor = e.Delta > 0 ? 1.15 : 1.0 / 1.15;
+        double factor = Math.Pow(1.15, steps);
         _zoom = Math.Clamp(_zoom * factor, ZoomMin, ZoomMax);
 
         double sNew = _fitScale * _zoom;
         _viewPan.X = p.X - sNew * localX;
         _viewPan.Y = p.Y - sNew * localY;
         ApplyViewScale();
-        e.Handled = true;
     }
 
     private void OnViewMouseDown(object sender, MouseButtonEventArgs e)
@@ -820,7 +944,8 @@ public sealed partial class PlacePreview : Grid
     private void OnButtonItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         // Label edits change the rendered text; nothing else affects layout.
-        if (e.PropertyName == nameof(NavigatorButtonViewModel.Label) || string.IsNullOrEmpty(e.PropertyName))
+        // (and where one goes, which a button without words says).
+        if (e.PropertyName is nameof(NavigatorButtonViewModel.Label) or nameof(NavigatorButtonViewModel.Target) || string.IsNullOrEmpty(e.PropertyName))
             RebuildButtons();
     }
 
@@ -896,6 +1021,9 @@ public sealed partial class PlacePreview : Grid
     /// current navigator-button count.</summary>
     private void ApplyOverlay()
     {
+        // The game's own interface, drawn with the place's buttons in it (PlacePreview.Hud); the old picture only
+        // without the game's extracted interface.
+        if (ShowGameHud()) return;
         bool extended = CountButtons() > Columns;
         var src = extended ? LoadOverlayExtended() : LoadOverlay();
         _overlayImage.Source = src;
@@ -918,6 +1046,8 @@ public sealed partial class PlacePreview : Grid
         if (_placeholder.Visibility != Visibility.Visible)
             ApplyOverlay();
 
+        // The buttons are in the game's interface as drawn.
+        if (HudDrawn) return;
         if (n == 0) return;
 
         FontFamily numberFont = NumberFont();
@@ -1120,11 +1250,14 @@ public sealed partial class PlacePreview : Grid
         _baseImage.Source = null;
         _videoImage.Source = null;
         _buttonLayer.Children.Clear();
+        SeeThroughUndo();
         _worldLayer.Children.Clear();
         _viewport.Visibility = Visibility.Collapsed;
         _placeholder.Text = message;
         _placeholder.Visibility = Visibility.Visible;
         SyncLook();
+        // The hierarchy and the picked one's settings stay: a place's objects are made and set there, art or not.
+        RefreshObjectMenu();
     }
 
     // ── GameObjects layer ─────────────────────────────────────────
@@ -1132,6 +1265,8 @@ public sealed partial class PlacePreview : Grid
     private static void OnGameObjectsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var self = (PlacePreview)d;
+        // Another place shown, or another pack: what was picked in the one before is not to be picked in it.
+        if (!self._undoing) self._lostNodePath = self._lostPlacementPath = null;
         if (e.OldValue is INotifyCollectionChanged oldCc)
             oldCc.CollectionChanged -= self.OnOverlayTreeChanged;
         if (e.NewValue is INotifyCollectionChanged newCc)
@@ -1191,6 +1326,27 @@ public sealed partial class PlacePreview : Grid
         SubscribeOverlayTree(GameObjects);
     }
 
+    /// <summary>A row's components, their settings and the game's ones' named values: what they do is played in the
+    /// preview, so the preview is drawn again as they are edited (after 1.10.0: "Including live preview when changing
+    /// parameters").</summary>
+    private void SubscribeComponents(System.Collections.ObjectModel.ObservableCollection<ComponentRowViewModel> components)
+    {
+        components.CollectionChanged += OnOverlayTreeChanged;
+        _overlaySubscriptions.Add(components);
+        foreach (var c in components)
+        {
+            c.PropertyChanged += OnOverlayItemChanged;
+            _overlaySubscriptions.Add(c);
+            c.ParamRows.CollectionChanged += OnOverlayTreeChanged;
+            _overlaySubscriptions.Add(c.ParamRows);
+            foreach (var row in c.ParamRows)
+            {
+                row.PropertyChanged += OnOverlayItemChanged;
+                _overlaySubscriptions.Add(row);
+            }
+        }
+    }
+
     private void SubscribeOverlayTree(IEnumerable? items)
     {
         if (items == null) return;
@@ -1199,6 +1355,7 @@ public sealed partial class PlacePreview : Grid
             if (it is not GameObjectViewModel o) continue;
             o.PropertyChanged += OnOverlayItemChanged;
             _overlaySubscriptions.Add(o);
+            SubscribeComponents(o.Components);
             o.Children.CollectionChanged += OnOverlayTreeChanged;
             _overlaySubscriptions.Add(o.Children);
             o.Npcs.CollectionChanged += OnOverlayTreeChanged;
@@ -1212,6 +1369,7 @@ public sealed partial class PlacePreview : Grid
                 }
                 pl.Children.CollectionChanged += OnOverlayTreeChanged;
                 _overlaySubscriptions.Add(pl.Children);
+                SubscribeComponents(pl.Components);
                 SubscribeOverlayTree(pl.Children);       // props parented under the NPC
             }
             SubscribeOverlayTree(o.Children);
@@ -1377,6 +1535,23 @@ public sealed partial class PlacePreview : Grid
     {
         get => (bool)GetValue(LevelParallaxSecondaryReversedProperty);
         set => SetValue(LevelParallaxSecondaryReversedProperty, value);
+    }
+
+    /// <summary>
+    /// Whether the level has a back picture that drifts, as the game's plugin finds it: always on a pack place (the
+    /// back sprite, <see cref="LevelParallaxSecondary"/>), on 22 of the game's levels (their second object, its drift
+    /// given here as the secondary's). An object the pack makes that drifts with the level takes its drift from it -
+    /// cloned from it with its sprite, or copied (a light, a group) - and without one stays with the level (after
+    /// 1.10.0; the preview drifted it at 0.75 whatever the back did).
+    /// </summary>
+    public static readonly DependencyProperty HasBackLayerProperty =
+        DependencyProperty.Register(nameof(HasBackLayer), typeof(bool), typeof(PlacePreview),
+            new PropertyMetadata(true, OnInputChanged));
+
+    public bool HasBackLayer
+    {
+        get => (bool)GetValue(HasBackLayerProperty);
+        set => SetValue(HasBackLayerProperty, value);
     }
 
     /// <summary>
@@ -1623,6 +1798,21 @@ public sealed partial class PlacePreview : Grid
     /// 100 px/unit through the level root's scale.</summary>
     private double WorldPpu => PixelsPerUnit * (LevelScale > 0 ? LevelScale : 1.0);
 
+    /// <summary>
+    /// The scale the level's own NPCs object keeps in the game while the place's NPCs node says 1 (the plugin sets one
+    /// there only when it is not 1): the template level's for a pack place, the level's own for a game level the pack
+    /// extends (its preview binds it). Measured: S17, after 1.10.0.
+    /// </summary>
+    public static readonly DependencyProperty NpcsObjectScaleProperty =
+        DependencyProperty.Register(nameof(NpcsObjectScale), typeof(double), typeof(PlacePreview),
+            new PropertyMetadata((double)VanillaLevelCatalog.TemplateNpcsScale, OnInputChanged));
+
+    public double NpcsObjectScale
+    {
+        get => (double)GetValue(NpcsObjectScaleProperty);
+        set => SetValue(NpcsObjectScaleProperty, value);
+    }
+
     /// <summary>Sorting order of the level's secondary (distance/blur) sprite,
     /// which renders behind the base.</summary>
     private const int LevelSecondarySortingOrder = -5;
@@ -1651,19 +1841,22 @@ public sealed partial class PlacePreview : Grid
         RebuildTime.Count++;
         _rebuildQueued = false;
         ResubscribeOverlayTree();
+        SeeThroughUndo();
         _worldLayer.Children.Clear();
-        _wetMarkers.Clear();
+        ClearSprays();
+        _drawnNames.Clear();
+        _objectImages.Clear();
         Mark(0);
 
         double minX = 0, minY = 0, maxX = CanvasWidth, maxY = CanvasHeight;
 
         string root = PackRoot ?? "";
         _scene = BuildScene();
+        DrawLevelCanvases(_scene);
         Mark(1);
         // The place's own lights, from what it shows on arrival (1.9.2).
         UpdateLights();
         SyncLook();
-        DrawLightMarkers();
         DrawEffects();
         ScheduleStandIn();
         Mark(2);
@@ -1675,6 +1868,10 @@ public sealed partial class PlacePreview : Grid
         var drawables = new System.Collections.Generic.List<(int Order, int Tie, UIElement Element)>();
 
         _parallaxTargets.Clear();
+        _enlargeable.Clear();
+        _animTargets.Clear();
+        // The suns drift with their lights (after 1.10.0), so they are made with what drifts.
+        DrawLightMarkers();
         // The level's two pictures outlive this rebuild, and are placed by Canvas.Left/Top alone: whatever transform
         // they carry now is the last drift, never where they were made. Tracked from it, every rebuild while drifted
         // added the drift again - switching places with Preview parallax on walked the art away from the objects
@@ -1690,6 +1887,7 @@ public sealed partial class PlacePreview : Grid
         if (_secondaryImage.Source != null)
         {
             drawables.Add((LevelArtSecondaryOrder, 0, _secondaryImage));
+            _drawnNames[_secondaryImage] = Loc.T("maskStudio.layer.back");
             // The backdrop is a CHILD of the level root: it carries the root's
             // drift and adds its own, scaled by the root. That sum is the whole
             // depth effect.
@@ -1708,6 +1906,7 @@ public sealed partial class PlacePreview : Grid
                 _secondaryImage.Source = LoadCachedBitmap(Path.Combine(root, Normalize(SecondarySprite)));
         }
         drawables.Add((LevelArtOrder, 0, _baseImage));
+        _drawnNames[_baseImage] = Loc.T("maskStudio.layer.front");
         TrackParallax(_baseImage, baseGain);
         if (LevelArtUnlit) _unlitElements.Add(_baseImage);
         if (PlaceVideoStill(root)) drawables.Add((LevelVideoScreen!.SortingOrder, -1, _videoImage));
@@ -1771,13 +1970,18 @@ public sealed partial class PlacePreview : Grid
                               (entry.ParentInactive ? "\n" + Loc.T("preview.place.parentInactive") : ""),
                 };
                 RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.NearestNeighbor);
+                // How it moves (after 1.10.0): by its own mask, the level's pass or the characters' jiggle, or by the
+                // back layer's read over its own picture - as the game moves it (PlaceFactory.ApplyObjectMask).
+                if (Shaders && o.Model.AppliesOwnVisuals) ShadeObject(o, img, abs, root, m);
                 var pathForClick = entry.Path;
                 var oForClick = o;
                 img.MouseLeftButtonDown += (_, e) => { SelectNode(oForClick, pathForClick); e.Handled = true; };
                 drawables.Add((o.SortingOrder, 1, img));
+                _drawnNames[img] = o.Display;
+                _objectImages[o] = img;
                 // Drawn with the game's unlit material: the level's lamps leave it as it is (1.9.2).
                 if (string.Equals(o.Model.Baseline?.SpriteRenderer?.Material, UnlitMaterial, StringComparison.Ordinal)) _unlitElements.Add(img);
-                TrackParallax(img, entry.ParallaxGain);
+                TrackParallax(img, entry.ParallaxGain, entry);
 
                 // Renderer tint, for a vanilla object that has one. Same masked
                 // silhouette the NPC reflections use — WPF can't multiply a tint
@@ -1799,7 +2003,7 @@ public sealed partial class PlacePreview : Grid
                     };
                     drawables.Add((o.SortingOrder, 2, tintRect));
                     // Rides with the sprite it colours, or it would smear off it.
-                    TrackParallax(tintRect, entry.ParallaxGain);
+                    TrackParallax(tintRect, entry.ParallaxGain, entry);
                 }
 
                 ExpandBounds(m, w, h, ref minX, ref minY, ref maxX, ref maxY);
@@ -1817,8 +2021,15 @@ public sealed partial class PlacePreview : Grid
         // runtime does for two overlays built back-to-back at the same order.
         foreach (var d in drawables.OrderBy(d => d.Order).ThenBy(d => d.Tie))
             _worldLayer.Children.Add(d.Element);
+        // The characters' pictures crisp where the view enlarges them past their own pixels.
+        SharpenWhenEnlarged();
+        // What the components do, played from where it is now (PlacePreview.Float).
+        SyncAnimClock();
+        if (_animClockOn) AnimateTo(AnimNow);
+        // Beside the mask studio: what is in front of the layer painted, see-through (PlacePreview.Cover).
+        SeeThroughInFront();
 
-        UpdateWetTimer();
+        SyncWetClock();
         Mark(6);
         AdoptCardPasses();
         SyncShaderTimer();
@@ -1849,23 +2060,18 @@ public sealed partial class PlacePreview : Grid
     // in the authored tree, then the placement's own body transform — composed
     // as 2-D affines in Unity space (Y up, CCW) by the scene walk, then mapped
     // to canvas pixels. The pose is drawn as a still (the animated jiggle lives on
-    // the NPCs tab); the shadow is a tinted ellipse; the Wet particle emitter is
-    // a lightweight animated droplet marker showing its transform.
+    // the NPCs tab); the shadow is a tinted ellipse; the Wet object's drops are
+    // the game's own, on a layer over the scene (PlacePreview.Wet).
 
     /// <summary>NPC / shadow / circle sprites are authored at 100 px/unit
     /// (level art is 70.32), so a sprite pixel is this many canvas pixels.</summary>
     private const double NpcSpritePpu = 100.0;
 
     /// <summary>Sorting-order tiers, mirroring the runtime: the NPC sits at its
-    /// def order, its shadow well below, its particle marker just above it.</summary>
+    /// def order, its shadow well below.</summary>
     private const int NpcShadowTieBelow = 0;   // shadow keeps its own (low) order
     private const int NpcBodyTie = 2;
-    private const int NpcWetTie = 3;
 
-    private readonly List<WetMarker> _wetMarkers = new();
-    private DispatcherTimer? _wetTimer;
-    private bool _isLoaded;
-    private DateTime _wetStart = DateTime.Now;
 
     private static readonly Dictionary<string, BitmapSource?> _bitmapCache = new();
 
@@ -1952,6 +2158,13 @@ public sealed partial class PlacePreview : Grid
 
         /// <summary>Last of its siblings, so its elbow closes the branch.</summary>
         public bool IsLast;
+        // What its components - and those above it - do to it (PlacePreview.Float): what moves it, its own picture's
+        // alpha, its parent's blend of it, whether it is on; a picker over its own children and the next child's index.
+        public Mover[]? Movers;
+        public Fader? Fader, Blend;
+        public Func<double, bool>[]? Gates;
+        public ChildPicker? Pickers;
+        public int ChildIndex;
 
         /// <summary>This row's own preview-visibility toggle is switched off.
         /// Purely a viewing preference — see <see cref="_hidden"/>.</summary>
@@ -2048,6 +2261,9 @@ public sealed partial class PlacePreview : Grid
         /// mutated in place as strokes land, so holding the reference is all the
         /// live update needs: the next tick already sees the new paint.</summary>
         public bool LiveMask;
+        /// <summary>A jiggle mask being painted (the studio's 256x256 buffer, mutated as strokes land): laid on the
+        /// art's grid again before each draw, as the jiggle pass reads its mask at the art's own size.</summary>
+        public byte[]? LiveSource;
         /// <summary>Set for a bust-family object (NPCs). Null means the level
         /// family — the two use genuinely different shaders.</summary>
         public JiggleParams? Params;
@@ -2121,10 +2337,11 @@ public sealed partial class PlacePreview : Grid
     /// one. Returns false when there is nothing to animate, leaving the caller's
     /// flat bitmap in place.
     /// </summary>
-    private bool TrackShader(Image img, string poseAbs, string maskAbs, JiggleParams p, Matrix toCanvas)
+    private bool TrackShader(Image img, string poseAbs, string maskAbs, JiggleParams p, Matrix toCanvas, byte[]? liveMask = null)
     {
         var baseSource = LoadCachedBitmap(poseAbs);
-        string maskKey = FileKey(maskAbs);
+        bool live = liveMask != null && liveMask.Length == Rendering.MaskBuffer.Size * Rendering.MaskBuffer.Size * 4;
+        string maskKey = live ? "live" : FileKey(maskAbs);   // English on purpose: a key, never shown
         if (baseSource == null || maskKey.Length == 0) return false;
         string tintKey = p.Tint ?? "";
         double perArtX = Math.Sqrt(toCanvas.M11 * toCanvas.M11 + toCanvas.M12 * toCanvas.M12);
@@ -2134,13 +2351,13 @@ public sealed partial class PlacePreview : Grid
         // Every step of a drag rebuilds the scene, and each rebuild read the mask's file again, copied the
         // art's pixels and made new buffers and a new picture for every NPC.
         var kept = TakeBefore(t => t.Params != null && ReferenceEquals(t.Params, p) && ReferenceEquals(t.BaseSource, baseSource)
-                                   && t.MaskKey == maskKey && t.TintKey == tintKey);
+                                   && t.MaskKey == maskKey && t.TintKey == tintKey && ReferenceEquals(t.LiveSource, live ? liveMask : null));
         if (kept != null)
         {
             double wasX = kept.CanvasPerArtX, wasY = kept.CanvasPerArtY;
             kept.CanvasPerArtX = perArtX; kept.CanvasPerArtY = perArtY;
             var (nw, nh) = NpcPictureSize(kept);
-            bool sized = Math.Abs(nw - kept.OutW) > Math.Max(2, kept.OutW / 8) || Math.Abs(nh - kept.OutH) > Math.Max(2, kept.OutH / 8);
+            bool sized = Resized(kept, nw, nh);
             // New buffers only while nothing is drawing into the old ones.
             if (!sized || (!_shaderInFlight && !_lookInFlight))
             {
@@ -2161,7 +2378,8 @@ public sealed partial class PlacePreview : Grid
         if (basePx == null || w <= 0 || h <= 0) return false;
         // The mask has to land on the pose's grid: the CPU port samples both
         // from one array shape, where the GPU would resample in UV space.
-        var maskPx = same != null && same.MaskKey == maskKey ? same.Mask : LoadBgraScaled(maskAbs, w, h);
+        var maskPx = live ? OnArtGrid(liveMask!, w, h, null)
+                   : same != null && same.MaskKey == maskKey && same.LiveSource == null ? same.Mask : LoadBgraScaled(maskAbs, w, h);
         if (maskPx == null) return false;
 
         var (tr, tg, tb, ta) = BustComposer.ParseTint(p.Tint);
@@ -2171,6 +2389,7 @@ public sealed partial class PlacePreview : Grid
             Params = p, Tint = (tr, tg, tb, ta),
             CanvasPerArtX = perArtX, CanvasPerArtY = perArtY,
             BaseSource = baseSource, MaskKey = maskKey, TintKey = tintKey,
+            LiveMask = live, LiveSource = live ? liveMask : null,
         };
         var (outW, outH) = NpcPictureSize(target);
         SizeNpcPicture(target, outW, outH);
@@ -2194,22 +2413,71 @@ public sealed partial class PlacePreview : Grid
         return (w, h);
     }
 
-    private static void SizeNpcPicture(ShaderTarget t, int w, int h)
+    /// <summary>
+    /// Whether a character's picture is drawn again at <paramref name="w"/> x <paramref name="h"/>: for a real change
+    /// only (each costs a new buffer) - and always for its art's own size, which a picture within an eighth of it stayed
+    /// short of: zoomed in, a picture a few percent smaller than its art beat against its pixels in bands (after 1.10.0,
+    /// PlaceZoomDetailTests).
+    /// </summary>
+    private static bool Resized(ShaderTarget t, int w, int h)
+        => w == t.SrcW && h == t.SrcH ? w != t.OutW || h != t.OutH
+         : Math.Abs(w - t.OutW) > Math.Max(2, t.OutW / 8) || Math.Abs(h - t.OutH) > Math.Max(2, t.OutH / 8);
+
+    /// <param name="showNow">Put the new picture up at once (blank until drawn) - else the last one stays up until the
+    /// new one is drawn (<see cref="Show"/>).</param>
+    private static void SizeNpcPicture(ShaderTarget t, int w, int h, bool showNow = true)
     {
         t.OutW = w; t.OutH = h;
         t.Output = new byte[w * 4 * h];
         t.Bitmap = new WriteableBitmap(w, h, 96, 96, PixelFormats.Pbgra32, null);
-        t.Image.Source = t.Bitmap;
+        if (showNow) t.Image.Source = t.Bitmap;
         t.Shown = false;
     }
 
+    /// <summary>The characters' pictures (bodies, reflections) and where each lands on the canvas (its pixel rect's
+    /// matrix): drawn crisp once enlarged past their own pixels, smooth while shrunk.</summary>
+    private readonly List<(Image Image, Matrix ToCanvas)> _enlargeable = new();
+
+    /// <summary>
+    /// Each character's picture crisp - nearest pixel - where the view enlarges it past its own pixels, smooth (WPF's
+    /// high-quality scaling) where it shrinks it (after 1.10.0: zoomed in, a character came out a smooth blur of its
+    /// art while the place's art beside it showed its own pixels). Shrunk, as at the view's fit, nothing changes.
+    /// </summary>
+    private void SharpenWhenEnlarged()
+    {
+        if (_enlargeable.Count == 0) return;
+        double dip = VisualTreeHelper.GetDpi(this).DpiScaleX;
+        foreach (var (img, m) in _enlargeable)
+        {
+            if (img.Source is not BitmapSource src || src.PixelWidth <= 0 || img.Width <= 0) continue;
+            double canvasPerLayout = Math.Sqrt(m.M11 * m.M11 + m.M12 * m.M12);
+            double screenPerPixel = canvasPerLayout * (img.Width / src.PixelWidth) * _displayScale * dip;
+            var mode = screenPerPixel >= 1.0 ? BitmapScalingMode.NearestNeighbor : BitmapScalingMode.HighQuality;
+            if (RenderOptions.GetBitmapScalingMode(img) == mode) continue;
+            RenderOptions.SetBitmapScalingMode(img, mode);
+            img.InvalidateVisual();
+        }
+    }
+
+    /// <summary>The characters' shader pictures' sizes against their art's - for tests.</summary>
+    internal IReadOnlyList<string> CharacterPictureSizes
+        => _shaderTargets.Where(t => t.Params != null).Select(t => $"{t.OutW}x{t.OutH}/{t.SrcW}x{t.SrcH}").ToList();
+
+    /// <summary>How the characters' pictures are scaled now - for tests.</summary>
+    internal IReadOnlyList<BitmapScalingMode> CharacterScaling => _enlargeable.Select(e => RenderOptions.GetBitmapScalingMode(e.Image)).ToList();
+
     private System.Windows.Threading.DispatcherTimer? _shaderResize;
+
+    /// <summary>The characters' pictures are to be sized once the pass drawing into them lands.</summary>
+    private bool _resizeWhenLanded;
 
     /// <summary>The NPCs' pictures sized for the view once the zoom settles.</summary>
     private void ScheduleShaderResize()
     {
         if (_shaderTargets.Count == 0) return;
-        _shaderResize ??= new System.Windows.Threading.DispatcherTimer(TimeSpan.FromMilliseconds(200), System.Windows.Threading.DispatcherPriority.Background,
+        // At the interface's own priority: below it, the shaders' frames (every display frame) starved it, and zoomed
+        // in a character stayed at the fitted view's size for many seconds (after 1.10.0, PlaceZoomDetailTests).
+        _shaderResize ??= new System.Windows.Threading.DispatcherTimer(TimeSpan.FromMilliseconds(200), System.Windows.Threading.DispatcherPriority.Normal,
                                                                         (_, _) => ResizeNpcPictures(), Dispatcher) { IsEnabled = false };
         _shaderResize.Stop();
         _shaderResize.Start();
@@ -2217,8 +2485,9 @@ public sealed partial class PlacePreview : Grid
 
     private void ResizeNpcPictures()
     {
-        // A pass drawing into the old buffers lands first.
-        if (_shaderInFlight) return;
+        // A pass drawing into the old buffers lands first - and then they are sized (OnShaderFrame).
+        if (_shaderInFlight) { _resizeWhenLanded = true; return; }
+        _resizeWhenLanded = false;
         _shaderResize?.Stop();
         bool any = false;
         foreach (var t in _shaderTargets)
@@ -2226,11 +2495,14 @@ public sealed partial class PlacePreview : Grid
             if (t.Params == null) continue;
             var (w, h) = NpcPictureSize(t);
             // Only for a real change: each one costs a new buffer.
-            if (Math.Abs(w - t.OutW) <= Math.Max(2, t.OutW / 8) && Math.Abs(h - t.OutH) <= Math.Max(2, t.OutH / 8)) continue;
-            SizeNpcPicture(t, w, h);
+            if (!Resized(t, w, h)) continue;
+            // While the shaders' clock runs, the next frame draws them at the new size off this thread, the last
+            // picture up until then: drawn here, a zoom held the interface for up to a second (after 1.10.0,
+            // PlacePreviewPerformanceTests).
+            SizeNpcPicture(t, w, h, showNow: !_shaderClockOn);
             any = true;
         }
-        if (any) { _shaderGeneration++; StepShaders(); }
+        if (any) { _shaderGeneration++; if (!_shaderClockOn) StepShaders(); SharpenWhenEnlarged(); }
     }
 
     /// <summary>
@@ -2240,7 +2512,7 @@ public sealed partial class PlacePreview : Grid
     /// The base art only — the backdrop keeps a plain material, and so does
     /// every GameObject that hasn't been given a mask of its own.
     /// </summary>
-    private bool TrackLevelShader(Image img, string baseAbs, string maskAbs, byte[]? liveMask)
+    private bool TrackLevelShader(Image img, string baseAbs, string maskAbs, byte[]? liveMask, bool anyImage = false)
     {
         var baseSource = LoadCachedBitmap(baseAbs);
         if (baseSource == null) return false;
@@ -2254,10 +2526,12 @@ public sealed partial class PlacePreview : Grid
         // whole - its buffers, its picture (which goes on showing the last frame drawn), its pass on the card.
         // Every step of a drag rebuilds the scene, and each rebuild copied the art's nine megabytes, read the
         // mask's file again and made a new picture of the art's size for each layer.
-        var kept = TakeBefore(t => t.Params == null && ReferenceEquals(t.Image, img) && ReferenceEquals(t.BaseSource, baseSource)
+        // An object's picture is made again with the scene (anyImage): its shader is kept for the new one.
+        var kept = TakeBefore(t => t.Params == null && (anyImage || ReferenceEquals(t.Image, img)) && ReferenceEquals(t.BaseSource, baseSource)
                                    && t.MaskKey == maskKey && (!live || ReferenceEquals(t.Mask, liveMask)));
         if (kept != null)
         {
+            kept.Image = img;
             img.Source = kept.Bitmap;
             _shaderTargets.Add(kept);
             return true;
@@ -2425,6 +2699,7 @@ public sealed partial class PlacePreview : Grid
             .ContinueWith(task =>
             {
                 _shaderInFlight = false;
+                if (_resizeWhenLanded) { ResizeNpcPictures(); return; }
                 if (!task.IsCompletedSuccessfully || generation != _shaderGeneration || !IsVisible) return;
                 ShaderSteps++;
                 foreach (var target in targets) Show(target);
@@ -2455,9 +2730,15 @@ public sealed partial class PlacePreview : Grid
     private static void Draw(ShaderTarget s, float t, bool useCard, JiggleShader.Sampling sampling)
     {
         // An NPC's mask is the pack's file, and a level's unless it is being painted: sent to the card once (1.10.0).
+        if (s.LiveSource != null) OnArtGrid(s.LiveSource, s.SrcW, s.SrcH, s.Mask);
+        // At the art's own size (zoomed in that far): one sample a pixel, at its middle - the art's own pixel. The
+        // game's 2x2 a screen pixel there took four points between the art's pixels and blended neighbours, and
+        // zoomed in a character was a blur of its art (after 1.10.0, the author: "when I zoom in I can still see
+        // things pixelated ... things should show at full size when zoomed in close enough"; PlaceZoomDetailTests).
+        if (s.Params != null && s.OutW >= s.SrcW && s.OutH >= s.SrcH) sampling = new JiggleShader.Sampling(1, 1, 1);
         var card = s.Params != null && useCard ? (s.Card ??= Rendering.Gpu.GpuAlone.TryCreate()) : null;
         if (card != null)
-            card.Draw(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params!, s.Tint, t, s.Output, s.OutW, s.OutH, sampling, maskStill: true);
+            card.Draw(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params!, s.Tint, t, s.Output, s.OutW, s.OutH, sampling, maskStill: !s.LiveMask);
         else if (s.Params != null)
             JiggleShader.Render(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params, s.Tint, t,
                                 s.Output, s.OutW, s.OutH, sampling);
@@ -2468,17 +2749,40 @@ public sealed partial class PlacePreview : Grid
                                  s.Milking, t, s.Output, s.OutW, s.OutH);
     }
 
+    /// <summary>A mask on the studio's 256x256 grid laid on art of <paramref name="w"/> x <paramref name="h"/>,
+    /// stretched over all of it (the game reads a mask at the art's own uv), nearest texel - into
+    /// <paramref name="into"/> when given.</summary>
+    internal static byte[] OnArtGrid(byte[] grid, int w, int h, byte[]? into)
+    {
+        const int size = Rendering.MaskBuffer.Size;
+        var o = into != null && into.Length == w * h * 4 ? into : new byte[w * h * 4];
+        for (int y = 0; y < h; y++)
+        {
+            int sy = Math.Min(size - 1, (int)((y + 0.5) * size / h));
+            for (int x = 0; x < w; x++)
+            {
+                int sx = Math.Min(size - 1, (int)((x + 0.5) * size / w));
+                Buffer.BlockCopy(grid, (sy * size + sx) * 4, o, (y * w + x) * 4, 4);
+            }
+        }
+        return o;
+    }
+
     private static void Show(ShaderTarget s)
     {
         s.Bitmap.WritePixels(new Int32Rect(0, 0, s.OutW, s.OutH), s.Output, s.OutW * 4, 0);
+        // A picture sized again goes up as it is first drawn.
+        if (!ReferenceEquals(s.Image.Source, s.Bitmap)) s.Image.Source = s.Bitmap;
         s.Shown = true;
     }
 
     /// <summary>Register an element to drift, unless it has no reason to.</summary>
-    private void TrackParallax(UIElement element, double gain)
+    private void TrackParallax(UIElement element, double gain, SceneEntry? entry = null)
     {
-        if (Math.Abs(gain) < 1e-6) return;
         var m = (element.RenderTransform as MatrixTransform)?.Matrix ?? Matrix.Identity;
+        // Floating too, with whatever floats above it (PlacePreview.Float).
+        TrackAnimated(element, m, gain, entry);
+        if (Math.Abs(gain) < 1e-6) return;
         _parallaxTargets.Add((element, m, gain));
         // Built again while the place is drifted: drifted from the start, not shown where it was made until
         // the cursor next moves.
@@ -2514,6 +2818,8 @@ public sealed partial class PlacePreview : Grid
             m.Translate(gain * offX, gain * offY * 0.5);
             element.RenderTransform = new MatrixTransform(m);
         }
+        // The light they cast: worked out again when the look is next drawn.
+        DriftLights();
     }
 
     /// <summary>Put every drifting element back where it was authored.</summary>
@@ -2521,15 +2827,19 @@ public sealed partial class PlacePreview : Grid
     {
         foreach (var (element, baseM, _) in _parallaxTargets)
             element.RenderTransform = new MatrixTransform(baseM);
+        DriftLights();
     }
 
     /// <summary>Walk the whole GameObject tree into a flat, tree-ordered list.</summary>
     private List<SceneEntry> BuildScene()
     {
         var entries = new List<SceneEntry>();
-        WalkScene(GameObjects, "", 0, Aff.Identity, false, false, new List<bool>(), entries, worldToLevel: WorldToLevel);
+        WalkScene(GameObjects, "", 0, Aff.Identity, false, false, new List<bool>(), entries, worldToLevel: WorldToLevel,
+                  npcsKeptScale: NpcsObjectScale);
+        PlaceOnLevelCanvases(entries);
         ApplyHiddenFlags(entries);
         ApplyParallaxGains(entries);
+        WorkOutAnimations(entries);
         return entries;
     }
 
@@ -2548,6 +2858,19 @@ public sealed partial class PlacePreview : Grid
     /// objects are overwhelmingly unrotated, and being a few pixels out on a
     /// rotated group is a far smaller error than ignoring the chain entirely.
     /// </summary>
+    /// <summary>
+    /// The drift of something the pack makes, set to drift: the back picture's effect, as the game gives it (cloned or
+    /// copied from it, PlaceFactory): its strength and its reversal unless the thing sets them (an unset field is left
+    /// as it was; a reversal set to false is not reversed, after 1.10.0). With no back picture an unset strength is
+    /// nothing, and an unset reversal not reversed.
+    /// </summary>
+    private double PackOwnDrift(float? ownStrength, bool? ownReversed, double parentScale)
+    {
+        double? strength = ownStrength is { } set ? set : HasBackLayer ? LevelParallaxSecondary : null;
+        bool reversed = ownReversed ?? (HasBackLayer && LevelParallaxSecondaryReversed);
+        return strength is { } s ? ParallaxGain(s, reversed, parentScale) : 0;
+    }
+
     private void ApplyParallaxGains(List<SceneEntry> entries)
     {
         // Level root: its localPosition sits in the levels container, above the
@@ -2576,10 +2899,16 @@ public sealed partial class PlacePreview : Grid
                 // the world scale chain does not apply to it at all. Running it
                 // through the chain anyway would throw the object several
                 // thousand pixels off screen.
-                own = node.ParallaxIsUI
-                    ? ParallaxGain(node.ParallaxStrength * 1000.0, node.ParallaxReversed, 1.0)
-                    : ParallaxGain(node.ParallaxStrength, node.ParallaxReversed, parentScale);
+                if (node.ParallaxIsUI)
+                    own = ParallaxGain(node.ParallaxStrength * 1000.0, node.ParallaxReversed, 1.0);
+                else if (node.Model.KeepsWhatItFinds)
+                    own = ParallaxGain(node.ParallaxStrength, node.ParallaxReversed, parentScale);   // the game's own effect, as extracted
+                else own = PackOwnDrift(node.Model.ParallaxStrength, node.Model.ParallaxReversed, parentScale);
             }
+            // A character drifting by its own (after 1.10.0) is given its effect as an object of the pack's is
+            // (NpcFactory, PlaceFactory.GiveDrift).
+            else if (e.Npc is { ParallaxEnabled: true } standing)
+                own = PackOwnDrift(standing.Model.ParallaxStrength, standing.Model.ParallaxReversed, parentScale);
 
             e.ParallaxGain = inherited + own;
 
@@ -2654,7 +2983,8 @@ public sealed partial class PlacePreview : Grid
     private static void WalkScene(IEnumerable? items, string prefix, int depth,
                                   Aff parentWorld, bool inNpcSubtree, bool parentInactive,
                                   List<bool> ancestorHasMore, List<SceneEntry> into, bool parentConditional = false,
-                                  string? parentChoice = null, bool parentPicks = false, Aff? worldToLevel = null)
+                                  string? parentChoice = null, bool parentPicks = false, Aff? worldToLevel = null,
+                                  double npcsKeptScale = 1.0)
     {
         var toLevel = worldToLevel ?? Aff.Identity;
         if (items == null) return;
@@ -2678,6 +3008,12 @@ public sealed partial class PlacePreview : Grid
             bool composed = inNpcSubtree || o.IsNpcRoot || o.Bind || o.IsCopy;
 
             Aff local = NodeAff(o);
+            // The NPCs root grafts onto the level's own NPCs object, and the plugin sets a scale there only when it is
+            // not exactly 1: at 1 the object keeps the game's (0.96 in the level every pack place is made from).
+            // Measured in the game (S17, after 1.10.0): a place's characters - their wet drops with them - stood 1/0.96
+            // as far apart, and as large, in the preview as in the game while the node said 1, as a new place's does.
+            if (o.IsNpcRoot && o.ScaleX == 1f && o.ScaleY == 1f && npcsKeptScale != 1.0)
+                local = Aff.Trs(o.X, o.Y, 0, 0, o.RotationZ, npcsKeptScale, npcsKeptScale);
             // A pack's own object stands at its X and Y in the world, sized as a child of the level's root:
             // its place taken into the level's units, its turn and size left as they are (see WorldToLevel).
             Aff world = composed ? parentWorld.Then(local)
@@ -2828,7 +3164,7 @@ public sealed partial class PlacePreview : Grid
                     IsHitTestVisible = false,
                 };
                 drawables.Add((def.ShadowSortingOrder, NpcShadowTieBelow, ell));
-                TrackParallax(ell, entry.ParallaxGain);
+                TrackParallax(ell, entry.ParallaxGain, entry);
                 ExpandBounds(mShadow, circlePx, circlePx, ref minX, ref minY, ref maxX, ref maxY);
             }
 
@@ -2850,6 +3186,7 @@ public sealed partial class PlacePreview : Grid
                     ToolTip = tip,
                 };
                 RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.HighQuality);
+                _enlargeable.Add((img, mBody));
                 // The shader draws into its own smaller buffer, so the Image
                 // keeps the pose's layout size and WPF scales the result — the
                 // object stays exactly where and how big it was.
@@ -2860,7 +3197,8 @@ public sealed partial class PlacePreview : Grid
                 var plPathForClick = entry.Path;
                 img.MouseLeftButtonDown += (_, e) => { SelectPlacement(plForClick, plPathForClick); e.Handled = true; };
                 drawables.Add((bodyOrder, NpcBodyTie, img));
-                TrackParallax(img, entry.ParallaxGain);
+                _drawnNames[img] = string.IsNullOrWhiteSpace(pl.Name) ? pl.Npc : pl.Name;
+                TrackParallax(img, entry.ParallaxGain, entry);
                 ExpandBounds(mBody, bmp.PixelWidth, bmp.PixelHeight, ref minX, ref minY, ref maxX, ref maxY);
 
                 // Reflection: the same bitmap again, mirrored on Y about the
@@ -2903,8 +3241,9 @@ public sealed partial class PlacePreview : Grid
                                 "tint", string.IsNullOrWhiteSpace(def.ReflectionTint) ? Loc.T("preview.place.noTint") : def.ReflectionTint),
                     };
                     RenderOptions.SetBitmapScalingMode(rimg, BitmapScalingMode.HighQuality);
+                    _enlargeable.Add((rimg, mRefl));
                     drawables.Add((def.ReflectionSortingOrder, NpcBodyTie, rimg));
-                    TrackParallax(rimg, entry.ParallaxGain);
+                    TrackParallax(rimg, entry.ParallaxGain, entry);
 
                     // Tint pass: the sprite's own silhouette filled with the
                     // reflection colour, laid over the mirrored pose. WPF can't
@@ -2927,175 +3266,18 @@ public sealed partial class PlacePreview : Grid
                             IsHitTestVisible = false,
                         };
                         drawables.Add((def.ReflectionSortingOrder, NpcBodyTie, tintRect));
-                        TrackParallax(tintRect, entry.ParallaxGain);
+                        TrackParallax(tintRect, entry.ParallaxGain, entry);
                     }
                 }
             }
 
-            // Wet particle emitter — a lightweight animated droplet marker at the
-            // emitter's transform (the runtime clones the exact vanilla particle,
-            // so a transform indicator is all the preview needs). During a gizmo
-            // drag we draw only the box + ring (no animated droplets) so a drag
-            // doesn't recreate/animate a swarm of ellipses every rebuild.
-            if (def.WetEnabled)
+            // The game's wet drops (PlacePreview.Wet, WetDrops): the Wet object's place and turn from the whole
+            // chain, its size from its own scale alone. Not drawn when the game would not show them on arrival.
+            if (def.WetEnabled && (def.WetStartActive || !AsTheGameShows))
             {
                 var ww = body.Then(LeafAff(pl.Wet));
-                var marker = BuildWetMarker(ww, def.WetStartActive ? ghost : ghost * 0.6,
-                                            animated: _activeHandle == GizmoHandle.None);
-                drawables.Add((bodyOrder, NpcWetTie, marker.Host));
-                TrackParallax(marker.Host, entry.ParallaxGain);
-            }
-        }
-    }
-
-    // ── Wet particle marker ─────────────────────────────────────────────
-    //
-    // Modelled on the vanilla shower emitter dumped from Unity: a Box shape,
-    // shapeScale (2,1,1), startSpeed 6, startLifetime 2, gravityModifier 0.7,
-    // simulationSpace Local. So the spray is an emission box twice as wide as
-    // tall, and the droplets fall (gravity over the lifetime) a fixed WORLD
-    // distance — not the short fixed column the old marker drew. The emission
-    // WIDTH scales with the Wet transform's X (its parent chain × the wet
-    // scaleX), so widening the spray is just scaling the Wet part on X; the fall
-    // is the physics distance in world units (gravity is world-space, so it
-    // doesn't scale with the transform), which reads the same as the game.
-
-    private sealed class WetMarker
-    {
-        public required Canvas Host;
-        public required Ellipse[] Drops;
-        public required double[] Lx;        // local X across the emission box, [-1,1]
-        public required double[] Sy;        // local Y spawn within the box, [-0.5,0.5]
-        public required double[] Progress;  // 0..1 fall progress
-        public required double[] Speed;
-        public Point O;                     // emitter origin (canvas px)
-        public Vector Ax;                   // canvas vector per +1 local X unit
-        public Vector Ay;                   // canvas vector per +1 local Y unit (up at rotZ 0)
-        public Vector Down;                 // unit canvas direction of the fall
-        public double FallCanvas;           // fall length in canvas px (world physics)
-    }
-
-    // Vanilla emitter constants (from npc_dump.json's Anna shower particle).
-    private const double WetShapeW = 2.0;          // Box shapeScale.x → emission width
-    private const double WetShapeH = 1.0;          // Box shapeScale.y → emission height
-    private const double WetGravityModifier = 0.7;
-    private const double WetLifetime = 2.0;
-    private const double UnityGravity = 9.81;
-    private const int WetDropCount = 14;   // enough to read as a spray; keeps the 30fps loop cheap
-    private static readonly Random _wetRng = new();
-
-    private WetMarker BuildWetMarker(in Aff ww, double opacity, bool animated)
-    {
-        const double ppu = PixelsPerUnit;
-        var o = new Point(WorldOriginX + ww.Tx * ppu, WorldOriginY - ww.Ty * ppu);
-        var ax = new Vector(ww.A * ppu, -ww.B * ppu);   // +1 local X in canvas
-        var ay = new Vector(ww.C * ppu, -ww.D * ppu);   // +1 local Y in canvas (up)
-        var down = new Vector(-ay.X, -ay.Y);
-        if (down.Length > 1e-6) down.Normalize(); else down = new Vector(0, 1);
-        double fallWorld = 0.5 * WetGravityModifier * UnityGravity * WetLifetime * WetLifetime;
-        double fallCanvas = fallWorld * ppu;
-
-        var host = new Canvas { Opacity = opacity, IsHitTestVisible = false };
-
-        // Emission indicator: just the top edge of the box — a line marking where
-        // the droplets start. Its length is the spray width (scales with the Wet
-        // transform's X); there is deliberately no box height, so the Wet Y scale
-        // is irrelevant.
-        double hw = WetShapeW / 2, top = WetShapeH / 2;
-        Point C(double sx, double sy) => new(o.X + sx * ax.X + sy * ay.X, o.Y + sx * ax.Y + sy * ay.Y);
-        Point edgeL = C(-hw, top), edgeR = C(hw, top);
-        host.Children.Add(new Line
-        {
-            X1 = edgeL.X, Y1 = edgeL.Y, X2 = edgeR.X, Y2 = edgeR.Y,
-            Stroke = new SolidColorBrush(Color.FromArgb(200, 0xCF, 0xEE, 0xFF)),
-            StrokeThickness = 2.5,
-            StrokeStartLineCap = PenLineCap.Round, StrokeEndLineCap = PenLineCap.Round,
-        });
-
-        int n = animated ? WetDropCount : 0;
-        var drops = new Ellipse[n];
-        var lx = new double[n]; var sy = new double[n]; var prog = new double[n]; var spd = new double[n];
-        var dropBrush = new SolidColorBrush(Color.FromArgb(235, 0x9F, 0xE0, 0xFF));
-        var dropStroke = new SolidColorBrush(Color.FromArgb(150, 0x2A, 0x6E, 0xA0));
-        for (int i = 0; i < n; i++)
-        {
-            // Positioned by a TranslateTransform (a render-only change) instead of
-            // Canvas.Left/Top — moving many droplets per tick with attached props
-            // re-invalidates layout; a transform only re-renders.
-            var drop = new Ellipse
-            {
-                Width = 5, Height = 12, Fill = dropBrush, Stroke = dropStroke, StrokeThickness = 0.8,
-                RenderTransform = new TranslateTransform(),
-            };
-            Canvas.SetLeft(drop, -2.5); Canvas.SetTop(drop, -6);   // centre at the transform's origin
-            lx[i] = -0.9 + 1.8 * _wetRng.NextDouble();
-            sy[i] = top;   // droplets start on the emission line (top of the box)
-            prog[i] = _wetRng.NextDouble();
-            spd[i] = 1.0 / WetLifetime * (0.85 + 0.3 * _wetRng.NextDouble());
-            host.Children.Add(drop);
-            drops[i] = drop;
-        }
-
-        var marker = new WetMarker
-        {
-            Host = host, Drops = drops, Lx = lx, Sy = sy, Progress = prog, Speed = spd,
-            O = o, Ax = ax, Ay = ay, Down = down, FallCanvas = fallCanvas,
-        };
-        for (int i = 0; i < n; i++) PlaceDrop(marker, i);
-        if (animated && n > 0) _wetMarkers.Add(marker);
-        return marker;
-    }
-
-    private static void PlaceDrop(WetMarker m, int i)
-    {
-        double p = m.Progress[i];
-        double cx = m.O.X + m.Lx[i] * m.Ax.X + m.Sy[i] * m.Ay.X + p * m.FallCanvas * m.Down.X;
-        double cy = m.O.Y + m.Lx[i] * m.Ax.Y + m.Sy[i] * m.Ay.Y + p * m.FallCanvas * m.Down.Y;
-        var t = (TranslateTransform)m.Drops[i].RenderTransform;
-        t.X = cx; t.Y = cy;
-        // Fade in as it leaves the emitter, out as it reaches the end of its fall.
-        m.Drops[i].Opacity = Math.Clamp(Math.Min(p * 6, (1 - p) * 2.5), 0, 1);
-    }
-
-    private void UpdateWetTimer()
-    {
-        if (_isLoaded && _wetMarkers.Count > 0)
-        {
-            if (_wetTimer == null)
-            {
-                _wetTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000.0 / 30) };
-                _wetTimer.Tick += OnWetTick;
-                _wetStart = DateTime.Now;
-            }
-            if (!_wetTimer.IsEnabled) _wetTimer.Start();
-        }
-        else
-        {
-            StopWetTimer();
-        }
-    }
-
-    private void StopWetTimer() => _wetTimer?.Stop();
-
-    private double _wetLastSec;
-    private void OnWetTick(object? sender, EventArgs e)
-    {
-        double now = (DateTime.Now - _wetStart).TotalSeconds;
-        double dt = Math.Min(0.1, now - _wetLastSec);
-        _wetLastSec = now;
-
-        foreach (var m in _wetMarkers)
-        {
-            for (int i = 0; i < m.Drops.Length; i++)
-            {
-                m.Progress[i] += m.Speed[i] * dt;
-                if (m.Progress[i] >= 1.0)
-                {
-                    m.Progress[i] -= 1.0;
-                    m.Lx[i] = -0.9 + 1.8 * _wetRng.NextDouble();
-                    // Sy stays on the emission line (top edge).
-                }
-                PlaceDrop(m, i);
+                AddSpray(pl, def.Model.Wet, ww, SpraySeed(pl.Name + "/" + pl.Npc, placements.IndexOf(entry)),
+                         def.WetStartActive ? ghost : ghost * 0.4, entry.ParallaxGain);
             }
         }
     }
@@ -3108,8 +3290,21 @@ public sealed partial class PlacePreview : Grid
         if (_bitmapCache.TryGetValue(abs, out var cached)) return cached;
         var bmp = File.Exists(abs) ? TryLoad(abs) : null;
         _bitmapCache[abs] = bmp;
+        _bitmapOrder.Enqueue(abs);
+        _bitmapBytes += BytesOf(bmp);
+        while (_bitmapBytes > BitmapsKept && _bitmapOrder.Count > 1)
+            if (_bitmapCache.Remove(_bitmapOrder.Dequeue(), out var gone)) _bitmapBytes -= BytesOf(gone);
         return bmp;
     }
+
+    // The pictures kept, oldest first, and what they take decoded (after 1.10.0). Kept without end until then: every
+    // picture of every place and game level shown stayed decoded, and the check drawing the game's 146 levels in one
+    // process grew past 13 GB. A place shows far less than this; the oldest go first past it.
+    private static readonly Queue<string> _bitmapOrder = new();
+    private static long _bitmapBytes;
+    private const long BitmapsKept = 768L * 1024 * 1024;
+
+    private static long BytesOf(BitmapSource? b) => b == null ? 0 : (long)b.PixelWidth * b.PixelHeight * Math.Max(1, (b.Format.BitsPerPixel + 7) / 8);
 
     // ── NPC subscriptions ───────────────────────────────────────────────
 
@@ -3148,7 +3343,15 @@ public sealed partial class PlacePreview : Grid
             if (it is NpcViewModel n) n.PropertyChanged -= OnNpcItemChanged;
     }
 
-    private void OnNpcItemChanged(object? sender, PropertyChangedEventArgs e) => QueueRebuild();
+    private void OnNpcItemChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        // The picked character's wet panel shows what it takes from its NPC (its kind, the box's size for it): read
+        // again when the NPC's own changes. Others read it again when they are picked.
+        if (e.PropertyName?.StartsWith("Wet", System.StringComparison.Ordinal) == true
+            && sender is NpcViewModel n && _selPlacement is { } pl && pl.Npc == n.Key)
+            pl.NpcWetChanged();
+        QueueRebuild();
+    }
 
     // ══ Transform gizmo ═════════════════════════════════════════════════
     //
@@ -3177,7 +3380,9 @@ public sealed partial class PlacePreview : Grid
     internal enum GizmoMode { Move, Rotate, Scale }
     internal enum GizmoPart { Body, Shadow, Blink, Wet, Reflection }
     internal enum GizmoHandle { None, MoveX, MoveY, MoveFree, RotZ, RotX, RotY, ScaleX, ScaleY, ScaleUniform,
-                                LightOuter, LightInner, LightOuterAngle, LightInnerAngle, LightPoint }
+                                LightOuter, LightInner, LightOuterAngle, LightInnerAngle, LightPoint, LightEdge,
+                                WetAreaLeft, WetAreaRight, WetAreaTop, WetAreaBottom,
+                                EffectMove, EffectSize }
 
     /// <summary>One editable transform, abstracted so the gizmo drives NPC parts
     /// and overlays through the same handles. Channels are LOCAL (parent-space).</summary>
@@ -3318,6 +3523,10 @@ public sealed partial class PlacePreview : Grid
     private GameObjectViewModel? _selNode;
     private string _selNodePath = "";
     private GizmoPart _selPart = GizmoPart.Body;
+    /// <summary>The part chosen with the chips: what <see cref="_selPart"/> is while the character offers it. A
+    /// reflection whose NPC no longer has one (another NPC chosen) shows the body meanwhile, and comes back with it -
+    /// with Ctrl+Z most of all (after 1.10.0, the walk over every control: the NPC taken back, the part stayed Body).</summary>
+    private GizmoPart _partChosen = GizmoPart.Body;
     private GizmoMode _gizmoMode = GizmoMode.Move;
 
     private IGizmoTarget? _gizmoTarget;
@@ -3349,10 +3558,17 @@ public sealed partial class PlacePreview : Grid
     /// <summary>Whether something is picked and has handles to drag.</summary>
     internal bool HasHandles => _gizmoTarget != null;
 
+    /// <summary>What is picked: a character standing in the place, an object, or nothing - for tests.</summary>
+    internal object? PickedRow => (object?)_selPlacement ?? _selNode;
+
     private void SelectPlacement(NpcPlacementViewModel pl, string path)
     {
+        _lostNodePath = _lostPlacementPath = null;
+        _pickedFrom = GameObjects;
         _selPlacement = pl;
         _selPlacementPath = path;
+        _selPlacementTwin = TwinInScene(pl);
+        (_selPlacementAt, _selPlacementCount) = OrdinalInScene(pl);
         _selNode = null;
         UpdateGizmoToolbar();
         RefreshGizmo();
@@ -3364,18 +3580,30 @@ public sealed partial class PlacePreview : Grid
     /// handles, in whatever frame their parent chain resolves to.</summary>
     /// <summary>Pick an object of the scene, as a click on it does (a tutorial step, 1.10.0). False when the
     /// object is not in this preview's scene.</summary>
-    internal bool PickNode(GameObjectViewModel o)
+    internal bool PickNode(GameObjectViewModel o) => PickRow(o);
+
+    /// <summary>Pick an object or a character standing in the place, as a click on it does: what a tutorial step or a
+    /// validation issue asks for, the settings of an object being beside the picture only. False when it is not in
+    /// this preview's scene.</summary>
+    internal bool PickRow(object row)
     {
         FlushRebuild();
         foreach (var e in _scene)
-            if (ReferenceEquals(e.Node, o)) { SelectNode(o, e.Path); return true; }
+        {
+            if (e.Node != null && ReferenceEquals(e.Node, row)) { SelectNode(e.Node, e.Path); return true; }
+            if (e.Npc != null && ReferenceEquals(e.Npc, row)) { SelectPlacement(e.Npc, e.Path); return true; }
+        }
         return false;
     }
 
     private void SelectNode(GameObjectViewModel o, string path)
     {
+        _lostNodePath = _lostPlacementPath = null;
+        _pickedFrom = GameObjects;
         _selNode = o;
         _selNodePath = path;
+        _selNodeTwin = TwinInScene(o);
+        (_selNodeAt, _selNodeCount) = OrdinalInScene(o);
         _selPlacement = null;
         UpdateGizmoToolbar();
         RefreshGizmo();
@@ -3385,12 +3613,107 @@ public sealed partial class PlacePreview : Grid
     private void Deselect()
     {
         if (_activeHandle != GizmoHandle.None) return;   // don't drop an active drag
+        _lostNodePath = _lostPlacementPath = null;
         _selPlacement = null;
         _selNode = null;
         _gizmoTarget = null;
         _gizmoLayer.Children.Clear();
         UpdateGizmoToolbar();
         RefreshObjectMenu();
+    }
+
+    /// <summary>
+    /// The <paramref name="twin"/>-th object (or character) at <paramref name="path"/>, else the first there. A
+    /// place can have two objects of one name side by side, and their path alone names the first: a place's
+    /// "Lamp" picture and "Lamp" light, the light picked, and the next look the preview took picked the picture
+    /// instead; renaming the picture moved the pick back to the light (found by the walk over every control,
+    /// after 1.10.0, as the panel beside the picture grew and shrank by a light's settings under the keyboard).
+    /// </summary>
+    private static SceneEntry? AtPath(List<SceneEntry> scene, string path, int twin, bool npc)
+    {
+        int seen = 0;
+        foreach (var e in scene)
+        {
+            if ((npc ? e.Npc == null : e.Node == null) || e.Path != path) continue;
+            if (seen++ == twin) return e;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Whether the views of what is shown may have been made again since the pick: an undo or a redo being put
+    /// back, or the objects shown being another list (a pack read again, the editor's language changed). Then
+    /// the pick is found again where it was in the tree. Otherwise only the object itself is the pick: one
+    /// taken out of the place is unpicked, not swapped for another of its name.
+    /// </summary>
+    private bool ViewsMadeAgain => _undoing || !ReferenceEquals(GameObjects, _pickedFrom);
+
+    /// <summary>How many objects (or characters) of the same path come before <paramref name="entry"/>.</summary>
+    private static int TwinOf(List<SceneEntry> scene, SceneEntry entry)
+    {
+        int n = 0;
+        foreach (var e in scene)
+        {
+            if (ReferenceEquals(e, entry)) return n;
+            if ((entry.Npc != null ? e.Npc != null : e.Node != null) && e.Path == entry.Path) n++;
+        }
+        return 0;
+    }
+
+    /// <summary>Which of the objects (or characters) at the picked one's path it is: see <see cref="AtPath"/>.</summary>
+    private int _selNodeTwin, _selPlacementTwin, _lostNodeTwin, _lostPlacementTwin;
+
+    /// <summary>
+    /// Where the picked one stands among the scene's objects (or characters), and how many there were: what finds it
+    /// again after an undo that took back what it is called - a name typed in the panel beside the picture, or the NPC
+    /// a character with no name of its own goes by (after 1.10.0, found by the walk over every control once it picked
+    /// things in the preview). The undo makes the row and its record again, and its path of names is the one the undo
+    /// took away, so neither finds it; nothing has moved, though. Only while there are as many as there were: one an
+    /// undo took out of the place is not swapped for its neighbour.
+    /// </summary>
+    private int _selNodeAt = -1, _selNodeCount, _selPlacementAt = -1, _selPlacementCount;
+
+    /// <summary>The <paramref name="at"/>-th object (or character) of the scene, when it has <paramref name="count"/>.</summary>
+    private static SceneEntry? AtOrdinal(List<SceneEntry> scene, int at, int count, bool npc)
+    {
+        if (at < 0) return null;
+        int n = 0;
+        SceneEntry? found = null;
+        foreach (var e in scene)
+        {
+            if (npc ? e.Npc == null : e.Node == null) continue;
+            if (n == at) found = e;
+            n++;
+        }
+        return n == count ? found : null;
+    }
+
+    /// <summary>Where <paramref name="entry"/> stands among the scene's objects (or characters), and how many there are.</summary>
+    private static (int At, int Count) OrdinalOf(List<SceneEntry> scene, SceneEntry entry)
+    {
+        bool npc = entry.Npc != null;
+        int n = 0, at = -1;
+        foreach (var e in scene)
+        {
+            if (npc ? e.Npc == null : e.Node == null) continue;
+            if (ReferenceEquals(e, entry)) at = n;
+            n++;
+        }
+        return (at, n);
+    }
+
+    /// <summary>Its place among the scene's objects (or characters) as last walked, for a pick being made.</summary>
+    private (int At, int Count) OrdinalInScene(object picked)
+    {
+        var entry = _scene.FirstOrDefault(e => ReferenceEquals(e.Node, picked) || ReferenceEquals(e.Npc, picked));
+        return entry == null ? (-1, 0) : OrdinalOf(_scene, entry);
+    }
+
+    /// <summary>Its twin number in the scene as last walked, for a pick being made.</summary>
+    private int TwinInScene(object picked)
+    {
+        var entry = _scene.FirstOrDefault(e => ReferenceEquals(e.Node, picked) || ReferenceEquals(e.Npc, picked));
+        return entry == null ? 0 : TwinOf(_scene, entry);
     }
 
     /// <summary>Resolve the current selection to its editable target + the frame
@@ -3406,23 +3729,35 @@ public sealed partial class PlacePreview : Grid
 
         if (_selNode != null)
         {
-            // Re-adopt by path first (stable across the rebind an undo/redo does),
-            // falling back to reference identity.
-            var entry = scene.FirstOrDefault(e => e.Node != null && e.Path == _selNodePath)
-                     ?? scene.FirstOrDefault(e => ReferenceEquals(e.Node, _selNode));
+            // The object itself while it is in the place, renamed or not; else the one where it was in the tree,
+            // for the views an undo or a redo made again.
+            var entry = scene.FirstOrDefault(e => ReferenceEquals(e.Node, _selNode))
+                     ?? (ViewsMadeAgain ? AtPath(scene, _selNodePath, _selNodeTwin, npc: false)
+                                          ?? AtOrdinal(scene, _selNodeAt, _selNodeCount, npc: false) : null);
             if (entry?.Node == null) return false;
+            _pickedFrom = GameObjects;
             _selNode = entry.Node;
             _selNodePath = entry.Path;
+            _selNodeTwin = TwinOf(scene, entry);
+            (_selNodeAt, _selNodeCount) = OrdinalOf(scene, entry);
             target = new OverlayTarget(entry.Node);
             frame = FrameFromParent(entry.ParentWorld);
             return true;
         }
 
-        var pe = scene.FirstOrDefault(e => e.Npc != null && e.Path == _selPlacementPath)
-              ?? scene.FirstOrDefault(e => ReferenceEquals(e.Npc, _selPlacement));
+        var pe = scene.FirstOrDefault(e => ReferenceEquals(e.Npc, _selPlacement))
+              ?? (ViewsMadeAgain ? AtPath(scene, _selPlacementPath, _selPlacementTwin, npc: true)
+                                   ?? AtOrdinal(scene, _selPlacementAt, _selPlacementCount, npc: true) : null);
         if (pe?.Npc == null) return false;
+        _pickedFrom = GameObjects;
         _selPlacement = pe.Npc;
         _selPlacementPath = pe.Path;
+        _selPlacementTwin = TwinOf(scene, pe);
+        (_selPlacementAt, _selPlacementCount) = OrdinalOf(scene, pe);
+        // The part chosen while the character offers it (_partChosen): a reflection whose NPC has none now shows the
+        // body. An undo or a redo puts that NPC there before the toolbar has looked, and the character was taken for
+        // gone - unpicked (after 1.10.0, the walk over every control: a character's NPC brought back with Ctrl+Y).
+        if (_selPart == GizmoPart.Reflection && DefFor(_selPlacement) is not { ReflectionEnabled: true }) _selPart = GizmoPart.Body;
 
         if (_selPart == GizmoPart.Body)
         {
@@ -3487,6 +3822,7 @@ public sealed partial class PlacePreview : Grid
         bool hasSelection = _selPlacement != null || _selNode != null;
         var nodeWas = _selNode;
         var placementWas = _selPlacement;
+        string pathWas = _selNodePath, placementPathWas = _selPlacementPath;
         if (hasSelection && TryResolveSelection(out var target, out var frame))
         {
             // The place's views were made again (an undo, a redo) and the picked object is the new one at the
@@ -3495,7 +3831,11 @@ public sealed partial class PlacePreview : Grid
             // showed the light as it was before the undo, and moving one changed a light that was no longer the
             // place's.
             if (!ReferenceEquals(nodeWas, _selNode) || !ReferenceEquals(placementWas, _selPlacement)
-                || !ReferenceEquals(_lightPanel.DataContext, _selPlacement == null ? _selNode?.Light : null))
+                || !ReferenceEquals(_lightPanel.DataContext, _selPlacement == null ? _selNode?.Light : null)
+                || !ReferenceEquals(_settings.Content, (object?)_selPlacement ?? _selNode)
+                // Renamed (its name box is right under the title now, after 1.10.0): the title says the new
+                // name, not the one it had a keystroke ago.
+                || pathWas != _selNodePath || placementPathWas != _selPlacementPath)
                 UpdateGizmoToolbar();
             _gizmoTarget = target;
             _gizmoFrame = frame;
@@ -3525,7 +3865,21 @@ public sealed partial class PlacePreview : Grid
                 _gizmoFrame = f;
                 DrawGizmo();
             }
-            else Deselect();
+            else
+            {
+                // Gone from the place: removed, or an undo took it out. Kept by where it was, for an undo or
+                // a redo that puts it back to pick it again (PickAgainAfterUndo) - not when it went with the
+                // place itself, another one shown or another pack opened.
+                bool samePlace = _undoing || ReferenceEquals(GameObjects, _pickedFrom);
+                string? node = _selNode != null && samePlace ? _selNodePath : null;
+                string? placed = _selPlacement != null && samePlace ? _selPlacementPath : null;
+                int nodeTwin = _selNodeTwin, placedTwin = _selPlacementTwin;
+                Deselect();
+                _lostNodePath = node;
+                _lostPlacementPath = placed;
+                _lostNodeTwin = nodeTwin;
+                _lostPlacementTwin = placedTwin;
+            }
         }));
     }
 
@@ -3534,7 +3888,11 @@ public sealed partial class PlacePreview : Grid
     private void DrawGizmo()
     {
         _gizmoLayer.Children.Clear();
+        WetBoxesShown = 0;
+        EffectBoxDrawn = null;
         if (_gizmoTarget == null) return;
+        // An object's light or effect picked (PlacePreview.ObjectParts): its handles alone, the object's out of the way.
+        if (DrawObjectPart()) return;
 
         Point o = _gizmoFrame.OriginFor(_gizmoTarget.X, _gizmoTarget.Y);
         double frameAngle = Math.Atan2(_gizmoFrame.Ux.Y, _gizmoFrame.Ux.X) * 180 / Math.PI;
@@ -3579,8 +3937,11 @@ public sealed partial class PlacePreview : Grid
                 break;
         }
 
-        // The picked object's light (1.10.0), over its other handles.
-        DrawLightHandles();
+        // The picked object's light (1.10.0), over its other handles - unless the light is a part of its own to pick
+        // (an object with a picture or an effect as well): then the object's handles are the object's alone.
+        if (_selNode == null || !LightIsApart(_selNode)) DrawLightHandles();
+        // A character's Wet part: the box its drops start in (PlacePreview.Wet).
+        DrawWetBox();
     }
 
     private void AddArrow(Point o, Vector u, Brush col, GizmoHandle h)
@@ -3658,8 +4019,8 @@ public sealed partial class PlacePreview : Grid
         if (_gizmoTarget == null) return;
         // Pull keyboard focus here: it commits (and undo-checkpoints) any field
         // that was mid-edit, and means the post-drag Ctrl+Z reaches the app
-        // rather than a still-focused text box's own undo.
-        Focus();
+        // rather than a still-focused text box's own undo. Without moving the page.
+        TakeKeyboard();
         BeginHandle(h, e.GetPosition(_canvas));
         _gizmoLayer.CaptureMouse();
         e.Handled = true;
@@ -3677,6 +4038,8 @@ public sealed partial class PlacePreview : Grid
         _startRotZ = _gizmoTarget.RotZ; _startRotX = _gizmoTarget.RotX; _startRotY = _gizmoTarget.RotY;
         _startScaleX = _gizmoTarget.ScaleX; _startScaleY = _gizmoTarget.ScaleY;
         if (IsLightHandle(h)) StartLightHandle();
+        if (IsWetSide(h)) StartWetSide();
+        if (IsEffectHandle(h)) StartEffectHandle();
     }
 
     private void OnGizmoMouseMove(object? sender, MouseEventArgs e)
@@ -3714,6 +4077,8 @@ public sealed partial class PlacePreview : Grid
                 break;
             default:
                 if (IsLightHandle(_activeHandle)) DragLightHandle(p);
+                else if (IsWetSide(_activeHandle)) DragWetSide(p);
+                else if (IsEffectHandle(_activeHandle)) DragEffectHandle(p);
                 break;
         }
     }
@@ -3814,13 +4179,25 @@ public sealed partial class PlacePreview : Grid
         foreach (var b in new[] { _btnMove, _btnRotate, _btnScale }) _modeRow.Children.Add(b);
 
         var close = MakeChip(new TextBlock { Text = "✕" }, Deselect);
+        // A chip as the others are, where they are: it was the theme's button, the width of the panel, its
+        // light cross on a light button in a light theme.
+        Paint(close, false);
+        close.HorizontalAlignment = HorizontalAlignment.Left;
 
         _gizmoBody = new StackPanel();
         _gizmoBody.Children.Add(_gizmoTitle);
         _gizmoBody.Children.Add(_partRow);
+        // An object's own, its light and its effect (PlacePreview.ObjectParts).
+        _gizmoBody.Children.Add(BuildObjectPartRow());
         _gizmoBody.Children.Add(_modeRow);
         _gizmoBody.Children.Add(BuildLightPanel());
         _gizmoBody.Children.Add(BuildEffectPanel());
+        // How a character drifts (after 1.10.0): PlacePreview.Drift.
+        var characterDrift = BuildDriftField(_characterDrift, CharacterTips, "panel:characterDrift", "btn:characterDriftBack");
+        characterDrift.Margin = new Thickness(0, 2, 0, 2);
+        _gizmoBody.Children.Add(characterDrift);
+        // Then everything its record below has (after 1.10.0): PlacePreview.Settings.
+        _gizmoBody.Children.Add(BuildSettings());
         _gizmoBody.Children.Add(close);
 
         // Said while nothing is picked, so the panel beside the picture is
@@ -3884,7 +4261,7 @@ public sealed partial class PlacePreview : Grid
 
     internal void SetPart(GizmoPart part)
     {
-        _selPart = part;
+        _selPart = _partChosen = part;
         UpdateGizmoToolbar();
         RefreshGizmo();
     }
@@ -3914,17 +4291,21 @@ public sealed partial class PlacePreview : Grid
         _gizmoBody.Visibility = picked ? Visibility.Visible : Visibility.Collapsed;
         UpdateLightPanel();
         UpdateEffectPanel();
+        UpdateSettings();
         if (!picked) return;
 
         bool isNpc = _selPlacement != null;
         _partRow.Visibility = isNpc ? Visibility.Visible : Visibility.Collapsed;
+        UpdateObjectParts();
+        // A light's or an effect's handles are their own: moving, turning and sizing are the object's.
+        _modeRow.Visibility = isNpc || PickedObjectPart == ObjectPart.Object ? Visibility.Visible : Visibility.Collapsed;
 
         // The reflection is the NPC's, not this placement's, and dragging it
         // moves it in every room that NPC stands in. Saying so in the title is
         // the only warning there is — the drag itself looks local.
         bool reflectable = isNpc && DefFor(_selPlacement) is { ReflectionEnabled: true };
         _btnReflection.Visibility = reflectable ? Visibility.Visible : Visibility.Collapsed;
-        if (!reflectable && _selPart == GizmoPart.Reflection) _selPart = GizmoPart.Body;
+        _selPart = _partChosen == GizmoPart.Reflection && !reflectable ? GizmoPart.Body : _partChosen;
 
         _gizmoTitle.Text = !isNpc
             ? Loc.F("preview.place.selectedObject", "path", _selNodePath)
@@ -3985,8 +4366,13 @@ public sealed partial class PlacePreview : Grid
                 VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
                 Content = _objectMenuList,
+                // A click on its empty room leaves the keyboard on the preview, for its keys.
+                Focusable = false,
             },
         };
+        // A click in the hierarchy puts the keyboard on the preview, for its keys: its rows are made again on every
+        // change, and the keyboard went with the row clicked.
+        _objectMenu.PreviewMouseLeftButtonDown += (_, _) => TakeKeyboard();
         RefreshObjectMenu();
     }
 
@@ -4002,17 +4388,27 @@ public sealed partial class PlacePreview : Grid
         _objectMenuList.Children.Clear();
 
         var scene = _scene.Count > 0 ? _scene : BuildScene();
-        _objectMenu.Visibility = scene.Count > 0 && _placeholder.Visibility != Visibility.Visible
-            ? Visibility.Visible : Visibility.Collapsed;
+        // Where a place's objects are made and set, there being nowhere else (after 1.10.0: the GameObjects list
+        // below the preview went): shown with no art yet behind them, and with no object yet, so + Object can make
+        // the first. A preview of no place's objects (Objects unset) only lists what it draws.
+        bool shown = Objects != null || (scene.Count > 0 && _placeholder.Visibility != Visibility.Visible);
+        _objectMenu.Visibility = shown ? Visibility.Visible : Visibility.Collapsed;
         _gizmoToolbar.Visibility = _objectMenu.Visibility;
-        if (scene.Count == 0) return;
+        if (!shown) return;
 
         _objectMenuList.Children.Add(new TextBlock
         {
             Text = Loc.T("preview.place.hierarchy"), FontWeight = FontWeights.Bold, FontSize = 11, Foreground = Brushes.White,
             Margin = new Thickness(2, 0, 0, 3),
+            ToolTip = Objects != null ? Loc.T("preview.place.keys.tip") : null,
         });
-        if (AddLightButton() is { } addLight) _objectMenuList.Children.Add(addLight);
+        _addRow = null;
+        if (AddLightButton() is FrameworkElement addLight)
+        {
+            _addRow = addLight;
+            foreach (var chip in addLight is Panel adds ? adds.Children.OfType<Button>() : Enumerable.Empty<Button>()) chip.Focusable = false;
+            _objectMenuList.Children.Add(addLight);
+        }
 
         // The scene list is already in tree order, so a row has children exactly
         // when the next one is deeper, and a collapsed row's subtree is every
@@ -4069,6 +4465,9 @@ public sealed partial class PlacePreview : Grid
                     () => SelectPlacement(q, p), collapsed, toggle, hide));
             }
         }
+        AddBinRows();
+        // As wide as the widest row of every place shown (PlacePreview.Panels).
+        AddWidestRow();
     }
 
     /// <summary>
@@ -4201,6 +4600,8 @@ public sealed partial class PlacePreview : Grid
             Foreground = ChipText,
             BorderThickness = new Thickness(0),
             Cursor = Cursors.Hand,
+            // The keyboard stays on the preview, for its keys: the row is made again on every change.
+            Focusable = false,
         };
         b.Click += (_, _) => onClick();
         return b;

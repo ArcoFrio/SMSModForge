@@ -95,6 +95,9 @@ internal sealed class PlaceFrame
     public PlaceLights? Lights;
     public BackdropRender.PostParts Parts;
     public BackdropScene? Scene;
+    /// <summary>The NPCs' wet drops (WetDrops): blended over the lit place, before the look.</summary>
+    public WetDrops.Drop[] Drops = new WetDrops.Drop[16];
+    public int DropCount;
 
     public void Clear()
     {
@@ -105,6 +108,7 @@ internal sealed class PlaceFrame
         Masked = false;
         Lights = null;
         Scene = null;
+        DropCount = 0;
     }
 
     public ref PlaceItem Add()
@@ -113,14 +117,36 @@ internal sealed class PlaceFrame
         return ref Items[Count++];
     }
 
+    public void AddDrop(in WetDrops.Drop d)
+    {
+        if (DropCount == Drops.Length) Array.Resize(ref Drops, Drops.Length * 2);
+        Drops[DropCount++] = d;
+    }
+
+    /// <summary>The drops, as the processor's passes take them (a copy: the frame is used again).</summary>
+    public WetDrops.Over? DropsOver(double canvasW, double canvasH)
+    {
+        var mips = WetDrops.Texture;
+        if (DropCount == 0 || mips == null) return null;
+        var copy = new WetDrops.Drop[DropCount];
+        Array.Copy(Drops, copy, DropCount);
+        return new WetDrops.Over(copy, DropCount, mips, canvasW, canvasH);
+    }
+
     /// <param name="butStamp">Whatever the shaders' clock says.</param>
     public bool SameAs(PlaceFrame o, bool butStamp = false)
     {
         if (Count != o.Count || (!butStamp && Stamp != o.Stamp) || Vw != o.Vw || Vh != o.Vh || ViewX != o.ViewX || ViewY != o.ViewY || ViewW != o.ViewW || ViewH != o.ViewH
             || CanvasW != o.CanvasW || CanvasH != o.CanvasH || Masked != o.Masked || !ReferenceEquals(Lights, o.Lights) || Parts != o.Parts
-            || !ReferenceEquals(Scene, o.Scene)) return false;
+            || !ReferenceEquals(Scene, o.Scene) || DropCount != o.DropCount) return false;
         for (int i = 0; i < Count; i++)
             if (!Items[i].SameAs(o.Items[i])) return false;
+        for (int i = 0; i < DropCount; i++)
+        {
+            ref readonly var a = ref Drops[i];
+            ref readonly var b = ref o.Drops[i];
+            if (a.X != b.X || a.Y != b.Y || a.W != b.W || a.H != b.H || a.Alpha != b.Alpha) return false;
+        }
         return true;
     }
 }
@@ -218,7 +244,7 @@ internal sealed class GpuPlaceScene : IDisposable
         _smooth = gpu.Device.CreateSamplerState(new SamplerDescription(Filter.MinMagMipLinear, TextureAddressMode.Clamp, TextureAddressMode.Clamp, TextureAddressMode.Clamp,
                                                                        0f, 1, ComparisonFunction.Never, 0f, float.MaxValue));
         _itemCb = new GpuConstants(gpu, 24);
-        _litCb = new GpuConstants(gpu, 12);
+        _litCb = new GpuConstants(gpu, 20);
     }
 
     /// <summary>One for a preview, or null when the PC has no card to draw on.</summary>
@@ -477,11 +503,19 @@ internal sealed class GpuPlaceScene : IDisposable
 
         static float U(int v) => BitConverter.Int32BitsToSingle(v);
         var (tw, th) = lights?.TextureSize ?? (0, 0);
+        // The NPCs' wet drops, and the particle texture's copies (once).
+        var mips = f.DropCount > 0 ? WetDrops.Texture : null;
+        int drops = mips != null ? DropsOnCard(ctx, f) : 0;
+        float canvasW = (float)f.CanvasW, canvasH = (float)f.CanvasH;
+        // WetDrops.Over: the target's pixels to a canvas pixel, as the processor works it out.
+        float dropScale = screenRows ? canvas.W / canvasW : 1f / (ax * canvasW);
         _litCb.Upload(_gpu, new[]
         {
             U(canvas.W), U(canvas.H), U(screenRows ? 1 : 0), U(f.Masked && lights != null ? 1 : 0),
             ax, bx, ay, by,
             U(lights != null ? 1 : 0), U(lights != null ? _lightRows : 0), U(tw), U(th),
+            U(drops), U(mips?.Full ?? 0), U(mips?.Levels ?? 0), dropScale,
+            canvasW, canvasH, 0f, 0f,
         });
         ctx.CSSetShader(_lit);
         ctx.CSSetConstantBuffer(0, _litCb.Buffer);
@@ -497,10 +531,52 @@ internal sealed class GpuPlaceScene : IDisposable
             if (_rowsRead != null) ctx.CSSetShaderResource(7, _rowsRead);
             if (_glowsRead != null) ctx.CSSetShaderResource(8, _glowsRead);
         }
+        if (drops > 0)
+        {
+            ctx.CSSetShaderResource(9, _dropsRead!);
+            ctx.CSSetShaderResource(10, _dropAlphaRead!);
+        }
         ctx.CSSetUnorderedAccessView(0, target.Write!);
         ctx.Dispatch((uint)((canvas.W + 15) / 16), (uint)((canvas.H + 15) / 16), 1);
         ctx.CSSetUnorderedAccessView(0, null);
-        for (uint slot = 0; slot <= 8; slot++) ctx.CSSetShaderResource(slot, null);
+        for (uint slot = 0; slot <= 10; slot++) ctx.CSSetShaderResource(slot, null);
+    }
+
+    // The drops' rows (made again as their number grows; filled every frame) and the texture's copies.
+    private ID3D11Buffer? _drops, _dropAlpha;
+    private ID3D11ShaderResourceView? _dropsRead, _dropAlphaRead;
+    private int _dropsRoom;
+    private float[]? _dropRows;
+    private const int DropStride = 12;
+
+    /// <summary>The frame's drops on the card, for both of its targets: how many.</summary>
+    private int DropsOnCard(ID3D11DeviceContext ctx, PlaceFrame f)
+    {
+        var mips = WetDrops.Texture!;
+        if (_dropAlpha == null)
+            (_dropAlpha, _dropAlphaRead) = Floats(mips.Alpha, 4);
+        if (_drops == null || _dropsRoom < f.DropCount)
+        {
+            _dropsRead?.Dispose(); _drops?.Dispose();
+            _dropsRoom = Math.Max(16, f.DropCount * 2);
+            _dropRows = new float[_dropsRoom * DropStride];
+            (_drops, _dropsRead) = Floats(_dropRows, DropStride * 4);
+        }
+        var rows = _dropRows!;
+        Array.Clear(rows);
+        for (int i = 0; i < f.DropCount; i++)
+        {
+            ref readonly var d = ref f.Drops[i];
+            int o = i * DropStride;
+            rows[o] = (float)d.X; rows[o + 1] = (float)d.Y; rows[o + 2] = (float)d.W; rows[o + 3] = (float)d.H; rows[o + 4] = d.Alpha;
+            rows[o + 5] = WetDrops.Linear(d.R); rows[o + 6] = WetDrops.Linear(d.G); rows[o + 7] = WetDrops.Linear(d.B); rows[o + 8] = d.Solid ? 1f : 0f; rows[o + 9] = d.Lit ? 1f : 0f;
+        }
+        unsafe
+        {
+            fixed (float* p = rows)
+                ctx.UpdateSubresource(_drops!, 0, null, (IntPtr)p, 0, 0);
+        }
+        return f.DropCount;
     }
 
     private (ID3D11Buffer, ID3D11ShaderResourceView) Floats(ReadOnlySpan<float> data, int stride)
@@ -576,6 +652,7 @@ internal sealed class GpuPlaceScene : IDisposable
             _look?.Dispose(); _angle?.Dispose(); _falloff?.Dispose();
             _decodeRead?.Dispose(); _decode?.Dispose(); _texelsRead?.Dispose(); _texels?.Dispose();
             _rowsRead?.Dispose(); _rows?.Dispose(); _glowsRead?.Dispose(); _glows?.Dispose();
+            _dropsRead?.Dispose(); _drops?.Dispose(); _dropAlphaRead?.Dispose(); _dropAlpha?.Dispose();
             _over.Dispose(); _raster.Dispose(); _nearest.Dispose(); _linear.Dispose(); _smooth.Dispose();
             _itemCb.Dispose(); _litCb.Dispose();
         }

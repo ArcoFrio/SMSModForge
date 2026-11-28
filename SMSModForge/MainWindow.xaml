@@ -3179,8 +3179,21 @@
             </Border>
         </DataTemplate>
 
+        <!-- A record's list of the records nested in it, left out where the
+             record is shown in the place preview's narrow panel (view:Narrow):
+             the hierarchy beside the picture lists them, and picks them. -->
+        <Style x:Key="NotInNarrow" TargetType="ItemsControl">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding (view:Narrow.Is), RelativeSource={RelativeSource Self}}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <!-- Implicit (keyed-by-type) so a GameObject's nested Children
-             ItemsControl re-uses this very template recursively. -->
+             ItemsControl re-uses this very template recursively. Also the
+             picked object's settings beside the place preview's picture, laid
+             out for the narrow panel there (view:Narrow). -->
         <DataTemplate DataType="{x:Type vm:GameObjectViewModel}">
             <!-- A bound node that currently differs from the vanilla object gets
                  an accent edge + wash, so you can see at a glance which of the
@@ -3233,6 +3246,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="{l:T gameObject.name}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
@@ -3240,7 +3254,24 @@
                              Grid.Row="0" Grid.Column="1"
                              IsEnabled="{Binding CanEditIdentity}"
                              ToolTip="{l:T gameObject.gameobjectNameDialogueActions.tip}"/>
-                    <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+                    <!-- Beside the name; under it, wrapping, in the place preview's
+                         narrow panel (view:Narrow), where beside it they left the
+                         name no room. Row 1 is theirs there and empty here. -->
+                    <WrapPanel>
+                        <WrapPanel.Style>
+                            <Style TargetType="WrapPanel">
+                                <Setter Property="Grid.Row" Value="0"/>
+                                <Setter Property="Grid.Column" Value="2"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding (view:Narrow.Is), RelativeSource={RelativeSource Self}}" Value="True">
+                                        <Setter Property="Grid.Row" Value="1"/>
+                                        <Setter Property="Grid.Column" Value="0"/>
+                                        <Setter Property="Grid.ColumnSpan" Value="3"/>
+                                        <Setter Property="Margin" Value="-4,4,0,0"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </WrapPanel.Style>
                         <!-- The NPCs container. Deliberately a CHIP and not a
                              tint: the row's background and border already carry
                              whether the object is the game's and whether the pack
@@ -3279,13 +3310,13 @@
                                 Command="{Binding PasteCommand}" ToolTip="{l:T gameObject.paste.tip}"/>
                         <Button Content="−" Width="22" Height="22" Padding="0" Margin="4,0,0,0"
                                 Command="{Binding RemoveCommand}" ToolTip="{l:T gameObject.remove.tip}"/>
-                    </StackPanel>
+                    </WrapPanel>
 
                     <!-- One row, stacked. The NPCs note and the bind controls can
                          BOTH apply now that an extension's NPCs container is a
                          bound node, and two siblings sharing a Grid.Row draw on
                          top of each other rather than below. -->
-                    <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
+                    <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
 
                     <!-- Shown for both kinds of NPCs container: the forced node a
                          pack place carries, and the vanilla object an extension
@@ -3316,18 +3347,22 @@
                         <CheckBox IsChecked="{Binding CopyBeside}" Content="{l:T gameObject.copyBeside}" Margin="16,2,0,0"
                                   Visibility="{Binding IsCopy, Converter={StaticResource BoolToVisibility}}"
                                   ToolTip="{l:T gameObject.copyBeside.tip}"/>
-                        <StackPanel Orientation="Horizontal" Margin="16,2,0,0"
-                                    Visibility="{Binding KeepsWhatItFinds, Converter={StaticResource BoolToVisibility}}">
-                            <CheckBox IsChecked="{Binding OverrideTransform}" Content="{l:T gameObject.overrideTransform}"
+                        <!-- Wrapping rows here and below: one line where there is room, as
+                             before; several in the place preview's narrow panel. -->
+                        <WrapPanel Margin="16,2,0,0"
+                                   Visibility="{Binding KeepsWhatItFinds, Converter={StaticResource BoolToVisibility}}">
+                            <CheckBox IsChecked="{Binding OverrideTransform}" Content="{l:T gameObject.overrideTransform}" Margin="0,0,12,0"
                                       ToolTip="{l:T gameObject.overrideTransform.tip}"/>
-                            <CheckBox IsChecked="{Binding OverrideActive}" Content="{l:T gameObject.overrideActive}" Margin="12,0,0,0"
+                            <CheckBox IsChecked="{Binding OverrideActive}" Content="{l:T gameObject.overrideActive}" Margin="0,0,12,0"
                                       ToolTip="{l:T gameObject.overrideActive.tip}"/>
-                            <CheckBox IsChecked="{Binding OverrideParallax}" Content="{l:T gameObject.overrideParallax}" Margin="12,0,0,0"
-                                      ToolTip="{l:T gameObject.overrideParallax.tip}"/>
-                            <TextBox Text="{Binding ParallaxStrength, StringFormat=F2, UpdateSourceTrigger=LostFocus}" Width="45" Margin="4,0,0,0"
-                                     Visibility="{Binding OverrideParallax, Converter={StaticResource BoolToVisibility}}"
-                                     ToolTip="{l:T gameObject.overrideParallax.tip}"/>
-                        </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding OverrideParallax}" Content="{l:T gameObject.overrideParallax}"
+                                          ToolTip="{l:T gameObject.overrideParallax.tip}"/>
+                                <TextBox Text="{Binding ParallaxStrength, StringFormat=F2, UpdateSourceTrigger=LostFocus}" Width="45" Margin="4,0,0,0"
+                                         Visibility="{Binding OverrideParallax, Converter={StaticResource BoolToVisibility}}"
+                                         ToolTip="{l:T gameObject.overrideParallax.tip}"/>
+                            </StackPanel>
+                        </WrapPanel>
                         <DockPanel Margin="16,2,0,0"
                                    Visibility="{Binding KeepsWhatItFinds, Converter={StaticResource BoolToVisibility}}">
                             <TextBlock Text="{l:T gameObject.particleColor}" Width="96" VerticalAlignment="Center"
@@ -3341,75 +3376,131 @@
                     </StackPanel>
                     </StackPanel>
 
-                    <TextBlock Text="{l:T gameObject.sprite}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{l:T gameObject.sprite}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
                     <ctl:PathPickerBox PathText="{Binding Sprite, UpdateSourceTrigger=PropertyChanged}"
                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
-                                       Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                                       Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
                                        ToolTip="{l:T gameObject.packRelativePNGPath.tip}"/>
 
-                    <TextBlock Text="{l:T gameObject.transform}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
-                    <WrapPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
-                        <TextBlock Text="X" VerticalAlignment="Center" Margin="0,0,2,2"/>
-                        <TextBox Text="{Binding X, UpdateSourceTrigger=PropertyChanged}" Width="50" Margin="0,0,0,2"
-                                 ToolTip="{l:T gameObject.worldXPositionLevel.tip}"/>
-                        <TextBlock Text="Y" VerticalAlignment="Center" Margin="8,0,2,2"/>
-                        <TextBox Text="{Binding Y, UpdateSourceTrigger=PropertyChanged}" Width="50" Margin="0,0,0,2"
-                                 ToolTip="{l:T gameObject.worldYPositionUp.tip}"/>
-                        <TextBlock Text="{l:T gameObject.rot}" VerticalAlignment="Center" Margin="8,0,2,2"/>
-                        <TextBox Text="{Binding RotationZ, UpdateSourceTrigger=PropertyChanged}" Width="45" Margin="0,0,0,2"
-                                 ToolTip="{l:T gameObject.zRotationDegreesPlane.tip}"/>
-                        <TextBlock Text="{l:T gameObject.scaleXY}" VerticalAlignment="Center" Margin="8,0,2,2"/>
-                        <TextBox Text="{Binding ScaleX, UpdateSourceTrigger=PropertyChanged}" Width="45" Margin="0,0,0,2"
-                                 ToolTip="{l:T gameObject.localXScale1.tip}"/>
-                        <TextBox Text="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged}" Width="45" Margin="4,0,0,2"
-                                 ToolTip="{l:T gameObject.localYScale.tip}"/>
-                        <TextBlock Text="{l:T gameObject.sort}" VerticalAlignment="Center" Margin="8,0,2,2"/>
-                        <TextBox Text="{Binding SortingOrder, UpdateSourceTrigger=PropertyChanged}" Width="45" Margin="0,0,0,2"
-                                 ToolTip="{l:T gameObject.spriterendererSortingOrderLower.tip}"/>
+                    <TextBlock Text="{l:T gameObject.transform}" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
+                    <!-- Each word with its box, so a narrow column (the place
+                         preview's panel) wraps between them, never inside one. -->
+                    <WrapPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,8,2">
+                            <TextBlock Text="X" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                            <TextBox Text="{Binding X, UpdateSourceTrigger=PropertyChanged}" Width="50"
+                                     ToolTip="{l:T gameObject.worldXPositionLevel.tip}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,8,2">
+                            <TextBlock Text="Y" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                            <TextBox Text="{Binding Y, UpdateSourceTrigger=PropertyChanged}" Width="50"
+                                     ToolTip="{l:T gameObject.worldYPositionUp.tip}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,8,2">
+                            <TextBlock Text="{l:T gameObject.rot}" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                            <TextBox Text="{Binding RotationZ, UpdateSourceTrigger=PropertyChanged}" Width="45"
+                                     ToolTip="{l:T gameObject.zRotationDegreesPlane.tip}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,8,2">
+                            <TextBlock Text="{l:T gameObject.scaleXY}" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                            <TextBox Text="{Binding ScaleX, UpdateSourceTrigger=PropertyChanged}" Width="45"
+                                     ToolTip="{l:T gameObject.localXScale1.tip}"/>
+                            <TextBox Text="{Binding ScaleY, UpdateSourceTrigger=PropertyChanged}" Width="45" Margin="4,0,0,0"
+                                     ToolTip="{l:T gameObject.localYScale.tip}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,8,2">
+                            <TextBlock Text="{l:T gameObject.sort}" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                            <TextBox Text="{Binding SortingOrder, UpdateSourceTrigger=PropertyChanged}" Width="45"
+                                     ToolTip="{l:T gameObject.spriterendererSortingOrderLower.tip}"/>
+                        </StackPanel>
                     </WrapPanel>
 
-                    <!-- Row 4 nests its own rows rather than claiming more of the
+                    <!-- Row 5 nests its own rows rather than claiming more of the
                          outer Grid: the parallax settings only appear when the
-                         effect is on, and a collapsed child costs no layout. -->
-                    <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,4,0,0">
-                        <StackPanel Orientation="Horizontal">
+                         effect is on, and a collapsed child costs no layout.
+                         Wrapping rows: one line where there is room, several in the
+                         place preview's narrow panel, a word and its box together. -->
+                    <StackPanel Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,4,0,0">
+                        <WrapPanel>
                             <CheckBox Content="{l:T gameObject.parallax}" IsChecked="{Binding ParallaxEnabled}"
-                                      VerticalAlignment="Center"
+                                      VerticalAlignment="Center" Margin="0,0,12,0"
                                       ToolTip="{l:T gameObject.parallax.tip}"/>
                             <CheckBox Content="{l:T gameObject.startActive}" IsChecked="{Binding StartActive}"
-                                      VerticalAlignment="Center" Margin="12,0,0,0"
+                                      VerticalAlignment="Center" Margin="0,0,12,0"
                                       ToolTip="{l:T gameObject.startActive.tip}"/>
-                            <TextBlock Text="{l:T gameObject.alpha}" VerticalAlignment="Center" Margin="12,0,2,0"/>
-                            <TextBox Text="{Binding StartAlpha, UpdateSourceTrigger=PropertyChanged}" Width="45"
-                                     ToolTip="{l:T gameObject.initialAlpha01.tip}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="16,4,0,0"
-                                    Visibility="{Binding ParallaxEnabled, Converter={StaticResource BoolToVisibility}}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{l:T gameObject.alpha}" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                                <TextBox Text="{Binding StartAlpha, UpdateSourceTrigger=PropertyChanged}" Width="45"
+                                         ToolTip="{l:T gameObject.initialAlpha01.tip}"/>
+                            </StackPanel>
+                        </WrapPanel>
+                        <WrapPanel Margin="16,4,0,0"
+                                   Visibility="{Binding ParallaxEnabled, Converter={StaticResource BoolToVisibility}}">
                             <CheckBox Content="{l:T gameObject.driftLevel}" IsChecked="{Binding ParallaxInherits}" VerticalAlignment="Center"
+                                      Margin="0,0,10,0"
                                       ToolTip="{l:T gameObject.driftLevel.tip}"/>
-                            <TextBox Text="{Binding ParallaxStrength, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" Width="45" Margin="10,0,0,0"
-                                     IsEnabled="{Binding ParallaxInherits, Converter={StaticResource InverseBoolConverter}}"
-                                     ToolTip="{l:T gameObject.depthRelativeLevelS.tip}"/>
-                            <Slider Value="{Binding ParallaxStrength}" Minimum="0" Maximum="1.5" Width="110"
-                                    VerticalAlignment="Center" Margin="6,0,0,0"
-                                    IsEnabled="{Binding ParallaxInherits, Converter={StaticResource InverseBoolConverter}}"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
+                                <TextBox Text="{Binding ParallaxStrength, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" Width="45"
+                                         IsEnabled="{Binding ParallaxInherits, Converter={StaticResource InverseBoolConverter}}"
+                                         ToolTip="{l:T gameObject.depthRelativeLevelS.tip}"/>
+                                <Slider Value="{Binding ParallaxStrength}" Minimum="0" Maximum="1.5" Width="110"
+                                        VerticalAlignment="Center" Margin="6,0,0,0"
+                                        IsEnabled="{Binding ParallaxInherits, Converter={StaticResource InverseBoolConverter}}"/>
+                            </StackPanel>
                             <CheckBox Content="{l:T gameObject.reversed}" IsChecked="{Binding ParallaxReversed}"
-                                      VerticalAlignment="Center" Margin="12,0,0,0"
+                                      VerticalAlignment="Center" Margin="0,0,12,0"
                                       ToolTip="{l:T gameObject.reversed.tip}"/>
                             <CheckBox Content="{l:T gameObject.uiSpace}" IsChecked="{Binding ParallaxIsUI}"
-                                      VerticalAlignment="Center" Margin="12,0,0,0"
+                                      VerticalAlignment="Center"
                                       ToolTip="{l:T gameObject.uiSpace.tip}"/>
-                        </StackPanel>
+                        </WrapPanel>
                     </StackPanel>
 
-                    <TextBlock Text="{l:T gameObject.maskOpt}" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
-                    <ctl:PathPickerBox PathText="{Binding Mask, UpdateSourceTrigger=PropertyChanged}"
-                                       PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
-                                       Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"
-                                       ToolTip="{l:T gameObject.optionalPackRelativeMask.tip}"/>
+                    <!-- How its picture moves (after 1.10.0): still, with the back layer's mask, or by a mask of its
+                         own through the level's pass or the characters' jiggle - painted in the mask studio. -->
+                    <TextBlock Text="{l:T gameObject.maskOpt}" Grid.Row="6" Grid.Column="0" VerticalAlignment="Top" Margin="0,3,0,0"/>
+                    <StackPanel Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2">
+                        <ComboBox SelectedValuePath="Tag" SelectedValue="{Binding MaskKind}" HorizontalAlignment="Left" MinWidth="170"
+                                  view:TutorialAnchor.Id="field:objectMaskKind" ToolTip="{l:T gameObject.maskKind.tip}">
+                            <ComboBoxItem Tag="none" Content="{l:T gameObject.maskKind.none}" ToolTip="{l:T gameObject.maskKind.none.tip}"/>
+                            <ComboBoxItem Tag="backLayer" Content="{l:T gameObject.maskKind.backLayer}" ToolTip="{l:T gameObject.maskKind.backLayer.tip}"/>
+                            <ComboBoxItem Tag="level" Content="{l:T gameObject.maskKind.level}" ToolTip="{l:T gameObject.maskKind.level.tip}"/>
+                            <ComboBoxItem Tag="jiggle" Content="{l:T gameObject.maskKind.jiggle}" ToolTip="{l:T gameObject.maskKind.jiggle.tip}"/>
+                        </ComboBox>
+                        <DockPanel Margin="0,4,0,0" Visibility="{Binding MaskIsOwn, Converter={StaticResource BoolToVisibility}}">
+                            <Button DockPanel.Dock="Right" Content="{l:T gameObject.editMask}" Margin="4,0,0,0" Padding="6,0"
+                                    view:TutorialAnchor.Id="btn:editObjectMask"
+                                    Click="EditObjectMask_Click" ToolTip="{l:T gameObject.editMask.tip}"/>
+                            <ctl:PathPickerBox PathText="{Binding Mask, UpdateSourceTrigger=PropertyChanged}"
+                                               PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
+                                               ToolTip="{l:T gameObject.optionalPackRelativeMask.tip}"/>
+                        </DockPanel>
+                        <Grid Margin="0,4,0,0" Visibility="{Binding MaskIsJiggle, Converter={StaticResource BoolToVisibility}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{l:T npcs.speed}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,6,0" ToolTip="{l:T npcs.speed.tip}"/>
+                            <TextBox Style="{StaticResource NumberBox}" ToolTip="{l:T npcs.speed.tip}" Text="{Binding JiggleSpeed, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                            <TextBlock Text="{l:T npcs.strength}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,6,0" ToolTip="{l:T npcs.strength.tip}"/>
+                            <TextBox ToolTip="{l:T npcs.strength.tip}" Text="{Binding JiggleStrength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                            <TextBlock Text="{l:T npcs.waveFrequency}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,6,0" ToolTip="{l:T npcs.waveFrequency.tip}"/>
+                            <TextBox ToolTip="{l:T npcs.waveFrequency.tip}" Text="{Binding JiggleFrequency, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"/>
+                            <TextBlock Text="{l:T npcs.noiseScale}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,6,0" ToolTip="{l:T npcs.noiseScale.tip}"/>
+                            <TextBox Style="{StaticResource NumberBox}" ToolTip="{l:T npcs.noiseScale.tip}" Text="{Binding NoiseScale, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1"/>
+                            <TextBlock Text="{l:T npcs.noiseSpeed}" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,6,0" ToolTip="{l:T npcs.noiseSpeed.tip}"/>
+                            <TextBox Style="{StaticResource NumberBox}" ToolTip="{l:T npcs.noiseSpeed.tip}" Text="{Binding NoiseSpeed, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1"/>
+                            <TextBlock Text="{l:T npcs.noiseStrength}" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,6,0" ToolTip="{l:T npcs.noiseStrength.tip}"/>
+                            <TextBox ToolTip="{l:T npcs.noiseStrength.tip}" Text="{Binding NoiseStrength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1"/>
+                        </Grid>
+                    </StackPanel>
 
                     <!-- Utility components attached to this GameObject. -->
-                    <Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"
+                    <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"
                             BorderBrush="{DynamicResource Theme.Border}" BorderThickness="0,1,0,0" Padding="0,4,0,0">
                         <StackPanel>
                             <DockPanel>
@@ -3425,7 +3516,7 @@
                     </Border>
                     <!-- Activation conditions: the object switches itself on/off as
                          these pass, instead of a rule having to drive it. -->
-                    <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"
+                    <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"
                             BorderBrush="{DynamicResource Theme.Border}" BorderThickness="0,1,0,0" Padding="0,4,0,0">
                         <StackPanel>
                             <DockPanel>
@@ -3448,7 +3539,7 @@
                     <!-- Children: nested GameObjects and NPC placements alike. NPCs
                          can only be added inside the NPCs subtree, so that button
                          hides itself elsewhere. -->
-                    <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"
+                    <Border Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"
                             BorderBrush="{DynamicResource Theme.Border}" BorderThickness="0,1,0,0" Padding="0,4,0,0">
                         <StackPanel>
                             <DockPanel>
@@ -3463,9 +3554,11 @@
                             </DockPanel>
                             <!-- No ItemTemplate on either: GameObjectViewModel and
                                  NpcPlacementViewModel each resolve to their implicit
-                                 template, giving recursive nesting. Indented to show depth. -->
-                            <ItemsControl ItemsSource="{Binding Npcs}" Margin="12,4,0,0"/>
-                            <ItemsControl ItemsSource="{Binding Children}" Margin="12,4,0,0"/>
+                                 template, giving recursive nesting. Indented to show depth.
+                                 Not in the place preview's narrow panel: there the
+                                 hierarchy beside the picture lists them, and picks them. -->
+                            <ItemsControl ItemsSource="{Binding Npcs}" Margin="12,4,0,0" Style="{StaticResource NotInNarrow}"/>
+                            <ItemsControl ItemsSource="{Binding Children}" Margin="12,4,0,0" Style="{StaticResource NotInNarrow}"/>
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -3542,6 +3635,27 @@
                                                     </WrapPanel>
                                                 </StackPanel>
 
+                                                <!-- FloatingSprite (after 1.10.0: monsters floating in vats) -->
+                                                <StackPanel Margin="0,4,0,0"
+                                                            Visibility="{Binding IsFloating, Converter={StaticResource BoolToVisibility}}">
+                                                    <TextBlock Text="{l:T component.floatExplain}"
+                                                               Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                                                    <WrapPanel>
+                                                        <TextBlock Text="{l:T component.floatHeight}" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                                                        <TextBox Width="45" Text="{Binding FloatHeight, UpdateSourceTrigger=LostFocus}" ToolTip="{l:T component.floatHeight.tip}"/>
+                                                        <TextBlock Text="{l:T component.floatPeriod}" VerticalAlignment="Center" Margin="8,0,2,0"/>
+                                                        <TextBox Width="45" Text="{Binding FloatPeriod, UpdateSourceTrigger=LostFocus}" ToolTip="{l:T component.floatPeriod.tip}"/>
+                                                        <TextBlock Text="{l:T component.floatSway}" VerticalAlignment="Center" Margin="8,0,2,0"/>
+                                                        <TextBox Width="45" Text="{Binding FloatSway, UpdateSourceTrigger=LostFocus}" ToolTip="{l:T component.floatSway.tip}"/>
+                                                    </WrapPanel>
+                                                    <WrapPanel Margin="0,3,0,0">
+                                                        <TextBlock Text="{l:T component.floatStart}" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                                                        <TextBox Width="45" Text="{Binding FloatStart, UpdateSourceTrigger=LostFocus}" ToolTip="{l:T component.floatStart.tip}"/>
+                                                        <CheckBox Content="{l:T component.floatRandomStart}" VerticalAlignment="Center" Margin="8,0,0,0"
+                                                                  IsChecked="{Binding FloatRandomStart}" ToolTip="{l:T component.floatRandomStart.tip}"/>
+                                                    </WrapPanel>
+                                                </StackPanel>
+
                                                 <!-- A component the GAME defines. Parameter names come
                                                      from the vanilla extraction, so they match the real
                                                      fields; blank means "leave at the component's own
@@ -3578,7 +3692,9 @@
                                         </Border>
         </DataTemplate>
 
-        <!-- Implicit, so a GameObject node's nested NPCs ItemsControl picks it up. -->
+        <!-- Implicit, so a GameObject node's nested NPCs ItemsControl picks it up.
+             Also the picked character's settings beside the place preview's
+             picture, in the narrow panel there (view:Narrow). -->
         <DataTemplate DataType="{x:Type vm:NpcPlacementViewModel}">
             <!-- Opaque background: an NPC row nests inside its host GameObject's
                  row, and without one it showed that host's tint — reading as if
@@ -3636,20 +3752,81 @@
                             <ContentControl Content="{Binding Blink}" ContentTemplate="{StaticResource NpcTransformEditor}"/>
                             <TextBlock Text="{l:T npcPlacement.wetParticle}" FontWeight="SemiBold" Margin="0,6,0,2"/>
                             <ContentControl Content="{Binding Wet}" ContentTemplate="{StaticResource NpcTransformEditor}"/>
+                            <!-- The wet effect (after 1.10.0): which of the game's two, the box its drops start in (its
+                                 sides dragged in the preview too), and its settings; the shower's top and floor alone
+                                 (the author: "we might only want to apply the top and bottom settings to that one"). -->
+                            <TextBlock Text="{l:T npcPlacement.wetEffect}" FontWeight="SemiBold" Margin="0,6,0,2"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{l:T npcPlacement.wetKind}" Grid.Row="0" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" MinWidth="110" SelectedIndex="{Binding WetKindIndex}"
+                                          ToolTip="{l:T npcPlacement.wetKind.tip}">
+                                    <ComboBoxItem Content="{l:T npcPlacement.wetKindNpc}"/>
+                                    <ComboBoxItem Content="{l:T npcPlacement.wetKindWet}"/>
+                                    <ComboBoxItem Content="{l:T npcPlacement.wetKindShower}"/>
+                                </ComboBox>
+                                <TextBlock Text="{l:T npcPlacement.wetWidth}" Grid.Row="1" VerticalAlignment="Center" Margin="0,2,6,0" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="52" Margin="0,2,0,0"
+                                         Text="{Binding WetAreaWidth, UpdateSourceTrigger=PropertyChanged}" ToolTip="{l:T npcPlacement.wetWidth.tip}"/>
+                                <TextBlock Text="{l:T npcPlacement.wetHeight}" Grid.Row="2" VerticalAlignment="Center" Margin="0,2,6,0" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                <TextBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Width="52" Margin="0,2,0,0"
+                                         Text="{Binding WetAreaHeight, UpdateSourceTrigger=PropertyChanged}" ToolTip="{l:T npcPlacement.wetHeight.tip}"/>
+                                <CheckBox Grid.Row="3" Grid.ColumnSpan="2" Margin="0,4,0,0" Content="{l:T npcPlacement.wetFromTop}" IsChecked="{Binding WetFromTop}"
+                                          Visibility="{Binding WetShower, Converter={StaticResource BoolToVisibility}}" ToolTip="{l:T npcPlacement.wetFromTop.tip}"/>
+                                <CheckBox Grid.Row="4" Grid.ColumnSpan="2" Margin="0,2,0,0" Content="{l:T npcPlacement.wetFloor}" IsChecked="{Binding WetFloor}"
+                                          Visibility="{Binding WetShower, Converter={StaticResource BoolToVisibility}}" ToolTip="{l:T npcPlacement.wetFloor.tip}"/>
+                                <TextBlock Text="{l:T npcPlacement.wetTint}" Grid.Row="5" VerticalAlignment="Center" Margin="0,4,6,0" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" Margin="0,4,0,0">
+                                    <TextBox Width="90" Text="{Binding WetTint, UpdateSourceTrigger=PropertyChanged}" ToolTip="{l:T npcPlacement.wetTint.tip}"/>
+                                    <Button Content="{l:T npcPlacement.wetPickTint}" Padding="8,1" Margin="6,0,0,0" Click="PickWetTint_Click"
+                                            ToolTip="{l:T npcPlacement.wetPickTint.tip}"/>
+                                </StackPanel>
+                                <TextBlock Text="{l:T npcPlacement.wetAmount}" Grid.Row="6" VerticalAlignment="Center" Margin="0,2,6,0" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                <TextBox Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" Width="52" Margin="0,2,0,0"
+                                         Text="{Binding WetAmount, UpdateSourceTrigger=PropertyChanged}" ToolTip="{l:T npcPlacement.wetAmount.tip}"/>
+                                <TextBlock Text="{l:T npcPlacement.wetSize}" Grid.Row="7" VerticalAlignment="Center" Margin="0,2,6,0" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                <TextBox Grid.Row="7" Grid.Column="1" HorizontalAlignment="Left" Width="52" Margin="0,2,0,0"
+                                         Text="{Binding WetSize, UpdateSourceTrigger=PropertyChanged}" ToolTip="{l:T npcPlacement.wetSize.tip}"/>
+                                <TextBlock Text="{l:T npcPlacement.wetFall}" Grid.Row="8" VerticalAlignment="Center" Margin="0,2,6,0" Foreground="{DynamicResource Theme.TextMuted}"/>
+                                <TextBox Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left" Width="52" Margin="0,2,0,0"
+                                         Text="{Binding WetFall, UpdateSourceTrigger=PropertyChanged}" ToolTip="{l:T npcPlacement.wetFall.tip}"/>
+                                <Button Grid.Row="9" Grid.Column="1" HorizontalAlignment="Left" Margin="0,4,0,0" Padding="8,1"
+                                        Content="{l:T npcPlacement.wetReset}" Command="{Binding ResetWetEffectCommand}" ToolTip="{l:T npcPlacement.wetReset.tip}"/>
+                            </Grid>
                         </StackPanel>
                     </Expander>
 
-                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="0,4,0,0">
+                    <!-- Wrapping: one line where there is room, two in the place
+                         preview's narrow panel. -->
+                    <WrapPanel Grid.Row="3" Grid.Column="1" Margin="0,4,0,0">
                         <CheckBox Content="{l:T npcPlacement.startActive}" IsChecked="{Binding StartActive}" VerticalAlignment="Center"
+                                  Margin="0,0,16,0"
                                   ToolTip="{l:T npcPlacement.startActive.tip}"/>
                         <!-- Depth belongs to the ROOM, not the character: the same
                              NPC stands behind one level's furniture and in front of
                              another's, and every vanilla level picks its own orders.
                              So it sits here with the transforms. -->
-                        <TextBlock Text="{l:T npcPlacement.sortingOrder}" VerticalAlignment="Center" Margin="16,0,4,0"/>
-                        <TextBox Width="55" Text="{Binding SortingOrder, UpdateSourceTrigger=LostFocus}"
-                                 ToolTip="{l:T npcPlacement.overridesNPCSOwn.tip}"/>
-                    </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{l:T npcPlacement.sortingOrder}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <TextBox Width="55" Text="{Binding SortingOrder, UpdateSourceTrigger=LostFocus}"
+                                     ToolTip="{l:T npcPlacement.overridesNPCSOwn.tip}"/>
+                        </StackPanel>
+                    </WrapPanel>
 
                     <!-- Utility components on the NPC itself. Attached before the
                          NPC is activated, so a FadeInSprite fades it in on
@@ -3698,7 +3875,7 @@
                                         ToolTip="{l:T npcPlacement.addChild.tip}"/>
                                 <TextBlock Text="{l:T npcPlacement.children}" FontWeight="SemiBold" VerticalAlignment="Center"/>
                             </DockPanel>
-                            <ItemsControl ItemsSource="{Binding Children}" Margin="12,4,0,0"/>
+                            <ItemsControl ItemsSource="{Binding Children}" Margin="12,4,0,0" Style="{StaticResource NotInNarrow}"/>
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -6121,6 +6298,15 @@
                             <GroupBox view:TutorialAnchor.Id="panel:outfitParticles" Header="{l:T characters.outfitParticles}"
                                       Visibility="{Binding ShowsPackArt, Converter={StaticResource BoolToVisibility}, FallbackValue=Collapsed}">
                                 <StackPanel>
+                                    <!-- Which of the game's two wet effects (after 1.10.0: "there should be a toggle between the
+                                         two wet types for both busts and npcs"). -->
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                        <TextBlock Text="{l:T characters.wetKind}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                        <ComboBox MinWidth="110" SelectedIndex="{Binding ParticleKindIndex}" ToolTip="{l:T characters.wetKind.tip}">
+                                            <ComboBoxItem Content="{l:T characters.wetKindWet}"/>
+                                            <ComboBoxItem Content="{l:T characters.wetKindShower}"/>
+                                        </ComboBox>
+                                    </StackPanel>
                                     <CheckBox Content="{l:T characters.wetParticleActiveSpawn}"
                                               IsChecked="{Binding ParticleActive}"
                                               ToolTip="{l:T characters.wetParticleActiveSpawn.tip}"/>
@@ -6522,6 +6708,43 @@
                                 <StackPanel>
                                     <CheckBox Content="{l:T npcs.enabled}" IsChecked="{Binding WetEnabled}" ToolTip="{l:T npcs.enabled.tip3}" Margin="0,0,0,4"/>
                                     <CheckBox Content="{l:T npcs.startActive}" IsChecked="{Binding WetStartActive}" ToolTip="{l:T npcs.startActive.tip}" Margin="0,0,0,4"/>
+                                    <!-- How the drops look wherever the NPC is placed (after 1.10.0, the author: "I see the
+                                         wet particle configs on Characters, but I don't see them on NPCs"; "NPC sets them,
+                                         placements can change"). A placement's own value, on the Places tab, goes over it. -->
+                                    <Grid Margin="0,0,0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{l:T npcs.wetKind}" Grid.Row="0" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                        <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" MinWidth="110" SelectedIndex="{Binding WetKindIndex}"
+                                                  ToolTip="{l:T npcs.wetKind.tip}">
+                                            <ComboBoxItem Content="{l:T npcs.wetKindWet}"/>
+                                            <ComboBoxItem Content="{l:T npcs.wetKindShower}"/>
+                                        </ComboBox>
+                                        <TextBlock Text="{l:T npcs.wetTint}" Grid.Row="1" VerticalAlignment="Center" Margin="0,4,6,0"/>
+                                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,4,0,0">
+                                            <TextBox Width="90" Text="{Binding WetTint, UpdateSourceTrigger=PropertyChanged}" ToolTip="{l:T npcs.wetTint.tip}"/>
+                                            <Button Content="{l:T npcs.wetPickTint}" Padding="8,1" Margin="6,0,0,0" Click="PickNpcWetTint_Click"
+                                                    ToolTip="{l:T npcs.wetPickTint.tip}"/>
+                                        </StackPanel>
+                                        <TextBlock Text="{l:T npcs.wetAmount}" Grid.Row="2" VerticalAlignment="Center" Margin="0,2,6,0"/>
+                                        <TextBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Width="52" Margin="0,2,0,0"
+                                                 Text="{Binding WetAmount, UpdateSourceTrigger=PropertyChanged}" ToolTip="{l:T npcs.wetAmount.tip}"/>
+                                        <TextBlock Text="{l:T npcs.wetSize}" Grid.Row="3" VerticalAlignment="Center" Margin="0,2,6,0"/>
+                                        <TextBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Width="52" Margin="0,2,0,0"
+                                                 Text="{Binding WetSize, UpdateSourceTrigger=PropertyChanged}" ToolTip="{l:T npcs.wetSize.tip}"/>
+                                        <TextBlock Text="{l:T npcs.wetFall}" Grid.Row="4" VerticalAlignment="Center" Margin="0,2,6,0"/>
+                                        <TextBox Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Width="52" Margin="0,2,0,0"
+                                                 Text="{Binding WetFall, UpdateSourceTrigger=PropertyChanged}" ToolTip="{l:T npcs.wetFall.tip}"/>
+                                    </Grid>
                                     <TextBlock Foreground="{DynamicResource Theme.TextMuted}" FontSize="10" TextWrapping="Wrap"
                                                Text="{l:T npcs.emitterOffsetRotationScale}"/>
                                 </StackPanel>
@@ -6660,7 +6883,16 @@
                                 <!-- Preview of the vanilla level itself, from the extracted
                                      art. Bound nodes carry no sprite, so what renders is the
                                      level plus whatever this extension actually adds. -->
-                                <GroupBox Header="{l:T places.preview}" HorizontalAlignment="Center">
+                                <GroupBox HorizontalAlignment="Center">
+                                    <!-- Full screen beside the heading (after 1.10.0, the author: "the best place for the full screen
+                                         button would be right next to the Preview header"). -->
+                                    <GroupBox.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{l:T places.preview}" VerticalAlignment="Center"/>
+                                            <Button x:Name="ExtFullScreenButton" Content="{l:T places.fullScreen}" ToolTip="{l:T places.fullScreen.tip}" Click="ExtFullScreen_Click"
+                                                    Padding="8,0" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </GroupBox.Header>
                                     <StackPanel>
                                         <ctl:PlacePreview x:Name="ExtPreview"
                                                           PackRoot="{Binding DataContext.PackRoot,
@@ -6669,6 +6901,9 @@
                                                           LevelArtOrder="{Binding PreviewArtOrder}"
                                                           LevelParallax="{Binding PreviewLevelParallax}"
                                                           LevelParallaxReversed="{Binding PreviewLevelParallaxReversed}"
+                                                          HasBackLayer="{Binding PreviewHasBackLayer}"
+                                                          LevelParallaxSecondary="{Binding PreviewBackParallax}"
+                                                          LevelParallaxSecondaryReversed="{Binding PreviewBackParallaxReversed}"
                                                           ParallaxPreview="{Binding IsChecked, ElementName=ExtParallaxPreview}"
                                                           Shaders="{Binding IsChecked, ElementName=ExtShaders}"
                                                           LookBloom="{Binding IsChecked, ElementName=ExtLookBloom}"
@@ -6685,13 +6920,17 @@
                                                           LevelVideoStill="{Binding PreviewVideoStill}"
                                                           LevelArtUnlit="{Binding PreviewArtUnlit}"
                                                           LevelScale="{Binding PreviewLevelScale}"
+                                                          NpcsObjectScale="{Binding PreviewNpcsScale}"
                                                           DimUnderInactiveParent="{Binding IsChecked, ElementName=ExtDimParent}"
                                                           DimInactive="{Binding IsChecked, ElementName=ExtDimSelf}"
-                                                          GameObjects="{Binding GameObjects}"
+                                                          GameObjects="{Binding GameObjects}" Objects="{Binding Objects}"
+                                                          FillCommand="{Binding SeedFromCatalogCommand}"
                                                           AddLightCommand="{Binding AddLightCommand}" AddEffectCommand="{Binding AddEffectCommand}"
                                                           Characters="{Binding DataContext.Characters,
                                                                      RelativeSource={RelativeSource AncestorType=Window}}"
                                                           NpcCatalog="{Binding DataContext.Npcs,
+                                                                     RelativeSource={RelativeSource AncestorType=Window}}"
+                                                          AllPlaces="{Binding DataContext.VanillaExtensions,
                                                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         <!-- Why the game's level is soft (the author, 1.9.0): only while
                                              its art is drawn. -->
@@ -6711,31 +6950,37 @@
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
-                                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                            <CheckBox x:Name="ExtDimParent" IsChecked="True" Content="{l:T places.extDimParent}"
+                                        <!-- Wrapping: one line on the page, as many as it takes under the hierarchy over the
+                                             whole screen (MainWindow.FullScreen moves these rows there). -->
+                                        <WrapPanel x:Name="ExtOptionsRow" Margin="0,4,0,0">
+                                            <CheckBox x:Name="ExtDimParent" IsChecked="True" Content="{l:T places.extDimParent}" Margin="0,0,12,2"
                                                       ToolTip="{l:T places.extDimParent.tip}"/>
-                                            <CheckBox x:Name="ExtDimSelf" IsChecked="True" Content="{l:T places.extDimSelf}" Margin="12,0,0,0"
+                                            <CheckBox x:Name="ExtDimSelf" IsChecked="True" Content="{l:T places.extDimSelf}" Margin="0,0,12,2"
                                                       ToolTip="{l:T places.extDimSelf.tip}"/>
-                                            <CheckBox x:Name="ExtParallaxPreview" IsChecked="False" Content="{l:T places.extParallaxPreview}" Margin="12,0,0,0"
+                                            <CheckBox x:Name="ExtParallaxPreview" IsChecked="{Binding DataContext.PlacePreviewParallax, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" Content="{l:T places.extParallaxPreview}" Margin="0,0,12,2"
                                                       ToolTip="{l:T places.extParallaxPreview.tip}"/>
-                                            <CheckBox x:Name="ExtShaders" IsChecked="False" Content="{l:T places.extShaders}" Margin="12,0,0,0"
+                                            <CheckBox x:Name="ExtShaders" IsChecked="{Binding DataContext.PlacePreviewShaders, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" Content="{l:T places.extShaders}" Margin="0,0,12,2"
                                                       ToolTip="{l:T places.extShaders.tip}"/>
-                                        </StackPanel>
+                                        </WrapPanel>
                                         <!-- The game's look over the place (1.9.1, the author): each part
                                              on unless unticked, drawn when the preview quality draws it. -->
-                                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                        <WrapPanel x:Name="ExtLookRow" Margin="0,4,0,0">
                                             <TextBlock Text="{l:T places.look}" ToolTip="{l:T places.look.tip}" VerticalAlignment="Center"
-                                                       Foreground="{DynamicResource Theme.TextMuted}" Margin="0,0,8,0"/>
+                                                       Foreground="{DynamicResource Theme.TextMuted}" Margin="0,0,8,2"/>
                                             <CheckBox x:Name="ExtLookLights" IsChecked="True" Content="{l:T places.lookLights}"
-                                                      ToolTip="{l:T places.lookLights.tip}" Margin="0,0,12,0"/>
-                                            <CheckBox x:Name="ExtLookBloom" IsChecked="True" Content="{l:T places.lookBloom}"
+                                                      ToolTip="{l:T places.lookLights.tip}" Margin="0,0,12,2"/>
+                                            <CheckBox x:Name="ExtLookBloom" IsChecked="True" Content="{l:T places.lookBloom}" Margin="0,0,12,2"
                                                       ToolTip="{l:T places.lookBloom.tip}"/>
-                                            <CheckBox x:Name="ExtLookFlares" IsChecked="True" Content="{l:T places.lookFlares}" Margin="12,0,0,0"
+                                            <CheckBox x:Name="ExtLookFlares" IsChecked="True" Content="{l:T places.lookFlares}" Margin="0,0,12,2"
                                                       ToolTip="{l:T places.lookFlares.tip}"/>
-                                            <CheckBox x:Name="ExtLookColour" IsChecked="True" Content="{l:T places.lookColour}" Margin="12,0,0,0"
+                                            <CheckBox x:Name="ExtLookColour" IsChecked="True" Content="{l:T places.lookColour}" Margin="0,0,12,2"
                                                       ToolTip="{l:T places.lookColour.tip}"/>
-                                        </StackPanel>
+                                        </WrapPanel>
                                         <ctl:PreviewQualityBar x:Name="ExtQualityBar" Margin="0,4,0,0" HorizontalAlignment="Left"/>
+                                        <!-- What the GameObjects list below said, now that its objects are made and set
+                                             here (after 1.10.0: "move the rest of the GO controls into the preview"). -->
+                                        <ctl:HelpText Key="places.levelObjectsHelp" Margin="0,6,0,0" Text="{l:T places.levelObjectsHelp}"
+                                                      MaxWidth="{Binding ActualWidth, ElementName=ExtPreview}" HorizontalAlignment="Left"/>
                                         <TextBlock Text="{Binding CatalogSummary}" Foreground="{DynamicResource Theme.TextMuted}"
                                                    FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0"/>
                                     </StackPanel>
@@ -6774,25 +7019,6 @@
                                                       ItemTemplate="{StaticResource NavigatorButtonRowTemplate}"/>
                                     </DockPanel>
                                 </GroupBox>
-
-                                <GroupBox Header="{l:T places.gameobjectsLayeredVanillaPlace}">
-                                    <DockPanel>
-                                        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,6,0,0">
-                                            <Button Content="{l:T places.addVanillaExtensionGameObject}"
-                                                    Command="{Binding DataContext.AddVanillaExtensionGameObjectCommand,
-                                                                      RelativeSource={RelativeSource AncestorType=Window}}"
-                                                    Padding="8,2"/>
-                                            <Button Content="{l:T places.addNpc}" Margin="6,0,0,0" Padding="8,2"
-                                                    Command="{Binding AddNpcCommand}"
-                                                    ToolTip="{l:T places.addNpc.tip}"/>
-                                            <Button Content="{l:T places.seedFromCatalog}" Margin="6,0,0,0" Padding="8,2"
-                                                    Command="{Binding SeedFromCatalogCommand}"
-                                                    ToolTip="{l:T places.seedFromCatalog.tip}"/>
-                                        </StackPanel>
-                                        <ctl:HelpText Key="places.gameobjectsInstantiatedUnderVanilla" DockPanel.Dock="Bottom" Margin="0,6,0,0" Text="{l:T places.gameobjectsInstantiatedUnderVanilla}"/>
-                                        <ItemsControl ItemsSource="{Binding GameObjects}"/>
-                                    </DockPanel>
-                                </GroupBox>
                             </StackPanel>
                         </ScrollViewer>
 
@@ -6805,7 +7031,16 @@
                                  and the live navigator buttons, same z-order as runtime. -->
                             <!-- Centred, its hierarchy and selection beside it, as large as
                                  its corner is dragged to (the author, 1.8.0). -->
-                            <GroupBox view:TutorialAnchor.Id="panel:placePreview" Header="{l:T places.preview}" HorizontalAlignment="Center">
+                            <GroupBox view:TutorialAnchor.Id="panel:placePreview" HorizontalAlignment="Center">
+                                <!-- Full screen beside the heading (after 1.10.0, the author: "the best place for the full screen
+                                     button would be right next to the Preview header"). -->
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{l:T places.preview}" VerticalAlignment="Center"/>
+                                        <Button x:Name="PlaceFullScreenButton" Content="{l:T places.fullScreen}" ToolTip="{l:T places.fullScreen.tip}" Click="PlaceFullScreen_Click"
+                                                Padding="8,0" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </GroupBox.Header>
                                 <StackPanel>
                                     <ctl:PlacePreview x:Name="PlacePreviewMain"
                                                       PackRoot="{Binding DataContext.PackRoot,
@@ -6819,7 +7054,7 @@
                                                       Buttons="{Binding NavigatorButtons}"
                                                       DimUnderInactiveParent="{Binding IsChecked, ElementName=PlaceDimParent}"
                                                       DimInactive="{Binding IsChecked, ElementName=PlaceDimSelf}"
-                                                      GameObjects="{Binding GameObjects}"
+                                                      GameObjects="{Binding GameObjects}" Objects="{Binding Objects}"
                                                       AddLightCommand="{Binding AddLightCommand}" AddEffectCommand="{Binding AddEffectCommand}"
                                                       Characters="{Binding DataContext.Characters,
                                                                  RelativeSource={RelativeSource AncestorType=Window}}"
@@ -6836,32 +7071,40 @@
                                                       LookColour="{Binding IsChecked, ElementName=PlaceLookColour}"
                                                       LookLights="{Binding IsChecked, ElementName=PlaceLookLights}"
                                                       NpcCatalog="{Binding DataContext.Npcs,
+                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
+                                                      AllPlaces="{Binding DataContext.Places,
                                                                  RelativeSource={RelativeSource AncestorType=Window}}"/>
-                                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                        <CheckBox x:Name="PlaceDimParent" IsChecked="True" Content="{l:T places.extDimParent}"
+                                    <!-- Wrapping: one line on the page, as many as it takes under the hierarchy over the
+                                         whole screen (MainWindow.FullScreen moves these rows there). -->
+                                    <WrapPanel x:Name="PlaceOptionsRow" Margin="0,4,0,0">
+                                        <CheckBox x:Name="PlaceDimParent" IsChecked="True" Content="{l:T places.extDimParent}" Margin="0,0,12,2"
                                                   ToolTip="{l:T places.extDimParent.tip}"/>
-                                        <CheckBox x:Name="PlaceDimSelf" IsChecked="True" Content="{l:T places.extDimSelf}" Margin="12,0,0,0"
+                                        <CheckBox x:Name="PlaceDimSelf" IsChecked="True" Content="{l:T places.extDimSelf}" Margin="0,0,12,2"
                                                   ToolTip="{l:T places.extDimSelf.tip}"/>
-                                        <CheckBox x:Name="PlaceParallaxPreview" IsChecked="False" Content="{l:T places.extParallaxPreview}" Margin="12,0,0,0"
+                                        <CheckBox x:Name="PlaceParallaxPreview" IsChecked="{Binding DataContext.PlacePreviewParallax, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" Content="{l:T places.extParallaxPreview}" Margin="0,0,12,2"
                                                   ToolTip="{l:T places.extParallaxPreview.tip2}"/>
-                                        <CheckBox x:Name="PlaceShaders" IsChecked="False" Content="{l:T places.extShaders}" Margin="12,0,0,0"
+                                        <CheckBox x:Name="PlaceShaders" IsChecked="{Binding DataContext.PlacePreviewShaders, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" Content="{l:T places.extShaders}" Margin="0,0,12,2"
                                                   ToolTip="{l:T places.extShaders.tip2}"/>
-                                    </StackPanel>
+                                    </WrapPanel>
                                     <!-- The game's look over the place (1.9.1, the author): each part
                                          on unless unticked, drawn when the preview quality draws it. -->
-                                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                    <WrapPanel x:Name="PlaceLookRow" Margin="0,4,0,0">
                                         <TextBlock Text="{l:T places.look}" ToolTip="{l:T places.look.tip}" VerticalAlignment="Center"
-                                                   Foreground="{DynamicResource Theme.TextMuted}" Margin="0,0,8,0"/>
+                                                   Foreground="{DynamicResource Theme.TextMuted}" Margin="0,0,8,2"/>
                                         <CheckBox x:Name="PlaceLookLights" IsChecked="True" Content="{l:T places.lookLights}"
-                                                  ToolTip="{l:T places.lookLights.tip}" Margin="0,0,12,0"/>
-                                        <CheckBox x:Name="PlaceLookBloom" IsChecked="True" Content="{l:T places.lookBloom}"
+                                                  ToolTip="{l:T places.lookLights.tip}" Margin="0,0,12,2"/>
+                                        <CheckBox x:Name="PlaceLookBloom" IsChecked="True" Content="{l:T places.lookBloom}" Margin="0,0,12,2"
                                                   ToolTip="{l:T places.lookBloom.tip}"/>
-                                        <CheckBox x:Name="PlaceLookFlares" IsChecked="True" Content="{l:T places.lookFlares}" Margin="12,0,0,0"
+                                        <CheckBox x:Name="PlaceLookFlares" IsChecked="True" Content="{l:T places.lookFlares}" Margin="0,0,12,2"
                                                   ToolTip="{l:T places.lookFlares.tip}"/>
-                                        <CheckBox x:Name="PlaceLookColour" IsChecked="True" Content="{l:T places.lookColour}" Margin="12,0,0,0"
+                                        <CheckBox x:Name="PlaceLookColour" IsChecked="True" Content="{l:T places.lookColour}" Margin="0,0,12,2"
                                                   ToolTip="{l:T places.lookColour.tip}"/>
-                                    </StackPanel>
+                                    </WrapPanel>
                                     <ctl:PreviewQualityBar x:Name="PlaceQualityBar" Margin="0,4,0,0" HorizontalAlignment="Left"/>
+                                    <!-- What the GameObjects list below said, now that its objects are made and set here
+                                         (after 1.10.0: "move the rest of the GO controls into the preview"). -->
+                                    <ctl:HelpText Key="places.placeObjectsHelp" Margin="0,6,0,0" Text="{l:T places.placeObjectsHelp}"
+                                                  MaxWidth="{Binding ActualWidth, ElementName=PlacePreviewMain}" HorizontalAlignment="Left"/>
                                 </StackPanel>
                             </GroupBox>
 
@@ -7072,22 +7315,6 @@
                                     <ctl:HelpText Key="places.up12ButtonsPer" DockPanel.Dock="Bottom" Margin="0,6,0,0" Text="{l:T places.up12ButtonsPer}"/>
                                     <ItemsControl ItemsSource="{Binding NavigatorButtons}"
                                                   ItemTemplate="{StaticResource NavigatorButtonRowTemplate}"/>
-                                </DockPanel>
-                            </GroupBox>
-
-                            <GroupBox view:TutorialAnchor.Id="panel:placeGameObjects" Header="{l:T places.placeGameObjects}">
-                                <DockPanel>
-                                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,6,0,0">
-                                        <Button Content="{l:T places.addVanillaExtensionGameObject}"
-                                                Command="{Binding DataContext.AddGameObjectCommand,
-                                                                  RelativeSource={RelativeSource AncestorType=Window}}"
-                                                Padding="8,2"/>
-                                        <Button view:TutorialAnchor.Id="btn:addNpcToPlace" Content="{l:T places.addNpc}" Margin="6,0,0,0" Padding="8,2"
-                                                Command="{Binding AddNpcCommand}"
-                                                ToolTip="{l:T places.addNpc.tip2}"/>
-                                    </StackPanel>
-                                    <ctl:HelpText Key="places.everythingPlaceBuildsUnder" DockPanel.Dock="Bottom" Margin="0,6,0,0" Text="{l:T places.everythingPlaceBuildsUnder}"/>
-                                    <ItemsControl ItemsSource="{Binding GameObjects}"/>
                                 </DockPanel>
                             </GroupBox>
 
@@ -12205,6 +12432,14 @@
                            VerticalAlignment="Center"/>
             </StackPanel>
         </Border>
+        <!-- A place preview over the whole screen (after 1.10.0): MainWindow.FullScreen moves it here. -->
+        <Grid x:Name="FullScreenHost" Panel.ZIndex="140" Visibility="Collapsed" Background="{DynamicResource Theme.Window}">
+            <!-- The picture over the whole screen, its panels over its sides (after 1.10.0, the author: "the canvas
+                 should span the whole screen, while the left and right menus overlay it"); the way back over its top. -->
+            <Grid x:Name="FullScreenSpot"/>
+            <Button HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,8,0,0" Padding="10,2" Opacity="0.85"
+                    Content="{l:T places.leaveFullScreen}" ToolTip="{l:T places.leaveFullScreen.tip}" Click="LeaveFullScreen_Click"/>
+        </Grid>
         <!-- A picture at full size over everything (the guide's, 1.10.0): View/Controls/PictureViewer. -->
         <ctl:PictureViewer x:Name="PictureViewer" Panel.ZIndex="150"/>
         <Border x:Name="SaveToast"

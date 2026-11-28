@@ -133,4 +133,12 @@ public sealed class EffectDef
     /// "4_CG_Manager-Photos" for each Starmaker photo.</summary>
     [JsonProperty(FX.UnderField, Order = 27, NullValueHandling = NullValueHandling.Ignore)]
     public string? Under { get; set; }
+
+    /// <summary>An object's effect in a place: how far from the object it plays, in the object's own units (its
+    /// box dragged in the place preview, after 1.10.0). Empty = at the object.</summary>
+    [JsonProperty(FX.LocalXField, Order = 28, NullValueHandling = NullValueHandling.Ignore)]
+    public float? LocalX { get; set; }
+
+    [JsonProperty(FX.LocalYField, Order = 29, NullValueHandling = NullValueHandling.Ignore)]
+    public float? LocalY { get; set; }
 }

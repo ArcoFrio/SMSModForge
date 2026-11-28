@@ -223,14 +223,42 @@ public static class UiSceneRenderer
         dh = (int)Math.Round(screen.Height);
         if (dw <= 0 || dh <= 0) return;
 
+        // A Filled image shows only its filled share (a bar): nothing at all when empty - the navigator's photo-XP bar
+        // is at nothing in the extraction, and drew pink over the whole navigator while this was not read.
+        if (image.IsFilled && !(image.FillAmount > 0f)) return;
         var pixels = tiled
             ? UiSlice.Tile(sprite.Pixels, sprite.Width, sprite.Height, border, dw, dh, image.FillCenter, divisor)
             : UiSlice.Compose(sprite.Pixels, sprite.Width, sprite.Height,
                               border, dw, dh, image.FillCenter, divisor);
+        if (image.IsFilled) Fill(pixels, dw, dh, image);
         UiSlice.Tint(pixels, tint.B, tint.G, tint.R, tint.A);
 
         Place(target, w, h, pixels, dw, dh, screen, node, clip, alpha, surface);
         report.Drawn++;
+    }
+
+    /// <summary>
+    /// What a Filled image leaves out: past its share along its way (Horizontal from the left, or the right for origin
+    /// 1; Vertical from the bottom, or the top for origin 1), a pixel kept when its centre is inside. A radial fill
+    /// (a clock) is drawn whole: none of the game's previewed screens shows one part-filled.
+    /// </summary>
+    private static void Fill(byte[] pixels, int dw, int dh, VanillaUiSurface.Image image)
+    {
+        float amount = Math.Clamp(image.FillAmount, 0f, 1f);
+        if (amount >= 1f) return;
+        bool horizontal = string.Equals(image.FillMethod, "Horizontal", StringComparison.OrdinalIgnoreCase);
+        bool vertical = string.Equals(image.FillMethod, "Vertical", StringComparison.OrdinalIgnoreCase);
+        if (!horizontal && !vertical) return;
+        for (int y = 0; y < dh; y++)
+            for (int x = 0; x < dw; x++)
+            {
+                // Rows from the top: "from the bottom" keeps the last rows.
+                double along = horizontal ? (x + 0.5) / dw : 1.0 - (y + 0.5) / dh;
+                if (image.FillOrigin == 1) along = 1.0 - along;
+                if (along < amount) continue;
+                int i = (y * dw + x) * 4;
+                pixels[i] = pixels[i + 1] = pixels[i + 2] = pixels[i + 3] = 0;
+            }
     }
 
     private static void DrawText(byte[] target, int w, int h,
@@ -363,8 +391,9 @@ public static class UiSceneRenderer
                                          double textHeight)
     {
         string a = (alignment ?? "").ToLowerInvariant();
-        if (a.Contains("top")) return 0;
-        if (a.Contains("bottom")) return boxHeight - textHeight;
+        // The old UI Text's names say it the other way: UpperLeft, LowerRight.
+        if (a.Contains("top") || a.StartsWith("upper", StringComparison.Ordinal)) return 0;
+        if (a.Contains("bottom") || a.StartsWith("lower", StringComparison.Ordinal)) return boxHeight - textHeight;
         return (boxHeight - textHeight) / 2.0;
     }
 

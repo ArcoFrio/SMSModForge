@@ -55,12 +55,16 @@ public sealed partial class PlacePreview
                 _effectViews[node] = view;
                 _effectLayer.Children.Add(view);
             }
-            var c = LightCentre(e);
+            // At the object, or as far from it as its box was moved, in the object's own units (after 1.10.0).
+            var c = EffectCentre(e, def);
             view.AtX = c.X / CanvasWidth;
             view.AtY = 1 - c.Y / CanvasHeight;
             view.PackRoot = PackRoot;
             if (!ReferenceEquals(view.Effect, def)) view.Effect = def;
-            view.Version = node.Effect?.LookVersion ?? 0;
+            int version = node.Effect?.LookVersion ?? 0;
+            // Its box being sized: what is out plays on (EffectPreview.Rescale).
+            if (_activeHandle == GizmoHandle.EffectSize && ReferenceEquals(node, _selNode)) view.Rescale(def.Scale ?? 1, version);
+            else view.Version = version;
         }
         foreach (var gone in _effectViews.Keys.Where(k => !seen.Contains(k)).ToList())
         {
@@ -131,7 +135,7 @@ public sealed partial class PlacePreview
                             new Binding(nameof(EffectViewModel.TemplateOption)) { Mode = BindingMode.TwoWay });
         template.SelectionChanged += (_, _) => { if (template.IsKeyboardFocusWithin || template.IsDropDownOpen) Committed(); };
         template.DropDownClosed += (_, _) => Committed();
-        _effectFields.Children.Add(Field("preview.effect.template", "preview.effect.template.tip", template));
+        _effectFields.Children.Add(Field("preview.effect.template", "preview.effect.template.tip", OnThemeSurface(template)));
 
         var picture = new PathPickerBox { Width = 150 };
         picture.SetBinding(PathPickerBox.PathTextProperty, new Binding(nameof(EffectViewModel.Texture)) { Mode = BindingMode.TwoWay });
@@ -142,7 +146,7 @@ public sealed partial class PlacePreview
         gamePicture.SetBinding(System.Windows.Controls.Primitives.Selector.SelectedItemProperty,
                                new Binding(nameof(EffectViewModel.GameTexture)) { Mode = BindingMode.TwoWay });
         gamePicture.DropDownClosed += (_, _) => Committed();
-        _effectFields.Children.Add(Field("preview.effect.gamePicture", "preview.effect.gamePicture.tip", gamePicture));
+        _effectFields.Children.Add(Field("preview.effect.gamePicture", "preview.effect.gamePicture.tip", OnThemeSurface(gamePicture)));
 
         _effectSwatch = new Border { Width = 22, Height = 18, BorderBrush = Brushes.Black, BorderThickness = new Thickness(1), Margin = new Thickness(0, 0, 4, 0), Cursor = Cursors.Hand };
         LocText.Bind(_effectSwatch, ToolTipProperty, "preview.effect.colour.tip");
@@ -158,7 +162,7 @@ public sealed partial class PlacePreview
         var layer = new ComboBox { Width = 150, FontSize = 11, ItemsSource = EffectViewModel.LayerChoices };
         layer.SetBinding(System.Windows.Controls.Primitives.Selector.SelectedItemProperty, new Binding(nameof(EffectViewModel.Layer)) { Mode = BindingMode.TwoWay });
         layer.DropDownClosed += (_, _) => Committed();
-        _effectFields.Children.Add(Field("preview.effect.layer", "preview.effect.layer.tip", layer));
+        _effectFields.Children.Add(Field("preview.effect.layer", "preview.effect.layer.tip", OnThemeSurface(layer)));
 
         _effectGlow = new CheckBox { Foreground = ChipText, FontSize = 11, Margin = new Thickness(0, 2, 0, 4), Content = Chip("preview.effect.glow") };
         LocText.Bind(_effectGlow, ToolTipProperty, "preview.effect.glow.tip");
@@ -184,7 +188,8 @@ public sealed partial class PlacePreview
     private void EffectEdited(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         // A template changed raises every row at once (a name of none).
-        if (e.PropertyName is nameof(EffectViewModel.LookVersion) or "" or null) DrawEffects();
+        if (e.PropertyName is nameof(EffectViewModel.LookVersion) or nameof(EffectViewModel.LocalX) or nameof(EffectViewModel.LocalY) or "" or null)
+            DrawEffects();
         if (e.PropertyName is nameof(EffectViewModel.Color) or "") UpdateEffectSwatch();
         if (e.PropertyName is nameof(EffectViewModel.TemplateOption) or "") UpdateEffectPanel();
     }

@@ -68,7 +68,9 @@ public sealed class FieldWidthTests
             }
             Wide(window);
 
-            var box = Descendants<GroupBox>(window).Single(g => g.IsVisible && g.Header as string == Loc.T(header));
+            // Its heading as words, or (the Places preview's, after 1.10.0) words with the Full screen button beside them.
+            static string? Heading(GroupBox g) => g.Header as string ?? (g.Header as Panel)?.Children.OfType<TextBlock>().FirstOrDefault()?.Text;
+            var box = Descendants<GroupBox>(window).Single(g => g.IsVisible && Heading(g) == Loc.T(header));
             var preview = Descendants<FrameworkElement>(box)
                 .Where(e => e.GetType().Namespace == "SMSModForge.View.Controls" && e.IsVisible)
                 .OrderByDescending(e => e.ActualWidth).First();

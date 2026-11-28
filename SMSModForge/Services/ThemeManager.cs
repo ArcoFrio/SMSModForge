@@ -551,6 +551,32 @@ public static class ThemeManager
         if (theme == null || Application.Current == null) return;
         FollowWindows();
         var r = Application.Current.Resources;
+        var p = PutColours(r, theme);
+        r[KeyFontFamily] = theme.IsEx ? ExFont : NormalFont;
+        ApplyStructure(theme.IsEx);
+
+        foreach (var t in All.Concat(Custom)) t.IsCurrent = ReferenceEquals(t, theme);
+        Current = theme;
+        foreach (Window window in Application.Current.Windows) NativeWindowLook.Apply(window, theme, p);
+        SaveName(theme.SavedAs);
+        Changed?.Invoke();
+    }
+
+    /// <summary>
+    /// The current theme as it would be on dark panels: itself when it is dark; else its accent and look over the
+    /// dark of the place preview's panels (after 1.10.0), so a record's own editors shown in one read as the panel does.
+    /// </summary>
+    public static ThemeDef DarkOf(ThemeDef theme) => theme.IsDark ? theme
+        : With(theme, window: "#1E2024", chrome: "#1A1C1F", surface: "#26292D", control: "#2E3136", text: "#F2F4F6");
+
+    /// <summary>
+    /// Every colour of <paramref name="theme"/> into <paramref name="r"/>: the theme's keys, its glows, and the
+    /// system's colours WPF's own templates draw with. The application's resources for the theme in use; a
+    /// panel's own for a part of the window drawn in another (<see cref="DarkOf"/>), whose controls find them
+    /// first.
+    /// </summary>
+    public static IReadOnlyDictionary<string, Color> PutColours(ResourceDictionary r, ThemeDef theme)
+    {
         var p = Palette(theme);
         foreach (var (key, colour) in p) r[key] = Frozen(colour);
         // A glow on a dark theme only. On a light one the same halo reads as
@@ -559,8 +585,6 @@ public static class ThemeManager
         // glow"); the accent border and underline say the same thing there.
         r[KeyGlow] = theme.IsDark ? Glow(p[KeyAccent], 9, 0.7) : null;
         r[KeyGlowSoft] = theme.IsDark ? Glow(p[KeyAccent], 6, 0.45) : null;
-        r[KeyFontFamily] = theme.IsEx ? ExFont : NormalFont;
-        ApplyStructure(theme.IsEx);
         // A speaker's colour washing a node row (a pastel, usually) lifts a
         // dark row far more than a light one: half as strong on a dark theme.
         r[KeyWashOpacity] = theme.IsDark ? 0.5 : 1.0;
@@ -597,12 +621,7 @@ public static class ThemeManager
         Sys(SystemColors.ActiveBorderBrushKey, SystemColors.ActiveBorderColorKey, p[KeyBorder]);
         Sys(SystemColors.InactiveBorderBrushKey, SystemColors.InactiveBorderColorKey, p[KeyBorder]);
         Sys(SystemColors.HotTrackBrushKey, SystemColors.HotTrackColorKey, p[KeyLink]);
-
-        foreach (var t in All.Concat(Custom)) t.IsCurrent = ReferenceEquals(t, theme);
-        Current = theme;
-        foreach (Window window in Application.Current.Windows) NativeWindowLook.Apply(window, theme, p);
-        SaveName(theme.SavedAs);
-        Changed?.Invoke();
+        return p;
     }
 
     // ── The EX structure ─────────────────────────────────────────────────

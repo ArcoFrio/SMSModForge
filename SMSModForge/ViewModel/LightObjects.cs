@@ -45,7 +45,10 @@ internal static class LightObjects
 
     /// <summary>Make <paramref name="made"/> a light object at the command's parameter (float[] { x, y }) - or, for
     /// <see cref="Darkness"/>, the place's base light at a night's blue, a third of the day's.</summary>
-    public static GameObjectViewModel Dress(GameObjectViewModel made, IEnumerable<GameObjectViewModel> tree, object? at)
+    /// <param name="withTheBack">Whether the place has a back picture for the light to drift with: a new lamp drifts
+    /// with it as the cursor moves (after 1.10.0, the author: "Moving with background should default to on"), and
+    /// with the front where there is none. The whole place's light lights it all and does not drift.</param>
+    public static GameObjectViewModel Dress(GameObjectViewModel made, IEnumerable<GameObjectViewModel> tree, object? at, bool withTheBack = false)
     {
         if (at is string kind && kind == Darkness)
         {
@@ -56,6 +59,7 @@ internal static class LightObjects
         made.Name = NewName(Names(tree));
         if (at is float[] { Length: >= 2 } xy) { made.X = xy[0]; made.Y = xy[1]; }
         made.AddLight();
+        if (withTheBack) made.DriftWith(GameObjectViewModel.DriftBack);
         return made;
     }
 }

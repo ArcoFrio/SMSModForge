@@ -27,7 +27,28 @@ public sealed class EffectPreview : FrameworkElement
 
     /// <summary>Changes whenever anything about the effect does: the preview starts it again.</summary>
     public static readonly DependencyProperty VersionProperty = DependencyProperty.Register(
-        nameof(Version), typeof(int), typeof(EffectPreview), new PropertyMetadata(0, (d, _) => ((EffectPreview)d).Restart()));
+        nameof(Version), typeof(int), typeof(EffectPreview), new PropertyMetadata(0, (d, e) =>
+        {
+            var self = (EffectPreview)d;
+            if (self._rescaledTo != (int)e.NewValue) self.Restart();
+        }));
+
+    /// <summary>The version a <see cref="Rescale"/> is being given: that change is the size, which plays on.</summary>
+    private int? _rescaledTo;
+
+    /// <summary>
+    /// The effect's size changed while its box is dragged in the place preview (after 1.10.0): what is out plays on and
+    /// what comes next comes at the new size, where a change to anything else starts it again. Started again at every
+    /// step of a drag, a slow effect - fog, a few drifting lights - showed nothing at all until the box was let go.
+    /// </summary>
+    internal void Rescale(double scale, int version)
+    {
+        _sim?.Rescale(scale);
+        _rescaledTo = version;
+        try { Version = version; }
+        finally { _rescaledTo = null; }
+        InvalidateVisual();
+    }
 
     public static readonly DependencyProperty PackRootProperty = DependencyProperty.Register(
         nameof(PackRoot), typeof(string), typeof(EffectPreview), new PropertyMetadata(null, (d, _) => ((EffectPreview)d).Restart()));
@@ -228,8 +249,12 @@ public sealed class EffectPreview : FrameworkElement
         private readonly Random _rng = new(1);
         private readonly BitmapSource? _picture;
         private readonly Color? _tint;
-        private readonly double _amount, _size, _speed, _life, _scale, _gravity;
+        private readonly double _amount, _size, _speed, _life, _gravity;
+        private double _scale;
         private double _x, _y;
+
+        /// <summary>From now on at this size: what is out stays as it is.</summary>
+        public void Rescale(double scale) => _scale = scale;
 
         /// <summary>Play it from here from now on (an object moved in the place preview).</summary>
         public void MoveTo(double x, double y)

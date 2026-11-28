@@ -88,9 +88,19 @@ public sealed class GameObjectDef
     [JsonProperty("parallaxStrength", Order = 10, NullValueHandling = NullValueHandling.Ignore)]
     public float? ParallaxStrength { get; set; }
 
-    /// <summary>Move WITH the cursor instead of against it.</summary>
-    [JsonProperty("parallaxReversed", Order = 11)]
-    public bool ParallaxReversed { get; set; } = false;
+    /// <summary>
+    /// Move WITH the cursor instead of against it. Null: as the effect the object is given has it - for an object the
+    /// pack makes, the level's back picture's (it is cloned from it, or given a copy of its effect: PlaceFactory), not
+    /// reversed where the level has none.
+    /// <para/>
+    /// Written whenever it is set, false too (after 1.10.0). It was a plain true-or-false written only when true, so an
+    /// unticked Reversed was the same as unset: in a place whose back picture is reversed - the usual case - an
+    /// object's own drift went the other way in the game whatever the tick said, and a "false" written by hand was
+    /// dropped by the next save (FROM-PACK-TESTING #21).
+    /// </para>
+    /// </summary>
+    [JsonProperty("parallaxReversed", Order = 11, NullValueHandling = NullValueHandling.Ignore)]
+    public bool? ParallaxReversed { get; set; }
 
     /// <summary>
     /// Treat the object as UI, which switches the effect to canvas coordinates.
@@ -152,11 +162,40 @@ public sealed class GameObjectDef
     [JsonIgnore]
     public float SpritePivotY { get; set; } = 0.5f;
 
-    /// <summary>Optional relative path to a mask PNG. When set, the object gets
-    /// its own material with this mask bound to <c>_MaskTex</c> (the Solid
-    /// cameo's shader trick). Blank = no mask.</summary>
+    /// <summary>Optional relative path to a mask PNG: what moves the object's picture, read by the pass
+    /// <see cref="MaskKind"/> says. Blank = no mask of its own.</summary>
     [JsonProperty("mask", Order = 16)]
     public string Mask { get; set; } = "";
+
+    /// <summary>The object's picture still.</summary>
+    public const string MaskNone = "none";
+    /// <summary>Moved by the place's back layer's mask, read at the object's own picture (what every object without
+    /// a mask did before a place said <see cref="PlaceDef.ObjectMasks"/>: they were cloned from the back layer).</summary>
+    public const string MaskBackLayer = "backLayer";
+    /// <summary>Moved by its own mask through the level's pass (water, foliage: its alpha).</summary>
+    public const string MaskLevel = "level";
+    /// <summary>Moved by its own mask through the characters' jiggle (bounce, wave, noise: R, G, B), with
+    /// <see cref="Jiggle"/>'s settings.</summary>
+    public const string MaskJiggle = "jiggle";
+
+    /// <summary>
+    /// How the object's picture moves (after 1.10.0, the author: "a way to add masks to other GOs in the place ...
+    /// choose between the jiggle and level masks"): <see cref="MaskNone"/>, <see cref="MaskBackLayer"/>,
+    /// <see cref="MaskLevel"/> or <see cref="MaskJiggle"/>. Written only when it is not what the object says without
+    /// it: level with a mask, none without one.
+    /// </summary>
+    [JsonProperty("maskKind", Order = 33)]
+    public string MaskKind { get; set; } = "";
+
+    /// <summary>What the object's mask comes to: <see cref="MaskKind"/>, or without it level with a mask and none
+    /// without one.</summary>
+    [JsonIgnore]
+    public string MaskMeans => !string.IsNullOrEmpty(MaskKind) ? MaskKind : string.IsNullOrEmpty(Mask) ? MaskNone : MaskLevel;
+
+    /// <summary>The jiggle's settings, for a <see cref="MaskJiggle"/> mask: the NPCs' (NpcDef.NewNpcJiggle) unless
+    /// changed.</summary>
+    [JsonProperty("jiggle", Order = 34)]
+    public JiggleParams? Jiggle { get; set; }
 
     /// <summary>
     /// Generic utility components attached to this GameObject. Each is added +
@@ -441,11 +480,15 @@ public sealed class GameObjectDef
     // An unset strength is absence, not a number — see ParallaxStrength.
     public bool ShouldSerializeParallaxStrength() => ParallaxStrength.HasValue
         && (MayOmit(AppliesOwnVisuals) && !ParallaxDisabled || KeepsWhatItFinds && OverrideParallax);
-    public bool ShouldSerializeParallaxReversed() => MayOmit(AppliesOwnVisuals) && !ParallaxDisabled && ParallaxReversed;
+    public bool ShouldSerializeParallaxReversed() => MayOmit(AppliesOwnVisuals) && !ParallaxDisabled && ParallaxReversed.HasValue;
     public bool ShouldSerializeParallaxIsUI() => MayOmit(AppliesOwnVisuals) && !ParallaxDisabled && ParallaxIsUI;
     public bool ShouldSerializeStartActive() => MayOmit(!KeepsWhatItFinds || OverrideActive);
     public bool ShouldSerializeStartAlpha() => MayOmit(AppliesOwnVisuals);
     public bool ShouldSerializeMask() => MayOmit(AppliesOwnVisuals) && !string.IsNullOrEmpty(Mask);
+    // Only what the mask alone would not say: a back layer's or a jiggle, or a kind that disagrees with the mask.
+    public bool ShouldSerializeMaskKind() => MayOmit(AppliesOwnVisuals) && !string.IsNullOrEmpty(MaskKind)
+        && MaskKind != (string.IsNullOrEmpty(Mask) ? MaskNone : MaskLevel);
+    public bool ShouldSerializeJiggle() => MayOmit(AppliesOwnVisuals) && Jiggle != null && MaskKind == MaskJiggle;
     // Value-defaulted: an omitted empty list or empty string reads back as
     // itself, so these are safe to drop on any serialization.
     public bool ShouldSerializeComponents() => Components.Count > 0;

@@ -57,6 +57,24 @@ public sealed class TutorialListTests
     [Fact]
     public void ADeeperTutorialIsDrawnIndentedUnderItsBase_AndContinueLearningKeepsTheStorysOrder()
     {
+        // From none taken, as a run of its own starts: the tests that walk every tutorial take them all in this
+        // process's settings, and after them there was no next one to hold to the story's order - the run of every
+        // tutorial test together failed here, every one of them passing alone (2026-11-28).
+        var taken = TutorialCatalog.All.ToDictionary(t => t.Id, t => SMSModForge.Services.EditorPrefs.CompletedRevision(t.Id));
+        foreach (var t in TutorialCatalog.All) SMSModForge.Services.EditorPrefs.ForgetTutorial(t.Id);
+        try { ListedAndContinued(); }
+        finally
+        {
+            foreach (var (id, was) in taken)
+            {
+                SMSModForge.Services.EditorPrefs.ForgetTutorial(id);
+                if (was > 0) SMSModForge.Services.EditorPrefs.MarkTutorialComplete(id, was);
+            }
+        }
+    }
+
+    private void ListedAndContinued()
+    {
         WindowHarness.Run(window =>
         {
             var vm = (MainViewModel)window.DataContext;

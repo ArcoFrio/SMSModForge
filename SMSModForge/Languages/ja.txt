@@ -2001,9 +2001,53 @@ gameObject.reversed = 逆向き
 # en: UI space
 gameObject.uiSpace = UI 空間
 
-# Text
-# en: Mask (opt):
-gameObject.maskOpt = マスク（任意）：
+# Text: the label of how an object's picture moves
+# en: Moves by:
+gameObject.maskOpt = 動き方：
+
+# Tooltip on the choice of how an object's picture moves
+# en: How this object's picture moves in the game. Paint its own mask with Edit, the same way as a place's or an NPC's.
+gameObject.maskKind.tip = ゲームの中で、このオブジェクトの絵がどう動くかです。自分のマスクは、場所や NPC と同じように「編集」で塗ります。
+
+# Choice: the object's picture stays still
+# en: Nothing (still)
+gameObject.maskKind.none = なし（静止）
+
+# Tooltip on a choice
+# en: The picture stays still.
+gameObject.maskKind.none.tip = 絵は動きません。
+
+# Choice: the object moves with the place's back layer's mask
+# en: The back layer's mask
+gameObject.maskKind.backLayer = 奥のレイヤーのマスク
+
+# Tooltip on a choice
+# en: Moves with the place's back layer's mask, read over this object's own picture (as if the mask were laid over it, not over the place). What objects without a mask used to do when the back layer had one.
+gameObject.maskKind.backLayer.tip = 場所の奥のレイヤーのマスクに合わせて動きます。マスクはこのオブジェクト自身の絵の上で読まれます（マスクを場所ではなく、このオブジェクトに重ねたように）。奥のレイヤーにマスクがあったとき、マスクのないオブジェクトがこれまでしていた動きです。
+
+# Choice: the object moves by a mask of its own, like a place's water or foliage
+# en: Its own mask, like a place
+gameObject.maskKind.level = 自分のマスク（場所のように）
+
+# Tooltip on a choice
+# en: Moves by a mask of its own, the way a place's picture moves: water, leaves, curtains. One layer (how much), painted in the mask studio.
+gameObject.maskKind.level.tip = 場所の絵と同じように、自分のマスクで動きます。水、木の葉、カーテンなどです。レイヤーは1つ（どれだけ動くか）で、マスクペインターで塗ります。
+
+# Choice: the object moves by a mask of its own, like a character's jiggle
+# en: Its own mask, like a character
+gameObject.maskKind.jiggle = 自分のマスク（キャラクターのように）
+
+# Tooltip on a choice
+# en: Moves by a mask of its own, the way an NPC's body moves: bounce, wave and noise (red, green and blue), with the settings below.
+gameObject.maskKind.jiggle.tip = NPC の体と同じように、自分のマスクで動きます。弾み、波、ノイズ（赤、緑、青）で、下の設定を使います。
+
+# Button: opens the mask studio on this object's mask
+# en: Edit
+gameObject.editMask = 編集
+
+# Tooltip on a button
+# en: Paint this object's mask in the mask studio, over its picture, with the place preview beside it.
+gameObject.editMask.tip = このオブジェクトのマスクを、マスクペインターで絵の上に塗ります。横に場所のプレビューが出ます。
 
 # Button
 # en: + Component
@@ -2070,8 +2114,8 @@ gameObject.copy.tip = この GameObject をエディターのクリップボー�
 gameObject.paste.tip = クリップボードの GameObject をこの下に兄弟として貼り付けます
 
 # Tooltip on a button
-# en: Remove this GameObject
-gameObject.remove.tip = この GameObject を削除します
+# en: Remove this GameObject. It goes to the place's recycle bin, under the hierarchy beside the preview, with everything under it, to be put back if you need it. One of the game's own objects is switched off where it stands instead, and the bin switches it back on.
+gameObject.remove.tip = この GameObject を削除します。下にあるものごと、プレビューの横の階層の下にある場所のごみ箱に入り、必要なら元に戻せます。ゲーム本来のオブジェクトは、代わりにその場でオフになり、ごみ箱からまたオンに戻せます。
 
 # Tooltip on "This GameObject already exists (bind, don't create)"
 # en: On: the Name above is looked up in the scene (a bare name or a A > B > C path) and only what you author here is applied to it — the way to modify a vanilla level you don't own. Off: this pack creates the GameObject.
@@ -2142,24 +2186,24 @@ gameObject.startActive.tip = 会話で後から見せるオーバーレイ（Fla
 gameObject.initialAlpha01.tip = 最初のアルファ 0..1（Portal のようにフェードインするオーバーレイは 0 から始めます）。
 
 # Tooltip on "Drift with the level"
-# en: On (the default) keeps the level's own strength, which is what a created object always did. Turn it off to set this object's depth independently.
-gameObject.driftLevel.tip = オン（既定）ならレベル自身の強さのままで、作ったオブジェクトはこれまでいつもそうでした。オフにすると、このオブジェクトの奥行きを別に設定できます。
+# en: On (the default): drift as the place's back picture does, which is what a created object does in the game. Turn it off to set this object's depth independently.
+gameObject.driftLevel.tip = オン（既定）：場所の奥の絵と同じように動きます。ゲームでも、作ったオブジェクトはそう動きます。オフにすると、このオブジェクトの奥行きを別に設定できます。
 
 # Tooltip on a text box
 # en: Depth relative to the level's main sprite, which every vanilla level fixes at 0.75: lower sits further away and lags behind the room, higher sits nearer and overshoots. Vanilla objects use 0.1, 0.5, 0.75 and 1.5.
 gameObject.depthRelativeLevelS.tip = レベルのメインスプライトに対する奥行きです。ゲームのレベルはどれも 0.75 に固定しています。小さいほど遠くにあって部屋より遅れて動き、大きいほど近くにあって行き過ぎます。ゲームのオブジェクトは 0.1、0.5、0.75、1.5 を使います。
 
 # Tooltip on "Reversed"
-# en: Drift WITH the cursor instead of against it.
-gameObject.reversed.tip = カーソルに逆らうのではなく、カーソル「と同じ向き」に動かします。
+# en: Drift WITH the cursor instead of against it. Until you change it, the object drifts the way the place's back picture does, so this starts ticked where the back picture is reversed.
+gameObject.reversed.tip = カーソルに逆らうのではなく、カーソル「と同じ向き」に動かします。変えるまでは場所の奥の絵と同じ向きに動くので、奥の絵が逆向きの場所では最初からチェックが入っています。
 
 # Tooltip on "UI space"
 # en: Only for an object under a Canvas — it switches the effect to canvas coordinates. A pack's own GameObjects are world sprites, so leave this off unless you're binding to a canvas object.
 gameObject.uiSpace.tip = Canvas の下にあるオブジェクト専用で、効果をキャンバス座標に切り替えます。パック自身の GameObject はワールドのスプライトなので、キャンバスのオブジェクトに結び付けるのでなければオフのままにします。
 
 # Tooltip on a part of the window
-# en: Optional pack-relative mask PNG bound to _MaskTex, for shader-masked overlays (a cameo).
-gameObject.optionalPackRelativeMask.tip = シェーダーでマスクするオーバーレイ（カメオ）用の、_MaskTex に結び付く任意のマスク PNG（パックからの相対パス）です。
+# en: The mask: a PNG in the pack, made in the mask studio (Edit) or elsewhere.
+gameObject.optionalPackRelativeMask.tip = マスクです。パックの中の PNG で、マスクペインター（「編集」）かほかのツールで作ります。
 
 # Tooltip on "+ Component"
 # en: Attach a generic utility component (fade, disappear, random child, blink) to this GameObject.
@@ -2222,6 +2266,50 @@ component.reshuffleEveryTimeS = 有効になるたびに選び直す
 # Text
 # en: Toggles a SpriteRenderer's alpha between min and max on a fixed interval (blink / pulse).
 component.togglesSpriterendererSAlpha = SpriteRenderer のアルファを一定の間隔で最小と最大の間で切り替えます（点滅 / 脈動）。
+
+# Text explaining a component's settings
+# en: Floats the object up and down, smoothly, for ever - everything under it with it. Several with Random start move out of step.
+component.floatExplain = オブジェクトを、その下にあるものごと、なめらかにずっと上下に浮かせます。「ランダムな開始位置」を使うと、いくつあってもばらばらに動きます。
+
+# Label in front of a text box
+# en: Height
+component.floatHeight = 高さ
+
+# Tooltip on a text box
+# en: How far it travels from its lowest point to its highest, in units (the size of the object's parent's units).
+component.floatHeight.tip = いちばん低い所からいちばん高い所までの距離で、単位はオブジェクトの親の単位です。
+
+# Label in front of a text box
+# en: Time (s)
+component.floatPeriod = 時間（秒）
+
+# Tooltip on a text box
+# en: Seconds for one whole rise and fall. Higher is slower and calmer.
+component.floatPeriod.tip = 1回上がって下がるまでの秒数です。大きいほどゆっくり穏やかになります。
+
+# Label in front of a text box
+# en: Sideways
+component.floatSway = 横揺れ
+
+# Tooltip on a text box
+# en: How far it also sways from side to side, in units. 0 keeps it straight up and down. The sway is a little slower than the rise, so the path keeps changing.
+component.floatSway.tip = 左右にも揺れる幅で、単位で指定します。0 なら真上と真下にだけ動きます。横揺れは上下の動きより少し遅いので、軌道は変わり続けます。
+
+# Label in front of a text box
+# en: Start at
+component.floatStart = 開始位置
+
+# Tooltip on a text box
+# en: Where in its rise and fall it starts, from 0 to 1: 0 in the middle going up, 0.25 at the top, 0.5 in the middle going down, 0.75 at the bottom. Used when Random start is off.
+component.floatStart.tip = 上下の動きのどこから始まるかで、0 から 1 で指定します。0 は上昇中の真ん中、0.25 はいちばん上、0.5 は下降中の真ん中、0.75 はいちばん下です。「ランダムな開始位置」がオフのときに使います。
+
+# Tick box
+# en: Random start
+component.floatRandomStart = ランダムな開始位置
+
+# Tooltip on a tick box
+# en: Each one starts somewhere at random in its rise and fall, so several floating side by side do not move together.
+component.floatRandomStart.tip = それぞれが上下の動きのランダムな位置から始まるので、いくつか並べて浮かべても一緒には動きません。
 
 # Text
 # en: Interval
@@ -2293,6 +2381,110 @@ npcPlacement.blink = まばたき
 # en: Wet (particle)
 npcPlacement.wetParticle = 濡れ（パーティクル）
 
+# Heading
+# en: Wet effect
+npcPlacement.wetEffect = 濡れエフェクト
+
+# Label in front of a dropdown
+# en: Kind
+npcPlacement.wetKind = 種類
+
+# Tooltip on a dropdown
+# en: Which of the game's two wet effects. Same as the NPC: the kind set in the NPC's Wet particles box on the NPCs tab. Wet: Anna's towel look - a few thin white drops over the body, drawn over everything. Shower: the bathroom shower - many fine blue-grey drops falling from a small box, lit by the room's lamps.
+npcPlacement.wetKind.tip = ゲームにある2つの濡れエフェクトのどちらかです。「NPC と同じ」：NPC タブで、NPC の「濡れパーティクル」欄に設定した種類。濡れ：Anna のタオル姿の見た目で、体の上に細く白いしずくが少し出て、すべての上に描かれます。シャワー：浴室のシャワーで、細かい青灰色のしずくがたくさん小さな枠から降り、部屋のランプに照らされます。
+
+# Choice in a dropdown: the kind the NPC itself has
+# en: Same as the NPC
+npcPlacement.wetKindNpc = NPC と同じ
+
+# Choice in a dropdown
+# en: Wet
+npcPlacement.wetKindWet = 濡れ
+
+# Choice in a dropdown
+# en: Shower
+npcPlacement.wetKindShower = シャワー
+
+# Label in front of a text box
+# en: Box width
+npcPlacement.wetWidth = 枠の幅
+
+# Tooltip on a text box
+# en: How wide the box the drops start in is, in the Wet part's own units (its scale still multiplies it). The game's: 3.21 for Wet, 2 for Shower. You can also drag the box's sides in the preview.
+npcPlacement.wetWidth.tip = しずくが出始める枠の幅で、「濡れ」の部分自身の単位です（その拡大率もかかります）。ゲームの値：濡れは 3.21、シャワーは 2。プレビューで枠の辺をドラッグしても変えられます。
+
+# Label in front of a text box
+# en: Box height
+npcPlacement.wetHeight = 枠の高さ
+
+# Tooltip on a text box
+# en: How tall the box the drops start in is, in the Wet part's own units (its scale still multiplies it). The game's: 8.45 for Wet, 1 for Shower. You can also drag the box's sides in the preview.
+npcPlacement.wetHeight.tip = しずくが出始める枠の高さで、「濡れ」の部分自身の単位です（その拡大率もかかります）。ゲームの値：濡れは 8.45、シャワーは 1。プレビューで枠の辺をドラッグしても変えられます。
+
+# Tick box
+# en: Drops start along the top
+npcPlacement.wetFromTop = 上辺からしずくを出す
+
+# Tooltip on a tick box
+# en: The drops start on the box's top side only, like a shower head as wide as the box, instead of anywhere in it.
+npcPlacement.wetFromTop.tip = しずくが枠の中のどこからでもではなく、上辺だけから出ます。枠と同じ幅のシャワーヘッドのようになります。
+
+# Tick box
+# en: Drops stop at the box's floor
+npcPlacement.wetFloor = 枠の底でしずくを止める
+
+# Tooltip on a tick box
+# en: A drop disappears the moment it reaches the bottom of the box, instead of falling off the screen. Drag the box's bottom side down to where the floor is.
+npcPlacement.wetFloor.tip = しずくは画面の外まで落ちず、枠の底に届いたとたんに消えます。枠の下の辺を、床のある所までドラッグしてください。
+
+# Label in front of a text box
+# en: Tint
+npcPlacement.wetTint = 色合い
+
+# Tooltip on a text box
+# en: The drops' own colour is multiplied by it: white keeps them as they are, a colour tints them, a lower alpha makes them fainter. #RRGGBB or #RRGGBBAA. Empty: the NPC's tint (set on the NPCs tab).
+npcPlacement.wetTint.tip = しずく自体の色にこれを掛けます。白ならそのまま、色を指定するとその色が付き、アルファを下げると薄くなります。#RRGGBB または #RRGGBBAA。空欄：NPC の色合い（NPC タブで設定）。
+
+# Button
+# en: Pick…
+npcPlacement.wetPickTint = 選ぶ…
+
+# Tooltip on a button
+# en: Choose the tint.
+npcPlacement.wetPickTint.tip = 色合いを選びます。
+
+# Label in front of a text box
+# en: Amount
+npcPlacement.wetAmount = 量
+
+# Tooltip on a text box
+# en: Times the game's number of drops a second: 2 makes twice as many, 0.5 half as many. Empty: the NPC's (set on the NPCs tab).
+npcPlacement.wetAmount.tip = ゲームの1秒あたりのしずくの数に掛ける倍率です。2 で2倍、0.5 で半分になります。空欄：NPC の値（NPC タブで設定）。
+
+# Label in front of a text box
+# en: Drop size
+npcPlacement.wetSize = しずくの大きさ
+
+# Tooltip on a text box
+# en: Times the game's drop size. The drops only - the box stays as it is. Empty: the NPC's (set on the NPCs tab).
+npcPlacement.wetSize.tip = ゲームのしずくの大きさに掛ける倍率です。変わるのはしずくだけで、枠はそのままです。空欄：NPC の値（NPC タブで設定）。
+
+# Label in front of a text box
+# en: Fall speed
+npcPlacement.wetFall = 落下速度
+
+# Tooltip on a text box
+# en: Times the game's fall: lower falls slower, higher faster. Empty: the NPC's (set on the NPCs tab).
+npcPlacement.wetFall.tip = ゲームの落下に掛ける倍率です。小さいほどゆっくり、大きいほど速く落ちます。空欄：NPC の値（NPC タブで設定）。
+
+# Button
+# en: Reset
+npcPlacement.wetReset = リセット
+
+# Tooltip on a button
+# en: Takes back everything set here: the kind and the drops' settings go back to the NPC's, the box to the game's own for that kind.
+npcPlacement.wetReset.tip = ここで設定したものをすべて取り消します。種類としずくの設定は NPC のものに、枠はその種類のゲーム本来のものに戻ります。
+
 # Tick box
 # en: Start active
 npcPlacement.startActive = 最初から有効
@@ -2338,8 +2530,8 @@ npcPlacement.children = 子
 npcPlacement.keyNPCNpcsTab.tip = NPC タブにある NPC のキーです。
 
 # Tooltip on a button
-# en: Remove this NPC.
-npcPlacement.remove.tip = この NPC を削除します。
+# en: Remove this NPC. It goes to the place's recycle bin, under the hierarchy beside the preview, to be put back if you need it.
+npcPlacement.remove.tip = この NPC を削除します。プレビューの横の階層の下にある場所のごみ箱に入り、必要なら元に戻せます。
 
 # Tooltip on a text box
 # en: GameObject name (SetGameObjectActive target). Blank = the NPC key.
@@ -3869,6 +4061,22 @@ characters.outfitParticles = パーティクル
 # en: Wet particle active on spawn
 characters.wetParticleActiveSpawn = 登場時に濡れパーティクルを有効にする
 
+# Label in front of a dropdown
+# en: Kind
+characters.wetKind = 種類
+
+# Tooltip on a dropdown
+# en: Which of the game's two wet effects. Wet: Anna's towel look - a few thin white drops round the middle of the bust. Shower: fine blue-grey drops falling from the top of the bust's picture.
+characters.wetKind.tip = ゲームにある2つの濡れエフェクトのどちらかです。濡れ：Anna のタオル姿の見た目で、立ち絵の真ん中あたりに細く白いしずくが少し出ます。シャワー：細かい青灰色のしずくが、立ち絵の絵の上端から降ります。
+
+# Choice in a dropdown
+# en: Wet
+characters.wetKindWet = 濡れ
+
+# Choice in a dropdown
+# en: Shower
+characters.wetKindShower = シャワー
+
 # Text
 # en: (The Wet preset is always attached — this controls whether it starts playing.)
 characters.wetPresetAlwaysAttached = （濡れプリセットは常に付いています。これは再生を始めるかどうかを決めます。）
@@ -4351,13 +4559,69 @@ npcs.colourHexRGBA = 色（16進 RGBA）：
 # en: Wet particles (optional)
 npcs.npcWet = 濡れパーティクル（任意）
 
+# Label in front of a dropdown
+# en: Kind
+npcs.wetKind = 種類
+
+# Tooltip on a dropdown
+# en: Which of the game's two wet effects this NPC has wherever it is placed. Wet: Anna's towel look - a few thin white drops over the body, drawn over everything. Shower: the bathroom shower - many fine blue-grey drops falling from a small box, lit by the room's lamps. A placement can pick the other kind for itself.
+npcs.wetKind.tip = この NPC がどこに置かれても持つ、ゲームの2つの濡れエフェクトのどちらかです。濡れ：Anna のタオル姿の見た目で、体の上に細く白いしずくが少し出て、すべての上に描かれます。シャワー：浴室のシャワーで、細かい青灰色のしずくがたくさん小さな枠から降り、部屋のランプに照らされます。配置ごとに、もう一方の種類を選ぶこともできます。
+
+# Choice in a dropdown
+# en: Wet
+npcs.wetKindWet = 濡れ
+
+# Choice in a dropdown
+# en: Shower
+npcs.wetKindShower = シャワー
+
+# Label in front of a text box
+# en: Tint
+npcs.wetTint = 色合い
+
+# Tooltip on a text box
+# en: The drops' own colour is multiplied by it: white keeps them as they are, a colour tints them, a lower alpha makes them fainter. #RRGGBB or #RRGGBBAA. Empty: the game's colours.
+npcs.wetTint.tip = しずく自体の色にこれを掛けます。白ならそのまま、色を指定するとその色が付き、アルファを下げると薄くなります。#RRGGBB または #RRGGBBAA。空欄：ゲームの色。
+
+# Button
+# en: Pick…
+npcs.wetPickTint = 選ぶ…
+
+# Tooltip on a button
+# en: Choose the tint.
+npcs.wetPickTint.tip = 色合いを選びます。
+
+# Label in front of a text box
+# en: Amount
+npcs.wetAmount = 量
+
+# Tooltip on a text box
+# en: Times the game's number of drops a second: 2 makes twice as many, 0.5 half as many.
+npcs.wetAmount.tip = ゲームの1秒あたりのしずくの数に掛ける倍率です。2 で2倍、0.5 で半分になります。
+
+# Label in front of a text box
+# en: Drop size
+npcs.wetSize = しずくの大きさ
+
+# Tooltip on a text box
+# en: Times the game's drop size. The drops only - the box they start in stays as it is.
+npcs.wetSize.tip = ゲームのしずくの大きさに掛ける倍率です。変わるのはしずくだけで、しずくが出る枠はそのままです。
+
+# Label in front of a text box
+# en: Fall speed
+npcs.wetFall = 落下速度
+
+# Tooltip on a text box
+# en: Times the game's fall: lower falls slower, higher faster.
+npcs.wetFall.tip = ゲームの落下に掛ける倍率です。小さいほどゆっくり、大きいほど速く落ちます。
+
 # Tick box
 # en: Start active
 npcs.startActive = 最初から有効
 
 # Text
-# en: Emitter offset / rotation / scale are per-placement — edit the Wet transform on the Places tab.
-npcs.emitterOffsetRotationScale = 発生源の位置 / 回転 / 拡大は配置ごとです。場所タブで濡れのトランスフォームを編集してください。
+# en: Where the drops stand (offset / rotation / scale), the box they start in and a shower's top and floor are set for each placement - edit the Wet part on the Places tab. A placement can also change the settings above for itself.
+npcs.emitterOffsetRotationScale = しずくの位置（位置 / 回転 / 拡大）、しずくが出る枠、シャワーの上辺と底は配置ごとに設定します。場所タブで「濡れ」の部分を編集してください。配置ごとに、上の設定を変えることもできます。
 
 # Tooltip on the divider between the NPC's fields and its preview
 # en: Drag to give the preview more or less of the tab: the NPC scales to fit, no bigger than the size its corner is dragged to. Remembered.
@@ -4613,25 +4877,9 @@ places.extNavigatorButtons = ナビゲーターボタン（このゲームの場
 # en: + Add navigator button
 places.addVanillaExtensionButton = + ナビゲーターボタンを追加
 
-# Box heading
-# en: GameObjects (layered on this vanilla place)
-places.gameobjectsLayeredVanillaPlace = GameObject（このゲームの場所に重ねる）
-
-# Button
-# en: + Add GameObject
-places.addVanillaExtensionGameObject = + GameObject を追加
-
-# Button
-# en: + Add NPC
-places.addNpc = + NPC を追加
-
 # Button
 # en: Fill from vanilla hierarchy
 places.seedFromCatalog = ゲームの階層から埋める
-
-# Text
-# en: GameObjects instantiated under the vanilla level (props, decorations, animated layers) — the pack decorates the level without owning it. Same authoring surface as a pack place's GameObjects: nest children, attach utility components, and target by Name from dialogue actions. Use 'Fill from vanilla hierarchy' to pull in the level's real objects as bound nodes you can modify; anything you leave untouched is dropped on save, so the pack only ever stores what it actually changes.
-places.gameobjectsInstantiatedUnderVanilla = ゲームのレベルの下に作る GameObject（小物、飾り、動くレイヤー）です。パックはレベルを所有せずに飾ります。パックの場所の GameObject と同じ編集画面で、子を入れ子にし、補助コンポーネントを付け、会話のアクションから名前で指定できます。「ゲームの階層から埋める」でレベルの実際のオブジェクトを、変更できる結び付いたノードとして取り込めます。手を付けなかったものは保存時に取り除かれるので、パックは実際に変えたものだけを保存します。
 
 # Box heading
 # en: Identity
@@ -4783,14 +5031,6 @@ places.navigatorButtons = ナビゲーターボタン（この場所が有効な
 places.up12ButtonsPer = 1つの場所に最大 12 個。順番 = 実行時の生成順 = 画面の左から右。▲▼で並べ替えます。プレビューはこの順に番号を付けて表示します。MOD 側のローダーは読み込み時に行き先の名前をレベルの番号に変換するので、2つの MOD がどちらもボタンを追加してもぶつかりません。
 
 # Box heading
-# en: GameObjects (this place's scene hierarchy)
-places.placeGameObjects = GameObject（この場所のシーン階層）
-
-# Text
-# en: Everything this place builds under its level, as one hierarchy. A GameObject with a Sprite is a layered sprite object (backdrop, prop, animated layer); leave the Sprite blank for a pure container that just groups children. Every node takes utility components (fade, disappear, random child, blink), nested children, and NPC placements. The NPCs node is the level's own NPCs object — always present, and the home for the NPC hierarchy; its subtree composes local transforms down the chain, so moving a container moves everything under it. Target any node from dialogue by Name with SetGameObjectActive / FadeSprite / MoveGameObject / SpinGameObject. Lower sorting draws further back.
-places.everythingPlaceBuildsUnder = この場所がレベルの下に作るすべてを、1つの階層で表します。スプライトのある GameObject は重ねたスプライトのオブジェクト（背景、小物、動くレイヤー）です。子をまとめるだけの入れ物なら、スプライトを空にします。どのノードにも補助コンポーネント（フェード、消える、ランダムな子、点滅）、入れ子の子、NPC の配置を付けられます。NPCs ノードはレベル自身の NPCs オブジェクトで、常にあり、NPC の階層の置き場です。その下の階層ではローカルのトランスフォームが順に合成されるので、入れ物を動かすと中のものすべてが動きます。会話からどのノードでも名前で、SetGameObjectActive / FadeSprite / MoveGameObject / SpinGameObject で指定できます。描画順が小さいほど奥に描かれます。
-
-# Box heading
 # en: On enter (once per level activation)
 places.enterOncePerLevel = 入ったとき（レベルが有効になるたびに1回）
 
@@ -4850,10 +5090,6 @@ places.extShaders.tip = 揺れのマスクがある NPC に、このパックの
 # en: Which of the game's own places this extension attaches to. What you add below appears when the player is there.
 places.whichGameSOwn.tip = この拡張を付けるゲームの場所です。下で追加したものは、プレイヤーがそこにいるときに表示されます。
 
-# Tooltip on "+ Add NPC"
-# en: Place an NPC under this vanilla level's own NPCs object. To hang it under a specific container instead, use the NPCs section on that container.
-places.addNpc.tip = このゲームのレベル自身の NPCs オブジェクトの下に NPC を置きます。特定の入れ物の下に付けるなら、その入れ物の NPC 欄を使ってください。
-
 # Tooltip on "Fill from vanilla hierarchy"
 # en: Add a bound node for every object the extracted catalog says this level has, seeded with its real transform. Existing entries are left alone, so it's safe to re-run — it just tops up anything new.
 places.seedFromCatalog.tip = 抽出したカタログがこのレベルにあるとするすべてのオブジェクトについて、実際のトランスフォームで結び付いたノードを追加します。既存の項目には触れないので、何度実行しても安全で、新しいものだけを補います。
@@ -4865,6 +5101,22 @@ places.extParallaxPreview.tip2 = ゲームと同じようにカーソルに合�
 # Tooltip on "Apply shaders"
 # en: Run the real JiggleSprite pass over NPCs that have a jiggle mask, using this pack's own uniforms — the same code and the same numbers the game runs. Animated, so it costs a little CPU; leave off while positioning.
 places.extShaders.tip2 = 揺れのマスクがある NPC に、このパックの値で本物の JiggleSprite の処理をかけます。ゲームと同じコード、同じ数値です。動くので CPU を少し使います。配置中はオフのままにしてください。
+
+# Button beside the place preview's tick boxes
+# en: Full screen
+places.fullScreen = 全画面
+
+# Tooltip on a button
+# en: Shows this preview over the whole screen: the hierarchy and the picked object's settings over its sides, and the preview's tick boxes and quality under the hierarchy, everything working as here. Esc or F11 brings it back. On the Places tab F11 also opens it.
+places.fullScreen.tip = このプレビューを画面全体に表示します。両側に階層と選んだオブジェクトの設定、階層の下にプレビューのチェックボックスと品質が出て、どれもここと同じように使えます。Esc か F11 で元に戻ります。場所タブでは F11 でも開きます。
+
+# Button in the corner of the place preview shown over the whole screen
+# en: Leave full screen
+places.leaveFullScreen = 全画面を終了
+
+# Tooltip on a button
+# en: Puts the preview back on the page. Esc or F11 does the same.
+places.leaveFullScreen.tip = プレビューをページに戻します。Esc か F11 でも同じです。
 
 # Tooltip on a text box
 # en: What this is called in the editor's own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself.
@@ -4965,10 +5217,6 @@ places.whetherGameSRain.tip = ゲームの雨や雪をここで降らせるか�
 # Tooltip on a text
 # en: Maximum 12 navigator buttons per place.
 places.maximum12NavigatorButtons.tip = ナビゲーターボタンは1つの場所に最大 12 個です。
-
-# Tooltip on "+ Add NPC"
-# en: Place an NPC under this level's NPCs object. To hang it under a specific container instead, use the NPCs section on that container.
-places.addNpc.tip2 = このレベルの NPCs オブジェクトの下に NPC を置きます。特定の入れ物の下に付けるなら、その入れ物の NPC 欄を使ってください。
 
 # Tooltip on a count beside a place
 # en: Changes {count} existing vanilla GameObjects — moved, switched, gated, or given components
@@ -9184,6 +9432,10 @@ maskStudio.kind.gameBust = ゲームの立ち絵に付ける揺れマスク。�
 # en: Level mask: one strength, painted over the level's art.
 maskStudio.kind.level = レベルマスク: 強さ一つを、レベルの絵の上に塗ります。
 
+# The studio's title for an object of a place: {name} is the object's name
+# en: {name} (object)
+maskStudio.object = {name}（オブジェクト）
+
 # In the title, after a level's name: which of its two masks
 # en: front layer
 maskStudio.layer.front = 前のレイヤー
@@ -9275,6 +9527,18 @@ maskStudio.sampled = 不透明度を取得: {value}
 # In the status line: where the pointer is on the mask, and the strength there ({value}, a percentage)
 # en: {x}, {y}: {value}
 maskStudio.cursor = {x}, {y}: {value}
+
+# In the status line, after the pointer's place: the part under the pointer is hidden by {name}, drawn in front of what is painted
+# en: under {name}: what moves here can't be seen
+maskStudio.coveredBy = {name} の下：ここで動くものは見えません
+
+# In the status line, once, when part of what is painted is hidden by pictures drawn in front of it
+# en: Something is drawn in front of part of this. The preview shows it see-through while you paint, but in the game it hides what moves behind it: point at a spot to see what covers it, and give that object a mask of its own.
+maskStudio.coverNote = この一部の手前に何かが描かれています。塗っている間、プレビューではそれを透かして見せますが、ゲームではその後ろで動くものが隠れます。ある位置を指すと何が覆っているかがわかるので、そのオブジェクトに自分のマスクを付けてください。
+
+# What the mask studio calls a picture in front that has no name
+# en: a picture in front
+preview.place.coverUnnamed = 手前の絵
 
 # In the status line: the tool and the layer it paints ({layer})
 # en: Brush on {layer}
@@ -10007,6 +10271,14 @@ docs.maskPainter.mirror.term = ミラー
 # Docs: a point in the topic
 # en: Paints both halves at once, mirrored about the middle, with a line marking the middle and a second ring showing where the twin stroke lands.
 docs.maskPainter.mirror = 中央を軸に左右対称で両側を一度に塗ります。中央には線が引かれ、2つ目の輪が反対側のストロークの位置を示します。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: See-through in the preview
+docs.maskPainter.covered.term = プレビューでは透けて見える
+
+# Docs: a point in the topic: on a place's or an object's mask, the parts hidden behind something drawn in front
+# en: On a place's layer or an object, the place preview beside the studio draws everything in front of what you paint see-through, so you can watch it move behind. The line at the bottom names what covers the spot under the pointer: in the game, that is what shows there, and the layer's movement is hidden. To move those parts in the game, give the object in front a mask of its own.
+docs.maskPainter.covered = 場所のレイヤーやオブジェクトでは、マスクペインターの横の場所のプレビューが、塗っているものの手前にあるものをすべて透かして描くので、その後ろで動く様子を見られます。下の行には、ポインターの下の位置を覆っているものの名前が出ます。ゲームではそれがそこに見え、レイヤーの動きは隠れます。ゲームでその部分を動かすには、手前のオブジェクトに自分のマスクを付けてください。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Live preview
@@ -11084,6 +11356,14 @@ docs.characters.startWetEffectAlready.term = 登場時に濡れパーティク�
 # en: Start the wet effect already running. Normally only for swimwear or wet variants.
 docs.characters.startWetEffectAlready = 濡れの効果を最初から動かしておきます。ふつうは水着や濡れた版だけです。
 
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Kind
+docs.characters.wetKind.term = 種類
+
+# Docs: a point in the topic
+# en: Which of the game's two wet effects the outfit has: Wet, Anna's thin white streaks round the middle of the bust, or Shower, fine blue-grey streaks falling from the top of the bust's picture.
+docs.characters.wetKind = 衣装が持つ、ゲームの2つの濡れエフェクトのどちらかです。濡れは、立ち絵の真ん中あたりに出る Anna の細く白い筋。シャワーは、立ち絵の絵の上端から降る細かい青灰色の筋です。
+
 # Docs: a heading inside the topic
 # en: Preview
 docs.characters.heading.preview = プレビュー
@@ -11330,6 +11610,14 @@ docs.npcs.whetherNPCHasWet.term = 有効 / 最初から有効
 # en: Whether the NPC has the wet effect at all, and whether it is already running when the room loads.
 docs.npcs.whetherNPCHasWet = NPC にそもそも濡れの効果があるか、部屋を読み込んだときにすでに動いているか。
 
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Wet effect
+docs.npcs.wetEffect.term = 濡れエフェクト
+
+# Docs: a point in the topic
+# en: How an NPC's wet effect looks is set in its Wet particles box: Kind, Tint, Amount, Drop size and Fall speed. Wet is Anna's, a few thin white streaks over the body; Shower is the bathroom's, fine blue-grey streaks from a small box, lit by the room. Every placement of the NPC starts from those; on the Places tab, pick the NPC in the place preview, then its Wet part, to change any of them for that placement alone (empty keeps the NPC's). The box is the placement's: drag the outlined box's sides to change where the drops start. For a shower, tick Drops start along the top and Drops stop at the box's floor to have it fall from the top of the box to its floor.
+docs.npcs.wetEffect = NPC の濡れエフェクトの見た目は、その「濡れパーティクル」欄で設定します：「種類」「色合い」「量」「しずくの大きさ」「落下速度」。濡れは Anna のもので、体の上に細く白い筋が少し出ます。シャワーは浴室のもので、細かい青灰色の筋が小さな枠から出て、部屋に照らされます。NPC のどの配置もこれらから始まります。場所タブで、場所のプレビューの NPC を選び、次にその「濡れ」の部分を選ぶと、その配置だけについてどれでも変えられます（空欄なら NPC のまま）。枠は配置のものです。囲まれた枠の辺をドラッグすると、しずくの出る所が変わります。シャワーなら「上辺からしずくを出す」と「枠の底でしずくを止める」にチェックを入れると、枠の上から底まで降るようになります。
+
 # Docs: a heading inside the topic
 # en: Preview
 docs.npcs.heading.preview = プレビュー
@@ -11509,12 +11797,12 @@ docs.places.addButtonPlaceS.term = + ナビゲーターボタンを追加
 docs.places.addButtonPlaceS = この場所の帯に、別の所へ通じるボタンを追加します。1つの場所に最大12個です。ボタンの横の数が使った数を示し、上限に達すると追加できなくなります。
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: + Add GameObject
-docs.places.addObjectRoomArt.term = + GameObject を追加
+# en: + Object
+docs.places.addObjectRoomArt.term = + オブジェクト
 
 # Docs: a point in the topic
-# en: Add an object to the room — art, a prop, a container for other objects.
-docs.places.addObjectRoomArt = 部屋にオブジェクトを追加します。絵、小物、ほかのオブジェクトの入れ物などです。
+# en: Over the hierarchy beside the preview: add an object to the room — art, a prop, a container for other objects. It arrives in the middle of the picture, picked, with its settings to the right of it.
+docs.places.addObjectRoomArt = プレビューの横の階層の上にあります。部屋にオブジェクトを追加します。絵、小物、ほかのオブジェクトの入れ物などです。絵の真ん中に選ばれた状態で現れ、その右に設定が出ます。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Copy of
@@ -11529,20 +11817,32 @@ docs.places.copyOfGameObject = オブジェクトを、ゲームのシーン内�
 docs.places.copyOfGameObject.more = コピーはゲームが読み込むたびに、自分の場所か元のものの隣に作られ、上書きしない限り元のものと同じ状態を保ちます。結び付けた子がその部分を変え、パーティクルの色でゲームのエフェクトの色を変えます。
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: + Add NPC
-docs.places.placeOneNpcsInto.term = + NPC を追加
+# en: Moves by
+docs.places.objectMask.term = 動き方
+
+# Docs: a point in the topic: how a place's object moves
+# en: In the panel beside the picture: how the object's picture moves. Nothing keeps it still; the back layer's mask moves it with the place's back layer's, read over its own picture; its own mask moves it like a place (water, leaves, curtains: one layer) or like a character (bounce, wave and noise, with the settings under it). Edit paints the mask in the mask studio, with the place preview beside it.
+docs.places.objectMask = 絵の横のパネルにあります。オブジェクトの絵がどう動くかです。「なし」なら動きません。「奥のレイヤーのマスク」は、場所の奥のレイヤーのマスクを自分の絵の上で読み、それに合わせて動かします。「自分のマスク」は、場所のように（水、木の葉、カーテン：レイヤー1つ）、またはキャラクターのように（弾み、波、ノイズ：その下の設定を使います）動かします。「編集」で、マスクペインターでマスクを塗ります。横に場所のプレビューが出ます。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: + Character
+docs.places.placeOneNpcsInto.term = + キャラクター
 
 # Docs: a point in the topic
-# en: Place one of your NPCs into the room. To hang it under a particular container instead, use that container's own NPCs section.
-docs.places.placeOneNpcsInto = 自分の NPC の1人を部屋に置きます。特定の入れ物の下に置きたいときは、その入れ物自身の NPC の欄を使ってください。
+# en: Over the hierarchy beside the preview: place one of your NPCs into the room. It goes on the picked object when that can hold characters (an object under NPCs), otherwise under the place's NPCs object; choose its NPC to the right of the picture.
+docs.places.placeOneNpcsInto = プレビューの横の階層の上にあります。自分の NPC の1人を部屋に置きます。選んだオブジェクトがキャラクターを入れられるもの（NPCs の下のオブジェクト）ならそこに、そうでなければ場所の NPCs オブジェクトの下に入ります。NPC は絵の右で選びます。
+
+# Docs: the fold-out under the text above
+# en: Picked, Moves with says how the character drifts as the cursor moves: Front stays on the floor they stand on, as the game's own characters do; Back drifts with the place's back picture, like someone far away; Own drifts by a strength you set. Their shadow, blink and reflection go with them. Parallax on the NPCs object drifts every character in it together.
+docs.places.placeOneNpcsInto.more = 選ぶと、「連動」で、カーソルを動かしたときのキャラクターの動き方が決まります。「手前」は、ゲーム本来のキャラクターと同じく、立っている床から離れません。「奥」は、遠くにいる人のように場所の奥の絵と一緒に動きます。「独自」は、設定した強さで動きます。影、まばたき、映り込みも一緒に動きます。NPCs オブジェクトの「視差」で、その中のキャラクター全員がまとめて動きます。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Fill from vanilla hierarchy
 docs.places.vanillaExtensionAddEntry.term = ゲームの階層から埋める
 
 # Docs: a point in the topic
-# en: On a vanilla extension, add an entry for every object the game's version of this place already has, each with its real position. Existing entries are left alone, so it is safe to run again later to pick up anything new.
-docs.places.vanillaExtensionAddEntry = ゲームの場所の拡張で、ゲーム版のこの場所にすでにあるすべてのオブジェクトの項目を、それぞれ実際の位置で追加します。すでにある項目はそのままなので、後で新しいものを取り込むためにもう一度実行しても安全です。
+# en: On a vanilla extension, over the hierarchy beside the preview: add an entry for every object the game's version of this place already has, each with its real position. Existing entries are left alone, so it is safe to run again later to pick up anything new.
+docs.places.vanillaExtensionAddEntry = ゲームの場所の拡張で、プレビューの横の階層の上にあります。ゲーム版のこの場所にすでにあるすべてのオブジェクトの項目を、それぞれ実際の位置で追加します。すでにある項目はそのままなので、後で新しいものを取り込むためにもう一度実行しても安全です。
 
 # Docs: a heading inside the topic
 # en: On enter / On exit
@@ -11591,6 +11891,14 @@ docs.places.runRealJigglePass.term = シェーダーを適用
 # Docs: a point in the topic
 # en: Run the real jiggle pass over NPCs that have a mask, using this pack's own numbers. Costs a little processor time, so leave it off while positioning.
 docs.places.runRealJigglePass = マスクのある NPC に、このパック自身の数値で本物の揺れの処理をかけます。プロセッサーの時間を少し使うので、位置を合わせている間はオフにしてください。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Full screen
+docs.places.fullScreen.term = 全画面
+
+# Docs: a point in the topic
+# en: Full screen, beside the Preview heading, shows the preview over the whole screen: the hierarchy and the picked object's settings over its sides, the preview's tick boxes and quality under the hierarchy. Everything works there as on the page, Ctrl+Z included. Esc, F11 or Leave full screen at its top brings it back. F11 on the Places tab opens it too.
+docs.places.fullScreen = 「プレビュー」見出しの横の「全画面」で、プレビューを画面全体に表示します。両側に階層と選んだオブジェクトの設定、階層の下にプレビューのチェックボックスと品質が出ます。そこではページと同じようにすべてが使え、Ctrl+Z も使えます。Esc、F11、または上部の「全画面を終了」で元に戻ります。場所タブで F11 を押しても開きます。
 
 [Docs: Map Buttons]
 
@@ -14365,8 +14673,8 @@ docs.example.rainyVisitor.s1.do = NPC タブで「+ NPC」をクリックし、�
 docs.example.rainyVisitor.s2 = 2. 場所に置く
 
 # A step of a guide example: what to do
-# en: On the Places tab, choose your place and click + Add NPC. Choose Wet visitor as its NPC, then drag it in the preview to where it should stand.
-docs.example.rainyVisitor.s2.do = 場所タブで自分の場所を選び、「+ NPC を追加」をクリックします。NPC に Wet visitor を選び、プレビューで立たせたい所までドラッグします。
+# en: On the Places tab, choose your place and click + Character over the hierarchy beside the preview. Choose Wet visitor as its NPC to the right of the picture, then drag it in the preview to where it should stand.
+docs.example.rainyVisitor.s2.do = 場所タブで自分の場所を選び、プレビューの横の階層の上にある「+ キャラクター」をクリックします。絵の右で NPC に Wet visitor を選び、プレビューで立たせたい所までドラッグします。
 
 # A step's heading in a guide example, numbered
 # en: 3. Only when it rains
@@ -14865,16 +15173,16 @@ docs.places.navRow = 「対象」は行き先で、矢印で帯の上を左右�
 docs.places.activeWhen.term = 有効にする条件
 
 # Docs: a point in the topic
-# en: On an object: + Condition, and the game shows it only while they pass - no rule needed, so objects with opposite conditions take turns by themselves. Untick Switch back off when the conditions stop matching for a one-way reveal.
-docs.places.activeWhen = オブジェクトに付けます。「+ 条件」を追加すると、ゲームはそれらが満たされている間だけオブジェクトを表示します。ルールは不要なので、逆の条件を持つオブジェクトどうしが自然に入れ替わります。一度きりで現れるようにするには、「条件が合わなくなったら再びオフにする」のチェックを外します。
+# en: On an object, in the panel to the right of the picture: + Condition, and the game shows it only while they pass - no rule needed, so objects with opposite conditions take turns by themselves. Untick Switch back off when the conditions stop matching for a one-way reveal.
+docs.places.activeWhen = オブジェクトの、絵の右のパネルにあります。「+ 条件」を追加すると、ゲームはそれらが満たされている間だけオブジェクトを表示します。ルールは不要なので、逆の条件を持つオブジェクトどうしが自然に入れ替わります。一度きりで現れるようにするには、「条件が合わなくなったら再びオフにする」のチェックを外します。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: + Add child, + Add NPC child, + Component
 docs.places.children.term = + 子を追加、+ NPC を子に追加、+ コンポーネント
 
 # Docs: a point in the topic
-# en: On an object: an object inside it, one of your NPCs placed inside it, or a small helper on it - a fade, a random child shown, a blink.
-docs.places.children = オブジェクトに付けます。その中のオブジェクト、その中に置いた自分の NPC、またはそれに付ける小さな補助（フェード、子をランダムに表示、まばたき）です。
+# en: On an object, in the panel to the right of the picture: an object inside it, one of your NPCs placed inside it, or a small helper on it - a fade, a random child shown, a blink, a smooth float up and down (FloatingSprite: its Height, Time, Sideways and start are yours to set). Components that change what you see play in the place preview as you edit them: fades (replayed after a pause), blinks, floats, a random child (a new pick every few seconds), and the game's swing, shake, sprite blender and cinema changer. The component list is grouped as ModForge's own, Vanilla (the game's scripts) and Unity, each with a line saying what it does.
+docs.places.children = オブジェクトの、絵の右のパネルにあります。その中のオブジェクト、その中に置いた自分の NPC、またはそれに付ける小さな補助（フェード、子をランダムに表示、まばたき、なめらかな上下の浮遊。浮遊の FloatingSprite では「高さ」「時間」「横揺れ」と開始位置を自分で設定します）です。見た目を変えるコンポーネントは、編集している間、場所のプレビューで再生されます。フェード（少し間をおいて再生し直します）、まばたき、浮遊、ランダムな子（数秒ごとに選び直します）、そしてゲームのスイング、シェイク、スプライトのブレンド、シネマの切り替えです。コンポーネントの一覧は「ModForge」、「ゲーム」（ゲームのスクリプト）、「Unity」に分かれ、それぞれに何をするかを書いた行があります。
 
 # A bullet's fold-out in the guide
 # en: A child switches on and off with its parent, and Active when or a RandomChildActivator on the parent decides for all of them. Its place does not follow the parent: an object of yours stands at its own X and Y in the room, so give each child its own. (A child bound to one of the game's objects, or a copy of one, sits relative to its parent, as the game has it.)
@@ -15473,24 +15781,24 @@ tutorial.dressingTheRoom.summary = 彼女のギャラリーに金色の花瓶を
 tutorial.dressingTheRoom.addObject.title = オブジェクトを追加する
 
 # Tutorials: what the step says
-# en: Under GameObjects, scroll to the bottom and click + Add GameObject. Light 2D and NPCs are in every place already - leave them as they are.
-tutorial.dressingTheRoom.addObject.body = 「GameObjects」の下で、いちばん下までスクロールして「+ GameObject を追加」をクリックします。Light 2D と NPCs はどの場所にも最初からあるので、そのままにしておきます。
+# en: In the hierarchy beside the preview, click + Object. Light 2D and NPCs are in every place already - leave them as they are.
+tutorial.dressingTheRoom.addObject.body = プレビューの横の階層で「+ オブジェクト」をクリックします。Light 2D と NPCs はどの場所にも最初からあるので、そのままにしておきます。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Add GameObject is at the bottom of the GameObjects box: scroll down to it.
-tutorial.dressingTheRoom.addObject.hint = 「+ GameObject を追加」は「GameObjects」欄のいちばん下にあります。スクロールしてください。
+# en: + Object is at the top of the hierarchy, beside the picture.
+tutorial.dressingTheRoom.addObject.hint = 「+ オブジェクト」は、絵の横の階層の上部にあります。
 
 # Tutorials: the heading of a step
 # en: Name and picture
 tutorial.dressingTheRoom.giveNamePicture.title = 名前と絵
 
 # Tutorials: what the step says
-# en: In the new card, named GameObject, type Vase over its Name, and choose TutorialArt/Locations/Vase.png as its Sprite.
-tutorial.dressingTheRoom.giveNamePicture.body = GameObject という名前の新しいカードで、「名前」の上から Vase と入力し、「スプライト」に TutorialArt/Locations/Vase.png を選びます。
+# en: The new object, named GameObject, is picked: in the panel to the right of the picture, type Vase over its Name, and choose TutorialArt/Locations/Vase.png as its Sprite.
+tutorial.dressingTheRoom.giveNamePicture.body = GameObject という名前の新しいオブジェクトが選ばれています。絵の右のパネルで、「名前」の上から Vase と入力し、「スプライト」に TutorialArt/Locations/Vase.png を選びます。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: The new card is called GameObject: type Vase in its Name, then fill in its Sprite.
-tutorial.dressingTheRoom.giveNamePicture.hint = 新しいカードの名前は GameObject です。「名前」に Vase と入力し、「スプライト」を指定します。
+# en: The panel to the right of the picture shows the picked object: type Vase in its Name, then fill in its Sprite.
+tutorial.dressingTheRoom.giveNamePicture.hint = 絵の右のパネルに、選んだオブジェクトが出ています。「名前」に Vase と入力し、「スプライト」を指定します。
 
 # Tutorials: the heading of a step
 # en: Put it in place
@@ -15509,12 +15817,12 @@ tutorial.dressingTheRoom.putWhereWant.hint = プレビューで花瓶をクリ�
 tutorial.dressingTheRoom.decideStandsFront.title = 2枚の絵の間に
 
 # Tutorials: what the step says
-# en: Set its Sort to -11 - the box after Scale X/Y on the vase's row.
-tutorial.dressingTheRoom.decideStandsFront.body = 「順」を -11 にします。花瓶の行で「拡大 X/Y」の次の欄です。
+# en: Set its Sort to -11 - the box after Scale X/Y, in the panel to the right of the picture.
+tutorial.dressingTheRoom.decideStandsFront.body = 「順」を -11 にします。絵の右のパネルで「拡大 X/Y」の次の欄です。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Sort, on the vase's row under GameObjects.
-tutorial.dressingTheRoom.decideStandsFront.hint = 「GameObjects」の下、花瓶の行の「順」です。
+# en: Sort, in the panel to the right of the picture, with the vase picked.
+tutorial.dressingTheRoom.decideStandsFront.hint = 花瓶を選んだ状態で、絵の右のパネルの「順」です。
 
 # Tutorials: the heading of a step
 # en: Hidden for now
@@ -16319,24 +16627,24 @@ tutorial.populating.giveThemSomeLife.hint = 「揺れのマスク」欄の横の
 tutorial.populating.putThemRoom.title = ギャラリーへ
 
 # Tutorials: what the step says
-# en: On the Places tab, with The Gallery chosen, click + Add NPC and pick Mannequin in the new row's NPC box.
-tutorial.populating.putThemRoom.body = 場所タブで The Gallery を選んだまま「+ NPC を追加」をクリックし、新しい行の「NPC」欄で Mannequin を選びます。
+# en: On the Places tab, with The Gallery chosen, click + Character in the hierarchy beside the preview and pick Mannequin as its NPC in the panel to the right of the picture.
+tutorial.populating.putThemRoom.body = 場所タブで The Gallery を選んだまま、プレビューの横の階層で「+ キャラクター」をクリックし、絵の右のパネルの「NPC」で Mannequin を選びます。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Add NPC under GameObjects, then Mannequin in the row's NPC box.
-tutorial.populating.putThemRoom.hint = GameObjects の下の「+ NPC を追加」、次に行の「NPC」欄で Mannequin です。
+# en: + Character over the hierarchy, then Mannequin as its NPC to the right of the picture.
+tutorial.populating.putThemRoom.hint = 階層の上の「+ キャラクター」、次に絵の右の「NPC」で Mannequin です。
 
 # Tutorials: the heading of a step
 # en: Show her
 tutorial.populating.switchThem.title = 表示する
 
 # Tutorials: what the step says
-# en: Tick Start active on the placement's row - below Part transforms, beside Sorting order. It shows the whole figure; the droplets have their own Enabled, which stays off. A new placement starts hidden.
-tutorial.populating.switchThem.body = 配置の行の「最初から有効」にチェックを入れます（「パーツのトランスフォーム」の下、「描画順」の横です）。これで人物全体が表示されます。しずくには自分の「有効」があり、それはオフのままです。新しい配置は隠れた状態で始まります。
+# en: Tick Start active in the panel to the right of the picture - below Part transforms, beside Sorting order. It shows the whole figure; the droplets have their own Enabled, which stays off. A new placement starts hidden.
+tutorial.populating.switchThem.body = 絵の右のパネルで「最初から有効」にチェックを入れます（「パーツのトランスフォーム」の下、「描画順」の横です）。これで人物全体が表示されます。しずくには自分の「有効」があり、それはオフのままです。新しい配置は隠れた状態で始まります。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Start active, below Part transforms on the placement's row under GameObjects.
-tutorial.populating.switchThem.hint = GameObjects の下の配置の行で、「パーツのトランスフォーム」の下にある「最初から有効」です。
+# en: Start active, below Part transforms in the panel to the right of the picture.
+tutorial.populating.switchThem.hint = 絵の右のパネルで、「パーツのトランスフォーム」の下にある「最初から有効」です。
 
 # Tutorials: the heading of a step
 # en: Put her in place
@@ -16375,16 +16683,16 @@ tutorial.populating.sitThemFloor.more = 「色」で濃さを決め、「描画�
 tutorial.populating.giveThemSomeLife.more = 立ち絵と同じマスクです。マスクのない人物はまったく動かず、画面のほかの何かが動いたとたん、段ボールの切り抜きに見えてしまいます。
 
 # The fold-out under a tutorial step: the whole explanation
-# en: A row with no NPC chosen is a placement of nobody: it shows nothing and breaks nothing, which is why it's easy to leave behind. The same NPC can stand in as many rooms as you like - each placement is a copy.
-tutorial.populating.putThemRoom.more = NPC を選んでいない行は、誰もいない配置です。何も表示せず、何も壊さないので、つい残してしまいがちです。同じ NPC は好きなだけ多くの部屋に立てます。配置の1つ1つがコピーです。
+# en: A character with no NPC chosen is a placement of nobody: it shows nothing and breaks nothing, which is why it's easy to leave behind. The same NPC can stand in as many rooms as you like - each placement is a copy.
+tutorial.populating.putThemRoom.more = NPC を選んでいないキャラクターは、誰もいない配置です。何も表示せず、何も壊さないので、つい残してしまいがちです。同じ NPC は好きなだけ多くの部屋に立てます。配置の1つ1つがコピーです。
 
 # The fold-out under a tutorial step: the whole explanation
 # en: Hidden is the usual start: a figure that a rule shows later, like one who arrives at night. This one should simply be there.
 tutorial.populating.switchThem.more = 隠れた状態で始まるのが普通です。夜に来る人のように、あとでルールが表示する人物のためです。この人物は、ただそこにいればよいのです。
 
 # The fold-out under a tutorial step: the whole explanation
-# en: Click a figure and its tools appear in the panel to the right of the picture. The first row picks what moves - Body, Shadow, Blink or Wet - and the second how: Move, Rotate or Scale. All four belong to this placement, not to the NPC, so they change in this room only. The same numbers are on the row under Part transforms.
-tutorial.populating.placeThemProperly.more = 人物をクリックすると、絵の右のパネルにそのツールが出ます。1段目で何を動かすか（「体」「影」「まばたき」「濡れ」）を、2段目でどう動かすか（「移動」「回転」「拡大縮小」）を選びます。4つとも NPC ではなくこの配置に属するので、変わるのはこの部屋だけです。同じ数値は、行の「パーツのトランスフォーム」の下にもあります。
+# en: Click a figure and its tools appear in the panel to the right of the picture. The first row picks what moves - Body, Shadow, Blink or Wet - and the second how: Move, Rotate or Scale. All four belong to this placement, not to the NPC, so they change in this room only. The same numbers are lower in that panel, under Part transforms.
+tutorial.populating.placeThemProperly.more = 人物をクリックすると、絵の右のパネルにそのツールが出ます。1段目で何を動かすか（「体」「影」「まばたき」「濡れ」）を、2段目でどう動かすか（「移動」「回転」「拡大縮小」）を選びます。4つとも NPC ではなくこの配置に属するので、変わるのはこの部屋だけです。同じ数値は、そのパネルの下のほうの「パーツのトランスフォーム」にもあります。
 
 # The fold-out under a tutorial step: the whole explanation
 # en: A place with figures in it stops looking like artwork. Standing in it is the only way to judge them. Next: a whole row of them.
@@ -16399,8 +16707,8 @@ tutorial.populating.shadow.title = 彼女の影
 tutorial.populating.shadow.body = 影は、ゲーム本来の人物の影と同じ位置から始まります。ここでは脚の後ろに隠れています。プレビューで彼女をクリックし、絵の右のパネルで「影」を選んで、影を足元までドラッグします。
 
 # The fold-out under a tutorial step: the whole explanation
-# en: A shadow is what stands a figure on the floor. Every placement has its own, so it fits that spot - half behind a table, on a step. Under Part transforms on her row, Shadow's X and Y are the same numbers to type; Scale Y squashes it flatter.
-tutorial.populating.shadow.more = 影があるから、人物は床に立って見えます。配置ごとに自分の影があるので、テーブルの陰に半分隠れる、段の上に立つなど、その場所に合わせられます。彼女の行の「パーツのトランスフォーム」の下にある「影」の X と Y は、同じ数値を入力するところです。「拡大率 Y」で影を平たくつぶせます。
+# en: A shadow is what stands a figure on the floor. Every placement has its own, so it fits that spot - half behind a table, on a step. Under Part transforms, lower in the panel to the right of the picture, Shadow's X and Y are the same numbers to type; Scale Y squashes it flatter.
+tutorial.populating.shadow.more = 影があるから、人物は床に立って見えます。配置ごとに自分の影があるので、テーブルの陰に半分隠れる、段の上に立つなど、その場所に合わせられます。絵の右のパネルの下のほうにある「パーツのトランスフォーム」の「影」の X と Y は、同じ数値を入力するところです。「拡大率 Y」で影を平たくつぶせます。
 
 # Tutorial hint, shown when a step has waited a while
 # en: Click her in the preview, then Shadow in the panel to the right of the picture, then drag.
@@ -16429,24 +16737,24 @@ tutorial.npcsThatBelong.definitionNotAppearance.body = マネキン1体なら展
 tutorial.npcsThatBelong.putSamePersonTwice.title = 2体目
 
 # Tutorials: what the step says
-# en: On the Places tab, add Mannequin to The Gallery again with + Add NPC.
-tutorial.npcsThatBelong.putSamePersonTwice.body = 場所タブで、「+ NPC を追加」を使って The Gallery にもう一度 Mannequin を追加します。
+# en: On the Places tab, add Mannequin to The Gallery again with + Character.
+tutorial.npcsThatBelong.putSamePersonTwice.body = 場所タブで、「+ キャラクター」を使って The Gallery にもう一度 Mannequin を追加します。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Add NPC on The Gallery, then Mannequin in the NPC box.
-tutorial.npcsThatBelong.putSamePersonTwice.hint = The Gallery で「+ NPC を追加」、次に「NPC」欄で Mannequin です。
+# en: + Character over the hierarchy on The Gallery, then Mannequin as its NPC to the right of the picture.
+tutorial.npcsThatBelong.putSamePersonTwice.hint = The Gallery で階層の上の「+ キャラクター」、次に絵の右の「NPC」で Mannequin です。
 
 # Tutorials: the heading of a step
 # en: Tell them apart
 tutorial.npcsThatBelong.tellThemApart.title = 見分けられるようにする
 
 # Tutorials: what the step says
-# en: Scroll down to the two Mannequin rows under GameObjects. The lower row is the new one, the one you dragged left: tick its Start active and name it MannequinLeft. Name the upper row MannequinRight.
-tutorial.npcsThatBelong.tellThemApart.body = GameObjects の下の、2つの Mannequin の行までスクロールします。下の行が新しいほう、左へドラッグしたほうです。その「最初から有効」にチェックを入れ、MannequinLeft と名付けます。上の行は MannequinRight と名付けます。
+# en: Both Mannequins are under NPCs in the hierarchy beside the picture. The new one, the one you dragged left, is picked: tick its Start active and name it MannequinLeft in the panel to the right of the picture. Then pick the other one and name it MannequinRight.
+tutorial.npcsThatBelong.tellThemApart.body = 2つの Mannequin は、どちらも絵の横の階層の NPCs の下にあります。新しいほう、左へドラッグしたほうが選ばれています。絵の右のパネルで、その「最初から有効」にチェックを入れ、MannequinLeft と名付けます。次にもう一方を選び、MannequinRight と名付けます。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Both Mannequin rows are at the bottom of the GameObjects box: give each its own Name.
-tutorial.npcsThatBelong.tellThemApart.hint = 2つの Mannequin の行は GameObjects 欄のいちばん下にあります。それぞれに別の「名前」を付けます。
+# en: Pick each Mannequin under NPCs in the hierarchy and give it its own Name in the panel to the right of the picture.
+tutorial.npcsThatBelong.tellThemApart.hint = 階層の NPCs の下でそれぞれの Mannequin を選び、絵の右のパネルで別々の「名前」を付けます。
 
 # Tutorials: the heading of a step
 # en: Change them both
@@ -18253,8 +18561,8 @@ tutorial.deeperPlaces.summary = 夜のギャラリー。勇気が出たら貼ら
 tutorial.deeperPlaces.story.title = 場所が持つもの
 
 # Tutorial step: what to do, in a sentence or two
-# en: A place is its art and the objects in it: props, lights, effects and NPCs, each in the GameObjects box and the hierarchy beside the preview. Her gallery is chosen.
-tutorial.deeperPlaces.story.body = 場所は、その絵と中のオブジェクトでできています。小道具、ライト、エフェクト、NPC で、どれも GameObjects 欄と、プレビューの横の階層にあります。彼女のギャラリーが選ばれています。
+# en: A place is its art and the objects in it: props, lights, effects and NPCs, each in the hierarchy beside the preview, with its settings to the right of the picture once you pick it. Her gallery is chosen.
+tutorial.deeperPlaces.story.body = 場所は、その絵と中のオブジェクトでできています。小道具、ライト、エフェクト、NPC で、どれもプレビューの横の階層にあり、選ぶと絵の右に設定が出ます。彼女のギャラリーが選ばれています。
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: Each object has its own picture, its own spot and size, its own order in front of or behind the others, and its own Active when: conditions that show it and hide it as they change. Objects can hold objects - move the parent and its children move with it.
@@ -18265,32 +18573,32 @@ tutorial.deeperPlaces.story.more = オブジェクトはそれぞれ、自分の
 tutorial.deeperPlaces.poster.title = 彼女のポスター
 
 # Tutorial step: what to do, in a sentence or two
-# en: Scroll to the bottom of the GameObjects box and click + Add GameObject. Name the new object "Poster", give it TutorialArt/Locations/Poster.png as its Sprite and set its Sort to -11, like the vase. Then scroll up and drag it onto the wall in the preview.
-tutorial.deeperPlaces.poster.body = GameObjects 欄のいちばん下までスクロールし、「+ GameObject を追加」をクリックします。新しいオブジェクトを「Poster」と名付け、「スプライト」に TutorialArt/Locations/Poster.png を指定し、「順」を花瓶と同じ -11 にします。次に上へスクロールし、プレビューで壁の上にドラッグします。
+# en: In the hierarchy beside the preview, click + Object. In the panel to the right of the picture, name the new object "Poster", give it TutorialArt/Locations/Poster.png as its Sprite and set its Sort to -11, like the vase. Then drag it onto the wall in the preview.
+tutorial.deeperPlaces.poster.body = プレビューの横の階層で「+ オブジェクト」をクリックします。絵の右のパネルで、新しいオブジェクトを「Poster」と名付け、「スプライト」に TutorialArt/Locations/Poster.png を指定し、「順」を花瓶と同じ -11 にします。次に、プレビューで壁の上にドラッグします。
 
 # Tutorial step: the whole explanation, under Tell me more
-# en: The picture is a framed portrait of her: around the frame it is see-through (a PNG), so only the frame and the portrait cover the wall. Sort -11 draws it between the room's back picture (-12) and its front one (-10). Size it with Scale, in the panel beside the preview or on its row.
-tutorial.deeperPlaces.poster.more = この絵は額に入った彼女の肖像です。額の周りは透明（PNG）なので、壁を覆うのは額と肖像だけです。「順」-11 で、部屋の奥の絵（-12）と手前の絵（-10）の間に描かれます。大きさは、プレビューの横のパネルの「拡大縮小」か、行の「拡大率」で決めます。
+# en: The picture is a framed portrait of her: around the frame it is see-through (a PNG), so only the frame and the portrait cover the wall. Sort -11 draws it between the room's back picture (-12) and its front one (-10). Size it with Scale, in the panel to the right of the picture.
+tutorial.deeperPlaces.poster.more = この絵は額に入った彼女の肖像です。額の周りは透明（PNG）なので、壁を覆うのは額と肖像だけです。「順」-11 で、部屋の奥の絵（-12）と手前の絵（-10）の間に描かれます。大きさは、絵の右のパネルの「拡大縮小」で決めます。
 
 # Tutorial step: where to click, when the step waits
-# en: + Add GameObject is at the bottom of the GameObjects box; Name, Sprite and Sort are on the new object's row.
-tutorial.deeperPlaces.poster.hint = 「+ GameObject を追加」は GameObjects 欄のいちばん下にあります。「名前」「スプライト」「順」は新しいオブジェクトの行にあります。
+# en: + Object is at the top of the hierarchy; Name, Sprite and Sort are in the panel to the right of the picture.
+tutorial.deeperPlaces.poster.hint = 「+ オブジェクト」は階層の上部にあります。「名前」「スプライト」「順」は絵の右のパネルにあります。
 
 # Tutorial step title
 # en: Up once she's braver
 tutorial.deeperPlaces.posterWhen.title = 勇気が出たら貼られる
 
 # Tutorial step: what to do, in a sentence or two
-# en: Scroll down to the Poster row - the last one. Under its Active when, click + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 3. Leave Start active as it is.
-tutorial.deeperPlaces.posterWhen.body = Poster の行（最後の行）までスクロールします。その「有効にする条件」の下の「+ 条件」をクリックし、「種類」Variable、「名前」Confidence、「比較」は「以上」、「値」3 にします。「最初から有効」はそのままにします。
+# en: The Poster is picked. Under its Active when, in the panel to the right of the picture, click + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 3. Leave Start active as it is.
+tutorial.deeperPlaces.posterWhen.body = Poster が選ばれています。絵の右のパネルで、その「有効にする条件」の下の「+ 条件」をクリックし、「種類」Variable、「名前」Confidence、「比較」は「以上」、「値」3 にします。「最初から有効」はそのままにします。
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: Active when is checked all the time, so the poster appears the moment her confidence reaches 3 and goes again if it drops - some nights cost her one (tutorial 21, Rules, in depth), and your visits win it back. Start active says what it is before any condition is met.
 tutorial.deeperPlaces.posterWhen.more = 「有効にする条件」は常に調べられているので、ポスターは彼女の自信が 3 になった瞬間に現れ、下がればまた消えます。ある夜には1つ下がり（チュートリアル 21「ルールを掘り下げる」）、あなたの訪問でまた取り戻します。「最初から有効」は、どの条件も満たされる前の状態を決めます。
 
 # Tutorial step: where to click, when the step waits
-# en: Active when is on the poster's row in the GameObjects box.
-tutorial.deeperPlaces.posterWhen.hint = 「有効にする条件」は、GameObjects 欄のポスターの行にあります。
+# en: Active when is in the panel to the right of the picture, with the poster picked.
+tutorial.deeperPlaces.posterWhen.hint = ポスターを選んだ状態で、「有効にする条件」は絵の右のパネルにあります。
 
 # Tutorial step title
 # en: What is drawn over what
@@ -18325,16 +18633,16 @@ tutorial.deeperPlaces.visitor.hint = 「+ NPC」は NPC の一覧の上にあり
 tutorial.deeperPlaces.placeVisitor.title = ギャラリーに
 
 # Tutorial step: what to do, in a sentence or two
-# en: On the Places tab, with The Gallery chosen, click + Add NPC and pick Visitor in the new row's NPC box. Then scroll up to the preview and drag her to the right of the gallery.
-tutorial.deeperPlaces.placeVisitor.body = 場所タブで The Gallery を選んだまま「+ NPC を追加」をクリックし、新しい行の「NPC」欄で Visitor を選びます。次にプレビューまで上へスクロールし、彼女をギャラリーの右側へドラッグします。
+# en: On the Places tab, with The Gallery chosen, click + Character in the hierarchy beside the preview and pick Visitor as its NPC in the panel to the right of the picture. Then drag her to the right of the gallery.
+tutorial.deeperPlaces.placeVisitor.body = 場所タブで The Gallery を選んだまま、プレビューの横の階層で「+ キャラクター」をクリックし、絵の右のパネルの「NPC」で Visitor を選びます。次に、彼女をギャラリーの右側へドラッグします。
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: A placement is one appearance of an NPC in one place: where she stands, how big, her shadow, and when she is there. The same NPC can be placed in many places, and twice in one.
 tutorial.deeperPlaces.placeVisitor.more = 配置は、1つの場所での NPC の1回の登場です。どこに立つか、どのくらいの大きさか、影、そしていつそこにいるか。同じ NPC をたくさんの場所に置けますし、1つの場所に2回置くこともできます。
 
 # Tutorial step: where to click, when the step waits
-# en: + Add NPC is under the GameObjects box.
-tutorial.deeperPlaces.placeVisitor.hint = 「+ NPC を追加」は GameObjects 欄の下にあります。
+# en: + Character is at the top of the hierarchy; pick Visitor as its NPC in the panel to the right of the picture.
+tutorial.deeperPlaces.placeVisitor.hint = 「+ キャラクター」は階層の上部にあります。絵の右のパネルの「NPC」で Visitor を選びます。
 
 # Tutorial step title
 # en: Her shadow
@@ -18357,16 +18665,16 @@ tutorial.deeperPlaces.visitorShadow.hint = プレビューで彼女をクリッ�
 tutorial.deeperPlaces.visitorWhen.title = お披露目がすんだら
 
 # Tutorial step: what to do, in a sentence or two
-# en: Scroll down to the visitor's row - the last one. Under its Active when, + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 5. Visitors come once the Dummy is sure of herself.
-tutorial.deeperPlaces.visitorWhen.body = 訪問者の行（最後の行）までスクロールします。その「有効にする条件」の下で「+ 条件」を押し、「種類」Variable、「名前」Confidence、「比較」は「以上」、「値」5 にします。訪問者は、Dummy が自信をつけてから来ます。
+# en: The visitor is picked. Under her Active when, in the panel to the right of the picture, + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 5. Visitors come once the Dummy is sure of herself.
+tutorial.deeperPlaces.visitorWhen.body = 訪問者が選ばれています。絵の右のパネルで、彼女の「有効にする条件」の下で「+ 条件」を押し、「種類」Variable、「名前」Confidence、「比較」は「以上」、「値」5 にします。訪問者は、Dummy が自信をつけてから来ます。
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: An NPC placement has its own Active when, as any object does: the same visitor could stand in her gallery on some days and in a cafe on others. Leave "Switch back off when the conditions stop matching" ticked, so she leaves again if the Dummy loses her nerve.
 tutorial.deeperPlaces.visitorWhen.more = NPC の配置にも、ほかのオブジェクトと同じく自分の「有効にする条件」があります。同じ訪問者が、ある日はギャラリーに、別の日はカフェに立つこともできます。「条件が合わなくなったら再びオフにする」はチェックを入れたままにして、Dummy が弱気になったら訪問者がまた帰るようにします。
 
 # Tutorial step: where to click, when the step waits
-# en: Active when is on the visitor's row in the GameObjects box.
-tutorial.deeperPlaces.visitorWhen.hint = 「有効にする条件」は、GameObjects 欄の訪問者の行にあります。
+# en: Active when is in the panel to the right of the picture, with the visitor picked.
+tutorial.deeperPlaces.visitorWhen.hint = 訪問者を選んだ状態で、「有効にする条件」は絵の右のパネルにあります。
 
 # Tutorial step title
 # en: The game's own places
@@ -19621,8 +19929,8 @@ tutorial.deeperRooms.weather.hint = ギャラリーの絵の下の「動作」�
 tutorial.deeperRooms.sign.title = ネオンの星
 
 # A tutorial step's instruction (short)
-# en: Add a GameObject "Star sign" with Sprite TutorialArt/Locations/NeonStar.png, Sort -11, high on her gallery's back wall, and click + Component: BlinkingSprite.
-tutorial.deeperRooms.sign.body = GameObject「Star sign」を追加し、「スプライト」を TutorialArt/Locations/NeonStar.png、「順」を -11 にして彼女のギャラリーの奥の壁の高い所に置き、「+ コンポーネント」をクリックして BlinkingSprite を選びます。
+# en: Click + Object over the hierarchy and name it "Star sign", with Sprite TutorialArt/Locations/NeonStar.png and Sort -11, high on her gallery's back wall. Then click + Component: BlinkingSprite.
+tutorial.deeperRooms.sign.body = 階層の上の「+ オブジェクト」をクリックして「Star sign」と名付け、「スプライト」を TutorialArt/Locations/NeonStar.png、「順」を -11 にして、彼女のギャラリーの奥の壁の高い所に置きます。次に「+ コンポーネント」をクリックして BlinkingSprite を選びます。
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: A component makes an object do something by itself. BlinkingSprite switches its picture's opacity between two values on a fixed beat, like a sign on a bad wire.
@@ -19633,12 +19941,28 @@ tutorial.deeperRooms.sign.more = コンポーネントは、オブジェクト�
 tutorial.deeperRooms.sign.hint = 「+ コンポーネント」はオブジェクトのパネルにあります。
 
 # A tutorial step's title
+# en: A vase that floats
+tutorial.deeperRooms.float.title = 浮かぶ花瓶
+
+# A tutorial step's instruction (short)
+# en: Click + Object and name it "Floating vase", with Sprite TutorialArt/Locations/Vase.png and Sort -10, in the middle of her gallery. Then click + Component: FloatingSprite.
+tutorial.deeperRooms.float.body = 「+ オブジェクト」をクリックして「Floating vase」と名付け、「スプライト」を TutorialArt/Locations/Vase.png、「順」を -10 にして、彼女のギャラリーの真ん中に置きます。次に「+ コンポーネント」をクリックして FloatingSprite を選びます。
+
+# A tutorial step's fold-out: the rest of its explanation
+# en: FloatingSprite moves an object up and down smoothly for ever, and everything under it with it: a sculpture hovering over its stand, a monster in a tank, a toy bobbing in water. Height is how far it travels and Time how long one rise and fall takes; the preview plays it as you change them.
+tutorial.deeperRooms.float.more = FloatingSprite は、オブジェクトをその下にあるものごと、なめらかにずっと上下させます。台の上に浮かぶ彫刻、水槽の中の怪物、水に浮き沈みするおもちゃなどです。「高さ」は動く距離、「時間」は1回の上下にかかる時間で、変えるとすぐにプレビューで再生されます。
+
+# A tutorial step's hint: where to find what it asks for
+# en: + Component is in the object's panel; FloatingSprite is in its ModForge group.
+tutorial.deeperRooms.float.hint = 「+ コンポーネント」はオブジェクトのパネルにあります。FloatingSprite はその「ModForge」グループにあります。
+
+# A tutorial step's title
 # en: Flowers for the visit
 tutorial.deeperRooms.flowers.title = 訪問のための花
 
 # A tutorial step's instruction (short)
-# en: Add a GameObject "Flowers" with no Sprite. Give it three children - Roses, Sunflowers and Lavender - each with its picture from TutorialArt/Locations, Sort -9, X -3.4 and Y -3.6 (on the floor beside the vase). Then give "Flowers" the component RandomChildActivator.
-tutorial.deeperRooms.flowers.body = 「スプライト」なしの GameObject「Flowers」を追加します。子を3つ（Roses、Sunflowers、Lavender）付け、それぞれ TutorialArt/Locations の絵、「順」を -9、X を -3.4、Y を -3.6（花瓶の横の床）にします。次に「Flowers」にコンポーネント RandomChildActivator を付けます。
+# en: Click + Object and name it "Flowers", with no Sprite. Give it three children with + Add child - Roses, Sunflowers and Lavender - each with its picture from TutorialArt/Locations, Sort -9, X -3.4 and Y -3.6 (on the floor beside the vase). Then pick "Flowers" again and give it the component RandomChildActivator.
+tutorial.deeperRooms.flowers.body = 「+ オブジェクト」をクリックして「Flowers」と名付け、「スプライト」はなしにします。「+ 子を追加」で子を3つ（Roses、Sunflowers、Lavender）付け、それぞれ TutorialArt/Locations の絵、「順」を -9、X を -3.4、Y を -3.6（花瓶の横の床）にします。次に「Flowers」をもう一度選び、コンポーネント RandomChildActivator を付けます。
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: RandomChildActivator shows one of its object's children, picked at random, each time the object is switched on. A different pot each visit, with no rule. Each child gets its own X and Y: an object of yours stands at its own place in the room, wherever its parent is.
@@ -19653,8 +19977,8 @@ tutorial.deeperRooms.flowers.hint = 「+ 子を追加」はオブジェクトの
 tutorial.deeperRooms.copy.title = ゲームのきらめき
 
 # A tutorial step's instruction (short)
-# en: Add a GameObject "Loving sparkles" and set Copy of to 6_Effects/CFXR2 Expression Loving (Timed).
-tutorial.deeperRooms.copy.body = GameObject「Loving sparkles」を追加し、「コピー元」を 6_Effects/CFXR2 Expression Loving (Timed) にします。
+# en: Click + Object, name it "Loving sparkles" and set Copy of to 6_Effects/CFXR2 Expression Loving (Timed).
+tutorial.deeperRooms.copy.body = 「+ オブジェクト」をクリックし、「Loving sparkles」と名付けて、「コピー元」を 6_Effects/CFXR2 Expression Loving (Timed) にします。
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: Copy of makes the object a copy of one of the game's, by its path in the game's scene: a level effect, a prop, a whole panel. The original is untouched.
@@ -19669,8 +19993,8 @@ tutorial.deeperRooms.freeLight.title = 床の明かり
 tutorial.deeperRooms.freeLight.body = プレビューの一覧の上にある「+ ライト」をクリックして「Floor glow」と名付け、形を「自由な形」、色を #9AB8FF にします。プレビューで角をドラッグして形を整えます。
 
 # A tutorial step's fold-out: the rest of its explanation
-# en: A free shape lights the area you draw, with a soft edge: a pool of light on the floor, a lit doorway. Drag the + halfway along a side to add a corner.
-tutorial.deeperRooms.freeLight.more = 自由な形は、描いた範囲を、縁をぼかして照らします。床に落ちる光だまりや、明るい戸口などです。辺の中ほどにある + をドラッグすると角が増えます。
+# en: A free shape lights the area you draw at full strength and shines out from all of its edge, as far as the dashed line round it: a pool of light on the floor, a lit doorway. Drag the + halfway along a side to add a corner, and the knob on the dashed line to make it reach further.
+tutorial.deeperRooms.freeLight.more = 自由な形は、描いた範囲を最大の強さで照らし、その縁全体から、周りの破線の所まで光を広げます。床に落ちる光だまりや、明るい戸口などです。辺の中ほどにある + をドラッグすると角が増え、破線上のつまみをドラッグすると光が遠くまで届きます。
 
 # A tutorial step's hint: where to find what it asks for
 # en: + Light is over the hierarchy beside the preview.
@@ -19897,16 +20221,16 @@ tutorial.deeperGently.talk.hint = どちらのチェックも、会話の名前�
 tutorial.deeperRooms.fades.title = 現れて、消える
 
 # A tutorial step's instruction (short)
-# en: Scroll down to her Poster and give it the component FadeInSprite. Then add FadeOutSprite to the Visitor's placement, with Delay 20, Duration 2 and Deactivate on complete ticked - and, on that placement itself, untick Switch back off when the conditions stop matching.
-tutorial.deeperRooms.fades.body = スクロールして彼女の Poster まで行き、コンポーネント FadeInSprite を付けます。次に Visitor の配置に FadeOutSprite を追加し、「待ち時間」を 20、「時間」を 2 にして「終わったら無効にする」にチェックを入れます。そして、その配置自体の「条件が合わなくなったら再びオフにする」のチェックを外します。
+# en: Her Poster is picked: give it the component FadeInSprite in the panel to the right of the picture. Then pick the Visitor's placement in the hierarchy and add FadeOutSprite to it, with Delay 20, Duration 2 and Deactivate on complete ticked - and, on that placement itself, untick Switch back off when the conditions stop matching.
+tutorial.deeperRooms.fades.body = 彼女の Poster が選ばれています。絵の右のパネルで、コンポーネント FadeInSprite を付けます。次に階層で Visitor の配置を選んで FadeOutSprite を追加し、「待ち時間」を 20、「時間」を 2 にして「終わったら無効にする」にチェックを入れます。そして、その配置自体の「条件が合わなくなったら再びオフにする」のチェックを外します。
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: FadeInSprite fades an object in each time it is switched on, so her poster appears softly. FadeOutSprite fades one out after a delay; with Deactivate on complete, it is switched off once gone - the visitor stays a while, then leaves. Switch back off is unticked because, ticked, Active when puts its answer back every moment, and would switch her straight on again. Unticked, she also stays if the Dummy's confidence falls below 5 again (tutorial 23): the fade-out is what sends her away now.
 tutorial.deeperRooms.fades.more = FadeInSprite はオブジェクトがオンになるたびにフェードインさせるので、彼女のポスターはふわりと現れます。FadeOutSprite は待ち時間のあとにフェードアウトさせます。「終わったら無効にする」なら、消えたあとにオフになるので、客はしばらくいて、それから去ります。「条件が合わなくなったら再びオフにする」のチェックを外すのは、チェックが入っていると「有効にする条件」が常に答えを戻し、客をすぐまたオンにしてしまうからです。チェックを外したので、Dummy の自信が再び 5 を下回っても客は残ります（チュートリアル 23）。今は、フェードアウトが客を帰らせます。
 
 # A tutorial step's hint: where to find what it asks for
-# en: An NPC placement takes components too, under its own panel.
-tutorial.deeperRooms.fades.hint = NPC の配置にも、そのパネルの下でコンポーネントを付けられます。
+# en: Components are in the panel to the right of the picture, for what is picked; an NPC placement takes them too.
+tutorial.deeperRooms.fades.hint = コンポーネントは、選んでいるものについて絵の右のパネルにあります。NPC の配置にも付けられます。
 
 # A tutorial step's hint: where to find what it asks for
 # en: Trigger mode is the rule's first box; WhilePassing is in its list.
@@ -20053,8 +20377,8 @@ tutorial.deeperVoices.owner.hint = Announcer のセリフを選んで「+ 兄弟
 tutorial.deeperJournal.counter.hint = QuestCounter は条件の「種類」の一覧にあります。彼女のクエスト、次に数えるタスクを選びます。
 
 # A tutorial step's hint: where to find what it asks for
-# en: + Add GameObject is at the bottom of the GameObjects box; Copy of is in the object's panel.
-tutorial.deeperRooms.copy.hint = 「+ GameObject を追加」は「GameObject」欄のいちばん下にあります。「コピー元」はオブジェクトのパネルにあります。
+# en: + Object is at the top of the hierarchy; Copy of is in the object's panel, to the right of the picture.
+tutorial.deeperRooms.copy.hint = 「+ オブジェクト」は階層の上部にあります。「コピー元」は絵の右の、オブジェクトのパネルにあります。
 
 # A tutorial step's hint: where to find what it asks for
 # en: + Light is over the hierarchy beside the preview; the shape list has Picture.
@@ -21116,16 +21440,16 @@ typeGroup.world = 場所とオブジェクト
 typeGroup.chance = 確率・時間・キー
 
 # Heading in the list of component types
-# en: Made for packs
-componentGroup.pack = パック用
+# en: ModForge
+componentGroup.pack = ModForge
 
 # Heading in the list of component types
-# en: The game's scripts
-componentGroup.game = ゲームのスクリプト
+# en: Vanilla
+componentGroup.game = ゲーム
 
 # Heading in the list of component types
-# en: Unity's own
-componentGroup.unity = Unity 本体のもの
+# en: Unity
+componentGroup.unity = Unity
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Lift the busts above a scene, or put them back
@@ -21372,8 +21696,188 @@ note.component.randomChild = 子のうち一つをランダムに表示
 note.component.blinking = 点滅する
 
 # A note beside a component type in its dropdown
-# en: Unity's own - most settings can't be set by name
-note.component.engine = Unity 本体のもの – 多くの設定は名前で設定できません
+# en: Floats up and down smoothly
+note.component.floating = なめらかに上下に浮かぶ
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A list of the game's instructions, run when something starts it
+note.component.actions = 何かが始めたときに実行される、ゲームの命令のリスト
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A button that runs the game's instructions when clicked
+note.component.buttonInstructions = クリックするとゲームの命令を実行するボタン
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades a particle effect out and cleans it up when it ends
+note.component.cfxrEffect = パーティクルエフェクトをフェードアウトさせ、終わったら片付ける
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Words made of particles, popping up
+note.component.cfxrParticleText = パーティクルでできた文字が飛び出す
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shakes it gently, as if riding in a car
+note.component.carInteriorShake = 車に乗っているように、そっと揺らす
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades a character in as it is shown, its blink and face with it
+note.component.characterIntroFade = 表示するキャラクターを、まばたきや顔と一緒にフェードインさせる
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shows one of its children at random, a new one every few seconds
+note.component.cinemaSpriteChanger = 子の1つをランダムに表示し、数秒ごとに替える
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Swings it from side to side, like a stage light
+note.component.concertLightSwing = ステージのライトのように左右に振る
+
+# A note beside a component type in its dropdown, saying what it does
+# en: The game's checks for whether something may happen
+note.component.conditions = 何かが起きてよいかを調べる、ゲームのチェック
+
+# A note beside a component type in its dropdown, saying what it does
+# en: One of the game's conversations
+note.component.dialogue = ゲームの会話の1つ
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Switches all its children off when the game tells it to
+note.component.disableChildren = ゲームの指示で子をすべてオフにする
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Switches all its children on when the game tells it to
+note.component.enableChildren = ゲームの指示で子をすべてオンにする
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Switches on every Map_Variation object under it when shown
+note.component.mapVariationActivator = 表示されたとき、下にある Map_Variation オブジェクトをすべてオンにする
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Scrolls a 3D shape's texture sideways; does nothing to a picture
+note.component.offsetScrolling = 3D の形のテクスチャを横にスクロールする。絵には何もしない
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Drifts it a little as the mouse moves
+note.component.parallaxMouseEffect = マウスの動きに合わせて少し動かす
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Plays a radio: songs, with talk between them
+note.component.radioSimulator = ラジオを流す：曲と、その合間のトーク
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades its children's pictures in and out at random
+note.component.randomSpriteBlender = 子の絵をランダムにフェードイン・アウトさせる
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Starts the game's instructions when something happens (a click, the start)
+note.component.trigger = 何か（クリック、開始など）が起きたときにゲームの命令を始める
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shows one object while the mouse is over a picture, another while not
+note.component.uiHoverActivator = マウスが絵の上にある間は1つのオブジェクトを、ない間は別のものを表示する
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Distorts the sound playing beside it
+note.component.audioDistortionFilter = 横で鳴っている音をゆがめる
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Muffles the sound playing beside it
+note.component.audioLowPassFilter = 横で鳴っている音をこもらせる
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Plays a sound
+note.component.audioSource = 音を鳴らす
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A box that clicks and bumps can hit
+note.component.boxCollider2D = クリックや衝突が当たる四角形
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws interface pictures and words
+note.component.canvas = インターフェースの絵と文字を描く
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades interface objects together, or stops clicks on them
+note.component.canvasGroup = インターフェースのオブジェクトをまとめてフェードさせる、またはクリックを止める
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws one interface object on its canvas
+note.component.canvasRenderer = インターフェースのオブジェクトを1つ、そのキャンバスに描く
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Sizes an interface to the screen
+note.component.canvasScaler = インターフェースを画面に合わせた大きさにする
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A circle that clicks and bumps can hit
+note.component.circleCollider2D = クリックや衝突が当たる円
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Lets the mouse click an interface
+note.component.graphicRaycaster = マウスでインターフェースをクリックできるようにする
+
+# A note beside a component type in its dropdown, saying what it does
+# en: An interface picture
+note.component.image = インターフェースの絵
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A light for 3D objects
+note.component.light = 3D オブジェクト用のライト
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A light that lights the pictures round it
+note.component.light2D = 周りの絵を照らすライト
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a line through points
+note.component.lineRenderer = 点を結ぶ線を描く
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A 3D shape that bumps can hit
+note.component.meshCollider = 衝突が当たる 3D の形
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Holds a 3D shape to draw
+note.component.meshFilter = 描く 3D の形を持つ
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a 3D shape
+note.component.meshRenderer = 3D の形を描く
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Gives off particles: sparks, drops, dust
+note.component.particleSystem = パーティクルを出す：火花、しずく、ほこり
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a particle system's particles
+note.component.particleSystemRenderer = パーティクルシステムのパーティクルを描く
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A drop shadow behind interface pictures and words
+note.component.shadow = インターフェースの絵や文字の後ろに付くドロップシャドウ
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Casts a shadow from the lights round it
+note.component.shadowCaster2D = 周りのライトから影を落とす
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shows pictures only inside its shape, or only outside
+note.component.spriteMask = 形の内側だけ、または外側だけに絵を表示する
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a picture
+note.component.spriteRenderer = 絵を描く
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Interface words
+note.component.textMeshProUgui = インターフェースの文字
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Plays a video
+note.component.videoPlayer = 動画を再生する
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Screen effects: glow, colour and the like
+note.component.volume = 画面効果：光のにじみ、色など
 
 # The editor's title bar; {game} is the game's version, {pack} the pack's id
 # en: SMSModForge {version} for {game} — {pack}
@@ -21650,8 +22154,8 @@ docs.places.light.term = + ライト
 docs.places.light = 場所のライトで、プレビューに映っている範囲の真ん中に置かれます。好きな所へドラッグしてください。選ぶと、絵の右のパネルに「色」「強さ」「届く範囲」「コーン」が出ます。
 
 # Guide bullet: the rest, folded away
-# en: Every place of yours starts with the light of the level it is built on: change it there, or remove it. Back to the game's puts the game's light back as it was. Soft edge and Full cone make a spotlight's edge harder or softer; a cone points the way its object is turned (Rotate).
-docs.places.light.more = 自分の場所はどれも、元にしたレベルのライトを持って始まります。そこで変えるか、削除してください。「ゲームのものに戻す」は、ゲームのライトを元どおりに戻します。「ぼかし幅」と「全強度のコーン」で、スポットライトの縁を硬くしたり柔らかくしたりします。コーンは、そのオブジェクトが向いている方向を指します（「回転」）。
+# en: Every place of yours starts with the light of the level it is built on: change it there, or remove it. Back to the game's puts the game's light back as it was. Full strength to and Full cone make a spotlight's edge harder or softer; a cone points the way its object is turned (Rotate). A free shape shines out from its edge as far as its Reach, the dashed line round it. Moves with is how a light drifts as the cursor moves: with the place's back picture (what a new light does), with its front (the game's own lamps), or by a strength of its own.
+docs.places.light.more = 自分の場所はどれも、元にしたレベルのライトを持って始まります。そこで変えるか、削除してください。「ゲームのものに戻す」は、ゲームのライトを元どおりに戻します。「全光量の範囲」と「全強度のコーン」で、スポットライトの縁を硬くしたり柔らかくしたりします。コーンは、そのオブジェクトが向いている方向を指します（「回転」）。自由な形は、その縁から「届く範囲」、つまり周りの破線の所まで光を広げます。「連動」は、カーソルを動かしたときのライトの動き方です。場所の奥の絵と一緒（新しいライトはこれ）、手前の絵と一緒（ゲーム本来のランプ）、または独自の強さで動きます。
 
 # Guide: a light's shapes
 # en: Round, Free shape, Picture
@@ -21697,6 +22201,14 @@ docs.places.giveIt.term = ライトを付ける、エフェクトを付ける
 # en: On an object you picked: it carries a light or an effect where it stands, shown whenever the object is - so its conditions switch both together.
 docs.places.giveIt = 選んだオブジェクトに付けます。オブジェクトは立っている場所にライトやエフェクトを持ち、オブジェクトが表示されているときはいつも表示されます。そのため、オブジェクトの条件で両方を一緒に切り替えられます。
 
+# Guide: three buttons' labels, over an object picked in the place preview
+# en: Object, Light, Effect
+docs.places.objectParts.term = オブジェクト、ライト、エフェクト
+
+# Guide bullet
+# en: An object with a picture and a light, or with an effect, has its parts to pick over its handles, as a character has Body and Shadow. Object moves, turns and sizes the object. Light shows only the light's handles (clicking its sun in the picture picks it too). Effect draws a box round where its particles start: drag inside it to move the effect away from the object - it still moves with it - and drag a corner or a side to make it bigger or smaller. A light on its own keeps its handles together, as before.
+docs.places.objectParts = 絵とライト、またはエフェクトを持つオブジェクトでは、キャラクターの「体」と「影」のように、ハンドルの上で部分を選べます。「オブジェクト」は、オブジェクトを動かし、回し、大きさを変えます。「ライト」は、ライトのハンドルだけを表示します（絵の中のライトの太陽をクリックしても選べます）。「エフェクト」は、パーティクルが出る所を囲む枠を描きます。枠の中をドラッグするとエフェクトをオブジェクトから離して動かせ（それでもオブジェクトと一緒に動きます）、角や辺をドラッグすると大きさを変えられます。ライトだけのものは、これまでどおりハンドルがまとまったままです。
+
 # Guide: a box's label
 # en: Character in the place
 docs.places.standIn.term = 場所に置くキャラクター
@@ -21705,13 +22217,21 @@ docs.places.standIn.term = 場所に置くキャラクター
 # en: Shows one of your characters where the game shows a character in a conversation, to see how the place's lights fall on her. Preview only: nothing is saved.
 docs.places.standIn = ゲームが会話でキャラクターを表示する位置に自分のキャラクターの1人を表示して、場所のライトがどう当たるかを見られます。プレビューだけで、何も保存されません。
 
+# Guide: what part of the place the player sees, as the preview marks it
+# en: What the player sees
+docs.places.playersView.term = プレイヤーに見える範囲
+
+# Guide bullet
+# en: The game always shows the same part of a place, 19.2 by 10.8 units round its middle, on any screen. That is exactly what the preview shows when the picture fits the view, with the game's interface over it. Your pictures are bigger, so their edges only come into sight as the cursor drifts the place: zoom out or drag the view and what the player can't see is a little darker, with a thin line round the rest.
+docs.places.playersView = ゲームはどの画面でも、場所の同じ部分を表示します。中心を囲む、横 19.2、縦 10.8 単位の範囲です。絵がビューに収まっているとき、プレビューに映るのはちょうどその範囲で、上にゲームのインターフェースが重なります。自分の絵はそれより大きいので、その端はカーソルで場所が動いたときにだけ見えてきます。ズームアウトするかビューをドラッグすると、プレイヤーに見えない所は少し暗くなり、残りの範囲は細い線で囲まれます。
+
 # Guide: picking an object in the preview
 # en: Picking
 docs.places.picking.term = 選び方
 
 # Guide bullet
-# en: Click an object in the picture or in the hierarchy beside it. The panel to the right of the picture then moves, turns or scales it; an NPC's first row picks the part - Body, Shadow, Blink, Wet or Reflection.
-docs.places.picking = 絵の中か、その横の階層でオブジェクトをクリックします。すると絵の右のパネルで、移動、回転、拡大縮小ができます。NPC では、最初の行で部分（「体」「影」「まばたき」「濡れ」「映り込み」）を選びます。
+# en: Click an object in the picture or in the hierarchy beside it. The panel to the right of the picture then moves, turns or scales it, and below that has all of its settings; an NPC's first row picks the part - Body, Shadow, Blink, Wet or Reflection.
+docs.places.picking = 絵の中か、その横の階層でオブジェクトをクリックします。すると絵の右のパネルで、移動、回転、拡大縮小ができ、その下にはそのオブジェクトの設定がすべて並びます。NPC では、最初の行で部分（「体」「影」「まばたき」「濡れ」「映り込み」）を選びます。
 
 # Guide: a box's heading
 # en: Hierarchy
@@ -24521,9 +25041,73 @@ setup.uninstall.go = アンインストール
 # en: ModForge has been uninstalled.
 setup.uninstall.done = ModForge をアンインストールしました。
 
+# Note under a place's preview: where its objects are made and set
+# en: Everything this place builds is in the hierarchy beside the picture. + Object adds art, a prop, or a container that groups other objects; + Character places one of your NPCs. Click an object in the picture or in the hierarchy and all of its settings are to the right of the picture: its picture, where it stands and how big, its components, Active when, and + Add child and + Add NPC child to put more under it. Dialogues reach an object by its Name, and a lower Sort draws it further back. NPCs is the place's own object, where every character stands.
+places.placeObjectsHelp = この場所が作るものは、すべて絵の横の階層にあります。「+ オブジェクト」は絵、小物、またはほかのオブジェクトをまとめる入れ物を追加し、「+ キャラクター」は自分の NPC を置きます。絵か階層でオブジェクトをクリックすると、その設定がすべて絵の右に出ます。絵、位置と大きさ、コンポーネント、「有効にする条件」、そしてその下にさらに追加する「+ 子を追加」と「+ NPC を子に追加」です。会話は「名前」でオブジェクトを見つけ、「順」が小さいほど奥に描かれます。NPCs は場所自身のオブジェクトで、キャラクターはみなそこに立ちます。
+
+# Note under a game level's preview: where its objects are made and set
+# en: The hierarchy beside the picture is the game's level as it is, with what your pack adds to it. + Object and + Character add your own, and Fill from vanilla hierarchy brings in any of the game's objects not listed yet. Click one and its settings are to the right of the picture. Your pack keeps only what it changes: the game's objects you leave alone are not saved.
+places.levelObjectsHelp = 絵の横の階層は、ゲームのレベルそのままに、パックが加えるものを足したものです。「+ オブジェクト」と「+ キャラクター」で自分のものを加え、「ゲームの階層から埋める」で、まだ一覧にないゲームのオブジェクトを取り込みます。1つクリックすると、その設定が絵の右に出ます。パックは変えたものだけを保存します。手を付けていないゲームのオブジェクトは保存されません。
+
 # Heading of the object list in the place preview
 # en: Hierarchy
 preview.place.hierarchy = 階層
+
+# Button over the object list in the place preview: adds an object
+# en: + Object
+preview.object.add = + オブジェクト
+
+# Tooltip on "+ Object"
+# en: Add an object to the place, in the middle of the picture: art, a prop, or a container for other objects. It is picked, with its settings to the right of the picture.
+preview.object.add.tip = 場所の、絵の真ん中にオブジェクトを追加します。絵、小物、またはほかのオブジェクトの入れ物です。選ばれた状態になり、その設定が絵の右に出ます。
+
+# Button over the object list in the place preview: places an NPC
+# en: + Character
+preview.character.add = + キャラクター
+
+# Tooltip on "+ Character"
+# en: Place one of your NPCs here: on the picked object when it can hold characters (an object under NPCs), otherwise under the place's NPCs object. It is picked: choose its NPC to the right of the picture, then drag it where it should stand.
+preview.character.add.tip = 自分の NPC をここに置きます。選んだオブジェクトがキャラクターを入れられるもの（NPCs の下のオブジェクト）ならそこに、そうでなければ場所の NPCs オブジェクトの下に置かれます。選ばれた状態になるので、絵の右で NPC を選び、立たせたい所までドラッグします。
+
+# Tooltip on the heading of the object list in the place preview: its keys
+# en: Keys, after a click on the picture or on this list: Ctrl+C copies the object picked, with everything under it. Ctrl+V pastes it under the object picked (with nothing picked, among the place's own). Ctrl+D duplicates the object picked beside itself. Delete sends it to the recycle bin at the bottom of this list. On the game's own objects, a copy of a light is a light of your own and a copy of anything else is a copy of the game's object, and Delete switches the game's object off where it stands. The NPCs object is the place's one: paste characters under it.
+preview.place.keys.tip = 絵かこの一覧をクリックした後に使えるキー：Ctrl+C で、選んだオブジェクトを下にあるものごとコピーします。Ctrl+V で、選んだオブジェクトの下に貼り付けます（何も選んでいなければ、場所自身のオブジェクトの並びに）。Ctrl+D で、選んだオブジェクトをその横に複製します。Delete で、この一覧のいちばん下にあるごみ箱に送ります。ゲーム本来のオブジェクトでは、ライトのコピーは自分のライトに、それ以外のコピーはゲームのオブジェクトのコピーになり、Delete はゲームのオブジェクトをその場でオフにします。NPCs オブジェクトは場所のものです。キャラクターはその下に貼り付けてください。
+
+# Heading of the recycle bin at the bottom of the place preview's object list; {count} is how many it holds
+# en: Recycle bin ({count})
+preview.place.bin = ごみ箱（{count}）
+
+# Tooltip on the recycle bin's heading
+# en: What you delete from this place waits here, with everything that was under it, until you put it back or empty the bin. It is saved with the pack and left out of what you export. Click to show or hide what it holds.
+preview.place.bin.tip = この場所から削除したものは、下にあったものごと、元に戻すかごみ箱を空にするまでここで待ちます。パックと一緒に保存され、エクスポートには含まれません。クリックすると中身を表示・非表示にします。
+
+# Tooltip on the arrow beside something in the recycle bin
+# en: Put it back where it was, under the same object
+preview.place.bin.restore.tip = 同じオブジェクトの下の、元の位置に戻します
+
+# Tooltip on the cross beside something in the recycle bin
+# en: Delete it for good. Ctrl+Z still brings it back.
+preview.place.bin.forget.tip = 完全に削除します。それでも Ctrl+Z で戻せます。
+
+# Button under what the recycle bin holds
+# en: Empty the bin
+preview.place.bin.empty = ごみ箱を空にする
+
+# Tooltip on "Empty the bin"
+# en: Delete everything in the bin for good. Ctrl+Z still brings it back.
+preview.place.bin.empty.tip = ごみ箱の中身をすべて完全に削除します。それでも Ctrl+Z で戻せます。
+
+# Tooltip on something in the recycle bin; {path} is the objects it was under, top first
+# en: Was under {path}
+preview.place.bin.under = {path} の下にありました
+
+# Tooltip on something in the recycle bin that was one of the place's top objects
+# en: Was one of the place's own objects, at the top of the list
+preview.place.bin.top = 場所自身のオブジェクトの1つで、一覧のいちばん上にありました
+
+# Tooltip on one of the game's own objects in the recycle bin
+# en: One of the game's own, switched off where it stands: the game's object cannot be taken out of the game. The arrow switches it back on as it was.
+preview.place.bin.switchedOff = ゲーム本来のもので、その場でオフになっています。ゲームのオブジェクトをゲームから取り除くことはできません。矢印で元どおりオンに戻ります。
 
 # Tooltip on the arrow beside an object in the hierarchy
 # en: Fold this object's children
@@ -24580,6 +25164,38 @@ preview.gizmo.rotate = 回転
 # On the toolbar over what is selected in the place preview: what dragging the handles does
 # en: Scale
 preview.gizmo.scale = 拡大縮小
+
+# On the toolbar over an object selected in the place preview that has a light or an effect: the handles move the object itself
+# en: Object
+preview.gizmo.object = オブジェクト
+
+# Tooltip on "Object"
+# en: Move, turn and size the object itself.
+preview.gizmo.object.tip = オブジェクト自体を動かし、回し、大きさを変えます。
+
+# On the toolbar over an object selected in the place preview: the handles are for the object's light
+# en: Light
+preview.gizmo.light = ライト
+
+# Tooltip on "Light"
+# en: The object's light: drag its reach, how far it stays full and its cone. The light stays where the object is.
+preview.gizmo.light.tip = オブジェクトのライトです。届く範囲、最大の強さを保つ距離、コーンをドラッグします。ライトはオブジェクトの位置から動きません。
+
+# On the toolbar over an object selected in the place preview: the handles are for the effect the object plays
+# en: Effect
+preview.gizmo.effect = エフェクト
+
+# Tooltip on "Effect"
+# en: The effect the object plays: drag inside its box to move it away from the object, drag a corner or a side to make it bigger or smaller.
+preview.gizmo.effect.tip = オブジェクトが再生するエフェクトです。枠の中をドラッグするとオブジェクトから離して動かせ、角や辺をドラッグすると大きさを変えられます。
+
+# Tooltip inside the box drawn round an object's effect in the place preview
+# en: Drag to move the effect away from its object. It moves with the object.
+preview.effect.box.tip = ドラッグすると、エフェクトをオブジェクトから離して動かします。オブジェクトと一緒に動きます。
+
+# Tooltip on the small squares on the box round an object's effect in the place preview
+# en: Drag to make the effect bigger or smaller (its Scale).
+preview.effect.grip.tip = ドラッグすると、エフェクトの大きさ（「拡大率」）を変えます。
 
 # Beside the place preview: which character to show standing in the place
 # en: Character in the place
@@ -24722,8 +25338,8 @@ preview.light.shape.round.tip = 中心から全方向、またはコーン状に
 preview.light.shape.free = 自由な形
 
 # Tooltip on the free light shape
-# en: A light in the exact shape you draw, point by point, with a soft edge around it.
-preview.light.shape.free.tip = 点を1つずつ置いて描いたとおりの形のライトで、周りの縁はぼけます。
+# en: A light in the shape you draw, point by point: full strength inside it, shining out from all of its edge as far as its reach.
+preview.light.shape.free.tip = 点を1つずつ置いて描いた形のライトです。中は最大の強さで、縁全体から届く範囲まで光が広がります。
 
 # Button beside the place preview: the light's shape
 # en: Picture
@@ -24825,13 +25441,93 @@ preview.light.point.tip = ドラッグすると、ライトの形のこの角を
 # en: Drag to add a corner here.
 preview.light.addPoint.tip = ドラッグすると、ここに角を追加します。
 
-# Label beside the place preview: the width of a free-shape light's soft edge
-# en: Soft edge
-preview.light.edge = ぼかし幅
+# Label beside the place preview: how far a free-shape light shines out from its shape
+# en: Reach
+preview.light.edge = 届く範囲
 
-# Tooltip on a free-shape light's soft edge
-# en: How far outside its shape the light fades to nothing, in the game's units.
-preview.light.edge.tip = 形の外側のどこまでで光が消えるかで、ゲームの単位です。
+# Tooltip on a free-shape light's reach
+# en: How far the light shines out from its shape, fading as it goes - as a round light fades from its middle, and round at the corners - in the game's units. Drag the knob on the dashed line in the preview.
+preview.light.edge.tip = 形から外へどこまで光が届くかで、遠くなるほど薄れます（円形のライトが中心から薄れるのと同じで、角では丸く広がります）。ゲームの単位です。プレビューで破線上のつまみをドラッグします。
+
+# Tooltip on the knob on a free-shape light's dashed reach line in the place preview
+# en: Drag to set how far the light shines out from its shape.
+preview.light.edge.drag.tip = ドラッグして、形から外へ光が届く距離を決めます。
+
+# Label beside the place preview: how a light drifts as the cursor moves (with the place's back picture, its front, or its own)
+# en: Moves with
+preview.light.drift = 連動
+
+# Tooltip on "Moves with"
+# en: How the light drifts with the place as the cursor moves (its parallax): with the place's back picture, with its front picture, or by a strength of its own. It is its object's drift, so a picture on the same object drifts with it. The game's own lamps keep what the game gave them.
+preview.light.drift.tip = カーソルを動かしたとき、ライトが場所と一緒にどう動くか（視差）です。場所の奥の絵と一緒、手前の絵と一緒、または独自の強さで動きます。これはオブジェクトの動きなので、同じオブジェクトの絵も一緒に動きます。ゲーム本来のランプは、ゲームが与えた動きのままです。
+
+# Button beside the place preview: the light drifts with the place's back picture
+# en: Back
+preview.light.drift.back = 奥
+
+# Tooltip on "Back"
+# en: Drift with the place's back picture, as something far away does: the moon, a street lamp seen through a window. What a new light does.
+preview.light.drift.back.tip = 遠くにあるもののように、場所の奥の絵と一緒に動きます。月や、窓越しに見える街灯などです。新しいライトはこれになります。
+
+# Tooltip on "Back" on a level of the game's that has no back picture to drift with
+# en: This level of the game's has no back picture of the kind a pack place has, so there is none to drift with. Front, or a strength of its own, can match how any of its pictures drifts.
+preview.light.drift.noBack.tip = このゲームのレベルには、パックの場所にあるような奥の絵がないので、一緒に動く相手がありません。「手前」か独自の強さで、どの絵の動きにも合わせられます。
+
+# Button beside the place preview: the light drifts with the place's front picture
+# en: Front
+preview.light.drift.front = 手前
+
+# Tooltip on "Front"
+# en: Drift with the place's front picture: the light stays on the lamp, window or screen it shines from. What every light made before this did, and what the game's own lamps do.
+preview.light.drift.front.tip = 場所の手前の絵と一緒に動きます。ライトは、光を出しているランプや窓、画面から離れません。これより前に作ったライトはすべてこうなっていて、ゲーム本来のランプもこう動きます。
+
+# Button beside the place preview: the light drifts by a strength of its own
+# en: Own
+preview.light.drift.own = 独自
+
+# Tooltip on "Own"
+# en: Drift by a strength of its own, set below. It starts where the light drifts now.
+preview.light.drift.own.tip = 下で設定する独自の強さで動きます。最初は今のライトの動きから始まります。
+
+# Label beside the place preview: how far a light drifts by its own strength
+# en: Drift strength
+preview.light.drift.strength = 動きの強さ
+
+# Tooltip on "Drift strength"
+# en: How far the light drifts as the cursor moves, on top of the place's front picture: 0 drifts with the front, higher drifts further. The game's own pictures use 0.1 to 1.5.
+preview.light.drift.strength.tip = カーソルを動かしたときにライトが動く量で、場所の手前の絵の動きに加わります。0 なら手前と一緒に動き、大きいほど大きく動きます。ゲーム本来の絵は 0.1 から 1.5 を使います。
+
+# Tick box beside the place preview: the light drifts the other way
+# en: Reversed
+preview.light.drift.reversed = 逆向き
+
+# Tooltip on "Reversed"
+# en: Drift with the cursor instead of against it. Until you change it, this is the way the place's back picture drifts, so it starts ticked where the back picture is reversed.
+preview.light.drift.reversed.tip = カーソルに逆らうのではなく、カーソルと同じ向きに動きます。変えるまでは場所の奥の絵と同じ向きなので、奥の絵が逆向きの場所では最初からチェックが入っています。
+
+# Tooltip on "Moves with" beside the place preview, for a character standing in the place
+# en: How the character drifts with the place as the cursor moves (their parallax): with the place's front picture, as the floor they stand on does, with its back picture, or by a strength of their own. Their shadow, blink, reflection and anything they hold drift with them.
+preview.character.drift.tip = カーソルを動かしたとき、キャラクターが場所と一緒にどう動くか（視差）です。立っている床と同じく場所の手前の絵と一緒、奥の絵と一緒、または独自の強さで動きます。影、まばたき、映り込み、持っているものも一緒に動きます。
+
+# Tooltip on "Back", for a character
+# en: Drift with the place's back picture, as someone far away does: a figure on a distant hill, a crowd seen through a window.
+preview.character.drift.back.tip = 遠くにいる人のように、場所の奥の絵と一緒に動きます。遠くの丘の上の人影や、窓越しに見える人混みなどです。
+
+# Tooltip on "Back" for a character, on a level of the game's with no back picture to drift with
+# en: This level of the game's has no back picture of the kind a pack place has, so there is none to drift with. Front, or a strength of their own, can match how any of its pictures drifts.
+preview.character.drift.noBack.tip = このゲームのレベルには、パックの場所にあるような奥の絵がないので、一緒に動く相手がありません。「手前」か独自の強さで、どの絵の動きにも合わせられます。
+
+# Tooltip on "Front", for a character
+# en: Drift with the place's front picture: the character stays on the floor they stand on. What every character placed before this did, and what the game's own characters do.
+preview.character.drift.front.tip = 場所の手前の絵と一緒に動きます。キャラクターは立っている床から離れません。これより前に置いたキャラクターはすべてこうなっていて、ゲーム本来のキャラクターもこう動きます。
+
+# Tooltip on "Own", for a character
+# en: Drift by a strength of their own, set below. It starts where the character drifts now.
+preview.character.drift.own.tip = 下で設定する独自の強さで動きます。最初は今のキャラクターの動きから始まります。
+
+# Tooltip on "Drift strength", for a character
+# en: How far the character drifts as the cursor moves, on top of what they stand under: 0 drifts with it, higher drifts further. The game's own pictures use 0.1 to 1.5.
+preview.character.drift.strength.tip = カーソルを動かしたときにキャラクターが動く量で、キャラクターが入っているもの（親）の動きに加わります。0 なら親と一緒に動き、大きいほど大きく動きます。ゲーム本来の絵は 0.1 から 1.5 を使います。
 
 # Label beside the place preview: the picture a picture light is made of
 # en: Picture
@@ -25328,6 +26024,18 @@ migration.cueVolumes = パターンが書かれている文字の大きさに合
 # In the list of what opening a pack changed: lines with more than one sound, their timing written down so they play as before
 # en: lines with more than one sound given their timing, so each keeps playing when it did
 migration.cueTiming = 音が二つ以上あるセリフに、それぞれがこれまでどおりのタイミングで鳴るよう、タイミングを書き込みました
+
+# In the list of what opening a pack changed: places and game levels now following the new rules for their objects' masks
+# en: places whose objects now stay still unless given a mask (each object keeps moving as it did)
+migration.objectMasks = オブジェクトにマスクを与えない限り、そのオブジェクトが動かなくなった場所（どのオブジェクトもこれまでどおりに動き続けます）
+
+# In the list of what opening a pack changed: objects that moved with the back layer's mask, now set to say so
+# en: objects that moved with the place's back layer's mask, now set to "The back layer's mask" so they keep moving
+migration.objectMasksBackLayer = 場所の奥のレイヤーのマスクで動いていたオブジェクト（動き続けるよう「奥のレイヤーのマスク」に設定しました）
+
+# In the list of what opening a pack changed: objects with a mask of their own that did nothing in the game, because the place's back layer had no mask, and are now set to stay still as they did
+# en: objects with a mask of their own that the game left still (the place's back layer had no mask), now set to "Nothing (still)" - choose "Its own mask" to make them move
+migration.objectMasksOwn = 自分のマスクを持っていても、ゲームでは動かなかったオブジェクト（場所の奥のレイヤーにマスクがなかったため）。これまでどおり「なし（静止）」に設定しました。動かすには「自分のマスク」を選んでください
 
 # One line of the list of what was brought up to date
 # en: Given a version to start from ({version})

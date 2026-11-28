@@ -27,9 +27,13 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
                                                 moveCallback: MoveNavigatorButton)));
         GameObjects = new ObservableCollection<GameObjectViewModel>();
         foreach (var o in model.GameObjects) GameObjects.Add(Row(o));
+        Objects = new PlaceObjects(GameObjects, () => Model.RecycleBin, InsertTop, () => GameObjects.Count, NpcsNode,
+                                   () => CatalogLevel is { GoName.Length: > 0 } lv ? LevelsRoot + "/" + lv.GoName : null, AnchorCopy,
+                                   () => PreviewHasBackLayer && PreviewBackParallaxReversed);
+        foreach (var o in GameObjects) o.Tree = Objects;
         SeedFromCatalogCommand = new RelayCommand(SeedFromCatalog, () => HasCatalogEntry);
         AddNpcCommand = new RelayCommand(() => NpcsNode().AddNpc());
-        AddLightCommand = new RelayCommand(at => LightObjects.Dress(AddGameObject(), GameObjects, at));
+        AddLightCommand = new RelayCommand(at => LightObjects.Dress(AddGameObject(), GameObjects, at, withTheBack: PreviewHasBackLayer));
         AddEffectCommand = new RelayCommand(at => LightObjects.DressAsEffect(AddGameObject(), GameObjects, at));
         // Seed here rather than leaving it to whoever constructs us: an
         // extension loaded from disk already has its Source, so the property
@@ -59,7 +63,12 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
             OnPropertyChanged(nameof(PreviewArtUnlit));
             OnPropertyChanged(nameof(PreviewVideoStill));
             OnPropertyChanged(nameof(PreviewLevelScale));
+            OnPropertyChanged(nameof(PreviewNpcsScale));
             OnPropertyChanged(nameof(PreviewArtOrder));
+            OnPropertyChanged(nameof(PreviewHasBackLayer));
+            OnPropertyChanged(nameof(PreviewBackParallax));
+            OnPropertyChanged(nameof(PreviewBackParallaxReversed));
+            Objects.BackReversalChanged();
             OnPropertyChanged(nameof(HasCatalogEntry));
             OnPropertyChanged(nameof(CatalogSummary));
             // Picking a source is what makes a hierarchy knowable, so fill it in
@@ -109,6 +118,10 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
         }
     }
 
+    /// <summary>The scale this level's own NPCs object keeps while the pack's NPCs node says 1 (the plugin sets one
+    /// only when it is not 1).</summary>
+    public float PreviewNpcsScale => VanillaLevelCatalog.NpcsObjectScale(CatalogLevel?.GoName, 1f);
+
     /// <summary>This level's art import ppu, which decides how large the
     /// backdrop is in world units. Per level — they are not all the same.</summary>
     public float PreviewArtPpu
@@ -144,6 +157,32 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
     /// at some pack-shaped default.</summary>
     public double PreviewLevelParallax => ParallaxOf(CatalogLevel?.Hierarchy)?.Strength ?? 0.75;
     public bool PreviewLevelParallaxReversed => ParallaxOf(CatalogLevel?.Hierarchy)?.Reversed ?? false;
+
+    /// <summary>
+    /// The level's back picture as the game's plugin finds it (PlaceFactory.SpritePrototype): its second object, when
+    /// that is a plain picture that drifts - 22 of the game's 146 levels. What an object the pack makes here takes its
+    /// drift from when it drifts with the level (a new light's "Back", after 1.10.0); null for a level without one,
+    /// where such an object stays with the level.
+    /// </summary>
+    private Model.VanillaLevelCatalog.Node? BackPicture
+    {
+        get
+        {
+            var children = CatalogLevel?.Hierarchy?.Children;
+            if (children == null || children.Count < 2) return null;
+            var second = children[1];
+            bool plain = second.Components.Contains("SpriteRenderer") && second.Components.Contains("ParallaxMouseEffect")
+                      && second.Components.All(c => c is "Transform" or "SpriteRenderer" or "ParallaxMouseEffect");
+            return plain ? second : null;
+        }
+    }
+
+    /// <summary>Whether the level has a back picture to drift with (see <see cref="BackPicture"/>).</summary>
+    public bool PreviewHasBackLayer => BackPicture != null;
+
+    /// <summary>How its back picture drifts, read off its extracted component.</summary>
+    public double PreviewBackParallax => ParallaxOf(BackPicture)?.Strength ?? 0;
+    public bool PreviewBackParallaxReversed => ParallaxOf(BackPicture)?.Reversed ?? false;
 
     private static (double Strength, bool Reversed)? ParallaxOf(Model.VanillaLevelCatalog.Node? n)
     {
@@ -203,7 +242,21 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
     }
 
     /// <summary>The row of one of the level's top objects: among the level's rows, in the extension's list.</summary>
-    private GameObjectViewModel Row(GameObjectDef def) => new(def, RemoveGameObject, false, GameObjects, Model.GameObjects);
+    private GameObjectViewModel Row(GameObjectDef def) => new(def, RemoveGameObject, false, GameObjects, Model.GameObjects) { Tree = Objects };
+
+    /// <summary>The level's objects as the preview's keys and its recycle bin work on them.</summary>
+    public PlaceObjects Objects { get; }
+
+    /// <summary>A top object put in at <paramref name="at"/> among the level's top rows.</summary>
+    private GameObjectViewModel InsertTop(GameObjectDef def, int at)
+    {
+        at = System.Math.Clamp(at, 0, GameObjects.Count);
+        int entry = at < GameObjects.Count ? Model.GameObjects.IndexOf(GameObjects[at].Model) : Model.GameObjects.Count;
+        Model.GameObjects.Insert(entry < 0 ? Model.GameObjects.Count : entry, def);
+        var vm = Row(def);
+        GameObjects.Insert(at, vm);
+        return vm;
+    }
 
     /// <summary>
     /// The level's objects made what a step has, where they are (1.10.0; see <see cref="GameObjectRows"/>).
@@ -272,7 +325,49 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
     public void EnsureSeeded()
     {
         if (CatalogLevel?.Hierarchy == null) return;
+        // Read from the file, a copy has only what the pack changes; back from the editor's own copy, all it had.
+        bool working = Model.Working;
         SeedFromCatalog();
+        AnchorCopies(GameObjects, working);
+    }
+
+    /// <summary>The game's scene object every level is under: what a level's path in the scene begins with.</summary>
+    private const string LevelsRoot = "5_Levels";   // English on purpose: the game's object's own name.
+
+    /// <summary>Every copy of one of this level's objects in the tree given what the game says of its original:
+    /// read from the file, or back from a step, it has only what the pack changed.</summary>
+    private void AnchorCopies(System.Collections.Generic.IEnumerable<GameObjectViewModel> rows, bool keepsItsOwn)
+    {
+        foreach (var row in rows)
+        {
+            if (row.Model.IsCopy && row.Model.Baseline == null)
+            {
+                AnchorCopy(row.Model, keepsItsOwn);
+                row.RefreshFromModel();
+            }
+            AnchorCopies(row.Children, keepsItsOwn);
+        }
+    }
+
+    /// <summary>
+    /// A copy of one of this level's objects (<see cref="GameObjectDef.CopyOf"/>) given what the game says of the
+    /// original - its picture, its size and pivot, and, where the pack does not say otherwise, where it stands and
+    /// whether it is on - as the game makes the copy: the preview draws it as it draws the original. Until this a
+    /// copy was a row with nothing in the picture. Not anchored as the original is (no name filled in from it):
+    /// it stays a copy, and the level's filling-in never takes it for the object itself.
+    /// </summary>
+    /// <param name="keepsItsOwn">Whether the copy has all its values (made here, or back from the editor's own
+    /// copy) rather than only what the pack changes (read from the file).</param>
+    internal void AnchorCopy(GameObjectDef copy, bool keepsItsOwn)
+    {
+        var level = CatalogLevel;
+        string prefix = level is { GoName.Length: > 0 } ? LevelsRoot + "/" + level.GoName + "/" : "";
+        if (level == null || prefix.Length == 0 || !copy.IsCopy
+            || !copy.CopyOf.StartsWith(prefix, System.StringComparison.OrdinalIgnoreCase)) return;
+        var original = VanillaLevelCatalog.FindNode(level, copy.CopyOf[prefix.Length..]);
+        if (original == null) return;
+        VanillaDelta.Rebase(copy, original, level, keepsItsOwn);
+        copy.BaselineName = null;
     }
 
     /// <summary>

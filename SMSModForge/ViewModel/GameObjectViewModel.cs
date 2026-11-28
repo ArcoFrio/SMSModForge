@@ -15,7 +15,7 @@ namespace SMSModForge.ViewModel;
 /// per-row editor (name, sprite path, transform, sorting, flags), and owns its
 /// nested child GameObjects and NPC placements so one tree renders recursively.
 /// </summary>
-public sealed class GameObjectViewModel : ObservableObject
+public sealed class GameObjectViewModel : ObservableObject, IDrifts
 {
     private readonly Action<GameObjectViewModel>? _removeCallback;
     private readonly bool _parentInNpcSubtree;
@@ -44,9 +44,11 @@ public sealed class GameObjectViewModel : ObservableObject
         // level's, a lamp of a vanilla level) is removed by switching it off:
         // dropping the node would only bring it back when the pack is next
         // opened, the game's light untouched (1.10.0).
+        // To the place's recycle bin - one of the game's own switched off, the bin keeping how to switch it back on
+        // (PlaceObjects.Delete). A row of no place's (a test's) as before.
         RemoveCommand = new RelayCommand(
-            () => { if (IsGameLightOnly) RemoveLight(); else _removeCallback?.Invoke(this); },
-            () => _removeCallback != null && !IsNpcRoot && !(IsGameLightOnly && Model.RemoveLight));
+            () => { if (Tree != null) Tree.Delete(this); else if (IsGameLightOnly) RemoveLight(); else _removeCallback?.Invoke(this); },
+            () => _removeCallback != null && (Tree?.CanDelete(this) ?? (!IsNpcRoot && !(IsGameLightOnly && Model.RemoveLight))));
         Components = new ObservableCollection<ComponentRowViewModel>(
             model.Components.Select(c => new ComponentRowViewModel(c, RemoveComponent)));
         AddComponentCommand = new RelayCommand(() => AddComponent());
@@ -287,7 +289,55 @@ public sealed class GameObjectViewModel : ObservableObject
     public RelayCommand AddChildCommand { get; }
 
     /// <summary>The row of one of this object's children: made the same way whoever makes it.</summary>
-    private GameObjectViewModel Child(GameObjectDef def) => new(def, RemoveChild, IsInNpcSubtree, Children, Model.Children);
+    private GameObjectViewModel Child(GameObjectDef def) => new(def, RemoveChild, IsInNpcSubtree, Children, Model.Children) { Tree = Tree };
+
+    private PlaceObjects? _tree;
+
+    /// <summary>
+    /// The objects of the place, or of the game's level, this row is one of: what its Remove sends to the recycle
+    /// bin through. Given to everything under it, as it is given (the rows under it are made before it knows).
+    /// Null for a row of no place's (a test's).
+    /// </summary>
+    internal PlaceObjects? Tree
+    {
+        get => _tree;
+        set
+        {
+            _tree = value;
+            foreach (var child in Children) child.Tree = value;
+            foreach (var npc in Npcs) npc.Tree = value;
+        }
+    }
+
+    /// <summary>Out of its parent, as its remove did before the recycle bin: the bin keeps what it was first.</summary>
+    internal void TakeOut() => _removeCallback?.Invoke(this);
+
+    /// <summary>Whether it has a parent to be taken out of (a pack place's forced NPCs object refuses).</summary>
+    internal bool CanTakeOut => _removeCallback != null && !IsNpcRoot;
+
+    /// <summary>A child given to this object at <paramref name="index"/> among its children (the end when past it).</summary>
+    internal GameObjectViewModel AdoptAt(GameObjectDef def, int index)
+    {
+        index = Math.Clamp(index, 0, Children.Count);
+        int entry = index < Children.Count ? Model.Children.IndexOf(Children[index].Model) : Model.Children.Count;
+        Model.Children.Insert(entry < 0 ? Model.Children.Count : entry, def);
+        var vm = Child(def);
+        Children.Insert(index, vm);
+        RefreshVanillaChange();
+        return vm;
+    }
+
+    /// <summary>A character standing on this object at <paramref name="index"/> among those that do.</summary>
+    internal NpcPlacementViewModel AddNpcAt(NpcPlacementDef def, int index)
+    {
+        index = Math.Clamp(index, 0, Npcs.Count);
+        int entry = index < Npcs.Count ? Model.Npcs.IndexOf(Npcs[index].Model) : Model.Npcs.Count;
+        Model.Npcs.Insert(entry < 0 ? Model.Npcs.Count : entry, def);
+        var vm = new NpcPlacementViewModel(def, RemoveNpc) { Tree = Tree };
+        Npcs.Insert(index, vm);
+        RefreshVanillaChange();
+        return vm;
+    }
 
     /// <summary>A row for an object that is to go under this one (GameObjectRows puts it there).</summary>
     internal GameObjectViewModel RowFor(GameObjectDef def) => Child(def);
@@ -338,7 +388,7 @@ public sealed class GameObjectViewModel : ObservableObject
         if (!Shows(Npcs, Model.Npcs, r => r.Model))
         {
             Npcs.Clear();
-            foreach (var n in Model.Npcs) Npcs.Add(new NpcPlacementViewModel(n, RemoveNpc));
+            foreach (var n in Model.Npcs) Npcs.Add(new NpcPlacementViewModel(n, RemoveNpc) { Tree = Tree });
         }
         if (!Shows(ActiveConditions, Model.ActiveConditions, r => r.Model))
         {
@@ -385,7 +435,7 @@ public sealed class GameObjectViewModel : ObservableObject
         if (row < 0 || entry < 0) return;
         int shift = IsNpcRoot ? 0 : 1;
         _parentModels.Insert(entry + shift, cloned);
-        _parentCollection.Insert(row + shift, new GameObjectViewModel(cloned, _removeCallback, _parentInNpcSubtree, _parentCollection, _parentModels));
+        _parentCollection.Insert(row + shift, new GameObjectViewModel(cloned, _removeCallback, _parentInNpcSubtree, _parentCollection, _parentModels) { Tree = Tree });
     }
 
     private static string UniqueName(string baseName, IEnumerable<string> existing)
@@ -410,7 +460,7 @@ public sealed class GameObjectViewModel : ObservableObject
     {
         var def = new NpcPlacementDef();
         Model.Npcs.Add(def);
-        var vm = new NpcPlacementViewModel(def, RemoveNpc);
+        var vm = new NpcPlacementViewModel(def, RemoveNpc) { Tree = Tree };
         Npcs.Add(vm);
         RefreshVanillaChange();
         return vm;
@@ -504,8 +554,17 @@ public sealed class GameObjectViewModel : ObservableObject
             Model.ParallaxDisabled = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(ParallaxEnabled));
+            OnPropertyChanged(nameof(Drift));
         }
     }
+
+    public const string DriftBack = Drifting.Back, DriftFront = Drifting.Front, DriftOwn = Drifting.Own;
+
+    /// <summary>How the object drifts as the cursor moves, as "Moves with" offers it (<see cref="Drifting"/>).</summary>
+    public string Drift => Drifting.Of(this);
+
+    /// <summary>Drift as <paramref name="kind"/> (<see cref="Drifting.Apply"/>).</summary>
+    public void DriftWith(string kind, float backStrength = 0.75f) => Drifting.Apply(this, kind, backStrength);
 
     /// <summary>Positive sense of <see cref="ParallaxDisabled"/>, so the editor
     /// can offer "Parallax" as something you switch ON and hang its settings
@@ -526,6 +585,7 @@ public sealed class GameObjectViewModel : ObservableObject
             Model.ParallaxStrength = value ? null : 0.75f;
             OnPropertyChanged();
             OnPropertyChanged(nameof(ParallaxStrength));
+            OnPropertyChanged(nameof(Drift));
         }
     }
 
@@ -540,13 +600,45 @@ public sealed class GameObjectViewModel : ObservableObject
             Model.ParallaxStrength = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(ParallaxInherits));
+            OnPropertyChanged(nameof(Drift));
         }
     }
 
+    /// <summary>
+    /// Whether it drifts reversed, as it will in the game: its own setting, or, unset, the level's back picture's
+    /// (<see cref="PlaceObjects.BackReversed"/>) - one of the game's objects as the game has it. Setting it is a
+    /// reversal of its own, false too (after 1.10.0: unticked was unset, and in a place whose back picture is reversed
+    /// it drifted reversed whatever the tick showed).
+    /// </summary>
     public bool ParallaxReversed
     {
+        get => Model.ParallaxReversed ?? (!Model.KeepsWhatItFinds && (Tree?.BackReversed ?? false));
+        set
+        {
+            if (value == ParallaxReversed) return;
+            Model.ParallaxReversed = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>Its own reversal, null as the back picture's (see <see cref="ParallaxReversed"/>).</summary>
+    public bool? ParallaxReversedOwn
+    {
         get => Model.ParallaxReversed;
-        set { Model.ParallaxReversed = value; OnPropertyChanged(); }
+        set
+        {
+            if (value == Model.ParallaxReversed) return;
+            Model.ParallaxReversed = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ParallaxReversed));
+        }
+    }
+
+    /// <summary>The back picture's reversal changed (<see cref="PlaceObjects.BackReversalChanged"/>): an object that
+    /// takes it shows it.</summary>
+    internal void ReversalMayHaveChanged()
+    {
+        if (Model.ParallaxReversed == null) OnPropertyChanged(nameof(ParallaxReversed));
     }
 
     public bool ParallaxIsUI
@@ -583,7 +675,87 @@ public sealed class GameObjectViewModel : ObservableObject
     public string Mask
     {
         get => Model.Mask;
-        set { Model.Mask = value; OnPropertyChanged(); }
+        set { Model.Mask = value; OnPropertyChanged(); OnPropertyChanged(nameof(MaskKind)); OnPropertyChanged(nameof(MaskIsOwn)); OnPropertyChanged(nameof(MaskIsJiggle)); }
+    }
+
+    // ── How its picture moves (after 1.10.0) ──────────────────────────────
+
+    /// <summary>
+    /// How the object's picture moves (the author: "a way to add masks to other GOs in the place ... choose between
+    /// the jiggle and level masks, and edit like we'd edit either"): <see cref="GameObjectDef.MaskNone"/>,
+    /// <see cref="GameObjectDef.MaskBackLayer"/>, <see cref="GameObjectDef.MaskLevel"/> or
+    /// <see cref="GameObjectDef.MaskJiggle"/>. A jiggle starts from an NPC's settings.
+    /// </summary>
+    public string MaskKind
+    {
+        get => Model.MaskMeans;
+        set
+        {
+            if (string.IsNullOrEmpty(value) || value == Model.MaskMeans) return;
+            Model.MaskKind = value;
+            if (value == GameObjectDef.MaskJiggle && Model.Jiggle == null) Model.Jiggle = NpcDef.NewNpcJiggle();
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(MaskIsOwn));
+            OnPropertyChanged(nameof(MaskIsJiggle));
+            RaiseJiggleChanged();
+        }
+    }
+
+    /// <summary>The kinds offered, in order.</summary>
+    public static IReadOnlyList<string> MaskKinds { get; } = new[]
+        { GameObjectDef.MaskNone, GameObjectDef.MaskBackLayer, GameObjectDef.MaskLevel, GameObjectDef.MaskJiggle };
+
+    /// <summary>The object moves by a mask of its own (a file to choose and paint).</summary>
+    public bool MaskIsOwn => MaskKind is GameObjectDef.MaskLevel or GameObjectDef.MaskJiggle;
+
+    public bool MaskIsJiggle => MaskKind == GameObjectDef.MaskJiggle;
+
+    private JiggleParams Jiggles => Model.Jiggle ??= NpcDef.NewNpcJiggle();
+
+    public float JiggleSpeed     { get => Jiggles.Speed;         set { Jiggles.Speed = value; OnPropertyChanged(); } }
+    public float JiggleStrength  { get => Jiggles.Strength;      set { Jiggles.Strength = value; OnPropertyChanged(); } }
+    public float JiggleFrequency { get => Jiggles.Frequency;     set { Jiggles.Frequency = value; OnPropertyChanged(); } }
+    public float NoiseScale      { get => Jiggles.NoiseScale;    set { Jiggles.NoiseScale = value; OnPropertyChanged(); } }
+    public float NoiseSpeed      { get => Jiggles.NoiseSpeed;    set { Jiggles.NoiseSpeed = value; OnPropertyChanged(); } }
+    public float NoiseStrength   { get => Jiggles.NoiseStrength; set { Jiggles.NoiseStrength = value; OnPropertyChanged(); } }
+
+    private void RaiseJiggleChanged()
+    {
+        OnPropertyChanged(nameof(JiggleSpeed));
+        OnPropertyChanged(nameof(JiggleStrength));
+        OnPropertyChanged(nameof(JiggleFrequency));
+        OnPropertyChanged(nameof(NoiseScale));
+        OnPropertyChanged(nameof(NoiseSpeed));
+        OnPropertyChanged(nameof(NoiseStrength));
+    }
+
+    private byte[]? _liveMask;
+
+    /// <summary>The object's mask as the mask studio is painting it, or null: the preview draws it at once. Not the
+    /// pack's - the studio's buffer, mutated as strokes land (as <see cref="PlaceViewModel.LiveBaseMask"/>).</summary>
+    public byte[]? LiveMask
+    {
+        get => _liveMask;
+        set { if (ReferenceEquals(_liveMask, value)) return; _liveMask = value; OnPropertyChanged(); }
+    }
+
+    /// <summary>The mask studio's way into this object's mask: its picture, its mask's file, its live buffer, and
+    /// which kind of mask it paints (a level's alpha, or a jiggle's R/G/B).</summary>
+    public IMaskEditorHost MaskHost => new ObjectMaskHost(this);
+
+    private sealed class ObjectMaskHost : IMaskEditorHost
+    {
+        private readonly GameObjectViewModel _o;
+        public ObjectMaskHost(GameObjectViewModel o) => _o = o;
+        public string Key => string.IsNullOrWhiteSpace(_o.Name) ? "object" : _o.Name;
+        public string PoseSpritePath => _o.Model.Sprite;
+        public string MaskPath { get => _o.Mask; set => _o.Mask = value; }
+        public byte[]? LiveMaskBgra { get => _o.LiveMask; set => _o.LiveMask = value; }
+        public int LiveMaskRevision { get; set; }
+        public Rendering.MaskKind MaskKind => _o.MaskIsJiggle ? Rendering.MaskKind.BustRgb : Rendering.MaskKind.LevelAlpha;
+        // The same object, whichever host was made for it: the studio does not open twice on one mask.
+        public override bool Equals(object? obj) => obj is ObjectMaskHost h && ReferenceEquals(h._o, _o);
+        public override int GetHashCode() => _o.GetHashCode();
     }
 
     /// <summary>Short label for headers / tooltips.</summary>

@@ -121,7 +121,8 @@ internal static partial class GamePost
     /// </summary>
     internal static void LookOverView(byte[]? screenPbgra, Target frame, byte[] viewPbgra, int vw, int vh, float ax, float bx, float ay, float by,
                                       Settings s, float[] table, float[] decode, BackdropRender.PostParts parts, Work work, byte[] output,
-                                      PlaceLights? lights = null, byte[]? screenLit = null, byte[]? viewLit = null)
+                                      PlaceLights? lights = null, byte[]? screenLit = null, byte[]? viewLit = null,
+                                      WetDrops.Over? drops = null)
     {
         Target? bloom = null;
         if (parts.Bloom && screenPbgra != null)
@@ -135,11 +136,15 @@ internal static partial class GamePost
                     int i = src + x * 4, o = (y * w + x) * 4;
                     frame.Px[o] = decode[screenPbgra[i + 2]]; frame.Px[o + 1] = decode[screenPbgra[i + 1]]; frame.Px[o + 2] = decode[screenPbgra[i]];
                     ToFrameFormat(frame.Px, o);
+                    // A shower's drops: lit with the place, so into it before its lights (WetDrops).
+                    drops?.Screen(ref frame.Px[o], ref frame.Px[o + 1], ref frame.Px[o + 2], x, y, w, h, lit: true);
                     // The level's own lights (1.9.2), on the screen's pixel: rows from the bottom.
                     // How far what is drawn there is lit: the lit mask (white lit, black unlit), laid out as the capture.
                     lights?.Apply(ref frame.Px[o], ref frame.Px[o + 1], ref frame.Px[o + 2],
                                   (x + 0.5f) * PlaceLights.ScreenW / w, (y + 0.5f) * PlaceLights.ScreenH / h,
                                   screenLit == null ? 1f : screenLit[i + 2] / 255f);
+                    // An NPC's wet drops: unlit, over the lit place (WetDrops).
+                    drops?.Screen(ref frame.Px[o], ref frame.Px[o + 1], ref frame.Px[o + 2], x, y, w, h);
                 }
             });
             bloom = BloomAndFlaresFast(frame, s, parts.Flares, work);
@@ -153,7 +158,9 @@ internal static partial class GamePost
                 // Into the camera's target's format, as the screen's frame is.
                 float r = Small(decode[viewPbgra[i + 2]], 6), g = Small(decode[viewPbgra[i + 1]], 6), b = Small(decode[viewPbgra[i]], 5);
                 float u = ax * (x + 0.5f) + bx, v = ay * (y + 0.5f) + by;
+                drops?.View(ref r, ref g, ref b, u, v, ax * drops.CanvasW, lit: true);
                 lights?.Apply(ref r, ref g, ref b, u * PlaceLights.ScreenW, v * PlaceLights.ScreenH, viewLit == null ? 1f : viewLit[i + 2] / 255f);
+                drops?.View(ref r, ref g, ref b, u, v, ax * drops.CanvasW);
                 if (parts.Colour)
                 {
                     var tex = new ViewTextures { R = r, G = g, B = b, Bloom = bloom ?? NoBloom };

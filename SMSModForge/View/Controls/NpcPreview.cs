@@ -63,6 +63,11 @@ public sealed class NpcPreview : Grid
     private readonly Canvas _canvas = new() { Width = BoxSize, Height = BoxSize, ClipToBounds = true };
     private readonly Ellipse _shadow = new();
     private readonly Image _body = new();
+    // The NPC's wet drops drawn alone (no backdrop): the frame's square, over the body. Over a backdrop they are
+    // in the frame (NpcRender.Compose, GpuFrame.DrawNpc).
+    private readonly Image _dropsAlone = new() { IsHitTestVisible = false, Stretch = Stretch.Fill, Visibility = Visibility.Collapsed };
+    private WriteableBitmap? _dropsBitmap;
+    private byte[]? _dropsOutput;
     private readonly TextBlock _placeholder = new()
     {
         Foreground = PreviewMessage.Ink, Background = PreviewMessage.Chip, Padding = new Thickness(6, 3, 6, 4),
@@ -109,6 +114,10 @@ public sealed class NpcPreview : Grid
 
     /// <summary>Whether the last frame was drawn over a backdrop - for tests.</summary>
     internal bool OverBackdrop { get; private set; }
+
+    /// <summary>The picture on screen: over a backdrop the whole frame, alone the NPC's own (its drops are
+    /// <see cref="DropsAloneShown"/>) - for tests.</summary>
+    internal System.Windows.Media.Imaging.BitmapSource? Shown => _body.Source as System.Windows.Media.Imaging.BitmapSource;
 
     // Live mask cache — the mask editor publishes a 256×256 BGRA buffer;
     // we resize it to the source grid each time the revision bumps.
@@ -166,6 +175,8 @@ public sealed class NpcPreview : Grid
         // body bitmap, so there's no separate blink element.
         _canvas.Children.Add(_shadow);
         _canvas.Children.Add(_body);
+        _canvas.Children.Add(_dropsAlone);
+        RenderOptions.SetBitmapScalingMode(_dropsAlone, BitmapScalingMode.NearestNeighbor);
         Children.Add(_canvas);
         Children.Add(_placeholder);
 
@@ -395,11 +406,15 @@ public sealed class NpcPreview : Grid
         if (scene != null)
         {
             ShowFramed(true, 0f, 0f);
+            ShowDropsAlone(null);
             RenderOverBackdrop(scene, backdropDef, _base, maskSnap, jiggle, tint, time, blink != null, rect);
             return;
         }
         EnsureAlone(Math.Max(1, (int)Math.Round(rect.width)), Math.Max(1, (int)Math.Round(rect.height)));
         ShowFramed(false, rect.left, rect.bottom);
+        var dropsAlone = WetDropsNow(null, backdropDef, rect, time, null);
+        DropsDrawn = dropsAlone?.Count ?? 0;
+        ShowDropsAlone(dropsAlone);
         // The blink at this output's grid (EnsureAlone reloads it with the size).
         if (blink != null) blink = _blinkTex;
         byte[] baseSnap = _base, output = _bodyOutput!;
@@ -474,6 +489,9 @@ public sealed class NpcPreview : Grid
         // Perfect Camera's snap).
         float width = rect.width, height = rect.height;
         float left = scene.Left + rect.left, bottom = scene.FrameBottom + rect.bottom;
+        // A shower's drops are lit by the room layer's light, as the NPC's art is: worked out on the frame's thread,
+        // with the light made there when the place changes (below).
+        var npcNow = Npc;
 
         _renderInFlight = true;
         ShaderPasses++;
@@ -498,13 +516,15 @@ public sealed class NpcPreview : Grid
                 var target = _target!;
                 var npcGi = _npcGi!;
                 bool giOn = gi != null;
+                var drops = WetDropsNow(scene, def, rect, time, light, npcNow);
+                DropsDrawn = drops?.Count ?? 0;
                 // On the graphics card when that draws the previews: the whole frame
                 // there (Rendering.Gpu.GpuFrame.DrawNpc), only its bytes coming back.
                 var card = useCard ? (_gpuFrame ??= Rendering.Gpu.GpuFrame.TryCreate()) : null;
                 if (card != null)
                 {
                     card.DrawNpc(scene, npcGi, giOn, light, baseSnap, blinkSrc, maskSnap, sw, sh, jiggle, tint, time,
-                                 left, bottom, width, height, parts, JiggleShader.GameZoom, output);
+                                 left, bottom, width, height, parts, JiggleShader.GameZoom, output, drops);
                     DrewOnCard = true;
                     return;
                 }
@@ -514,7 +534,7 @@ public sealed class NpcPreview : Grid
                 if (linearBlink != null)
                     NpcRender.Body(blinkSrc!, maskSnap, sw, sh, jiggle, tint, time, gi, blinkArt, light.At, left, bottom, width, height,
                                    scene.Left, scene.FrameBottom, linearBlink, true, scene.Decode, JiggleShader.GameZoom);
-                NpcRender.Compose(scene, target, scratch, coverage, parts, output, linear, linearBlink);
+                NpcRender.Compose(scene, target, scratch, coverage, parts, output, drops, linear, linearBlink);
                 DrewOnCard = false;
             })
             .ContinueWith(t =>
@@ -532,6 +552,128 @@ public sealed class NpcPreview : Grid
                 }
                 finally { _renderInFlight = false; }
             }, _uiScheduler!);
+    }
+
+    // ── The NPC's wet drops ─────────────────────────────────────────────
+
+    /// <summary>How many drops the last frame drew - for tests.</summary>
+    internal int DropsDrawn { get; private set; }
+
+    /// <summary>Where the last frame had the NPC's Wet object, on its canvas - for tests.</summary>
+    internal WetDrops.Emitter? LastEmitter { get; private set; }
+
+    /// <summary>A test's own moment for the drops.</summary>
+    internal Func<double>? WetClockForTests { get; set; }
+
+    /// <summary>The drops drawn alone, as last drawn (the frame's square, premultiplied BGRA), or null when none
+    /// are - for tests.</summary>
+    internal byte[]? DropsAloneShown => _dropsAlone.Visibility == Visibility.Visible ? _dropsOutput : null;
+
+    /// <summary>
+    /// The NPC's wet drops this frame (after 1.10.0, the author: "I see the wet particle configs on Characters, but I
+    /// don't see them on NPCs, and setting Enabled and Start Active also doesn't have the preview behaving
+    /// accordingly"): none with its Wet particles off; faint, as the place preview's ghosts, when they do not start
+    /// on; its own look (kind, tint, amount, size, fall: WetEffectDef.Merged with no placement over it) where a new
+    /// placement puts its Wet object - (-0.3, 7.7) of the NPC's own units from the middle of its art, moved and sized
+    /// as the art is, the drops at their own size (the game scales a spray by its own object alone: WetDrops).
+    /// Over a backdrop on the screen's canvas, a shower's drops lit by the room layer's light where each one is (the
+    /// NPC's own: NpcLight); alone on the frame's square at the game's 50 pixels a unit, unlit, there being no room.
+    /// </summary>
+    internal WetDrops.Over? WetDropsNow(BackdropScene? scene, Services.PreviewBackdropDef def,
+                                        (float width, float height, float left, float bottom) rect, float time, NpcLight? light,
+                                        NpcViewModel? npc = null)
+    {
+        npc ??= Npc;
+        if (npc == null) return null;
+        double t = WetClockForTests?.Invoke() ?? (Services.TestMode.Active ? WetDrops.TestTime : WetDrops.Steady + time);
+        var drops = DropsFor(npc.Model.Wet, npc.Key ?? "", scene, def.LevelScale, rect, t, light, out var e);
+        LastEmitter = e;
+        return drops;
+    }
+
+    /// <summary>
+    /// <see cref="WetDropsNow"/>'s drops for an NPC's wet settings <paramref name="wet"/> (its key seeds them), out
+    /// <paramref name="t"/> seconds, the NPC at <paramref name="rect"/> of the frame in a place of scale
+    /// <paramref name="levelScale"/> - what the frame on the card is held to the processor's with (GpuNpcTests).
+    /// Null with its Wet particles off, without the particle texture, or with none out.
+    /// </summary>
+    internal static WetDrops.Over? DropsFor(SMSModForge.Model.NpcWetDef wet, string key, BackdropScene? scene, float levelScale,
+                                            (float width, float height, float left, float bottom) rect, double t, NpcLight? light,
+                                            out WetDrops.Emitter? emitter)
+    {
+        emitter = null;
+        if (!wet.Enabled) return null;
+        var mips = WetDrops.Texture;
+        if (mips == null) return null;
+        var look = SMSModForge.Model.WetEffectDef.Merged(wet, null);
+        bool shower = SMSModForge.Model.WetEffectDef.ShowerKind(look.Kind);
+        var at = new SMSModForge.Model.NpcPlacementDef().Wet;
+        const int N = BackdropRender.FrameSize;
+        double screenW = scene?.Backdrop.ScreenWidth ?? N, screenH = scene?.Backdrop.ScreenHeight ?? N;
+        double frameLeft = scene?.Left ?? 0, frameBottom = scene?.FrameBottom ?? 0;
+        // The game's camera sees 10.8 units top to bottom; alone the frame is the x1 picture, 50 pixels a unit.
+        double ppu = scene != null ? screenH / 10.8 : 50.0;
+        double toCanvas = WetDrops.PixelsPerUnit / ppu;
+        // One of the NPC's own units on the screen: a hundred of its art's pixels (its sprite's 100 a unit), as the art.
+        double unit = 100.0 * NpcRender.ScreenPerArtPixel(levelScale);
+        double wx = frameLeft + rect.left + rect.width / 2.0 + at.X * unit;
+        double wy = frameBottom + rect.bottom + rect.height / 2.0 + at.Y * unit;
+        uint seed = 2166136261;
+        foreach (char ch in key) seed = (seed ^ ch) * 16777619;
+        float tr = 1f, tg = 1f, tb = 1f, ta = 1f;
+        try { if (!string.IsNullOrWhiteSpace(look.Tint)) (tr, tg, tb, ta) = BustComposer.ParseTint(look.Tint); }
+        catch (FormatException) { }
+        catch (ArgumentException) { }
+        double own = shower ? WetDrops.ShowerOwnScale : 1.0;
+        var e = new WetDrops.Emitter(wx * toCanvas, (screenH - wy) * toCanvas, 1, 0, 0, -1,
+                                     at.ScaleX * own, at.ScaleY * own, seed, wet.StartActive ? 1.0 : 0.4,
+                                     SMSModForge.Model.WetEffectDef.DefaultWidth(look.Kind), SMSModForge.Model.WetEffectDef.DefaultHeight(look.Kind),
+                                     shower ? WetDrops.Kind.Shower : WetDrops.Kind.Towel, false, false, tr, tg, tb, ta,
+                                     look.Amount ?? 1f, look.Size ?? 1f, look.Fall ?? 1f, Unlit: light == null);
+        emitter = e;
+        double canvasW = screenW * toCanvas, canvasH = screenH * toCanvas;
+        var list = new System.Collections.Generic.List<WetDrops.Drop>();
+        WetDrops.At(t, e, list, 0, 0, canvasW, canvasH);
+        if (list.Count == 0) return null;
+        if (light != null)
+            for (int i = 0; i < list.Count; i++)
+            {
+                var d = list[i];
+                if (!d.Lit) continue;
+                // Lit where it is, as the NPC's art is: its colour in linear light times the layer's light there.
+                var (lr, lg, lb) = light.At((float)(d.X / toCanvas), (float)(screenH - d.Y / toCanvas));
+                d.R = SrgbOf(WetDrops.Linear(d.R) * lr);
+                d.G = SrgbOf(WetDrops.Linear(d.G) * lg);
+                d.B = SrgbOf(WetDrops.Linear(d.B) * lb);
+                d.Lit = false;
+                list[i] = d;
+            }
+        return new WetDrops.Over(list.ToArray(), list.Count, mips, canvasW, canvasH);
+    }
+
+    /// <summary>A linear channel back in sRGB, not cut at 1 (a light can be brighter than white): what WetDrops.Linear
+    /// takes back to the same number.</summary>
+    private static float SrgbOf(float linear)
+        => linear <= 0.0031308f ? 12.92f * linear : 1.055f * MathF.Pow(linear, 1f / 2.4f) - 0.055f;
+
+    /// <summary>The drops over the NPC drawn alone, or none.</summary>
+    private void ShowDropsAlone(WetDrops.Over? drops)
+    {
+        if (drops == null)
+        {
+            _dropsAlone.Visibility = Visibility.Collapsed;
+            return;
+        }
+        const int N = BackdropRender.FrameSize;
+        _dropsOutput ??= new byte[N * N * 4];
+        _dropsBitmap ??= new WriteableBitmap(N, N, 96, 96, PixelFormats.Pbgra32, null);
+        Array.Clear(_dropsOutput);
+        WetDrops.BlendAlone(_dropsOutput, N, drops);
+        _dropsBitmap.WritePixels(new Int32Rect(0, 0, N, N), _dropsOutput, N * 4, 0);
+        if (!ReferenceEquals(_dropsAlone.Source, _dropsBitmap)) _dropsAlone.Source = _dropsBitmap;
+        _dropsAlone.Width = N; _dropsAlone.Height = N;
+        Canvas.SetLeft(_dropsAlone, 0); Canvas.SetTop(_dropsAlone, 0);
+        _dropsAlone.Visibility = Visibility.Visible;
     }
 
     /// <summary>The blink overlay (256² straight-alpha) to composite this frame,

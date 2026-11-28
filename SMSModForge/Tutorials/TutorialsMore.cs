@@ -1501,7 +1501,7 @@ internal static class TutorialsMore
                     More = "tutorial.deeperRooms.story.more",
                     Kind = StepKind.Read,
                     Tab = MainTab.Places,
-                    Anchor = "panel:placeGameObjects",
+                    Anchor = "panel:placePreview",
                     OnEnter = (vm, s) => { if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g; },
                 },
                 new TutorialStep
@@ -1527,6 +1527,16 @@ internal static class TutorialsMore
                              o.X = 3.2f; o.Y = 2.2f;
                              o.SortingOrder = -11;
                              o.AddComponent().Type = PackComponentType.BlinkingSprite;
+                         }),
+                RoomStep("float", vm => GalleryObjects(vm).Any(o => o.Model.Components.Any(c => c.Type == PackComponentType.FloatingSprite)),
+                         vm =>
+                         {
+                             var o = StoryPack.Gallery(vm)!.AddGameObject();
+                             o.Name = "Floating vase";   // English on purpose: an object's name.
+                             o.Sprite = TutorialAssets.Prop;
+                             o.X = 1.2f; o.Y = -1.0f;
+                             o.SortingOrder = -10;
+                             o.AddComponent().Type = PackComponentType.FloatingSprite;
                          }),
                 RoomStep("flowers", vm => GalleryObjects(vm).Any(o => o.Model.Components.Any(c => c.Type == PackComponentType.RandomChildActivator) &&
                                                                       o.Model.Children.Count >= 2),
@@ -1602,9 +1612,14 @@ internal static class TutorialsMore
                     More = "tutorial.deeperRooms.fades.more",
                     Kind = StepKind.Do,
                     Tab = MainTab.Places,
-                    Anchor = "panel:placeGameObjects",
+                    Anchor = "panel:placeSettings",
                     AlsoAllow = new[] { "panel:placePreview" },
                     OnEnter = (vm, s) => { if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g; },
+                    // Her poster first: its components are beside the picture once it is picked.
+                    OnShown = vm =>
+                    {
+                        if (GalleryObjects(vm).FirstOrDefault(o => Is(o.Name, TutorialsDeep.PosterName)) is { } poster) vm.PickInPreview(poster);
+                    },
                     IsDone = (vm, s) => GalleryObjects(vm).Any(o => Is(o.Name, TutorialsDeep.PosterName) &&
                                                                     o.Model.Components.Any(c => c.Type == PackComponentType.FadeInSprite)) &&
                                         VisitorPlacement(vm) is { } v && v.Model.Components.Any(c => c.Type == PackComponentType.FadeOutSprite),
@@ -1852,37 +1867,41 @@ internal static class TutorialsMore
 
     /// <summary>A step adding something to her gallery, on the Places tab.</summary>
     private static TutorialStep RoomStep(string name, Func<MainViewModel, bool> done, Action<MainViewModel> solve,
-                                         string anchor = "panel:placeGameObjects")
+                                         string anchor = "btn:addObject")
         => new()
         {
             Title = name switch
             {
-                "sign" => "tutorial.deeperRooms.sign.title", "flowers" => "tutorial.deeperRooms.flowers.title",
+                "sign" => "tutorial.deeperRooms.sign.title", "float" => "tutorial.deeperRooms.float.title",
+                "flowers" => "tutorial.deeperRooms.flowers.title",
                 "copy" => "tutorial.deeperRooms.copy.title", "freeLight" => "tutorial.deeperRooms.freeLight.title",
                 _ => "tutorial.deeperRooms.pictureLight.title",
             },
             Body = name switch
             {
-                "sign" => "tutorial.deeperRooms.sign.body", "flowers" => "tutorial.deeperRooms.flowers.body",
+                "sign" => "tutorial.deeperRooms.sign.body", "float" => "tutorial.deeperRooms.float.body",
+                "flowers" => "tutorial.deeperRooms.flowers.body",
                 "copy" => "tutorial.deeperRooms.copy.body", "freeLight" => "tutorial.deeperRooms.freeLight.body",
                 _ => "tutorial.deeperRooms.pictureLight.body",
             },
             More = name switch
             {
-                "sign" => "tutorial.deeperRooms.sign.more", "flowers" => "tutorial.deeperRooms.flowers.more",
+                "sign" => "tutorial.deeperRooms.sign.more", "float" => "tutorial.deeperRooms.float.more",
+                "flowers" => "tutorial.deeperRooms.flowers.more",
                 "copy" => "tutorial.deeperRooms.copy.more", "freeLight" => "tutorial.deeperRooms.freeLight.more",
                 _ => "tutorial.deeperRooms.pictureLight.more",
             },
             Hint = name switch
             {
-                "sign" => "tutorial.deeperRooms.sign.hint", "flowers" => "tutorial.deeperRooms.flowers.hint",
+                "sign" => "tutorial.deeperRooms.sign.hint", "float" => "tutorial.deeperRooms.float.hint",
+                "flowers" => "tutorial.deeperRooms.flowers.hint",
                 "copy" => "tutorial.deeperRooms.copy.hint", "freeLight" => "tutorial.deeperRooms.freeLight.hint",
                 _ => "tutorial.deeperRooms.pictureLight.hint",
             },
             Kind = StepKind.Do,
             Tab = MainTab.Places,
             Anchor = anchor,
-            AlsoAllow = new[] { "panel:placeGameObjects", "panel:placePreview", "btn:addLight" },
+            AlsoAllow = new[] { "panel:placePreview", "btn:addObject", "btn:addLight" },
             OnEnter = (vm, s) => { if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g; },
             IsDone = (vm, s) => done(vm),
             Solve = (vm, s) =>

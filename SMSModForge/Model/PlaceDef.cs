@@ -197,6 +197,28 @@ public sealed class PlaceDef
     [JsonProperty("onExit", Order = 20)]
     public List<LevelHookDef> OnExit { get; set; } = new();
 
+    /// <summary>
+    /// Which rules the objects' masks follow (after 1.10.0). 1: an object with no mask stays still
+    /// (<see cref="GameObjectDef.MaskKind"/> says otherwise). Absent (0): a place saved before, whose objects without
+    /// a mask took the back layer's - the plugin keeps that for packs exported then, and the editor turns it into
+    /// the kinds as the pack loads (PackMigration). New places start at 1.
+    /// </summary>
+    [JsonProperty("objectMasks", Order = 22)]
+    public int ObjectMasks { get; set; } = CurrentObjectMasks;
+    public bool ShouldSerializeObjectMasks() => ObjectMasks != 0;
+
+    /// <summary>Read from a file: absent is a place saved before the rules (0), not a new one.</summary>
+    [System.Runtime.Serialization.OnDeserializing]
+    private void BeforeReadingObjectMasks(System.Runtime.Serialization.StreamingContext _) => ObjectMasks = 0;
+
+    /// <summary>The rules this editor writes.</summary>
+    public const int CurrentObjectMasks = 1;
+
+    /// <summary>What was deleted from the place, newest last, kept to be put back (<see cref="BinnedObjectDef"/>).</summary>
+    [JsonProperty("recycleBin", Order = 21)]
+    public List<BinnedObjectDef> RecycleBin { get; set; } = new();
+    public bool ShouldSerializeRecycleBin() => RecycleBin.Count > 0;
+
     // Off is the overwhelming default (vanilla reverses exactly one sprite in
     // the whole game), so an unreversed place writes nothing rather than two
     // false flags onto every entry.

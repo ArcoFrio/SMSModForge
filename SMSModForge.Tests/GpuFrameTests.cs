@@ -117,6 +117,148 @@ public sealed class GpuFrameTests
         finally { try { Directory.Delete(folder, true); } catch (IOException) { } }
     }
 
+    /// <summary>
+    /// A wet bust's drops (after 1.10.0; measured in the game, InGameSuiteTests.S20): the card blends them over the
+    /// frame before the post as the processor does (WetDrops.BlendInto). Over the PC's room without its lamp, as above,
+    /// at the moment tests draw. Control: the card's frame without the drops is not the processor's with them.
+    /// </summary>
+    [Fact]
+    public void AWetBustsDropsOnTheCardAreTheProcessors()
+    {
+        using var card = GpuFrame.TryCreate();
+        Assert.True(card != null, "no graphics card device: " + GpuDevice.SharedFailure);
+        Assert.NotNull(WetDrops.Texture);
+        string folder = Path.Combine(Path.GetTempPath(), "smsmodforge-wetbust-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(folder);
+        try
+        {
+            string shipped = Path.Combine(GameRun.RepoRoot(), "SMSModForge", "Resources", "Backdrops", "MyRoom");
+            foreach (var f in Directory.GetFiles(shipped)) if (!f.EndsWith("room-noglow-hdr.png")) File.Copy(f, Path.Combine(folder, Path.GetFileName(f)));
+            var json = Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(Path.Combine(folder, "backdrop.json")));
+            json.Remove("lamp");
+            File.WriteAllText(Path.Combine(folder, "backdrop.json"), json.ToString());
+            var scene = new BackdropScene(PreviewBackdrop.Load(folder));
+            var gi = scene.Prepare();
+            const int S = JiggleShader.Size, N = BackdropRender.FrameSize;
+            var art = new byte[S * S * 4];
+            var mask = new byte[S * S * 4];
+            for (int y = 0; y < S; y++)
+                for (int x = 0; x < S; x++)
+                {
+                    var c = InGameSuitePacks.Looks.FigureAt(x, y);
+                    int i = (y * S + x) * 4;
+                    art[i] = c.B; art[i + 1] = c.G; art[i + 2] = c.R; art[i + 3] = c.A;
+                }
+            var p = new JiggleParams();
+            const float Time = 5.3f;
+            int bustBottom = scene.Backdrop.BustRestBottom;
+            var b = scene.Backdrop;
+            double ppu = b.ScreenHeight / 10.8;
+            var emitter = WetDrops.OnBust(scene.Left, bustBottom, N, b.ScreenHeight, ppu, 12345u);
+            var drops = WetDrops.OnBustAt(WetDrops.TestTime, emitter, b.ScreenWidth * 100 / ppu, b.ScreenHeight * 100 / ppu);
+            Assert.True(drops != null && drops.Count >= 1, "none of the bust's drops is on the screen");   // two or three are, as in the game
+            var parts = BackdropRender.PostParts.All;
+            byte[] Processor(bool wet)
+            {
+                var target = BackdropRender.Scene(scene);
+                var linear = new float[N * N * 4];
+                BackdropRender.Body(art, mask, p, (1f, 1f, 1f, 1f), Time, gi, new FakeGi.Art(art, S, S, gi.Reach), scene.Left, scene.FrameBottom, bustBottom,
+                                    linear, true, null, 0f, true, scene.Decode, JiggleShader.GameZoom);
+                var coverage = new float[N * N];
+                BackdropRender.Layer(target, scene, linear, coverage);
+                BackdropRender.Lamps(target, scene, coverage);
+                if (wet) WetDrops.BlendInto(target, drops!);
+                var bytes = new byte[N * N * 4];
+                BackdropRender.Present(target, scene, parts, bytes, new GamePost.Work());
+                return bytes;
+            }
+            var cpu = Processor(true);
+            var cpuDry = Processor(false);
+            var onCard = new byte[N * N * 4];
+            card!.DrawNoLamp(scene, art, mask, p, (1f, 1f, 1f, 1f), Time, true, bustBottom, true, 0f, null, null, null, parts, JiggleShader.GameZoom, onCard, drops);
+            var dry = new byte[N * N * 4];
+            card.DrawNoLamp(scene, art, mask, p, (1f, 1f, 1f, 1f), Time, true, bustBottom, true, 0f, null, null, null, parts, JiggleShader.GameZoom, dry);
+            int Off(byte[] a, byte[] c) => Enumerable.Range(0, a.Length).Count(i => (i & 3) != 3 && Math.Abs(a[i] - c[i]) > 1);
+            int wetDrawn = Off(cpu, cpuDry), overOne = Off(cpu, onCard), controlOff = Off(cpu, dry);
+            _out.WriteLine($"{drops!.Count} drops: they change {wetDrawn} bytes on the processor; the card's frame more than a level from it at {overOne}; the card's without them at {controlOff}");
+            Assert.True(wetDrawn > 100, "the drops changed too little of the frame to tell");
+            Assert.True(controlOff >= wetDrawn / 2, "control: the card's frame without the drops passes for the processor's with them");
+            Assert.True(overOne <= wetDrawn / 50 + cpu.Length / 5000, $"the card's wet frame is more than a level from the processor's at {overOne} bytes");
+        }
+        finally { try { Directory.Delete(folder, true); } catch (IOException) { } }
+    }
+
+    /// <summary>
+    /// A bust's shower over a room with a lamp (after 1.10.0): its drops blended before the lamp's glow, which goes
+    /// over them as over the bust (InGameSuiteTests.S22) - on the card (GpuFrame's DropsPass) as on the processor
+    /// (JigglePreview: WetDrops.BlendInto with the frame's coverage, then the glow). Control: the card's frame without
+    /// the drops is not the processor's with them.
+    /// </summary>
+    [Fact]
+    public void AShowerOverABustWithALampOnTheCardIsTheProcessors()
+    {
+        using var card = GpuFrame.TryCreate();
+        Assert.True(card != null, "no graphics card device: " + GpuDevice.SharedFailure);
+        var backdrop = PreviewBackdrop.Load(Path.Combine(GameRun.RepoRoot(), "SMSModForge", "Resources", "Backdrops", "MyRoom"));
+        var scene = new BackdropScene(backdrop);
+        var gi = scene.Prepare();
+        var lamp = scene.Lamp!;
+        const int S = JiggleShader.Size, N = BackdropRender.FrameSize;
+        var art = new byte[S * S * 4];
+        var mask = new byte[S * S * 4];
+        for (int y = 0; y < S; y++)
+            for (int x = 0; x < S; x++)
+            {
+                var c = InGameSuitePacks.Looks.FigureAt(x, y);
+                int i = (y * S + x) * 4;
+                art[i] = c.B; art[i + 1] = c.G; art[i + 2] = c.R; art[i + 3] = c.A;
+            }
+        var p = new JiggleParams();
+        const float Time = 6.21f;
+        int bustBottom = backdrop.BustRestBottom;
+        var shadow = new float[lamp.Shadow.W * lamp.Shadow.H];
+        lamp.Shadow.Draw(new BustShadow.Caster(art, S, S, 100f), scene.Left + N / 2f, bustBottom - 0.4f + N / 2f, 2f, 1f, shadow);
+        double ppu = backdrop.ScreenHeight / 10.8;
+        var emitter = WetDrops.OnBust(scene.Left, bustBottom, N, backdrop.ScreenHeight, ppu, 12345u, WetDrops.Kind.Shower);
+        var drops = WetDrops.OnBustAt(WetDrops.TestTime, emitter, backdrop.ScreenWidth * 100 / ppu, backdrop.ScreenHeight * 100 / ppu);
+        Assert.True(drops != null && drops.Count > 100, "the shower is not on the screen");
+        var parts = new BackdropRender.PostParts(false, false, true);
+        byte[] Cpu(bool wet)
+        {
+            var target = BackdropRender.Scene(scene);
+            var background = new float[backdrop.BackgroundWidth * backdrop.BackgroundHeight * 4];
+            lamp.Room(shadow, target, background, backdrop.BackgroundWidth, backdrop.BackgroundHeight);
+            gi.UseBackground(background);
+            var linear = new float[N * N * 4];
+            BackdropRender.Body(art, mask, p, (1f, 1f, 1f, 1f), Time, gi, new FakeGi.Art(art, S, S, gi.Reach), scene.Left, scene.FrameBottom, bustBottom,
+                                linear, true, null, 0f, true, scene.Decode, JiggleShader.GameZoom);
+            var coverage = new float[N * N];
+            BackdropRender.Layer(target, scene, linear, coverage);
+            if (wet) WetDrops.BlendInto(target, drops!, scene, coverage);
+            lamp.Glow(target, shadow, BackdropRender.Covered(scene, coverage));
+            var output = new byte[N * N * 4];
+            BackdropRender.Present(target, scene, parts, output, new GamePost.Work());
+            return output;
+        }
+        byte[] Card(WetDrops.Over? with)
+        {
+            var output = new byte[N * N * 4];
+            card!.Draw(lamp, shadow, scene, art, mask, p, (1f, 1f, 1f, 1f), Time, true, bustBottom, true, 0f, null, null, null, parts,
+                       JiggleShader.GameZoom, output, with);
+            return output;
+        }
+        var cpu = Cpu(true);
+        var cpuDry = Cpu(false);
+        var onCard = Card(drops);
+        var dry = Card(null);
+        int Off(byte[] a, byte[] c) => Enumerable.Range(0, a.Length).Count(i => (i & 3) != 3 && Math.Abs(a[i] - c[i]) > 1);
+        int wetDrawn = Off(cpu, cpuDry), overOne = Off(cpu, onCard), controlOff = Off(cpu, dry);
+        _out.WriteLine($"{drops!.Count} drops: they change {wetDrawn} bytes on the processor; the card's frame more than a level from it at {overOne}; the card's without them at {controlOff}");
+        Assert.True(wetDrawn > 500, "the drops changed too little of the frame to tell");
+        Assert.True(controlOff >= wetDrawn / 2, "control: the card's frame without the drops passes for the processor's with them");
+        Assert.True(overOne <= wetDrawn / 50 + cpu.Length / 5000, $"the card's wet frame is more than a level from the processor's at {overOne} bytes");
+    }
+
     [Theory]
     [InlineData("MyRoom", 0f, true)]
     [InlineData("MyRoom", 0.55f, true)]

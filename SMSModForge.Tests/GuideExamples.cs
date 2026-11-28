@@ -40,6 +40,27 @@ internal static class GuideExamples
                                     && System.Windows.Media.VisualTreeHelper.GetParent(f) is FrameworkElement p
                                     && !ReferenceEquals(p.DataContext, record));
     private static Func<MainWindow, FrameworkElement?> At(string anchor) => w => GuideSectionShots.Anchor(w, anchor);
+
+    /// <summary>The anchored part, scrolled inside itself to the words <paramref name="words"/>, at its top so what is
+    /// under them shows too. The place preview's panel beside the picture scrolls inside itself: it showed its top
+    /// while the words the picture marks were further down, and the picture was cut where they would have been with
+    /// nothing of the panel in it.</summary>
+    private static Func<MainWindow, FrameworkElement?> AtShowing(string anchor, string words) => w =>
+    {
+        var part = GuideSectionShots.Anchor(w, anchor);
+        if (part == null || GuideSectionShots.Below(part).OfType<TextBlock>().FirstOrDefault(t => t.Text == words && t.IsVisible) is not { } shown)
+            return part;
+        DependencyObject? up = shown;
+        while (up != null && up is not ScrollViewer) up = System.Windows.Media.VisualTreeHelper.GetParent(up);
+        if (up is ScrollViewer scroller)
+        {
+            double y = shown.TransformToAncestor(scroller).Transform(new Point(0, 0)).Y;
+            scroller.ScrollToVerticalOffset(scroller.VerticalOffset + y - 4);
+        }
+        else shown.BringIntoView();
+        w.UpdateLayout();
+        return part;
+    };
     private static Func<MainWindow, FrameworkElement?> Group(string caption) => w => GuideSectionShots.ByHeading(T(w), caption);
 
     private static string Place(MainViewModel vm) => "place:" + (StoryPack.Gallery(vm) ?? vm.Places[0]).Key;
@@ -275,13 +296,16 @@ internal static class GuideExamples
                 placed.Name = "Wet visitor";
                 placed.StartActive = true;
                 placed.Body.X = -3f;
-            }, At("panel:placeGameObjects")),
+                vm.PickInPreview(placed);
+            }, At("panel:placePreview")),
             new Step(MainTab.Places, vm =>
             {
                 var g = StoryPack.Gallery(vm)!;
                 vm.SelectedPlace = g;
-                Rain(g.NpcsNode.Npcs.First(p => p.Name == "Wet visitor").AddActiveCondition());
-            }, At("panel:placeGameObjects"))),
+                var placed = g.NpcsNode.Npcs.First(p => p.Name == "Wet visitor");
+                Rain(placed.AddActiveCondition());
+                vm.PickInPreview(placed);
+            }, AtShowing("panel:placeSettings", "Active when"))),
 
         new Example("countVisits",
             vm => vm.IntegrationRules.Any(r => r.DisplayName == "Count visits" && r.Model.Actions.Any(a => a.Type == NodeActionTypes.IncrementVariable)),
@@ -477,7 +501,7 @@ internal static class GuideExamples
             new[] { "+ UI", "Name", "On screen from the start" },
             new[] { "+ Object", "Text", "+ Action" },
         },
-        ["rainyVisitor"] = new[] { new[] { "+ NPC", "Display name", "Pose sprite" }, new[] { "+ Add NPC" }, new[] { "Active when" } },
+        ["rainyVisitor"] = new[] { new[] { "+ NPC", "Display name", "Pose sprite" }, new[] { "+ Character" }, new[] { "Active when" } },
         ["countVisits"] = new[]
         {
             new[] { "+ Variable", "Name", "Type", "Default value", "Persisted" },

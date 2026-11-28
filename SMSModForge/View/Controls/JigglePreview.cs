@@ -564,6 +564,8 @@ public sealed class JigglePreview : Image
         public readonly System.Collections.Generic.Dictionary<string, byte[]> Faces = new();
         public bool PackReplacedMask;
         public JiggleParams? VanillaJiggle;
+        /// <summary>The bust art's own size, which its mask is spread over (0: unknown, taken as square).</summary>
+        public int ArtW, ArtH;
     }
 
     /// <summary>What a load reads, copied off the outfit on the interface's thread.</summary>
@@ -624,6 +626,7 @@ public sealed class JigglePreview : Image
     {
         _base = set.Base;
         _mask = set.Mask;
+        _artW = set.ArtW; _artH = set.ArtH;
         _blink = set.Blink;
         for (int i = 1; i <= 4; i++) _mouth[i] = set.Mouth[i];
         _expressions.Clear();
@@ -645,9 +648,13 @@ public sealed class JigglePreview : Image
         if (i.VanillaBustKey != null) { LoadVanilla(i, set); return set; }
         string Pack(string relative) => Path.Combine(i.PackRoot, Normalize(relative));
         set.Base = LoadIfExists(Pack(i.BaseSprite));
-        set.Mask = Shared.GameArt.IsBorrowed(i.MaskSprite)
-            ? LoadBorrowed(i.MaskSprite, "Mask.PNG")
-            : LoadIfExists(Pack(i.MaskSprite));
+        // The mask is spread over the ART, as the game reads it (BustComposer.LoadPngOnArt):
+        // on art that is not square, not over the whole frame the art is fitted in.
+        if (set.Base != null) SMSModForge.Validation.ArtDimensions.TryReadPngSize(Pack(i.BaseSprite), out set.ArtW, out set.ArtH);
+        string? maskFile = Shared.GameArt.IsBorrowed(i.MaskSprite)
+            ? Rendering.VanillaArtResolver.GameArtFile(i.MaskSprite, "Mask.PNG")
+            : Pack(i.MaskSprite);
+        set.Mask = maskFile != null && File.Exists(maskFile) ? BustComposer.LoadPngOnArt(maskFile, set.ArtW, set.ArtH) : null;
         set.Blink = Shared.GameArt.IsBorrowed(i.BlinkSprite)
             ? LoadBorrowed(i.BlinkSprite, "Blink.PNG")
             : LoadIfExists(Pack(i.BlinkSprite));
@@ -878,6 +885,25 @@ public sealed class JigglePreview : Image
         return (_base, _mask, _blink, _mouth, _expressions);
     }
 
+    /// <summary>
+    /// The mask the next frame moves the bust by, on the frame's grid: the one
+    /// the mask studio is painting while it is open (so unsaved strokes show at
+    /// once), else the file's. A missing mask is no jiggle, not no picture. The
+    /// studio paints on the art's own uv, as the game reads a mask, so on art that
+    /// is not square its buffer is laid over the art's part of the frame
+    /// (BustComposer.PlaceOnArt). The render path's own, and the tests'.
+    /// </summary>
+    internal byte[] MaskDrawn()
+    {
+        var live = Outfit?.LiveMaskBgra;
+        if (live == null || live.Length != JiggleShader.Stride * JiggleShader.Size) return _mask ?? NoMask;
+        if (_artW <= 0 || _artH <= 0 || _artW == _artH) return live;
+        // A new buffer each time: the pass before may still be reading the last one.
+        return BustComposer.PlaceOnArt(live, _artW, _artH, new byte[live.Length]);
+    }
+
+    private int _artW, _artH;
+
     private static byte[] Empty() => new byte[JiggleShader.Stride * JiggleShader.Size];
 
     /// <summary>
@@ -1015,7 +1041,7 @@ public sealed class JigglePreview : Image
         // A missing mask means "no jiggle", not "don't draw" — the base should
         // appear the moment it's set, with each further sprite layering in as
         // it's filled rather than the whole preview waiting on the last one.
-        byte[] mask = Outfit.LiveMaskBgra ?? _mask ?? NoMask;
+        byte[] mask = MaskDrawn();
 
         // Snapshot every input on the UI thread before handing off. Field
         // assignments here are local refs, so a subsequent ReloadTextures()
@@ -1120,6 +1146,8 @@ public sealed class JigglePreview : Image
         bool useCard = Services.PreviewRendererManager.UseCard && scene?.Backdrop.IsPlace != true;
         // The breathing's whole pixels for a bust drawn alone (over a backdrop it is bustBottom's).
         int bobAlone = scene == null && Breathing ? (int)Math.Round(Math.Sin(time * BreathingSpeed) * BreathingAmplitude) : 0;
+        var drops = WetDropsNow(scene, bustBottom, time);
+        DropsDrawn = drops?.Count ?? 0;
 
         _uiScheduler ??= TaskScheduler.FromCurrentSynchronizationContext();
         _renderInFlight = true;
@@ -1143,11 +1171,11 @@ public sealed class JigglePreview : Image
                     {
                         lamp.Shadow.Draw(caster!, scene.Left + Rendering.BackdropRender.FrameSize / 2f, shadowY, 2f, rendererAlpha, shadowTexture!);
                         wholeOnCard.Draw(lamp, shadowTexture!, scene, baseSnap, maskSnap, jiggle, tint, time, gi != null, bustBottom, bodyShows, silhouette,
-                                         expression, mouth, blink, parts, JiggleShader.GameZoom, output);
+                                         expression, mouth, blink, parts, JiggleShader.GameZoom, output, drops);
                     }
                     else
                         wholeOnCard.DrawNoLamp(scene, baseSnap, maskSnap, jiggle, tint, time, gi != null, bustBottom, bodyShows, silhouette,
-                                               expression, mouth, blink, parts, JiggleShader.GameZoom, output);
+                                               expression, mouth, blink, parts, JiggleShader.GameZoom, output, drops);
                     DrewOnCard = true;
                     return;
                 }
@@ -1182,10 +1210,18 @@ public sealed class JigglePreview : Image
                 if (linearSilhouette != null) Rendering.BackdropRender.Layer(sceneTarget!, scene, linearSilhouette, coverage!);
                 if (lamp != null)
                 {
+                    // A wet outfit's drops (the Bust layer at 10, over the bust): before the lamp's glow, which the game
+                    // adds over them as over the bust - a shower's over the window came out the glow brighter (S22).
+                    if (drops != null) Rendering.WetDrops.BlendInto(sceneTarget!, drops, scene, coverage!);
                     lamp.Glow(sceneTarget!, shadowTexture, Rendering.BackdropRender.Covered(scene, coverage!));
                     Rendering.BackdropRender.OthersOver(sceneTarget!, scene);
                 }
-                else Rendering.BackdropRender.Lamps(sceneTarget!, scene, coverage!);
+                else
+                {
+                    Rendering.BackdropRender.Lamps(sceneTarget!, scene, coverage!);
+                    // A wet outfit's drops, over everything and before the post, as the game blends them.
+                    if (drops != null) Rendering.WetDrops.BlendInto(sceneTarget!, drops);
+                }
                 // The game's post-processing: on the card too when it draws.
                 var cardPost = useCard ? (_gpuPost ??= Rendering.Gpu.GpuPost.TryCreate()) : null;
                 if (cardPost != null) cardPost.Present(sceneTarget!, scene, parts, output);
@@ -1235,6 +1271,9 @@ public sealed class JigglePreview : Image
             // The silhouette is drawn above all of them (the body's order + 8 to 16).
             if (bodyAlpha != null) IntroFade.DrawSilhouette(output, bodyAlpha, silhouette);
 
+            // A wet outfit's drops, over the bust (they ride its breathing, as the game's do).
+            if (drops != null) Rendering.WetDrops.BlendAlone(output, JiggleShader.RenderSize, drops);
+
             // Breathing, inside the picture as over a backdrop: the whole bust a
             // whole pixel at a time (the game's Pixel Perfect Camera), up by bob.
             // It was a WPF transform sliding the image until 1.9.1 (the author:
@@ -1263,6 +1302,51 @@ public sealed class JigglePreview : Image
             }
             finally { _renderInFlight = false; }
         }, _uiScheduler);
+    }
+
+    /// <summary>The drops to draw in place of the outfit's own - for tests (S20 draws the game's).</summary>
+    internal Rendering.WetDrops.Over? DropsOverride { get; set; }
+
+    /// <summary>A test's own moment for the drops.</summary>
+    internal Func<double>? WetClockForTests { get; set; }
+
+    /// <summary>How many drops the last frame drew - for tests.</summary>
+    internal int DropsDrawn { get; private set; }
+
+    /// <summary>Where the last frame had the outfit's Wet object, on its canvas - for tests (S20 holds it to the game's).</summary>
+    internal Rendering.WetDrops.Emitter? LastEmitter { get; private set; }
+
+    /// <summary>
+    /// A wet outfit's drops this frame (after 1.10.0: "busts can carry the same wet drops in dialogues, and the bust
+    /// preview doesn't show them yet" - the author: "yes"): with its Wet particle on, the game's own drops round the
+    /// middle of the bust (Rendering.WetDrops.OnBust, measured in the game: InGameSuiteTests.S20), on the screen's
+    /// canvas over a backdrop - the bust's square where it stands, its breathing in - or on the bust's own square
+    /// alone; as after five seconds of them, the same moment every time under tests.
+    /// </summary>
+    internal Rendering.WetDrops.Over? WetDropsNow(Rendering.BackdropScene? scene, int bustBottom, float time)
+    {
+        if (DropsOverride != null) return DropsOverride;
+        if (Outfit?.ParticleActive != true) return null;
+        double t = WetClockForTests?.Invoke() ?? (Services.TestMode.Active ? Rendering.WetDrops.TestTime : Rendering.WetDrops.Steady + time);
+        uint seed = 2166136261;
+        foreach (char ch in Outfit.Key ?? "") seed = (seed ^ ch) * 16777619;
+        const int N = Rendering.BackdropRender.FrameSize;
+        var kind = Outfit.ParticleKindIndex == 1 ? Rendering.WetDrops.Kind.Shower : Rendering.WetDrops.Kind.Towel;
+        // The game's camera sees 10.8 units top to bottom, whatever the screen's size.
+        if (scene != null)
+        {
+            var b = scene.Backdrop;
+            double ppu = b.ScreenHeight / 10.8;
+            var e = Rendering.WetDrops.OnBust(scene.Left, bustBottom, N, b.ScreenHeight, ppu, seed, kind);
+            LastEmitter = e;
+            return Rendering.WetDrops.OnBustAt(t, e, b.ScreenWidth * Rendering.WetDrops.PixelsPerUnit / ppu, b.ScreenHeight * Rendering.WetDrops.PixelsPerUnit / ppu);
+        }
+        // Alone, the bust's square is the x1 picture: 50 pixels a unit, as at the game's 960x540.
+        const double alonePpu = 50;
+        var alone = Rendering.WetDrops.OnBust(0, 0, N, N, alonePpu, seed, kind);
+        LastEmitter = alone;
+        double canvas = N * Rendering.WetDrops.PixelsPerUnit / alonePpu;
+        return Rendering.WetDrops.OnBustAt(t, alone, canvas, canvas);
     }
 
     /// <summary>

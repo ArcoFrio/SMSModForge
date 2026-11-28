@@ -478,4 +478,161 @@ public sealed partial class InGameSuiteTests
         Assert.Contains("/" + TemplateLight.ObjectName + " ", lit);   // control: kept where it is not removed
         Assert.DoesNotContain("/" + TemplateLight.ObjectName + " ", dark);
     }
+
+    /// <summary>
+    /// A pack's lamps drift with the cursor in the game as the editor's "Moves with" says (after 1.10.0, the author:
+    /// "Would it be too performance costly to add an option to have the light and darkness sources move together with
+    /// parallax?"). On the drift place (InGameSuitePacks.Looks) the lamp set to the back picture has the game's drift
+    /// effect, switched on, as the back picture has it - its strength and its reversal, read from the back picture
+    /// in the game, which drifts apart from the front (1.2 against 0.75, the other way); the lamp with a strength of
+    /// its own has that strength. Control: the lamp made before lamps could drift has no drift of its own, as before:
+    /// it goes with the level, the front.
+    /// <para/>
+    /// And its reversal (after 1.10.0, FROM-PACK-TESTING #21): unset, an own drift has the back picture's - a lamp given a
+    /// copy of its effect, a picture cloned from it - and set to false it is not reversed. A false was read as unset
+    /// for a character until then (S16).
+    /// </summary>
+    [Fact]
+    public void S15_A_lamp_drifts_with_the_back_picture_or_by_its_own_strength_in_the_game()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        string back, backLamp, ownLamp, frontLamp, forwardLamp, ownWall, forwardWall;
+        try
+        {
+            Travel(game, "pack:" + InGameSuitePacks.Looks.Id + "." + InGameSuitePacks.Looks.DriftPlaceKey, "_" + InGameSuitePacks.Looks.DriftPlaceObject);
+            game.Ask("wait 1", 10);
+            string level = "5_Levels/" + game.Ask("level").Split(' ').Last().Trim();
+            // The game's drift effect on an object, or what the bridge says when it has none.
+            string Drift(string name)
+            {
+                try { return game.Ask("fields ParallaxMouseEffect " + level + "/" + name); }
+                catch (BridgeError e) { return "none: " + e.Message; }
+            }
+            // The suite holds every drift effect still (parallax rest, switched off while it checks): let go, each
+            // shows whether the place switched it on.
+            game.Ask("parallax go");
+            back = Drift(InGameSuitePacks.Looks.DriftPlaceObject + "_Secondary");
+            backLamp = Drift(InGameSuitePacks.Looks.DriftBackLamp);
+            ownLamp = Drift(InGameSuitePacks.Looks.DriftOwnLamp);
+            frontLamp = Drift(InGameSuitePacks.Looks.DriftFrontLamp);
+            forwardLamp = Drift(InGameSuitePacks.Looks.DriftForwardLamp);
+            ownWall = Drift(InGameSuitePacks.Looks.DriftOwnWall);
+            forwardWall = Drift(InGameSuitePacks.Looks.DriftForwardWall);
+        }
+        finally
+        {
+            game.Ask("parallax rest");
+            Travel(game, "vanilla:5_MyRoom", "5_MyRoom");
+        }
+        foreach (var said in new[] { back, backLamp, ownLamp, frontLamp, forwardLamp, ownWall, forwardWall }) _out.WriteLine("   " + said);
+        static string Of(string said, string field)
+        {
+            var m = System.Text.RegularExpressions.Regex.Match(said, @"\b" + field + @"=([^;]*)");
+            return m.Success ? m.Groups[1].Value.Trim() : "(none)";
+        }
+        Assert.DoesNotContain("none:", back);
+        Assert.Equal("True", Of(back, "enabled"));
+        Assert.Equal("True", Of(back, "reversed"));     // the place's back picture as made: the other way from the front
+        Assert.DoesNotContain("none:", backLamp);
+        Assert.Equal("True", Of(backLamp, "enabled"));
+        Assert.Equal(Of(back, "parallaxStrength"), Of(backLamp, "parallaxStrength"));
+        Assert.Equal(Of(back, "reversed"), Of(backLamp, "reversed"));
+        Assert.DoesNotContain("none:", ownLamp);
+        Assert.Equal("True", Of(ownLamp, "enabled"));
+        Assert.Equal(0.3, double.Parse(Of(ownLamp, "parallaxStrength"), System.Globalization.CultureInfo.InvariantCulture), 3);
+        Assert.StartsWith("none:", frontLamp);   // control: as every lamp was before
+        Assert.Contains("no ParallaxMouseEffect", frontLamp);
+
+        // Its reversal: unset, the back picture's (reversed here); false, not reversed.
+        Assert.Equal("True", Of(ownLamp, "reversed"));
+        Assert.Equal("True", Of(forwardLamp, "enabled"));
+        Assert.Equal("False", Of(forwardLamp, "reversed"));
+        Assert.Equal("True", Of(ownWall, "enabled"));
+        Assert.Equal(0.55, double.Parse(Of(ownWall, "parallaxStrength"), System.Globalization.CultureInfo.InvariantCulture), 3);
+        Assert.Equal("True", Of(ownWall, "reversed"));
+        Assert.Equal("True", Of(forwardWall, "enabled"));
+        Assert.Equal("False", Of(forwardWall, "reversed"));
+    }
+
+    /// <summary>
+    /// A character standing in a place drifts in the game as its "Moves with" says (after 1.10.0, the author asked
+    /// for "parallax settings for individual NPCs"), and the place's NPCs object set to drift takes its characters with
+    /// it - its Parallax drifted them in the editor's preview and did nothing in the game until now. On the drift place
+    /// the character set to the back picture has the game's drift effect, switched on, as the back picture has it; the
+    /// one with a strength of its own has that strength. On the crowd place the NPCs object has the back picture's
+    /// effect, and the character in it none of its own. Control: the character placed as every one was before has no
+    /// drift of its own, and neither has the drift place's NPCs object.
+    /// </summary>
+    [Fact]
+    public void S16_A_character_drifts_with_the_back_picture_or_its_own_strength_and_with_a_drifting_NPCs_object_in_the_game()
+    {
+        if (Off) return;
+        var game = _s.InGame();
+        string back, backGuest, ownGuest, frontGuest, forwardGuest, npcs, crowdBack, crowdNpcs, crowdGuest;
+        // The game's drift effect on an object of the level shown, or what the bridge says when it has none.
+        string Drift(string name)
+        {
+            string level = "5_Levels/" + game.Ask("level").Split(' ').Last().Trim();
+            try { return game.Ask("fields ParallaxMouseEffect " + level + "/" + name); }
+            catch (BridgeError e) { return "none: " + e.Message; }
+        }
+        try
+        {
+            Travel(game, "pack:" + InGameSuitePacks.Looks.Id + "." + InGameSuitePacks.Looks.DriftPlaceKey, "_" + InGameSuitePacks.Looks.DriftPlaceObject);
+            game.Ask("wait 1", 10);
+            // The suite holds every drift effect still (parallax rest, switched off while it checks): let go, each
+            // shows whether the place switched it on.
+            game.Ask("parallax go");
+            back = Drift(InGameSuitePacks.Looks.DriftPlaceObject + "_Secondary");
+            npcs = Drift("NPCs");
+            backGuest = Drift("NPCs/" + InGameSuitePacks.Looks.DriftBackCharacter);
+            ownGuest = Drift("NPCs/" + InGameSuitePacks.Looks.DriftOwnCharacter);
+            frontGuest = Drift("NPCs/" + InGameSuitePacks.Looks.DriftFrontCharacter);
+            forwardGuest = Drift("NPCs/" + InGameSuitePacks.Looks.DriftForwardCharacter);
+            game.Ask("parallax rest");
+
+            Travel(game, "pack:" + InGameSuitePacks.Looks.Id + "." + InGameSuitePacks.Looks.CrowdPlaceKey, "_" + InGameSuitePacks.Looks.CrowdPlaceObject);
+            game.Ask("wait 1", 10);
+            game.Ask("parallax go");
+            crowdBack = Drift(InGameSuitePacks.Looks.CrowdPlaceObject + "_Secondary");
+            crowdNpcs = Drift("NPCs");
+            crowdGuest = Drift("NPCs/" + InGameSuitePacks.Looks.CrowdCharacter);
+        }
+        finally
+        {
+            game.Ask("parallax rest");
+            Travel(game, "vanilla:5_MyRoom", "5_MyRoom");
+        }
+        foreach (var said in new[] { back, npcs, backGuest, ownGuest, frontGuest, forwardGuest, crowdBack, crowdNpcs, crowdGuest }) _out.WriteLine("   " + said);
+        static string Of(string said, string field)
+        {
+            var m = System.Text.RegularExpressions.Regex.Match(said, @"\b" + field + @"=([^;]*)");
+            return m.Success ? m.Groups[1].Value.Trim() : "(none)";
+        }
+        Assert.DoesNotContain("none:", back);
+        Assert.Equal("True", Of(back, "enabled"));
+        Assert.Equal("True", Of(back, "reversed"));     // the place's back picture as made: the other way from the front
+        Assert.DoesNotContain("none:", backGuest);
+        Assert.Equal("True", Of(backGuest, "enabled"));
+        Assert.Equal(Of(back, "parallaxStrength"), Of(backGuest, "parallaxStrength"));
+        Assert.Equal(Of(back, "reversed"), Of(backGuest, "reversed"));
+        Assert.DoesNotContain("none:", ownGuest);
+        Assert.Equal("True", Of(ownGuest, "enabled"));
+        Assert.Equal(0.3, double.Parse(Of(ownGuest, "parallaxStrength"), System.Globalization.CultureInfo.InvariantCulture), 3);
+        // Its reversal (after 1.10.0): unset, the back picture's; false, not reversed - it was read as unset.
+        Assert.Equal("True", Of(ownGuest, "reversed"));
+        Assert.Equal("True", Of(forwardGuest, "enabled"));
+        Assert.Equal("False", Of(forwardGuest, "reversed"));
+        Assert.StartsWith("none:", frontGuest);   // control: as every character was before
+        Assert.Contains("no ParallaxMouseEffect", frontGuest);
+        Assert.StartsWith("none:", npcs);         // control: an NPCs object not set to drift
+        Assert.Contains("no ParallaxMouseEffect", npcs);
+
+        Assert.DoesNotContain("none:", crowdNpcs);
+        Assert.Equal("True", Of(crowdNpcs, "enabled"));
+        Assert.Equal(Of(crowdBack, "parallaxStrength"), Of(crowdNpcs, "parallaxStrength"));
+        Assert.Equal(Of(crowdBack, "reversed"), Of(crowdNpcs, "reversed"));
+        Assert.StartsWith("none:", crowdGuest);   // it drifts with what it stands in, adding nothing
+    }
 }

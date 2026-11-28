@@ -132,7 +132,13 @@ public static class PackExporter
                 // wire format is canonical so the same archive opens
                 // identically on every OS.
                 string entryName = relPath.Replace(Path.DirectorySeparatorChar, '/');
-                zip.CreateEntryFromFile(fullPath, entryName, CompressionLevel.Optimal);
+                if (entryName == ManifestEntryName && WithoutRecycleBins(File.ReadAllText(fullPath)) is { } forTheGame)
+                {
+                    // The places' recycle bins are the author's, not the game's (after 1.10.0).
+                    using var writer = new StreamWriter(zip.CreateEntry(entryName, CompressionLevel.Optimal).Open(), new System.Text.UTF8Encoding(false));
+                    writer.Write(forTheGame);
+                }
+                else zip.CreateEntryFromFile(fullPath, entryName, CompressionLevel.Optimal);
                 fileCount++;
                 // Read source size off the source file rather than the
                 // entry: ZipArchiveEntry in Create mode throws on
@@ -151,6 +157,26 @@ public static class PackExporter
         {
             TutorialArtLeftOut = tutorialArt, TutorialArtBytes = tutorialArtBytes,
         };
+    }
+
+    /// <summary>
+    /// The manifest with every place's and game level's recycle bin left out (<see cref="BinnedObjectDef"/>):
+    /// what an author deleted is theirs to put back, and nothing the game reads. Null when there is none to leave
+    /// out - the file then goes in as it is, byte for byte - or the manifest cannot be read (the export says so
+    /// elsewhere).
+    /// </summary>
+    internal static string? WithoutRecycleBins(string manifest)
+    {
+        if (!manifest.Contains("\"recycleBin\"", StringComparison.Ordinal)) return null;
+        Newtonsoft.Json.Linq.JObject root;
+        try { root = Newtonsoft.Json.Linq.JObject.Parse(manifest); }
+        catch (Newtonsoft.Json.JsonException) { return null; }
+        bool any = false;
+        foreach (string section in new[] { "places", "vanillaExtensions" })
+            if (root[section] is Newtonsoft.Json.Linq.JArray entries)
+                foreach (var entry in entries.OfType<Newtonsoft.Json.Linq.JObject>())
+                    any |= entry.Remove("recycleBin");
+        return any ? root.ToString(PackRepository.ManifestSettings.Formatting) : null;
     }
 
     /// <summary>

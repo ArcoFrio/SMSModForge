@@ -916,7 +916,10 @@ public sealed partial class MainViewModel : ObservableObject, IGameConditionEdit
         if (change.Changed is not { Count: 1 } one) return false;
         int index = one[0];
         if (change.From[index] is not SplitPiece from || change.To[index] is not SplitPiece to) return false;
-        if (!from.Parts[0].SameTextAs(to.Parts[0])) return false;
+        // The place's own values the same - but for its recycle bin, which a deletion and its undo change with the
+        // objects (after 1.10.0): read from the step's own values and its rows made again, below.
+        List<BinnedObjectDef>? bin = null;
+        if (!from.Parts[0].SameTextAs(to.Parts[0]) && !SameButTheBin(from.Parts[0].Text, to.Parts[0].Text, out bin)) return false;
         long said = Services.UndoService.Said;
         Undo.Suspended = true;
         try
@@ -928,6 +931,11 @@ public sealed partial class MainViewModel : ObservableObject, IGameConditionEdit
                     if (index < 0 || index >= Pack.Places.Count) return false;
                     int at = IndexOfModel(Places, Pack.Places[index], p => p.Model);
                     if (at < 0 || !Places[at].ReadObjectsAgain(from, to)) return false;
+                    if (bin != null)
+                    {
+                        Places[at].Model.RecycleBin = bin;
+                        Places[at].Objects.ReadBinAgain();
+                    }
                     break;
                 }
                 case "vanillaExtensions":
@@ -935,6 +943,11 @@ public sealed partial class MainViewModel : ObservableObject, IGameConditionEdit
                     if (index < 0 || index >= Pack.VanillaExtensions.Count) return false;
                     int at = IndexOfModel(VanillaExtensions, Pack.VanillaExtensions[index], v => v.Model);
                     if (at < 0 || !VanillaExtensions[at].ReadObjectsAgain(from, to)) return false;
+                    if (bin != null)
+                    {
+                        VanillaExtensions[at].Model.RecycleBin = bin;
+                        VanillaExtensions[at].Objects.ReadBinAgain();
+                    }
                     break;
                 }
                 default: return false;
@@ -948,6 +961,29 @@ public sealed partial class MainViewModel : ObservableObject, IGameConditionEdit
             if (!step.Holds(Pack, change.Name, one)) return false;
         Undo.Absorb(step, said);
         return true;
+    }
+
+    /// <summary>
+    /// Whether a place's own values (written without its objects) differ only in its recycle bin, and if so the
+    /// bin <paramref name="to"/> has, read as a step is read. False when anything else differs, or either cannot
+    /// be read.
+    /// </summary>
+    private static bool SameButTheBin(string from, string to, out List<BinnedObjectDef>? bin)
+    {
+        bin = null;
+        try
+        {
+            var a = Newtonsoft.Json.Linq.JObject.Parse(from);
+            var b = Newtonsoft.Json.Linq.JObject.Parse(to);
+            var kept = b["recycleBin"];
+            a.Remove("recycleBin");
+            b.Remove("recycleBin");
+            if (!Newtonsoft.Json.Linq.JToken.DeepEquals(a, b)) return false;
+            bin = kept?.ToObject<List<BinnedObjectDef>>(Newtonsoft.Json.JsonSerializer.Create(PackRepository.ManifestSettings))
+                  ?? new List<BinnedObjectDef>();
+            return true;
+        }
+        catch (Newtonsoft.Json.JsonException) { return false; }
     }
 
     /// <summary>
@@ -4716,6 +4752,21 @@ public sealed partial class MainViewModel : ObservableObject, IGameConditionEdit
         set { View.Controls.FpsBadge.Shown = value; OnPropertyChanged(); }
     }
 
+    /// <summary>Preview parallax, the same for every place's preview and every game level's, kept between sessions
+    /// (<see cref="EditorPrefs.PlacePreviewParallax"/>). A way of looking, never in the pack.</summary>
+    public bool PlacePreviewParallax
+    {
+        get => EditorPrefs.PlacePreviewParallax;
+        set { if (value == EditorPrefs.PlacePreviewParallax) return; EditorPrefs.PlacePreviewParallax = value; OnPropertyChanged(); }
+    }
+
+    /// <summary>Apply shaders, the same way (<see cref="EditorPrefs.PlacePreviewShaders"/>).</summary>
+    public bool PlacePreviewShaders
+    {
+        get => EditorPrefs.PlacePreviewShaders;
+        set { if (value == EditorPrefs.PlacePreviewShaders) return; EditorPrefs.PlacePreviewShaders = value; OnPropertyChanged(); }
+    }
+
     /// <summary>The guided tutorials offered on the ModForge tab, each paired
     /// with whether this author has finished it.</summary>
     /// In the order the list shows them: each tutorial of the first run, with the ones going deeper into it right
@@ -4745,11 +4796,12 @@ public sealed partial class MainViewModel : ObservableObject, IGameConditionEdit
     /// <summary>Starts the tutorial passed as the command parameter.</summary>
     public RelayCommand StartTutorialCommand { get; }
 
-    /// <summary>Asks the place preview showing to pick an object, as a click on it does (a tutorial step's light,
-    /// 1.10.0). MainWindow passes it on to the preview on screen.</summary>
-    public event Action<GameObjectViewModel>? PreviewPickRequested;
+    /// <summary>Asks the place preview showing to pick an object or a character standing in the place, as a click on
+    /// it does (a tutorial step's light, 1.10.0; an object's or a character's settings, now beside the picture only).
+    /// MainWindow passes it on to the preview on screen.</summary>
+    public event Action<object>? PreviewPickRequested;
 
-    public void PickInPreview(GameObjectViewModel node) => PreviewPickRequested?.Invoke(node);
+    public void PickInPreview(object row) => PreviewPickRequested?.Invoke(row);
 
     /// <summary>The start page's "Learn ModForge": the first tutorial (1.10.0).</summary>
     public RelayCommand StartFirstTutorialCommand { get; }
@@ -4820,6 +4872,9 @@ public sealed partial class MainViewModel : ObservableObject, IGameConditionEdit
         // owns the pack. One window, one editor; a test that makes another
         // takes over, which is the one it is driving.
         GameConditionEditing.Editor = this;
+        // A placed character's wet effect shows its kind by its NPC's where it sets none (after 1.10.0): the same
+        // one window's pack.
+        NpcPlacementViewModel.NpcWetOf = key => Npcs.FirstOrDefault(n => n.Key == key)?.Model.Wet;
 
         // Shared folder trees for the remaining unit tabs (Dialogues /
         // Variables / Integration have their own hand-rolled trees). One

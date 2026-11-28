@@ -48,6 +48,9 @@ namespace SMSModForge.Shared
         public const string PlayWhenField = "playWhen";
         public const string ConditionsField = "conditions";
         public const string UnderField = "under";
+        /// <summary>An object's effect (after 1.10.0): how far from the object it plays, in the object's own units -
+        /// the effect's local position under it. Empty = at the object.</summary>
+        public const string LocalXField = "localX", LocalYField = "localY";
 
         // ── Actions ─────────────────────────────────────────────────────────────────────────────────
         public const string PlayAction = "PlayEffect";

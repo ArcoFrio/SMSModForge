@@ -406,9 +406,15 @@ public sealed class UndoKeysTests : IDisposable
     {
         Run(MainTab.Places, (window, vm, state) =>
         {
-            vm.SelectedPlace = vm.Places.First(p => p.GameObjects.Any(g => g.CanEditIdentity));
+            var place = vm.Places.First(p => p.GameObjects.Any(g => g.CanEditIdentity));
+            vm.SelectedPlace = place;
             WindowHarness.Pump();
-            var box = Under<TextBox>(Page(window)).First(b => b.IsEnabled && PathOf(b, TextBox.TextProperty) == "Name" && b.DataContext is GameObjectViewModel);
+            // An object's settings are beside the place preview's picture, for the object picked (after 1.10.0).
+            vm.PickInPreview(place.GameObjects.First(g => g.CanEditIdentity));
+            WindowHarness.Pump();
+            window.UpdateLayout();
+            WindowHarness.Pump();
+            var box = Under<TextBox>(Page(window)).First(b => b.IsEnabled && b.IsVisible && PathOf(b, TextBox.TextProperty) == "Name" && b.DataContext is GameObjectViewModel);
             Assert.Equal(UpdateSourceTrigger.PropertyChanged, BindingOperations.GetBinding(box, TextBox.TextProperty)!.UpdateSourceTrigger);
             var thing = (GameObjectViewModel)box.DataContext;
             string was = thing.Name;

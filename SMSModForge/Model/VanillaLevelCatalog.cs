@@ -211,6 +211,27 @@ public static class VanillaLevelCatalog
         return _byGoName.TryGetValue(goName, out var lv) ? lv : null;
     }
 
+    /// <summary>The level every pack place is made from (PlaceFactory clones it).</summary>
+    public const string TemplateLevel = "14_Beach";
+
+    /// <summary>The template level's NPCs object's own scale, measured (S17, after 1.10.0): what a pack place's NPCs
+    /// keep in the game while the pack's NPCs node says 1.</summary>
+    public const float TemplateNpcsScale = 0.96053f;
+
+    /// <summary>
+    /// The scale of a level's own NPCs object (<paramref name="goName"/>'s child named NPCs), which a pack's NPCs node
+    /// grafts onto: the plugin sets a scale there only when it is not exactly 1 (PlaceFactory.BuildNodeRecursive), so at
+    /// 1 the game keeps this one. <paramref name="fallback"/> where the catalog does not know the level or it has none.
+    /// </summary>
+    public static float NpcsObjectScale(string? goName, float fallback = 1f)
+    {
+        var children = FindLevel(goName)?.Hierarchy?.Children;
+        if (children != null)
+            foreach (var c in children)
+                if (string.Equals(c.Name, "NPCs", StringComparison.OrdinalIgnoreCase) && c.ScaleY > 0) return c.ScaleY;
+        return fallback;
+    }
+
     /// <summary>
     /// The catalog entry for a level token as stored on a vanilla extension
     /// (<c>vanilla:&lt;goName&gt;</c>). Anything else — a pack place, a blank —

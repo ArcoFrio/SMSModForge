@@ -17,6 +17,14 @@ cbuffer LitBuf : register(b0)
     uint LightCount;     // the lights with a glow, in the place's order
     uint TexW;           // the light texture
     uint TexH;
+    uint DropCount;      // the NPCs' wet drops over the lit place (WetDrops)
+    uint DropSize;       // the particle texture's size (square), and how many copies of it
+    uint DropLevels;
+    float DropScale;     // this target's pixels to a canvas pixel: which copy a drop is read from
+    float CanvasW;       // the canvas (the game's screen, 100 pixels a unit)
+    float CanvasH;
+    float DropPad0;
+    float DropPad1;
 };
 
 struct LightRow
@@ -48,6 +56,25 @@ Texture2D<float> AngleTable : register(t5);        // ... and angle
 Texture2D<float> FalloffTable : register(t6);      // URP's falloff lookup, 2048 x 128
 StructuredBuffer<LightRow> Lights : register(t7);
 StructuredBuffer<float> ShapedGlow : register(t8); // each shaped light's glow, RGB a pixel of the game's screen, rows from the bottom
+
+struct DropRow
+{
+    float X;             // its centre on the canvas, its size there
+    float Y;
+    float W;
+    float H;
+    float Alpha;
+    float R;             // its colour in linear light (white but for a tint)
+    float G;
+    float B;
+    float Solid;         // 1: a solid quad (the shower's), no texture
+    float LitDrop;       // 1: lit with the place (the shower's): blended in before its lights
+    float Pad1;
+    float Pad2;
+};
+
+StructuredBuffer<DropRow> Drops : register(t9);
+StructuredBuffer<float> DropAlpha : register(t10); // the particle texture's alpha, each smaller copy after the one before
 RWTexture2D<float4> LitTarget : register(u0);
 
 #define SCREEN_W 960
@@ -156,6 +183,48 @@ float3 Light(float3 c, float sx, float sy, float lit)
 
 uint ByteOf(float v) { return (uint)(v * 255.0f + 0.5f); }
 
+// WetDrops.Mips.LevelFor: the copy a picture wide x tall pixels is read from.
+uint DropLevel(float wide, float tall)
+{
+    float t = max((float)DropSize / max(wide, 1e-6f), (float)DropSize / max(tall, 1e-6f));
+    if (!(t > 1.0f)) return 0u;
+    int level = (int)floor(log2(t) + 0.5f);
+    return (uint)clamp(level, 0, (int)DropLevels - 1);
+}
+
+// WetDrops.Mips.Sample: between the four nearest texels of a copy.
+float DropSample(uint level, float u, float v)
+{
+    uint at = 0u, s = DropSize;
+    for (uint i = 0u; i < level; i++) { at += s * s; s = max(s >> 1, 1u); }
+    precise float fx = u * (float)s - 0.5f, fy = v * (float)s - 0.5f;
+    precise float x0 = floor(fx), y0 = floor(fy);
+    precise float ax = fx - x0, ay = fy - y0;
+    int xa = ClampTo(x0, (int)s), xb = ClampTo(x0 + 1.0f, (int)s), ya = ClampTo(y0, (int)s), yb = ClampTo(y0 + 1.0f, (int)s);
+    precise float top = DropAlpha[at + (uint)(ya * (int)s + xa)] * (1.0f - ax) + DropAlpha[at + (uint)(ya * (int)s + xb)] * ax;
+    precise float bottom = DropAlpha[at + (uint)(yb * (int)s + xa)] * (1.0f - ax) + DropAlpha[at + (uint)(yb * (int)s + xb)] * ax;
+    precise float r = top * (1.0f - ay) + bottom * ay;
+    return r;
+}
+
+// WetDrops.Blend: every drop over canvas point (cx, cy), its colour through its alpha, over what is there.
+float3 WithDrops(float3 c, float cx, float cy, float lit)
+{
+    for (uint i = 0u; i < DropCount; i++)
+    {
+        DropRow d = Drops[i];
+        if (d.LitDrop != lit) continue;
+        precise float left = d.X - d.W * 0.5f, top = d.Y - d.H * 0.5f;
+        precise float u = (cx - left) / d.W, v = (cy - top) / d.H;
+        if (!(u >= 0.0f && u < 1.0f && v >= 0.0f && v < 1.0f)) continue;
+        precise float a = d.Alpha;
+        if (d.Solid < 0.5f) a *= DropSample(DropLevel(d.W * DropScale, d.H * DropScale), u, v);
+        if (!(a > 0.0f)) continue;
+        c = float3(Small(c.x + (d.R - c.x) * a, 6), Small(c.y + (d.G - c.y) * a, 6), Small(c.z + (d.B - c.z) * a, 5));
+    }
+    return c;
+}
+
 [numthreads(16, 16, 1)]
 void Lit(uint3 id : SV_DispatchThreadID)
 {
@@ -164,6 +233,25 @@ void Lit(uint3 id : SV_DispatchThreadID)
     int row = ScreenRows != 0u ? (int)OutH - 1 - y : y;
     float4 s = Scene.Load(int3(x, row, 0));
     float3 c = float3(Small(Decode[ByteOf(s.x)], 6), Small(Decode[ByteOf(s.y)], 6), Small(Decode[ByteOf(s.z)], 5));
+    // WetDrops.Over: Screen (rows from the bottom) and View - where on the canvas this pixel's centre is.
+    precise float cx = 0.0f, cy = 0.0f;
+    if (DropCount != 0u)
+    {
+        if (ScreenRows != 0u)
+        {
+            cx = ((float)x + 0.5f) * CanvasW / (float)OutW;
+            cy = CanvasH - ((float)y + 0.5f) * CanvasH / (float)OutH;
+        }
+        else
+        {
+            precise float du = ViewMap.x * ((float)x + 0.5f) + ViewMap.y;
+            precise float dv = ViewMap.z * ((float)y + 0.5f) + ViewMap.w;
+            cx = du * CanvasW;
+            cy = (1.0f - dv) * CanvasH;
+        }
+        // A shower's drops: lit with the place, so into it before its lights.
+        c = WithDrops(c, cx, cy, 1.0f);
+    }
     if (WithLights != 0u)
     {
         precise float sx, sy;
@@ -182,5 +270,7 @@ void Lit(uint3 id : SV_DispatchThreadID)
         float lit = Masked != 0u ? (float)ByteOf(LitMask.Load(int3(x, row, 0)).x) / 255.0f : 1.0f;
         c = Light(c, sx, sy, lit);
     }
+    // The towel's drops: unlit, over the lit place.
+    if (DropCount != 0u) c = WithDrops(c, cx, cy, 0.0f);
     LitTarget[id.xy] = float4(c, 1.0f);
 }

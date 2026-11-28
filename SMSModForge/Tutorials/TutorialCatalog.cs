@@ -415,7 +415,8 @@ public static class TutorialCatalog
                     More = "tutorial.dressingTheRoom.addObject.more",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
-                    Anchor = "panel:placeGameObjects",
+                    Anchor = "btn:addObject",
+                    AlsoAllow = new[] { "panel:placePreview" },
                     OnEnter = (vm, s) => s.Set("gos", CountGameObjects(vm)),
                     IsDone = (vm, s) => s.GrewSince("gos", CountGameObjects(vm)),
                     Solve = (vm, s) =>
@@ -432,7 +433,9 @@ public static class TutorialCatalog
                     More = "tutorial.dressingTheRoom.giveNamePicture.more",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
-                    Anchor = "panel:placeGameObjects",
+                    Anchor = "panel:placeSettings",
+                    AlsoAllow = new[] { "panel:placePreview" },
+                    OnShown = PickTheVase,
                     IsDone = (vm, s) => FirstGameObject(vm) is { } g &&
                                         g.Name.Trim().Length > 0 && g.Sprite.Trim().Length > 0,
                     Solve = (vm, s) =>
@@ -452,7 +455,7 @@ public static class TutorialCatalog
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "panel:placePreview",
-                    AlsoAllow = new[] { "panel:placeGameObjects" },
+                    AlsoAllow = new[] { "panel:placeSettings" },
                     OnEnter = (vm, s) => s.Set("pos", PropPosition(vm)),
                     IsDone = (vm, s) => PropPosition(vm) != s.Get<string>("pos"),
                     Solve = (vm, s) =>
@@ -471,8 +474,9 @@ public static class TutorialCatalog
                     More = "tutorial.dressingTheRoom.decideStandsFront.more",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
-                    Anchor = "panel:placeGameObjects",
+                    Anchor = "panel:placeSettings",
                     AlsoAllow = new[] { "panel:placePreview" },
+                    OnShown = PickTheVase,
                     IsDone = (vm, s) => FirstGameObject(vm) is { } g && g.SortingOrder < 0,
                     Solve = (vm, s) => FirstGameObject(vm)!.SortingOrder = -11,
                     Hint = "tutorial.dressingTheRoom.decideStandsFront.hint",
@@ -484,7 +488,9 @@ public static class TutorialCatalog
                     More = "tutorial.dressingTheRoom.leaveSwitchedOff.more",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
-                    Anchor = "panel:placeGameObjects",
+                    Anchor = "panel:placeSettings",
+                    AlsoAllow = new[] { "panel:placePreview" },
+                    OnShown = PickTheVase,
                     IsDone = (vm, s) => FirstGameObject(vm) is { StartActive: false },
                     Solve = (vm, s) => FirstGameObject(vm)!.StartActive = false,
                     Hint = "tutorial.dressingTheRoom.leaveSwitchedOff.hint",
@@ -638,6 +644,13 @@ public static class TutorialCatalog
     /// </summary>
     private static ViewModel.GameObjectViewModel? FirstGameObject(ViewModel.MainViewModel vm)
         => vm.SelectedPlace?.GameObjects.LastOrDefault(g => !g.IsNpcRoot && !g.HasLight && !g.HasEffect);
+
+    /// <summary>The reader's object picked in the place preview, so its settings are beside the picture: where every
+    /// object's settings are since the GameObjects list below the preview went (after 1.10.0).</summary>
+    private static void PickTheVase(ViewModel.MainViewModel vm)
+    {
+        if (FirstGameObject(vm) is { } g) vm.PickInPreview(g);
+    }
 
     /// <summary>
     /// The diagnostic walkthrough. Not for authors — it exercises the overlay,

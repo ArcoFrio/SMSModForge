@@ -46,6 +46,29 @@ public sealed class VanillaPlaceExtensionDef
     public bool ShouldSerializeGameObjects() => GameObjects.Count > 0;
 
     /// <summary>
+    /// Which rules the objects' masks follow (after 1.10.0). 1: an object with no mask stays still
+    /// (<see cref="GameObjectDef.MaskKind"/> says otherwise). Absent (0): a place saved before, whose objects without
+    /// a mask took the back layer's - the plugin keeps that for packs exported then, and the editor turns it into
+    /// the kinds as the pack loads (PackMigration). New places start at 1.
+    /// </summary>
+    [JsonProperty("objectMasks", Order = 5)]
+    public int ObjectMasks { get; set; } = CurrentObjectMasks;
+    public bool ShouldSerializeObjectMasks() => ObjectMasks != 0;
+
+    /// <summary>Read from a file: absent is a place saved before the rules (0), not a new one.</summary>
+    [System.Runtime.Serialization.OnDeserializing]
+    private void BeforeReadingObjectMasks(System.Runtime.Serialization.StreamingContext _) => ObjectMasks = 0;
+
+    /// <summary>The rules this editor writes.</summary>
+    public const int CurrentObjectMasks = PlaceDef.CurrentObjectMasks;
+
+    /// <summary>What the pack's own objects deleted from the level were, newest last, kept to be put back
+    /// (<see cref="BinnedObjectDef"/>).</summary>
+    [JsonProperty("recycleBin", Order = 4)]
+    public List<BinnedObjectDef> RecycleBin { get; set; } = new();
+    public bool ShouldSerializeRecycleBin() => RecycleBin.Count > 0;
+
+    /// <summary>
     /// Set by the editor while <see cref="GameObjects"/> is the whole level as it is worked on - every object
     /// of the game's, with the pack's changes on them - rather than what a pack on disk holds: only what it
     /// changed, each object saying whether it means its own place and showing (worked out as the file is

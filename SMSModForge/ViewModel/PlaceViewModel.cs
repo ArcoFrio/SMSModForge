@@ -70,6 +70,9 @@ public sealed class PlaceViewModel : ObservableObject, IDerivesKey
         GameObjects = new ObservableCollection<GameObjectViewModel>();
         foreach (var g in model.GameObjects) GameObjects.Add(Row(g));
         NpcsNode = GameObjects.First(g => g.IsNpcRoot);
+        Objects = new PlaceObjects(GameObjects, () => Model.RecycleBin, InsertTop, () => TopEnd, () => NpcsNode,
+                                   backReversed: () => Model.ParallaxSecondaryReversed);
+        foreach (var g in GameObjects) g.Tree = Objects;
 
         OnEnterHooks = new ObservableCollection<LevelHookViewModel>(
             model.OnEnter.Select(h => new LevelHookViewModel(h, RemoveEnterHook)));
@@ -91,7 +94,8 @@ public sealed class PlaceViewModel : ObservableObject, IDerivesKey
         // New NPCs hang under the forced NPCs-root node (the runtime home for
         // the NPC hierarchy), next to the "Add GameObject" button.
         AddNpcCommand = new RelayCommand(() => NpcsNode.AddNpc());
-        AddLightCommand = new RelayCommand(at => LightObjects.Dress(AddGameObject(), GameObjects, at));
+        // A pack place always has a back picture to drift with (the template level's second sprite).
+        AddLightCommand = new RelayCommand(at => LightObjects.Dress(AddGameObject(), GameObjects, at, withTheBack: true));
         AddEffectCommand = new RelayCommand(at => LightObjects.DressAsEffect(AddGameObject(), GameObjects, at));
     }
 
@@ -109,7 +113,31 @@ public sealed class PlaceViewModel : ObservableObject, IDerivesKey
     }
 
     /// <summary>The row of one of the place's own objects: among the place's rows, in the place's list.</summary>
-    private GameObjectViewModel Row(GameObjectDef def) => new(def, RemoveGameObject, false, GameObjects, Model.GameObjects);
+    private GameObjectViewModel Row(GameObjectDef def) => new(def, RemoveGameObject, false, GameObjects, Model.GameObjects) { Tree = Objects };
+
+    /// <summary>The place's objects as the preview's keys and its recycle bin work on them.</summary>
+    public PlaceObjects Objects { get; }
+
+    /// <summary>Where a top object goes last: before the forced NPCs node, which stays last.</summary>
+    private int TopEnd
+    {
+        get
+        {
+            for (int i = 0; i < GameObjects.Count; i++) if (GameObjects[i].IsNpcRoot) return i;
+            return GameObjects.Count;
+        }
+    }
+
+    /// <summary>A top object put in at <paramref name="at"/> among the top rows, never after the NPCs node.</summary>
+    private GameObjectViewModel InsertTop(GameObjectDef def, int at)
+    {
+        at = System.Math.Clamp(at, 0, TopEnd);
+        int entry = at < GameObjects.Count ? Model.GameObjects.IndexOf(GameObjects[at].Model) : Model.GameObjects.Count;
+        Model.GameObjects.Insert(entry < 0 ? Model.GameObjects.Count : entry, def);
+        var vm = Row(def);
+        GameObjects.Insert(at, vm);
+        return vm;
+    }
 
     /// <summary>
     /// The place's objects made what a step has, where they are (1.10.0; see <see cref="GameObjectRows"/>).
@@ -415,7 +443,7 @@ public sealed class PlaceViewModel : ObservableObject, IDerivesKey
     public bool ParallaxSecondaryReversed
     {
         get => Model.ParallaxSecondaryReversed;
-        set { Model.ParallaxSecondaryReversed = value; OnPropertyChanged(); }
+        set { Model.ParallaxSecondaryReversed = value; OnPropertyChanged(); Objects.BackReversalChanged(); }
     }
 
     public bool KeepAudio

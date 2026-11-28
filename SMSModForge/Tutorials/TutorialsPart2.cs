@@ -731,9 +731,10 @@ internal static class TutorialsPart2
                     More = "tutorial.populating.putThemRoom.more",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
-                    Anchor = "btn:addNpcToPlace",
-                    // The + and its row are on the right; choosing the place is in the list on the left.
-                    AlsoAllow = new[] { "panel:placeGameObjects", "panel:placeList" },
+                    Anchor = "btn:addPlaceCharacter",
+                    // The + is over the hierarchy and the new one's settings beside the picture; choosing the place is
+                    // in the list on the left.
+                    AlsoAllow = new[] { "panel:placePreview", "panel:placeList" },
                     OnEnter = (vm, s) =>
                     {
                         if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g;
@@ -753,8 +754,9 @@ internal static class TutorialsPart2
                     More = "tutorial.populating.switchThem.more",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
-                    Anchor = "panel:placeGameObjects",
-                    AlsoAllow = new[] { "panel:placeList" },
+                    Anchor = "panel:placeSettings",
+                    AlsoAllow = new[] { "panel:placePreview", "panel:placeList" },
+                    OnShown = PickNewestPlacement,
                     IsDone = (vm, s) => vm.SelectedPlace is { } p &&
                                         p.NpcsNode.Npcs.Any(n => n.StartActive &&
                                                                  !string.IsNullOrWhiteSpace(n.Npc)),
@@ -770,7 +772,7 @@ internal static class TutorialsPart2
                     Kind = StepKind.Free,
                     Tab = TabPlaces,
                     Anchor = "panel:placePreview",
-                    AlsoAllow = new[] { "panel:placeGameObjects" },
+                    AlsoAllow = new[] { "panel:placeSettings" },
                     OnEnter = (vm, s) => s.Set("at", Where(NewestPlacement(vm))),
                     IsDone = (vm, s) => NewestPlacement(vm) is { } pl && Moved(pl, s.Get<string>("at")),
                     Solve = (vm, s) => NewestPlacement(vm)!.Body.X = 3f,
@@ -785,7 +787,7 @@ internal static class TutorialsPart2
                     Kind = StepKind.Free,
                     Tab = TabPlaces,
                     Anchor = "panel:placePreview",
-                    AlsoAllow = new[] { "panel:placeGameObjects" },
+                    AlsoAllow = new[] { "panel:placeSettings" },
                     OnEnter = (vm, s) => s.Set("shadow", NewestPlacement(vm)?.Shadow.Y ?? 0f),
                     IsDone = (vm, s) => NewestPlacement(vm) is { } pl && Math.Abs(pl.Shadow.Y - s.Get<float>("shadow")) > 0.5f,
                     Solve = (vm, s) => ShadowUnderFeet(vm, NewestPlacement(vm)!),
@@ -832,8 +834,8 @@ internal static class TutorialsPart2
                     More = "tutorial.npcsThatBelong.putSamePersonTwice.more",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
-                    Anchor = "btn:addNpcToPlace",
-                    AlsoAllow = new[] { "panel:placeGameObjects", "panel:placeList" },
+                    Anchor = "btn:addPlaceCharacter",
+                    AlsoAllow = new[] { "panel:placePreview", "panel:placeList" },
                     OnEnter = (vm, s) =>
                     {
                         if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g;
@@ -851,7 +853,7 @@ internal static class TutorialsPart2
                     Kind = StepKind.Free,
                     Tab = TabPlaces,
                     Anchor = "panel:placePreview",
-                    AlsoAllow = new[] { "panel:placeGameObjects" },
+                    AlsoAllow = new[] { "panel:placeSettings" },
                     // Moved, and apart from the first one: on top of her, the two read as one.
                     OnEnter = (vm, s) => s.Set("at", Where(NewestPlacement(vm))),
                     IsDone = (vm, s) => vm.SelectedPlace is { } p && p.NpcsNode.Npcs.Count(n => !string.IsNullOrWhiteSpace(n.Npc)) >= 2 &&
@@ -873,7 +875,9 @@ internal static class TutorialsPart2
                     More = "tutorial.npcsThatBelong.tellThemApart.more",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
-                    Anchor = "panel:placeGameObjects",
+                    Anchor = "panel:placeSettings",
+                    AlsoAllow = new[] { "panel:placePreview" },
+                    OnShown = PickNewestPlacement,
                     IsDone = (vm, s) => vm.SelectedPlace is { } p &&
                                         p.NpcsNode.Npcs.Count >= 2 &&
                                         p.NpcsNode.Npcs.Count(n => n.StartActive) >= 2 &&
@@ -898,7 +902,7 @@ internal static class TutorialsPart2
                     Kind = StepKind.Free,
                     Tab = TabPlaces,
                     Anchor = "panel:placePreview",
-                    AlsoAllow = new[] { "panel:placeGameObjects" },
+                    AlsoAllow = new[] { "panel:placeSettings" },
                     OnEnter = (vm, s) => s.Set("shadow", NewestPlacement(vm)?.Shadow.Y ?? 0f),
                     IsDone = (vm, s) => NewestPlacement(vm) is { } pl && Math.Abs(pl.Shadow.Y - s.Get<float>("shadow")) > 0.5f,
                     Solve = (vm, s) => ShadowUnderFeet(vm, NewestPlacement(vm)!),
@@ -1745,6 +1749,13 @@ internal static class TutorialsPart2
     /// <summary>The placement made last in the place chosen that names an NPC.</summary>
     private static NpcPlacementViewModel? NewestPlacement(MainViewModel vm)
         => vm.SelectedPlace?.NpcsNode.Npcs.LastOrDefault(n => !string.IsNullOrWhiteSpace(n.Npc));
+
+    /// <summary>The newest placement picked in the place preview, so its settings are beside the picture: where every
+    /// object's and placement's settings are since the GameObjects list below the preview went (after 1.10.0).</summary>
+    private static void PickNewestPlacement(MainViewModel vm)
+    {
+        if (NewestPlacement(vm) is { } pl) vm.PickInPreview(pl);
+    }
 
     /// <summary>A placement's shadow moved under its pose's feet, read off the pose's picture.</summary>
     internal static void ShadowUnderFeet(MainViewModel vm, NpcPlacementViewModel placement)

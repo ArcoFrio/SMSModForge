@@ -139,7 +139,7 @@ public sealed partial class PlacePreview
     }
 
     /// <summary>The place's lights as the look draws them now, or null for none - for tests.</summary>
-    internal PlaceLights? PlaceLightsNow => LookLights ? _placeLights : null;
+    internal PlaceLights? PlaceLightsNow => LookLights ? LightsNow() : null;
 
     /// <summary>
     /// The place's lights, from what it shows on arrival: each object's light
@@ -151,23 +151,34 @@ public sealed partial class PlacePreview
     /// </summary>
     private void UpdateLights()
     {
+        _lightsMoved = false;
         var found = new System.Collections.Generic.List<PlaceLights.Light>();
         // The place's own base light (1.10.0): the last one on, as the game's last switched on.
         Model.LightDef? ambient = null;
+        bool drifts = false;
+        var drift = Drift;
         foreach (var entry in _scene)
         {
             var node = entry.Node;
             if (node?.Model.Light is not { } def || node.Model.RemoveLight || entry.Hidden) continue;
             if (entry.ParentInactive || entry.Conditional || !node.StartActive || entry.Choice != null) continue;
             if (def.IsAmbient) { ambient = def; continue; }
+            // Where its object has drifted to with the cursor, as everything else of the scene has (after 1.10.0: the
+            // lights stayed where they were made while the place drifted under them). A light is its object's, so it
+            // goes with it: the game's lamps and every light made before with the level's front, a new one with its
+            // back picture, or as its object is set to (Drift).
+            if (Math.Abs(entry.ParallaxGain) >= 1e-6) drifts = true;
+            var shift = drift is { } d && Math.Abs(entry.ParallaxGain) >= 1e-6
+                ? new Vector(entry.ParallaxGain * d.Across, entry.ParallaxGain * d.Down * 0.5) : new Vector();
             if (!def.IsRound)
             {
-                if (ShapeOf(def, entry) is { } shape && PlaceLights.FromShaped(def, shape) is { } shaped) found.Add(shaped);
+                if (ShapeOf(def, entry, shift) is { } shape && PlaceLights.FromShaped(def, shape) is { } shaped) found.Add(shaped);
                 continue;
             }
-            var (sx, sy) = ScreenPoint(entry.World.Tx, entry.World.Ty);
+            var (sx, sy) = ScreenPoint(entry.World.Tx + shift.X / WorldPpu, entry.World.Ty - shift.Y / WorldPpu);
             if (PlaceLights.FromLight(def, sx, sy, WorldRotation(entry.World)) is { } light) found.Add(light);
         }
+        _lightsDrift = drifts;
         var global = (1f, 1f, 1f);
         var charactersGlobal = (1f, 1f, 1f);
         if (ambient != null)
@@ -181,6 +192,32 @@ public sealed partial class PlacePreview
         _placeLights = found.Count == 0 && ambient == null ? null
             : new PlaceLights(found, global, charactersGlobal, Services.PreviewBackdropManager.GameLook?.Backdrop.LookupDecode);
         LookAgain();
+    }
+
+    /// <summary>Whether any of the place's lights drifts with the cursor: they are worked out again as it moves.</summary>
+    private bool _lightsDrift;
+
+    /// <summary>The place has drifted since its lights were worked out.</summary>
+    private bool _lightsMoved;
+
+    /// <summary>
+    /// The place drifted, or put back: its lights are to be worked out where their objects are now - not here, on
+    /// every move of the cursor (about 2.7 ms a time for two lamps, measured), but once for each time the look is
+    /// drawn, which is paced and is all that draws them (<see cref="LightsNow"/>).
+    /// </summary>
+    private void DriftLights()
+    {
+        if (!_lightsDrift) return;
+        _lightsMoved = true;
+        LookAgain();
+    }
+
+    /// <summary>The place's lights where their objects stand now: worked out again first if the place has drifted
+    /// since - for whatever draws with them.</summary>
+    private PlaceLights? LightsNow()
+    {
+        if (_lightsMoved) UpdateLights();
+        return _placeLights;
     }
 
     /// <summary>How far an object is turned on screen, degrees anticlockwise: its world transform's x axis.</summary>
@@ -293,11 +330,12 @@ public sealed partial class PlacePreview
     /// (<see cref="LookTick"/>), with the view being the whole screen. Straight BGRA, rows from the top; null while
     /// the game's look is still loading. <paramref name="look"/> false: the scene as drawn, without the look.
     /// </summary>
-    internal byte[]? RenderStill(bool look = true, bool lights = true)
+    internal byte[]? RenderStill(bool look = true, bool lights = true, int width = 0, int height = 0)
     {
         FlushRebuild();
-        var placeLights = lights && LookLights ? _placeLights : null;
-        int w = (int)CanvasWidth, h = (int)CanvasHeight;
+        var placeLights = lights && LookLights ? LightsNow() : null;
+        // At the game's 1920x1080 screen, or at another size of it (the in-game checks' 960x540 test screen).
+        int w = width > 0 ? width : (int)CanvasWidth, h = height > 0 ? height : (int)CanvasHeight;
         var shot = new DrawingVisual();
         using (var dc = shot.RenderOpen())
         {
@@ -311,7 +349,9 @@ public sealed partial class PlacePreview
         var capture = new RenderTargetBitmap(w, h, 96, 96, PixelFormats.Pbgra32);
         capture.Render(shot);
         var view = new byte[w * h * 4];
-        if (!look && placeLights == null)
+        // The NPCs' wet drops: over the scene once it is lit (PlacePreview.Wet).
+        var drops = DropsNow();
+        if (!look && placeLights == null && drops == null)
         {
             new FormatConvertedBitmap(capture, PixelFormats.Bgra32, null, 0).CopyPixels(view, w * 4, 0);
             return view;
@@ -341,10 +381,10 @@ public sealed partial class PlacePreview
         var output = new byte[w * h * 4];
         // A screen pixel's centre on the screen: uv, v up (LookTick's mapping, for a view that is the whole screen).
         // Without the look, the lit scene alone (as the game's camera target holds it before the post).
-        GamePost.LookOverView(screen, new GamePost.Target(LookW, LookH), view, w, h, (float)(1.0 / CanvasWidth), 0f,
-                              (float)(-1.0 / CanvasHeight), 1f, scene.Backdrop.Post, scene.Backdrop.GradingTable, scene.Decode,
+        GamePost.LookOverView(screen, new GamePost.Target(LookW, LookH), view, w, h, (float)(1.0 / w), 0f,
+                              (float)(-1.0 / h), 1f, scene.Backdrop.Post, scene.Backdrop.GradingTable, scene.Decode,
                               look ? new BackdropRender.PostParts(true, true, true) : new BackdropRender.PostParts(false, false, false),
-                              new GamePost.Work(), output, placeLights, screenLit, viewLit);
+                              new GamePost.Work(), output, placeLights, screenLit, viewLit, drops);
         return output;
     }
 
@@ -361,6 +401,26 @@ public sealed partial class PlacePreview
 
     internal LookTimes LookTime { get; } = new();
 
+    /// <summary>The drops the last look was worked out with (the processor's way: they are not in its captures).</summary>
+    private WetDrops.Over? _lookDropsLast;
+
+    /// <summary>The drops a still is drawn with, in place of the preview's own: the game's, read from it (the in-game
+    /// check S17 draws exactly the drops the game shows).</summary>
+    internal WetDrops.Over? DropsOverride { get; set; }
+
+    private static bool SameDrops(WetDrops.Over? a, WetDrops.Over? b)
+    {
+        if (a == null || b == null) return a == null && b == null;
+        if (a.Count != b.Count) return false;
+        for (int i = 0; i < a.Count; i++)
+        {
+            ref readonly var x = ref a.Drops[i];
+            ref readonly var y = ref b.Drops[i];
+            if (x.X != y.X || x.Y != y.Y || x.W != y.W || x.H != y.H || x.Alpha != y.Alpha) return false;
+        }
+        return true;
+    }
+
     /// <summary>Take the scene layer; if it or the parts changed, put it through the look.</summary>
     private void LookTick()
     {
@@ -371,7 +431,7 @@ public sealed partial class PlacePreview
         var parts = LookParts();
         var scene = Services.PreviewBackdropManager.GameLook;
         if (scene == null) return;                      // the game's settings are still loading
-        var lights = LookLights ? _placeLights : null;
+        var lights = LookLights ? LightsNow() : null;
         if (!parts.Bloom && !parts.Flares && !parts.Colour && lights == null)
         {
             _lookImage.Visibility = Visibility.Collapsed;
@@ -395,6 +455,8 @@ public sealed partial class PlacePreview
         var next = _frameNext;
         next.Clear();
         bool described = DescribeScene(next, useCard);
+        // The NPCs' wet drops, for the processor's passes (the card reads them from the frame).
+        var drops = described ? next.DropsOver(CanvasWidth, CanvasHeight) : DropsNow();
         // Captures that keep coming out the same are taken up to five times a second (the processor's way).
         bool resting = _lookSame > 30 && System.Diagnostics.Stopwatch.GetTimestamp() < _lookNextAt;
         if (described)
@@ -464,6 +526,7 @@ public sealed partial class PlacePreview
         long t2 = System.Diagnostics.Stopwatch.GetTimestamp();
         LookTime.Ticks++; LookTime.Capture += t1 - t0; LookTime.Mask += t2 - t1;
         bool same = _lookViewLast != null && parts == _lookLastParts && rect == _lookViewLastRect && ReferenceEquals(lights, _lookLastLights)
+                    && SameDrops(drops, _lookDropsLast)
                     && _lookViewTaken.AsSpan().SequenceEqual(_lookViewLast)
                     && (!parts.Bloom || (_lookLast != null && _lookTaken!.AsSpan().SequenceEqual(_lookLast)));
         // The scene as just taken is what the look shows, or is about to: the next list is held against this one.
@@ -487,6 +550,7 @@ public sealed partial class PlacePreview
         }
         _lookLastParts = parts;
         _lookLastLights = lights;
+        _lookDropsLast = drops;
 
         // A view pixel's centre on the screen: uv, v up (past its edges too).
         float ax = (float)(rect.Width / vw / CanvasWidth), bx = (float)(rect.X / CanvasWidth);
@@ -498,6 +562,7 @@ public sealed partial class PlacePreview
         var output = _lookOut != null && _lookOut.Length == vw * vh * 4 ? _lookOut : (_lookOut = new byte[vw * vh * 4]);
         var frame = _lookFrame ??= new GamePost.Target(LookW, LookH);
         var work = _lookWork;
+        double dropsAt = _dropsCollectedAt;   // the moment of the drops just taken
         _lookInFlight = true;
         var ui = TaskScheduler.FromCurrentSynchronizationContext();
         // The card for the look alone (its bloom and compose) when it draws the previews but not this scene.
@@ -508,9 +573,9 @@ public sealed partial class PlacePreview
                 long w0 = System.Diagnostics.Stopwatch.GetTimestamp();
                 // On the graphics card when that draws the previews: the exact passes there.
                 var card = postOnCard ? CardPost() : null;
-                if (card != null) card.LookOverView(screen, LookW, LookH, view, vw, vh, ax, bx, ay, by, scene, parts, output, lights, screenLit, viewLit);
+                if (card != null) card.LookOverView(screen, LookW, LookH, view, vw, vh, ax, bx, ay, by, scene, parts, output, lights, screenLit, viewLit, drops);
                 else GamePost.LookOverView(screen, frame, view, vw, vh, ax, bx, ay, by, scene.Backdrop.Post, scene.Backdrop.GradingTable, scene.Decode,
-                                           parts, work, output, lights, screenLit, viewLit);
+                                           parts, work, output, lights, screenLit, viewLit, drops);
                 LookOnCard = card != null;
                 System.Threading.Interlocked.Add(ref LookTime.Work, System.Diagnostics.Stopwatch.GetTimestamp() - w0);
             })
@@ -520,6 +585,7 @@ public sealed partial class PlacePreview
                 if (t.IsFaulted) { _frameLastSet = false; return; }
                 if (!IsVisible) return;
                 ShowLook(output, vw, vh, rect);
+                LookDropsShown(dropsAt);
             }, ui);
     }
 }

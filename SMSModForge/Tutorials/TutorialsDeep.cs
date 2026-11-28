@@ -842,7 +842,7 @@ internal static class TutorialsDeep
                     More = "tutorial.deeperPlaces.story.more",
                     Kind = StepKind.Read,
                     Tab = TabPlaces,
-                    Anchor = "panel:placeGameObjects",
+                    Anchor = "panel:placePreview",
                     OnShown = vm => { if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g; },
                 },
                 new TutorialStep
@@ -852,7 +852,7 @@ internal static class TutorialsDeep
                     More = "tutorial.deeperPlaces.poster.more",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
-                    Anchor = "panel:placeGameObjects",
+                    Anchor = "btn:addObject",
                     AlsoAllow = new[] { "panel:placePreview" },
                     OnShown = vm => { if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g; },
                     IsDone = (vm, s) => Poster(vm) is { } p && p.Sprite.Trim().Length > 0 && p.SortingOrder < -10,
@@ -878,8 +878,9 @@ internal static class TutorialsDeep
                     More = "tutorial.deeperPlaces.posterWhen.more",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
-                    Anchor = "panel:placeGameObjects",
-                    OnShown = vm => { if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g; },
+                    Anchor = "panel:placeSettings",
+                    AlsoAllow = new[] { "panel:placePreview" },
+                    OnShown = vm => { if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g; if (Poster(vm) is { } p) vm.PickInPreview(p); },
                     IsDone = (vm, s) => Poster(vm) is { } p && Flat(p.Model.ActiveConditions).Any(c => ComparesUp(c, Confidence)),
                     Solve = (vm, s) => Compare(Poster(vm)!.AddActiveCondition(), Confidence, "greater or equal", "3"),   // English on purpose: a value the code compares.
                     Hint = "tutorial.deeperPlaces.posterWhen.hint",
@@ -891,7 +892,7 @@ internal static class TutorialsDeep
                     More = "tutorial.deeperPlaces.order.more",
                     Kind = StepKind.Read,
                     Tab = TabPlaces,
-                    Anchor = "panel:placeGameObjects",
+                    Anchor = "panel:placePreview",
                 },
                 new TutorialStep
                 {
@@ -919,8 +920,8 @@ internal static class TutorialsDeep
                     More = "tutorial.deeperPlaces.placeVisitor.more",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
-                    Anchor = "btn:addNpcToPlace",
-                    AlsoAllow = new[] { "panel:placeGameObjects", "panel:placePreview" },
+                    Anchor = "btn:addPlaceCharacter",
+                    AlsoAllow = new[] { "panel:placePreview" },
                     OnShown = vm => { if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g; },
                     IsDone = (vm, s) => VisitorPlacement(vm) != null,
                     Solve = (vm, s) =>
@@ -943,7 +944,7 @@ internal static class TutorialsDeep
                     Kind = StepKind.Free,
                     Tab = TabPlaces,
                     Anchor = "panel:placePreview",
-                    AlsoAllow = new[] { "panel:placeGameObjects" },
+                    AlsoAllow = new[] { "panel:placeSettings" },
                     OnShown = vm => { if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g; },
                     // Her feet are lower than the game's figures' are: the shadow has to come down under them.
                     IsDone = (vm, s) => VisitorPlacement(vm) is { } v && v.Shadow.Y < -2.5f,
@@ -957,8 +958,9 @@ internal static class TutorialsDeep
                     More = "tutorial.deeperPlaces.visitorWhen.more",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
-                    Anchor = "panel:placeGameObjects",
-                    OnShown = vm => { if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g; },
+                    Anchor = "panel:placeSettings",
+                    AlsoAllow = new[] { "panel:placePreview" },
+                    OnShown = vm => { if (StoryPack.Gallery(vm) is { } g) vm.SelectedPlace = g; if (VisitorPlacement(vm) is { } v) vm.PickInPreview(v); },
                     IsDone = (vm, s) => VisitorPlacement(vm) is { } v && Flat(v.ActiveConditions.Select(c => c.Model)).Any(c => ComparesUp(c, Confidence)),
                     Solve = (vm, s) => Compare(VisitorPlacement(vm)!.AddActiveCondition(), Confidence, "greater or equal", "5"),   // English on purpose: a value the code compares.
                     Hint = "tutorial.deeperPlaces.visitorWhen.hint",

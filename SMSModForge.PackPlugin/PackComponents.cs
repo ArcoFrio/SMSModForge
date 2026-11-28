@@ -370,6 +370,59 @@ namespace SMSModForge.PackPlugin
     }
 
     /// <summary>
+    /// Floats the object up and down, smoothly, for ever (after 1.10.0, the author: "I have a few monsters in vats ...
+    /// and I wanted the full sprites to move up and down in a smooth way. Please add it with editable parameters so we
+    /// can change how the movement looks"): a sine of <see cref="Height"/> from its lowest to its highest point over
+    /// <see cref="Period"/> seconds, and as much again of <see cref="Sway"/> from side to side over 1.618 times as long,
+    /// added to its local position. Laid over whatever else moves it in the same frame (the mouse's drift writes the
+    /// position afresh each frame from its own start): what it added last is taken back only when nothing else moved
+    /// it since.
+    /// </summary>
+    public sealed class FloatingSprite : MonoBehaviour
+    {
+        public float Height = 0.3f, Period = 3f, Sway, Start;
+        public bool RandomStart = true;
+
+        private Vector3 _added, _left;
+        private bool _placed;
+        private float _start;
+
+        public void Configure(float height, float period, float sway, float start, bool randomStart)
+        {
+            Height = height; Period = Mathf.Max(0.05f, period); Sway = sway; Start = start; RandomStart = randomStart;
+            _start = RandomStart ? Random.value : Start;
+        }
+
+        private void OnEnable() { _placed = false; }
+
+        private void OnDisable()
+        {
+            // Back where it stands: switched off and on again, it floats from there, not from where it was left.
+            if (_placed && transform.localPosition == _left) transform.localPosition -= _added;
+            _placed = false;
+        }
+
+        /// <summary>Where it is moved to now, from where it stands.</summary>
+        public Vector3 OffsetAt(float time)
+        {
+            float rise = Mathf.Sin(2f * Mathf.PI * (time / Period + _start)) * Height * 0.5f;
+            float sway = Sway == 0f ? 0f : Mathf.Sin(2f * Mathf.PI * (time / (Period * 1.618f) + _start)) * Sway * 0.5f;
+            return new Vector3(sway, rise, 0f);
+        }
+
+        private void LateUpdate()
+        {
+            var at = transform.localPosition;
+            // Nothing else moved it since: where it stands is where it is, less what was added.
+            if (_placed && at == _left) at -= _added;
+            _added = OffsetAt(Time.time);
+            transform.localPosition = at + _added;
+            _left = transform.localPosition;
+            _placed = true;
+        }
+    }
+
+    /// <summary>
     /// Adds + configures one of the generic pack utility components on a
     /// GameObject from its authored JSON (<c>{ "type": ..., ...fields }</c>).
     /// Unknown types are logged and skipped so a typo can't crash the build.
@@ -405,6 +458,11 @@ namespace SMSModForge.PackPlugin
                 case "BlinkSprite":
                     go.AddComponent<BlinkingSprite>().Configure(
                         F(c, "blinkInterval", 0.5f), F(c, "minAlpha", 0f), F(c, "maxAlpha", 1f));
+                    break;
+                case "FloatingSprite":
+                    go.AddComponent<FloatingSprite>().Configure(
+                        F(c, "floatHeight", 0.3f), F(c, "floatPeriod", 3f), F(c, "floatSway", 0f), F(c, "floatStart", 0f),
+                        B(c, "floatRandomStart", true));
                     break;
                 default:
                     // Not one of ours — try the game's own. A vanilla level is

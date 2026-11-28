@@ -92,6 +92,25 @@ public static class EditorPrefs
     }
 
     private const string KeyShowPreviewFps = "showPreviewFps";
+    private const string KeyPlacePreviewParallax = "placePreviewParallax", KeyPlacePreviewShaders = "placePreviewShaders";
+
+    /// <summary>
+    /// The place previews' Preview parallax and Apply shaders (after 1.10.0, the author: "They should start as
+    /// inactive, but if an user checks them it should stay active across all places and modpacks, and vice versa"):
+    /// one each for every place and game's level, in every pack, kept between sessions. Off until ticked.
+    /// </summary>
+    public static bool PlacePreviewParallax
+    {
+        get => GetBool(KeyPlacePreviewParallax, defaultValue: false);
+        set => SetBool(KeyPlacePreviewParallax, value);
+    }
+
+    /// <summary>See <see cref="PlacePreviewParallax"/>.</summary>
+    public static bool PlacePreviewShaders
+    {
+        get => GetBool(KeyPlacePreviewShaders, defaultValue: false);
+        set => SetBool(KeyPlacePreviewShaders, value);
+    }
 
     /// <summary>Whether the live previews show the frame rate they draw at
     /// (1.9.1, Options; off by default).</summary>

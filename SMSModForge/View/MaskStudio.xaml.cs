@@ -167,12 +167,12 @@ public partial class MaskStudio : UserControl
             : Path.Combine(_packRoot, Normalize(_host.MaskPath));
         if (File.Exists(basePath))
         {
-            _diffuse = BustComposer.LoadPng(basePath);
+            _diffuse = LoadOnGrid(basePath);
             _referenceAspect = ReadAspect(basePath);
         }
         ApplyZoomSize();
         if (!string.IsNullOrWhiteSpace(_host.MaskPath) && File.Exists(maskPath))
-            _mask.FromBgra(BustComposer.LoadPng(maskPath));
+            _mask.FromBgra(LoadOnGrid(maskPath));
 
         // Publish the live buffer so the preview switches over to it.
         _mask.ToBgra(_liveBgra);
@@ -182,6 +182,8 @@ public partial class MaskStudio : UserControl
         OfferTheOtherOutfits();
         RecomposeAll();
         UpdateStatus();
+        // What covers the layer, once the preview beside it has drawn the place.
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(TakeCover));
         Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(FitView));
         CanvasHost.Focus();
     }
@@ -212,6 +214,39 @@ public partial class MaskStudio : UserControl
         return true;
     }
 
+    /// <summary>
+    /// What covers the layer painted (after 1.10.0): asked of the place preview beside it once it has drawn the place
+    /// (<see cref="TakeCover"/>). The cursor says what hides the spot under it - a stroke there moves the layer, and in
+    /// the game nobody sees it. The canvas shows the layer alone; the preview draws what is in front see-through (the
+    /// author: "the preview would show the layer on the front a bit transparent so we could see what we're painting
+    /// behind it ... I really don't like the front layer overlayed on the actual painting screen").
+    /// </summary>
+    internal Func<Rendering.MaskCover?>? CoverSource { get; set; }
+
+    private Rendering.MaskCover? _cover;
+    private int _coverTries;
+
+    /// <summary>What covers the layer, as last taken - for tests.</summary>
+    internal Rendering.MaskCover? Cover => _cover;
+
+    /// <summary>Asks the preview what covers the layer; again a little later while it has not drawn the place yet.</summary>
+    internal void TakeCover()
+    {
+        if (CoverSource == null || _closed) return;
+        _cover = CoverSource();
+        if (_cover != null)
+        {
+            RecomposeAll();
+            if (_cover.Share > 0) UpdateStatus(Loc.T("maskStudio.coverNote"));
+            return;
+        }
+        // Up to fifteen seconds: a place with large pictures, on a busy machine, takes a while to draw first.
+        if (++_coverTries > 50) return;
+        var later = new System.Windows.Threading.DispatcherTimer(TimeSpan.FromMilliseconds(300), System.Windows.Threading.DispatcherPriority.Background,
+                                                                 (t, _) => { ((System.Windows.Threading.DispatcherTimer)t!).Stop(); TakeCover(); }, Dispatcher);
+        later.Start();
+    }
+
     /// <summary>The answer to "save the mask?" in place of asking - for tests.</summary>
     internal Func<MessageBoxResult>? AnswerUnsaved;
 
@@ -222,6 +257,16 @@ public partial class MaskStudio : UserControl
     private Window PromptOwner => Window.GetWindow(this) ?? Application.Current.MainWindow;
 
     private static string Normalize(string p) => p?.Replace('/', Path.DirectorySeparatorChar) ?? "";
+
+    /// <summary>
+    /// A picture on the mask's grid as the game lays it there: spread over all of
+    /// it, for a place, a bust and an NPC alike - the game reads every mask at its
+    /// art's own uv (BustComposer.LoadPngOverGrid), and the canvas takes the art's
+    /// shape. The art under the brush and every mask read in go through here, so
+    /// a stroke lands on the art the game moves with it. Square art is where it
+    /// always was.
+    /// </summary>
+    private static byte[] LoadOnGrid(string absPath) => BustComposer.LoadPngOverGrid(absPath);
 
     // ──────────────────────── copying another outfit's layers
 
@@ -297,7 +342,7 @@ public partial class MaskStudio : UserControl
             // the one being painted next.
             _history.Snapshot(_mask, only);
             var other = new MaskBuffer(_mask.Kind);
-            other.FromBgra(BustComposer.LoadPng(path));
+            other.FromBgra(LoadOnGrid(path));
             Buffer.BlockCopy(other.Channel(only), 0, _mask.Channel(only), 0, _mask.Channel(only).Length);
             _mask.SetUnsoftened(only, null);
             (only switch { 0 => ActiveR, 1 => ActiveG, _ => ActiveB }).IsChecked = true;
@@ -313,7 +358,7 @@ public partial class MaskStudio : UserControl
         for (int channel = 0; channel < _mask.ChannelCount; channel++)
             _history.Snapshot(_mask, channel);
 
-        _mask.FromBgra(BustComposer.LoadPng(path));
+        _mask.FromBgra(LoadOnGrid(path));
         _mask.ToBgra(_liveBgra);
         _host.LiveMaskRevision++;
         MarkDirty();
@@ -824,6 +869,8 @@ public partial class MaskStudio : UserControl
         byte v = _mask.Channel(_activeChannel)[y * MaskBuffer.Size + x];
         CursorText.Text = Loc.F("maskStudio.cursor", "x", x.ToString(), "y", y.ToString(),
                                 "value", (v / 255.0).ToString("P0", System.Globalization.CultureInfo.CurrentCulture));
+        if (_cover != null && _cover.Covered[y * MaskBuffer.Size + x] && _cover.By[y * MaskBuffer.Size + x] is { } by)
+            CursorText.Text += "  ·  " + Loc.F("maskStudio.coveredBy", "name", by);
     }
 
     private void BrushParamChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -872,14 +919,17 @@ public partial class MaskStudio : UserControl
                 if (mb > cov) cov = mb;
 
                 float r = mr, g = mg, b = mb;
+                // The layer alone, whatever is in front of it: the preview beside the studio shows that see-through
+                // (the author: "I really don't like the front layer overlayed on the actual painting screen").
                 if (_showDiffuse && _diffuse != null)
                 {
                     int di = srcIdx * 4;
                     float da = _diffuse[di + 3] / 255f;
                     float inv = 1f - cov;
-                    b += _diffuse[di] / 255f * da * 0.5f * inv;
-                    g += _diffuse[di + 1] / 255f * da * 0.5f * inv;
-                    r += _diffuse[di + 2] / 255f * da * 0.5f * inv;
+                    const float k = 0.5f;
+                    b += _diffuse[di] / 255f * da * k * inv;
+                    g += _diffuse[di + 1] / 255f * da * k * inv;
+                    r += _diffuse[di + 2] / 255f * da * k * inv;
                 }
 
                 buf[dstIdx] = (byte)(b * 255f);

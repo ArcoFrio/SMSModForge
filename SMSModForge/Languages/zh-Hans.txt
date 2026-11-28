@@ -2001,9 +2001,53 @@ gameObject.reversed = 反向
 # en: UI space
 gameObject.uiSpace = UI 空间
 
-# Text
-# en: Mask (opt):
-gameObject.maskOpt = 遮罩（可选）：
+# Text: the label of how an object's picture moves
+# en: Moves by:
+gameObject.maskOpt = 移动方式：
+
+# Tooltip on the choice of how an object's picture moves
+# en: How this object's picture moves in the game. Paint its own mask with Edit, the same way as a place's or an NPC's.
+gameObject.maskKind.tip = 这个对象的图片在游戏里如何移动。用「编辑」画它自己的遮罩，方法与地点或 NPC 的遮罩相同。
+
+# Choice: the object's picture stays still
+# en: Nothing (still)
+gameObject.maskKind.none = 无（静止）
+
+# Tooltip on a choice
+# en: The picture stays still.
+gameObject.maskKind.none.tip = 图片保持静止。
+
+# Choice: the object moves with the place's back layer's mask
+# en: The back layer's mask
+gameObject.maskKind.backLayer = 后景图层的遮罩
+
+# Tooltip on a choice
+# en: Moves with the place's back layer's mask, read over this object's own picture (as if the mask were laid over it, not over the place). What objects without a mask used to do when the back layer had one.
+gameObject.maskKind.backLayer.tip = 随地点后景图层的遮罩移动，遮罩按这个对象自己的图片读取（就像遮罩铺在它上面，而不是铺在地点上）。这是后景图层有遮罩时，没有遮罩的对象以前的行为。
+
+# Choice: the object moves by a mask of its own, like a place's water or foliage
+# en: Its own mask, like a place
+gameObject.maskKind.level = 自己的遮罩，像地点
+
+# Tooltip on a choice
+# en: Moves by a mask of its own, the way a place's picture moves: water, leaves, curtains. One layer (how much), painted in the mask studio.
+gameObject.maskKind.level.tip = 按它自己的遮罩移动，就像地点的图片那样：水面、树叶、窗帘。一个图层（动多少），在遮罩绘制工具里绘制。
+
+# Choice: the object moves by a mask of its own, like a character's jiggle
+# en: Its own mask, like a character
+gameObject.maskKind.jiggle = 自己的遮罩，像角色
+
+# Tooltip on a choice
+# en: Moves by a mask of its own, the way an NPC's body moves: bounce, wave and noise (red, green and blue), with the settings below.
+gameObject.maskKind.jiggle.tip = 按它自己的遮罩移动，就像 NPC 的身体那样：弹跳、波动和噪声（红、绿、蓝），使用下面的设置。
+
+# Button: opens the mask studio on this object's mask
+# en: Edit
+gameObject.editMask = 编辑
+
+# Tooltip on a button
+# en: Paint this object's mask in the mask studio, over its picture, with the place preview beside it.
+gameObject.editMask.tip = 在遮罩绘制工具里，在这个对象的图片上绘制它的遮罩，旁边有地点预览。
 
 # Button
 # en: + Component
@@ -2070,8 +2114,8 @@ gameObject.copy.tip = 复制这个 GameObject 到编辑器剪贴板
 gameObject.paste.tip = 把剪贴板里的 GameObject 作为同级对象粘贴到它下面
 
 # Tooltip on a button
-# en: Remove this GameObject
-gameObject.remove.tip = 移除这个 GameObject
+# en: Remove this GameObject. It goes to the place's recycle bin, under the hierarchy beside the preview, with everything under it, to be put back if you need it. One of the game's own objects is switched off where it stands instead, and the bin switches it back on.
+gameObject.remove.tip = 移除这个 GameObject。它会连同其下的一切进入地点的回收站（位于预览旁边的层级下方），需要时可以放回来。如果是游戏自己的对象，则改为在原处把它关闭，回收站可以把它重新打开。
 
 # Tooltip on "This GameObject already exists (bind, don't create)"
 # en: On: the Name above is looked up in the scene (a bare name or a A > B > C path) and only what you author here is applied to it — the way to modify a vanilla level you don't own. Off: this pack creates the GameObject.
@@ -2142,24 +2186,24 @@ gameObject.startActive.tip = 对于由对话稍后揭示的叠加层（Flash、P
 gameObject.initialAlpha01.tip = 初始透明度 0..1（像 Portal 这类淡入的叠加层请从 0 开始）。
 
 # Tooltip on "Drift with the level"
-# en: On (the default) keeps the level's own strength, which is what a created object always did. Turn it off to set this object's depth independently.
-gameObject.driftLevel.tip = 开启（默认）会沿用关卡自身的强度，这也是创建出来的对象一贯的行为。关闭后可以单独设定这个对象的景深。
+# en: On (the default): drift as the place's back picture does, which is what a created object does in the game. Turn it off to set this object's depth independently.
+gameObject.driftLevel.tip = 开启（默认）：像地点的后景图那样漂移，这也是游戏里创建出来的对象的行为。关闭后可以单独设定这个对象的景深。
 
 # Tooltip on a text box
 # en: Depth relative to the level's main sprite, which every vanilla level fixes at 0.75: lower sits further away and lags behind the room, higher sits nearer and overshoots. Vanilla objects use 0.1, 0.5, 0.75 and 1.5.
 gameObject.depthRelativeLevelS.tip = 相对于关卡主精灵图的景深，每个原版关卡都固定为 0.75：更小则更远，落后于房间；更大则更近，会超出房间的移动幅度。原版对象使用 0.1、0.5、0.75 和 1.5。
 
 # Tooltip on "Reversed"
-# en: Drift WITH the cursor instead of against it.
-gameObject.reversed.tip = 跟随光标漂移，而不是与之相反。
+# en: Drift WITH the cursor instead of against it. Until you change it, the object drifts the way the place's back picture does, so this starts ticked where the back picture is reversed.
+gameObject.reversed.tip = 跟随光标漂移，而不是与之相反。在你改动之前，对象会像地点的后景图那样漂移，所以在后景图反向的地点，这一项一开始就是勾选的。
 
 # Tooltip on "UI space"
 # en: Only for an object under a Canvas — it switches the effect to canvas coordinates. A pack's own GameObjects are world sprites, so leave this off unless you're binding to a canvas object.
 gameObject.uiSpace.tip = 仅用于 Canvas 下的对象——它会把效果换成画布坐标。模组包自己的 GameObject 是世界精灵图，所以除非你绑定的是画布对象，否则请保持关闭。
 
 # Tooltip on a part of the window
-# en: Optional pack-relative mask PNG bound to _MaskTex, for shader-masked overlays (a cameo).
-gameObject.optionalPackRelativeMask.tip = 可选的、相对于模组包的遮罩 PNG，绑定到 _MaskTex，用于带着色器遮罩的叠加层（比如一次客串出场）。
+# en: The mask: a PNG in the pack, made in the mask studio (Edit) or elsewhere.
+gameObject.optionalPackRelativeMask.tip = 遮罩：模组包里的一张 PNG，可以在遮罩绘制工具（「编辑」）里或别处制作。
 
 # Tooltip on "+ Component"
 # en: Attach a generic utility component (fade, disappear, random child, blink) to this GameObject.
@@ -2222,6 +2266,50 @@ component.reshuffleEveryTimeS = 每次激活时重新洗牌
 # Text
 # en: Toggles a SpriteRenderer's alpha between min and max on a fixed interval (blink / pulse).
 component.togglesSpriterendererSAlpha = 按固定间隔在最小值和最大值之间切换 SpriteRenderer 的透明度（闪烁 / 脉动）。
+
+# Text explaining a component's settings
+# en: Floats the object up and down, smoothly, for ever - everything under it with it. Several with Random start move out of step.
+component.floatExplain = 让对象平滑地上下浮动，永不停止——它下面的一切也随之浮动。几个都勾选「随机起始点」时，它们的步调会错开。
+
+# Label in front of a text box
+# en: Height
+component.floatHeight = 高度
+
+# Tooltip on a text box
+# en: How far it travels from its lowest point to its highest, in units (the size of the object's parent's units).
+component.floatHeight.tip = 它从最低点到最高点移动的距离，以单位计（对象的父对象的单位大小）。
+
+# Label in front of a text box
+# en: Time (s)
+component.floatPeriod = 时间（秒）
+
+# Tooltip on a text box
+# en: Seconds for one whole rise and fall. Higher is slower and calmer.
+component.floatPeriod.tip = 完整升降一次所需的秒数。越大越慢、越平静。
+
+# Label in front of a text box
+# en: Sideways
+component.floatSway = 左右摆动
+
+# Tooltip on a text box
+# en: How far it also sways from side to side, in units. 0 keeps it straight up and down. The sway is a little slower than the rise, so the path keeps changing.
+component.floatSway.tip = 它同时左右摆动的距离，以单位计。0 让它只做竖直的上下运动。摆动比升降稍慢一点，所以路径会不断变化。
+
+# Label in front of a text box
+# en: Start at
+component.floatStart = 起始点
+
+# Tooltip on a text box
+# en: Where in its rise and fall it starts, from 0 to 1: 0 in the middle going up, 0.25 at the top, 0.5 in the middle going down, 0.75 at the bottom. Used when Random start is off.
+component.floatStart.tip = 它从升降过程中的哪里开始，从 0 到 1：0 在中间向上，0.25 在顶部，0.5 在中间向下，0.75 在底部。在「随机起始点」关闭时使用。
+
+# Tick box
+# en: Random start
+component.floatRandomStart = 随机起始点
+
+# Tooltip on a tick box
+# en: Each one starts somewhere at random in its rise and fall, so several floating side by side do not move together.
+component.floatRandomStart.tip = 每一个都从升降过程中的随机位置开始，所以几个并排浮动的对象不会一起移动。
 
 # Text
 # en: Interval
@@ -2293,6 +2381,110 @@ npcPlacement.blink = 眨眼
 # en: Wet (particle)
 npcPlacement.wetParticle = 湿润（粒子）
 
+# Heading
+# en: Wet effect
+npcPlacement.wetEffect = 湿润效果
+
+# Label in front of a dropdown
+# en: Kind
+npcPlacement.wetKind = 类型
+
+# Tooltip on a dropdown
+# en: Which of the game's two wet effects. Same as the NPC: the kind set in the NPC's Wet particles box on the NPCs tab. Wet: Anna's towel look - a few thin white drops over the body, drawn over everything. Shower: the bathroom shower - many fine blue-grey drops falling from a small box, lit by the room's lamps.
+npcPlacement.wetKind.tip = 游戏两种湿润效果中的哪一种。「与 NPC 相同」：即在「NPC」选项卡上该 NPC 的「湿润粒子」框里设置的类型。「湿润」：Anna 的浴巾造型——身体上几道细细的白色水滴，画在所有东西之上。「淋浴」：浴室的淋浴——许多细密的蓝灰色水滴从一个小框里落下，被房间的灯照亮。
+
+# Choice in a dropdown: the kind the NPC itself has
+# en: Same as the NPC
+npcPlacement.wetKindNpc = 与 NPC 相同
+
+# Choice in a dropdown
+# en: Wet
+npcPlacement.wetKindWet = 湿润
+
+# Choice in a dropdown
+# en: Shower
+npcPlacement.wetKindShower = 淋浴
+
+# Label in front of a text box
+# en: Box width
+npcPlacement.wetWidth = 框宽度
+
+# Tooltip on a text box
+# en: How wide the box the drops start in is, in the Wet part's own units (its scale still multiplies it). The game's: 3.21 for Wet, 2 for Shower. You can also drag the box's sides in the preview.
+npcPlacement.wetWidth.tip = 水滴起始所在的框有多宽，以「湿身」部件自己的单位计（它的缩放仍会乘上去）。游戏的数值：「湿润」为 3.21，「淋浴」为 2。你也可以在预览里拖动框的边。
+
+# Label in front of a text box
+# en: Box height
+npcPlacement.wetHeight = 框高度
+
+# Tooltip on a text box
+# en: How tall the box the drops start in is, in the Wet part's own units (its scale still multiplies it). The game's: 8.45 for Wet, 1 for Shower. You can also drag the box's sides in the preview.
+npcPlacement.wetHeight.tip = 水滴起始所在的框有多高，以「湿身」部件自己的单位计（它的缩放仍会乘上去）。游戏的数值：「湿润」为 8.45，「淋浴」为 1。你也可以在预览里拖动框的边。
+
+# Tick box
+# en: Drops start along the top
+npcPlacement.wetFromTop = 水滴从顶边开始
+
+# Tooltip on a tick box
+# en: The drops start on the box's top side only, like a shower head as wide as the box, instead of anywhere in it.
+npcPlacement.wetFromTop.tip = 水滴只从框的顶边开始，就像一个和框一样宽的淋浴喷头，而不是从框里的任意位置开始。
+
+# Tick box
+# en: Drops stop at the box's floor
+npcPlacement.wetFloor = 水滴止于框底
+
+# Tooltip on a tick box
+# en: A drop disappears the moment it reaches the bottom of the box, instead of falling off the screen. Drag the box's bottom side down to where the floor is.
+npcPlacement.wetFloor.tip = 水滴一碰到框的底边就消失，而不是一直落出屏幕。把框的底边往下拖到地板所在的位置。
+
+# Label in front of a text box
+# en: Tint
+npcPlacement.wetTint = 着色
+
+# Tooltip on a text box
+# en: The drops' own colour is multiplied by it: white keeps them as they are, a colour tints them, a lower alpha makes them fainter. #RRGGBB or #RRGGBBAA. Empty: the NPC's tint (set on the NPCs tab).
+npcPlacement.wetTint.tip = 水滴本身的颜色会乘上它：白色保持原样，其他颜色会给它们染色，更低的 alpha 让它们更淡。#RRGGBB 或 #RRGGBBAA。留空：使用 NPC 的着色（在「NPC」选项卡上设置）。
+
+# Button
+# en: Pick…
+npcPlacement.wetPickTint = 选择…
+
+# Tooltip on a button
+# en: Choose the tint.
+npcPlacement.wetPickTint.tip = 选择着色。
+
+# Label in front of a text box
+# en: Amount
+npcPlacement.wetAmount = 数量
+
+# Tooltip on a text box
+# en: Times the game's number of drops a second: 2 makes twice as many, 0.5 half as many. Empty: the NPC's (set on the NPCs tab).
+npcPlacement.wetAmount.tip = 游戏每秒水滴数的倍数：2 是两倍，0.5 是一半。留空：使用 NPC 的（在「NPC」选项卡上设置）。
+
+# Label in front of a text box
+# en: Drop size
+npcPlacement.wetSize = 水滴大小
+
+# Tooltip on a text box
+# en: Times the game's drop size. The drops only - the box stays as it is. Empty: the NPC's (set on the NPCs tab).
+npcPlacement.wetSize.tip = 游戏水滴大小的倍数。只影响水滴——框保持不变。留空：使用 NPC 的（在「NPC」选项卡上设置）。
+
+# Label in front of a text box
+# en: Fall speed
+npcPlacement.wetFall = 下落速度
+
+# Tooltip on a text box
+# en: Times the game's fall: lower falls slower, higher faster. Empty: the NPC's (set on the NPCs tab).
+npcPlacement.wetFall.tip = 游戏下落速度的倍数：越低落得越慢，越高落得越快。留空：使用 NPC 的（在「NPC」选项卡上设置）。
+
+# Button
+# en: Reset
+npcPlacement.wetReset = 重置
+
+# Tooltip on a button
+# en: Takes back everything set here: the kind and the drops' settings go back to the NPC's, the box to the game's own for that kind.
+npcPlacement.wetReset.tip = 撤销这里设置的一切：类型和水滴的设置恢复为 NPC 的，框恢复为游戏中该类型自己的框。
+
 # Tick box
 # en: Start active
 npcPlacement.startActive = 初始激活
@@ -2338,8 +2530,8 @@ npcPlacement.children = 子对象
 npcPlacement.keyNPCNpcsTab.tip = NPC 选项卡中某个 NPC 的键名。
 
 # Tooltip on a button
-# en: Remove this NPC.
-npcPlacement.remove.tip = 移除这个 NPC。
+# en: Remove this NPC. It goes to the place's recycle bin, under the hierarchy beside the preview, to be put back if you need it.
+npcPlacement.remove.tip = 移除这个 NPC。它会进入地点的回收站（位于预览旁边的层级下方），需要时可以放回来。
 
 # Tooltip on a text box
 # en: GameObject name (SetGameObjectActive target). Blank = the NPC key.
@@ -3869,6 +4061,22 @@ characters.outfitParticles = 粒子
 # en: Wet particle active on spawn
 characters.wetParticleActiveSpawn = 出现时湿润粒子即激活
 
+# Label in front of a dropdown
+# en: Kind
+characters.wetKind = 类型
+
+# Tooltip on a dropdown
+# en: Which of the game's two wet effects. Wet: Anna's towel look - a few thin white drops round the middle of the bust. Shower: fine blue-grey drops falling from the top of the bust's picture.
+characters.wetKind.tip = 游戏两种湿润效果中的哪一种。「湿润」：Anna 的浴巾造型——立绘中部周围几道细细的白色水滴。「淋浴」：细密的蓝灰色水滴从立绘图片的顶部落下。
+
+# Choice in a dropdown
+# en: Wet
+characters.wetKindWet = 湿润
+
+# Choice in a dropdown
+# en: Shower
+characters.wetKindShower = 淋浴
+
 # Text
 # en: (The Wet preset is always attached — this controls whether it starts playing.)
 characters.wetPresetAlwaysAttached = （“湿润”预设始终是挂上的——这里只控制它是否一开始就播放。）
@@ -4351,13 +4559,69 @@ npcs.colourHexRGBA = 颜色（十六进制 RGBA）：
 # en: Wet particles (optional)
 npcs.npcWet = 湿润粒子（可选）
 
+# Label in front of a dropdown
+# en: Kind
+npcs.wetKind = 类型
+
+# Tooltip on a dropdown
+# en: Which of the game's two wet effects this NPC has wherever it is placed. Wet: Anna's towel look - a few thin white drops over the body, drawn over everything. Shower: the bathroom shower - many fine blue-grey drops falling from a small box, lit by the room's lamps. A placement can pick the other kind for itself.
+npcs.wetKind.tip = 这个 NPC 无论摆在哪里都带有的，是游戏两种湿润效果中的哪一种。「湿润」：Anna 的浴巾造型——身体上几道细细的白色水滴，画在所有东西之上。「淋浴」：浴室的淋浴——许多细密的蓝灰色水滴从一个小框里落下，被房间的灯照亮。某个摆放可以为自己选择另一种类型。
+
+# Choice in a dropdown
+# en: Wet
+npcs.wetKindWet = 湿润
+
+# Choice in a dropdown
+# en: Shower
+npcs.wetKindShower = 淋浴
+
+# Label in front of a text box
+# en: Tint
+npcs.wetTint = 着色
+
+# Tooltip on a text box
+# en: The drops' own colour is multiplied by it: white keeps them as they are, a colour tints them, a lower alpha makes them fainter. #RRGGBB or #RRGGBBAA. Empty: the game's colours.
+npcs.wetTint.tip = 水滴本身的颜色会乘上它：白色保持原样，其他颜色会给它们染色，更低的 alpha 让它们更淡。#RRGGBB 或 #RRGGBBAA。留空：使用游戏的颜色。
+
+# Button
+# en: Pick…
+npcs.wetPickTint = 选择…
+
+# Tooltip on a button
+# en: Choose the tint.
+npcs.wetPickTint.tip = 选择着色。
+
+# Label in front of a text box
+# en: Amount
+npcs.wetAmount = 数量
+
+# Tooltip on a text box
+# en: Times the game's number of drops a second: 2 makes twice as many, 0.5 half as many.
+npcs.wetAmount.tip = 游戏每秒水滴数的倍数：2 是两倍，0.5 是一半。
+
+# Label in front of a text box
+# en: Drop size
+npcs.wetSize = 水滴大小
+
+# Tooltip on a text box
+# en: Times the game's drop size. The drops only - the box they start in stays as it is.
+npcs.wetSize.tip = 游戏水滴大小的倍数。只影响水滴——它们起始所在的框保持不变。
+
+# Label in front of a text box
+# en: Fall speed
+npcs.wetFall = 下落速度
+
+# Tooltip on a text box
+# en: Times the game's fall: lower falls slower, higher faster.
+npcs.wetFall.tip = 游戏下落速度的倍数：越低落得越慢，越高落得越快。
+
 # Tick box
 # en: Start active
 npcs.startActive = 初始激活
 
 # Text
-# en: Emitter offset / rotation / scale are per-placement — edit the Wet transform on the Places tab.
-npcs.emitterOffsetRotationScale = 发射器的偏移 / 旋转 / 缩放都是按摆放设置的——请在地点选项卡里编辑“湿润”的 transform。
+# en: Where the drops stand (offset / rotation / scale), the box they start in and a shower's top and floor are set for each placement - edit the Wet part on the Places tab. A placement can also change the settings above for itself.
+npcs.emitterOffsetRotationScale = 水滴所在的位置（偏移 / 旋转 / 缩放）、它们起始所在的框，以及淋浴的顶边和底面，都是按每个摆放设置的——请在「地点」选项卡上编辑「湿身」部件。摆放也可以为自己更改上面的设置。
 
 # Tooltip on the divider between the NPC's fields and its preview
 # en: Drag to give the preview more or less of the tab: the NPC scales to fit, no bigger than the size its corner is dragged to. Remembered.
@@ -4613,25 +4877,9 @@ places.extNavigatorButtons = 导航按钮（添加到这个原版地点的导航
 # en: + Add navigator button
 places.addVanillaExtensionButton = + 添加导航按钮
 
-# Box heading
-# en: GameObjects (layered on this vanilla place)
-places.gameobjectsLayeredVanillaPlace = GameObject（叠加在这个原版地点上）
-
-# Button
-# en: + Add GameObject
-places.addVanillaExtensionGameObject = + 添加 GameObject
-
-# Button
-# en: + Add NPC
-places.addNpc = + 添加 NPC
-
 # Button
 # en: Fill from vanilla hierarchy
 places.seedFromCatalog = 从原版层级填充
-
-# Text
-# en: GameObjects instantiated under the vanilla level (props, decorations, animated layers) — the pack decorates the level without owning it. Same authoring surface as a pack place's GameObjects: nest children, attach utility components, and target by Name from dialogue actions. Use 'Fill from vanilla hierarchy' to pull in the level's real objects as bound nodes you can modify; anything you leave untouched is dropped on save, so the pack only ever stores what it actually changes.
-places.gameobjectsInstantiatedUnderVanilla = 在原版关卡下创建的 GameObject（道具、装饰、动画图层）——模组包为关卡添置内容，却不占有它。编辑方式与模组包自有地点的 GameObject 完全相同：嵌套子对象、附加工具组件，并在对话动作里按“名称”定位。使用“从原版层级填充”可以把关卡真实的对象引入为可修改的绑定节点；凡是你没有改动的，保存时都会被丢弃，所以模组包只会保存它真正改动过的内容。
 
 # Box heading
 # en: Identity
@@ -4783,14 +5031,6 @@ places.navigatorButtons = 导航按钮（这个地点激活时可见）
 places.up12ButtonsPer = 每个地点最多 12 个按钮。顺序 = 运行时的创建顺序 = 屏幕上从左到右；用 ▲▼ 调整顺序。预览会按这个顺序给它们编号。模组端的加载器会在加载时把目标名称解析成关卡索引，因此两个模组都添加按钮也不会冲突。
 
 # Box heading
-# en: GameObjects (this place's scene hierarchy)
-places.placeGameObjects = GameObject（这个地点的场景层级）
-
-# Text
-# en: Everything this place builds under its level, as one hierarchy. A GameObject with a Sprite is a layered sprite object (backdrop, prop, animated layer); leave the Sprite blank for a pure container that just groups children. Every node takes utility components (fade, disappear, random child, blink), nested children, and NPC placements. The NPCs node is the level's own NPCs object — always present, and the home for the NPC hierarchy; its subtree composes local transforms down the chain, so moving a container moves everything under it. Target any node from dialogue by Name with SetGameObjectActive / FadeSprite / MoveGameObject / SpinGameObject. Lower sorting draws further back.
-places.everythingPlaceBuildsUnder = 这个地点在它的关卡下构建的一切，作为一整个层级。带精灵图的 GameObject 就是分层的精灵对象（背景、道具、动画图层）；若只想要一个用来归拢子对象的纯容器，把精灵图留空即可。每个节点都能加工具组件（淡入、淡出、随机子对象、闪烁）、嵌套子对象和 NPC 摆放。NPCs 节点就是关卡自己的 NPC 对象——它始终存在，也是 NPC 层级的归属之处；它的子树会逐级叠加局部 transform，所以移动一个容器就会移动它下面的一切。在对话里可用 SetGameObjectActive / FadeSprite / MoveGameObject / SpinGameObject 按“名称”定位任意节点。排序值越小，画得越靠后。
-
-# Box heading
 # en: On enter (once per level activation)
 places.enterOncePerLevel = 进入时（每次关卡激活执行一次）
 
@@ -4850,10 +5090,6 @@ places.extShaders.tip = 用本模组包自己的参数，对有晃动遮罩的 N
 # en: Which of the game's own places this extension attaches to. What you add below appears when the player is there.
 places.whichGameSOwn.tip = 这个扩展挂在游戏自有地点中的哪一个上。你在下面添加的内容会在玩家身处该地时出现。
 
-# Tooltip on "+ Add NPC"
-# en: Place an NPC under this vanilla level's own NPCs object. To hang it under a specific container instead, use the NPCs section on that container.
-places.addNpc.tip = 把一个 NPC 放到这个原版关卡自己的 NPC 对象之下。若想挂到某个特定容器下，请用那个容器上的 NPC 区域。
-
 # Tooltip on "Fill from vanilla hierarchy"
 # en: Add a bound node for every object the extracted catalog says this level has, seeded with its real transform. Existing entries are left alone, so it's safe to re-run — it just tops up anything new.
 places.seedFromCatalog.tip = 依据提取到的目录，为这个关卡的每个对象添加一个绑定节点，并带上它真实的 transform。已有的条目不会被动，所以可以放心重复执行——它只会补上新增的部分。
@@ -4865,6 +5101,22 @@ places.extParallaxPreview.tip2 = 让场景随光标漂移，就像游戏里那�
 # Tooltip on "Apply shaders"
 # en: Run the real JiggleSprite pass over NPCs that have a jiggle mask, using this pack's own uniforms — the same code and the same numbers the game runs. Animated, so it costs a little CPU; leave off while positioning.
 places.extShaders.tip2 = 用本模组包自己的参数，对有晃动遮罩的 NPC 运行真正的 JiggleSprite 渲染——与游戏运行的是同一套代码和同样的数值。它是动画，会占一点 CPU；摆放时请保持关闭。
+
+# Button beside the place preview's tick boxes
+# en: Full screen
+places.fullScreen = 全屏
+
+# Tooltip on a button
+# en: Shows this preview over the whole screen: the hierarchy and the picked object's settings over its sides, and the preview's tick boxes and quality under the hierarchy, everything working as here. Esc or F11 brings it back. On the Places tab F11 also opens it.
+places.fullScreen.tip = 在整个屏幕上显示这个预览：层级和选中对象的设置分列两侧，预览的勾选框和质量在层级下方，一切都和这里一样可用。按 Esc 或 F11 返回。在「地点」选项卡上按 F11 也能打开它。
+
+# Button in the corner of the place preview shown over the whole screen
+# en: Leave full screen
+places.leaveFullScreen = 退出全屏
+
+# Tooltip on a button
+# en: Puts the preview back on the page. Esc or F11 does the same.
+places.leaveFullScreen.tip = 把预览放回页面上。按 Esc 或 F11 也一样。
 
 # Tooltip on a text box
 # en: What this is called in the editor's own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself.
@@ -4965,10 +5217,6 @@ places.whetherGameSRain.tip = 游戏的雨雪是否在这里生效。“无”�
 # Tooltip on a text
 # en: Maximum 12 navigator buttons per place.
 places.maximum12NavigatorButtons.tip = 每个地点最多 12 个导航按钮。
-
-# Tooltip on "+ Add NPC"
-# en: Place an NPC under this level's NPCs object. To hang it under a specific container instead, use the NPCs section on that container.
-places.addNpc.tip2 = 把一个 NPC 放到这个关卡的 NPC 对象之下。若想挂到某个特定容器下，请用那个容器上的 NPC 区域。
 
 # Tooltip on a count beside a place
 # en: Changes {count} existing vanilla GameObjects — moved, switched, gated, or given components
@@ -9182,6 +9430,10 @@ maskStudio.kind.gameBust = 游戏半身像上的晃动遮罩，取代游戏自�
 # en: Level mask: one strength, painted over the level's art.
 maskStudio.kind.level = 关卡遮罩：单一强度，画在关卡的图上。
 
+# The studio's title for an object of a place: {name} is the object's name
+# en: {name} (object)
+maskStudio.object = {name}（对象）
+
 # In the title, after a level's name: which of its two masks
 # en: front layer
 maskStudio.layer.front = 前图层
@@ -9273,6 +9525,18 @@ maskStudio.sampled = 已取用不透明度：{value}
 # In the status line: where the pointer is on the mask, and the strength there ({value}, a percentage)
 # en: {x}, {y}: {value}
 maskStudio.cursor = {x}, {y}：{value}
+
+# In the status line, after the pointer's place: the part under the pointer is hidden by {name}, drawn in front of what is painted
+# en: under {name}: what moves here can't be seen
+maskStudio.coveredBy = 在 {name} 下面：这里的移动看不到
+
+# In the status line, once, when part of what is painted is hidden by pictures drawn in front of it
+# en: Something is drawn in front of part of this. The preview shows it see-through while you paint, but in the game it hides what moves behind it: point at a spot to see what covers it, and give that object a mask of its own.
+maskStudio.coverNote = 这里有一部分被画在前面的东西挡住了。绘制时预览会把它显示为透明，但在游戏里它会挡住后面移动的东西：把指针指向某处，可以看到是什么挡住了它，再给那个对象一个它自己的遮罩。
+
+# What the mask studio calls a picture in front that has no name
+# en: a picture in front
+preview.place.coverUnnamed = 前面的一张图片
 
 # In the status line: the tool and the layer it paints ({layer})
 # en: Brush on {layer}
@@ -10005,6 +10269,14 @@ docs.maskPainter.mirror.term = 镜像
 # Docs: a point in the topic
 # en: Paints both halves at once, mirrored about the middle, with a line marking the middle and a second ring showing where the twin stroke lands.
 docs.maskPainter.mirror = 以中线为轴，一次同时画两半：一条线标出中线，第二个圆圈显示对称的笔画落在哪里。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: See-through in the preview
+docs.maskPainter.covered.term = 预览中透明显示
+
+# Docs: a point in the topic: on a place's or an object's mask, the parts hidden behind something drawn in front
+# en: On a place's layer or an object, the place preview beside the studio draws everything in front of what you paint see-through, so you can watch it move behind. The line at the bottom names what covers the spot under the pointer: in the game, that is what shows there, and the layer's movement is hidden. To move those parts in the game, give the object in front a mask of its own.
+docs.maskPainter.covered = 在地点的图层或对象上，遮罩绘制工具旁边的地点预览会把你所绘制内容前面的一切画成透明的，让你能看着它在后面移动。底部那一行会说出指针下的位置被什么挡住：在游戏里，那里显示的就是它，图层的移动会被挡住。想让这些部分在游戏里动起来，就给前面的对象一个它自己的遮罩。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Live preview
@@ -11082,6 +11354,14 @@ docs.characters.startWetEffectAlready.term = 出现时湿润粒子即激活
 # en: Start the wet effect already running. Normally only for swimwear or wet variants.
 docs.characters.startWetEffectAlready = 一开始就让湿润效果处于运行状态。通常只用于泳装或湿身变体。
 
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Kind
+docs.characters.wetKind.term = 类型
+
+# Docs: a point in the topic
+# en: Which of the game's two wet effects the outfit has: Wet, Anna's thin white streaks round the middle of the bust, or Shower, fine blue-grey streaks falling from the top of the bust's picture.
+docs.characters.wetKind = 服装带有游戏两种湿润效果中的哪一种：「湿润」，即 Anna 那种立绘中部周围细细的白色水痕；或「淋浴」，即从立绘图片顶部落下的细密蓝灰色水痕。
+
 # Docs: a heading inside the topic
 # en: Preview
 docs.characters.heading.preview = 预览
@@ -11328,6 +11608,14 @@ docs.npcs.whetherNPCHasWet.term = 启用 / 初始激活
 # en: Whether the NPC has the wet effect at all, and whether it is already running when the room loads.
 docs.npcs.whetherNPCHasWet = 这个 NPC 到底有没有湿润效果，以及房间加载时它是否已经在运行。
 
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Wet effect
+docs.npcs.wetEffect.term = 湿润效果
+
+# Docs: a point in the topic
+# en: How an NPC's wet effect looks is set in its Wet particles box: Kind, Tint, Amount, Drop size and Fall speed. Wet is Anna's, a few thin white streaks over the body; Shower is the bathroom's, fine blue-grey streaks from a small box, lit by the room. Every placement of the NPC starts from those; on the Places tab, pick the NPC in the place preview, then its Wet part, to change any of them for that placement alone (empty keeps the NPC's). The box is the placement's: drag the outlined box's sides to change where the drops start. For a shower, tick Drops start along the top and Drops stop at the box's floor to have it fall from the top of the box to its floor.
+docs.npcs.wetEffect = NPC 的湿润效果是什么样子，在它的「湿润粒子」框里设置：「类型」「着色」「数量」「水滴大小」和「下落速度」。「湿润」是 Anna 的，身体上几道细细的白色水痕；「淋浴」是浴室的，细密的蓝灰色水痕从一个小框里落下，被房间照亮。这个 NPC 的每个摆放都从这些设置开始；在「地点」选项卡上，先在地点预览里选中这个 NPC，再选它的「湿身」部件，就能只为那个摆放更改其中任意一项（留空则沿用 NPC 的）。框属于摆放：拖动带轮廓的框的边，就能改变水滴开始的位置。对于淋浴，勾选「水滴从顶边开始」和「水滴止于框底」，让它从框的顶部落到框底。
+
 # Docs: a heading inside the topic
 # en: Preview
 docs.npcs.heading.preview = 预览
@@ -11507,12 +11795,12 @@ docs.places.addButtonPlaceS.term = + 添加导航按钮
 docs.places.addButtonPlaceS = 在这个地点的导航条上添加一个通往别处的按钮。每个地点最多十二个——按钮旁边的计数会显示你已经用了多少，达到上限后就不再提供。
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: + Add GameObject
-docs.places.addObjectRoomArt.term = + 添加 GameObject
+# en: + Object
+docs.places.addObjectRoomArt.term = + 对象
 
 # Docs: a point in the topic
-# en: Add an object to the room — art, a prop, a container for other objects.
-docs.places.addObjectRoomArt = 往房间里添加一个对象——美术图、道具，或用来装其他对象的容器。
+# en: Over the hierarchy beside the preview: add an object to the room — art, a prop, a container for other objects. It arrives in the middle of the picture, picked, with its settings to the right of it.
+docs.places.addObjectRoomArt = 在预览旁边的层级上方：往房间里添加一个对象——美术图、道具，或用来装其他对象的容器。它会出现在画面中间，处于选中状态，设置就在画面右侧。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Copy of
@@ -11527,20 +11815,32 @@ docs.places.copyOfGameObject = 让一个对象成为游戏中某个对象的副�
 docs.places.copyOfGameObject.more = 副本在每次游戏加载时生成，放在你的地点里或原对象旁边，除非你覆盖，否则保持原对象的样子；勾选了 Bind 的子对象会改变它的部件，粒子颜色则给游戏的特效重新上色。
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: + Add NPC
-docs.places.placeOneNpcsInto.term = + 添加 NPC
+# en: Moves by
+docs.places.objectMask.term = 移动方式
+
+# Docs: a point in the topic: how a place's object moves
+# en: In the panel beside the picture: how the object's picture moves. Nothing keeps it still; the back layer's mask moves it with the place's back layer's, read over its own picture; its own mask moves it like a place (water, leaves, curtains: one layer) or like a character (bounce, wave and noise, with the settings under it). Edit paints the mask in the mask studio, with the place preview beside it.
+docs.places.objectMask = 在画面旁边的面板里：对象的图片如何移动。「无」让它保持静止；「后景图层的遮罩」让它随地点后景图层的遮罩移动，遮罩按它自己的图片读取；「自己的遮罩」让它像地点那样移动（水面、树叶、窗帘：一个图层），或像角色那样移动（弹跳、波动和噪声，使用它下面的设置）。「编辑」会在遮罩绘制工具里绘制遮罩，旁边有地点预览。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: + Character
+docs.places.placeOneNpcsInto.term = + 角色
 
 # Docs: a point in the topic
-# en: Place one of your NPCs into the room. To hang it under a particular container instead, use that container's own NPCs section.
-docs.places.placeOneNpcsInto = 把你的某个 NPC 放进房间。若想挂到某个特定容器下，请用那个容器自己的 NPC 区域。
+# en: Over the hierarchy beside the preview: place one of your NPCs into the room. It goes on the picked object when that can hold characters (an object under NPCs), otherwise under the place's NPCs object; choose its NPC to the right of the picture.
+docs.places.placeOneNpcsInto = 在预览旁边的层级上方：把你的某个 NPC 放进房间。如果选中的对象能容纳角色（NPCs 下的对象），它就放在那个对象上，否则放在地点的 NPCs 对象下；在画面右侧选择它的 NPC。
+
+# Docs: the fold-out under the text above
+# en: Picked, Moves with says how the character drifts as the cursor moves: Front stays on the floor they stand on, as the game's own characters do; Back drifts with the place's back picture, like someone far away; Own drifts by a strength you set. Their shadow, blink and reflection go with them. Parallax on the NPCs object drifts every character in it together.
+docs.places.placeOneNpcsInto.more = 选中后，「跟随」决定光标移动时角色如何漂移：「前景」让角色留在所站的地面上，就像游戏自己的角色那样；「后景」随地点的后景图漂移，就像远处的人；「自定」按你设定的强度漂移。角色的影子、眨眼和倒影都跟着他们一起漂移。NPCs 对象上的「视差」会让其中的所有角色一起漂移。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Fill from vanilla hierarchy
 docs.places.vanillaExtensionAddEntry.term = 从原版层级填充
 
 # Docs: a point in the topic
-# en: On a vanilla extension, add an entry for every object the game's version of this place already has, each with its real position. Existing entries are left alone, so it is safe to run again later to pick up anything new.
-docs.places.vanillaExtensionAddEntry = 在原版扩展里，为游戏版本的这个地点已有的每个对象各添加一条记录，并带上它真实的位置。已有的记录不会被动，所以以后再运行一次也很安全，它只会补上新增的内容。
+# en: On a vanilla extension, over the hierarchy beside the preview: add an entry for every object the game's version of this place already has, each with its real position. Existing entries are left alone, so it is safe to run again later to pick up anything new.
+docs.places.vanillaExtensionAddEntry = 在原版扩展里，在预览旁边的层级上方：为游戏版本的这个地点已有的每个对象各添加一条记录，并带上它真实的位置。已有的记录不会被动，所以以后再运行一次也很安全，它只会补上新增的内容。
 
 # Docs: a heading inside the topic
 # en: On enter / On exit
@@ -11589,6 +11889,14 @@ docs.places.runRealJigglePass.term = 应用着色器
 # Docs: a point in the topic
 # en: Run the real jiggle pass over NPCs that have a mask, using this pack's own numbers. Costs a little processor time, so leave it off while positioning.
 docs.places.runRealJigglePass = 用本模组包自己的数值，对有遮罩的 NPC 运行真正的晃动渲染。会占用一点处理器时间，所以摆放时请保持关闭。
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Full screen
+docs.places.fullScreen.term = 全屏
+
+# Docs: a point in the topic
+# en: Full screen, beside the Preview heading, shows the preview over the whole screen: the hierarchy and the picked object's settings over its sides, the preview's tick boxes and quality under the hierarchy. Everything works there as on the page, Ctrl+Z included. Esc, F11 or Leave full screen at its top brings it back. F11 on the Places tab opens it too.
+docs.places.fullScreen = 「全屏」在「预览」标题旁边，会在整个屏幕上显示预览：层级和选中对象的设置分列两侧，预览的勾选框和质量在层级下方。那里的一切都和页面上一样可用，包括 Ctrl+Z。按 Esc、F11 或顶部的「退出全屏」即可返回。在「地点」选项卡上按 F11 也能打开它。
 
 [Docs: Map Buttons]
 
@@ -14363,8 +14671,8 @@ docs.example.rainyVisitor.s1.do = 在「NPC」选项卡上点「+ NPC」，命�
 docs.example.rainyVisitor.s2 = 2. 放进地点
 
 # A step of a guide example: what to do
-# en: On the Places tab, choose your place and click + Add NPC. Choose Wet visitor as its NPC, then drag it in the preview to where it should stand.
-docs.example.rainyVisitor.s2.do = 在「地点」选项卡上选择你的地点，点「+ 添加 NPC」。选择 Wet visitor 作为它的「NPC」，然后在预览里把它拖到它该站的位置。
+# en: On the Places tab, choose your place and click + Character over the hierarchy beside the preview. Choose Wet visitor as its NPC to the right of the picture, then drag it in the preview to where it should stand.
+docs.example.rainyVisitor.s2.do = 在「地点」选项卡上选择你的地点，点预览旁边层级上方的「+ 角色」。在画面右侧选择 Wet visitor 作为它的「NPC」，然后在预览里把它拖到它该站的位置。
 
 # A step's heading in a guide example, numbered
 # en: 3. Only when it rains
@@ -14863,16 +15171,16 @@ docs.places.navRow = 「目标」是它通往的地方，箭头可以把它沿�
 docs.places.activeWhen.term = 激活条件
 
 # Docs: a point in the topic
-# en: On an object: + Condition, and the game shows it only while they pass - no rule needed, so objects with opposite conditions take turns by themselves. Untick Switch back off when the conditions stop matching for a one-way reveal.
-docs.places.activeWhen = 用于对象：点「+ 条件」，游戏就只在条件通过时显示它——不需要规则，所以条件相反的对象会自动轮流出现。想要一次性的揭示，就取消勾选「条件不再满足时重新关闭」。
+# en: On an object, in the panel to the right of the picture: + Condition, and the game shows it only while they pass - no rule needed, so objects with opposite conditions take turns by themselves. Untick Switch back off when the conditions stop matching for a one-way reveal.
+docs.places.activeWhen = 用于对象，在画面右侧的面板里：点「+ 条件」，游戏就只在条件通过时显示它——不需要规则，所以条件相反的对象会自动轮流出现。想要一次性的揭示，就取消勾选「条件不再满足时重新关闭」。
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: + Add child, + Add NPC child, + Component
 docs.places.children.term = + 添加子对象、+ 添加 NPC 子对象、+ 组件
 
 # Docs: a point in the topic
-# en: On an object: an object inside it, one of your NPCs placed inside it, or a small helper on it - a fade, a random child shown, a blink.
-docs.places.children = 用于对象：它里面的一个对象、放在它里面的你的某个 NPC，或者它上面的一个小助手——淡入淡出、随机显示一个子对象、眨眼。
+# en: On an object, in the panel to the right of the picture: an object inside it, one of your NPCs placed inside it, or a small helper on it - a fade, a random child shown, a blink, a smooth float up and down (FloatingSprite: its Height, Time, Sideways and start are yours to set). Components that change what you see play in the place preview as you edit them: fades (replayed after a pause), blinks, floats, a random child (a new pick every few seconds), and the game's swing, shake, sprite blender and cinema changer. The component list is grouped as ModForge's own, Vanilla (the game's scripts) and Unity, each with a line saying what it does.
+docs.places.children = 用于对象，在画面右侧的面板里：它里面的一个对象、放在它里面的你的某个 NPC，或者它上面的一个小助手——淡入淡出、随机显示一个子对象、眨眼、平滑地上下浮动（FloatingSprite：它的「高度」「时间」「左右摆动」和起始点都由你设定）。会改变你所见内容的组件，在你编辑时就会在地点预览里播放：淡入淡出（暂停后重播）、眨眼、浮动、随机子对象（每隔几秒重新选一次），以及游戏的摆动、晃动、图片混合和影院图片切换。组件列表分为「ModForge」（ModForge 自带）、「原版」（游戏的脚本）和「Unity」三组，每个组件都有一行说明它的作用。
 
 # A bullet's fold-out in the guide
 # en: A child switches on and off with its parent, and Active when or a RandomChildActivator on the parent decides for all of them. Its place does not follow the parent: an object of yours stands at its own X and Y in the room, so give each child its own. (A child bound to one of the game's objects, or a copy of one, sits relative to its parent, as the game has it.)
@@ -15471,24 +15779,24 @@ tutorial.dressingTheRoom.summary = 在她的画廊里放一个金色花瓶作为
 tutorial.dressingTheRoom.addObject.title = 添加一个对象
 
 # Tutorials: what the step says
-# en: Under GameObjects, scroll to the bottom and click + Add GameObject. Light 2D and NPCs are in every place already - leave them as they are.
-tutorial.dressingTheRoom.addObject.body = 在「GameObject」下滚动到底部，点「+ 添加 GameObject」。Light 2D 和 NPCs 已经在每个地点里了——保持原样就好。
+# en: In the hierarchy beside the preview, click + Object. Light 2D and NPCs are in every place already - leave them as they are.
+tutorial.dressingTheRoom.addObject.body = 在预览旁边的层级里，点「+ 对象」。Light 2D 和 NPCs 已经在每个地点里了——保持原样就好。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Add GameObject is at the bottom of the GameObjects box: scroll down to it.
-tutorial.dressingTheRoom.addObject.hint = 「+ 添加 GameObject」在「GameObject」框的底部：向下滚动就能找到。
+# en: + Object is at the top of the hierarchy, beside the picture.
+tutorial.dressingTheRoom.addObject.hint = 「+ 对象」在画面旁边的层级顶部。
 
 # Tutorials: the heading of a step
 # en: Name and picture
 tutorial.dressingTheRoom.giveNamePicture.title = 名字和图片
 
 # Tutorials: what the step says
-# en: In the new card, named GameObject, type Vase over its Name, and choose TutorialArt/Locations/Vase.png as its Sprite.
-tutorial.dressingTheRoom.giveNamePicture.body = 在名为 GameObject 的新卡片里，把它的「名称」改写成 Vase，并选择 TutorialArt/Locations/Vase.png 作为它的「精灵图」。
+# en: The new object, named GameObject, is picked: in the panel to the right of the picture, type Vase over its Name, and choose TutorialArt/Locations/Vase.png as its Sprite.
+tutorial.dressingTheRoom.giveNamePicture.body = 名为 GameObject 的新对象已处于选中状态：在画面右侧的面板里，把它的「名称」改写成 Vase，并选择 TutorialArt/Locations/Vase.png 作为它的「精灵图」。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: The new card is called GameObject: type Vase in its Name, then fill in its Sprite.
-tutorial.dressingTheRoom.giveNamePicture.hint = 新卡片叫 GameObject：在它的「名称」里输入 Vase，然后填写它的「精灵图」。
+# en: The panel to the right of the picture shows the picked object: type Vase in its Name, then fill in its Sprite.
+tutorial.dressingTheRoom.giveNamePicture.hint = 画面右侧的面板显示选中的对象：在它的「名称」里输入 Vase，然后填写它的「精灵图」。
 
 # Tutorials: the heading of a step
 # en: Put it in place
@@ -15507,12 +15815,12 @@ tutorial.dressingTheRoom.putWhereWant.hint = 在预览里点击花瓶，然后�
 tutorial.dressingTheRoom.decideStandsFront.title = 在两张图片之间
 
 # Tutorials: what the step says
-# en: Set its Sort to -11 - the box after Scale X/Y on the vase's row.
-tutorial.dressingTheRoom.decideStandsFront.body = 把它的「排序」设为 -11——就是花瓶那一行上「缩放 X/Y」后面的那个框。
+# en: Set its Sort to -11 - the box after Scale X/Y, in the panel to the right of the picture.
+tutorial.dressingTheRoom.decideStandsFront.body = 把它的「排序」设为 -11——就是画面右侧面板里「缩放 X/Y」后面的那个框。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Sort, on the vase's row under GameObjects.
-tutorial.dressingTheRoom.decideStandsFront.hint = 「排序」，在「GameObject」下花瓶的那一行上。
+# en: Sort, in the panel to the right of the picture, with the vase picked.
+tutorial.dressingTheRoom.decideStandsFront.hint = 「排序」，在画面右侧的面板里，选中花瓶时可见。
 
 # Tutorials: the heading of a step
 # en: Hidden for now
@@ -16317,24 +16625,24 @@ tutorial.populating.giveThemSomeLife.hint = 「晃动遮罩」字段旁边的「
 tutorial.populating.putThemRoom.title = 进入画廊
 
 # Tutorials: what the step says
-# en: On the Places tab, with The Gallery chosen, click + Add NPC and pick Mannequin in the new row's NPC box.
-tutorial.populating.putThemRoom.body = 在「地点」选项卡上选中 The Gallery，点击 + 添加 NPC，并在新一行的「NPC」框里选择 Mannequin。
+# en: On the Places tab, with The Gallery chosen, click + Character in the hierarchy beside the preview and pick Mannequin as its NPC in the panel to the right of the picture.
+tutorial.populating.putThemRoom.body = 在「地点」选项卡上选中 The Gallery，点击预览旁边层级里的「+ 角色」，并在画面右侧的面板里选择 Mannequin 作为它的「NPC」。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Add NPC under GameObjects, then Mannequin in the row's NPC box.
-tutorial.populating.putThemRoom.hint = 「GameObjects」下的 + 添加 NPC，然后在那一行的「NPC」框里选 Mannequin。
+# en: + Character over the hierarchy, then Mannequin as its NPC to the right of the picture.
+tutorial.populating.putThemRoom.hint = 层级上方的「+ 角色」，然后在画面右侧选 Mannequin 作为它的「NPC」。
 
 # Tutorials: the heading of a step
 # en: Show her
 tutorial.populating.switchThem.title = 让她显示
 
 # Tutorials: what the step says
-# en: Tick Start active on the placement's row - below Part transforms, beside Sorting order. It shows the whole figure; the droplets have their own Enabled, which stays off. A new placement starts hidden.
-tutorial.populating.switchThem.body = 在这个摆放的那一行上勾选「初始激活」——在「各部件的 transform」下方，「排序值」旁边。它显示整个人物；水滴有自己的「启用」，保持关闭。新的摆放一开始是隐藏的。
+# en: Tick Start active in the panel to the right of the picture - below Part transforms, beside Sorting order. It shows the whole figure; the droplets have their own Enabled, which stays off. A new placement starts hidden.
+tutorial.populating.switchThem.body = 在画面右侧的面板里勾选「初始激活」——在「各部件的 transform」下方，「排序值」旁边。它显示整个人物；水滴有自己的「启用」，保持关闭。新的摆放一开始是隐藏的。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Start active, below Part transforms on the placement's row under GameObjects.
-tutorial.populating.switchThem.hint = 「GameObjects」下这个摆放那一行上、「各部件的 transform」下方的「初始激活」。
+# en: Start active, below Part transforms in the panel to the right of the picture.
+tutorial.populating.switchThem.hint = 「初始激活」，在画面右侧面板里「各部件的 transform」的下方。
 
 # Tutorials: the heading of a step
 # en: Put her in place
@@ -16373,16 +16681,16 @@ tutorial.populating.sitThemFloor.more = 「颜色」决定它有多暗；「排�
 tutorial.populating.giveThemSomeLife.more = 和立绘用的是同一种遮罩。没有遮罩的人物完全静止，屏幕上一有别的东西动起来，它就像一块纸板剪影。
 
 # The fold-out under a tutorial step: the whole explanation
-# en: A row with no NPC chosen is a placement of nobody: it shows nothing and breaks nothing, which is why it's easy to leave behind. The same NPC can stand in as many rooms as you like - each placement is a copy.
-tutorial.populating.putThemRoom.more = 没选 NPC 的一行是个谁也没摆的摆放：它什么也不显示，也不会弄坏什么，所以很容易被遗留下来。同一个 NPC 可以站在任意多个房间里——每个摆放都是一个副本。
+# en: A character with no NPC chosen is a placement of nobody: it shows nothing and breaks nothing, which is why it's easy to leave behind. The same NPC can stand in as many rooms as you like - each placement is a copy.
+tutorial.populating.putThemRoom.more = 没选 NPC 的角色是个谁也没摆的摆放：它什么也不显示，也不会弄坏什么，所以很容易被遗留下来。同一个 NPC 可以站在任意多个房间里——每个摆放都是一个副本。
 
 # The fold-out under a tutorial step: the whole explanation
 # en: Hidden is the usual start: a figure that a rule shows later, like one who arrives at night. This one should simply be there.
 tutorial.populating.switchThem.more = 隐藏是通常的起始状态：留给之后由规则显示的人物，比如晚上才到的人。这一个只需要一直在那里。
 
 # The fold-out under a tutorial step: the whole explanation
-# en: Click a figure and its tools appear in the panel to the right of the picture. The first row picks what moves - Body, Shadow, Blink or Wet - and the second how: Move, Rotate or Scale. All four belong to this placement, not to the NPC, so they change in this room only. The same numbers are on the row under Part transforms.
-tutorial.populating.placeThemProperly.more = 点击一个人物，它的工具就会出现在画面右侧的面板里。第一行选择移动什么——「身体」「影子」「眨眼」或「湿身」——第二行选择怎么动：「移动」「旋转」或「缩放」。这四样都属于这个摆放，而不属于 NPC，所以只在这个房间里改变。同样的数值也在那一行的「各部件的 transform」下面。
+# en: Click a figure and its tools appear in the panel to the right of the picture. The first row picks what moves - Body, Shadow, Blink or Wet - and the second how: Move, Rotate or Scale. All four belong to this placement, not to the NPC, so they change in this room only. The same numbers are lower in that panel, under Part transforms.
+tutorial.populating.placeThemProperly.more = 点击一个人物，它的工具就会出现在画面右侧的面板里。第一行选择移动什么——「身体」「影子」「眨眼」或「湿身」——第二行选择怎么动：「移动」「旋转」或「缩放」。这四样都属于这个摆放，而不属于 NPC，所以只在这个房间里改变。同样的数值也在这个面板的下方，在「各部件的 transform」下面。
 
 # The fold-out under a tutorial step: the whole explanation
 # en: A place with figures in it stops looking like artwork. Standing in it is the only way to judge them. Next: a whole row of them.
@@ -16397,8 +16705,8 @@ tutorial.populating.shadow.title = 她的影子
 tutorial.populating.shadow.body = 她的影子一开始在游戏自带人物的影子所在的位置——在这里，就是藏在她的腿后面。在预览里点击她，在画面右侧的面板里选「影子」，然后把影子往下拖到她脚下。
 
 # The fold-out under a tutorial step: the whole explanation
-# en: A shadow is what stands a figure on the floor. Every placement has its own, so it fits that spot - half behind a table, on a step. Under Part transforms on her row, Shadow's X and Y are the same numbers to type; Scale Y squashes it flatter.
-tutorial.populating.shadow.more = 影子让人物站在地面上。每个摆放都有自己的影子，所以它能贴合那个位置——半藏在桌子后面，或在台阶上。在她那一行的「各部件的 transform」下，「阴影」的 X 和 Y 是同样的数值，可以直接输入；「缩放 Y」把它压得更扁。
+# en: A shadow is what stands a figure on the floor. Every placement has its own, so it fits that spot - half behind a table, on a step. Under Part transforms, lower in the panel to the right of the picture, Shadow's X and Y are the same numbers to type; Scale Y squashes it flatter.
+tutorial.populating.shadow.more = 影子让人物站在地面上。每个摆放都有自己的影子，所以它能贴合那个位置——半藏在桌子后面，或在台阶上。在画面右侧面板下方的「各部件的 transform」下，「阴影」的 X 和 Y 是同样的数值，可以直接输入；「缩放 Y」把它压得更扁。
 
 # Tutorial hint, shown when a step has waited a while
 # en: Click her in the preview, then Shadow in the panel to the right of the picture, then drag.
@@ -16427,24 +16735,24 @@ tutorial.npcsThatBelong.definitionNotAppearance.body = 一个人体模特只是�
 tutorial.npcsThatBelong.putSamePersonTwice.title = 第二个
 
 # Tutorials: what the step says
-# en: On the Places tab, add Mannequin to The Gallery again with + Add NPC.
-tutorial.npcsThatBelong.putSamePersonTwice.body = 在「地点」选项卡上，用 + 添加 NPC 再把 Mannequin 加到 The Gallery。
+# en: On the Places tab, add Mannequin to The Gallery again with + Character.
+tutorial.npcsThatBelong.putSamePersonTwice.body = 在「地点」选项卡上，用「+ 角色」再把 Mannequin 加到 The Gallery。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Add NPC on The Gallery, then Mannequin in the NPC box.
-tutorial.npcsThatBelong.putSamePersonTwice.hint = 在 The Gallery 上点 + 添加 NPC，然后在「NPC」框里选 Mannequin。
+# en: + Character over the hierarchy on The Gallery, then Mannequin as its NPC to the right of the picture.
+tutorial.npcsThatBelong.putSamePersonTwice.hint = 在 The Gallery 上点层级上方的「+ 角色」，然后在画面右侧选 Mannequin 作为它的「NPC」。
 
 # Tutorials: the heading of a step
 # en: Tell them apart
 tutorial.npcsThatBelong.tellThemApart.title = 把他们区分开
 
 # Tutorials: what the step says
-# en: Scroll down to the two Mannequin rows under GameObjects. The lower row is the new one, the one you dragged left: tick its Start active and name it MannequinLeft. Name the upper row MannequinRight.
-tutorial.npcsThatBelong.tellThemApart.body = 往下滚动到「GameObjects」下的两行 Mannequin。下面那一行是新的，就是你拖到左边的那个：勾选它的「初始激活」，并命名为 MannequinLeft。把上面那一行命名为 MannequinRight。
+# en: Both Mannequins are under NPCs in the hierarchy beside the picture. The new one, the one you dragged left, is picked: tick its Start active and name it MannequinLeft in the panel to the right of the picture. Then pick the other one and name it MannequinRight.
+tutorial.npcsThatBelong.tellThemApart.body = 两个 Mannequin 都在画面旁边层级里的 NPCs 下。新的那个，就是你拖到左边的那个，已处于选中状态：在画面右侧的面板里勾选它的「初始激活」，并把它命名为 MannequinLeft。然后选中另一个，把它命名为 MannequinRight。
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Both Mannequin rows are at the bottom of the GameObjects box: give each its own Name.
-tutorial.npcsThatBelong.tellThemApart.hint = 两行 Mannequin 都在「GameObjects」框的底部：给每一行起个自己的「名称」。
+# en: Pick each Mannequin under NPCs in the hierarchy and give it its own Name in the panel to the right of the picture.
+tutorial.npcsThatBelong.tellThemApart.hint = 在层级的 NPCs 下逐个选中 Mannequin，在画面右侧的面板里给每个起一个自己的「名称」。
 
 # Tutorials: the heading of a step
 # en: Change them both
@@ -18251,8 +18559,8 @@ tutorial.deeperPlaces.summary = 入夜后的画廊：一张等她更勇敢时才
 tutorial.deeperPlaces.story.title = 地点里有什么
 
 # Tutorial step: what to do, in a sentence or two
-# en: A place is its art and the objects in it: props, lights, effects and NPCs, each in the GameObjects box and the hierarchy beside the preview. Her gallery is chosen.
-tutorial.deeperPlaces.story.body = 地点由它的美术图和其中的对象组成：道具、灯光、特效和 NPC，每一个都在「GameObjects」框和预览旁边的层级里。她的画廊已被选中。
+# en: A place is its art and the objects in it: props, lights, effects and NPCs, each in the hierarchy beside the preview, with its settings to the right of the picture once you pick it. Her gallery is chosen.
+tutorial.deeperPlaces.story.body = 地点由它的美术图和其中的对象组成：道具、灯光、特效和 NPC，每一个都在预览旁边的层级里，选中后它的设置就在画面右侧。她的画廊已被选中。
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: Each object has its own picture, its own spot and size, its own order in front of or behind the others, and its own Active when: conditions that show it and hide it as they change. Objects can hold objects - move the parent and its children move with it.
@@ -18263,32 +18571,32 @@ tutorial.deeperPlaces.story.more = 每个对象都有自己的图片、自己的
 tutorial.deeperPlaces.poster.title = 她的海报
 
 # Tutorial step: what to do, in a sentence or two
-# en: Scroll to the bottom of the GameObjects box and click + Add GameObject. Name the new object "Poster", give it TutorialArt/Locations/Poster.png as its Sprite and set its Sort to -11, like the vase. Then scroll up and drag it onto the wall in the preview.
-tutorial.deeperPlaces.poster.body = 滚动到「GameObjects」框底部，点击 + 添加 GameObject。把新对象命名为「Poster」，「精灵图」设为 TutorialArt/Locations/Poster.png，「排序」设为 -11，和花瓶一样。然后往上滚动，在预览里把它拖到墙上。
+# en: In the hierarchy beside the preview, click + Object. In the panel to the right of the picture, name the new object "Poster", give it TutorialArt/Locations/Poster.png as its Sprite and set its Sort to -11, like the vase. Then drag it onto the wall in the preview.
+tutorial.deeperPlaces.poster.body = 在预览旁边的层级里，点击「+ 对象」。在画面右侧的面板里，把新对象命名为「Poster」，「精灵图」设为 TutorialArt/Locations/Poster.png，「排序」设为 -11，和花瓶一样。然后在预览里把它拖到墙上。
 
 # Tutorial step: the whole explanation, under Tell me more
-# en: The picture is a framed portrait of her: around the frame it is see-through (a PNG), so only the frame and the portrait cover the wall. Sort -11 draws it between the room's back picture (-12) and its front one (-10). Size it with Scale, in the panel beside the preview or on its row.
-tutorial.deeperPlaces.poster.more = 这张图是一幅装了框的她的肖像：画框外是透明的（PNG），所以只有画框和肖像会盖住墙面。「排序」-11 会把它画在房间的后景图（-12）和前景图（-10）之间。用「缩放」调整大小，在预览旁边的面板里或它那一行上都可以。
+# en: The picture is a framed portrait of her: around the frame it is see-through (a PNG), so only the frame and the portrait cover the wall. Sort -11 draws it between the room's back picture (-12) and its front one (-10). Size it with Scale, in the panel to the right of the picture.
+tutorial.deeperPlaces.poster.more = 这张图是一幅装了框的她的肖像：画框外是透明的（PNG），所以只有画框和肖像会盖住墙面。「排序」-11 会把它画在房间的后景图（-12）和前景图（-10）之间。用画面右侧面板里的「缩放」调整大小。
 
 # Tutorial step: where to click, when the step waits
-# en: + Add GameObject is at the bottom of the GameObjects box; Name, Sprite and Sort are on the new object's row.
-tutorial.deeperPlaces.poster.hint = + 添加 GameObject 在「GameObjects」框底部；「名称」「精灵图」和「排序」在新对象那一行上。
+# en: + Object is at the top of the hierarchy; Name, Sprite and Sort are in the panel to the right of the picture.
+tutorial.deeperPlaces.poster.hint = 「+ 对象」在层级顶部；「名称」「精灵图」和「排序」在画面右侧的面板里。
 
 # Tutorial step title
 # en: Up once she's braver
 tutorial.deeperPlaces.posterWhen.title = 等她更勇敢时挂上
 
 # Tutorial step: what to do, in a sentence or two
-# en: Scroll down to the Poster row - the last one. Under its Active when, click + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 3. Leave Start active as it is.
-tutorial.deeperPlaces.posterWhen.body = 往下滚动到 Poster 那一行——最后一行。在它的「激活条件」下点击 + 条件：「类型」Variable，「名称」Confidence，「比较」大于或等于，「值」3。「初始激活」保持不变。
+# en: The Poster is picked. Under its Active when, in the panel to the right of the picture, click + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 3. Leave Start active as it is.
+tutorial.deeperPlaces.posterWhen.body = Poster 已处于选中状态。在画面右侧面板里它的「激活条件」下点击「+ 条件」：「类型」Variable，「名称」Confidence，「比较」大于或等于，「值」3。「初始激活」保持不变。
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: Active when is checked all the time, so the poster appears the moment her confidence reaches 3 and goes again if it drops - some nights cost her one (tutorial 21, Rules, in depth), and your visits win it back. Start active says what it is before any condition is met.
 tutorial.deeperPlaces.posterWhen.more = 「激活条件」会一直被检查，所以她的自信一达到 3，海报就会出现；如果自信下降，海报又会消失——有些夜晚会让她掉一点（教程 21「深入了解规则」），而你的来访会把它赢回来。「初始激活」决定在任何条件满足之前它是什么状态。
 
 # Tutorial step: where to click, when the step waits
-# en: Active when is on the poster's row in the GameObjects box.
-tutorial.deeperPlaces.posterWhen.hint = 「激活条件」在「GameObjects」框里海报那一行上。
+# en: Active when is in the panel to the right of the picture, with the poster picked.
+tutorial.deeperPlaces.posterWhen.hint = 「激活条件」在画面右侧的面板里，选中海报时可见。
 
 # Tutorial step title
 # en: What is drawn over what
@@ -18323,16 +18631,16 @@ tutorial.deeperPlaces.visitor.hint = + NPC 在 NPC 列表上方。
 tutorial.deeperPlaces.placeVisitor.title = 在画廊里
 
 # Tutorial step: what to do, in a sentence or two
-# en: On the Places tab, with The Gallery chosen, click + Add NPC and pick Visitor in the new row's NPC box. Then scroll up to the preview and drag her to the right of the gallery.
-tutorial.deeperPlaces.placeVisitor.body = 在「地点」选项卡上选中 The Gallery，点击 + 添加 NPC，并在新一行的「NPC」框里选择 Visitor。然后往上滚动到预览，把她拖到画廊的右侧。
+# en: On the Places tab, with The Gallery chosen, click + Character in the hierarchy beside the preview and pick Visitor as its NPC in the panel to the right of the picture. Then drag her to the right of the gallery.
+tutorial.deeperPlaces.placeVisitor.body = 在「地点」选项卡上选中 The Gallery，点击预览旁边层级里的「+ 角色」，并在画面右侧的面板里选择 Visitor 作为它的「NPC」。然后把她拖到画廊的右侧。
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: A placement is one appearance of an NPC in one place: where she stands, how big, her shadow, and when she is there. The same NPC can be placed in many places, and twice in one.
 tutorial.deeperPlaces.placeVisitor.more = 摆放就是一个 NPC 在一个地点的一次出现：她站在哪里、多大、她的影子，以及她什么时候在那里。同一个 NPC 可以摆到许多地点，也可以在一个地点摆两次。
 
 # Tutorial step: where to click, when the step waits
-# en: + Add NPC is under the GameObjects box.
-tutorial.deeperPlaces.placeVisitor.hint = + 添加 NPC 在「GameObjects」框下面。
+# en: + Character is at the top of the hierarchy; pick Visitor as its NPC in the panel to the right of the picture.
+tutorial.deeperPlaces.placeVisitor.hint = 「+ 角色」在层级顶部；在画面右侧的面板里选择 Visitor 作为它的「NPC」。
 
 # Tutorial step title
 # en: Her shadow
@@ -18355,16 +18663,16 @@ tutorial.deeperPlaces.visitorShadow.hint = 在预览里点击她，再点画面�
 tutorial.deeperPlaces.visitorWhen.title = 等她展出之后
 
 # Tutorial step: what to do, in a sentence or two
-# en: Scroll down to the visitor's row - the last one. Under its Active when, + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 5. Visitors come once the Dummy is sure of herself.
-tutorial.deeperPlaces.visitorWhen.body = 往下滚动到访客那一行——最后一行。在它的「激活条件」下点 + 条件：「类型」Variable，「名称」Confidence，「比较」大于或等于，「值」5。Dummy 有了自信，访客才会来。
+# en: The visitor is picked. Under her Active when, in the panel to the right of the picture, + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 5. Visitors come once the Dummy is sure of herself.
+tutorial.deeperPlaces.visitorWhen.body = 访客已处于选中状态。在画面右侧面板里她的「激活条件」下点「+ 条件」：「类型」Variable，「名称」Confidence，「比较」大于或等于，「值」5。Dummy 有了自信，访客才会来。
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: An NPC placement has its own Active when, as any object does: the same visitor could stand in her gallery on some days and in a cafe on others. Leave "Switch back off when the conditions stop matching" ticked, so she leaves again if the Dummy loses her nerve.
 tutorial.deeperPlaces.visitorWhen.more = NPC 的摆放和任何对象一样，有自己的「激活条件」：同一位访客可以有些日子站在她的画廊里，另一些日子站在咖啡馆里。让「条件不再满足时重新关闭」保持勾选，这样如果 Dummy 泄了气，访客就会再次离开。
 
 # Tutorial step: where to click, when the step waits
-# en: Active when is on the visitor's row in the GameObjects box.
-tutorial.deeperPlaces.visitorWhen.hint = 「激活条件」在「GameObjects」框里访客那一行上。
+# en: Active when is in the panel to the right of the picture, with the visitor picked.
+tutorial.deeperPlaces.visitorWhen.hint = 「激活条件」在画面右侧的面板里，选中访客时可见。
 
 # Tutorial step title
 # en: The game's own places
@@ -19619,8 +19927,8 @@ tutorial.deeperRooms.weather.hint = 圈出的「天气」框，在画廊美术�
 tutorial.deeperRooms.sign.title = 一颗霓虹星
 
 # A tutorial step's instruction (short)
-# en: Add a GameObject "Star sign" with Sprite TutorialArt/Locations/NeonStar.png, Sort -11, high on her gallery's back wall, and click + Component: BlinkingSprite.
-tutorial.deeperRooms.sign.body = 添加一个 GameObject「Star sign」，「精灵图」为 TutorialArt/Locations/NeonStar.png，「排序」-11，放在她画廊后墙的高处，然后点击「+ 组件」：BlinkingSprite。
+# en: Click + Object over the hierarchy and name it "Star sign", with Sprite TutorialArt/Locations/NeonStar.png and Sort -11, high on her gallery's back wall. Then click + Component: BlinkingSprite.
+tutorial.deeperRooms.sign.body = 点击层级上方的「+ 对象」，把它命名为「Star sign」，「精灵图」为 TutorialArt/Locations/NeonStar.png，「排序」-11，放在她画廊后墙的高处。然后点击「+ 组件」：BlinkingSprite。
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: A component makes an object do something by itself. BlinkingSprite switches its picture's opacity between two values on a fixed beat, like a sign on a bad wire.
@@ -19631,12 +19939,28 @@ tutorial.deeperRooms.sign.more = 组件让对象自己做某件事。BlinkingSpr
 tutorial.deeperRooms.sign.hint = 「+ 组件」在对象的面板里。
 
 # A tutorial step's title
+# en: A vase that floats
+tutorial.deeperRooms.float.title = 会浮动的花瓶
+
+# A tutorial step's instruction (short)
+# en: Click + Object and name it "Floating vase", with Sprite TutorialArt/Locations/Vase.png and Sort -10, in the middle of her gallery. Then click + Component: FloatingSprite.
+tutorial.deeperRooms.float.body = 点击「+ 对象」，把它命名为「Floating vase」，「精灵图」为 TutorialArt/Locations/Vase.png，「排序」-10，放在她画廊的中间。然后点击「+ 组件」：FloatingSprite。
+
+# A tutorial step's fold-out: the rest of its explanation
+# en: FloatingSprite moves an object up and down smoothly for ever, and everything under it with it: a sculpture hovering over its stand, a monster in a tank, a toy bobbing in water. Height is how far it travels and Time how long one rise and fall takes; the preview plays it as you change them.
+tutorial.deeperRooms.float.more = FloatingSprite 让对象永远平滑地上下移动，它下面的一切也随之移动：悬在底座上方的雕塑、水箱里的怪物、在水里上下浮动的玩具。「高度」是它移动的距离，「时间」是一次升降所需的时长；你修改它们时，预览会实时播放。
+
+# A tutorial step's hint: where to find what it asks for
+# en: + Component is in the object's panel; FloatingSprite is in its ModForge group.
+tutorial.deeperRooms.float.hint = 「+ 组件」在对象的面板里；FloatingSprite 在它的「ModForge」组里。
+
+# A tutorial step's title
 # en: Flowers for the visit
 tutorial.deeperRooms.flowers.title = 迎接来访的花
 
 # A tutorial step's instruction (short)
-# en: Add a GameObject "Flowers" with no Sprite. Give it three children - Roses, Sunflowers and Lavender - each with its picture from TutorialArt/Locations, Sort -9, X -3.4 and Y -3.6 (on the floor beside the vase). Then give "Flowers" the component RandomChildActivator.
-tutorial.deeperRooms.flowers.body = 添加一个没有「精灵图」的 GameObject「Flowers」。给它三个子对象——Roses、Sunflowers 和 Lavender——每个都用 TutorialArt/Locations 里对应的图片，「排序」-9，「X」-3.4，「Y」-3.6（在花瓶旁边的地板上）。然后给「Flowers」加上组件 RandomChildActivator。
+# en: Click + Object and name it "Flowers", with no Sprite. Give it three children with + Add child - Roses, Sunflowers and Lavender - each with its picture from TutorialArt/Locations, Sort -9, X -3.4 and Y -3.6 (on the floor beside the vase). Then pick "Flowers" again and give it the component RandomChildActivator.
+tutorial.deeperRooms.flowers.body = 点击「+ 对象」，把它命名为「Flowers」，不设「精灵图」。用「+ 添加子对象」给它三个子对象——Roses、Sunflowers 和 Lavender——每个都用 TutorialArt/Locations 里对应的图片，「排序」-9，「X」-3.4，「Y」-3.6（在花瓶旁边的地板上）。然后再次选中「Flowers」，给它加上组件 RandomChildActivator。
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: RandomChildActivator shows one of its object's children, picked at random, each time the object is switched on. A different pot each visit, with no rule. Each child gets its own X and Y: an object of yours stands at its own place in the room, wherever its parent is.
@@ -19651,8 +19975,8 @@ tutorial.deeperRooms.flowers.hint = 「+ 添加子对象」在对象的面板里
 tutorial.deeperRooms.copy.title = 游戏的闪光
 
 # A tutorial step's instruction (short)
-# en: Add a GameObject "Loving sparkles" and set Copy of to 6_Effects/CFXR2 Expression Loving (Timed).
-tutorial.deeperRooms.copy.body = 添加一个 GameObject「Loving sparkles」，并把「复制自」设为 6_Effects/CFXR2 Expression Loving (Timed)。
+# en: Click + Object, name it "Loving sparkles" and set Copy of to 6_Effects/CFXR2 Expression Loving (Timed).
+tutorial.deeperRooms.copy.body = 点击「+ 对象」，把它命名为「Loving sparkles」，并把「复制自」设为 6_Effects/CFXR2 Expression Loving (Timed)。
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: Copy of makes the object a copy of one of the game's, by its path in the game's scene: a level effect, a prop, a whole panel. The original is untouched.
@@ -19667,8 +19991,8 @@ tutorial.deeperRooms.freeLight.title = 地板上的光晕
 tutorial.deeperRooms.freeLight.body = 点击预览列表上方的「+ 灯光」，命名为「Floor glow」，把形状设为「自由形状」，颜色设为 #9AB8FF。在预览里拖动它的角来调整形状。
 
 # A tutorial step's fold-out: the rest of its explanation
-# en: A free shape lights the area you draw, with a soft edge: a pool of light on the floor, a lit doorway. Drag the + halfway along a side to add a corner.
-tutorial.deeperRooms.freeLight.more = 自由形状会照亮你画出的区域，边缘柔和：地板上的一摊光、一个亮着的门口。拖动边中点的 + 就能添加一个角。
+# en: A free shape lights the area you draw at full strength and shines out from all of its edge, as far as the dashed line round it: a pool of light on the floor, a lit doorway. Drag the + halfway along a side to add a corner, and the knob on the dashed line to make it reach further.
+tutorial.deeperRooms.freeLight.more = 自由形状会以全强度照亮你画出的区域，并从它的整条边缘向外照射，一直到它周围的虚线：地板上的一摊光、一个亮着的门口。拖动边中点的 + 就能添加一个角，拖动虚线上的圆钮能让它照得更远。
 
 # A tutorial step's hint: where to find what it asks for
 # en: + Light is over the hierarchy beside the preview.
@@ -19895,16 +20219,16 @@ tutorial.deeperGently.talk.hint = 两个勾选框都在这段对话的「身份�
 tutorial.deeperRooms.fades.title = 淡入与淡出
 
 # A tutorial step's instruction (short)
-# en: Scroll down to her Poster and give it the component FadeInSprite. Then add FadeOutSprite to the Visitor's placement, with Delay 20, Duration 2 and Deactivate on complete ticked - and, on that placement itself, untick Switch back off when the conditions stop matching.
-tutorial.deeperRooms.fades.body = 向下滚动到她的 Poster，给它加上组件 FadeInSprite。然后给 Visitor 的摆放加上 FadeOutSprite，「延迟」20，「时长」2，勾选「完成后停用」——并在那个摆放本身上取消勾选「条件不再满足时重新关闭」。
+# en: Her Poster is picked: give it the component FadeInSprite in the panel to the right of the picture. Then pick the Visitor's placement in the hierarchy and add FadeOutSprite to it, with Delay 20, Duration 2 and Deactivate on complete ticked - and, on that placement itself, untick Switch back off when the conditions stop matching.
+tutorial.deeperRooms.fades.body = 她的 Poster 已处于选中状态：在画面右侧的面板里给它加上组件 FadeInSprite。然后在层级里选中 Visitor 的摆放，给它加上 FadeOutSprite，「延迟」20，「时长」2，勾选「完成后停用」——并在那个摆放本身上取消勾选「条件不再满足时重新关闭」。
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: FadeInSprite fades an object in each time it is switched on, so her poster appears softly. FadeOutSprite fades one out after a delay; with Deactivate on complete, it is switched off once gone - the visitor stays a while, then leaves. Switch back off is unticked because, ticked, Active when puts its answer back every moment, and would switch her straight on again. Unticked, she also stays if the Dummy's confidence falls below 5 again (tutorial 23): the fade-out is what sends her away now.
 tutorial.deeperRooms.fades.more = FadeInSprite 在对象每次被开启时让它淡入，所以她的海报会柔和地出现。FadeOutSprite 在一段延迟之后让对象淡出；勾选「完成后停用」时，对象消失后就会被关闭——访客待一会儿，然后离开。之所以取消勾选「条件不再满足时重新关闭」，是因为勾选时，「激活条件」每时每刻都会把它的答案放回去，会立刻又把她打开。取消勾选后，即使 Dummy 的自信再次跌到 5 以下（教程 23），她也会留下：现在让她离开的是淡出。
 
 # A tutorial step's hint: where to find what it asks for
-# en: An NPC placement takes components too, under its own panel.
-tutorial.deeperRooms.fades.hint = NPC 的摆放也可以加组件，在它自己的面板下方。
+# en: Components are in the panel to the right of the picture, for what is picked; an NPC placement takes them too.
+tutorial.deeperRooms.fades.hint = 组件在画面右侧的面板里，针对选中的东西；NPC 的摆放也可以加组件。
 
 # A tutorial step's hint: where to find what it asks for
 # en: Trigger mode is the rule's first box; WhilePassing is in its list.
@@ -20051,8 +20375,8 @@ tutorial.deeperVoices.owner.hint = 选中 Announcer 的台词并点击「+ 同�
 tutorial.deeperJournal.counter.hint = QuestCounter 在条件的「类型」列表里；先选她的任务，再选那个计数的目标。
 
 # A tutorial step's hint: where to find what it asks for
-# en: + Add GameObject is at the bottom of the GameObjects box; Copy of is in the object's panel.
-tutorial.deeperRooms.copy.hint = 「+ 添加 GameObject」在 GameObjects 框的底部；「复制自」在对象的面板里。
+# en: + Object is at the top of the hierarchy; Copy of is in the object's panel, to the right of the picture.
+tutorial.deeperRooms.copy.hint = 「+ 对象」在层级顶部；「复制自」在画面右侧对象的面板里。
 
 # A tutorial step's hint: where to find what it asks for
 # en: + Light is over the hierarchy beside the preview; the shape list has Picture.
@@ -21114,16 +21438,16 @@ typeGroup.world = 地点和对象
 typeGroup.chance = 概率、时间和按键
 
 # Heading in the list of component types
-# en: Made for packs
-componentGroup.pack = 为模组包制作
+# en: ModForge
+componentGroup.pack = ModForge
 
 # Heading in the list of component types
-# en: The game's scripts
-componentGroup.game = 游戏的脚本
+# en: Vanilla
+componentGroup.game = 原版
 
 # Heading in the list of component types
-# en: Unity's own
-componentGroup.unity = Unity 自带
+# en: Unity
+componentGroup.unity = Unity
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Lift the busts above a scene, or put them back
@@ -21370,8 +21694,188 @@ note.component.randomChild = 随机显示其中一个子对象
 note.component.blinking = 闪烁
 
 # A note beside a component type in its dropdown
-# en: Unity's own - most settings can't be set by name
-note.component.engine = Unity 自带——多数设置无法按名称设置
+# en: Floats up and down smoothly
+note.component.floating = 平滑地上下浮动
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A list of the game's instructions, run when something starts it
+note.component.actions = 一串游戏指令，在有东西启动它时运行
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A button that runs the game's instructions when clicked
+note.component.buttonInstructions = 点击时运行游戏指令的按钮
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades a particle effect out and cleans it up when it ends
+note.component.cfxrEffect = 粒子特效结束时将其淡出并清理
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Words made of particles, popping up
+note.component.cfxrParticleText = 由粒子组成、会弹出来的文字
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shakes it gently, as if riding in a car
+note.component.carInteriorShake = 轻轻晃动它，就像坐在车里
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades a character in as it is shown, its blink and face with it
+note.component.characterIntroFade = 角色出现时将其淡入，眨眼和面部也一起
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shows one of its children at random, a new one every few seconds
+note.component.cinemaSpriteChanger = 随机显示其中一个子对象，每隔几秒换一个
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Swings it from side to side, like a stage light
+note.component.concertLightSwing = 让它左右摆动，像舞台灯一样
+
+# A note beside a component type in its dropdown, saying what it does
+# en: The game's checks for whether something may happen
+note.component.conditions = 游戏用来检查某件事能否发生的条件
+
+# A note beside a component type in its dropdown, saying what it does
+# en: One of the game's conversations
+note.component.dialogue = 游戏的一段对话
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Switches all its children off when the game tells it to
+note.component.disableChildren = 游戏通知时关闭它的所有子对象
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Switches all its children on when the game tells it to
+note.component.enableChildren = 游戏通知时开启它的所有子对象
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Switches on every Map_Variation object under it when shown
+note.component.mapVariationActivator = 显示时开启它下面的每个 Map_Variation 对象
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Scrolls a 3D shape's texture sideways; does nothing to a picture
+note.component.offsetScrolling = 让 3D 形状的纹理横向滚动；对图片不起作用
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Drifts it a little as the mouse moves
+note.component.parallaxMouseEffect = 随鼠标移动让它稍微漂移
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Plays a radio: songs, with talk between them
+note.component.radioSimulator = 播放电台：歌曲，中间夹着主持人的说话
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades its children's pictures in and out at random
+note.component.randomSpriteBlender = 随机淡入淡出其子对象的图片
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Starts the game's instructions when something happens (a click, the start)
+note.component.trigger = 发生某件事时（点击、开始）启动游戏指令
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shows one object while the mouse is over a picture, another while not
+note.component.uiHoverActivator = 鼠标悬停在图片上时显示一个对象，否则显示另一个
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Distorts the sound playing beside it
+note.component.audioDistortionFilter = 让旁边播放的声音失真
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Muffles the sound playing beside it
+note.component.audioLowPassFilter = 让旁边播放的声音变闷
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Plays a sound
+note.component.audioSource = 播放声音
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A box that clicks and bumps can hit
+note.component.boxCollider2D = 点击和碰撞能碰到的方框
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws interface pictures and words
+note.component.canvas = 绘制界面图片和文字
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades interface objects together, or stops clicks on them
+note.component.canvasGroup = 让界面对象一起淡入淡出，或让它们不响应点击
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws one interface object on its canvas
+note.component.canvasRenderer = 在画布上绘制一个界面对象
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Sizes an interface to the screen
+note.component.canvasScaler = 让界面适应屏幕大小
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A circle that clicks and bumps can hit
+note.component.circleCollider2D = 点击和碰撞能碰到的圆形
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Lets the mouse click an interface
+note.component.graphicRaycaster = 让鼠标能点击界面
+
+# A note beside a component type in its dropdown, saying what it does
+# en: An interface picture
+note.component.image = 界面图片
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A light for 3D objects
+note.component.light = 用于 3D 对象的灯光
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A light that lights the pictures round it
+note.component.light2D = 照亮周围图片的灯光
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a line through points
+note.component.lineRenderer = 穿过各点画一条线
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A 3D shape that bumps can hit
+note.component.meshCollider = 碰撞能碰到的 3D 形状
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Holds a 3D shape to draw
+note.component.meshFilter = 保存要绘制的 3D 形状
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a 3D shape
+note.component.meshRenderer = 绘制 3D 形状
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Gives off particles: sparks, drops, dust
+note.component.particleSystem = 发出粒子：火花、水滴、灰尘
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a particle system's particles
+note.component.particleSystemRenderer = 绘制粒子系统的粒子
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A drop shadow behind interface pictures and words
+note.component.shadow = 界面图片和文字后面的投影
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Casts a shadow from the lights round it
+note.component.shadowCaster2D = 在周围的灯光下投下阴影
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shows pictures only inside its shape, or only outside
+note.component.spriteMask = 只在它的形状内显示图片，或只在形状外显示
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a picture
+note.component.spriteRenderer = 绘制一张图片
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Interface words
+note.component.textMeshProUgui = 界面文字
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Plays a video
+note.component.videoPlayer = 播放视频
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Screen effects: glow, colour and the like
+note.component.volume = 屏幕效果：辉光、色彩之类
 
 # The editor's title bar; {game} is the game's version, {pack} the pack's id
 # en: SMSModForge {version} for {game} — {pack}
@@ -21648,8 +22152,8 @@ docs.places.light.term = + 灯光
 docs.places.light = 给地点加一盏灯光，放在预览所显示区域的中间；把它拖到你想要的位置。选中后，它的「颜色」、「强度」、「照射范围」和「锥角」都在图片右侧的面板里。
 
 # Guide bullet: the rest, folded away
-# en: Every place of yours starts with the light of the level it is built on: change it there, or remove it. Back to the game's puts the game's light back as it was. Soft edge and Full cone make a spotlight's edge harder or softer; a cone points the way its object is turned (Rotate).
-docs.places.light.more = 你的每个地点一开始都带着它所基于的关卡的灯光：可以在那里修改，也可以移除。「恢复为游戏的」会把游戏的灯光恢复原样。「柔边」和「全强度锥角」让聚光灯的边缘更硬或更柔；锥角指向它的对象所朝的方向（「旋转」）。
+# en: Every place of yours starts with the light of the level it is built on: change it there, or remove it. Back to the game's puts the game's light back as it was. Full strength to and Full cone make a spotlight's edge harder or softer; a cone points the way its object is turned (Rotate). A free shape shines out from its edge as far as its Reach, the dashed line round it. Moves with is how a light drifts as the cursor moves: with the place's back picture (what a new light does), with its front (the game's own lamps), or by a strength of its own.
+docs.places.light.more = 你的每个地点一开始都带着它所基于的关卡的灯光：可以在那里修改，也可以移除。「恢复为游戏的」会把游戏的灯光恢复原样。「全强度范围」和「全强度锥角」让聚光灯的边缘更硬或更柔；锥角指向它的对象所朝的方向（「旋转」）。自由形状会从它的边缘向外照射，直到它的「照射范围」，也就是它周围的虚线。「跟随」是光标移动时灯光漂移的方式：随地点的后景图（新灯光就是这样）、随它的前景图（游戏自己的灯就是这样），或按它自己的强度。
 
 # Guide: a light's shapes
 # en: Round, Free shape, Picture
@@ -21695,6 +22199,14 @@ docs.places.giveIt.term = 给它加灯光、给它加特效
 # en: On an object you picked: it carries a light or an effect where it stands, shown whenever the object is - so its conditions switch both together.
 docs.places.giveIt = 在你选中的对象上：它会在自己所在的位置带上一盏灯光或一个特效，只要对象显示，它们就显示——所以对象的条件会同时开关两者。
 
+# Guide: three buttons' labels, over an object picked in the place preview
+# en: Object, Light, Effect
+docs.places.objectParts.term = 对象、灯光、特效
+
+# Guide bullet
+# en: An object with a picture and a light, or with an effect, has its parts to pick over its handles, as a character has Body and Shadow. Object moves, turns and sizes the object. Light shows only the light's handles (clicking its sun in the picture picks it too). Effect draws a box round where its particles start: drag inside it to move the effect away from the object - it still moves with it - and drag a corner or a side to make it bigger or smaller. A light on its own keeps its handles together, as before.
+docs.places.objectParts = 带有图片和灯光、或带有特效的对象，可以在它的手柄上方选择部件，就像角色有「身体」和「影子」一样。「对象」用来移动、旋转和缩放对象。「灯光」只显示灯光的手柄（在画面里点击它的太阳也能选中它）。「特效」会在它的粒子起始的位置周围画一个框：在框里拖动可以把特效从对象上移开——它仍然跟着对象移动——拖动角或边可以让它变大或变小。单独的一盏灯光仍像以前一样，手柄都在一起。
+
 # Guide: a box's label
 # en: Character in the place
 docs.places.standIn.term = 地点中的角色
@@ -21703,13 +22215,21 @@ docs.places.standIn.term = 地点中的角色
 # en: Shows one of your characters where the game shows a character in a conversation, to see how the place's lights fall on her. Preview only: nothing is saved.
 docs.places.standIn = 在游戏显示对话角色的位置显示你的一个角色，看看地点的灯光如何落在她身上。仅用于预览：不会保存任何东西。
 
+# Guide: what part of the place the player sees, as the preview marks it
+# en: What the player sees
+docs.places.playersView.term = 玩家看到的部分
+
+# Guide bullet
+# en: The game always shows the same part of a place, 19.2 by 10.8 units round its middle, on any screen. That is exactly what the preview shows when the picture fits the view, with the game's interface over it. Your pictures are bigger, so their edges only come into sight as the cursor drifts the place: zoom out or drag the view and what the player can't see is a little darker, with a thin line round the rest.
+docs.places.playersView = 无论在什么屏幕上，游戏总是显示地点的同一部分：以它的中心为准，19.2 × 10.8 个单位。当画面适合视图时，预览显示的正是这一部分，上面盖着游戏的界面。你的图片更大，所以只有当光标让地点漂移时，它们的边缘才会进入视野：缩小或拖动视图，玩家看不到的部分会稍暗一些，其余部分周围有一条细线。
+
 # Guide: picking an object in the preview
 # en: Picking
 docs.places.picking.term = 选取
 
 # Guide bullet
-# en: Click an object in the picture or in the hierarchy beside it. The panel to the right of the picture then moves, turns or scales it; an NPC's first row picks the part - Body, Shadow, Blink, Wet or Reflection.
-docs.places.picking = 在图片里或旁边的层级里点击一个对象。然后图片右侧的面板可以移动、旋转或缩放它；NPC 的第一行用来选择部位——「身体」、「影子」、「眨眼」、「湿身」或「倒影」。
+# en: Click an object in the picture or in the hierarchy beside it. The panel to the right of the picture then moves, turns or scales it, and below that has all of its settings; an NPC's first row picks the part - Body, Shadow, Blink, Wet or Reflection.
+docs.places.picking = 在图片里或旁边的层级里点击一个对象。然后图片右侧的面板可以移动、旋转或缩放它，下方还列出它的全部设置；NPC 的第一行用来选择部位——「身体」、「影子」、「眨眼」、「湿身」或「倒影」。
 
 # Guide: a box's heading
 # en: Hierarchy
@@ -24519,9 +25039,73 @@ setup.uninstall.go = 卸载
 # en: ModForge has been uninstalled.
 setup.uninstall.done = ModForge 已卸载。
 
+# Note under a place's preview: where its objects are made and set
+# en: Everything this place builds is in the hierarchy beside the picture. + Object adds art, a prop, or a container that groups other objects; + Character places one of your NPCs. Click an object in the picture or in the hierarchy and all of its settings are to the right of the picture: its picture, where it stands and how big, its components, Active when, and + Add child and + Add NPC child to put more under it. Dialogues reach an object by its Name, and a lower Sort draws it further back. NPCs is the place's own object, where every character stands.
+places.placeObjectsHelp = 这个地点构建的一切都在画面旁边的层级里。「+ 对象」用来添加美术图、道具，或把其他对象归为一组的容器；「+ 角色」用来放置你的某个 NPC。在画面或层级里点击一个对象，它的全部设置就会出现在画面右侧：它的图片、站在哪里、多大、它的组件、「激活条件」，以及用来在它下面放更多东西的「+ 添加子对象」和「+ 添加 NPC 子对象」。对话按「名称」找到对象，「排序」越低画得越靠后。NPCs 是地点自己的对象，每个角色都站在那里。
+
+# Note under a game level's preview: where its objects are made and set
+# en: The hierarchy beside the picture is the game's level as it is, with what your pack adds to it. + Object and + Character add your own, and Fill from vanilla hierarchy brings in any of the game's objects not listed yet. Click one and its settings are to the right of the picture. Your pack keeps only what it changes: the game's objects you leave alone are not saved.
+places.levelObjectsHelp = 画面旁边的层级就是游戏关卡原本的样子，加上你的模组包给它添加的内容。「+ 对象」和「+ 角色」添加你自己的东西，「从原版层级填充」会把尚未列出的游戏对象加进来。点击一个，它的设置就在画面右侧。你的模组包只保留它更改的内容：你没动过的游戏对象不会被保存。
+
 # Heading of the object list in the place preview
 # en: Hierarchy
 preview.place.hierarchy = 层级
+
+# Button over the object list in the place preview: adds an object
+# en: + Object
+preview.object.add = + 对象
+
+# Tooltip on "+ Object"
+# en: Add an object to the place, in the middle of the picture: art, a prop, or a container for other objects. It is picked, with its settings to the right of the picture.
+preview.object.add.tip = 在画面中间往地点里添加一个对象：美术图、道具，或用来装其他对象的容器。它会处于选中状态，设置就在画面右侧。
+
+# Button over the object list in the place preview: places an NPC
+# en: + Character
+preview.character.add = + 角色
+
+# Tooltip on "+ Character"
+# en: Place one of your NPCs here: on the picked object when it can hold characters (an object under NPCs), otherwise under the place's NPCs object. It is picked: choose its NPC to the right of the picture, then drag it where it should stand.
+preview.character.add.tip = 在这里放置你的某个 NPC：如果选中的对象能容纳角色（NPCs 下的对象），就放在它上面，否则放在地点的 NPCs 对象下。它会处于选中状态：在画面右侧选择它的 NPC，然后把它拖到它该站的位置。
+
+# Tooltip on the heading of the object list in the place preview: its keys
+# en: Keys, after a click on the picture or on this list: Ctrl+C copies the object picked, with everything under it. Ctrl+V pastes it under the object picked (with nothing picked, among the place's own). Ctrl+D duplicates the object picked beside itself. Delete sends it to the recycle bin at the bottom of this list. On the game's own objects, a copy of a light is a light of your own and a copy of anything else is a copy of the game's object, and Delete switches the game's object off where it stands. The NPCs object is the place's one: paste characters under it.
+preview.place.keys.tip = 快捷键（在画面或这个列表上点击之后）：Ctrl+C 复制选中的对象及其下的一切。Ctrl+V 把它粘贴到选中的对象下（没有选中时，粘贴到地点自己的对象之中）。Ctrl+D 在选中对象旁边复制一份。Delete 把它送到这个列表底部的回收站。对于游戏自己的对象：复制一盏灯光会得到你自己的灯光，复制其他东西会得到游戏对象的副本；Delete 会把游戏的对象在原处关闭。NPCs 对象是地点自己的那个：把角色粘贴到它下面。
+
+# Heading of the recycle bin at the bottom of the place preview's object list; {count} is how many it holds
+# en: Recycle bin ({count})
+preview.place.bin = 回收站（{count}）
+
+# Tooltip on the recycle bin's heading
+# en: What you delete from this place waits here, with everything that was under it, until you put it back or empty the bin. It is saved with the pack and left out of what you export. Click to show or hide what it holds.
+preview.place.bin.tip = 你从这个地点删除的东西会连同其下的一切在这里等着，直到你把它放回去或清空回收站。它会随模组包一起保存，但不会包含在导出的内容里。点击可显示或隐藏其中的内容。
+
+# Tooltip on the arrow beside something in the recycle bin
+# en: Put it back where it was, under the same object
+preview.place.bin.restore.tip = 把它放回原处，放在同一个对象下
+
+# Tooltip on the cross beside something in the recycle bin
+# en: Delete it for good. Ctrl+Z still brings it back.
+preview.place.bin.forget.tip = 永久删除它。Ctrl+Z 仍然可以恢复。
+
+# Button under what the recycle bin holds
+# en: Empty the bin
+preview.place.bin.empty = 清空回收站
+
+# Tooltip on "Empty the bin"
+# en: Delete everything in the bin for good. Ctrl+Z still brings it back.
+preview.place.bin.empty.tip = 永久删除回收站里的一切。Ctrl+Z 仍然可以恢复。
+
+# Tooltip on something in the recycle bin; {path} is the objects it was under, top first
+# en: Was under {path}
+preview.place.bin.under = 原先在 {path} 下
+
+# Tooltip on something in the recycle bin that was one of the place's top objects
+# en: Was one of the place's own objects, at the top of the list
+preview.place.bin.top = 原先是地点自己的对象之一，位于列表顶部
+
+# Tooltip on one of the game's own objects in the recycle bin
+# en: One of the game's own, switched off where it stands: the game's object cannot be taken out of the game. The arrow switches it back on as it was.
+preview.place.bin.switchedOff = 游戏自己的对象，已在原处关闭：游戏的对象不能从游戏里拿走。箭头会把它按原样重新打开。
 
 # Tooltip on the arrow beside an object in the hierarchy
 # en: Fold this object's children
@@ -24578,6 +25162,38 @@ preview.gizmo.rotate = 旋转
 # On the toolbar over what is selected in the place preview: what dragging the handles does
 # en: Scale
 preview.gizmo.scale = 缩放
+
+# On the toolbar over an object selected in the place preview that has a light or an effect: the handles move the object itself
+# en: Object
+preview.gizmo.object = 对象
+
+# Tooltip on "Object"
+# en: Move, turn and size the object itself.
+preview.gizmo.object.tip = 移动、旋转和缩放对象本身。
+
+# On the toolbar over an object selected in the place preview: the handles are for the object's light
+# en: Light
+preview.gizmo.light = 灯光
+
+# Tooltip on "Light"
+# en: The object's light: drag its reach, how far it stays full and its cone. The light stays where the object is.
+preview.gizmo.light.tip = 对象的灯光：拖动它的照射范围、全强度范围和锥角。灯光留在对象所在的位置。
+
+# On the toolbar over an object selected in the place preview: the handles are for the effect the object plays
+# en: Effect
+preview.gizmo.effect = 特效
+
+# Tooltip on "Effect"
+# en: The effect the object plays: drag inside its box to move it away from the object, drag a corner or a side to make it bigger or smaller.
+preview.gizmo.effect.tip = 对象播放的特效：在它的框里拖动可以把它从对象上移开，拖动角或边可以让它变大或变小。
+
+# Tooltip inside the box drawn round an object's effect in the place preview
+# en: Drag to move the effect away from its object. It moves with the object.
+preview.effect.box.tip = 拖动可以把特效从它的对象上移开。它会跟着对象移动。
+
+# Tooltip on the small squares on the box round an object's effect in the place preview
+# en: Drag to make the effect bigger or smaller (its Scale).
+preview.effect.grip.tip = 拖动可以让特效变大或变小（它的「缩放」）。
 
 # Beside the place preview: which character to show standing in the place
 # en: Character in the place
@@ -24720,8 +25336,8 @@ preview.light.shape.round.tip = 从中心向四周照射的灯光，或者照成
 preview.light.shape.free = 自由形状
 
 # Tooltip on the free light shape
-# en: A light in the exact shape you draw, point by point, with a soft edge around it.
-preview.light.shape.free.tip = 形状和你逐点画出的完全一样的灯光，周围带有柔和的边缘。
+# en: A light in the shape you draw, point by point: full strength inside it, shining out from all of its edge as far as its reach.
+preview.light.shape.free.tip = 形状和你逐点画出的一样的灯光：内部是全强度，从整条边缘向外照射，直到它的照射范围。
 
 # Button beside the place preview: the light's shape
 # en: Picture
@@ -24823,13 +25439,93 @@ preview.light.point.tip = 拖动来移动灯光形状的这个角。右键单击
 # en: Drag to add a corner here.
 preview.light.addPoint.tip = 拖动以在这里添加一个角。
 
-# Label beside the place preview: the width of a free-shape light's soft edge
-# en: Soft edge
-preview.light.edge = 柔边
+# Label beside the place preview: how far a free-shape light shines out from its shape
+# en: Reach
+preview.light.edge = 照射范围
 
-# Tooltip on a free-shape light's soft edge
-# en: How far outside its shape the light fades to nothing, in the game's units.
-preview.light.edge.tip = 灯光在它的形状之外淡到零的距离，以游戏的单位计。
+# Tooltip on a free-shape light's reach
+# en: How far the light shines out from its shape, fading as it goes - as a round light fades from its middle, and round at the corners - in the game's units. Drag the knob on the dashed line in the preview.
+preview.light.edge.tip = 灯光从它的形状向外照射多远，越远越淡——就像圆形灯光从中心向外变淡，在角上则是圆的——以游戏的单位计。在预览里拖动虚线上的圆钮。
+
+# Tooltip on the knob on a free-shape light's dashed reach line in the place preview
+# en: Drag to set how far the light shines out from its shape.
+preview.light.edge.drag.tip = 拖动以设置灯光从它的形状向外照射多远。
+
+# Label beside the place preview: how a light drifts as the cursor moves (with the place's back picture, its front, or its own)
+# en: Moves with
+preview.light.drift = 跟随
+
+# Tooltip on "Moves with"
+# en: How the light drifts with the place as the cursor moves (its parallax): with the place's back picture, with its front picture, or by a strength of its own. It is its object's drift, so a picture on the same object drifts with it. The game's own lamps keep what the game gave them.
+preview.light.drift.tip = 光标移动时灯光如何随地点漂移（它的视差）：随地点的后景图、随它的前景图，或按它自己的强度。这是它所在对象的漂移，所以同一个对象上的图片会和它一起漂移。游戏自己的灯保持游戏给它们的设置。
+
+# Button beside the place preview: the light drifts with the place's back picture
+# en: Back
+preview.light.drift.back = 后景
+
+# Tooltip on "Back"
+# en: Drift with the place's back picture, as something far away does: the moon, a street lamp seen through a window. What a new light does.
+preview.light.drift.back.tip = 随地点的后景图漂移，就像远处的东西那样：月亮、透过窗户看到的路灯。新灯光就是这样。
+
+# Tooltip on "Back" on a level of the game's that has no back picture to drift with
+# en: This level of the game's has no back picture of the kind a pack place has, so there is none to drift with. Front, or a strength of its own, can match how any of its pictures drifts.
+preview.light.drift.noBack.tip = 游戏的这个关卡没有模组包地点那种后景图，所以没有可以跟着漂移的后景。用「前景」或它自己的强度，可以匹配这个关卡任意一张图片的漂移方式。
+
+# Button beside the place preview: the light drifts with the place's front picture
+# en: Front
+preview.light.drift.front = 前景
+
+# Tooltip on "Front"
+# en: Drift with the place's front picture: the light stays on the lamp, window or screen it shines from. What every light made before this did, and what the game's own lamps do.
+preview.light.drift.front.tip = 随地点的前景图漂移：灯光留在它所照出的灯、窗户或屏幕上。在此之前做的每盏灯光都是这样，游戏自己的灯也是这样。
+
+# Button beside the place preview: the light drifts by a strength of its own
+# en: Own
+preview.light.drift.own = 自定
+
+# Tooltip on "Own"
+# en: Drift by a strength of its own, set below. It starts where the light drifts now.
+preview.light.drift.own.tip = 按它自己的强度漂移，在下面设置。它从灯光现在的漂移开始。
+
+# Label beside the place preview: how far a light drifts by its own strength
+# en: Drift strength
+preview.light.drift.strength = 漂移强度
+
+# Tooltip on "Drift strength"
+# en: How far the light drifts as the cursor moves, on top of the place's front picture: 0 drifts with the front, higher drifts further. The game's own pictures use 0.1 to 1.5.
+preview.light.drift.strength.tip = 光标移动时灯光漂移多远，在地点前景图的基础上：0 随前景漂移，越高漂得越远。游戏自己的图片使用 0.1 到 1.5。
+
+# Tick box beside the place preview: the light drifts the other way
+# en: Reversed
+preview.light.drift.reversed = 反向
+
+# Tooltip on "Reversed"
+# en: Drift with the cursor instead of against it. Until you change it, this is the way the place's back picture drifts, so it starts ticked where the back picture is reversed.
+preview.light.drift.reversed.tip = 跟随光标漂移，而不是与之相反。在你改动之前，这是地点后景图的漂移方向，所以在后景图反向的地点，这一项一开始就是勾选的。
+
+# Tooltip on "Moves with" beside the place preview, for a character standing in the place
+# en: How the character drifts with the place as the cursor moves (their parallax): with the place's front picture, as the floor they stand on does, with its back picture, or by a strength of their own. Their shadow, blink, reflection and anything they hold drift with them.
+preview.character.drift.tip = 光标移动时角色如何随地点漂移（角色的视差）：随地点的前景图，就像角色所站的地面那样；随它的后景图；或按角色自己的强度。角色的影子、眨眼、倒影以及手里拿着的任何东西都随角色一起漂移。
+
+# Tooltip on "Back", for a character
+# en: Drift with the place's back picture, as someone far away does: a figure on a distant hill, a crowd seen through a window.
+preview.character.drift.back.tip = 随地点的后景图漂移，就像远处的人那样：远山上的身影、透过窗户看到的人群。
+
+# Tooltip on "Back" for a character, on a level of the game's with no back picture to drift with
+# en: This level of the game's has no back picture of the kind a pack place has, so there is none to drift with. Front, or a strength of their own, can match how any of its pictures drifts.
+preview.character.drift.noBack.tip = 游戏的这个关卡没有模组包地点那种后景图，所以没有可以跟着漂移的后景。用「前景」或角色自己的强度，可以匹配这个关卡任意一张图片的漂移方式。
+
+# Tooltip on "Front", for a character
+# en: Drift with the place's front picture: the character stays on the floor they stand on. What every character placed before this did, and what the game's own characters do.
+preview.character.drift.front.tip = 随地点的前景图漂移：角色留在所站的地面上。在此之前摆放的每个角色都是这样，游戏自己的角色也是这样。
+
+# Tooltip on "Own", for a character
+# en: Drift by a strength of their own, set below. It starts where the character drifts now.
+preview.character.drift.own.tip = 按角色自己的强度漂移，在下面设置。它从角色现在的漂移开始。
+
+# Tooltip on "Drift strength", for a character
+# en: How far the character drifts as the cursor moves, on top of what they stand under: 0 drifts with it, higher drifts further. The game's own pictures use 0.1 to 1.5.
+preview.character.drift.strength.tip = 光标移动时角色漂移多远，在角色所属对象的基础上：0 随它一起漂移，越高漂得越远。游戏自己的图片使用 0.1 到 1.5。
 
 # Label beside the place preview: the picture a picture light is made of
 # en: Picture
@@ -25326,6 +26022,18 @@ migration.cueVolumes = 声音现在会按其触发词的字号播放得更响或
 # In the list of what opening a pack changed: lines with more than one sound, their timing written down so they play as before
 # en: lines with more than one sound given their timing, so each keeps playing when it did
 migration.cueTiming = 有不止一个声音的台词，已写下它们的时间，使每个声音仍在原来的时刻播放
+
+# In the list of what opening a pack changed: places and game levels now following the new rules for their objects' masks
+# en: places whose objects now stay still unless given a mask (each object keeps moving as it did)
+migration.objectMasks = 对象现在除非设置了遮罩、否则保持静止的地点（每个对象仍像以前一样移动）
+
+# In the list of what opening a pack changed: objects that moved with the back layer's mask, now set to say so
+# en: objects that moved with the place's back layer's mask, now set to "The back layer's mask" so they keep moving
+migration.objectMasksBackLayer = 原本随地点后景图层的遮罩移动的对象，现已设为「后景图层的遮罩」，以便继续移动
+
+# In the list of what opening a pack changed: objects with a mask of their own that did nothing in the game, because the place's back layer had no mask, and are now set to stay still as they did
+# en: objects with a mask of their own that the game left still (the place's back layer had no mask), now set to "Nothing (still)" - choose "Its own mask" to make them move
+migration.objectMasksOwn = 有自己的遮罩、但游戏让它们保持静止的对象（地点的后景图层没有遮罩），现已设为「无（静止）」——选择「自己的遮罩」可以让它们动起来
 
 # One line of the list of what was brought up to date
 # en: Given a version to start from ({version})

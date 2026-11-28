@@ -249,6 +249,11 @@ public sealed class EffectViewModel : ObservableObject, IDerivesKey
     public double Speed { get => Model.Speed ?? 1; set { Model.Speed = OneIsNone(value); Changed(nameof(Speed)); } }
     public double Lifetime { get => Model.Lifetime ?? 1; set { Model.Lifetime = OneIsNone(value); Changed(nameof(Lifetime)); } }
 
+    /// <summary>An object's effect: how far from the object it plays, in the object's own units. Moved, it plays on
+    /// from there - not started again (no <see cref="LookVersion"/>).</summary>
+    public double LocalX { get => Model.LocalX ?? 0; set { Model.LocalX = ZeroIsNone(value); OnPropertyChanged(nameof(LocalX)); } }
+    public double LocalY { get => Model.LocalY ?? 0; set { Model.LocalY = ZeroIsNone(value); OnPropertyChanged(nameof(LocalY)); } }
+
     /// <summary>Particles: times the template's. The points: how many (new), or times the game's (changed).</summary>
     public double Amount
     {
@@ -376,6 +381,7 @@ public sealed class EffectViewModel : ObservableObject, IDerivesKey
 
     private static float? Round(double v) => (float)Math.Round(v, 3);
     private static float? OneIsNone(double v) => Math.Abs(v - 1) < 0.0005 ? null : (float)Math.Round(v, 3);
+    private static float? ZeroIsNone(double v) => Math.Abs(v) < 0.0005 ? null : (float)Math.Round(v, 3);
 
     private static float? ParseOrNull(string? text)
         => float.TryParse((text ?? "").Trim().Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out var f) ? f : null;

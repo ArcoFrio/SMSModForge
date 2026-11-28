@@ -655,6 +655,20 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
         }
     }
 
+    /// <summary>Which of the game's wet effects the outfit's particle is: 0 Anna's towel's, 1 the bathroom shower's.
+    /// A value it does not have is ignored (warmed pages blank a box while it has no options).</summary>
+    public int ParticleKindIndex
+    {
+        get => Model.Particles.Count > 0 && string.Equals(Model.Particles[0].Preset, ParticleRef.PresetShower, System.StringComparison.OrdinalIgnoreCase) ? 1 : 0;
+        set
+        {
+            if (value is not (0 or 1) || value == ParticleKindIndex) return;
+            if (Model.Particles.Count == 0) Model.Particles.Add(new ParticleRef());
+            Model.Particles[0].Preset = value == 1 ? ParticleRef.PresetShower : ParticleRef.PresetWet;
+            OnPropertyChanged();
+        }
+    }
+
     public string Display => $"{Key} ({GameObjectName})";
 
     // ── IMaskEditorHost ────────────────────────────────────────────────

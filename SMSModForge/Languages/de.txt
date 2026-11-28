@@ -2016,9 +2016,53 @@ gameObject.reversed = Umgekehrt
 # en: UI space
 gameObject.uiSpace = UI-Raum
 
-# Text
-# en: Mask (opt):
-gameObject.maskOpt = Maske (opt.):
+# Text: the label of how an object's picture moves
+# en: Moves by:
+gameObject.maskOpt = Bewegt von:
+
+# Tooltip on the choice of how an object's picture moves
+# en: How this object's picture moves in the game. Paint its own mask with Edit, the same way as a place's or an NPC's.
+gameObject.maskKind.tip = Wie sich das Bild dieses Objekts im Spiel bewegt. Mal seine eigene Maske mit Bearbeiten, genauso wie die eines Orts oder eines NPCs.
+
+# Choice: the object's picture stays still
+# en: Nothing (still)
+gameObject.maskKind.none = Nichts (still)
+
+# Tooltip on a choice
+# en: The picture stays still.
+gameObject.maskKind.none.tip = Das Bild bleibt still.
+
+# Choice: the object moves with the place's back layer's mask
+# en: The back layer's mask
+gameObject.maskKind.backLayer = Die Maske der hinteren Ebene
+
+# Tooltip on a choice
+# en: Moves with the place's back layer's mask, read over this object's own picture (as if the mask were laid over it, not over the place). What objects without a mask used to do when the back layer had one.
+gameObject.maskKind.backLayer.tip = Bewegt sich mit der Maske der hinteren Ebene des Orts, über das eigene Bild dieses Objekts gelesen (als läge die Maske darüber, nicht über dem Ort). Das taten Objekte ohne Maske früher, wenn die hintere Ebene eine hatte.
+
+# Choice: the object moves by a mask of its own, like a place's water or foliage
+# en: Its own mask, like a place
+gameObject.maskKind.level = Eigene Maske, wie ein Ort
+
+# Tooltip on a choice
+# en: Moves by a mask of its own, the way a place's picture moves: water, leaves, curtains. One layer (how much), painted in the mask studio.
+gameObject.maskKind.level.tip = Bewegt sich durch eine eigene Maske, so wie sich das Bild eines Orts bewegt: Wasser, Blätter, Vorhänge. Eine Ebene (wie stark), im Maskenstudio gemalt.
+
+# Choice: the object moves by a mask of its own, like a character's jiggle
+# en: Its own mask, like a character
+gameObject.maskKind.jiggle = Eigene Maske, wie eine Figur
+
+# Tooltip on a choice
+# en: Moves by a mask of its own, the way an NPC's body moves: bounce, wave and noise (red, green and blue), with the settings below.
+gameObject.maskKind.jiggle.tip = Bewegt sich durch eine eigene Maske, so wie sich der Körper eines NPCs bewegt: Federn, Welle und Rauschen (Rot, Grün und Blau), mit den Einstellungen darunter.
+
+# Button: opens the mask studio on this object's mask
+# en: Edit
+gameObject.editMask = Bearbeiten
+
+# Tooltip on a button
+# en: Paint this object's mask in the mask studio, over its picture, with the place preview beside it.
+gameObject.editMask.tip = Die Maske dieses Objekts im Maskenstudio malen, über seinem Bild, mit der Ortsvorschau daneben.
 
 # Button
 # en: + Component
@@ -2085,8 +2129,8 @@ gameObject.copy.tip = Dieses GameObject in die Zwischenablage des Editors kopier
 gameObject.paste.tip = Das GameObject aus der Zwischenablage als Geschwister unter diesem einfügen
 
 # Tooltip on a button
-# en: Remove this GameObject
-gameObject.remove.tip = Dieses GameObject entfernen
+# en: Remove this GameObject. It goes to the place's recycle bin, under the hierarchy beside the preview, with everything under it, to be put back if you need it. One of the game's own objects is switched off where it stands instead, and the bin switches it back on.
+gameObject.remove.tip = Dieses GameObject entfernen. Es kommt mit allem darunter in den Papierkorb des Orts, unter der Hierarchie neben der Vorschau, damit du es bei Bedarf zurückholen kannst. Ein eigenes Objekt des Spiels wird stattdessen dort ausgeschaltet, wo es steht, und der Papierkorb schaltet es wieder ein.
 
 # Tooltip on "This GameObject already exists (bind, don't create)"
 # en: On: the Name above is looked up in the scene (a bare name or a A > B > C path) and only what you author here is applied to it — the way to modify a vanilla level you don't own. Off: this pack creates the GameObject.
@@ -2157,24 +2201,24 @@ gameObject.startActive.tip = Abhaken für Overlays, die ein Dialog später zeigt
 gameObject.initialAlpha01.tip = Anfangs-Alpha 0..1 (für Einblend-Overlays wie das Portal bei 0 beginnen).
 
 # Tooltip on "Drift with the level"
-# en: On (the default) keeps the level's own strength, which is what a created object always did. Turn it off to set this object's depth independently.
-gameObject.driftLevel.tip = An (Standard) behält die eigene Stärke des Levels, wie es ein erstelltes Objekt immer getan hat. Schalte es aus, um die Tiefe dieses Objekts unabhängig einzustellen.
+# en: On (the default): drift as the place's back picture does, which is what a created object does in the game. Turn it off to set this object's depth independently.
+gameObject.driftLevel.tip = An (Standard): treibt wie das hintere Bild des Orts, so wie es ein erstelltes Objekt im Spiel tut. Schalte es aus, um die Tiefe dieses Objekts unabhängig einzustellen.
 
 # Tooltip on a text box
 # en: Depth relative to the level's main sprite, which every vanilla level fixes at 0.75: lower sits further away and lags behind the room, higher sits nearer and overshoots. Vanilla objects use 0.1, 0.5, 0.75 and 1.5.
 gameObject.depthRelativeLevelS.tip = Tiefe relativ zum Haupt-Sprite des Levels, das jedes Level des Spiels auf 0.75 festlegt: niedriger liegt weiter weg und hinkt dem Raum hinterher, höher liegt näher und schießt über. Objekte des Spiels nutzen 0.1, 0.5, 0.75 und 1.5.
 
 # Tooltip on "Reversed"
-# en: Drift WITH the cursor instead of against it.
-gameObject.reversed.tip = MIT dem Mauszeiger treiben statt gegen ihn.
+# en: Drift WITH the cursor instead of against it. Until you change it, the object drifts the way the place's back picture does, so this starts ticked where the back picture is reversed.
+gameObject.reversed.tip = MIT dem Mauszeiger treiben statt gegen ihn. Solange du es nicht änderst, treibt das Objekt so wie das hintere Bild des Orts, deshalb ist es dort schon angehakt, wo das hintere Bild umgekehrt ist.
 
 # Tooltip on "UI space"
 # en: Only for an object under a Canvas — it switches the effect to canvas coordinates. A pack's own GameObjects are world sprites, so leave this off unless you're binding to a canvas object.
 gameObject.uiSpace.tip = Nur für ein Objekt unter einem Canvas – es stellt den Effekt auf Canvas-Koordinaten um. Die eigenen GameObjects eines Pakets sind Welt-Sprites, also lass das aus, außer du bindest an ein Canvas-Objekt.
 
 # Tooltip on a part of the window
-# en: Optional pack-relative mask PNG bound to _MaskTex, for shader-masked overlays (a cameo).
-gameObject.optionalPackRelativeMask.tip = Optionale Masken-PNG relativ zum Paket, an _MaskTex gebunden, für per Shader maskierte Overlays (ein Cameo).
+# en: The mask: a PNG in the pack, made in the mask studio (Edit) or elsewhere.
+gameObject.optionalPackRelativeMask.tip = Die Maske: ein PNG im Paket, im Maskenstudio (Bearbeiten) oder anderswo erstellt.
 
 # Tooltip on "+ Component"
 # en: Attach a generic utility component (fade, disappear, random child, blink) to this GameObject.
@@ -2237,6 +2281,50 @@ component.reshuffleEveryTimeS = Bei jedem Aktivieren neu mischen
 # Text
 # en: Toggles a SpriteRenderer's alpha between min and max on a fixed interval (blink / pulse).
 component.togglesSpriterendererSAlpha = Schaltet das Alpha eines SpriteRenderers in festem Abstand zwischen Min und Max um (Blinken / Pulsieren).
+
+# Text explaining a component's settings
+# en: Floats the object up and down, smoothly, for ever - everything under it with it. Several with Random start move out of step.
+component.floatExplain = Lässt das Objekt sanft auf und ab schweben, endlos – und alles darunter mit. Mehrere mit Zufälliger Start bewegen sich versetzt.
+
+# Label in front of a text box
+# en: Height
+component.floatHeight = Höhe
+
+# Tooltip on a text box
+# en: How far it travels from its lowest point to its highest, in units (the size of the object's parent's units).
+component.floatHeight.tip = Wie weit es von seinem tiefsten bis zu seinem höchsten Punkt wandert, in Einheiten (in der Größe der Einheiten seines Elternobjekts).
+
+# Label in front of a text box
+# en: Time (s)
+component.floatPeriod = Zeit (s)
+
+# Tooltip on a text box
+# en: Seconds for one whole rise and fall. Higher is slower and calmer.
+component.floatPeriod.tip = Sekunden für ein ganzes Steigen und Sinken. Höher ist langsamer und ruhiger.
+
+# Label in front of a text box
+# en: Sideways
+component.floatSway = Seitwärts
+
+# Tooltip on a text box
+# en: How far it also sways from side to side, in units. 0 keeps it straight up and down. The sway is a little slower than the rise, so the path keeps changing.
+component.floatSway.tip = Wie weit es zusätzlich von Seite zu Seite schwankt, in Einheiten. 0 hält es gerade auf und ab. Das Schwanken ist etwas langsamer als das Steigen, deshalb ändert sich die Bahn ständig.
+
+# Label in front of a text box
+# en: Start at
+component.floatStart = Start bei
+
+# Tooltip on a text box
+# en: Where in its rise and fall it starts, from 0 to 1: 0 in the middle going up, 0.25 at the top, 0.5 in the middle going down, 0.75 at the bottom. Used when Random start is off.
+component.floatStart.tip = Wo in seinem Steigen und Sinken es beginnt, von 0 bis 1: 0 in der Mitte aufwärts, 0.25 oben, 0.5 in der Mitte abwärts, 0.75 unten. Gilt, wenn Zufälliger Start aus ist.
+
+# Tick box
+# en: Random start
+component.floatRandomStart = Zufälliger Start
+
+# Tooltip on a tick box
+# en: Each one starts somewhere at random in its rise and fall, so several floating side by side do not move together.
+component.floatRandomStart.tip = Jedes beginnt an einer zufälligen Stelle seines Steigens und Sinkens, damit sich mehrere nebeneinander schwebende nicht gleich bewegen.
 
 # Text
 # en: Interval
@@ -2308,6 +2396,110 @@ npcPlacement.blink = Blinzeln
 # en: Wet (particle)
 npcPlacement.wetParticle = Nass (Partikel)
 
+# Heading
+# en: Wet effect
+npcPlacement.wetEffect = Nass-Effekt
+
+# Label in front of a dropdown
+# en: Kind
+npcPlacement.wetKind = Art
+
+# Tooltip on a dropdown
+# en: Which of the game's two wet effects. Same as the NPC: the kind set in the NPC's Wet particles box on the NPCs tab. Wet: Anna's towel look - a few thin white drops over the body, drawn over everything. Shower: the bathroom shower - many fine blue-grey drops falling from a small box, lit by the room's lamps.
+npcPlacement.wetKind.tip = Welcher der zwei Nass-Effekte des Spiels. Wie beim NPC: die Art, die im Feld Nass-Partikel des NPCs im Tab NPCs eingestellt ist. Nass: Annas Handtuch-Look – ein paar dünne weiße Tropfen über dem Körper, über allem gezeichnet. Dusche: die Dusche im Bad – viele feine blaugraue Tropfen, die aus einer kleinen Box fallen, von den Lampen des Raums beleuchtet.
+
+# Choice in a dropdown: the kind the NPC itself has
+# en: Same as the NPC
+npcPlacement.wetKindNpc = Wie beim NPC
+
+# Choice in a dropdown
+# en: Wet
+npcPlacement.wetKindWet = Nass
+
+# Choice in a dropdown
+# en: Shower
+npcPlacement.wetKindShower = Dusche
+
+# Label in front of a text box
+# en: Box width
+npcPlacement.wetWidth = Boxbreite
+
+# Tooltip on a text box
+# en: How wide the box the drops start in is, in the Wet part's own units (its scale still multiplies it). The game's: 3.21 for Wet, 2 for Shower. You can also drag the box's sides in the preview.
+npcPlacement.wetWidth.tip = Wie breit die Box ist, in der die Tropfen starten, in den eigenen Einheiten des Teils Nass (seine Skalierung multipliziert sie noch). Werte des Spiels: 3.21 für Nass, 2 für Dusche. Du kannst auch die Seiten der Box in der Vorschau ziehen.
+
+# Label in front of a text box
+# en: Box height
+npcPlacement.wetHeight = Boxhöhe
+
+# Tooltip on a text box
+# en: How tall the box the drops start in is, in the Wet part's own units (its scale still multiplies it). The game's: 8.45 for Wet, 1 for Shower. You can also drag the box's sides in the preview.
+npcPlacement.wetHeight.tip = Wie hoch die Box ist, in der die Tropfen starten, in den eigenen Einheiten des Teils Nass (seine Skalierung multipliziert sie noch). Werte des Spiels: 8.45 für Nass, 1 für Dusche. Du kannst auch die Seiten der Box in der Vorschau ziehen.
+
+# Tick box
+# en: Drops start along the top
+npcPlacement.wetFromTop = Tropfen starten an der Oberkante
+
+# Tooltip on a tick box
+# en: The drops start on the box's top side only, like a shower head as wide as the box, instead of anywhere in it.
+npcPlacement.wetFromTop.tip = Die Tropfen starten nur an der Oberseite der Box, wie ein Duschkopf, der so breit ist wie die Box, statt irgendwo darin.
+
+# Tick box
+# en: Drops stop at the box's floor
+npcPlacement.wetFloor = Tropfen enden am Boden der Box
+
+# Tooltip on a tick box
+# en: A drop disappears the moment it reaches the bottom of the box, instead of falling off the screen. Drag the box's bottom side down to where the floor is.
+npcPlacement.wetFloor.tip = Ein Tropfen verschwindet in dem Moment, in dem er den unteren Rand der Box erreicht, statt aus dem Bildschirm zu fallen. Zieh die Unterseite der Box nach unten bis dorthin, wo der Boden ist.
+
+# Label in front of a text box
+# en: Tint
+npcPlacement.wetTint = Tönung
+
+# Tooltip on a text box
+# en: The drops' own colour is multiplied by it: white keeps them as they are, a colour tints them, a lower alpha makes them fainter. #RRGGBB or #RRGGBBAA. Empty: the NPC's tint (set on the NPCs tab).
+npcPlacement.wetTint.tip = Die eigene Farbe der Tropfen wird damit multipliziert: Weiß lässt sie, wie sie sind, eine Farbe tönt sie, ein niedrigeres Alpha macht sie blasser. #RRGGBB oder #RRGGBBAA. Leer: die Tönung des NPCs (im Tab NPCs eingestellt).
+
+# Button
+# en: Pick…
+npcPlacement.wetPickTint = Wählen…
+
+# Tooltip on a button
+# en: Choose the tint.
+npcPlacement.wetPickTint.tip = Die Tönung wählen.
+
+# Label in front of a text box
+# en: Amount
+npcPlacement.wetAmount = Menge
+
+# Tooltip on a text box
+# en: Times the game's number of drops a second: 2 makes twice as many, 0.5 half as many. Empty: the NPC's (set on the NPCs tab).
+npcPlacement.wetAmount.tip = Ein Faktor auf die Zahl der Tropfen pro Sekunde im Spiel: 2 macht doppelt so viele, 0.5 halb so viele. Leer: die des NPCs (im Tab NPCs eingestellt).
+
+# Label in front of a text box
+# en: Drop size
+npcPlacement.wetSize = Tropfengröße
+
+# Tooltip on a text box
+# en: Times the game's drop size. The drops only - the box stays as it is. Empty: the NPC's (set on the NPCs tab).
+npcPlacement.wetSize.tip = Ein Faktor auf die Tropfengröße des Spiels. Nur die Tropfen – die Box bleibt, wie sie ist. Leer: die des NPCs (im Tab NPCs eingestellt).
+
+# Label in front of a text box
+# en: Fall speed
+npcPlacement.wetFall = Falltempo
+
+# Tooltip on a text box
+# en: Times the game's fall: lower falls slower, higher faster. Empty: the NPC's (set on the NPCs tab).
+npcPlacement.wetFall.tip = Ein Faktor auf das Fallen im Spiel: niedriger fällt langsamer, höher schneller. Leer: das des NPCs (im Tab NPCs eingestellt).
+
+# Button
+# en: Reset
+npcPlacement.wetReset = Zurücksetzen
+
+# Tooltip on a button
+# en: Takes back everything set here: the kind and the drops' settings go back to the NPC's, the box to the game's own for that kind.
+npcPlacement.wetReset.tip = Nimmt alles zurück, was hier eingestellt ist: Die Art und die Einstellungen der Tropfen gehen auf die des NPCs zurück, die Box auf die des Spiels für diese Art.
+
 # Tick box
 # en: Start active
 npcPlacement.startActive = Aktiv beim Start
@@ -2353,8 +2545,8 @@ npcPlacement.children = Kinder
 npcPlacement.keyNPCNpcsTab.tip = Schlüssel eines NPCs aus dem Tab NPCs.
 
 # Tooltip on a button
-# en: Remove this NPC.
-npcPlacement.remove.tip = Diesen NPC entfernen.
+# en: Remove this NPC. It goes to the place's recycle bin, under the hierarchy beside the preview, to be put back if you need it.
+npcPlacement.remove.tip = Diesen NPC entfernen. Er kommt in den Papierkorb des Orts, unter der Hierarchie neben der Vorschau, damit du ihn bei Bedarf zurückholen kannst.
 
 # Tooltip on a text box
 # en: GameObject name (SetGameObjectActive target). Blank = the NPC key.
@@ -3903,6 +4095,22 @@ characters.outfitParticles = Partikel
 # en: Wet particle active on spawn
 characters.wetParticleActiveSpawn = Nass-Partikel beim Erscheinen aktiv
 
+# Label in front of a dropdown
+# en: Kind
+characters.wetKind = Art
+
+# Tooltip on a dropdown
+# en: Which of the game's two wet effects. Wet: Anna's towel look - a few thin white drops round the middle of the bust. Shower: fine blue-grey drops falling from the top of the bust's picture.
+characters.wetKind.tip = Welcher der zwei Nass-Effekte des Spiels. Nass: Annas Handtuch-Look – ein paar dünne weiße Tropfen um die Mitte der Büste. Dusche: feine blaugraue Tropfen, die vom oberen Rand des Bilds der Büste fallen.
+
+# Choice in a dropdown
+# en: Wet
+characters.wetKindWet = Nass
+
+# Choice in a dropdown
+# en: Shower
+characters.wetKindShower = Dusche
+
 # Text
 # en: (The Wet preset is always attached — this controls whether it starts playing.)
 characters.wetPresetAlwaysAttached = (Die Vorlage Nass ist immer angehängt – das steuert, ob sie zu spielen beginnt.)
@@ -4385,13 +4593,69 @@ npcs.colourHexRGBA = Farbe (Hex RGBA):
 # en: Wet particles (optional)
 npcs.npcWet = Nass-Partikel (optional)
 
+# Label in front of a dropdown
+# en: Kind
+npcs.wetKind = Art
+
+# Tooltip on a dropdown
+# en: Which of the game's two wet effects this NPC has wherever it is placed. Wet: Anna's towel look - a few thin white drops over the body, drawn over everything. Shower: the bathroom shower - many fine blue-grey drops falling from a small box, lit by the room's lamps. A placement can pick the other kind for itself.
+npcs.wetKind.tip = Welchen der zwei Nass-Effekte des Spiels dieser NPC hat, wo immer er platziert ist. Nass: Annas Handtuch-Look – ein paar dünne weiße Tropfen über dem Körper, über allem gezeichnet. Dusche: die Dusche im Bad – viele feine blaugraue Tropfen, die aus einer kleinen Box fallen, von den Lampen des Raums beleuchtet. Eine Platzierung kann für sich die andere Art wählen.
+
+# Choice in a dropdown
+# en: Wet
+npcs.wetKindWet = Nass
+
+# Choice in a dropdown
+# en: Shower
+npcs.wetKindShower = Dusche
+
+# Label in front of a text box
+# en: Tint
+npcs.wetTint = Tönung
+
+# Tooltip on a text box
+# en: The drops' own colour is multiplied by it: white keeps them as they are, a colour tints them, a lower alpha makes them fainter. #RRGGBB or #RRGGBBAA. Empty: the game's colours.
+npcs.wetTint.tip = Die eigene Farbe der Tropfen wird damit multipliziert: Weiß lässt sie, wie sie sind, eine Farbe tönt sie, ein niedrigeres Alpha macht sie blasser. #RRGGBB oder #RRGGBBAA. Leer: die Farben des Spiels.
+
+# Button
+# en: Pick…
+npcs.wetPickTint = Wählen…
+
+# Tooltip on a button
+# en: Choose the tint.
+npcs.wetPickTint.tip = Die Tönung wählen.
+
+# Label in front of a text box
+# en: Amount
+npcs.wetAmount = Menge
+
+# Tooltip on a text box
+# en: Times the game's number of drops a second: 2 makes twice as many, 0.5 half as many.
+npcs.wetAmount.tip = Ein Faktor auf die Zahl der Tropfen pro Sekunde im Spiel: 2 macht doppelt so viele, 0.5 halb so viele.
+
+# Label in front of a text box
+# en: Drop size
+npcs.wetSize = Tropfengröße
+
+# Tooltip on a text box
+# en: Times the game's drop size. The drops only - the box they start in stays as it is.
+npcs.wetSize.tip = Ein Faktor auf die Tropfengröße des Spiels. Nur die Tropfen – die Box, in der sie starten, bleibt, wie sie ist.
+
+# Label in front of a text box
+# en: Fall speed
+npcs.wetFall = Falltempo
+
+# Tooltip on a text box
+# en: Times the game's fall: lower falls slower, higher faster.
+npcs.wetFall.tip = Ein Faktor auf das Fallen im Spiel: niedriger fällt langsamer, höher schneller.
+
 # Tick box
 # en: Start active
 npcs.startActive = Aktiv beim Start
 
 # Text
-# en: Emitter offset / rotation / scale are per-placement — edit the Wet transform on the Places tab.
-npcs.emitterOffsetRotationScale = Versatz / Drehung / Skalierung des Emitters gelten pro Platzierung – bearbeite die Nass-Transformation im Tab Orte.
+# en: Where the drops stand (offset / rotation / scale), the box they start in and a shower's top and floor are set for each placement - edit the Wet part on the Places tab. A placement can also change the settings above for itself.
+npcs.emitterOffsetRotationScale = Wo die Tropfen stehen (Versatz / Drehung / Skalierung), die Box, in der sie starten, sowie Oberkante und Boden einer Dusche werden pro Platzierung festgelegt – bearbeite den Teil Nass im Tab Orte. Eine Platzierung kann auch die Einstellungen oben für sich ändern.
 
 # Tooltip on the divider between the NPC's fields and its preview
 # en: Drag to give the preview more or less of the tab: the NPC scales to fit, no bigger than the size its corner is dragged to. Remembered.
@@ -4647,25 +4911,9 @@ places.extNavigatorButtons = Navigator-Schaltflächen (zur Leiste dieses Orts de
 # en: + Add navigator button
 places.addVanillaExtensionButton = + Navigator-Schaltfläche
 
-# Box heading
-# en: GameObjects (layered on this vanilla place)
-places.gameobjectsLayeredVanillaPlace = GameObjects (über diesen Ort des Spiels gelegt)
-
-# Button
-# en: + Add GameObject
-places.addVanillaExtensionGameObject = + GameObject
-
-# Button
-# en: + Add NPC
-places.addNpc = + NPC
-
 # Button
 # en: Fill from vanilla hierarchy
 places.seedFromCatalog = Aus der Hierarchie des Spiels füllen
-
-# Text
-# en: GameObjects instantiated under the vanilla level (props, decorations, animated layers) — the pack decorates the level without owning it. Same authoring surface as a pack place's GameObjects: nest children, attach utility components, and target by Name from dialogue actions. Use 'Fill from vanilla hierarchy' to pull in the level's real objects as bound nodes you can modify; anything you leave untouched is dropped on save, so the pack only ever stores what it actually changes.
-places.gameobjectsInstantiatedUnderVanilla = GameObjects, die unter dem Level des Spiels erzeugt werden (Requisiten, Dekoration, animierte Ebenen) – das Paket schmückt das Level, ohne es zu besitzen. Dieselbe Bearbeitung wie bei den GameObjects eines eigenen Orts: Kinder verschachteln, Hilfskomponenten anhängen und aus Dialogaktionen über den Namen ansprechen. Mit „Aus der Hierarchie des Spiels füllen“ holst du die echten Objekte des Levels als gebundene Knoten, die du ändern kannst; alles, was du unberührt lässt, fällt beim Speichern weg, sodass das Paket nur speichert, was es tatsächlich ändert.
 
 # Box heading
 # en: Identity
@@ -4817,14 +5065,6 @@ places.navigatorButtons = Navigator-Schaltflächen (sichtbar, solange dieser Ort
 places.up12ButtonsPer = Bis zu 12 Schaltflächen pro Ort. Reihenfolge = Erzeugungsreihenfolge zur Laufzeit = auf dem Bildschirm von links nach rechts; mit ▲▼ umsortieren. Die Vorschau zeigt sie in dieser Reihenfolge nummeriert. Der Loader auf Mod-Seite löst Zielnamen beim Laden in Level-Indizes auf, damit zwei Mods beide Schaltflächen hinzufügen können, ohne sich in die Quere zu kommen.
 
 # Box heading
-# en: GameObjects (this place's scene hierarchy)
-places.placeGameObjects = GameObjects (die Szenenhierarchie dieses Orts)
-
-# Text
-# en: Everything this place builds under its level, as one hierarchy. A GameObject with a Sprite is a layered sprite object (backdrop, prop, animated layer); leave the Sprite blank for a pure container that just groups children. Every node takes utility components (fade, disappear, random child, blink), nested children, and NPC placements. The NPCs node is the level's own NPCs object — always present, and the home for the NPC hierarchy; its subtree composes local transforms down the chain, so moving a container moves everything under it. Target any node from dialogue by Name with SetGameObjectActive / FadeSprite / MoveGameObject / SpinGameObject. Lower sorting draws further back.
-places.everythingPlaceBuildsUnder = Alles, was dieser Ort unter seinem Level baut, als eine Hierarchie. Ein GameObject mit Sprite ist ein geschichtetes Sprite-Objekt (Hintergrund, Requisite, animierte Ebene); lass das Sprite leer für einen reinen Container, der nur Kinder gruppiert. Jeder Knoten nimmt Hilfskomponenten (Einblenden, Verschwinden, zufälliges Kind, Blinken), verschachtelte Kinder und NPC-Platzierungen auf. Der Knoten NPCs ist das eigene NPCs-Objekt des Levels – immer vorhanden und das Zuhause der NPC-Hierarchie; sein Unterbaum setzt lokale Transformationen die Kette hinunter zusammen, sodass das Verschieben eines Containers alles darunter mitnimmt. Sprich jeden Knoten aus einem Dialog über den Namen an, mit SetGameObjectActive / FadeSprite / MoveGameObject / SpinGameObject. Niedrigere Sortierung wird weiter hinten gezeichnet.
-
-# Box heading
 # en: On enter (once per level activation)
 places.enterOncePerLevel = Beim Betreten (einmal pro Aktivierung des Levels)
 
@@ -4884,10 +5124,6 @@ places.extShaders.tip = Den echten JiggleSprite-Durchgang über NPCs mit Wackel-
 # en: Which of the game's own places this extension attaches to. What you add below appears when the player is there.
 places.whichGameSOwn.tip = An welchen der eigenen Orte des Spiels diese Erweiterung gehängt wird. Was du unten hinzufügst, erscheint, wenn der Spieler dort ist.
 
-# Tooltip on "+ Add NPC"
-# en: Place an NPC under this vanilla level's own NPCs object. To hang it under a specific container instead, use the NPCs section on that container.
-places.addNpc.tip = Einen NPC unter das eigene NPCs-Objekt dieses Levels des Spiels setzen. Um ihn stattdessen unter einen bestimmten Container zu hängen, nutze den NPC-Bereich dieses Containers.
-
 # Tooltip on "Fill from vanilla hierarchy"
 # en: Add a bound node for every object the extracted catalog says this level has, seeded with its real transform. Existing entries are left alone, so it's safe to re-run — it just tops up anything new.
 places.seedFromCatalog.tip = Für jedes Objekt, das dieses Level laut extrahiertem Katalog hat, einen gebundenen Knoten hinzufügen, mit seiner echten Transformation. Bestehende Einträge bleiben unberührt, also kann man es gefahrlos erneut ausführen – es ergänzt nur Neues.
@@ -4899,6 +5135,22 @@ places.extParallaxPreview.tip2 = Die Szene wie im Spiel mit dem Mauszeiger treib
 # Tooltip on "Apply shaders"
 # en: Run the real JiggleSprite pass over NPCs that have a jiggle mask, using this pack's own uniforms — the same code and the same numbers the game runs. Animated, so it costs a little CPU; leave off while positioning.
 places.extShaders.tip2 = Den echten JiggleSprite-Durchgang über NPCs mit Wackel-Maske laufen lassen, mit den eigenen Werten dieses Pakets – derselbe Code und dieselben Zahlen wie im Spiel. Animiert, kostet also etwas CPU; beim Positionieren ausgeschaltet lassen.
+
+# Button beside the place preview's tick boxes
+# en: Full screen
+places.fullScreen = Vollbild
+
+# Tooltip on a button
+# en: Shows this preview over the whole screen: the hierarchy and the picked object's settings over its sides, and the preview's tick boxes and quality under the hierarchy, everything working as here. Esc or F11 brings it back. On the Places tab F11 also opens it.
+places.fullScreen.tip = Zeigt diese Vorschau über den ganzen Bildschirm: die Hierarchie und die Einstellungen des ausgewählten Objekts an den Seiten darüber, die Kästchen und die Qualität der Vorschau unter der Hierarchie, und alles funktioniert wie hier. Esc oder F11 holt sie zurück. Im Tab Orte öffnet F11 sie auch.
+
+# Button in the corner of the place preview shown over the whole screen
+# en: Leave full screen
+places.leaveFullScreen = Vollbild beenden
+
+# Tooltip on a button
+# en: Puts the preview back on the page. Esc or F11 does the same.
+places.leaveFullScreen.tip = Bringt die Vorschau zurück auf die Seite. Esc oder F11 tut dasselbe.
 
 # Tooltip on a text box
 # en: What this is called in the editor's own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself.
@@ -4999,10 +5251,6 @@ places.whetherGameSRain.tip = Ob Regen und Schnee des Spiels hier laufen. Keines
 # Tooltip on a text
 # en: Maximum 12 navigator buttons per place.
 places.maximum12NavigatorButtons.tip = Höchstens 12 Navigator-Schaltflächen pro Ort.
-
-# Tooltip on "+ Add NPC"
-# en: Place an NPC under this level's NPCs object. To hang it under a specific container instead, use the NPCs section on that container.
-places.addNpc.tip2 = Einen NPC unter das NPCs-Objekt dieses Levels setzen. Um ihn stattdessen unter einen bestimmten Container zu hängen, nutze den NPC-Bereich dieses Containers.
 
 # Tooltip on a count beside a place
 # one: 1 · other: 0, 2, 3, 4…
@@ -9267,6 +9515,10 @@ maskStudio.kind.gameBust = Wackelmaske auf einer Büste des Spiels, anstelle der
 # en: Level mask: one strength, painted over the level's art.
 maskStudio.kind.level = Levelmaske: eine Stärke, gemalt über die Grafik des Levels.
 
+# The studio's title for an object of a place: {name} is the object's name
+# en: {name} (object)
+maskStudio.object = {name} (Objekt)
+
 # In the title, after a level's name: which of its two masks
 # en: front layer
 maskStudio.layer.front = vordere Ebene
@@ -9358,6 +9610,18 @@ maskStudio.sampled = Deckkraft übernommen: {value}
 # In the status line: where the pointer is on the mask, and the strength there ({value}, a percentage)
 # en: {x}, {y}: {value}
 maskStudio.cursor = {x}, {y}: {value}
+
+# In the status line, after the pointer's place: the part under the pointer is hidden by {name}, drawn in front of what is painted
+# en: under {name}: what moves here can't be seen
+maskStudio.coveredBy = unter {name}: Was sich hier bewegt, ist nicht zu sehen
+
+# In the status line, once, when part of what is painted is hidden by pictures drawn in front of it
+# en: Something is drawn in front of part of this. The preview shows it see-through while you paint, but in the game it hides what moves behind it: point at a spot to see what covers it, and give that object a mask of its own.
+maskStudio.coverNote = Vor einem Teil davon ist etwas gezeichnet. Die Vorschau zeigt es beim Malen durchsichtig, aber im Spiel verdeckt es, was sich dahinter bewegt: Zeig auf eine Stelle, um zu sehen, was sie verdeckt, und gib diesem Objekt eine eigene Maske.
+
+# What the mask studio calls a picture in front that has no name
+# en: a picture in front
+preview.place.coverUnnamed = ein Bild davor
 
 # In the status line: the tool and the layer it paints ({layer})
 # en: Brush on {layer}
@@ -10090,6 +10354,14 @@ docs.maskPainter.mirror.term = Spiegeln
 # Docs: a point in the topic
 # en: Paints both halves at once, mirrored about the middle, with a line marking the middle and a second ring showing where the twin stroke lands.
 docs.maskPainter.mirror = Malt beide Hälften auf einmal, gespiegelt an der Mitte: Eine Linie markiert die Mitte, ein zweiter Ring zeigt, wo der gespiegelte Strich landet.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: See-through in the preview
+docs.maskPainter.covered.term = Durchsichtig in der Vorschau
+
+# Docs: a point in the topic: on a place's or an object's mask, the parts hidden behind something drawn in front
+# en: On a place's layer or an object, the place preview beside the studio draws everything in front of what you paint see-through, so you can watch it move behind. The line at the bottom names what covers the spot under the pointer: in the game, that is what shows there, and the layer's movement is hidden. To move those parts in the game, give the object in front a mask of its own.
+docs.maskPainter.covered = Bei der Ebene eines Orts oder bei einem Objekt zeichnet die Ortsvorschau neben dem Studio alles durchsichtig, was vor dem liegt, was du malst, damit du sehen kannst, wie es sich dahinter bewegt. Die Zeile unten nennt, was die Stelle unter dem Mauszeiger verdeckt: Im Spiel ist das dort zu sehen, und die Bewegung der Ebene bleibt verborgen. Um diese Teile im Spiel zu bewegen, gib dem Objekt davor eine eigene Maske.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Live preview
@@ -11167,6 +11439,14 @@ docs.characters.startWetEffectAlready.term = Nass-Partikel beim Erscheinen aktiv
 # en: Start the wet effect already running. Normally only for swimwear or wet variants.
 docs.characters.startWetEffectAlready = Den Nass-Effekt schon laufend starten. Normalerweise nur für Badekleidung oder nasse Varianten.
 
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Kind
+docs.characters.wetKind.term = Art
+
+# Docs: a point in the topic
+# en: Which of the game's two wet effects the outfit has: Wet, Anna's thin white streaks round the middle of the bust, or Shower, fine blue-grey streaks falling from the top of the bust's picture.
+docs.characters.wetKind = Welchen der zwei Nass-Effekte des Spiels das Outfit hat: Nass, Annas dünne weiße Streifen um die Mitte der Büste, oder Dusche, feine blaugraue Streifen, die vom oberen Rand des Bilds der Büste fallen.
+
 # Docs: a heading inside the topic
 # en: Preview
 docs.characters.heading.preview = Vorschau
@@ -11413,6 +11693,14 @@ docs.npcs.whetherNPCHasWet.term = Aktiviert / Aktiv beim Start
 # en: Whether the NPC has the wet effect at all, and whether it is already running when the room loads.
 docs.npcs.whetherNPCHasWet = Ob der NPC den Nass-Effekt überhaupt hat und ob er beim Laden des Raums schon läuft.
 
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Wet effect
+docs.npcs.wetEffect.term = Nass-Effekt
+
+# Docs: a point in the topic
+# en: How an NPC's wet effect looks is set in its Wet particles box: Kind, Tint, Amount, Drop size and Fall speed. Wet is Anna's, a few thin white streaks over the body; Shower is the bathroom's, fine blue-grey streaks from a small box, lit by the room. Every placement of the NPC starts from those; on the Places tab, pick the NPC in the place preview, then its Wet part, to change any of them for that placement alone (empty keeps the NPC's). The box is the placement's: drag the outlined box's sides to change where the drops start. For a shower, tick Drops start along the top and Drops stop at the box's floor to have it fall from the top of the box to its floor.
+docs.npcs.wetEffect = Wie der Nass-Effekt eines NPCs aussieht, wird in seinem Feld Nass-Partikel eingestellt: Art, Tönung, Menge, Tropfengröße und Falltempo. Nass ist der von Anna, ein paar dünne weiße Streifen über dem Körper; Dusche ist der des Bads, feine blaugraue Streifen aus einer kleinen Box, vom Raum beleuchtet. Jede Platzierung des NPCs geht davon aus; wähle im Tab Orte den NPC in der Ortsvorschau und dann seinen Teil Nass, um davon etwas nur für diese Platzierung zu ändern (leer behält den Wert des NPCs). Die Box gehört der Platzierung: Zieh die Seiten der umrandeten Box, um zu ändern, wo die Tropfen starten. Für eine Dusche hake Tropfen starten an der Oberkante und Tropfen enden am Boden der Box an, damit sie von oben in der Box bis zu ihrem Boden fällt.
+
 # Docs: a heading inside the topic
 # en: Preview
 docs.npcs.heading.preview = Vorschau
@@ -11592,12 +11880,12 @@ docs.places.addButtonPlaceS.term = + Navigator-Schaltfläche
 docs.places.addButtonPlaceS = Der Leiste dieses Orts eine Schaltfläche hinzufügen, die woandershin führt. Höchstens zwölf pro Ort – die Zahl neben der Schaltfläche sagt, wie viele du verwendet hast, und am Limit wird keine weitere angeboten.
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: + Add GameObject
-docs.places.addObjectRoomArt.term = + GameObject
+# en: + Object
+docs.places.addObjectRoomArt.term = + Objekt
 
 # Docs: a point in the topic
-# en: Add an object to the room — art, a prop, a container for other objects.
-docs.places.addObjectRoomArt = Dem Raum ein Objekt hinzufügen – Grafik, eine Requisite, einen Behälter für andere Objekte.
+# en: Over the hierarchy beside the preview: add an object to the room — art, a prop, a container for other objects. It arrives in the middle of the picture, picked, with its settings to the right of it.
+docs.places.addObjectRoomArt = Über der Hierarchie neben der Vorschau: dem Raum ein Objekt hinzufügen – Grafik, eine Requisite, einen Behälter für andere Objekte. Es erscheint in der Mitte des Bilds, ausgewählt, mit seinen Einstellungen rechts daneben.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Copy of
@@ -11612,20 +11900,32 @@ docs.places.copyOfGameObject = Mach ein Objekt zu einer Kopie eines Objekts des 
 docs.places.copyOfGameObject.more = Die Kopie wird jedes Mal erstellt, wenn das Spiel lädt, in deinem Ort oder neben dem Original, und bleibt, wie das Original war, außer du überschreibst es; Kinder mit Bind ändern ihre Teile, und eine Partikelfarbe färbt die Effekte des Spiels um.
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: + Add NPC
-docs.places.placeOneNpcsInto.term = + NPC
+# en: Moves by
+docs.places.objectMask.term = Bewegt von
+
+# Docs: a point in the topic: how a place's object moves
+# en: In the panel beside the picture: how the object's picture moves. Nothing keeps it still; the back layer's mask moves it with the place's back layer's, read over its own picture; its own mask moves it like a place (water, leaves, curtains: one layer) or like a character (bounce, wave and noise, with the settings under it). Edit paints the mask in the mask studio, with the place preview beside it.
+docs.places.objectMask = Im Bereich neben dem Bild: wie sich das Bild des Objekts bewegt. Mit Nichts bleibt es still; mit der Maske der hinteren Ebene bewegt es sich mit der des Orts, über sein eigenes Bild gelesen; mit einer eigenen Maske bewegt es sich wie ein Ort (Wasser, Blätter, Vorhänge: eine Ebene) oder wie eine Figur (Federn, Welle und Rauschen, mit den Einstellungen darunter). Bearbeiten malt die Maske im Maskenstudio, mit der Ortsvorschau daneben.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: + Character
+docs.places.placeOneNpcsInto.term = + Figur
 
 # Docs: a point in the topic
-# en: Place one of your NPCs into the room. To hang it under a particular container instead, use that container's own NPCs section.
-docs.places.placeOneNpcsInto = Einen deiner NPCs in den Raum setzen. Um ihn stattdessen unter einen bestimmten Behälter zu hängen, nutze dessen eigenen Abschnitt NPCs.
+# en: Over the hierarchy beside the preview: place one of your NPCs into the room. It goes on the picked object when that can hold characters (an object under NPCs), otherwise under the place's NPCs object; choose its NPC to the right of the picture.
+docs.places.placeOneNpcsInto = Über der Hierarchie neben der Vorschau: einen deiner NPCs in den Raum setzen. Er kommt auf das ausgewählte Objekt, wenn dieses Figuren aufnehmen kann (ein Objekt unter NPCs), sonst unter das Objekt NPCs des Orts; wähle seinen NPC rechts neben dem Bild.
+
+# Docs: the fold-out under the text above
+# en: Picked, Moves with says how the character drifts as the cursor moves: Front stays on the floor they stand on, as the game's own characters do; Back drifts with the place's back picture, like someone far away; Own drifts by a strength you set. Their shadow, blink and reflection go with them. Parallax on the NPCs object drifts every character in it together.
+docs.places.placeOneNpcsInto.more = Ist die Figur ausgewählt, sagt Bewegt sich mit, wie sie treibt, wenn sich der Mauszeiger bewegt: Vorne bleibt auf dem Boden, auf dem sie steht, wie die eigenen Figuren des Spiels; Hinten treibt mit dem hinteren Bild des Orts, wie jemand weit weg; Eigen treibt mit einer Stärke, die du einstellst. Ihr Schatten, ihr Blinzeln und ihre Spiegelung gehen mit ihr. Parallaxe beim Objekt NPCs lässt alle Figuren darin gemeinsam treiben.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Fill from vanilla hierarchy
 docs.places.vanillaExtensionAddEntry.term = Aus der Hierarchie des Spiels füllen
 
 # Docs: a point in the topic
-# en: On a vanilla extension, add an entry for every object the game's version of this place already has, each with its real position. Existing entries are left alone, so it is safe to run again later to pick up anything new.
-docs.places.vanillaExtensionAddEntry = Bei einer Erweiterung des Spiels für jedes Objekt, das die Version des Spiels von diesem Ort schon hat, einen Eintrag mit seiner echten Position hinzufügen. Vorhandene Einträge bleiben unberührt, also kann man es später gefahrlos erneut ausführen, um Neues zu übernehmen.
+# en: On a vanilla extension, over the hierarchy beside the preview: add an entry for every object the game's version of this place already has, each with its real position. Existing entries are left alone, so it is safe to run again later to pick up anything new.
+docs.places.vanillaExtensionAddEntry = Bei einer Erweiterung des Spiels, über der Hierarchie neben der Vorschau: für jedes Objekt, das die Version des Spiels von diesem Ort schon hat, einen Eintrag mit seiner echten Position hinzufügen. Vorhandene Einträge bleiben unberührt, also kann man es später gefahrlos erneut ausführen, um Neues zu übernehmen.
 
 # Docs: a heading inside the topic
 # en: On enter / On exit
@@ -11674,6 +11974,14 @@ docs.places.runRealJigglePass.term = Shader anwenden
 # Docs: a point in the topic
 # en: Run the real jiggle pass over NPCs that have a mask, using this pack's own numbers. Costs a little processor time, so leave it off while positioning.
 docs.places.runRealJigglePass = Den echten Wackel-Durchgang über NPCs mit Maske laufen lassen, mit den eigenen Zahlen dieses Pakets. Kostet etwas Prozessorzeit, also beim Positionieren ausgeschaltet lassen.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Full screen
+docs.places.fullScreen.term = Vollbild
+
+# Docs: a point in the topic
+# en: Full screen, beside the Preview heading, shows the preview over the whole screen: the hierarchy and the picked object's settings over its sides, the preview's tick boxes and quality under the hierarchy. Everything works there as on the page, Ctrl+Z included. Esc, F11 or Leave full screen at its top brings it back. F11 on the Places tab opens it too.
+docs.places.fullScreen = Vollbild, neben der Überschrift Vorschau, zeigt die Vorschau über den ganzen Bildschirm: die Hierarchie und die Einstellungen des ausgewählten Objekts an den Seiten darüber, die Kästchen und die Qualität der Vorschau unter der Hierarchie. Dort funktioniert alles wie auf der Seite, Strg+Z eingeschlossen. Esc, F11 oder Vollbild beenden oben darin holt sie zurück. F11 im Tab Orte öffnet es ebenfalls.
 
 [Docs: Map Buttons]
 
@@ -14448,8 +14756,8 @@ docs.example.rainyVisitor.s1.do = Klicke im Tab NPCs auf + NPC, nenne ihn „Wet
 docs.example.rainyVisitor.s2 = 2. In den Ort
 
 # A step of a guide example: what to do
-# en: On the Places tab, choose your place and click + Add NPC. Choose Wet visitor as its NPC, then drag it in the preview to where it should stand.
-docs.example.rainyVisitor.s2.do = Wähle im Tab Orte deinen Ort und klicke auf + NPC. Wähle Wet visitor als seinen NPC und zieh ihn dann in der Vorschau an die Stelle, wo er stehen soll.
+# en: On the Places tab, choose your place and click + Character over the hierarchy beside the preview. Choose Wet visitor as its NPC to the right of the picture, then drag it in the preview to where it should stand.
+docs.example.rainyVisitor.s2.do = Wähle im Tab Orte deinen Ort und klicke über der Hierarchie neben der Vorschau auf + Figur. Wähle rechts neben dem Bild Wet visitor als ihren NPC und zieh sie dann in der Vorschau an die Stelle, wo sie stehen soll.
 
 # A step's heading in a guide example, numbered
 # en: 3. Only when it rains
@@ -14948,16 +15256,16 @@ docs.places.navRow = Ziel ist, wohin sie führt, und die Pfeile schieben sie ent
 docs.places.activeWhen.term = Aktiv, wenn
 
 # Docs: a point in the topic
-# en: On an object: + Condition, and the game shows it only while they pass - no rule needed, so objects with opposite conditions take turns by themselves. Untick Switch back off when the conditions stop matching for a one-way reveal.
-docs.places.activeWhen = Bei einem Objekt: + Bedingung, und das Spiel zeigt es nur, solange sie erfüllt sind – keine Regel nötig, also wechseln sich Objekte mit gegensätzlichen Bedingungen von selbst ab. Entferne das Häkchen bei Wieder ausschalten, wenn die Bedingungen nicht mehr zutreffen, für ein einmaliges Enthüllen.
+# en: On an object, in the panel to the right of the picture: + Condition, and the game shows it only while they pass - no rule needed, so objects with opposite conditions take turns by themselves. Untick Switch back off when the conditions stop matching for a one-way reveal.
+docs.places.activeWhen = Bei einem Objekt, im Bereich rechts neben dem Bild: + Bedingung, und das Spiel zeigt es nur, solange sie erfüllt sind – keine Regel nötig, also wechseln sich Objekte mit gegensätzlichen Bedingungen von selbst ab. Entferne das Häkchen bei Wieder ausschalten, wenn die Bedingungen nicht mehr zutreffen, für ein einmaliges Enthüllen.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: + Add child, + Add NPC child, + Component
 docs.places.children.term = + Kind, + NPC als Kind, + Komponente
 
 # Docs: a point in the topic
-# en: On an object: an object inside it, one of your NPCs placed inside it, or a small helper on it - a fade, a random child shown, a blink.
-docs.places.children = Bei einem Objekt: ein Objekt darin, einer deiner NPCs darin platziert oder ein kleiner Helfer darauf – ein Ausblenden, ein zufällig gezeigtes Kind, ein Blinken.
+# en: On an object, in the panel to the right of the picture: an object inside it, one of your NPCs placed inside it, or a small helper on it - a fade, a random child shown, a blink, a smooth float up and down (FloatingSprite: its Height, Time, Sideways and start are yours to set). Components that change what you see play in the place preview as you edit them: fades (replayed after a pause), blinks, floats, a random child (a new pick every few seconds), and the game's swing, shake, sprite blender and cinema changer. The component list is grouped as ModForge's own, Vanilla (the game's scripts) and Unity, each with a line saying what it does.
+docs.places.children = Bei einem Objekt, im Bereich rechts neben dem Bild: ein Objekt darin, einer deiner NPCs darin platziert oder ein kleiner Helfer darauf – ein Ausblenden, ein zufällig gezeigtes Kind, ein Blinken, ein sanftes Auf- und Abschweben (FloatingSprite: Höhe, Zeit, Seitwärts und den Start stellst du selbst ein). Komponenten, die verändern, was du siehst, spielen in der Ortsvorschau, während du sie bearbeitest: Ein- und Ausblenden (nach einer Pause wiederholt), Blinken, Schweben, ein zufälliges Kind (alle paar Sekunden ein neues) sowie Schwingen, Schütteln, Sprite-Mischer und Kino-Bildwechsler des Spiels. Die Liste der Komponenten ist gruppiert: ModForge (die eigenen von ModForge), Spiel (die Skripte des Spiels) und Unity, jede mit einer Zeile, die sagt, was sie tut.
 
 # A bullet's fold-out in the guide
 # en: A child switches on and off with its parent, and Active when or a RandomChildActivator on the parent decides for all of them. Its place does not follow the parent: an object of yours stands at its own X and Y in the room, so give each child its own. (A child bound to one of the game's objects, or a copy of one, sits relative to its parent, as the game has it.)
@@ -15556,24 +15864,24 @@ tutorial.dressingTheRoom.summary = Stell eine goldene Vase als Objekt in ihre Ga
 tutorial.dressingTheRoom.addObject.title = Ein Objekt hinzufügen
 
 # Tutorials: what the step says
-# en: Under GameObjects, scroll to the bottom and click + Add GameObject. Light 2D and NPCs are in every place already - leave them as they are.
-tutorial.dressingTheRoom.addObject.body = Scrolle unter GameObjects ganz nach unten und klicke auf + GameObject. Light 2D und NPCs sind schon in jedem Ort – lass sie, wie sie sind.
+# en: In the hierarchy beside the preview, click + Object. Light 2D and NPCs are in every place already - leave them as they are.
+tutorial.dressingTheRoom.addObject.body = Klicke in der Hierarchie neben der Vorschau auf + Objekt. Light 2D und NPCs sind schon in jedem Ort – lass sie, wie sie sind.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Add GameObject is at the bottom of the GameObjects box: scroll down to it.
-tutorial.dressingTheRoom.addObject.hint = + GameObject ist ganz unten im Feld GameObjects: Scrolle hinunter.
+# en: + Object is at the top of the hierarchy, beside the picture.
+tutorial.dressingTheRoom.addObject.hint = + Objekt ist oben in der Hierarchie, neben dem Bild.
 
 # Tutorials: the heading of a step
 # en: Name and picture
 tutorial.dressingTheRoom.giveNamePicture.title = Name und Bild
 
 # Tutorials: what the step says
-# en: In the new card, named GameObject, type Vase over its Name, and choose TutorialArt/Locations/Vase.png as its Sprite.
-tutorial.dressingTheRoom.giveNamePicture.body = Tippe in der neuen Karte namens GameObject Vase über ihren Namen und wähle TutorialArt/Locations/Vase.png als ihr Sprite.
+# en: The new object, named GameObject, is picked: in the panel to the right of the picture, type Vase over its Name, and choose TutorialArt/Locations/Vase.png as its Sprite.
+tutorial.dressingTheRoom.giveNamePicture.body = Das neue Objekt namens GameObject ist ausgewählt: Tippe im Bereich rechts neben dem Bild Vase als Name ein und wähle TutorialArt/Locations/Vase.png als sein Sprite.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: The new card is called GameObject: type Vase in its Name, then fill in its Sprite.
-tutorial.dressingTheRoom.giveNamePicture.hint = Die neue Karte heißt GameObject: Tippe Vase in ihr Feld Name und fülle dann ihr Sprite aus.
+# en: The panel to the right of the picture shows the picked object: type Vase in its Name, then fill in its Sprite.
+tutorial.dressingTheRoom.giveNamePicture.hint = Der Bereich rechts neben dem Bild zeigt das ausgewählte Objekt: Tippe Vase in sein Feld Name und fülle dann sein Sprite aus.
 
 # Tutorials: the heading of a step
 # en: Put it in place
@@ -15592,12 +15900,12 @@ tutorial.dressingTheRoom.putWhereWant.hint = Klicke auf die Vase in der Vorschau
 tutorial.dressingTheRoom.decideStandsFront.title = Zwischen den Bildern
 
 # Tutorials: what the step says
-# en: Set its Sort to -11 - the box after Scale X/Y on the vase's row.
-tutorial.dressingTheRoom.decideStandsFront.body = Setze ihr Sort. auf -11 – das Feld nach Skalierung X/Y in der Zeile der Vase.
+# en: Set its Sort to -11 - the box after Scale X/Y, in the panel to the right of the picture.
+tutorial.dressingTheRoom.decideStandsFront.body = Setze ihr Sort. auf -11 – das Feld nach Skalierung X/Y, im Bereich rechts neben dem Bild.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Sort, on the vase's row under GameObjects.
-tutorial.dressingTheRoom.decideStandsFront.hint = Sort., in der Zeile der Vase unter GameObjects.
+# en: Sort, in the panel to the right of the picture, with the vase picked.
+tutorial.dressingTheRoom.decideStandsFront.hint = Sort., im Bereich rechts neben dem Bild, wenn die Vase ausgewählt ist.
 
 # Tutorials: the heading of a step
 # en: Hidden for now
@@ -16402,24 +16710,24 @@ tutorial.populating.giveThemSomeLife.hint = Maske bearbeiten, neben dem Feld Wac
 tutorial.populating.putThemRoom.title = In die Galerie
 
 # Tutorials: what the step says
-# en: On the Places tab, with The Gallery chosen, click + Add NPC and pick Mannequin in the new row's NPC box.
-tutorial.populating.putThemRoom.body = Wähle im Tab Orte The Gallery aus, klicke auf + NPC und wähle im Feld NPC der neuen Zeile Mannequin.
+# en: On the Places tab, with The Gallery chosen, click + Character in the hierarchy beside the preview and pick Mannequin as its NPC in the panel to the right of the picture.
+tutorial.populating.putThemRoom.body = Wähle im Tab Orte The Gallery aus, klicke in der Hierarchie neben der Vorschau auf + Figur und wähle im Bereich rechts neben dem Bild Mannequin als ihren NPC.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Add NPC under GameObjects, then Mannequin in the row's NPC box.
-tutorial.populating.putThemRoom.hint = + NPC unter GameObjects, dann Mannequin im Feld NPC der Zeile.
+# en: + Character over the hierarchy, then Mannequin as its NPC to the right of the picture.
+tutorial.populating.putThemRoom.hint = + Figur über der Hierarchie, dann Mannequin als ihren NPC rechts neben dem Bild.
 
 # Tutorials: the heading of a step
 # en: Show her
 tutorial.populating.switchThem.title = Zeig sie
 
 # Tutorials: what the step says
-# en: Tick Start active on the placement's row - below Part transforms, beside Sorting order. It shows the whole figure; the droplets have their own Enabled, which stays off. A new placement starts hidden.
-tutorial.populating.switchThem.body = Hake Aktiv beim Start in der Zeile der Platzierung an – unter Transformationen der Teile, neben Sortierreihenfolge. Das zeigt die ganze Figur; die Tropfen haben ihr eigenes Aktiviert, das aus bleibt. Eine neue Platzierung beginnt versteckt.
+# en: Tick Start active in the panel to the right of the picture - below Part transforms, beside Sorting order. It shows the whole figure; the droplets have their own Enabled, which stays off. A new placement starts hidden.
+tutorial.populating.switchThem.body = Hake Aktiv beim Start im Bereich rechts neben dem Bild an – unter Transformationen der Teile, neben Sortierreihenfolge. Das zeigt die ganze Figur; die Tropfen haben ihr eigenes Aktiviert, das aus bleibt. Eine neue Platzierung beginnt versteckt.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Start active, below Part transforms on the placement's row under GameObjects.
-tutorial.populating.switchThem.hint = Aktiv beim Start, unter Transformationen der Teile in der Zeile der Platzierung unter GameObjects.
+# en: Start active, below Part transforms in the panel to the right of the picture.
+tutorial.populating.switchThem.hint = Aktiv beim Start, unter Transformationen der Teile im Bereich rechts neben dem Bild.
 
 # Tutorials: the heading of a step
 # en: Put her in place
@@ -16458,16 +16766,16 @@ tutorial.populating.sitThemFloor.more = Farbe legt fest, wie dunkel er ist; Sort
 tutorial.populating.giveThemSomeLife.more = Dieselbe Maske wie bei einer Büste. Eine Figur ohne Maske ist völlig starr und wirkt wie ein Pappaufsteller, sobald sich irgendetwas anderes auf dem Bildschirm bewegt.
 
 # The fold-out under a tutorial step: the whole explanation
-# en: A row with no NPC chosen is a placement of nobody: it shows nothing and breaks nothing, which is why it's easy to leave behind. The same NPC can stand in as many rooms as you like - each placement is a copy.
-tutorial.populating.putThemRoom.more = Eine Zeile ohne gewählten NPC ist eine Platzierung von niemandem: Sie zeigt nichts und macht nichts kaputt, darum bleibt sie leicht übrig. Derselbe NPC kann in beliebig vielen Räumen stehen – jede Platzierung ist eine Kopie.
+# en: A character with no NPC chosen is a placement of nobody: it shows nothing and breaks nothing, which is why it's easy to leave behind. The same NPC can stand in as many rooms as you like - each placement is a copy.
+tutorial.populating.putThemRoom.more = Eine Figur ohne gewählten NPC ist eine Platzierung von niemandem: Sie zeigt nichts und macht nichts kaputt, darum bleibt sie leicht übrig. Derselbe NPC kann in beliebig vielen Räumen stehen – jede Platzierung ist eine Kopie.
 
 # The fold-out under a tutorial step: the whole explanation
 # en: Hidden is the usual start: a figure that a rule shows later, like one who arrives at night. This one should simply be there.
 tutorial.populating.switchThem.more = Versteckt ist der übliche Anfang: eine Figur, die eine Regel später zeigt, etwa jemand, der nachts kommt. Diese hier soll einfach da sein.
 
 # The fold-out under a tutorial step: the whole explanation
-# en: Click a figure and its tools appear in the panel to the right of the picture. The first row picks what moves - Body, Shadow, Blink or Wet - and the second how: Move, Rotate or Scale. All four belong to this placement, not to the NPC, so they change in this room only. The same numbers are on the row under Part transforms.
-tutorial.populating.placeThemProperly.more = Klicke auf eine Figur, und ihre Werkzeuge erscheinen im Bereich rechts neben dem Bild. Die erste Reihe wählt, was sich bewegt – Körper, Schatten, Blinzeln oder Nass –, die zweite, wie: Verschieben, Drehen oder Skalieren. Alle vier gehören zu dieser Platzierung, nicht zum NPC, also ändern sie sich nur in diesem Raum. Dieselben Zahlen stehen in der Zeile unter Transformationen der Teile.
+# en: Click a figure and its tools appear in the panel to the right of the picture. The first row picks what moves - Body, Shadow, Blink or Wet - and the second how: Move, Rotate or Scale. All four belong to this placement, not to the NPC, so they change in this room only. The same numbers are lower in that panel, under Part transforms.
+tutorial.populating.placeThemProperly.more = Klicke auf eine Figur, und ihre Werkzeuge erscheinen im Bereich rechts neben dem Bild. Die erste Reihe wählt, was sich bewegt – Körper, Schatten, Blinzeln oder Nass –, die zweite, wie: Verschieben, Drehen oder Skalieren. Alle vier gehören zu dieser Platzierung, nicht zum NPC, also ändern sie sich nur in diesem Raum. Dieselben Zahlen stehen weiter unten in diesem Bereich, unter Transformationen der Teile.
 
 # The fold-out under a tutorial step: the whole explanation
 # en: A place with figures in it stops looking like artwork. Standing in it is the only way to judge them. Next: a whole row of them.
@@ -16482,8 +16790,8 @@ tutorial.populating.shadow.title = Ihr Schatten
 tutorial.populating.shadow.body = Ihr Schatten beginnt dort, wo die Figuren des Spiels ihren haben – hier, versteckt hinter ihren Beinen. Klicke sie in der Vorschau an, wähle im Bereich rechts neben dem Bild Schatten und zieh den Schatten nach unten unter ihre Füße.
 
 # The fold-out under a tutorial step: the whole explanation
-# en: A shadow is what stands a figure on the floor. Every placement has its own, so it fits that spot - half behind a table, on a step. Under Part transforms on her row, Shadow's X and Y are the same numbers to type; Scale Y squashes it flatter.
-tutorial.populating.shadow.more = Erst ein Schatten stellt eine Figur auf den Boden. Jede Platzierung hat ihren eigenen, damit er zu der Stelle passt – halb hinter einem Tisch, auf einer Stufe. Unter Transformationen der Teile in ihrer Zeile sind X und Y von Schatten dieselben Zahlen zum Eintippen; Skalierung Y staucht ihn flacher.
+# en: A shadow is what stands a figure on the floor. Every placement has its own, so it fits that spot - half behind a table, on a step. Under Part transforms, lower in the panel to the right of the picture, Shadow's X and Y are the same numbers to type; Scale Y squashes it flatter.
+tutorial.populating.shadow.more = Erst ein Schatten stellt eine Figur auf den Boden. Jede Platzierung hat ihren eigenen, damit er zu der Stelle passt – halb hinter einem Tisch, auf einer Stufe. Unter Transformationen der Teile, weiter unten im Bereich rechts neben dem Bild, sind X und Y von Schatten dieselben Zahlen zum Eintippen; Skalierung Y staucht ihn flacher.
 
 # Tutorial hint, shown when a step has waited a while
 # en: Click her in the preview, then Shadow in the panel to the right of the picture, then drag.
@@ -16512,24 +16820,24 @@ tutorial.npcsThatBelong.definitionNotAppearance.body = Eine Schaufensterpuppe is
 tutorial.npcsThatBelong.putSamePersonTwice.title = Eine zweite
 
 # Tutorials: what the step says
-# en: On the Places tab, add Mannequin to The Gallery again with + Add NPC.
-tutorial.npcsThatBelong.putSamePersonTwice.body = Füge im Tab Orte Mannequin mit + NPC noch einmal zu The Gallery hinzu.
+# en: On the Places tab, add Mannequin to The Gallery again with + Character.
+tutorial.npcsThatBelong.putSamePersonTwice.body = Füge im Tab Orte Mannequin mit + Figur noch einmal zu The Gallery hinzu.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Add NPC on The Gallery, then Mannequin in the NPC box.
-tutorial.npcsThatBelong.putSamePersonTwice.hint = + NPC bei The Gallery, dann Mannequin im Feld NPC.
+# en: + Character over the hierarchy on The Gallery, then Mannequin as its NPC to the right of the picture.
+tutorial.npcsThatBelong.putSamePersonTwice.hint = + Figur über der Hierarchie bei The Gallery, dann Mannequin als ihren NPC rechts neben dem Bild.
 
 # Tutorials: the heading of a step
 # en: Tell them apart
 tutorial.npcsThatBelong.tellThemApart.title = Unterscheide sie
 
 # Tutorials: what the step says
-# en: Scroll down to the two Mannequin rows under GameObjects. The lower row is the new one, the one you dragged left: tick its Start active and name it MannequinLeft. Name the upper row MannequinRight.
-tutorial.npcsThatBelong.tellThemApart.body = Scrolle nach unten zu den beiden Mannequin-Zeilen unter GameObjects. Die untere Zeile ist die neue, die du nach links gezogen hast: Hake dort Aktiv beim Start an und nenne sie MannequinLeft. Nenne die obere Zeile MannequinRight.
+# en: Both Mannequins are under NPCs in the hierarchy beside the picture. The new one, the one you dragged left, is picked: tick its Start active and name it MannequinLeft in the panel to the right of the picture. Then pick the other one and name it MannequinRight.
+tutorial.npcsThatBelong.tellThemApart.body = Beide Mannequin-Figuren sind in der Hierarchie neben dem Bild unter NPCs. Die neue, die du nach links gezogen hast, ist ausgewählt: Hake im Bereich rechts neben dem Bild ihr Aktiv beim Start an und nenne sie MannequinLeft. Wähle dann die andere aus und nenne sie MannequinRight.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Both Mannequin rows are at the bottom of the GameObjects box: give each its own Name.
-tutorial.npcsThatBelong.tellThemApart.hint = Beide Mannequin-Zeilen stehen ganz unten im Feld GameObjects: Gib jeder ihren eigenen Namen.
+# en: Pick each Mannequin under NPCs in the hierarchy and give it its own Name in the panel to the right of the picture.
+tutorial.npcsThatBelong.tellThemApart.hint = Wähle jede Mannequin-Figur unter NPCs in der Hierarchie aus und gib ihr im Bereich rechts neben dem Bild ihren eigenen Namen.
 
 # Tutorials: the heading of a step
 # en: Change them both
@@ -18336,8 +18644,8 @@ tutorial.deeperPlaces.summary = Die Galerie nach Einbruch der Dunkelheit: ein Po
 tutorial.deeperPlaces.story.title = Was ein Ort enthält
 
 # Tutorial step: what to do, in a sentence or two
-# en: A place is its art and the objects in it: props, lights, effects and NPCs, each in the GameObjects box and the hierarchy beside the preview. Her gallery is chosen.
-tutorial.deeperPlaces.story.body = Ein Ort ist seine Grafik und die Objekte darin: Requisiten, Lichter, Effekte und NPCs, jedes im Feld GameObjects und in der Hierarchie neben der Vorschau. Ihre Galerie ist ausgewählt.
+# en: A place is its art and the objects in it: props, lights, effects and NPCs, each in the hierarchy beside the preview, with its settings to the right of the picture once you pick it. Her gallery is chosen.
+tutorial.deeperPlaces.story.body = Ein Ort ist seine Grafik und die Objekte darin: Requisiten, Lichter, Effekte und NPCs, jedes in der Hierarchie neben der Vorschau, mit seinen Einstellungen rechts neben dem Bild, sobald du es auswählst. Ihre Galerie ist ausgewählt.
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: Each object has its own picture, its own spot and size, its own order in front of or behind the others, and its own Active when: conditions that show it and hide it as they change. Objects can hold objects - move the parent and its children move with it.
@@ -18348,32 +18656,32 @@ tutorial.deeperPlaces.story.more = Jedes Objekt hat sein eigenes Bild, seine eig
 tutorial.deeperPlaces.poster.title = Ihr Poster
 
 # Tutorial step: what to do, in a sentence or two
-# en: Scroll to the bottom of the GameObjects box and click + Add GameObject. Name the new object "Poster", give it TutorialArt/Locations/Poster.png as its Sprite and set its Sort to -11, like the vase. Then scroll up and drag it onto the wall in the preview.
-tutorial.deeperPlaces.poster.body = Scrolle ganz nach unten im Feld GameObjects und klicke auf + GameObject. Nenne das neue Objekt „Poster“, gib ihm TutorialArt/Locations/Poster.png als Sprite und setz Sort. auf -11, wie bei der Vase. Scrolle dann nach oben und zieh es in der Vorschau an die Wand.
+# en: In the hierarchy beside the preview, click + Object. In the panel to the right of the picture, name the new object "Poster", give it TutorialArt/Locations/Poster.png as its Sprite and set its Sort to -11, like the vase. Then drag it onto the wall in the preview.
+tutorial.deeperPlaces.poster.body = Klicke in der Hierarchie neben der Vorschau auf + Objekt. Nenne das neue Objekt im Bereich rechts neben dem Bild „Poster“, gib ihm TutorialArt/Locations/Poster.png als Sprite und setz Sort. auf -11, wie bei der Vase. Zieh es dann in der Vorschau an die Wand.
 
 # Tutorial step: the whole explanation, under Tell me more
-# en: The picture is a framed portrait of her: around the frame it is see-through (a PNG), so only the frame and the portrait cover the wall. Sort -11 draws it between the room's back picture (-12) and its front one (-10). Size it with Scale, in the panel beside the preview or on its row.
-tutorial.deeperPlaces.poster.more = Das Bild ist ein gerahmtes Porträt von ihr: Um den Rahmen herum ist es durchsichtig (ein PNG), also verdecken nur Rahmen und Porträt die Wand. Sort. -11 zeichnet es zwischen dem hinteren Bild des Raums (-12) und dem vorderen (-10). Ändere seine Größe mit Skalierung, im Bereich neben der Vorschau oder in seiner Zeile.
+# en: The picture is a framed portrait of her: around the frame it is see-through (a PNG), so only the frame and the portrait cover the wall. Sort -11 draws it between the room's back picture (-12) and its front one (-10). Size it with Scale, in the panel to the right of the picture.
+tutorial.deeperPlaces.poster.more = Das Bild ist ein gerahmtes Porträt von ihr: Um den Rahmen herum ist es durchsichtig (ein PNG), also verdecken nur Rahmen und Porträt die Wand. Sort. -11 zeichnet es zwischen dem hinteren Bild des Raums (-12) und dem vorderen (-10). Ändere seine Größe mit Skalierung, im Bereich rechts neben dem Bild.
 
 # Tutorial step: where to click, when the step waits
-# en: + Add GameObject is at the bottom of the GameObjects box; Name, Sprite and Sort are on the new object's row.
-tutorial.deeperPlaces.poster.hint = + GameObject steht ganz unten im Feld GameObjects; Name, Sprite und Sort. sind in der Zeile des neuen Objekts.
+# en: + Object is at the top of the hierarchy; Name, Sprite and Sort are in the panel to the right of the picture.
+tutorial.deeperPlaces.poster.hint = + Objekt ist oben in der Hierarchie; Name, Sprite und Sort. sind im Bereich rechts neben dem Bild.
 
 # Tutorial step title
 # en: Up once she's braver
 tutorial.deeperPlaces.posterWhen.title = Aufgehängt, sobald sie mutiger ist
 
 # Tutorial step: what to do, in a sentence or two
-# en: Scroll down to the Poster row - the last one. Under its Active when, click + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 3. Leave Start active as it is.
-tutorial.deeperPlaces.posterWhen.body = Scrolle nach unten zur Zeile Poster – der letzten. Klicke unter ihrem Aktiv, wenn auf + Bedingung: Typ Variable, Name Confidence, Vergleich größer oder gleich, Wert 3. Lass Aktiv beim Start, wie es ist.
+# en: The Poster is picked. Under its Active when, in the panel to the right of the picture, click + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 3. Leave Start active as it is.
+tutorial.deeperPlaces.posterWhen.body = Das Poster ist ausgewählt. Klicke unter seinem Aktiv, wenn im Bereich rechts neben dem Bild auf + Bedingung: Typ Variable, Name Confidence, Vergleich größer oder gleich, Wert 3. Lass Aktiv beim Start, wie es ist.
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: Active when is checked all the time, so the poster appears the moment her confidence reaches 3 and goes again if it drops - some nights cost her one (tutorial 21, Rules, in depth), and your visits win it back. Start active says what it is before any condition is met.
 tutorial.deeperPlaces.posterWhen.more = Aktiv, wenn wird ständig geprüft, also erscheint das Poster in dem Moment, in dem ihr Selbstvertrauen 3 erreicht, und verschwindet wieder, wenn es sinkt – manche Nächte kosten sie einen Punkt (Tutorial 21, Regeln im Detail), und deine Besuche holen ihn zurück. Aktiv beim Start sagt, was es ist, bevor irgendeine Bedingung erfüllt ist.
 
 # Tutorial step: where to click, when the step waits
-# en: Active when is on the poster's row in the GameObjects box.
-tutorial.deeperPlaces.posterWhen.hint = Aktiv, wenn ist in der Zeile des Posters im Feld GameObjects.
+# en: Active when is in the panel to the right of the picture, with the poster picked.
+tutorial.deeperPlaces.posterWhen.hint = Aktiv, wenn ist im Bereich rechts neben dem Bild, wenn das Poster ausgewählt ist.
 
 # Tutorial step title
 # en: What is drawn over what
@@ -18408,16 +18716,16 @@ tutorial.deeperPlaces.visitor.hint = + NPC steht über der Liste der NPCs.
 tutorial.deeperPlaces.placeVisitor.title = In der Galerie
 
 # Tutorial step: what to do, in a sentence or two
-# en: On the Places tab, with The Gallery chosen, click + Add NPC and pick Visitor in the new row's NPC box. Then scroll up to the preview and drag her to the right of the gallery.
-tutorial.deeperPlaces.placeVisitor.body = Wähle im Tab Orte The Gallery aus, klicke auf + NPC und wähle im Feld NPC der neuen Zeile Visitor. Scrolle dann nach oben zur Vorschau und zieh sie auf die rechte Seite der Galerie.
+# en: On the Places tab, with The Gallery chosen, click + Character in the hierarchy beside the preview and pick Visitor as its NPC in the panel to the right of the picture. Then drag her to the right of the gallery.
+tutorial.deeperPlaces.placeVisitor.body = Wähle im Tab Orte The Gallery aus, klicke in der Hierarchie neben der Vorschau auf + Figur und wähle im Bereich rechts neben dem Bild Visitor als ihren NPC. Zieh sie dann auf die rechte Seite der Galerie.
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: A placement is one appearance of an NPC in one place: where she stands, how big, her shadow, and when she is there. The same NPC can be placed in many places, and twice in one.
 tutorial.deeperPlaces.placeVisitor.more = Eine Platzierung ist ein Auftritt eines NPCs an einem Ort: wo sie steht, wie groß, ihr Schatten und wann sie da ist. Derselbe NPC kann an vielen Orten platziert werden, auch zweimal an einem.
 
 # Tutorial step: where to click, when the step waits
-# en: + Add NPC is under the GameObjects box.
-tutorial.deeperPlaces.placeVisitor.hint = + NPC steht unter dem Feld GameObjects.
+# en: + Character is at the top of the hierarchy; pick Visitor as its NPC in the panel to the right of the picture.
+tutorial.deeperPlaces.placeVisitor.hint = + Figur ist oben in der Hierarchie; wähle im Bereich rechts neben dem Bild Visitor als ihren NPC.
 
 # Tutorial step title
 # en: Her shadow
@@ -18440,16 +18748,16 @@ tutorial.deeperPlaces.visitorShadow.hint = Klicke sie in der Vorschau an, dann S
 tutorial.deeperPlaces.visitorWhen.title = Sobald sie sich zeigt
 
 # Tutorial step: what to do, in a sentence or two
-# en: Scroll down to the visitor's row - the last one. Under its Active when, + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 5. Visitors come once the Dummy is sure of herself.
-tutorial.deeperPlaces.visitorWhen.body = Scrolle nach unten zur Zeile der Besucherin – der letzten. Unter ihrem Aktiv, wenn: + Bedingung, Typ Variable, Name Confidence, Vergleich größer oder gleich, Wert 5. Besucher kommen, sobald Dummy sich ihrer sicher ist.
+# en: The visitor is picked. Under her Active when, in the panel to the right of the picture, + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 5. Visitors come once the Dummy is sure of herself.
+tutorial.deeperPlaces.visitorWhen.body = Die Besucherin ist ausgewählt. Unter ihrem Aktiv, wenn im Bereich rechts neben dem Bild: + Bedingung, Typ Variable, Name Confidence, Vergleich größer oder gleich, Wert 5. Besucher kommen, sobald Dummy sich ihrer sicher ist.
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: An NPC placement has its own Active when, as any object does: the same visitor could stand in her gallery on some days and in a cafe on others. Leave "Switch back off when the conditions stop matching" ticked, so she leaves again if the Dummy loses her nerve.
 tutorial.deeperPlaces.visitorWhen.more = Eine NPC-Platzierung hat ihr eigenes Aktiv, wenn, wie jedes Objekt: Dieselbe Besucherin könnte an manchen Tagen in ihrer Galerie stehen und an anderen in einem Café. Lass „Wieder ausschalten, wenn die Bedingungen nicht mehr zutreffen“ angehakt, damit sie wieder geht, wenn Dummy den Mut verliert.
 
 # Tutorial step: where to click, when the step waits
-# en: Active when is on the visitor's row in the GameObjects box.
-tutorial.deeperPlaces.visitorWhen.hint = Aktiv, wenn ist in der Zeile der Besucherin im Feld GameObjects.
+# en: Active when is in the panel to the right of the picture, with the visitor picked.
+tutorial.deeperPlaces.visitorWhen.hint = Aktiv, wenn ist im Bereich rechts neben dem Bild, wenn die Besucherin ausgewählt ist.
 
 # Tutorial step title
 # en: The game's own places
@@ -19704,8 +20012,8 @@ tutorial.deeperRooms.weather.hint = Das eingekreiste Feld Wetter, im Panel Verha
 tutorial.deeperRooms.sign.title = Ein Neonstern
 
 # A tutorial step's instruction (short)
-# en: Add a GameObject "Star sign" with Sprite TutorialArt/Locations/NeonStar.png, Sort -11, high on her gallery's back wall, and click + Component: BlinkingSprite.
-tutorial.deeperRooms.sign.body = Füge ein GameObject „Star sign“ mit Sprite TutorialArt/Locations/NeonStar.png hinzu, Sort. -11, hoch an der Rückwand ihrer Galerie, und klicke auf + Komponente: BlinkingSprite.
+# en: Click + Object over the hierarchy and name it "Star sign", with Sprite TutorialArt/Locations/NeonStar.png and Sort -11, high on her gallery's back wall. Then click + Component: BlinkingSprite.
+tutorial.deeperRooms.sign.body = Klicke über der Hierarchie auf + Objekt und nenne es „Star sign“, mit Sprite TutorialArt/Locations/NeonStar.png und Sort. -11, hoch an der Rückwand ihrer Galerie. Klicke dann auf + Komponente: BlinkingSprite.
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: A component makes an object do something by itself. BlinkingSprite switches its picture's opacity between two values on a fixed beat, like a sign on a bad wire.
@@ -19716,12 +20024,28 @@ tutorial.deeperRooms.sign.more = Eine Komponente lässt ein Objekt von selbst et
 tutorial.deeperRooms.sign.hint = + Komponente ist im Panel des Objekts.
 
 # A tutorial step's title
+# en: A vase that floats
+tutorial.deeperRooms.float.title = Eine Vase, die schwebt
+
+# A tutorial step's instruction (short)
+# en: Click + Object and name it "Floating vase", with Sprite TutorialArt/Locations/Vase.png and Sort -10, in the middle of her gallery. Then click + Component: FloatingSprite.
+tutorial.deeperRooms.float.body = Klicke auf + Objekt und nenne es „Floating vase“, mit Sprite TutorialArt/Locations/Vase.png und Sort. -10, mitten in ihrer Galerie. Klicke dann auf + Komponente: FloatingSprite.
+
+# A tutorial step's fold-out: the rest of its explanation
+# en: FloatingSprite moves an object up and down smoothly for ever, and everything under it with it: a sculpture hovering over its stand, a monster in a tank, a toy bobbing in water. Height is how far it travels and Time how long one rise and fall takes; the preview plays it as you change them.
+tutorial.deeperRooms.float.more = FloatingSprite bewegt ein Objekt endlos sanft auf und ab, und alles darunter mit: eine Skulptur, die über ihrem Sockel schwebt, ein Monster in einem Tank, ein Spielzeug, das im Wasser schaukelt. Höhe ist, wie weit es wandert, und Zeit, wie lange ein Steigen und Sinken dauert; die Vorschau spielt es ab, während du sie änderst.
+
+# A tutorial step's hint: where to find what it asks for
+# en: + Component is in the object's panel; FloatingSprite is in its ModForge group.
+tutorial.deeperRooms.float.hint = + Komponente ist im Panel des Objekts; FloatingSprite steht dort in der Gruppe ModForge.
+
+# A tutorial step's title
 # en: Flowers for the visit
 tutorial.deeperRooms.flowers.title = Blumen für den Besuch
 
 # A tutorial step's instruction (short)
-# en: Add a GameObject "Flowers" with no Sprite. Give it three children - Roses, Sunflowers and Lavender - each with its picture from TutorialArt/Locations, Sort -9, X -3.4 and Y -3.6 (on the floor beside the vase). Then give "Flowers" the component RandomChildActivator.
-tutorial.deeperRooms.flowers.body = Füge ein GameObject „Flowers“ ohne Sprite hinzu. Gib ihm drei Kinder – Roses, Sunflowers und Lavender –, jedes mit seinem Bild aus TutorialArt/Locations, Sort. -9, X -3.4 und Y -3.6 (auf dem Boden neben der Vase). Gib „Flowers“ dann die Komponente RandomChildActivator.
+# en: Click + Object and name it "Flowers", with no Sprite. Give it three children with + Add child - Roses, Sunflowers and Lavender - each with its picture from TutorialArt/Locations, Sort -9, X -3.4 and Y -3.6 (on the floor beside the vase). Then pick "Flowers" again and give it the component RandomChildActivator.
+tutorial.deeperRooms.flowers.body = Klicke auf + Objekt und nenne es „Flowers“, ohne Sprite. Gib ihm mit + Kind drei Kinder – Roses, Sunflowers und Lavender –, jedes mit seinem Bild aus TutorialArt/Locations, Sort. -9, X -3.4 und Y -3.6 (auf dem Boden neben der Vase). Wähle dann „Flowers“ wieder aus und gib ihm die Komponente RandomChildActivator.
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: RandomChildActivator shows one of its object's children, picked at random, each time the object is switched on. A different pot each visit, with no rule. Each child gets its own X and Y: an object of yours stands at its own place in the room, wherever its parent is.
@@ -19736,8 +20060,8 @@ tutorial.deeperRooms.flowers.hint = + Kind ist im Panel des Objekts.
 tutorial.deeperRooms.copy.title = Funkeln des Spiels
 
 # A tutorial step's instruction (short)
-# en: Add a GameObject "Loving sparkles" and set Copy of to 6_Effects/CFXR2 Expression Loving (Timed).
-tutorial.deeperRooms.copy.body = Füge ein GameObject „Loving sparkles“ hinzu und setze Kopie von auf 6_Effects/CFXR2 Expression Loving (Timed).
+# en: Click + Object, name it "Loving sparkles" and set Copy of to 6_Effects/CFXR2 Expression Loving (Timed).
+tutorial.deeperRooms.copy.body = Klicke auf + Objekt, nenne es „Loving sparkles“ und setze Kopie von auf 6_Effects/CFXR2 Expression Loving (Timed).
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: Copy of makes the object a copy of one of the game's, by its path in the game's scene: a level effect, a prop, a whole panel. The original is untouched.
@@ -19752,8 +20076,8 @@ tutorial.deeperRooms.freeLight.title = Ein Schein auf dem Boden
 tutorial.deeperRooms.freeLight.body = Klicke über der Liste der Vorschau auf + Licht, nenne es „Floor glow“, setze seine Form auf Freie Form und seine Farbe auf #9AB8FF. Zieh in der Vorschau an seinen Ecken, um es zu formen.
 
 # A tutorial step's fold-out: the rest of its explanation
-# en: A free shape lights the area you draw, with a soft edge: a pool of light on the floor, a lit doorway. Drag the + halfway along a side to add a corner.
-tutorial.deeperRooms.freeLight.more = Eine freie Form beleuchtet die Fläche, die du zeichnest, mit weichem Rand: eine Lichtpfütze auf dem Boden, eine beleuchtete Tür. Zieh das + auf halber Länge einer Seite, um eine Ecke hinzuzufügen.
+# en: A free shape lights the area you draw at full strength and shines out from all of its edge, as far as the dashed line round it: a pool of light on the floor, a lit doorway. Drag the + halfway along a side to add a corner, and the knob on the dashed line to make it reach further.
+tutorial.deeperRooms.freeLight.more = Eine freie Form beleuchtet die Fläche, die du zeichnest, mit voller Stärke und scheint von ihrem ganzen Rand nach außen, bis zur gestrichelten Linie drumherum: eine Lichtpfütze auf dem Boden, eine beleuchtete Tür. Zieh das + auf halber Länge einer Seite, um eine Ecke hinzuzufügen, und den Knopf auf der gestrichelten Linie, damit es weiter reicht.
 
 # A tutorial step's hint: where to find what it asks for
 # en: + Light is over the hierarchy beside the preview.
@@ -19980,16 +20304,16 @@ tutorial.deeperGently.talk.hint = Beide Häkchen sind in der Gruppe Identität d
 tutorial.deeperRooms.fades.title = Ein- und ausblenden
 
 # A tutorial step's instruction (short)
-# en: Scroll down to her Poster and give it the component FadeInSprite. Then add FadeOutSprite to the Visitor's placement, with Delay 20, Duration 2 and Deactivate on complete ticked - and, on that placement itself, untick Switch back off when the conditions stop matching.
-tutorial.deeperRooms.fades.body = Scrolle hinunter zu ihrem Poster und gib ihm die Komponente FadeInSprite. Füge dann FadeOutSprite zur Platzierung von Visitor hinzu, mit Verzögerung 20, Dauer 2 und Am Ende deaktivieren angehakt – und nimm bei dieser Platzierung selbst den Haken bei Wieder ausschalten, wenn die Bedingungen nicht mehr zutreffen heraus.
+# en: Her Poster is picked: give it the component FadeInSprite in the panel to the right of the picture. Then pick the Visitor's placement in the hierarchy and add FadeOutSprite to it, with Delay 20, Duration 2 and Deactivate on complete ticked - and, on that placement itself, untick Switch back off when the conditions stop matching.
+tutorial.deeperRooms.fades.body = Ihr Poster ist ausgewählt: Gib ihm im Bereich rechts neben dem Bild die Komponente FadeInSprite. Wähle dann die Platzierung von Visitor in der Hierarchie aus und füge ihr FadeOutSprite hinzu, mit Verzögerung 20, Dauer 2 und Am Ende deaktivieren angehakt – und nimm bei dieser Platzierung selbst den Haken bei Wieder ausschalten, wenn die Bedingungen nicht mehr zutreffen heraus.
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: FadeInSprite fades an object in each time it is switched on, so her poster appears softly. FadeOutSprite fades one out after a delay; with Deactivate on complete, it is switched off once gone - the visitor stays a while, then leaves. Switch back off is unticked because, ticked, Active when puts its answer back every moment, and would switch her straight on again. Unticked, she also stays if the Dummy's confidence falls below 5 again (tutorial 23): the fade-out is what sends her away now.
 tutorial.deeperRooms.fades.more = FadeInSprite blendet ein Objekt jedes Mal ein, wenn es eingeschaltet wird, also erscheint ihr Poster sanft. FadeOutSprite blendet eines nach einer Verzögerung aus; mit Am Ende deaktivieren wird es ausgeschaltet, sobald es weg ist – die Besucherin bleibt eine Weile und geht dann. Wieder ausschalten ist ohne Haken, weil Aktiv, wenn mit Haken seine Antwort in jedem Moment neu setzt und sie sofort wieder einschalten würde. Ohne Haken bleibt sie auch, wenn Dummys Selbstvertrauen wieder unter 5 fällt (Tutorial 23): Jetzt schickt das Ausblenden sie weg.
 
 # A tutorial step's hint: where to find what it asks for
-# en: An NPC placement takes components too, under its own panel.
-tutorial.deeperRooms.fades.hint = Eine NPC-Platzierung nimmt auch Komponenten, unter ihrem eigenen Panel.
+# en: Components are in the panel to the right of the picture, for what is picked; an NPC placement takes them too.
+tutorial.deeperRooms.fades.hint = Komponenten sind im Bereich rechts neben dem Bild, für das, was ausgewählt ist; auch eine NPC-Platzierung nimmt welche.
 
 # A tutorial step's hint: where to find what it asks for
 # en: Trigger mode is the rule's first box; WhilePassing is in its list.
@@ -20136,8 +20460,8 @@ tutorial.deeperVoices.owner.hint = Wähle die Zeile des Announcer und klicke auf
 tutorial.deeperJournal.counter.hint = QuestCounter ist in der Liste Typ der Bedingung; wähle ihre Quest, dann die gezählte Aufgabe.
 
 # A tutorial step's hint: where to find what it asks for
-# en: + Add GameObject is at the bottom of the GameObjects box; Copy of is in the object's panel.
-tutorial.deeperRooms.copy.hint = + GameObject ist unten im Feld GameObjects; Kopie von ist im Panel des Objekts.
+# en: + Object is at the top of the hierarchy; Copy of is in the object's panel, to the right of the picture.
+tutorial.deeperRooms.copy.hint = + Objekt ist oben in der Hierarchie; Kopie von ist im Panel des Objekts, rechts neben dem Bild.
 
 # A tutorial step's hint: where to find what it asks for
 # en: + Light is over the hierarchy beside the preview; the shape list has Picture.
@@ -21202,16 +21526,16 @@ typeGroup.world = Orte und Objekte
 typeGroup.chance = Zufall, Zeit und Tasten
 
 # Heading in the list of component types
-# en: Made for packs
-componentGroup.pack = Für Pakete gemacht
+# en: ModForge
+componentGroup.pack = ModForge
 
 # Heading in the list of component types
-# en: The game's scripts
-componentGroup.game = Skripte des Spiels
+# en: Vanilla
+componentGroup.game = Spiel
 
 # Heading in the list of component types
-# en: Unity's own
-componentGroup.unity = Von Unity selbst
+# en: Unity
+componentGroup.unity = Unity
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Lift the busts above a scene, or put them back
@@ -21458,8 +21782,188 @@ note.component.randomChild = Zeigt zufällig eines seiner Kinder
 note.component.blinking = Blinkt an und aus
 
 # A note beside a component type in its dropdown
-# en: Unity's own - most settings can't be set by name
-note.component.engine = Von Unity selbst – die meisten Einstellungen lassen sich nicht per Name setzen
+# en: Floats up and down smoothly
+note.component.floating = Schwebt sanft auf und ab
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A list of the game's instructions, run when something starts it
+note.component.actions = Eine Liste von Anweisungen des Spiels, ausgeführt, wenn etwas sie startet
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A button that runs the game's instructions when clicked
+note.component.buttonInstructions = Eine Schaltfläche, die beim Klicken Anweisungen des Spiels ausführt
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades a particle effect out and cleans it up when it ends
+note.component.cfxrEffect = Blendet einen Partikeleffekt aus und räumt ihn am Ende auf
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Words made of particles, popping up
+note.component.cfxrParticleText = Worte aus Partikeln, die aufploppen
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shakes it gently, as if riding in a car
+note.component.carInteriorShake = Schüttelt es sanft, wie bei einer Autofahrt
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades a character in as it is shown, its blink and face with it
+note.component.characterIntroFade = Blendet eine Figur ein, wenn sie gezeigt wird, mit Blinzeln und Gesicht
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shows one of its children at random, a new one every few seconds
+note.component.cinemaSpriteChanger = Zeigt eines seiner Kinder zufällig, alle paar Sekunden ein neues
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Swings it from side to side, like a stage light
+note.component.concertLightSwing = Schwingt es hin und her, wie ein Bühnenlicht
+
+# A note beside a component type in its dropdown, saying what it does
+# en: The game's checks for whether something may happen
+note.component.conditions = Die Prüfungen des Spiels, ob etwas passieren darf
+
+# A note beside a component type in its dropdown, saying what it does
+# en: One of the game's conversations
+note.component.dialogue = Einer der Dialoge des Spiels
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Switches all its children off when the game tells it to
+note.component.disableChildren = Schaltet alle seine Kinder aus, wenn das Spiel es sagt
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Switches all its children on when the game tells it to
+note.component.enableChildren = Schaltet alle seine Kinder ein, wenn das Spiel es sagt
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Switches on every Map_Variation object under it when shown
+note.component.mapVariationActivator = Schaltet beim Zeigen jedes Map_Variation-Objekt darunter ein
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Scrolls a 3D shape's texture sideways; does nothing to a picture
+note.component.offsetScrolling = Verschiebt die Textur einer 3D-Form seitlich; bei einem Bild tut es nichts
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Drifts it a little as the mouse moves
+note.component.parallaxMouseEffect = Lässt es ein wenig treiben, wenn sich die Maus bewegt
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Plays a radio: songs, with talk between them
+note.component.radioSimulator = Spielt ein Radio: Lieder, mit Moderation dazwischen
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades its children's pictures in and out at random
+note.component.randomSpriteBlender = Blendet die Bilder seiner Kinder zufällig ein und aus
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Starts the game's instructions when something happens (a click, the start)
+note.component.trigger = Startet Anweisungen des Spiels, wenn etwas passiert (ein Klick, der Start)
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shows one object while the mouse is over a picture, another while not
+note.component.uiHoverActivator = Zeigt ein Objekt, solange die Maus über einem Bild ist, sonst ein anderes
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Distorts the sound playing beside it
+note.component.audioDistortionFilter = Verzerrt den Ton, der daneben spielt
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Muffles the sound playing beside it
+note.component.audioLowPassFilter = Dämpft den Ton, der daneben spielt
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Plays a sound
+note.component.audioSource = Spielt einen Ton
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A box that clicks and bumps can hit
+note.component.boxCollider2D = Eine Box, die Klicks und Stöße treffen können
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws interface pictures and words
+note.component.canvas = Zeichnet Bilder und Worte der Oberfläche
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades interface objects together, or stops clicks on them
+note.component.canvasGroup = Blendet Oberflächenobjekte gemeinsam ein und aus oder blockiert Klicks auf sie
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws one interface object on its canvas
+note.component.canvasRenderer = Zeichnet ein Oberflächenobjekt auf seinem Canvas
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Sizes an interface to the screen
+note.component.canvasScaler = Passt die Größe einer Oberfläche an den Bildschirm an
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A circle that clicks and bumps can hit
+note.component.circleCollider2D = Ein Kreis, den Klicks und Stöße treffen können
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Lets the mouse click an interface
+note.component.graphicRaycaster = Lässt die Maus eine Oberfläche anklicken
+
+# A note beside a component type in its dropdown, saying what it does
+# en: An interface picture
+note.component.image = Ein Bild der Oberfläche
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A light for 3D objects
+note.component.light = Ein Licht für 3D-Objekte
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A light that lights the pictures round it
+note.component.light2D = Ein Licht, das die Bilder um sich herum beleuchtet
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a line through points
+note.component.lineRenderer = Zeichnet eine Linie durch Punkte
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A 3D shape that bumps can hit
+note.component.meshCollider = Eine 3D-Form, die Stöße treffen können
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Holds a 3D shape to draw
+note.component.meshFilter = Hält eine 3D-Form zum Zeichnen
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a 3D shape
+note.component.meshRenderer = Zeichnet eine 3D-Form
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Gives off particles: sparks, drops, dust
+note.component.particleSystem = Gibt Partikel ab: Funken, Tropfen, Staub
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a particle system's particles
+note.component.particleSystemRenderer = Zeichnet die Partikel eines Partikelsystems
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A drop shadow behind interface pictures and words
+note.component.shadow = Ein Schlagschatten hinter Bildern und Worten der Oberfläche
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Casts a shadow from the lights round it
+note.component.shadowCaster2D = Wirft einen Schatten von den Lichtern um es herum
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shows pictures only inside its shape, or only outside
+note.component.spriteMask = Zeigt Bilder nur innerhalb seiner Form oder nur außerhalb
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a picture
+note.component.spriteRenderer = Zeichnet ein Bild
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Interface words
+note.component.textMeshProUgui = Worte der Oberfläche
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Plays a video
+note.component.videoPlayer = Spielt ein Video ab
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Screen effects: glow, colour and the like
+note.component.volume = Bildschirmeffekte: Leuchten, Farbe und Ähnliches
 
 # The editor's title bar; {game} is the game's version, {pack} the pack's id
 # en: SMSModForge {version} for {game} — {pack}
@@ -21745,8 +22249,8 @@ docs.places.light.term = + Licht
 docs.places.light = Ein Licht für den Ort, in die Mitte dessen gesetzt, was die Vorschau zeigt; zieh es, wohin du es haben willst. Ist es gewählt, stehen seine Farbe, Stärke, Reichweite und sein Kegel im Bereich rechts neben dem Bild.
 
 # Guide bullet: the rest, folded away
-# en: Every place of yours starts with the light of the level it is built on: change it there, or remove it. Back to the game's puts the game's light back as it was. Soft edge and Full cone make a spotlight's edge harder or softer; a cone points the way its object is turned (Rotate).
-docs.places.light.more = Jeder Ort von dir beginnt mit dem Licht des Levels, auf dem er aufbaut: Ändere es dort oder entferne es. Wie im Spiel stellt das Licht des Spiels wieder her, wie es war. Weicher Rand und Voller Kegel machen den Rand eines Spotlichts härter oder weicher; ein Kegel zeigt in die Richtung, in die sein Objekt gedreht ist (Drehen).
+# en: Every place of yours starts with the light of the level it is built on: change it there, or remove it. Back to the game's puts the game's light back as it was. Full strength to and Full cone make a spotlight's edge harder or softer; a cone points the way its object is turned (Rotate). A free shape shines out from its edge as far as its Reach, the dashed line round it. Moves with is how a light drifts as the cursor moves: with the place's back picture (what a new light does), with its front (the game's own lamps), or by a strength of its own.
+docs.places.light.more = Jeder Ort von dir beginnt mit dem Licht des Levels, auf dem er aufbaut: Ändere es dort oder entferne es. Wie im Spiel stellt das Licht des Spiels wieder her, wie es war. Volle Stärke bis und Voller Kegel machen den Rand eines Spotlichts härter oder weicher; ein Kegel zeigt in die Richtung, in die sein Objekt gedreht ist (Drehen). Eine freie Form scheint von ihrem Rand nach außen, so weit ihre Reichweite geht, bis zur gestrichelten Linie drumherum. Bewegt sich mit sagt, wie ein Licht treibt, wenn sich der Mauszeiger bewegt: mit dem hinteren Bild des Orts (was ein neues Licht tut), mit seinem vorderen (wie die eigenen Lampen des Spiels) oder mit einer eigenen Stärke.
 
 # Guide: a light's shapes
 # en: Round, Free shape, Picture
@@ -21792,6 +22296,14 @@ docs.places.giveIt.term = Ihm ein Licht geben, Ihm einen Effekt geben
 # en: On an object you picked: it carries a light or an effect where it stands, shown whenever the object is - so its conditions switch both together.
 docs.places.giveIt = Bei einem gewählten Objekt: Es trägt ein Licht oder einen Effekt dort, wo es steht, sichtbar, wann immer das Objekt es ist – also schalten seine Bedingungen beides zusammen.
 
+# Guide: three buttons' labels, over an object picked in the place preview
+# en: Object, Light, Effect
+docs.places.objectParts.term = Objekt, Licht, Effekt
+
+# Guide bullet
+# en: An object with a picture and a light, or with an effect, has its parts to pick over its handles, as a character has Body and Shadow. Object moves, turns and sizes the object. Light shows only the light's handles (clicking its sun in the picture picks it too). Effect draws a box round where its particles start: drag inside it to move the effect away from the object - it still moves with it - and drag a corner or a side to make it bigger or smaller. A light on its own keeps its handles together, as before.
+docs.places.objectParts = Ein Objekt mit einem Bild und einem Licht oder mit einem Effekt hat über seinen Griffen seine Teile zur Auswahl, so wie eine Figur Körper und Schatten hat. Objekt verschiebt, dreht und skaliert das Objekt. Licht zeigt nur die Griffe des Lichts (ein Klick auf seine Sonne im Bild wählt es auch aus). Effekt zeichnet eine Box um die Stelle, wo seine Partikel starten: Zieh darin, um den Effekt vom Objekt wegzuschieben – er bewegt sich trotzdem mit ihm –, und zieh an einer Ecke oder Seite, um ihn größer oder kleiner zu machen. Ein Licht allein hält seine Griffe wie bisher zusammen.
+
 # Guide: a box's label
 # en: Character in the place
 docs.places.standIn.term = Figur im Ort
@@ -21800,13 +22312,21 @@ docs.places.standIn.term = Figur im Ort
 # en: Shows one of your characters where the game shows a character in a conversation, to see how the place's lights fall on her. Preview only: nothing is saved.
 docs.places.standIn = Zeigt eine deiner Figuren dort, wo das Spiel in einem Gespräch eine Figur zeigt, damit du siehst, wie die Lichter des Orts auf sie fallen. Nur Vorschau: Nichts wird gespeichert.
 
+# Guide: what part of the place the player sees, as the preview marks it
+# en: What the player sees
+docs.places.playersView.term = Was der Spieler sieht
+
+# Guide bullet
+# en: The game always shows the same part of a place, 19.2 by 10.8 units round its middle, on any screen. That is exactly what the preview shows when the picture fits the view, with the game's interface over it. Your pictures are bigger, so their edges only come into sight as the cursor drifts the place: zoom out or drag the view and what the player can't see is a little darker, with a thin line round the rest.
+docs.places.playersView = Das Spiel zeigt immer denselben Ausschnitt eines Orts, 19.2 mal 10.8 Einheiten um seine Mitte, auf jedem Bildschirm. Genau das zeigt die Vorschau, wenn das Bild in die Ansicht passt, mit der Oberfläche des Spiels darüber. Deine Bilder sind größer, daher kommen ihre Ränder erst in Sicht, wenn der Mauszeiger den Ort treiben lässt: Zoome heraus oder zieh die Ansicht, und was der Spieler nicht sehen kann, ist etwas dunkler, mit einer dünnen Linie um den Rest.
+
 # Guide: picking an object in the preview
 # en: Picking
 docs.places.picking.term = Auswählen
 
 # Guide bullet
-# en: Click an object in the picture or in the hierarchy beside it. The panel to the right of the picture then moves, turns or scales it; an NPC's first row picks the part - Body, Shadow, Blink, Wet or Reflection.
-docs.places.picking = Klicke auf ein Objekt im Bild oder in der Hierarchie daneben. Der Bereich rechts neben dem Bild verschiebt, dreht oder skaliert es dann; die erste Zeile eines NPC wählt den Teil – Körper, Schatten, Blinzeln, Nass oder Spiegelung.
+# en: Click an object in the picture or in the hierarchy beside it. The panel to the right of the picture then moves, turns or scales it, and below that has all of its settings; an NPC's first row picks the part - Body, Shadow, Blink, Wet or Reflection.
+docs.places.picking = Klicke auf ein Objekt im Bild oder in der Hierarchie daneben. Der Bereich rechts neben dem Bild verschiebt, dreht oder skaliert es dann und hat darunter alle seine Einstellungen; die erste Zeile eines NPC wählt den Teil – Körper, Schatten, Blinzeln, Nass oder Spiegelung.
 
 # Guide: a box's heading
 # en: Hierarchy
@@ -24663,9 +25183,73 @@ setup.uninstall.go = Deinstallieren
 # en: ModForge has been uninstalled.
 setup.uninstall.done = ModForge wurde deinstalliert.
 
+# Note under a place's preview: where its objects are made and set
+# en: Everything this place builds is in the hierarchy beside the picture. + Object adds art, a prop, or a container that groups other objects; + Character places one of your NPCs. Click an object in the picture or in the hierarchy and all of its settings are to the right of the picture: its picture, where it stands and how big, its components, Active when, and + Add child and + Add NPC child to put more under it. Dialogues reach an object by its Name, and a lower Sort draws it further back. NPCs is the place's own object, where every character stands.
+places.placeObjectsHelp = Alles, was dieser Ort aufbaut, ist in der Hierarchie neben dem Bild. + Objekt fügt Grafik, eine Requisite oder einen Behälter hinzu, der andere Objekte gruppiert; + Figur platziert einen deiner NPCs. Klicke auf ein Objekt im Bild oder in der Hierarchie, und alle seine Einstellungen stehen rechts neben dem Bild: sein Bild, wo es steht und wie groß es ist, seine Komponenten, Aktiv, wenn sowie + Kind und + NPC als Kind, um mehr darunter zu setzen. Dialoge erreichen ein Objekt über seinen Namen, und ein niedrigeres Sort. zeichnet es weiter hinten. NPCs ist das eigene Objekt des Orts, in dem jede Figur steht.
+
+# Note under a game level's preview: where its objects are made and set
+# en: The hierarchy beside the picture is the game's level as it is, with what your pack adds to it. + Object and + Character add your own, and Fill from vanilla hierarchy brings in any of the game's objects not listed yet. Click one and its settings are to the right of the picture. Your pack keeps only what it changes: the game's objects you leave alone are not saved.
+places.levelObjectsHelp = Die Hierarchie neben dem Bild ist das Level des Spiels, wie es ist, mit dem, was dein Paket hinzufügt. + Objekt und + Figur fügen deine eigenen hinzu, und Aus der Hierarchie des Spiels füllen holt alle Objekte des Spiels herein, die noch nicht aufgeführt sind. Klicke eines an, und seine Einstellungen stehen rechts neben dem Bild. Dein Paket behält nur, was es ändert: Die Objekte des Spiels, die du unberührt lässt, werden nicht gespeichert.
+
 # Heading of the object list in the place preview
 # en: Hierarchy
 preview.place.hierarchy = Hierarchie
+
+# Button over the object list in the place preview: adds an object
+# en: + Object
+preview.object.add = + Objekt
+
+# Tooltip on "+ Object"
+# en: Add an object to the place, in the middle of the picture: art, a prop, or a container for other objects. It is picked, with its settings to the right of the picture.
+preview.object.add.tip = Dem Ort ein Objekt hinzufügen, in der Mitte des Bilds: Grafik, eine Requisite oder einen Behälter für andere Objekte. Es ist dann ausgewählt, mit seinen Einstellungen rechts neben dem Bild.
+
+# Button over the object list in the place preview: places an NPC
+# en: + Character
+preview.character.add = + Figur
+
+# Tooltip on "+ Character"
+# en: Place one of your NPCs here: on the picked object when it can hold characters (an object under NPCs), otherwise under the place's NPCs object. It is picked: choose its NPC to the right of the picture, then drag it where it should stand.
+preview.character.add.tip = Einen deiner NPCs hier platzieren: auf dem ausgewählten Objekt, wenn es Figuren aufnehmen kann (ein Objekt unter NPCs), sonst unter dem Objekt NPCs des Orts. Die Figur ist dann ausgewählt: Wähle ihren NPC rechts neben dem Bild und zieh sie dorthin, wo sie stehen soll.
+
+# Tooltip on the heading of the object list in the place preview: its keys
+# en: Keys, after a click on the picture or on this list: Ctrl+C copies the object picked, with everything under it. Ctrl+V pastes it under the object picked (with nothing picked, among the place's own). Ctrl+D duplicates the object picked beside itself. Delete sends it to the recycle bin at the bottom of this list. On the game's own objects, a copy of a light is a light of your own and a copy of anything else is a copy of the game's object, and Delete switches the game's object off where it stands. The NPCs object is the place's one: paste characters under it.
+preview.place.keys.tip = Tasten, nach einem Klick auf das Bild oder auf diese Liste: Strg+C kopiert das ausgewählte Objekt mit allem darunter. Strg+V fügt es unter dem ausgewählten Objekt ein (ist nichts ausgewählt, bei den eigenen Objekten des Orts). Strg+D dupliziert das ausgewählte Objekt neben sich selbst. Entf schickt es in den Papierkorb unten in dieser Liste. Bei den eigenen Objekten des Spiels ist die Kopie eines Lichts ein eigenes Licht von dir und die Kopie von etwas anderem eine Kopie des Objekts des Spiels, und Entf schaltet das Objekt des Spiels dort aus, wo es steht. Das Objekt NPCs gehört dem Ort: Füge Figuren darunter ein.
+
+# Heading of the recycle bin at the bottom of the place preview's object list; {count} is how many it holds
+# en: Recycle bin ({count})
+preview.place.bin = Papierkorb ({count})
+
+# Tooltip on the recycle bin's heading
+# en: What you delete from this place waits here, with everything that was under it, until you put it back or empty the bin. It is saved with the pack and left out of what you export. Click to show or hide what it holds.
+preview.place.bin.tip = Was du aus diesem Ort löschst, wartet hier mit allem, was darunter war, bis du es zurückholst oder den Papierkorb leerst. Er wird mit dem Paket gespeichert und beim Exportieren weggelassen. Klicke, um seinen Inhalt zu zeigen oder zu verbergen.
+
+# Tooltip on the arrow beside something in the recycle bin
+# en: Put it back where it was, under the same object
+preview.place.bin.restore.tip = Dorthin zurücklegen, wo es war, unter dasselbe Objekt
+
+# Tooltip on the cross beside something in the recycle bin
+# en: Delete it for good. Ctrl+Z still brings it back.
+preview.place.bin.forget.tip = Endgültig löschen. Strg+Z holt es trotzdem zurück.
+
+# Button under what the recycle bin holds
+# en: Empty the bin
+preview.place.bin.empty = Papierkorb leeren
+
+# Tooltip on "Empty the bin"
+# en: Delete everything in the bin for good. Ctrl+Z still brings it back.
+preview.place.bin.empty.tip = Alles im Papierkorb endgültig löschen. Strg+Z holt es trotzdem zurück.
+
+# Tooltip on something in the recycle bin; {path} is the objects it was under, top first
+# en: Was under {path}
+preview.place.bin.under = War unter {path}
+
+# Tooltip on something in the recycle bin that was one of the place's top objects
+# en: Was one of the place's own objects, at the top of the list
+preview.place.bin.top = War eines der eigenen Objekte des Orts, ganz oben in der Liste
+
+# Tooltip on one of the game's own objects in the recycle bin
+# en: One of the game's own, switched off where it stands: the game's object cannot be taken out of the game. The arrow switches it back on as it was.
+preview.place.bin.switchedOff = Eines der eigenen Objekte des Spiels, dort ausgeschaltet, wo es steht: Das Objekt des Spiels kann nicht aus dem Spiel genommen werden. Der Pfeil schaltet es wieder ein, wie es war.
 
 # Tooltip on the arrow beside an object in the hierarchy
 # en: Fold this object's children
@@ -24722,6 +25306,38 @@ preview.gizmo.rotate = Drehen
 # On the toolbar over what is selected in the place preview: what dragging the handles does
 # en: Scale
 preview.gizmo.scale = Skalieren
+
+# On the toolbar over an object selected in the place preview that has a light or an effect: the handles move the object itself
+# en: Object
+preview.gizmo.object = Objekt
+
+# Tooltip on "Object"
+# en: Move, turn and size the object itself.
+preview.gizmo.object.tip = Das Objekt selbst verschieben, drehen und skalieren.
+
+# On the toolbar over an object selected in the place preview: the handles are for the object's light
+# en: Light
+preview.gizmo.light = Licht
+
+# Tooltip on "Light"
+# en: The object's light: drag its reach, how far it stays full and its cone. The light stays where the object is.
+preview.gizmo.light.tip = Das Licht des Objekts: Zieh seine Reichweite, wie weit es voll bleibt, und seinen Kegel. Das Licht bleibt, wo das Objekt ist.
+
+# On the toolbar over an object selected in the place preview: the handles are for the effect the object plays
+# en: Effect
+preview.gizmo.effect = Effekt
+
+# Tooltip on "Effect"
+# en: The effect the object plays: drag inside its box to move it away from the object, drag a corner or a side to make it bigger or smaller.
+preview.gizmo.effect.tip = Der Effekt, den das Objekt abspielt: Zieh in seiner Box, um ihn vom Objekt wegzuschieben, und zieh an einer Ecke oder Seite, um ihn größer oder kleiner zu machen.
+
+# Tooltip inside the box drawn round an object's effect in the place preview
+# en: Drag to move the effect away from its object. It moves with the object.
+preview.effect.box.tip = Ziehen, um den Effekt von seinem Objekt wegzuschieben. Er bewegt sich mit dem Objekt.
+
+# Tooltip on the small squares on the box round an object's effect in the place preview
+# en: Drag to make the effect bigger or smaller (its Scale).
+preview.effect.grip.tip = Ziehen, um den Effekt größer oder kleiner zu machen (seine Skalierung).
 
 # Beside the place preview: which character to show standing in the place
 # en: Character in the place
@@ -24864,8 +25480,8 @@ preview.light.shape.round.tip = Ein Licht, das von seiner Mitte aus rundum schei
 preview.light.shape.free = Freie Form
 
 # Tooltip on the free light shape
-# en: A light in the exact shape you draw, point by point, with a soft edge around it.
-preview.light.shape.free.tip = Ein Licht in genau der Form, die du zeichnest, Punkt für Punkt, mit einem weichen Rand drumherum.
+# en: A light in the shape you draw, point by point: full strength inside it, shining out from all of its edge as far as its reach.
+preview.light.shape.free.tip = Ein Licht in der Form, die du zeichnest, Punkt für Punkt: darin volle Stärke, und von ihrem ganzen Rand scheint es nach außen, so weit seine Reichweite geht.
 
 # Button beside the place preview: the light's shape
 # en: Picture
@@ -24967,13 +25583,93 @@ preview.light.point.tip = Ziehen, um diese Ecke der Lichtform zu verschieben. Re
 # en: Drag to add a corner here.
 preview.light.addPoint.tip = Ziehen, um hier eine Ecke hinzuzufügen.
 
-# Label beside the place preview: the width of a free-shape light's soft edge
-# en: Soft edge
-preview.light.edge = Weicher Rand
+# Label beside the place preview: how far a free-shape light shines out from its shape
+# en: Reach
+preview.light.edge = Reichweite
 
-# Tooltip on a free-shape light's soft edge
-# en: How far outside its shape the light fades to nothing, in the game's units.
-preview.light.edge.tip = Wie weit außerhalb seiner Form das Licht bis zu nichts verblasst, in Einheiten des Spiels.
+# Tooltip on a free-shape light's reach
+# en: How far the light shines out from its shape, fading as it goes - as a round light fades from its middle, and round at the corners - in the game's units. Drag the knob on the dashed line in the preview.
+preview.light.edge.tip = Wie weit das Licht aus seiner Form nach außen scheint und dabei verblasst – so wie ein rundes Licht von seiner Mitte aus verblasst, und an den Ecken rund –, in Einheiten des Spiels. Zieh den Knopf auf der gestrichelten Linie in der Vorschau.
+
+# Tooltip on the knob on a free-shape light's dashed reach line in the place preview
+# en: Drag to set how far the light shines out from its shape.
+preview.light.edge.drag.tip = Ziehen, um einzustellen, wie weit das Licht aus seiner Form nach außen scheint.
+
+# Label beside the place preview: how a light drifts as the cursor moves (with the place's back picture, its front, or its own)
+# en: Moves with
+preview.light.drift = Bewegt sich mit
+
+# Tooltip on "Moves with"
+# en: How the light drifts with the place as the cursor moves (its parallax): with the place's back picture, with its front picture, or by a strength of its own. It is its object's drift, so a picture on the same object drifts with it. The game's own lamps keep what the game gave them.
+preview.light.drift.tip = Wie das Licht mit dem Ort treibt, wenn sich der Mauszeiger bewegt (seine Parallaxe): mit dem hinteren Bild des Orts, mit seinem vorderen Bild oder mit einer eigenen Stärke. Es ist das Treiben seines Objekts, also treibt ein Bild am selben Objekt mit ihm. Die eigenen Lampen des Spiels behalten, was das Spiel ihnen gegeben hat.
+
+# Button beside the place preview: the light drifts with the place's back picture
+# en: Back
+preview.light.drift.back = Hinten
+
+# Tooltip on "Back"
+# en: Drift with the place's back picture, as something far away does: the moon, a street lamp seen through a window. What a new light does.
+preview.light.drift.back.tip = Mit dem hinteren Bild des Orts treiben, wie etwas weit Entferntes: der Mond, eine Straßenlaterne, durch ein Fenster gesehen. Das tut ein neues Licht.
+
+# Tooltip on "Back" on a level of the game's that has no back picture to drift with
+# en: This level of the game's has no back picture of the kind a pack place has, so there is none to drift with. Front, or a strength of its own, can match how any of its pictures drifts.
+preview.light.drift.noBack.tip = Dieses Level des Spiels hat kein hinteres Bild der Art, die ein Ort eines Pakets hat, also gibt es keins, mit dem es treiben könnte. Vorne oder eine eigene Stärke kann dem Treiben jedes seiner Bilder entsprechen.
+
+# Button beside the place preview: the light drifts with the place's front picture
+# en: Front
+preview.light.drift.front = Vorne
+
+# Tooltip on "Front"
+# en: Drift with the place's front picture: the light stays on the lamp, window or screen it shines from. What every light made before this did, and what the game's own lamps do.
+preview.light.drift.front.tip = Mit dem vorderen Bild des Orts treiben: Das Licht bleibt auf der Lampe, dem Fenster oder dem Bildschirm, von dem es scheint. Das tat jedes bisher erstellte Licht, und das tun die eigenen Lampen des Spiels.
+
+# Button beside the place preview: the light drifts by a strength of its own
+# en: Own
+preview.light.drift.own = Eigen
+
+# Tooltip on "Own"
+# en: Drift by a strength of its own, set below. It starts where the light drifts now.
+preview.light.drift.own.tip = Mit einer eigenen Stärke treiben, unten eingestellt. Sie startet bei dem Wert, mit dem das Licht jetzt treibt.
+
+# Label beside the place preview: how far a light drifts by its own strength
+# en: Drift strength
+preview.light.drift.strength = Treibstärke
+
+# Tooltip on "Drift strength"
+# en: How far the light drifts as the cursor moves, on top of the place's front picture: 0 drifts with the front, higher drifts further. The game's own pictures use 0.1 to 1.5.
+preview.light.drift.strength.tip = Wie weit das Licht treibt, wenn sich der Mauszeiger bewegt, zusätzlich zum vorderen Bild des Orts: 0 treibt mit dem vorderen, höher treibt weiter. Die eigenen Bilder des Spiels nutzen 0.1 bis 1.5.
+
+# Tick box beside the place preview: the light drifts the other way
+# en: Reversed
+preview.light.drift.reversed = Umgekehrt
+
+# Tooltip on "Reversed"
+# en: Drift with the cursor instead of against it. Until you change it, this is the way the place's back picture drifts, so it starts ticked where the back picture is reversed.
+preview.light.drift.reversed.tip = Mit dem Mauszeiger treiben statt gegen ihn. Solange du es nicht änderst, ist das die Richtung, in die das hintere Bild des Orts treibt, deshalb ist es dort schon angehakt, wo das hintere Bild umgekehrt ist.
+
+# Tooltip on "Moves with" beside the place preview, for a character standing in the place
+# en: How the character drifts with the place as the cursor moves (their parallax): with the place's front picture, as the floor they stand on does, with its back picture, or by a strength of their own. Their shadow, blink, reflection and anything they hold drift with them.
+preview.character.drift.tip = Wie die Figur mit dem Ort treibt, wenn sich der Mauszeiger bewegt (ihre Parallaxe): mit dem vorderen Bild des Orts, wie der Boden, auf dem sie steht, mit seinem hinteren Bild oder mit einer eigenen Stärke. Ihr Schatten, ihr Blinzeln, ihre Spiegelung und alles, was sie hält, treiben mit ihr.
+
+# Tooltip on "Back", for a character
+# en: Drift with the place's back picture, as someone far away does: a figure on a distant hill, a crowd seen through a window.
+preview.character.drift.back.tip = Mit dem hinteren Bild des Orts treiben, wie jemand weit weg: eine Gestalt auf einem fernen Hügel, eine Menge, durch ein Fenster gesehen.
+
+# Tooltip on "Back" for a character, on a level of the game's with no back picture to drift with
+# en: This level of the game's has no back picture of the kind a pack place has, so there is none to drift with. Front, or a strength of their own, can match how any of its pictures drifts.
+preview.character.drift.noBack.tip = Dieses Level des Spiels hat kein hinteres Bild der Art, die ein Ort eines Pakets hat, also gibt es keins, mit dem sie treiben könnte. Vorne oder eine eigene Stärke kann dem Treiben jedes seiner Bilder entsprechen.
+
+# Tooltip on "Front", for a character
+# en: Drift with the place's front picture: the character stays on the floor they stand on. What every character placed before this did, and what the game's own characters do.
+preview.character.drift.front.tip = Mit dem vorderen Bild des Orts treiben: Die Figur bleibt auf dem Boden, auf dem sie steht. Das tat jede bisher platzierte Figur, und das tun die eigenen Figuren des Spiels.
+
+# Tooltip on "Own", for a character
+# en: Drift by a strength of their own, set below. It starts where the character drifts now.
+preview.character.drift.own.tip = Mit einer eigenen Stärke treiben, unten eingestellt. Sie startet bei dem Wert, mit dem die Figur jetzt treibt.
+
+# Tooltip on "Drift strength", for a character
+# en: How far the character drifts as the cursor moves, on top of what they stand under: 0 drifts with it, higher drifts further. The game's own pictures use 0.1 to 1.5.
+preview.character.drift.strength.tip = Wie weit die Figur treibt, wenn sich der Mauszeiger bewegt, zusätzlich zu dem, worunter sie steht: 0 treibt damit, höher treibt weiter. Die eigenen Bilder des Spiels nutzen 0.1 bis 1.5.
 
 # Label beside the place preview: the picture a picture light is made of
 # en: Picture
@@ -25494,6 +26190,18 @@ migration.cueVolumes = Zeilen, deren Sounds jetzt lauter oder leiser spielen, pa
 # In the list of what opening a pack changed: lines with more than one sound, their timing written down so they play as before
 # en: lines with more than one sound given their timing, so each keeps playing when it did
 migration.cueTiming = Zeilen mit mehr als einem Sound, deren Timing festgehalten wurde, sodass jeder weiter dann spielt, wann er es bisher tat
+
+# In the list of what opening a pack changed: places and game levels now following the new rules for their objects' masks
+# en: places whose objects now stay still unless given a mask (each object keeps moving as it did)
+migration.objectMasks = Orte, deren Objekte jetzt still bleiben, außer sie bekommen eine Maske (jedes Objekt bewegt sich weiter wie bisher)
+
+# In the list of what opening a pack changed: objects that moved with the back layer's mask, now set to say so
+# en: objects that moved with the place's back layer's mask, now set to "The back layer's mask" so they keep moving
+migration.objectMasksBackLayer = Objekte, die sich mit der Maske der hinteren Ebene des Orts bewegten, jetzt auf „Die Maske der hinteren Ebene“ gesetzt, damit sie sich weiter bewegen
+
+# In the list of what opening a pack changed: objects with a mask of their own that did nothing in the game, because the place's back layer had no mask, and are now set to stay still as they did
+# en: objects with a mask of their own that the game left still (the place's back layer had no mask), now set to "Nothing (still)" - choose "Its own mask" to make them move
+migration.objectMasksOwn = Objekte mit eigener Maske, die das Spiel still ließ (die hintere Ebene des Orts hatte keine Maske), jetzt auf „Nichts (still)“ gesetzt – wähle „Eigene Maske“, damit sie sich bewegen
 
 # One line of the list of what was brought up to date
 # en: Given a version to start from ({version})

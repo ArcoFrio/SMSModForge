@@ -11,11 +11,15 @@ namespace SMSModForge.Model;
 public sealed class ParticleRef
 {
     /// <summary>
-    /// Preset name. Built-in: <c>"Wet"</c>. Use <c>"custom"</c> to indicate a
+    /// Preset name. Built-in: <c>"Wet"</c> (Anna's towel bust's two systems)
+    /// and <c>"Shower"</c> (the bathroom's AnnaInShower NPC's system, from the
+    /// top of the bust's picture). Use <c>"custom"</c> to indicate a
     /// per-pack file is attached.
     /// </summary>
     [JsonProperty("preset", Order = 1)]
-    public string Preset { get; set; } = "Wet";
+    public string Preset { get; set; } = PresetWet;
+
+    public const string PresetWet = "Wet", PresetShower = "Shower";
 
     /// <summary>
     /// When <see cref="Preset"/> is <c>"custom"</c>, path (relative to pack

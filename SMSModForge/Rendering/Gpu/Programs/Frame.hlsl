@@ -233,13 +233,121 @@ void GlowPass(uint3 id : SV_DispatchThreadID)
     Target[o] = float4(WithGlow(t.xyz, s, p), t.w);
 }
 
-// The target into the texture the post-processing reads.
+// A wet bust's drops (after 1.10.0; WetDrops.BlendInto, as PlaceLit.hlsl blends a place's): over the target as it
+// goes to the post-processing, white through the particle texture's alpha, in the target's own precision.
+cbuffer DropBuf : register(b1)
+{
+    uint DropCount;
+    uint DropSize;       // the texture's side, its copies after it
+    uint DropLevels;
+    float DropScale;     // the target's pixels to a canvas pixel
+    float CanvasW;       // the canvas (the game's screen, 100 pixels a unit)
+    float CanvasH;
+    float DropPad0;
+    float DropPad1;
+};
+
+struct DropRow
+{
+    float X;             // its centre on the canvas, its size there
+    float Y;
+    float W;
+    float H;
+    float Alpha;
+    float R;             // its colour in linear light (white but for a tint)
+    float G;
+    float B;
+    float Solid;         // 1: a solid quad (the shower's), no texture
+    float LitDrop;       // 1: lit with the place (the shower's): blended in before its lights
+    float Pad1;
+    float Pad2;
+};
+
+StructuredBuffer<DropRow> Drops : register(t9);
+StructuredBuffer<float> DropAlpha : register(t10);
+
+int ClampTo(float i, int n) { return i < 0.0f ? 0 : (i > (float)(n - 1) ? n - 1 : (int)i); }
+
+uint DropLevel(float wide, float tall)
+{
+    float t = max((float)DropSize / max(wide, 1e-6f), (float)DropSize / max(tall, 1e-6f));
+    if (!(t > 1.0f)) return 0u;
+    int level = (int)floor(log2(t) + 0.5f);
+    return (uint)clamp(level, 0, (int)DropLevels - 1);
+}
+
+float DropSample(uint level, float u, float v)
+{
+    uint at = 0u, s = DropSize;
+    for (uint i = 0u; i < level; i++) { at += s * s; s = max(s >> 1, 1u); }
+    precise float fx = u * (float)s - 0.5f, fy = v * (float)s - 0.5f;
+    precise float x0 = floor(fx), y0 = floor(fy);
+    precise float ax = fx - x0, ay = fy - y0;
+    int xa = ClampTo(x0, (int)s), xb = ClampTo(x0 + 1.0f, (int)s), ya = ClampTo(y0, (int)s), yb = ClampTo(y0 + 1.0f, (int)s);
+    precise float top = DropAlpha[at + (uint)(ya * (int)s + xa)] * (1.0f - ax) + DropAlpha[at + (uint)(ya * (int)s + xb)] * ax;
+    precise float bottom = DropAlpha[at + (uint)(yb * (int)s + xa)] * (1.0f - ax) + DropAlpha[at + (uint)(yb * (int)s + xb)] * ax;
+    precise float r = top * (1.0f - ay) + bottom * ay;
+    return r;
+}
+
+float3 WithDropsKeep(float3 c, float cx, float cy, inout float keep)
+{
+    for (uint i = 0u; i < DropCount; i++)
+    {
+        DropRow d = Drops[i];
+        precise float left = d.X - d.W * 0.5f, top = d.Y - d.H * 0.5f;
+        precise float u = (cx - left) / d.W, v = (cy - top) / d.H;
+        if (!(u >= 0.0f && u < 1.0f && v >= 0.0f && v < 1.0f)) continue;
+        precise float a = d.Alpha;
+        if (d.Solid < 0.5f) a *= DropSample(DropLevel(d.W * DropScale, d.H * DropScale), u, v);
+        if (!(a > 0.0f)) continue;
+        c = float3(Small(c.x + (d.R - c.x) * a, 6), Small(c.y + (d.G - c.y) * a, 6), Small(c.z + (d.B - c.z) * a, 5));
+        keep *= 1.0f - a;
+    }
+    return c;
+}
+
+float3 WithDrops(float3 c, float cx, float cy)
+{
+    float keep = 1.0f;
+    return WithDropsKeep(c, cx, cy, keep);
+}
+
+// A wet bust's drops with a lamp (after 1.10.0): before the lamp's glow, which the game adds over them as over the
+// bust - each drop's pixels counted as drawn over (Coverage), as the bust's own are. WetDrops.BlendInto with coverage.
+[numthreads(16, 16, 1)]
+void DropsPass(uint3 id : SV_DispatchThreadID)
+{
+    int x = (int)id.x, y = (int)id.y;
+    if (x >= ScreenW || y >= ScreenH || DropCount == 0u) return;
+    int o = y * ScreenW + x;
+    float4 t = Target[o];
+    precise float cx = ((float)x + 0.5f) * CanvasW / (float)ScreenW;
+    precise float cy = CanvasH - ((float)y + 0.5f) * CanvasH / (float)ScreenH;
+    float keep = 1.0f;
+    t.xyz = WithDropsKeep(t.xyz, cx, cy, keep);
+    Target[o] = t;
+    if (!(keep < 1.0f)) return;
+    int fx = x - Left, fy = N - 1 - (y - FrameBottom);
+    if (fx < 0 || fx >= N || fy < 0 || fy >= N) return;
+    uint i = (uint)(fy * N + fx);
+    Coverage[i] = 1.0f - (1.0f - Coverage[i]) * keep;
+}
+
+// The target into the texture the post-processing reads - a wet bust's drops over it on the way.
 [numthreads(16, 16, 1)]
 void CopyOut(uint3 id : SV_DispatchThreadID)
 {
     int x = (int)id.x, y = (int)id.y;
     if (x >= ScreenW || y >= ScreenH) return;
-    FrameOut[int2(x, y)] = Target[y * ScreenW + x];
+    float4 t = Target[y * ScreenW + x];
+    if (DropCount > 0u)
+    {
+        precise float cx = ((float)x + 0.5f) * CanvasW / (float)ScreenW;
+        precise float cy = CanvasH - ((float)y + 0.5f) * CanvasH / (float)ScreenH;
+        t.xyz = WithDrops(t.xyz, cx, cy);
+    }
+    FrameOut[int2(x, y)] = t;
 }
 
 // BackdropRender.Lamps: a backdrop without a lamp - what its lights add to the bust where it covers.

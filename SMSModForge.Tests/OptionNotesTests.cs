@@ -50,13 +50,19 @@ public sealed class OptionNotesTests
     [Fact]
     public void EveryVariableOperation() => EveryOneHasANote(OptionNotes.VariableOperation, NodeActionViewModel.VariableOperations);
 
+    /// <summary>Every component the list offers says what it does - ModForge's, the game's scripts and Unity's (after
+    /// 1.10.0, the author: "can we add hints for all components available instead of just the ones built into ModForge
+    /// and Unity's?") - and Unity's say only that: "we don't need to mention that they're Unity's on every hint".</summary>
     [Fact]
-    public void TheComponentsMadeForPacks_AndAWarningOnUnitysOwn()
+    public void EveryComponentSaysWhatItDoes_AndUnitysNotWhoseItIs()
     {
         EveryOneHasANote(OptionNotes.Component, PackComponentType.BuiltIn);
-        var engine = VanillaComponentCatalog.All.FirstOrDefault(e => e.IsEngineComponent);
-        if (engine != null)
-            Assert.Equal(SMSModForge.Localization.Loc.T("note.component.engine"), OptionNotes.NoteFor(OptionNotes.Component, engine.Type));
+        var offered = VanillaComponentCatalog.TypeNames();
+        _out.WriteLine(offered.Count + " components offered");
+        Assert.True(offered.Count > PackComponentType.BuiltIn.Length, "the level extraction offers no components of the game's");
+        EveryOneHasANote(OptionNotes.Component, offered);
+        foreach (var engine in VanillaComponentCatalog.All.Where(e => e.IsEngineComponent))
+            Assert.DoesNotContain("Unity", OptionNotes.NoteFor(OptionNotes.Component, engine.Type));
     }
 
     [Fact]

@@ -186,6 +186,55 @@ public sealed class NpcViewModel : ObservableObject, IDerivesKey, IMaskEditorHos
     public bool WetEnabled     { get => Model.Wet.Enabled;     set { Model.Wet.Enabled = value; OnPropertyChanged(); } }
     public bool WetStartActive { get => Model.Wet.StartActive; set { Model.Wet.StartActive = value; OnPropertyChanged(); } }
 
+    // How its drops look (after 1.10.0, the author: "NPC sets them, placements can change"): every placement starts
+    // from these (WetEffectDef.Merged). The game's own where unset; set back to it, unset.
+
+    /// <summary>0 the wet (Anna's towel), 1 the shower. A value it does not have is ignored (warmed pages).</summary>
+    public int WetKindIndex
+    {
+        get => WetEffectDef.ShowerKind(Model.Wet.Kind) ? 1 : 0;
+        set
+        {
+            if (value is not (0 or 1) || value == WetKindIndex) return;
+            Model.Wet.Kind = value == 1 ? WetEffectDef.KindShower : null;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>The colour the game's drop colour is multiplied by: "" for none.</summary>
+    public string WetTint
+    {
+        get => Model.Wet.Tint ?? "";
+        set
+        {
+            string v = (value ?? "").Trim();
+            Model.Wet.Tint = v.Length == 0 || string.Equals(v, "#FFFFFF", System.StringComparison.OrdinalIgnoreCase)
+                             || string.Equals(v, "#FFFFFFFF", System.StringComparison.OrdinalIgnoreCase) ? null : v;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>Times the game's drops a second.</summary>
+    public float WetAmount
+    {
+        get => Model.Wet.Amount ?? 1f;
+        set { if (!(value >= 0)) return; Model.Wet.Amount = value == 1f ? null : value; OnPropertyChanged(); }
+    }
+
+    /// <summary>Times the game's drop size.</summary>
+    public float WetSize
+    {
+        get => Model.Wet.Size ?? 1f;
+        set { if (!(value > 0)) return; Model.Wet.Size = value == 1f ? null : value; OnPropertyChanged(); }
+    }
+
+    /// <summary>Times the game's fall.</summary>
+    public float WetFall
+    {
+        get => Model.Wet.Fall ?? 1f;
+        set { if (!(value >= 0)) return; Model.Wet.Fall = value == 1f ? null : value; OnPropertyChanged(); }
+    }
+
     public string Display => ListNames.Of(DisplayName, Key);
 
     // ── IMaskEditorHost ──────────────────────────────────────────────────
@@ -217,7 +266,7 @@ public sealed class NpcViewModel : ObservableObject, IDerivesKey, IMaskEditorHos
 /// INPC wrapper around one <see cref="NpcPlacementDef"/> — a row in a place's
 /// NPC-placements list.
 /// </summary>
-public sealed class NpcPlacementViewModel : ObservableObject
+public sealed class NpcPlacementViewModel : ObservableObject, IDrifts
 {
     public NpcPlacementDef Model { get; }
 
@@ -231,11 +280,153 @@ public sealed class NpcPlacementViewModel : ObservableObject
     public NpcTransformViewModel Blink { get; }
     public NpcTransformViewModel Wet { get; }
 
+    // ── The wet effect (WetEffectDef) ────────────────────────────────────
+    // What the placement sets over its NPC's look (after 1.10.0, the author: "NPC sets them, placements can change"):
+    // empty, the NPC's (NpcWetDef) - and the game's where the NPC sets none. The box, the shower's top and floor are the
+    // placement's alone. Nothing set at all leaves the placement's record as it was (no "wetEffect").
+
+    /// <summary>
+    /// An NPC's wet settings by its key: the open pack's (MainViewModel sets it), what a placement shows its kind
+    /// by. The preview and the plugin read the NPC themselves (WetEffectDef.Merged); this is for the panel alone.
+    /// </summary>
+    internal static System.Func<string, NpcWetDef?>? NpcWetOf { get; set; }
+
+    private NpcWetDef? NpcWet => string.IsNullOrEmpty(Model.Npc) ? null : NpcWetOf?.Invoke(Model.Npc);
+
+    /// <summary>What this placed character's wet effect is: the NPC's look, the placement's over it.</summary>
+    public WetEffectDef EffectiveWet(NpcWetDef? npc) => WetEffectDef.Merged(npc, Model.WetEffect);
+
+    private WetEffectDef Effect => Model.WetEffect ??= new WetEffectDef();
+
+    private void EffectChanged()
+    {
+        if (Model.WetEffect is { Empty: true }) Model.WetEffect = null;
+        RaiseWet();
+    }
+
+    /// <summary>The NPC's own wet settings changed: what this shows from them, read again.</summary>
+    internal void NpcWetChanged() => RaiseWet();
+
+    private void RaiseWet()
+    {
+        foreach (var name in WetNames) OnPropertyChanged(name);
+    }
+
+    private static readonly string[] WetNames =
+    {
+        nameof(WetKindIndex), nameof(WetShower), nameof(WetAreaWidth), nameof(WetAreaHeight), nameof(WetFromTop),
+        nameof(WetFloor), nameof(WetTint), nameof(WetAmount), nameof(WetSize), nameof(WetFall), nameof(WetCustomised),
+    };
+
+    /// <summary>The kind it has: the placement's, else its NPC's, else the wet.</summary>
+    public string WetKind => Model.WetEffect?.Kind ?? NpcWet?.Kind ?? WetEffectDef.KindWet;
+
+    /// <summary>0 the NPC's kind, 1 the wet, 2 the shower (the dropdown's place). A value it does not have is ignored: a
+    /// page built ahead blanks its box while it has no options (warmed pages), which must not change the pack.</summary>
+    public int WetKindIndex
+    {
+        get => Model.WetEffect?.Kind switch { null => 0, WetEffectDef.KindShower => 2, _ => 1 };
+        set
+        {
+            if (value is not (0 or 1 or 2) || value == WetKindIndex) return;
+            Effect.Kind = value switch { 1 => WetEffectDef.KindWet, 2 => WetEffectDef.KindShower, _ => null };
+            EffectChanged();
+        }
+    }
+
+    public bool WetShower => WetEffectDef.ShowerKind(WetKind);
+
+    /// <summary>The box the Wet part's drops start in, its own units: the kind's own (3.21 x 8.45 the wet's, 2 x 1
+    /// the shower's) until a side of it is dragged in the place preview or a number is typed.</summary>
+    public float WetAreaWidth
+    {
+        get => Model.WetEffect?.Width ?? WetEffectDef.DefaultWidth(WetKind);
+        set { if (!(value > 0)) return; Effect.Width = value; EffectChanged(); }
+    }
+
+    /// <summary>See <see cref="WetAreaWidth"/>.</summary>
+    public float WetAreaHeight
+    {
+        get => Model.WetEffect?.Height ?? WetEffectDef.DefaultHeight(WetKind);
+        set { if (!(value > 0)) return; Effect.Height = value; EffectChanged(); }
+    }
+
+    /// <summary>The box's size both at once (a side dragged: the other size kept as it reads).</summary>
+    public void SetWetArea(float width, float height)
+    {
+        Effect.Width = width;
+        Effect.Height = height;
+        EffectChanged();
+    }
+
+    /// <summary>The shower's drops start along the box's top side only.</summary>
+    public bool WetFromTop
+    {
+        get => Model.WetEffect?.FromTop == true;
+        set { Effect.FromTop = value ? true : null; EffectChanged(); }
+    }
+
+    /// <summary>The shower's drops vanish at the box's floor.</summary>
+    public bool WetFloor
+    {
+        get => Model.WetEffect?.Floor == true;
+        set { Effect.Floor = value ? true : null; EffectChanged(); }
+    }
+
+    /// <summary>The colour the game's drop colour is multiplied by, here: "" for the NPC's.</summary>
+    public string WetTint
+    {
+        get => Model.WetEffect?.Tint ?? "";
+        set
+        {
+            string v = (value ?? "").Trim();
+            Effect.Tint = v.Length == 0 ? null : v;
+            EffectChanged();
+        }
+    }
+
+    /// <summary>Times the game's drops a second, here: empty (null) for the NPC's.</summary>
+    public float? WetAmount
+    {
+        get => Model.WetEffect?.Amount;
+        set { if (value is < 0) return; Effect.Amount = value; EffectChanged(); }
+    }
+
+    /// <summary>Times the game's drop size, here: empty (null) for the NPC's.</summary>
+    public float? WetSize
+    {
+        get => Model.WetEffect?.Size;
+        set { if (value is <= 0) return; Effect.Size = value; EffectChanged(); }
+    }
+
+    /// <summary>Times the game's fall, here: empty (null) for the NPC's.</summary>
+    public float? WetFall
+    {
+        get => Model.WetEffect?.Fall;
+        set { if (value is < 0) return; Effect.Fall = value; EffectChanged(); }
+    }
+
+    /// <summary>Anything of the effect set here: what Reset takes back.</summary>
+    public bool WetCustomised => Model.WetEffect != null;
+
+    /// <summary>The placed character's wet effect back to its NPC's (and the game's box).</summary>
+    public void ResetWetEffect()
+    {
+        Model.WetEffect = null;
+        RaiseWet();
+    }
+
+    public RelayCommand ResetWetEffectCommand => _resetWet ??= new RelayCommand(ResetWetEffect);
+    private RelayCommand? _resetWet;
+
     public NpcPlacementViewModel(NpcPlacementDef model, System.Action<NpcPlacementViewModel>? removeCallback = null,
                                  System.Action? changed = null)
     {
         Model = model;
-        RemoveCommand = new RelayCommand(() => removeCallback?.Invoke(this), () => removeCallback != null);
+        _removeCallback = removeCallback;
+        // To the place's recycle bin (PlaceObjects.Delete), when the row is one of a place's.
+        RemoveCommand = new RelayCommand(() => { if (Tree != null) Tree.Delete(this); else removeCallback?.Invoke(this); },
+                                         () => removeCallback != null);
         Body = new NpcTransformViewModel(model.Body, changed);
         Shadow = new NpcTransformViewModel(model.Shadow, changed);
         Blink = new NpcTransformViewModel(model.Blink, changed);
@@ -300,14 +491,36 @@ public sealed class NpcPlacementViewModel : ObservableObject
     public System.Collections.ObjectModel.ObservableCollection<GameObjectViewModel> Children { get; }
     public RelayCommand AddChildCommand { get; }
 
-    public GameObjectViewModel AddChild()
+    public GameObjectViewModel AddChild() => AdoptAt(new GameObjectDef(), Children.Count);
+
+    /// <summary>A child given to the character at <paramref name="index"/> among its children (the end when past it).</summary>
+    internal GameObjectViewModel AdoptAt(GameObjectDef def, int index)
     {
-        var def = new GameObjectDef();
-        Model.Children.Add(def);
-        var vm = new GameObjectViewModel(def, RemoveChild, true, Children, Model.Children);
-        Children.Add(vm);
+        index = System.Math.Clamp(index, 0, Children.Count);
+        int entry = index < Children.Count ? Model.Children.IndexOf(Children[index].Model) : Model.Children.Count;
+        Model.Children.Insert(entry < 0 ? Model.Children.Count : entry, def);
+        var vm = new GameObjectViewModel(def, RemoveChild, true, Children, Model.Children) { Tree = Tree };
+        Children.Insert(index, vm);
         return vm;
     }
+
+    private readonly System.Action<NpcPlacementViewModel>? _removeCallback;
+    private PlaceObjects? _tree;
+
+    /// <summary>The objects of the place this character stands in: what its Remove sends to the recycle bin
+    /// through (see <see cref="GameObjectViewModel.Tree"/>).</summary>
+    internal PlaceObjects? Tree
+    {
+        get => _tree;
+        set
+        {
+            _tree = value;
+            foreach (var child in Children) child.Tree = value;
+        }
+    }
+
+    /// <summary>Out of the object it stands on, as its remove did before the recycle bin.</summary>
+    internal void TakeOut() => _removeCallback?.Invoke(this);
 
     public void RemoveChild(GameObjectViewModel vm)
     {
@@ -329,6 +542,8 @@ public sealed class NpcPlacementViewModel : ObservableObject
         {
             if (value is null) return;
             Model.Npc = value; OnPropertyChanged(); OnPropertyChanged(nameof(Display));
+            // Its wet effect follows its NPC's where it sets nothing of its own.
+            RaiseWet();
         }
     }
 
@@ -365,4 +580,82 @@ public sealed class NpcPlacementViewModel : ObservableObject
 
     // ── DeactivateWhenUnmet ────────────────────────────────────────────
     public bool DeactivateWhenUnmet { get => Model.DeactivateWhenUnmet; set { Model.DeactivateWhenUnmet = value; OnPropertyChanged(); } }
+
+    // ── How it drifts (after 1.10.0) ─────────────────────────────────────
+    /// <summary>How the character drifts as the cursor moves, as "Moves with" offers it (<see cref="Drifting"/>).</summary>
+    public string Drift => Drifting.Of(this);
+
+    public void DriftWith(string kind, float backStrength = 0.75f) => Drifting.Apply(this, kind, backStrength);
+
+    public bool ParallaxEnabled
+    {
+        get => !Model.ParallaxDisabled;
+        set
+        {
+            if (value == ParallaxEnabled) return;
+            Model.ParallaxDisabled = !value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(Drift));
+        }
+    }
+
+    public bool ParallaxInherits
+    {
+        get => Model.ParallaxStrength == null;
+        set
+        {
+            if (value == ParallaxInherits) return;
+            Model.ParallaxStrength = value ? null : 0.75f;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ParallaxStrength));
+            OnPropertyChanged(nameof(Drift));
+        }
+    }
+
+    /// <summary>Its own strength; 0.75 shown while it drifts with the back picture. Setting it is a strength of its own.</summary>
+    public float ParallaxStrength
+    {
+        get => Model.ParallaxStrength ?? 0.75f;
+        set
+        {
+            if (Model.ParallaxStrength == value) return;
+            Model.ParallaxStrength = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ParallaxInherits));
+            OnPropertyChanged(nameof(Drift));
+        }
+    }
+
+    /// <summary>Whether it drifts reversed, as it will in the game: its own setting, or, unset, the level's back
+    /// picture's (<see cref="PlaceObjects.BackReversed"/>). Setting it is a reversal of its own, false too (see
+    /// <see cref="GameObjectViewModel.ParallaxReversed"/>).</summary>
+    public bool ParallaxReversed
+    {
+        get => Model.ParallaxReversed ?? Tree?.BackReversed ?? false;
+        set
+        {
+            if (value == ParallaxReversed) return;
+            Model.ParallaxReversed = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>Its own reversal, null as the back picture's.</summary>
+    public bool? ParallaxReversedOwn
+    {
+        get => Model.ParallaxReversed;
+        set
+        {
+            if (value == Model.ParallaxReversed) return;
+            Model.ParallaxReversed = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ParallaxReversed));
+        }
+    }
+
+    /// <summary>The back picture's reversal changed: a character that takes it shows it.</summary>
+    internal void ReversalMayHaveChanged()
+    {
+        if (Model.ParallaxReversed == null) OnPropertyChanged(nameof(ParallaxReversed));
+    }
 }

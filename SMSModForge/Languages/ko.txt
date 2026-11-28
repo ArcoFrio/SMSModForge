@@ -2001,9 +2001,53 @@ gameObject.reversed = 반대로
 # en: UI space
 gameObject.uiSpace = UI 공간
 
-# Text
-# en: Mask (opt):
-gameObject.maskOpt = 마스크(선택):
+# Text: the label of how an object's picture moves
+# en: Moves by:
+gameObject.maskOpt = 움직임 방식:
+
+# Tooltip on the choice of how an object's picture moves
+# en: How this object's picture moves in the game. Paint its own mask with Edit, the same way as a place's or an NPC's.
+gameObject.maskKind.tip = 게임에서 이 오브젝트의 그림이 움직이는 방식입니다. 자체 마스크는 장소나 NPC의 마스크처럼 '편집'으로 칠하세요.
+
+# Choice: the object's picture stays still
+# en: Nothing (still)
+gameObject.maskKind.none = 없음(고정)
+
+# Tooltip on a choice
+# en: The picture stays still.
+gameObject.maskKind.none.tip = 그림이 움직이지 않습니다.
+
+# Choice: the object moves with the place's back layer's mask
+# en: The back layer's mask
+gameObject.maskKind.backLayer = 뒤 레이어의 마스크
+
+# Tooltip on a choice
+# en: Moves with the place's back layer's mask, read over this object's own picture (as if the mask were laid over it, not over the place). What objects without a mask used to do when the back layer had one.
+gameObject.maskKind.backLayer.tip = 장소 뒤 레이어의 마스크에 따라 움직이며, 그 마스크를 이 오브젝트 자체의 그림 위에서 읽습니다(마스크를 장소가 아니라 이 오브젝트 위에 깐 것처럼). 뒤 레이어에 마스크가 있을 때 마스크 없는 오브젝트가 예전에 하던 방식입니다.
+
+# Choice: the object moves by a mask of its own, like a place's water or foliage
+# en: Its own mask, like a place
+gameObject.maskKind.level = 자체 마스크(장소처럼)
+
+# Tooltip on a choice
+# en: Moves by a mask of its own, the way a place's picture moves: water, leaves, curtains. One layer (how much), painted in the mask studio.
+gameObject.maskKind.level.tip = 장소의 그림이 움직이듯 자체 마스크로 움직입니다. 물, 나뭇잎, 커튼. 레이어 하나(얼마나 움직일지)를 마스크 스튜디오에서 칠합니다.
+
+# Choice: the object moves by a mask of its own, like a character's jiggle
+# en: Its own mask, like a character
+gameObject.maskKind.jiggle = 자체 마스크(캐릭터처럼)
+
+# Tooltip on a choice
+# en: Moves by a mask of its own, the way an NPC's body moves: bounce, wave and noise (red, green and blue), with the settings below.
+gameObject.maskKind.jiggle.tip = NPC의 몸이 움직이듯 자체 마스크로 움직입니다. 튕김, 파동, 노이즈(빨강, 초록, 파랑)를 아래 설정과 함께 씁니다.
+
+# Button: opens the mask studio on this object's mask
+# en: Edit
+gameObject.editMask = 편집
+
+# Tooltip on a button
+# en: Paint this object's mask in the mask studio, over its picture, with the place preview beside it.
+gameObject.editMask.tip = 마스크 스튜디오에서 이 오브젝트의 그림 위에 마스크를 칠합니다. 옆에 장소 미리보기가 있습니다.
 
 # Button
 # en: + Component
@@ -2070,8 +2114,8 @@ gameObject.copy.tip = 이 GameObject를 에디터 클립보드에 복사합니�
 gameObject.paste.tip = 클립보드의 GameObject를 이 아래에 형제로 붙여넣습니다
 
 # Tooltip on a button
-# en: Remove this GameObject
-gameObject.remove.tip = 이 GameObject를 제거합니다
+# en: Remove this GameObject. It goes to the place's recycle bin, under the hierarchy beside the preview, with everything under it, to be put back if you need it. One of the game's own objects is switched off where it stands instead, and the bin switches it back on.
+gameObject.remove.tip = 이 GameObject를 제거합니다. 그 아래의 모든 것과 함께 미리보기 옆 계층 아래에 있는 장소의 휴지통으로 들어가며, 필요하면 되돌릴 수 있습니다. 게임 자체의 오브젝트는 대신 그 자리에서 꺼지고, 휴지통에서 다시 켤 수 있습니다.
 
 # Tooltip on "This GameObject already exists (bind, don't create)"
 # en: On: the Name above is looked up in the scene (a bare name or a A > B > C path) and only what you author here is applied to it — the way to modify a vanilla level you don't own. Off: this pack creates the GameObject.
@@ -2142,24 +2186,24 @@ gameObject.startActive.tip = 대화가 나중에 보여 주는 오버레이(Flas
 gameObject.initialAlpha01.tip = 처음 알파 0..1(Portal처럼 페이드 인하는 오버레이는 0에서 시작합니다).
 
 # Tooltip on "Drift with the level"
-# en: On (the default) keeps the level's own strength, which is what a created object always did. Turn it off to set this object's depth independently.
-gameObject.driftLevel.tip = 켬(기본값)은 레벨 자체의 강도를 유지하며, 만든 오브젝트는 늘 그랬습니다. 끄면 이 오브젝트의 깊이를 따로 정할 수 있습니다.
+# en: On (the default): drift as the place's back picture does, which is what a created object does in the game. Turn it off to set this object's depth independently.
+gameObject.driftLevel.tip = 켬(기본값): 장소의 뒤 그림처럼 움직이며, 게임에서 만든 오브젝트가 움직이는 방식입니다. 끄면 이 오브젝트의 깊이를 따로 정할 수 있습니다.
 
 # Tooltip on a text box
 # en: Depth relative to the level's main sprite, which every vanilla level fixes at 0.75: lower sits further away and lags behind the room, higher sits nearer and overshoots. Vanilla objects use 0.1, 0.5, 0.75 and 1.5.
 gameObject.depthRelativeLevelS.tip = 레벨 메인 스프라이트에 대한 깊이입니다. 게임 레벨은 모두 이를 0.75로 고정합니다. 낮을수록 멀리 있어 방보다 늦게 따라오고, 높을수록 가까이 있어 더 멀리 움직입니다. 게임 오브젝트는 0.1, 0.5, 0.75, 1.5를 씁니다.
 
 # Tooltip on "Reversed"
-# en: Drift WITH the cursor instead of against it.
-gameObject.reversed.tip = 커서와 반대가 아니라 커서와 '같은 방향'으로 움직입니다.
+# en: Drift WITH the cursor instead of against it. Until you change it, the object drifts the way the place's back picture does, so this starts ticked where the back picture is reversed.
+gameObject.reversed.tip = 커서와 반대가 아니라 커서와 '같은 방향'으로 움직입니다. 바꾸기 전까지는 장소의 뒤 그림과 같은 방식으로 움직이므로, 뒤 그림이 반대로 움직이는 곳에서는 처음부터 체크되어 있습니다.
 
 # Tooltip on "UI space"
 # en: Only for an object under a Canvas — it switches the effect to canvas coordinates. A pack's own GameObjects are world sprites, so leave this off unless you're binding to a canvas object.
 gameObject.uiSpace.tip = Canvas 아래 오브젝트 전용이며, 효과를 캔버스 좌표로 바꿉니다. 팩 자신의 GameObject는 월드 스프라이트이므로, 캔버스 오브젝트에 연결하는 게 아니라면 꺼 두세요.
 
 # Tooltip on a part of the window
-# en: Optional pack-relative mask PNG bound to _MaskTex, for shader-masked overlays (a cameo).
-gameObject.optionalPackRelativeMask.tip = 셰이더로 마스킹하는 오버레이(카메오)용으로 _MaskTex에 연결되는 선택 마스크 PNG(팩 기준 상대 경로)입니다.
+# en: The mask: a PNG in the pack, made in the mask studio (Edit) or elsewhere.
+gameObject.optionalPackRelativeMask.tip = 마스크: 마스크 스튜디오('편집')나 다른 곳에서 만든, 팩 안의 PNG입니다.
 
 # Tooltip on "+ Component"
 # en: Attach a generic utility component (fade, disappear, random child, blink) to this GameObject.
@@ -2222,6 +2266,50 @@ component.reshuffleEveryTimeS = 활성화될 때마다 다시 섞기
 # Text
 # en: Toggles a SpriteRenderer's alpha between min and max on a fixed interval (blink / pulse).
 component.togglesSpriterendererSAlpha = SpriteRenderer의 알파를 일정한 간격으로 최소와 최대 사이에서 바꿉니다(깜빡임 / 맥동).
+
+# Text explaining a component's settings
+# en: Floats the object up and down, smoothly, for ever - everything under it with it. Several with Random start move out of step.
+component.floatExplain = 오브젝트를 그 아래의 모든 것과 함께 위아래로 부드럽게, 끝없이 띄웁니다. '무작위 시작'을 켠 여러 개는 서로 엇갈려 움직입니다.
+
+# Label in front of a text box
+# en: Height
+component.floatHeight = 높이
+
+# Tooltip on a text box
+# en: How far it travels from its lowest point to its highest, in units (the size of the object's parent's units).
+component.floatHeight.tip = 가장 낮은 곳에서 가장 높은 곳까지 움직이는 거리입니다(단위: 오브젝트 부모의 단위).
+
+# Label in front of a text box
+# en: Time (s)
+component.floatPeriod = 시간(초)
+
+# Tooltip on a text box
+# en: Seconds for one whole rise and fall. Higher is slower and calmer.
+component.floatPeriod.tip = 한 번 올라갔다 내려오는 데 걸리는 초입니다. 높을수록 느리고 차분합니다.
+
+# Label in front of a text box
+# en: Sideways
+component.floatSway = 좌우
+
+# Tooltip on a text box
+# en: How far it also sways from side to side, in units. 0 keeps it straight up and down. The sway is a little slower than the rise, so the path keeps changing.
+component.floatSway.tip = 좌우로도 흔들리는 거리(단위)입니다. 0이면 똑바로 위아래로만 움직입니다. 좌우 흔들림은 오르내림보다 조금 느려서, 움직이는 경로가 계속 바뀝니다.
+
+# Label in front of a text box
+# en: Start at
+component.floatStart = 시작 위치
+
+# Tooltip on a text box
+# en: Where in its rise and fall it starts, from 0 to 1: 0 in the middle going up, 0.25 at the top, 0.5 in the middle going down, 0.75 at the bottom. Used when Random start is off.
+component.floatStart.tip = 오르내림의 어디에서 시작할지, 0에서 1까지입니다. 0은 가운데에서 올라가는 중, 0.25는 맨 위, 0.5는 가운데에서 내려가는 중, 0.75는 맨 아래입니다. '무작위 시작'이 꺼져 있을 때 쓰입니다.
+
+# Tick box
+# en: Random start
+component.floatRandomStart = 무작위 시작
+
+# Tooltip on a tick box
+# en: Each one starts somewhere at random in its rise and fall, so several floating side by side do not move together.
+component.floatRandomStart.tip = 각각 오르내림의 무작위 위치에서 시작하므로, 나란히 떠 있는 여러 개가 함께 움직이지 않습니다.
 
 # Text
 # en: Interval
@@ -2293,6 +2381,110 @@ npcPlacement.blink = 눈 깜빡임
 # en: Wet (particle)
 npcPlacement.wetParticle = 젖음(파티클)
 
+# Heading
+# en: Wet effect
+npcPlacement.wetEffect = 젖음 효과
+
+# Label in front of a dropdown
+# en: Kind
+npcPlacement.wetKind = 종류
+
+# Tooltip on a dropdown
+# en: Which of the game's two wet effects. Same as the NPC: the kind set in the NPC's Wet particles box on the NPCs tab. Wet: Anna's towel look - a few thin white drops over the body, drawn over everything. Shower: the bathroom shower - many fine blue-grey drops falling from a small box, lit by the room's lamps.
+npcPlacement.wetKind.tip = 게임의 두 가지 젖음 효과 중 어느 것인지입니다. 'NPC와 같게': 'NPC' 탭에서 그 NPC의 '젖음 파티클' 칸에 정한 종류. '젖음': Anna의 수건 모습으로, 몸 위에 가는 흰 물방울 몇 개가 모든 것 위에 그려집니다. '샤워': 욕실 샤워로, 작은 상자에서 고운 청회색 물방울이 많이 떨어지며 방의 램프 빛을 받습니다.
+
+# Choice in a dropdown: the kind the NPC itself has
+# en: Same as the NPC
+npcPlacement.wetKindNpc = NPC와 같게
+
+# Choice in a dropdown
+# en: Wet
+npcPlacement.wetKindWet = 젖음
+
+# Choice in a dropdown
+# en: Shower
+npcPlacement.wetKindShower = 샤워
+
+# Label in front of a text box
+# en: Box width
+npcPlacement.wetWidth = 상자 너비
+
+# Tooltip on a text box
+# en: How wide the box the drops start in is, in the Wet part's own units (its scale still multiplies it). The game's: 3.21 for Wet, 2 for Shower. You can also drag the box's sides in the preview.
+npcPlacement.wetWidth.tip = 물방울이 시작되는 상자의 너비로, '젖음' 부위 자체의 단위입니다(그 크기가 다시 곱해집니다). 게임 값: '젖음' 3.21, '샤워' 2. 미리보기에서 상자의 변을 끌어도 됩니다.
+
+# Label in front of a text box
+# en: Box height
+npcPlacement.wetHeight = 상자 높이
+
+# Tooltip on a text box
+# en: How tall the box the drops start in is, in the Wet part's own units (its scale still multiplies it). The game's: 8.45 for Wet, 1 for Shower. You can also drag the box's sides in the preview.
+npcPlacement.wetHeight.tip = 물방울이 시작되는 상자의 높이로, '젖음' 부위 자체의 단위입니다(그 크기가 다시 곱해집니다). 게임 값: '젖음' 8.45, '샤워' 1. 미리보기에서 상자의 변을 끌어도 됩니다.
+
+# Tick box
+# en: Drops start along the top
+npcPlacement.wetFromTop = 물방울이 위쪽 변에서 시작
+
+# Tooltip on a tick box
+# en: The drops start on the box's top side only, like a shower head as wide as the box, instead of anywhere in it.
+npcPlacement.wetFromTop.tip = 상자만큼 넓은 샤워기 헤드처럼, 물방울이 상자 안 아무 곳이 아니라 상자의 위쪽 변에서만 시작합니다.
+
+# Tick box
+# en: Drops stop at the box's floor
+npcPlacement.wetFloor = 물방울이 상자 바닥에서 멈춤
+
+# Tooltip on a tick box
+# en: A drop disappears the moment it reaches the bottom of the box, instead of falling off the screen. Drag the box's bottom side down to where the floor is.
+npcPlacement.wetFloor.tip = 물방울이 화면 밖으로 떨어지지 않고, 상자 바닥에 닿는 순간 사라집니다. 상자의 아래쪽 변을 바닥이 있는 곳까지 끌어내리세요.
+
+# Label in front of a text box
+# en: Tint
+npcPlacement.wetTint = 색조
+
+# Tooltip on a text box
+# en: The drops' own colour is multiplied by it: white keeps them as they are, a colour tints them, a lower alpha makes them fainter. #RRGGBB or #RRGGBBAA. Empty: the NPC's tint (set on the NPCs tab).
+npcPlacement.wetTint.tip = 물방울 자체의 색에 이 색이 곱해집니다. 흰색은 그대로 두고, 색을 주면 그 색조가 입혀지며, 알파를 낮추면 더 희미해집니다. #RRGGBB 또는 #RRGGBBAA. 비워 두면 NPC의 색조('NPC' 탭에서 설정)입니다.
+
+# Button
+# en: Pick…
+npcPlacement.wetPickTint = 선택…
+
+# Tooltip on a button
+# en: Choose the tint.
+npcPlacement.wetPickTint.tip = 색조를 고릅니다.
+
+# Label in front of a text box
+# en: Amount
+npcPlacement.wetAmount = 양
+
+# Tooltip on a text box
+# en: Times the game's number of drops a second: 2 makes twice as many, 0.5 half as many. Empty: the NPC's (set on the NPCs tab).
+npcPlacement.wetAmount.tip = 게임의 초당 물방울 수에 곱하는 배수입니다. 2는 두 배, 0.5는 절반입니다. 비워 두면 NPC의 값('NPC' 탭에서 설정)입니다.
+
+# Label in front of a text box
+# en: Drop size
+npcPlacement.wetSize = 물방울 크기
+
+# Tooltip on a text box
+# en: Times the game's drop size. The drops only - the box stays as it is. Empty: the NPC's (set on the NPCs tab).
+npcPlacement.wetSize.tip = 게임의 물방울 크기에 곱하는 배수입니다. 물방울만 바뀌고 상자는 그대로입니다. 비워 두면 NPC의 값('NPC' 탭에서 설정)입니다.
+
+# Label in front of a text box
+# en: Fall speed
+npcPlacement.wetFall = 낙하 속도
+
+# Tooltip on a text box
+# en: Times the game's fall: lower falls slower, higher faster. Empty: the NPC's (set on the NPCs tab).
+npcPlacement.wetFall.tip = 게임의 낙하에 곱하는 배수입니다. 낮으면 느리게, 높으면 빠르게 떨어집니다. 비워 두면 NPC의 값('NPC' 탭에서 설정)입니다.
+
+# Button
+# en: Reset
+npcPlacement.wetReset = 초기화
+
+# Tooltip on a button
+# en: Takes back everything set here: the kind and the drops' settings go back to the NPC's, the box to the game's own for that kind.
+npcPlacement.wetReset.tip = 여기서 정한 것을 모두 되돌립니다. 종류와 물방울 설정은 NPC의 것으로, 상자는 그 종류에 맞는 게임 기본값으로 돌아갑니다.
+
 # Tick box
 # en: Start active
 npcPlacement.startActive = 처음부터 활성
@@ -2338,8 +2530,8 @@ npcPlacement.children = 자식
 npcPlacement.keyNPCNpcsTab.tip = NPC 탭에 있는 NPC의 키입니다.
 
 # Tooltip on a button
-# en: Remove this NPC.
-npcPlacement.remove.tip = 이 NPC를 제거합니다.
+# en: Remove this NPC. It goes to the place's recycle bin, under the hierarchy beside the preview, to be put back if you need it.
+npcPlacement.remove.tip = 이 NPC를 제거합니다. 미리보기 옆 계층 아래에 있는 장소의 휴지통으로 들어가며, 필요하면 되돌릴 수 있습니다.
 
 # Tooltip on a text box
 # en: GameObject name (SetGameObjectActive target). Blank = the NPC key.
@@ -3869,6 +4061,22 @@ characters.outfitParticles = 파티클
 # en: Wet particle active on spawn
 characters.wetParticleActiveSpawn = 등장할 때 젖음 파티클 활성
 
+# Label in front of a dropdown
+# en: Kind
+characters.wetKind = 종류
+
+# Tooltip on a dropdown
+# en: Which of the game's two wet effects. Wet: Anna's towel look - a few thin white drops round the middle of the bust. Shower: fine blue-grey drops falling from the top of the bust's picture.
+characters.wetKind.tip = 게임의 두 가지 젖음 효과 중 어느 것인지입니다. '젖음': Anna의 수건 모습으로, 스탠딩 가운데쯤에 가는 흰 물방울 몇 개. '샤워': 스탠딩 그림 맨 위에서 떨어지는 고운 청회색 물방울.
+
+# Choice in a dropdown
+# en: Wet
+characters.wetKindWet = 젖음
+
+# Choice in a dropdown
+# en: Shower
+characters.wetKindShower = 샤워
+
 # Text
 # en: (The Wet preset is always attached — this controls whether it starts playing.)
 characters.wetPresetAlwaysAttached = (젖음 프리셋은 항상 붙어 있습니다. 이것은 재생을 시작할지를 정합니다.)
@@ -4351,13 +4559,69 @@ npcs.colourHexRGBA = 색(16진 RGBA):
 # en: Wet particles (optional)
 npcs.npcWet = 젖음 파티클(선택)
 
+# Label in front of a dropdown
+# en: Kind
+npcs.wetKind = 종류
+
+# Tooltip on a dropdown
+# en: Which of the game's two wet effects this NPC has wherever it is placed. Wet: Anna's towel look - a few thin white drops over the body, drawn over everything. Shower: the bathroom shower - many fine blue-grey drops falling from a small box, lit by the room's lamps. A placement can pick the other kind for itself.
+npcs.wetKind.tip = 이 NPC가 어디에 배치되든 갖는, 게임의 두 가지 젖음 효과 중 어느 것인지입니다. '젖음': Anna의 수건 모습으로, 몸 위에 가는 흰 물방울 몇 개가 모든 것 위에 그려집니다. '샤워': 욕실 샤워로, 작은 상자에서 고운 청회색 물방울이 많이 떨어지며 방의 램프 빛을 받습니다. 배치는 자기만 다른 종류를 고를 수 있습니다.
+
+# Choice in a dropdown
+# en: Wet
+npcs.wetKindWet = 젖음
+
+# Choice in a dropdown
+# en: Shower
+npcs.wetKindShower = 샤워
+
+# Label in front of a text box
+# en: Tint
+npcs.wetTint = 색조
+
+# Tooltip on a text box
+# en: The drops' own colour is multiplied by it: white keeps them as they are, a colour tints them, a lower alpha makes them fainter. #RRGGBB or #RRGGBBAA. Empty: the game's colours.
+npcs.wetTint.tip = 물방울 자체의 색에 이 색이 곱해집니다. 흰색은 그대로 두고, 색을 주면 그 색조가 입혀지며, 알파를 낮추면 더 희미해집니다. #RRGGBB 또는 #RRGGBBAA. 비워 두면 게임의 색입니다.
+
+# Button
+# en: Pick…
+npcs.wetPickTint = 선택…
+
+# Tooltip on a button
+# en: Choose the tint.
+npcs.wetPickTint.tip = 색조를 고릅니다.
+
+# Label in front of a text box
+# en: Amount
+npcs.wetAmount = 양
+
+# Tooltip on a text box
+# en: Times the game's number of drops a second: 2 makes twice as many, 0.5 half as many.
+npcs.wetAmount.tip = 게임의 초당 물방울 수에 곱하는 배수입니다. 2는 두 배, 0.5는 절반입니다.
+
+# Label in front of a text box
+# en: Drop size
+npcs.wetSize = 물방울 크기
+
+# Tooltip on a text box
+# en: Times the game's drop size. The drops only - the box they start in stays as it is.
+npcs.wetSize.tip = 게임의 물방울 크기에 곱하는 배수입니다. 물방울만 바뀌고, 물방울이 시작되는 상자는 그대로입니다.
+
+# Label in front of a text box
+# en: Fall speed
+npcs.wetFall = 낙하 속도
+
+# Tooltip on a text box
+# en: Times the game's fall: lower falls slower, higher faster.
+npcs.wetFall.tip = 게임의 낙하에 곱하는 배수입니다. 낮으면 느리게, 높으면 빠르게 떨어집니다.
+
 # Tick box
 # en: Start active
 npcs.startActive = 처음부터 활성
 
 # Text
-# en: Emitter offset / rotation / scale are per-placement — edit the Wet transform on the Places tab.
-npcs.emitterOffsetRotationScale = 발생기 위치 / 회전 / 크기는 배치마다 다릅니다. 장소 탭에서 젖음 트랜스폼을 편집하세요.
+# en: Where the drops stand (offset / rotation / scale), the box they start in and a shower's top and floor are set for each placement - edit the Wet part on the Places tab. A placement can also change the settings above for itself.
+npcs.emitterOffsetRotationScale = 물방울의 자리(위치 / 회전 / 크기), 물방울이 시작되는 상자, 샤워의 위쪽과 바닥은 배치마다 정합니다. '장소' 탭에서 '젖음' 부위를 편집하세요. 배치는 위의 설정도 자기만 따로 바꿀 수 있습니다.
 
 # Tooltip on the divider between the NPC's fields and its preview
 # en: Drag to give the preview more or less of the tab: the NPC scales to fit, no bigger than the size its corner is dragged to. Remembered.
@@ -4613,25 +4877,9 @@ places.extNavigatorButtons = 내비게이터 버튼(이 게임 장소의 바에 
 # en: + Add navigator button
 places.addVanillaExtensionButton = + 내비게이터 버튼 추가
 
-# Box heading
-# en: GameObjects (layered on this vanilla place)
-places.gameobjectsLayeredVanillaPlace = GameObject(이 게임 장소 위에 겹침)
-
-# Button
-# en: + Add GameObject
-places.addVanillaExtensionGameObject = + GameObject 추가
-
-# Button
-# en: + Add NPC
-places.addNpc = + NPC 추가
-
 # Button
 # en: Fill from vanilla hierarchy
 places.seedFromCatalog = 게임 계층에서 채우기
-
-# Text
-# en: GameObjects instantiated under the vanilla level (props, decorations, animated layers) — the pack decorates the level without owning it. Same authoring surface as a pack place's GameObjects: nest children, attach utility components, and target by Name from dialogue actions. Use 'Fill from vanilla hierarchy' to pull in the level's real objects as bound nodes you can modify; anything you leave untouched is dropped on save, so the pack only ever stores what it actually changes.
-places.gameobjectsInstantiatedUnderVanilla = 게임 레벨 아래에 만드는 GameObject(소품, 장식, 움직이는 레이어)입니다. 팩은 레벨을 소유하지 않고 꾸밉니다. 팩 장소의 GameObject와 같은 편집 화면으로, 자식을 중첩하고, 보조 컴포넌트를 붙이고, 대화 액션에서 이름으로 가리킬 수 있습니다. '게임 계층에서 채우기'로 레벨의 실제 오브젝트를 바꿀 수 있는 연결된 노드로 가져올 수 있습니다. 건드리지 않은 것은 저장할 때 빠지므로, 팩은 실제로 바꾼 것만 저장합니다.
 
 # Box heading
 # en: Identity
@@ -4783,14 +5031,6 @@ places.navigatorButtons = 내비게이터 버튼(이 장소가 활성인 동안 
 places.up12ButtonsPer = 장소마다 최대 12개. 순서 = 실행 시 생성 순서 = 화면에서 왼쪽→오른쪽. ▲▼로 순서를 바꿉니다. 미리보기는 이 순서대로 번호를 붙여 보여 줍니다. 모드 쪽 로더가 불러올 때 대상 이름을 레벨 번호로 바꾸므로, 두 모드가 모두 버튼을 추가해도 부딪히지 않습니다.
 
 # Box heading
-# en: GameObjects (this place's scene hierarchy)
-places.placeGameObjects = GameObject(이 장소의 씬 계층)
-
-# Text
-# en: Everything this place builds under its level, as one hierarchy. A GameObject with a Sprite is a layered sprite object (backdrop, prop, animated layer); leave the Sprite blank for a pure container that just groups children. Every node takes utility components (fade, disappear, random child, blink), nested children, and NPC placements. The NPCs node is the level's own NPCs object — always present, and the home for the NPC hierarchy; its subtree composes local transforms down the chain, so moving a container moves everything under it. Target any node from dialogue by Name with SetGameObjectActive / FadeSprite / MoveGameObject / SpinGameObject. Lower sorting draws further back.
-places.everythingPlaceBuildsUnder = 이 장소가 레벨 아래에 만드는 모든 것을 하나의 계층으로 보여 줍니다. 스프라이트가 있는 GameObject는 겹쳐진 스프라이트 오브젝트(배경, 소품, 움직이는 레이어)입니다. 자식을 묶기만 하는 용기라면 스프라이트를 비워 둡니다. 어느 노드든 보조 컴포넌트(페이드, 사라짐, 무작위 자식, 깜빡임), 중첩된 자식, NPC 배치를 가질 수 있습니다. NPCs 노드는 레벨 자체의 NPCs 오브젝트로, 항상 있으며 NPC 계층의 자리입니다. 그 아래 계층은 로컬 트랜스폼을 차례로 합치므로, 용기를 옮기면 그 아래 모든 것이 함께 움직입니다. 대화에서 어느 노드든 이름으로 SetGameObjectActive / FadeSprite / MoveGameObject / SpinGameObject로 가리킬 수 있습니다. 그리기 순서가 낮을수록 더 뒤에 그려집니다.
-
-# Box heading
 # en: On enter (once per level activation)
 places.enterOncePerLevel = 들어올 때(레벨이 활성화될 때마다 한 번)
 
@@ -4850,10 +5090,6 @@ places.extShaders.tip = 흔들림 마스크가 있는 NPC에 이 팩의 값으�
 # en: Which of the game's own places this extension attaches to. What you add below appears when the player is there.
 places.whichGameSOwn.tip = 이 확장을 붙일 게임 자체의 장소입니다. 아래에서 추가한 것은 플레이어가 그곳에 있을 때 나타납니다.
 
-# Tooltip on "+ Add NPC"
-# en: Place an NPC under this vanilla level's own NPCs object. To hang it under a specific container instead, use the NPCs section on that container.
-places.addNpc.tip = 이 게임 레벨 자체의 NPCs 오브젝트 아래에 NPC를 놓습니다. 특정 용기 아래에 달려면 그 용기의 NPC 부분을 쓰세요.
-
 # Tooltip on "Fill from vanilla hierarchy"
 # en: Add a bound node for every object the extracted catalog says this level has, seeded with its real transform. Existing entries are left alone, so it's safe to re-run — it just tops up anything new.
 places.seedFromCatalog.tip = 추출한 카탈로그가 이 레벨에 있다고 하는 모든 오브젝트마다, 실제 트랜스폼으로 연결된 노드를 추가합니다. 기존 항목은 건드리지 않으므로 다시 실행해도 안전하며, 새 것만 채웁니다.
@@ -4865,6 +5101,22 @@ places.extParallaxPreview.tip2 = 게임처럼 커서를 따라 씬을 흘러가�
 # Tooltip on "Apply shaders"
 # en: Run the real JiggleSprite pass over NPCs that have a jiggle mask, using this pack's own uniforms — the same code and the same numbers the game runs. Animated, so it costs a little CPU; leave off while positioning.
 places.extShaders.tip2 = 흔들림 마스크가 있는 NPC에 이 팩의 값으로 실제 JiggleSprite 처리를 적용합니다. 게임과 같은 코드, 같은 숫자입니다. 움직이므로 CPU를 조금 씁니다. 배치하는 동안에는 꺼 두세요.
+
+# Button beside the place preview's tick boxes
+# en: Full screen
+places.fullScreen = 전체 화면
+
+# Tooltip on a button
+# en: Shows this preview over the whole screen: the hierarchy and the picked object's settings over its sides, and the preview's tick boxes and quality under the hierarchy, everything working as here. Esc or F11 brings it back. On the Places tab F11 also opens it.
+places.fullScreen.tip = 이 미리보기를 화면 전체에 보여 줍니다. 계층과 선택한 오브젝트의 설정이 양옆에, 미리보기의 체크 상자와 품질이 계층 아래에 놓이며, 모든 것이 여기서처럼 작동합니다. Esc나 F11로 돌아옵니다. '장소' 탭에서는 F11로도 열립니다.
+
+# Button in the corner of the place preview shown over the whole screen
+# en: Leave full screen
+places.leaveFullScreen = 전체 화면 종료
+
+# Tooltip on a button
+# en: Puts the preview back on the page. Esc or F11 does the same.
+places.leaveFullScreen.tip = 미리보기를 페이지로 되돌립니다. Esc나 F11도 같습니다.
 
 # Tooltip on a text box
 # en: What this is called in the editor's own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself.
@@ -4965,10 +5217,6 @@ places.whetherGameSRain.tip = 게임의 비와 눈이 여기서 내리는지 여
 # Tooltip on a text
 # en: Maximum 12 navigator buttons per place.
 places.maximum12NavigatorButtons.tip = 장소마다 내비게이터 버튼은 최대 12개입니다.
-
-# Tooltip on "+ Add NPC"
-# en: Place an NPC under this level's NPCs object. To hang it under a specific container instead, use the NPCs section on that container.
-places.addNpc.tip2 = 이 레벨의 NPCs 오브젝트 아래에 NPC를 놓습니다. 특정 용기 아래에 달려면 그 용기의 NPC 부분을 쓰세요.
 
 # Tooltip on a count beside a place
 # en: Changes {count} existing vanilla GameObjects — moved, switched, gated, or given components
@@ -9184,6 +9432,10 @@ maskStudio.kind.gameBust = 게임 스탠딩에 씌우는 흔들림 마스크로,
 # en: Level mask: one strength, painted over the level's art.
 maskStudio.kind.level = 레벨 마스크: 하나의 세기를 레벨 그림 위에 칠합니다.
 
+# The studio's title for an object of a place: {name} is the object's name
+# en: {name} (object)
+maskStudio.object = {name} (오브젝트)
+
 # In the title, after a level's name: which of its two masks
 # en: front layer
 maskStudio.layer.front = 앞 레이어
@@ -9275,6 +9527,18 @@ maskStudio.sampled = 불투명도 가져옴: {value}
 # In the status line: where the pointer is on the mask, and the strength there ({value}, a percentage)
 # en: {x}, {y}: {value}
 maskStudio.cursor = {x}, {y}: {value}
+
+# In the status line, after the pointer's place: the part under the pointer is hidden by {name}, drawn in front of what is painted
+# en: under {name}: what moves here can't be seen
+maskStudio.coveredBy = {name}에 가려짐: 여기서 움직이는 것은 보이지 않음
+
+# In the status line, once, when part of what is painted is hidden by pictures drawn in front of it
+# en: Something is drawn in front of part of this. The preview shows it see-through while you paint, but in the game it hides what moves behind it: point at a spot to see what covers it, and give that object a mask of its own.
+maskStudio.coverNote = 칠하는 부분 일부의 앞에 무언가가 그려져 있습니다. 칠하는 동안 미리보기는 그것을 투명하게 보여 주지만, 게임에서는 그 뒤에서 움직이는 것을 가립니다. 한 지점을 가리키면 무엇이 덮고 있는지 보이니, 그 오브젝트에 자체 마스크를 주세요.
+
+# What the mask studio calls a picture in front that has no name
+# en: a picture in front
+preview.place.coverUnnamed = 앞에 있는 그림
 
 # In the status line: the tool and the layer it paints ({layer})
 # en: Brush on {layer}
@@ -10007,6 +10271,14 @@ docs.maskPainter.mirror.term = 대칭
 # Docs: a point in the topic
 # en: Paints both halves at once, mirrored about the middle, with a line marking the middle and a second ring showing where the twin stroke lands.
 docs.maskPainter.mirror = 가운데를 기준으로 좌우 대칭으로 양쪽을 한 번에 칠합니다. 가운데에 선이 표시되고, 두 번째 원이 반대쪽 획이 닿는 곳을 보여 줍니다.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: See-through in the preview
+docs.maskPainter.covered.term = 미리보기에서 투명하게
+
+# Docs: a point in the topic: on a place's or an object's mask, the parts hidden behind something drawn in front
+# en: On a place's layer or an object, the place preview beside the studio draws everything in front of what you paint see-through, so you can watch it move behind. The line at the bottom names what covers the spot under the pointer: in the game, that is what shows there, and the layer's movement is hidden. To move those parts in the game, give the object in front a mask of its own.
+docs.maskPainter.covered = 장소의 레이어나 오브젝트에서는, 스튜디오 옆의 장소 미리보기가 칠하는 것 앞에 있는 모든 것을 투명하게 그려서 그 뒤에서 움직이는 모습을 볼 수 있습니다. 아래쪽 줄에는 포인터 아래 지점을 덮는 것의 이름이 나옵니다. 게임에서는 그것이 그 자리에 보이고, 레이어의 움직임은 가려집니다. 게임에서 그 부분을 움직이려면 앞에 있는 오브젝트에 자체 마스크를 주세요.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Live preview
@@ -11084,6 +11356,14 @@ docs.characters.startWetEffectAlready.term = 등장할 때 젖음 파티클 활�
 # en: Start the wet effect already running. Normally only for swimwear or wet variants.
 docs.characters.startWetEffectAlready = 젖음 효과를 이미 돌아가는 상태로 시작합니다. 보통 수영복이나 젖은 버전에만 씁니다.
 
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Kind
+docs.characters.wetKind.term = 종류
+
+# Docs: a point in the topic
+# en: Which of the game's two wet effects the outfit has: Wet, Anna's thin white streaks round the middle of the bust, or Shower, fine blue-grey streaks falling from the top of the bust's picture.
+docs.characters.wetKind = 의상이 가진 게임의 두 가지 젖음 효과 중 어느 것인지: '젖음'은 스탠딩 가운데쯤의 가는 흰 줄기인 Anna의 것, '샤워'는 스탠딩 그림 맨 위에서 떨어지는 고운 청회색 줄기입니다.
+
 # Docs: a heading inside the topic
 # en: Preview
 docs.characters.heading.preview = 미리보기
@@ -11330,6 +11610,14 @@ docs.npcs.whetherNPCHasWet.term = 켜짐 / 처음부터 활성
 # en: Whether the NPC has the wet effect at all, and whether it is already running when the room loads.
 docs.npcs.whetherNPCHasWet = NPC에 젖음 효과가 아예 있는지, 방을 불러올 때 이미 돌아가고 있는지.
 
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Wet effect
+docs.npcs.wetEffect.term = 젖음 효과
+
+# Docs: a point in the topic
+# en: How an NPC's wet effect looks is set in its Wet particles box: Kind, Tint, Amount, Drop size and Fall speed. Wet is Anna's, a few thin white streaks over the body; Shower is the bathroom's, fine blue-grey streaks from a small box, lit by the room. Every placement of the NPC starts from those; on the Places tab, pick the NPC in the place preview, then its Wet part, to change any of them for that placement alone (empty keeps the NPC's). The box is the placement's: drag the outlined box's sides to change where the drops start. For a shower, tick Drops start along the top and Drops stop at the box's floor to have it fall from the top of the box to its floor.
+docs.npcs.wetEffect = NPC의 젖음 효과가 어떻게 보이는지는 '젖음 파티클' 칸에서 정합니다: '종류', '색조', '양', '물방울 크기', '낙하 속도'. '젖음'은 Anna의 것으로 몸 위에 가는 흰 줄기 몇 개, '샤워'는 욕실의 것으로 작은 상자에서 떨어지는 고운 청회색 줄기이며 방의 빛을 받습니다. NPC의 모든 배치는 이 값에서 시작합니다. '장소' 탭의 장소 미리보기에서 NPC를 선택한 다음 그 '젖음' 부위를 고르면, 그 배치에서만 어느 값이든 바꿀 수 있습니다(비워 두면 NPC의 값). 상자는 배치의 것입니다. 윤곽선으로 그려진 상자의 변을 끌어 물방울이 시작되는 곳을 바꾸세요. 샤워라면 '물방울이 위쪽 변에서 시작'과 '물방울이 상자 바닥에서 멈춤'에 체크해 상자 위에서 바닥까지 떨어지게 하세요.
+
 # Docs: a heading inside the topic
 # en: Preview
 docs.npcs.heading.preview = 미리보기
@@ -11509,12 +11797,12 @@ docs.places.addButtonPlaceS.term = + 내비게이터 버튼 추가
 docs.places.addButtonPlaceS = 이 장소의 줄에 다른 곳으로 이어지는 버튼을 추가합니다. 장소마다 최대 열두 개입니다. 버튼 옆의 숫자가 몇 개를 썼는지 알려 주며, 한도에 이르면 더는 제안하지 않습니다.
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: + Add GameObject
-docs.places.addObjectRoomArt.term = + GameObject 추가
+# en: + Object
+docs.places.addObjectRoomArt.term = + 오브젝트
 
 # Docs: a point in the topic
-# en: Add an object to the room — art, a prop, a container for other objects.
-docs.places.addObjectRoomArt = 방에 오브젝트를 추가합니다. 그림, 소품, 다른 오브젝트를 담는 그릇 등입니다.
+# en: Over the hierarchy beside the preview: add an object to the room — art, a prop, a container for other objects. It arrives in the middle of the picture, picked, with its settings to the right of it.
+docs.places.addObjectRoomArt = 미리보기 옆 계층 위에 있습니다. 방에 오브젝트를 추가합니다. 그림, 소품, 다른 오브젝트를 담는 그릇 등입니다. 그림 한가운데에 선택된 채로 나타나며, 설정은 그 오른쪽에 나옵니다.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Copy of
@@ -11529,20 +11817,32 @@ docs.places.copyOfGameObject = 오브젝트를 게임 오브젝트의 사본으�
 docs.places.copyOfGameObject.more = 사본은 게임이 불러올 때마다 내 장소나 원본 옆에 만들어지며, 덮어쓰지 않는 한 원본의 모습을 유지합니다. 연결(Bind)된 자식은 그 일부를 바꾸고, 파티클 색은 게임 효과의 색을 바꿉니다.
 
 # Docs: the bold label in front of the next text, usually a name on screen
-# en: + Add NPC
-docs.places.placeOneNpcsInto.term = + NPC 추가
+# en: Moves by
+docs.places.objectMask.term = 움직임 방식
+
+# Docs: a point in the topic: how a place's object moves
+# en: In the panel beside the picture: how the object's picture moves. Nothing keeps it still; the back layer's mask moves it with the place's back layer's, read over its own picture; its own mask moves it like a place (water, leaves, curtains: one layer) or like a character (bounce, wave and noise, with the settings under it). Edit paints the mask in the mask studio, with the place preview beside it.
+docs.places.objectMask = 그림 옆 패널에서, 오브젝트의 그림이 어떻게 움직이는지 정합니다. '없음(고정)'은 움직이지 않게 합니다. '뒤 레이어의 마스크'는 장소 뒤 레이어의 마스크를 오브젝트 자체의 그림 위에서 읽어 그에 따라 움직입니다. '자체 마스크'는 장소처럼(물, 나뭇잎, 커튼: 레이어 하나) 또는 캐릭터처럼(튕김, 파동, 노이즈와 그 아래 설정) 움직입니다. '편집'은 마스크 스튜디오에서 마스크를 칠하며, 옆에 장소 미리보기가 있습니다.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: + Character
+docs.places.placeOneNpcsInto.term = + 캐릭터
 
 # Docs: a point in the topic
-# en: Place one of your NPCs into the room. To hang it under a particular container instead, use that container's own NPCs section.
-docs.places.placeOneNpcsInto = 내 NPC 하나를 방에 배치합니다. 대신 특정 그릇 아래에 두려면, 그 그릇 자체의 NPC 부분을 쓰세요.
+# en: Over the hierarchy beside the preview: place one of your NPCs into the room. It goes on the picked object when that can hold characters (an object under NPCs), otherwise under the place's NPCs object; choose its NPC to the right of the picture.
+docs.places.placeOneNpcsInto = 미리보기 옆 계층 위에 있습니다. 내 NPC 하나를 방에 배치합니다. 선택한 오브젝트가 캐릭터를 담을 수 있으면(NPCs 아래의 오브젝트) 그 오브젝트에, 아니면 장소의 NPCs 오브젝트 아래에 놓입니다. 그 NPC는 그림 오른쪽에서 고르세요.
+
+# Docs: the fold-out under the text above
+# en: Picked, Moves with says how the character drifts as the cursor moves: Front stays on the floor they stand on, as the game's own characters do; Back drifts with the place's back picture, like someone far away; Own drifts by a strength you set. Their shadow, blink and reflection go with them. Parallax on the NPCs object drifts every character in it together.
+docs.places.placeOneNpcsInto.more = 선택하면 '함께 움직임'이 커서가 움직일 때 캐릭터가 어떻게 흘러가는지 정합니다. '앞'은 게임 자체의 캐릭터처럼 서 있는 바닥에 머뭅니다. '뒤'는 멀리 있는 사람처럼 장소의 뒤 그림과 함께 흘러갑니다. '자체'는 직접 정한 세기로 흘러갑니다. 그림자, 눈 깜빡임, 반사도 함께 움직입니다. NPCs 오브젝트의 '시차'는 그 안의 모든 캐릭터를 함께 움직입니다.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: Fill from vanilla hierarchy
 docs.places.vanillaExtensionAddEntry.term = 게임 계층에서 채우기
 
 # Docs: a point in the topic
-# en: On a vanilla extension, add an entry for every object the game's version of this place already has, each with its real position. Existing entries are left alone, so it is safe to run again later to pick up anything new.
-docs.places.vanillaExtensionAddEntry = 게임 장소 확장에서, 이 장소의 게임 버전에 이미 있는 모든 오브젝트의 항목을 각각 실제 위치로 추가합니다. 이미 있는 항목은 그대로 두므로, 나중에 새것을 가져오려고 다시 실행해도 안전합니다.
+# en: On a vanilla extension, over the hierarchy beside the preview: add an entry for every object the game's version of this place already has, each with its real position. Existing entries are left alone, so it is safe to run again later to pick up anything new.
+docs.places.vanillaExtensionAddEntry = 게임 장소 확장에서, 미리보기 옆 계층 위에 있습니다. 이 장소의 게임 버전에 이미 있는 모든 오브젝트의 항목을 각각 실제 위치로 추가합니다. 이미 있는 항목은 그대로 두므로, 나중에 새것을 가져오려고 다시 실행해도 안전합니다.
 
 # Docs: a heading inside the topic
 # en: On enter / On exit
@@ -11591,6 +11891,14 @@ docs.places.runRealJigglePass.term = 셰이더 적용
 # Docs: a point in the topic
 # en: Run the real jiggle pass over NPCs that have a mask, using this pack's own numbers. Costs a little processor time, so leave it off while positioning.
 docs.places.runRealJigglePass = 마스크가 있는 NPC에 이 팩 자체의 수치로 진짜 흔들림 처리를 돌립니다. 프로세서 시간을 조금 쓰므로, 위치를 잡는 동안은 꺼 두세요.
+
+# Docs: the bold label in front of the next text, usually a name on screen
+# en: Full screen
+docs.places.fullScreen.term = 전체 화면
+
+# Docs: a point in the topic
+# en: Full screen, beside the Preview heading, shows the preview over the whole screen: the hierarchy and the picked object's settings over its sides, the preview's tick boxes and quality under the hierarchy. Everything works there as on the page, Ctrl+Z included. Esc, F11 or Leave full screen at its top brings it back. F11 on the Places tab opens it too.
+docs.places.fullScreen = '미리보기' 제목 옆의 '전체 화면'은 미리보기를 화면 전체에 보여 줍니다. 계층과 선택한 오브젝트의 설정이 양옆에, 미리보기의 체크 상자와 품질이 계층 아래에 놓입니다. 거기서도 Ctrl+Z를 포함해 모든 것이 페이지에서처럼 작동합니다. Esc, F11 또는 위쪽의 '전체 화면 종료'로 돌아옵니다. '장소' 탭에서 F11을 눌러도 열립니다.
 
 [Docs: Map Buttons]
 
@@ -14365,8 +14673,8 @@ docs.example.rainyVisitor.s1.do = 'NPC' 탭에서 '+ NPC'를 클릭하고, 이�
 docs.example.rainyVisitor.s2 = 2. 장소에 넣기
 
 # A step of a guide example: what to do
-# en: On the Places tab, choose your place and click + Add NPC. Choose Wet visitor as its NPC, then drag it in the preview to where it should stand.
-docs.example.rainyVisitor.s2.do = '장소' 탭에서 내 장소를 고르고 '+ NPC 추가'를 클릭하세요. 그 NPC로 Wet visitor를 고른 다음, 미리보기에서 서 있어야 할 곳으로 끌어다 놓으세요.
+# en: On the Places tab, choose your place and click + Character over the hierarchy beside the preview. Choose Wet visitor as its NPC to the right of the picture, then drag it in the preview to where it should stand.
+docs.example.rainyVisitor.s2.do = '장소' 탭에서 내 장소를 고르고 미리보기 옆 계층 위의 '+ 캐릭터'를 클릭하세요. 그림 오른쪽에서 그 NPC로 Wet visitor를 고른 다음, 미리보기에서 서 있어야 할 곳으로 끌어다 놓으세요.
 
 # A step's heading in a guide example, numbered
 # en: 3. Only when it rains
@@ -14865,16 +15173,16 @@ docs.places.navRow = '목적지'는 버튼이 이끄는 곳이며, 화살표로 
 docs.places.activeWhen.term = 활성 조건
 
 # Docs: a point in the topic
-# en: On an object: + Condition, and the game shows it only while they pass - no rule needed, so objects with opposite conditions take turns by themselves. Untick Switch back off when the conditions stop matching for a one-way reveal.
-docs.places.activeWhen = 오브젝트에서: '+ 조건'을 쓰면 게임은 조건을 통과하는 동안에만 그것을 보여 줍니다. 규칙이 필요 없으므로, 반대 조건을 가진 오브젝트들은 저절로 번갈아 나타납니다. 한 번만 드러내려면 '조건이 더 이상 맞지 않으면 다시 끄기'의 체크를 해제하세요.
+# en: On an object, in the panel to the right of the picture: + Condition, and the game shows it only while they pass - no rule needed, so objects with opposite conditions take turns by themselves. Untick Switch back off when the conditions stop matching for a one-way reveal.
+docs.places.activeWhen = 오브젝트의 그림 오른쪽 패널에서: '+ 조건'을 쓰면 게임은 조건을 통과하는 동안에만 그것을 보여 줍니다. 규칙이 필요 없으므로, 반대 조건을 가진 오브젝트들은 저절로 번갈아 나타납니다. 한 번만 드러내려면 '조건이 더 이상 맞지 않으면 다시 끄기'의 체크를 해제하세요.
 
 # Docs: the bold label in front of the next text, usually a name on screen
 # en: + Add child, + Add NPC child, + Component
 docs.places.children.term = + 자식 추가, + NPC 자식 추가, + 컴포넌트
 
 # Docs: a point in the topic
-# en: On an object: an object inside it, one of your NPCs placed inside it, or a small helper on it - a fade, a random child shown, a blink.
-docs.places.children = 오브젝트에서: 그 안의 오브젝트, 그 안에 배치한 내 NPC, 또는 그 위의 작은 도우미(페이드, 무작위 자식 표시, 깜빡임).
+# en: On an object, in the panel to the right of the picture: an object inside it, one of your NPCs placed inside it, or a small helper on it - a fade, a random child shown, a blink, a smooth float up and down (FloatingSprite: its Height, Time, Sideways and start are yours to set). Components that change what you see play in the place preview as you edit them: fades (replayed after a pause), blinks, floats, a random child (a new pick every few seconds), and the game's swing, shake, sprite blender and cinema changer. The component list is grouped as ModForge's own, Vanilla (the game's scripts) and Unity, each with a line saying what it does.
+docs.places.children = 오브젝트의 그림 오른쪽 패널에서: 그 안의 오브젝트, 그 안에 배치한 내 NPC, 또는 그 위의 작은 도우미입니다. 페이드, 무작위 자식 표시, 깜빡임, 부드럽게 위아래로 뜨기(FloatingSprite: '높이', '시간', '좌우', 시작을 직접 정합니다). 보이는 것을 바꾸는 컴포넌트는 편집하는 동안 장소 미리보기에서 재생됩니다. 페이드(잠시 멈춘 뒤 다시 재생), 깜빡임, 뜨기, 무작위 자식(몇 초마다 새로 고름), 그리고 게임의 좌우 흔들기, 진동, 스프라이트 블렌더, 시네마 체인저. 컴포넌트 목록은 'ModForge', '게임'(게임의 스크립트), 'Unity'로 묶여 있으며, 각각 무엇을 하는지 한 줄 설명이 붙어 있습니다.
 
 # A bullet's fold-out in the guide
 # en: A child switches on and off with its parent, and Active when or a RandomChildActivator on the parent decides for all of them. Its place does not follow the parent: an object of yours stands at its own X and Y in the room, so give each child its own. (A child bound to one of the game's objects, or a copy of one, sits relative to its parent, as the game has it.)
@@ -15473,24 +15781,24 @@ tutorial.dressingTheRoom.summary = 그녀의 갤러리에 금빛 꽃병을 오�
 tutorial.dressingTheRoom.addObject.title = 오브젝트 추가하기
 
 # Tutorials: what the step says
-# en: Under GameObjects, scroll to the bottom and click + Add GameObject. Light 2D and NPCs are in every place already - leave them as they are.
-tutorial.dressingTheRoom.addObject.body = 'GameObject' 아래에서 맨 아래로 스크롤해 '+ GameObject 추가'를 클릭하세요. Light 2D와 NPCs는 모든 장소에 이미 있습니다. 그대로 두세요.
+# en: In the hierarchy beside the preview, click + Object. Light 2D and NPCs are in every place already - leave them as they are.
+tutorial.dressingTheRoom.addObject.body = 미리보기 옆 계층에서 '+ 오브젝트'를 클릭하세요. Light 2D와 NPCs는 모든 장소에 이미 있습니다. 그대로 두세요.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Add GameObject is at the bottom of the GameObjects box: scroll down to it.
-tutorial.dressingTheRoom.addObject.hint = '+ GameObject 추가'는 'GameObject' 칸 맨 아래에 있습니다. 아래로 스크롤하세요.
+# en: + Object is at the top of the hierarchy, beside the picture.
+tutorial.dressingTheRoom.addObject.hint = '+ 오브젝트'는 그림 옆, 계층 맨 위에 있습니다.
 
 # Tutorials: the heading of a step
 # en: Name and picture
 tutorial.dressingTheRoom.giveNamePicture.title = 이름과 그림
 
 # Tutorials: what the step says
-# en: In the new card, named GameObject, type Vase over its Name, and choose TutorialArt/Locations/Vase.png as its Sprite.
-tutorial.dressingTheRoom.giveNamePicture.body = GameObject라는 이름의 새 카드에서 '이름' 위에 Vase라고 입력하고, '스프라이트'로 TutorialArt/Locations/Vase.png를 고르세요.
+# en: The new object, named GameObject, is picked: in the panel to the right of the picture, type Vase over its Name, and choose TutorialArt/Locations/Vase.png as its Sprite.
+tutorial.dressingTheRoom.giveNamePicture.body = GameObject라는 이름의 새 오브젝트가 선택되어 있습니다. 그림 오른쪽 패널에서 '이름' 위에 Vase라고 입력하고, '스프라이트'로 TutorialArt/Locations/Vase.png를 고르세요.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: The new card is called GameObject: type Vase in its Name, then fill in its Sprite.
-tutorial.dressingTheRoom.giveNamePicture.hint = 새 카드의 이름은 GameObject입니다. '이름'에 Vase를 입력한 다음 '스프라이트'를 채우세요.
+# en: The panel to the right of the picture shows the picked object: type Vase in its Name, then fill in its Sprite.
+tutorial.dressingTheRoom.giveNamePicture.hint = 그림 오른쪽 패널에 선택한 오브젝트가 나옵니다. '이름'에 Vase를 입력한 다음 '스프라이트'를 채우세요.
 
 # Tutorials: the heading of a step
 # en: Put it in place
@@ -15509,12 +15817,12 @@ tutorial.dressingTheRoom.putWhereWant.hint = 미리보기에서 꽃병을 클릭
 tutorial.dressingTheRoom.decideStandsFront.title = 그림 사이에
 
 # Tutorials: what the step says
-# en: Set its Sort to -11 - the box after Scale X/Y on the vase's row.
-tutorial.dressingTheRoom.decideStandsFront.body = '순서'를 -11로 두세요. 꽃병 줄에서 '크기 X/Y' 다음 칸입니다.
+# en: Set its Sort to -11 - the box after Scale X/Y, in the panel to the right of the picture.
+tutorial.dressingTheRoom.decideStandsFront.body = '순서'를 -11로 두세요. 그림 오른쪽 패널에서 '크기 X/Y' 다음 칸입니다.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Sort, on the vase's row under GameObjects.
-tutorial.dressingTheRoom.decideStandsFront.hint = 'GameObject' 아래 꽃병 줄의 '순서'입니다.
+# en: Sort, in the panel to the right of the picture, with the vase picked.
+tutorial.dressingTheRoom.decideStandsFront.hint = 꽃병을 선택한 채로, 그림 오른쪽 패널의 '순서'입니다.
 
 # Tutorials: the heading of a step
 # en: Hidden for now
@@ -16319,24 +16627,24 @@ tutorial.populating.giveThemSomeLife.hint = '흔들림 마스크' 칸 옆의 '�
 tutorial.populating.putThemRoom.title = 갤러리 안으로
 
 # Tutorials: what the step says
-# en: On the Places tab, with The Gallery chosen, click + Add NPC and pick Mannequin in the new row's NPC box.
-tutorial.populating.putThemRoom.body = '장소' 탭에서 The Gallery를 선택한 채로 '+ NPC 추가'를 클릭하고, 새 행의 'NPC' 칸에서 Mannequin을 고르세요.
+# en: On the Places tab, with The Gallery chosen, click + Character in the hierarchy beside the preview and pick Mannequin as its NPC in the panel to the right of the picture.
+tutorial.populating.putThemRoom.body = '장소' 탭에서 The Gallery를 선택한 채로 미리보기 옆 계층의 '+ 캐릭터'를 클릭하고, 그림 오른쪽 패널에서 그 NPC로 Mannequin을 고르세요.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Add NPC under GameObjects, then Mannequin in the row's NPC box.
-tutorial.populating.putThemRoom.hint = GameObjects 아래의 '+ NPC 추가', 그다음 그 행의 'NPC' 칸에서 Mannequin.
+# en: + Character over the hierarchy, then Mannequin as its NPC to the right of the picture.
+tutorial.populating.putThemRoom.hint = 계층 위의 '+ 캐릭터', 그다음 그림 오른쪽에서 그 NPC로 Mannequin.
 
 # Tutorials: the heading of a step
 # en: Show her
 tutorial.populating.switchThem.title = 보이게 하기
 
 # Tutorials: what the step says
-# en: Tick Start active on the placement's row - below Part transforms, beside Sorting order. It shows the whole figure; the droplets have their own Enabled, which stays off. A new placement starts hidden.
-tutorial.populating.switchThem.body = 배치 행에서 '부위 트랜스폼' 아래, '그리기 순서' 옆의 '처음부터 활성'에 체크하세요. 인물 전체가 보이게 됩니다. 물방울에는 따로 '켜짐'이 있으며, 그것은 꺼 둔 채로 둡니다. 새 배치는 숨겨진 상태로 시작합니다.
+# en: Tick Start active in the panel to the right of the picture - below Part transforms, beside Sorting order. It shows the whole figure; the droplets have their own Enabled, which stays off. A new placement starts hidden.
+tutorial.populating.switchThem.body = 그림 오른쪽 패널에서 '부위 트랜스폼' 아래, '그리기 순서' 옆의 '처음부터 활성'에 체크하세요. 인물 전체가 보이게 됩니다. 물방울에는 따로 '켜짐'이 있으며, 그것은 꺼 둔 채로 둡니다. 새 배치는 숨겨진 상태로 시작합니다.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Start active, below Part transforms on the placement's row under GameObjects.
-tutorial.populating.switchThem.hint = GameObjects 아래 배치 행의 '부위 트랜스폼' 아래에 있는 '처음부터 활성'입니다.
+# en: Start active, below Part transforms in the panel to the right of the picture.
+tutorial.populating.switchThem.hint = 그림 오른쪽 패널의 '부위 트랜스폼' 아래에 있는 '처음부터 활성'입니다.
 
 # Tutorials: the heading of a step
 # en: Put her in place
@@ -16375,16 +16683,16 @@ tutorial.populating.sitThemFloor.more = '색'은 그림자가 얼마나 어두�
 tutorial.populating.giveThemSomeLife.more = 스탠딩과 같은 마스크입니다. 마스크가 없는 인물은 완전히 멈춰 있어서, 화면의 다른 무언가가 움직이는 순간 골판지 입간판처럼 보입니다.
 
 # The fold-out under a tutorial step: the whole explanation
-# en: A row with no NPC chosen is a placement of nobody: it shows nothing and breaks nothing, which is why it's easy to leave behind. The same NPC can stand in as many rooms as you like - each placement is a copy.
-tutorial.populating.putThemRoom.more = NPC를 고르지 않은 행은 아무도 없는 배치입니다. 아무것도 보여 주지 않고 아무것도 망가뜨리지 않아서, 그대로 남겨 두기 쉽습니다. 같은 NPC는 원하는 만큼 많은 방에 설 수 있습니다. 배치 하나하나가 복사본입니다.
+# en: A character with no NPC chosen is a placement of nobody: it shows nothing and breaks nothing, which is why it's easy to leave behind. The same NPC can stand in as many rooms as you like - each placement is a copy.
+tutorial.populating.putThemRoom.more = NPC를 고르지 않은 캐릭터는 아무도 없는 배치입니다. 아무것도 보여 주지 않고 아무것도 망가뜨리지 않아서, 그대로 남겨 두기 쉽습니다. 같은 NPC는 원하는 만큼 많은 방에 설 수 있습니다. 배치 하나하나가 복사본입니다.
 
 # The fold-out under a tutorial step: the whole explanation
 # en: Hidden is the usual start: a figure that a rule shows later, like one who arrives at night. This one should simply be there.
 tutorial.populating.switchThem.more = 숨김이 보통의 시작입니다. 밤에 도착하는 인물처럼, 나중에 규칙이 보이게 하는 인물이죠. 이 마네킹은 그냥 그 자리에 있으면 됩니다.
 
 # The fold-out under a tutorial step: the whole explanation
-# en: Click a figure and its tools appear in the panel to the right of the picture. The first row picks what moves - Body, Shadow, Blink or Wet - and the second how: Move, Rotate or Scale. All four belong to this placement, not to the NPC, so they change in this room only. The same numbers are on the row under Part transforms.
-tutorial.populating.placeThemProperly.more = 인물을 클릭하면 그림 오른쪽 패널에 도구가 나타납니다. 첫 줄은 무엇을 움직일지('몸', '그림자', '눈 깜빡임', '젖음'), 둘째 줄은 어떻게 움직일지('이동', '회전', '크기') 고릅니다. 이 넷은 모두 NPC가 아니라 이 배치에 속하므로, 이 방에서만 바뀝니다. 같은 숫자가 행의 '부위 트랜스폼' 아래에도 있습니다.
+# en: Click a figure and its tools appear in the panel to the right of the picture. The first row picks what moves - Body, Shadow, Blink or Wet - and the second how: Move, Rotate or Scale. All four belong to this placement, not to the NPC, so they change in this room only. The same numbers are lower in that panel, under Part transforms.
+tutorial.populating.placeThemProperly.more = 인물을 클릭하면 그림 오른쪽 패널에 도구가 나타납니다. 첫 줄은 무엇을 움직일지('몸', '그림자', '눈 깜빡임', '젖음'), 둘째 줄은 어떻게 움직일지('이동', '회전', '크기') 고릅니다. 이 넷은 모두 NPC가 아니라 이 배치에 속하므로, 이 방에서만 바뀝니다. 같은 숫자가 그 패널 아래쪽의 '부위 트랜스폼' 아래에도 있습니다.
 
 # The fold-out under a tutorial step: the whole explanation
 # en: A place with figures in it stops looking like artwork. Standing in it is the only way to judge them. Next: a whole row of them.
@@ -16399,8 +16707,8 @@ tutorial.populating.shadow.title = 그녀의 그림자
 tutorial.populating.shadow.body = 그녀의 그림자는 게임 자체 인물들의 그림자가 있는 자리에서 시작합니다. 여기서는 다리 뒤에 숨어 있습니다. 미리보기에서 그녀를 클릭하고, 그림 오른쪽 패널에서 '그림자'를 고른 다음, 그림자를 발밑으로 끌어내리세요.
 
 # The fold-out under a tutorial step: the whole explanation
-# en: A shadow is what stands a figure on the floor. Every placement has its own, so it fits that spot - half behind a table, on a step. Under Part transforms on her row, Shadow's X and Y are the same numbers to type; Scale Y squashes it flatter.
-tutorial.populating.shadow.more = 그림자는 인물을 바닥에 세워 주는 것입니다. 배치마다 자기 그림자가 있어서, 탁자 뒤에 반쯤 가려지든 계단 위에 있든 그 자리에 맞출 수 있습니다. 그녀의 행 '부위 트랜스폼' 아래에 있는 '그림자'의 X와 Y는 같은 값을 직접 입력하는 곳이고, '크기' Y는 그림자를 더 납작하게 누릅니다.
+# en: A shadow is what stands a figure on the floor. Every placement has its own, so it fits that spot - half behind a table, on a step. Under Part transforms, lower in the panel to the right of the picture, Shadow's X and Y are the same numbers to type; Scale Y squashes it flatter.
+tutorial.populating.shadow.more = 그림자는 인물을 바닥에 세워 주는 것입니다. 배치마다 자기 그림자가 있어서, 탁자 뒤에 반쯤 가려지든 계단 위에 있든 그 자리에 맞출 수 있습니다. 그림 오른쪽 패널 아래쪽의 '부위 트랜스폼' 아래에 있는 '그림자'의 X와 Y는 같은 값을 직접 입력하는 곳이고, '크기' Y는 그림자를 더 납작하게 누릅니다.
 
 # Tutorial hint, shown when a step has waited a while
 # en: Click her in the preview, then Shadow in the panel to the right of the picture, then drag.
@@ -16429,24 +16737,24 @@ tutorial.npcsThatBelong.definitionNotAppearance.body = 마네킹 하나는 진�
 tutorial.npcsThatBelong.putSamePersonTwice.title = 두 번째 마네킹
 
 # Tutorials: what the step says
-# en: On the Places tab, add Mannequin to The Gallery again with + Add NPC.
-tutorial.npcsThatBelong.putSamePersonTwice.body = '장소' 탭에서 '+ NPC 추가'로 The Gallery에 Mannequin을 한 번 더 추가하세요.
+# en: On the Places tab, add Mannequin to The Gallery again with + Character.
+tutorial.npcsThatBelong.putSamePersonTwice.body = '장소' 탭에서 '+ 캐릭터'로 The Gallery에 Mannequin을 한 번 더 추가하세요.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: + Add NPC on The Gallery, then Mannequin in the NPC box.
-tutorial.npcsThatBelong.putSamePersonTwice.hint = The Gallery에서 '+ NPC 추가', 그다음 'NPC' 칸에서 Mannequin.
+# en: + Character over the hierarchy on The Gallery, then Mannequin as its NPC to the right of the picture.
+tutorial.npcsThatBelong.putSamePersonTwice.hint = The Gallery에서 계층 위의 '+ 캐릭터', 그다음 그림 오른쪽에서 그 NPC로 Mannequin.
 
 # Tutorials: the heading of a step
 # en: Tell them apart
 tutorial.npcsThatBelong.tellThemApart.title = 서로 구별하기
 
 # Tutorials: what the step says
-# en: Scroll down to the two Mannequin rows under GameObjects. The lower row is the new one, the one you dragged left: tick its Start active and name it MannequinLeft. Name the upper row MannequinRight.
-tutorial.npcsThatBelong.tellThemApart.body = GameObjects 아래의 Mannequin 행 두 개까지 스크롤하세요. 아래 행이 새로 추가한, 왼쪽으로 끌어다 놓은 마네킹입니다. 그 행의 '처음부터 활성'에 체크하고 이름을 MannequinLeft로 붙이세요. 위 행은 MannequinRight로 이름을 붙이세요.
+# en: Both Mannequins are under NPCs in the hierarchy beside the picture. The new one, the one you dragged left, is picked: tick its Start active and name it MannequinLeft in the panel to the right of the picture. Then pick the other one and name it MannequinRight.
+tutorial.npcsThatBelong.tellThemApart.body = 두 Mannequin은 모두 그림 옆 계층의 NPCs 아래에 있습니다. 새로 추가한, 왼쪽으로 끌어다 놓은 마네킹이 선택되어 있습니다. 그림 오른쪽 패널에서 그 '처음부터 활성'에 체크하고 이름을 MannequinLeft로 붙이세요. 그다음 다른 하나를 선택해 이름을 MannequinRight로 붙이세요.
 
 # Tutorials: the nudge shown when a step has been waiting a while
-# en: Both Mannequin rows are at the bottom of the GameObjects box: give each its own Name.
-tutorial.npcsThatBelong.tellThemApart.hint = Mannequin 행 두 개는 GameObjects 칸 맨 아래에 있습니다. 각각에 다른 '이름'을 주세요.
+# en: Pick each Mannequin under NPCs in the hierarchy and give it its own Name in the panel to the right of the picture.
+tutorial.npcsThatBelong.tellThemApart.hint = 계층의 NPCs 아래에서 Mannequin을 하나씩 선택하고, 그림 오른쪽 패널에서 각각에 다른 '이름'을 주세요.
 
 # Tutorials: the heading of a step
 # en: Change them both
@@ -18253,8 +18561,8 @@ tutorial.deeperPlaces.summary = 어두워진 뒤의 갤러리. 그녀가 대담�
 tutorial.deeperPlaces.story.title = 장소가 담는 것
 
 # Tutorial step: what to do, in a sentence or two
-# en: A place is its art and the objects in it: props, lights, effects and NPCs, each in the GameObjects box and the hierarchy beside the preview. Her gallery is chosen.
-tutorial.deeperPlaces.story.body = 장소는 그림과 그 안의 오브젝트로 이루어집니다. 소품, 조명, 효과, NPC가 각각 GameObjects 칸과 미리보기 옆 계층에 있습니다. 그녀의 갤러리가 선택되어 있습니다.
+# en: A place is its art and the objects in it: props, lights, effects and NPCs, each in the hierarchy beside the preview, with its settings to the right of the picture once you pick it. Her gallery is chosen.
+tutorial.deeperPlaces.story.body = 장소는 그림과 그 안의 오브젝트로 이루어집니다. 소품, 조명, 효과, NPC가 각각 미리보기 옆 계층에 있으며, 선택하면 그림 오른쪽에 설정이 나옵니다. 그녀의 갤러리가 선택되어 있습니다.
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: Each object has its own picture, its own spot and size, its own order in front of or behind the others, and its own Active when: conditions that show it and hide it as they change. Objects can hold objects - move the parent and its children move with it.
@@ -18265,32 +18573,32 @@ tutorial.deeperPlaces.story.more = 오브젝트마다 자기 그림, 자기 위�
 tutorial.deeperPlaces.poster.title = 그녀의 포스터
 
 # Tutorial step: what to do, in a sentence or two
-# en: Scroll to the bottom of the GameObjects box and click + Add GameObject. Name the new object "Poster", give it TutorialArt/Locations/Poster.png as its Sprite and set its Sort to -11, like the vase. Then scroll up and drag it onto the wall in the preview.
-tutorial.deeperPlaces.poster.body = GameObjects 칸 맨 아래로 스크롤하고 '+ GameObject 추가'를 클릭하세요. 새 오브젝트의 이름을 "Poster"로 붙이고, '스프라이트'로 TutorialArt/Locations/Poster.png를 주고, 꽃병처럼 '순서'를 -11로 설정하세요. 그다음 위로 스크롤해서 미리보기에서 벽 위로 끌어다 두세요.
+# en: In the hierarchy beside the preview, click + Object. In the panel to the right of the picture, name the new object "Poster", give it TutorialArt/Locations/Poster.png as its Sprite and set its Sort to -11, like the vase. Then drag it onto the wall in the preview.
+tutorial.deeperPlaces.poster.body = 미리보기 옆 계층에서 '+ 오브젝트'를 클릭하세요. 그림 오른쪽 패널에서 새 오브젝트의 이름을 "Poster"로 붙이고, '스프라이트'로 TutorialArt/Locations/Poster.png를 주고, 꽃병처럼 '순서'를 -11로 설정하세요. 그다음 미리보기에서 벽 위로 끌어다 두세요.
 
 # Tutorial step: the whole explanation, under Tell me more
-# en: The picture is a framed portrait of her: around the frame it is see-through (a PNG), so only the frame and the portrait cover the wall. Sort -11 draws it between the room's back picture (-12) and its front one (-10). Size it with Scale, in the panel beside the preview or on its row.
-tutorial.deeperPlaces.poster.more = 이 그림은 액자에 든 그녀의 초상화입니다. 액자 바깥은 투명하므로(PNG) 액자와 초상화만 벽을 가립니다. '순서' -11은 방의 뒤 그림(-12)과 앞 그림(-10) 사이에 그립니다. 크기는 미리보기 옆 패널이나 그 행의 '크기'로 정하세요.
+# en: The picture is a framed portrait of her: around the frame it is see-through (a PNG), so only the frame and the portrait cover the wall. Sort -11 draws it between the room's back picture (-12) and its front one (-10). Size it with Scale, in the panel to the right of the picture.
+tutorial.deeperPlaces.poster.more = 이 그림은 액자에 든 그녀의 초상화입니다. 액자 바깥은 투명하므로(PNG) 액자와 초상화만 벽을 가립니다. '순서' -11은 방의 뒤 그림(-12)과 앞 그림(-10) 사이에 그립니다. 크기는 그림 오른쪽 패널의 '크기'로 정하세요.
 
 # Tutorial step: where to click, when the step waits
-# en: + Add GameObject is at the bottom of the GameObjects box; Name, Sprite and Sort are on the new object's row.
-tutorial.deeperPlaces.poster.hint = '+ GameObject 추가'는 GameObjects 칸 맨 아래에 있습니다. '이름', '스프라이트', '순서'는 새 오브젝트의 행에 있습니다.
+# en: + Object is at the top of the hierarchy; Name, Sprite and Sort are in the panel to the right of the picture.
+tutorial.deeperPlaces.poster.hint = '+ 오브젝트'는 계층 맨 위에 있습니다. '이름', '스프라이트', '순서'는 그림 오른쪽 패널에 있습니다.
 
 # Tutorial step title
 # en: Up once she's braver
 tutorial.deeperPlaces.posterWhen.title = 대담해지면 걸리는 포스터
 
 # Tutorial step: what to do, in a sentence or two
-# en: Scroll down to the Poster row - the last one. Under its Active when, click + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 3. Leave Start active as it is.
-tutorial.deeperPlaces.posterWhen.body = Poster 행(맨 마지막 행)까지 스크롤하세요. 그 '활성 조건' 아래의 '+ 조건'을 클릭하세요: '종류' Variable, '이름' Confidence, '비교' '이상', '값' 3. '처음부터 활성'은 그대로 두세요.
+# en: The Poster is picked. Under its Active when, in the panel to the right of the picture, click + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 3. Leave Start active as it is.
+tutorial.deeperPlaces.posterWhen.body = Poster가 선택되어 있습니다. 그림 오른쪽 패널에서 그 '활성 조건' 아래의 '+ 조건'을 클릭하세요: '종류' Variable, '이름' Confidence, '비교' '이상', '값' 3. '처음부터 활성'은 그대로 두세요.
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: Active when is checked all the time, so the poster appears the moment her confidence reaches 3 and goes again if it drops - some nights cost her one (tutorial 21, Rules, in depth), and your visits win it back. Start active says what it is before any condition is met.
 tutorial.deeperPlaces.posterWhen.more = '활성 조건'은 계속 확인되므로, 포스터는 그녀의 자신감이 3에 이르는 순간 나타나고 떨어지면 다시 사라집니다. 어떤 밤에는 자신감이 하나 줄고(21번째 튜토리얼 '규칙 자세히'), 당신의 방문이 그것을 되찾아 줍니다. '처음부터 활성'은 어떤 조건도 맞기 전의 상태를 정합니다.
 
 # Tutorial step: where to click, when the step waits
-# en: Active when is on the poster's row in the GameObjects box.
-tutorial.deeperPlaces.posterWhen.hint = '활성 조건'은 GameObjects 칸의 포스터 행에 있습니다.
+# en: Active when is in the panel to the right of the picture, with the poster picked.
+tutorial.deeperPlaces.posterWhen.hint = 포스터를 선택한 채로, '활성 조건'은 그림 오른쪽 패널에 있습니다.
 
 # Tutorial step title
 # en: What is drawn over what
@@ -18325,16 +18633,16 @@ tutorial.deeperPlaces.visitor.hint = '+ NPC'는 NPC 목록 위에 있습니다.
 tutorial.deeperPlaces.placeVisitor.title = 갤러리 안에
 
 # Tutorial step: what to do, in a sentence or two
-# en: On the Places tab, with The Gallery chosen, click + Add NPC and pick Visitor in the new row's NPC box. Then scroll up to the preview and drag her to the right of the gallery.
-tutorial.deeperPlaces.placeVisitor.body = '장소' 탭에서 The Gallery를 선택한 채로 '+ NPC 추가'를 클릭하고, 새 행의 'NPC' 칸에서 Visitor를 고르세요. 그다음 위로 스크롤해 미리보기에서 그녀를 갤러리 오른쪽으로 끌어 옮기세요.
+# en: On the Places tab, with The Gallery chosen, click + Character in the hierarchy beside the preview and pick Visitor as its NPC in the panel to the right of the picture. Then drag her to the right of the gallery.
+tutorial.deeperPlaces.placeVisitor.body = '장소' 탭에서 The Gallery를 선택한 채로 미리보기 옆 계층의 '+ 캐릭터'를 클릭하고, 그림 오른쪽 패널에서 그 NPC로 Visitor를 고르세요. 그다음 그녀를 갤러리 오른쪽으로 끌어 옮기세요.
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: A placement is one appearance of an NPC in one place: where she stands, how big, her shadow, and when she is there. The same NPC can be placed in many places, and twice in one.
 tutorial.deeperPlaces.placeVisitor.more = 배치는 한 장소에 NPC가 한 번 등장하는 것입니다. 어디에 서는지, 얼마나 큰지, 그림자, 언제 그곳에 있는지를 정합니다. 같은 NPC를 여러 장소에, 한 장소에 두 번도 배치할 수 있습니다.
 
 # Tutorial step: where to click, when the step waits
-# en: + Add NPC is under the GameObjects box.
-tutorial.deeperPlaces.placeVisitor.hint = '+ NPC 추가'는 GameObjects 칸 아래에 있습니다.
+# en: + Character is at the top of the hierarchy; pick Visitor as its NPC in the panel to the right of the picture.
+tutorial.deeperPlaces.placeVisitor.hint = '+ 캐릭터'는 계층 맨 위에 있습니다. 그림 오른쪽 패널에서 그 NPC로 Visitor를 고르세요.
 
 # Tutorial step title
 # en: Her shadow
@@ -18357,16 +18665,16 @@ tutorial.deeperPlaces.visitorShadow.hint = 미리보기에서 그녀를 클릭�
 tutorial.deeperPlaces.visitorWhen.title = 그녀가 전시되면
 
 # Tutorial step: what to do, in a sentence or two
-# en: Scroll down to the visitor's row - the last one. Under its Active when, + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 5. Visitors come once the Dummy is sure of herself.
-tutorial.deeperPlaces.visitorWhen.body = 손님의 행(맨 마지막 행)까지 스크롤하세요. 그 '활성 조건' 아래에서 '+ 조건': '종류' Variable, '이름' Confidence, '비교' '이상', '값' 5. Dummy가 자신감을 얻으면 손님들이 찾아옵니다.
+# en: The visitor is picked. Under her Active when, in the panel to the right of the picture, + Condition: Type Variable, Name Confidence, Comparison greater or equal, Value 5. Visitors come once the Dummy is sure of herself.
+tutorial.deeperPlaces.visitorWhen.body = 손님이 선택되어 있습니다. 그림 오른쪽 패널에서 그녀의 '활성 조건' 아래에서 '+ 조건': '종류' Variable, '이름' Confidence, '비교' '이상', '값' 5. Dummy가 자신감을 얻으면 손님들이 찾아옵니다.
 
 # Tutorial step: the whole explanation, under Tell me more
 # en: An NPC placement has its own Active when, as any object does: the same visitor could stand in her gallery on some days and in a cafe on others. Leave "Switch back off when the conditions stop matching" ticked, so she leaves again if the Dummy loses her nerve.
 tutorial.deeperPlaces.visitorWhen.more = NPC 배치에도 다른 오브젝트처럼 자기 '활성 조건'이 있습니다. 같은 손님이 어떤 날은 그녀의 갤러리에, 다른 날은 카페에 서 있을 수도 있습니다. '조건이 더 이상 맞지 않으면 다시 끄기'는 체크한 채로 두세요. 그래야 Dummy가 기가 죽으면 손님도 다시 떠납니다.
 
 # Tutorial step: where to click, when the step waits
-# en: Active when is on the visitor's row in the GameObjects box.
-tutorial.deeperPlaces.visitorWhen.hint = '활성 조건'은 GameObjects 칸의 손님 행에 있습니다.
+# en: Active when is in the panel to the right of the picture, with the visitor picked.
+tutorial.deeperPlaces.visitorWhen.hint = 손님을 선택한 채로, '활성 조건'은 그림 오른쪽 패널에 있습니다.
 
 # Tutorial step title
 # en: The game's own places
@@ -19621,8 +19929,8 @@ tutorial.deeperRooms.weather.hint = 갤러리 그림 아래 '동작' 패널에 �
 tutorial.deeperRooms.sign.title = 네온 별
 
 # A tutorial step's instruction (short)
-# en: Add a GameObject "Star sign" with Sprite TutorialArt/Locations/NeonStar.png, Sort -11, high on her gallery's back wall, and click + Component: BlinkingSprite.
-tutorial.deeperRooms.sign.body = GameObject를 추가해 이름을 "Star sign"으로 하고, '스프라이트' TutorialArt/Locations/NeonStar.png, '순서' -11로 해서 그녀의 갤러리 뒷벽 높은 곳에 두세요. 그다음 '+ 컴포넌트'를 클릭해 BlinkingSprite를 고르세요.
+# en: Click + Object over the hierarchy and name it "Star sign", with Sprite TutorialArt/Locations/NeonStar.png and Sort -11, high on her gallery's back wall. Then click + Component: BlinkingSprite.
+tutorial.deeperRooms.sign.body = 계층 위의 '+ 오브젝트'를 클릭해 이름을 "Star sign"으로 하고, '스프라이트' TutorialArt/Locations/NeonStar.png, '순서' -11로 해서 그녀의 갤러리 뒷벽 높은 곳에 두세요. 그다음 '+ 컴포넌트'를 클릭해 BlinkingSprite를 고르세요.
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: A component makes an object do something by itself. BlinkingSprite switches its picture's opacity between two values on a fixed beat, like a sign on a bad wire.
@@ -19633,12 +19941,28 @@ tutorial.deeperRooms.sign.more = 컴포넌트는 오브젝트가 스스로 무�
 tutorial.deeperRooms.sign.hint = '+ 컴포넌트'는 오브젝트 패널에 있습니다.
 
 # A tutorial step's title
+# en: A vase that floats
+tutorial.deeperRooms.float.title = 떠 있는 꽃병
+
+# A tutorial step's instruction (short)
+# en: Click + Object and name it "Floating vase", with Sprite TutorialArt/Locations/Vase.png and Sort -10, in the middle of her gallery. Then click + Component: FloatingSprite.
+tutorial.deeperRooms.float.body = '+ 오브젝트'를 클릭해 이름을 "Floating vase"로 하고, '스프라이트' TutorialArt/Locations/Vase.png, '순서' -10으로 해서 그녀의 갤러리 한가운데에 두세요. 그다음 '+ 컴포넌트'를 클릭해 FloatingSprite를 고르세요.
+
+# A tutorial step's fold-out: the rest of its explanation
+# en: FloatingSprite moves an object up and down smoothly for ever, and everything under it with it: a sculpture hovering over its stand, a monster in a tank, a toy bobbing in water. Height is how far it travels and Time how long one rise and fall takes; the preview plays it as you change them.
+tutorial.deeperRooms.float.more = FloatingSprite는 오브젝트를 그 아래의 모든 것과 함께 끝없이 부드럽게 위아래로 움직입니다. 받침대 위에 떠 있는 조각상, 수조 속 괴물, 물에 둥실 떠 있는 장난감 같은 것입니다. '높이'는 움직이는 거리, '시간'은 한 번 오르내리는 데 걸리는 시간이며, 값을 바꾸는 대로 미리보기가 재생합니다.
+
+# A tutorial step's hint: where to find what it asks for
+# en: + Component is in the object's panel; FloatingSprite is in its ModForge group.
+tutorial.deeperRooms.float.hint = '+ 컴포넌트'는 오브젝트 패널에 있고, FloatingSprite는 그 'ModForge' 묶음에 있습니다.
+
+# A tutorial step's title
 # en: Flowers for the visit
 tutorial.deeperRooms.flowers.title = 방문을 위한 꽃
 
 # A tutorial step's instruction (short)
-# en: Add a GameObject "Flowers" with no Sprite. Give it three children - Roses, Sunflowers and Lavender - each with its picture from TutorialArt/Locations, Sort -9, X -3.4 and Y -3.6 (on the floor beside the vase). Then give "Flowers" the component RandomChildActivator.
-tutorial.deeperRooms.flowers.body = GameObject를 추가해 이름을 "Flowers"로 하고, '스프라이트'는 비워 두세요. 자식 세 개(Roses, Sunflowers, Lavender)를 주고, 각각 TutorialArt/Locations에 있는 자기 그림, '순서' -9, X -3.4, Y -3.6(꽃병 옆 바닥)으로 하세요. 그다음 "Flowers"에 RandomChildActivator 컴포넌트를 주세요.
+# en: Click + Object and name it "Flowers", with no Sprite. Give it three children with + Add child - Roses, Sunflowers and Lavender - each with its picture from TutorialArt/Locations, Sort -9, X -3.4 and Y -3.6 (on the floor beside the vase). Then pick "Flowers" again and give it the component RandomChildActivator.
+tutorial.deeperRooms.flowers.body = '+ 오브젝트'를 클릭해 이름을 "Flowers"로 하고, '스프라이트'는 비워 두세요. '+ 자식 추가'로 자식 세 개(Roses, Sunflowers, Lavender)를 주고, 각각 TutorialArt/Locations에 있는 자기 그림, '순서' -9, X -3.4, Y -3.6(꽃병 옆 바닥)으로 하세요. 그다음 "Flowers"를 다시 선택해 RandomChildActivator 컴포넌트를 주세요.
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: RandomChildActivator shows one of its object's children, picked at random, each time the object is switched on. A different pot each visit, with no rule. Each child gets its own X and Y: an object of yours stands at its own place in the room, wherever its parent is.
@@ -19653,8 +19977,8 @@ tutorial.deeperRooms.flowers.hint = '+ 자식 추가'는 오브젝트 패널에 
 tutorial.deeperRooms.copy.title = 게임의 반짝임
 
 # A tutorial step's instruction (short)
-# en: Add a GameObject "Loving sparkles" and set Copy of to 6_Effects/CFXR2 Expression Loving (Timed).
-tutorial.deeperRooms.copy.body = GameObject를 추가해 이름을 "Loving sparkles"로 하고, '복사할 대상'을 6_Effects/CFXR2 Expression Loving (Timed)로 하세요.
+# en: Click + Object, name it "Loving sparkles" and set Copy of to 6_Effects/CFXR2 Expression Loving (Timed).
+tutorial.deeperRooms.copy.body = '+ 오브젝트'를 클릭해 이름을 "Loving sparkles"로 하고, '복사할 대상'을 6_Effects/CFXR2 Expression Loving (Timed)로 하세요.
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: Copy of makes the object a copy of one of the game's, by its path in the game's scene: a level effect, a prop, a whole panel. The original is untouched.
@@ -19669,8 +19993,8 @@ tutorial.deeperRooms.freeLight.title = 바닥의 빛
 tutorial.deeperRooms.freeLight.body = 미리보기 목록 위의 '+ 조명'을 클릭하고 이름을 "Floor glow"로 지은 뒤, 모양을 '자유 모양'으로, 색을 #9AB8FF로 하세요. 미리보기에서 모서리를 끌어 모양을 잡으세요.
 
 # A tutorial step's fold-out: the rest of its explanation
-# en: A free shape lights the area you draw, with a soft edge: a pool of light on the floor, a lit doorway. Drag the + halfway along a side to add a corner.
-tutorial.deeperRooms.freeLight.more = 자유 모양은 그린 영역을 부드러운 가장자리와 함께 비춥니다. 바닥에 고인 빛, 불 켜진 출입구 같은 것입니다. 변 중간에 있는 +를 끌면 모서리가 추가됩니다.
+# en: A free shape lights the area you draw at full strength and shines out from all of its edge, as far as the dashed line round it: a pool of light on the floor, a lit doorway. Drag the + halfway along a side to add a corner, and the knob on the dashed line to make it reach further.
+tutorial.deeperRooms.freeLight.more = 자유 모양은 그린 영역을 최대 세기로 비추고, 가장자리 전체에서 둘레의 점선까지 바깥으로 빛을 냅니다. 바닥에 고인 빛, 불 켜진 출입구 같은 것입니다. 변 중간에 있는 +를 끌면 모서리가 추가되고, 점선 위의 손잡이를 끌면 빛이 더 멀리 닿습니다.
 
 # A tutorial step's hint: where to find what it asks for
 # en: + Light is over the hierarchy beside the preview.
@@ -19897,16 +20221,16 @@ tutorial.deeperGently.talk.hint = 두 체크 상자 모두 대화 이름 아래�
 tutorial.deeperRooms.fades.title = 나타났다 사라졌다
 
 # A tutorial step's instruction (short)
-# en: Scroll down to her Poster and give it the component FadeInSprite. Then add FadeOutSprite to the Visitor's placement, with Delay 20, Duration 2 and Deactivate on complete ticked - and, on that placement itself, untick Switch back off when the conditions stop matching.
-tutorial.deeperRooms.fades.body = 아래로 스크롤해 그녀의 Poster에 FadeInSprite 컴포넌트를 주세요. 그다음 Visitor의 배치에 FadeOutSprite를 추가하고 '지연' 20, '시간' 2, '끝나면 비활성화' 체크로 하세요. 그리고 그 배치 자체에서 '조건이 더 이상 맞지 않으면 다시 끄기'의 체크를 해제하세요.
+# en: Her Poster is picked: give it the component FadeInSprite in the panel to the right of the picture. Then pick the Visitor's placement in the hierarchy and add FadeOutSprite to it, with Delay 20, Duration 2 and Deactivate on complete ticked - and, on that placement itself, untick Switch back off when the conditions stop matching.
+tutorial.deeperRooms.fades.body = 그녀의 Poster가 선택되어 있습니다. 그림 오른쪽 패널에서 FadeInSprite 컴포넌트를 주세요. 그다음 계층에서 Visitor의 배치를 선택해 FadeOutSprite를 추가하고 '지연' 20, '시간' 2, '끝나면 비활성화' 체크로 하세요. 그리고 그 배치 자체에서 '조건이 더 이상 맞지 않으면 다시 끄기'의 체크를 해제하세요.
 
 # A tutorial step's fold-out: the rest of its explanation
 # en: FadeInSprite fades an object in each time it is switched on, so her poster appears softly. FadeOutSprite fades one out after a delay; with Deactivate on complete, it is switched off once gone - the visitor stays a while, then leaves. Switch back off is unticked because, ticked, Active when puts its answer back every moment, and would switch her straight on again. Unticked, she also stays if the Dummy's confidence falls below 5 again (tutorial 23): the fade-out is what sends her away now.
 tutorial.deeperRooms.fades.more = FadeInSprite는 오브젝트가 켜질 때마다 서서히 나타나게 하므로, 그녀의 포스터가 부드럽게 나타납니다. FadeOutSprite는 지연 뒤에 오브젝트를 서서히 사라지게 합니다. '끝나면 비활성화'가 있으면 사라진 뒤 꺼지므로, 방문객은 잠시 머물다가 떠납니다. '다시 끄기'의 체크를 해제하는 이유는, 체크되어 있으면 '활성 조건'이 매 순간 자기 답을 되돌려 놓아서 방문객을 곧장 다시 켜 버리기 때문입니다. 체크를 해제하면 Dummy의 자신감이 다시 5 아래로 떨어져도 방문객은 남아 있습니다(튜토리얼 23). 이제 방문객을 내보내는 것은 페이드아웃입니다.
 
 # A tutorial step's hint: where to find what it asks for
-# en: An NPC placement takes components too, under its own panel.
-tutorial.deeperRooms.fades.hint = NPC 배치에도 컴포넌트를 줄 수 있습니다. 배치 패널 아래에 있습니다.
+# en: Components are in the panel to the right of the picture, for what is picked; an NPC placement takes them too.
+tutorial.deeperRooms.fades.hint = 컴포넌트는 선택한 것의 그림 오른쪽 패널에 있습니다. NPC 배치에도 줄 수 있습니다.
 
 # A tutorial step's hint: where to find what it asks for
 # en: Trigger mode is the rule's first box; WhilePassing is in its list.
@@ -20053,8 +20377,8 @@ tutorial.deeperVoices.owner.hint = Announcer의 대사를 선택하고 '+ 형제
 tutorial.deeperJournal.counter.hint = QuestCounter는 조건 '종류' 목록에 있습니다. 그녀의 퀘스트를 고른 뒤, 세는 작업을 고르세요.
 
 # A tutorial step's hint: where to find what it asks for
-# en: + Add GameObject is at the bottom of the GameObjects box; Copy of is in the object's panel.
-tutorial.deeperRooms.copy.hint = '+ GameObject 추가'는 GameObjects 칸 맨 아래에 있고, '복사할 대상'은 오브젝트 패널에 있습니다.
+# en: + Object is at the top of the hierarchy; Copy of is in the object's panel, to the right of the picture.
+tutorial.deeperRooms.copy.hint = '+ 오브젝트'는 계층 맨 위에 있고, '복사할 대상'은 그림 오른쪽의 오브젝트 패널에 있습니다.
 
 # A tutorial step's hint: where to find what it asks for
 # en: + Light is over the hierarchy beside the preview; the shape list has Picture.
@@ -21116,16 +21440,16 @@ typeGroup.world = 장소와 오브젝트
 typeGroup.chance = 확률, 시간, 키
 
 # Heading in the list of component types
-# en: Made for packs
-componentGroup.pack = 팩용
+# en: ModForge
+componentGroup.pack = ModForge
 
 # Heading in the list of component types
-# en: The game's scripts
-componentGroup.game = 게임의 스크립트
+# en: Vanilla
+componentGroup.game = 게임
 
 # Heading in the list of component types
-# en: Unity's own
-componentGroup.unity = Unity 자체의 것
+# en: Unity
+componentGroup.unity = Unity
 
 # A note beside an action type in its dropdown, saying what it does
 # en: Lift the busts above a scene, or put them back
@@ -21372,8 +21696,188 @@ note.component.randomChild = 자식 중 하나를 무작위로 보여 줌
 note.component.blinking = 깜빡임
 
 # A note beside a component type in its dropdown
-# en: Unity's own - most settings can't be set by name
-note.component.engine = Unity 자체의 것 – 대부분의 설정은 이름으로 정할 수 없음
+# en: Floats up and down smoothly
+note.component.floating = 부드럽게 위아래로 떠다닙니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A list of the game's instructions, run when something starts it
+note.component.actions = 무언가가 시작시키면 실행되는 게임 명령 목록
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A button that runs the game's instructions when clicked
+note.component.buttonInstructions = 클릭하면 게임 명령을 실행하는 버튼
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades a particle effect out and cleans it up when it ends
+note.component.cfxrEffect = 파티클 효과를 서서히 사라지게 하고, 끝나면 정리합니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Words made of particles, popping up
+note.component.cfxrParticleText = 파티클로 만든 글자가 톡 튀어나옵니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shakes it gently, as if riding in a car
+note.component.carInteriorShake = 차를 타고 가는 것처럼 살살 흔듭니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades a character in as it is shown, its blink and face with it
+note.component.characterIntroFade = 캐릭터가 보일 때 눈 깜빡임과 얼굴까지 함께 서서히 나타나게 합니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shows one of its children at random, a new one every few seconds
+note.component.cinemaSpriteChanger = 자식 중 하나를 무작위로 보여 주고, 몇 초마다 바꿉니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Swings it from side to side, like a stage light
+note.component.concertLightSwing = 무대 조명처럼 좌우로 흔듭니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: The game's checks for whether something may happen
+note.component.conditions = 무언가가 일어나도 되는지 게임이 확인하는 조건
+
+# A note beside a component type in its dropdown, saying what it does
+# en: One of the game's conversations
+note.component.dialogue = 게임의 대화 하나
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Switches all its children off when the game tells it to
+note.component.disableChildren = 게임이 시키면 모든 자식을 끕니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Switches all its children on when the game tells it to
+note.component.enableChildren = 게임이 시키면 모든 자식을 켭니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Switches on every Map_Variation object under it when shown
+note.component.mapVariationActivator = 보일 때 그 아래의 모든 Map_Variation 오브젝트를 켭니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Scrolls a 3D shape's texture sideways; does nothing to a picture
+note.component.offsetScrolling = 3D 모양의 텍스처를 옆으로 스크롤합니다. 그림에는 아무 효과가 없습니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Drifts it a little as the mouse moves
+note.component.parallaxMouseEffect = 마우스가 움직이면 살짝 흘러가게 합니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Plays a radio: songs, with talk between them
+note.component.radioSimulator = 라디오를 재생합니다: 노래와 그 사이의 멘트
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades its children's pictures in and out at random
+note.component.randomSpriteBlender = 자식들의 그림을 무작위로 서서히 나타나고 사라지게 합니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Starts the game's instructions when something happens (a click, the start)
+note.component.trigger = 무언가가 일어나면(클릭, 시작) 게임 명령을 시작합니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shows one object while the mouse is over a picture, another while not
+note.component.uiHoverActivator = 마우스가 그림 위에 있는 동안 한 오브젝트를, 아닐 때는 다른 오브젝트를 보여 줍니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Distorts the sound playing beside it
+note.component.audioDistortionFilter = 옆에서 재생되는 소리를 일그러뜨립니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Muffles the sound playing beside it
+note.component.audioLowPassFilter = 옆에서 재생되는 소리를 먹먹하게 합니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Plays a sound
+note.component.audioSource = 소리를 재생합니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A box that clicks and bumps can hit
+note.component.boxCollider2D = 클릭과 충돌이 닿을 수 있는 상자
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws interface pictures and words
+note.component.canvas = 인터페이스의 그림과 글자를 그립니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Fades interface objects together, or stops clicks on them
+note.component.canvasGroup = 인터페이스 오브젝트를 함께 페이드하거나, 클릭을 막습니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws one interface object on its canvas
+note.component.canvasRenderer = 인터페이스 오브젝트 하나를 캔버스에 그립니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Sizes an interface to the screen
+note.component.canvasScaler = 인터페이스 크기를 화면에 맞춥니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A circle that clicks and bumps can hit
+note.component.circleCollider2D = 클릭과 충돌이 닿을 수 있는 원
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Lets the mouse click an interface
+note.component.graphicRaycaster = 마우스로 인터페이스를 클릭할 수 있게 합니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: An interface picture
+note.component.image = 인터페이스 그림
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A light for 3D objects
+note.component.light = 3D 오브젝트용 조명
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A light that lights the pictures round it
+note.component.light2D = 주변의 그림을 비추는 조명
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a line through points
+note.component.lineRenderer = 여러 점을 지나는 선을 그립니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A 3D shape that bumps can hit
+note.component.meshCollider = 충돌이 닿을 수 있는 3D 모양
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Holds a 3D shape to draw
+note.component.meshFilter = 그릴 3D 모양을 담습니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a 3D shape
+note.component.meshRenderer = 3D 모양을 그립니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Gives off particles: sparks, drops, dust
+note.component.particleSystem = 파티클을 내뿜습니다: 불꽃, 물방울, 먼지
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a particle system's particles
+note.component.particleSystemRenderer = 파티클 시스템의 파티클을 그립니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: A drop shadow behind interface pictures and words
+note.component.shadow = 인터페이스 그림과 글자 뒤의 그림자
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Casts a shadow from the lights round it
+note.component.shadowCaster2D = 주변 조명으로 그림자를 드리웁니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Shows pictures only inside its shape, or only outside
+note.component.spriteMask = 자기 모양 안에서만, 또는 바깥에서만 그림을 보여 줍니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Draws a picture
+note.component.spriteRenderer = 그림을 그립니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Interface words
+note.component.textMeshProUgui = 인터페이스 글자
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Plays a video
+note.component.videoPlayer = 동영상을 재생합니다
+
+# A note beside a component type in its dropdown, saying what it does
+# en: Screen effects: glow, colour and the like
+note.component.volume = 화면 효과: 발광, 색 등
 
 # The editor's title bar; {game} is the game's version, {pack} the pack's id
 # en: SMSModForge {version} for {game} — {pack}
@@ -21650,8 +22154,8 @@ docs.places.light.term = + 조명
 docs.places.light = 장소에 두는 조명으로, 미리보기에 보이는 영역의 한가운데에 놓입니다. 원하는 곳으로 끌어다 놓으세요. 선택하면 그림 오른쪽 패널에 '색', '세기', '도달 거리', '원뿔'이 나옵니다.
 
 # Guide bullet: the rest, folded away
-# en: Every place of yours starts with the light of the level it is built on: change it there, or remove it. Back to the game's puts the game's light back as it was. Soft edge and Full cone make a spotlight's edge harder or softer; a cone points the way its object is turned (Rotate).
-docs.places.light.more = 내 장소는 모두 바탕이 된 레벨의 조명을 가지고 시작합니다. 거기서 바꾸거나 제거하세요. '게임 원래대로'는 게임의 조명을 원래대로 되돌립니다. '부드러운 가장자리'와 '안쪽 원뿔'은 스포트라이트의 가장자리를 더 선명하게 또는 더 부드럽게 합니다. 원뿔은 그 오브젝트가 돌아간 방향('회전')을 향합니다.
+# en: Every place of yours starts with the light of the level it is built on: change it there, or remove it. Back to the game's puts the game's light back as it was. Full strength to and Full cone make a spotlight's edge harder or softer; a cone points the way its object is turned (Rotate). A free shape shines out from its edge as far as its Reach, the dashed line round it. Moves with is how a light drifts as the cursor moves: with the place's back picture (what a new light does), with its front (the game's own lamps), or by a strength of its own.
+docs.places.light.more = 내 장소는 모두 바탕이 된 레벨의 조명을 가지고 시작합니다. 거기서 바꾸거나 제거하세요. '게임 원래대로'는 게임의 조명을 원래대로 되돌립니다. '최대 세기 범위'와 '안쪽 원뿔'은 스포트라이트의 가장자리를 더 선명하게 또는 더 부드럽게 합니다. 원뿔은 그 오브젝트가 돌아간 방향('회전')을 향합니다. 자유 모양은 가장자리에서 '도달 거리', 곧 둘레의 점선까지 바깥으로 빛을 냅니다. '함께 움직임'은 커서가 움직일 때 조명이 어떻게 흘러가는지 정합니다. 장소의 뒤 그림과 함께(새 조명이 하는 방식), 앞 그림과 함께(게임 자체의 램프), 또는 자체 세기로.
 
 # Guide: a light's shapes
 # en: Round, Free shape, Picture
@@ -21697,6 +22201,14 @@ docs.places.giveIt.term = 조명 달기, 효과 달기
 # en: On an object you picked: it carries a light or an effect where it stands, shown whenever the object is - so its conditions switch both together.
 docs.places.giveIt = 선택한 오브젝트에서: 오브젝트가 서 있는 곳에 조명이나 효과를 달아, 오브젝트가 보일 때마다 함께 보이게 합니다. 그래서 오브젝트의 조건이 둘을 함께 켜고 끕니다.
 
+# Guide: three buttons' labels, over an object picked in the place preview
+# en: Object, Light, Effect
+docs.places.objectParts.term = 오브젝트, 조명, 효과
+
+# Guide bullet
+# en: An object with a picture and a light, or with an effect, has its parts to pick over its handles, as a character has Body and Shadow. Object moves, turns and sizes the object. Light shows only the light's handles (clicking its sun in the picture picks it too). Effect draws a box round where its particles start: drag inside it to move the effect away from the object - it still moves with it - and drag a corner or a side to make it bigger or smaller. A light on its own keeps its handles together, as before.
+docs.places.objectParts = 그림과 조명이 있거나 효과가 있는 오브젝트는, 캐릭터에 '몸'과 '그림자'가 있듯이 핸들 위에서 부위를 고를 수 있습니다. '오브젝트'는 오브젝트를 옮기고, 돌리고, 크기를 바꿉니다. '조명'은 조명의 핸들만 보여 줍니다(그림 속 조명의 해 아이콘을 클릭해도 선택됩니다). '효과'는 파티클이 시작되는 곳 둘레에 상자를 그립니다. 상자 안을 끌면 효과를 오브젝트에서 떨어뜨려 옮기고(그래도 오브젝트와 함께 움직입니다), 모서리나 변을 끌면 크게 또는 작게 만듭니다. 조명만 있는 오브젝트는 예전처럼 핸들이 한데 모여 있습니다.
+
 # Guide: a box's label
 # en: Character in the place
 docs.places.standIn.term = 장소 속 캐릭터
@@ -21705,13 +22217,21 @@ docs.places.standIn.term = 장소 속 캐릭터
 # en: Shows one of your characters where the game shows a character in a conversation, to see how the place's lights fall on her. Preview only: nothing is saved.
 docs.places.standIn = 게임이 대화에서 캐릭터를 보여 주는 자리에 내 캐릭터 하나를 보여 주어, 장소의 조명이 그녀에게 어떻게 비치는지 봅니다. 미리보기 전용이며, 아무것도 저장되지 않습니다.
 
+# Guide: what part of the place the player sees, as the preview marks it
+# en: What the player sees
+docs.places.playersView.term = 플레이어가 보는 화면
+
+# Guide bullet
+# en: The game always shows the same part of a place, 19.2 by 10.8 units round its middle, on any screen. That is exactly what the preview shows when the picture fits the view, with the game's interface over it. Your pictures are bigger, so their edges only come into sight as the cursor drifts the place: zoom out or drag the view and what the player can't see is a little darker, with a thin line round the rest.
+docs.places.playersView = 게임은 어느 화면에서든 장소의 같은 부분, 곧 가운데를 중심으로 19.2×10.8 단위를 보여 줍니다. 그림이 보기에 맞춰져 있을 때 미리보기가 보여 주는 것이 정확히 그 부분이며, 그 위에 게임 인터페이스가 얹힙니다. 내 그림은 더 크므로, 그 가장자리는 커서에 따라 장소가 흘러갈 때만 보입니다. 축소하거나 보기를 끌면 플레이어가 볼 수 없는 부분은 조금 어둡게 보이고, 나머지는 가는 선으로 둘러싸입니다.
+
 # Guide: picking an object in the preview
 # en: Picking
 docs.places.picking.term = 고르기
 
 # Guide bullet
-# en: Click an object in the picture or in the hierarchy beside it. The panel to the right of the picture then moves, turns or scales it; an NPC's first row picks the part - Body, Shadow, Blink, Wet or Reflection.
-docs.places.picking = 그림이나 그 옆의 계층에서 오브젝트를 클릭하세요. 그러면 그림 오른쪽 패널에서 오브젝트를 옮기고, 돌리고, 크기를 바꿀 수 있습니다. NPC는 첫 번째 행에서 부위를 고릅니다. 몸, 그림자, 눈 깜빡임, 젖음, 반사.
+# en: Click an object in the picture or in the hierarchy beside it. The panel to the right of the picture then moves, turns or scales it, and below that has all of its settings; an NPC's first row picks the part - Body, Shadow, Blink, Wet or Reflection.
+docs.places.picking = 그림이나 그 옆의 계층에서 오브젝트를 클릭하세요. 그러면 그림 오른쪽 패널에서 오브젝트를 옮기고, 돌리고, 크기를 바꿀 수 있으며, 그 아래에 오브젝트의 모든 설정이 있습니다. NPC는 첫 번째 행에서 부위를 고릅니다. 몸, 그림자, 눈 깜빡임, 젖음, 반사.
 
 # Guide: a box's heading
 # en: Hierarchy
@@ -24521,9 +25041,73 @@ setup.uninstall.go = 제거
 # en: ModForge has been uninstalled.
 setup.uninstall.done = ModForge를 제거했습니다.
 
+# Note under a place's preview: where its objects are made and set
+# en: Everything this place builds is in the hierarchy beside the picture. + Object adds art, a prop, or a container that groups other objects; + Character places one of your NPCs. Click an object in the picture or in the hierarchy and all of its settings are to the right of the picture: its picture, where it stands and how big, its components, Active when, and + Add child and + Add NPC child to put more under it. Dialogues reach an object by its Name, and a lower Sort draws it further back. NPCs is the place's own object, where every character stands.
+places.placeObjectsHelp = 이 장소가 만드는 모든 것은 그림 옆 계층에 있습니다. '+ 오브젝트'는 그림, 소품, 또는 다른 오브젝트를 묶는 그릇을 추가하고, '+ 캐릭터'는 내 NPC 하나를 배치합니다. 그림이나 계층에서 오브젝트를 클릭하면 그 모든 설정이 그림 오른쪽에 나옵니다. 그림, 서 있는 위치와 크기, 컴포넌트, '활성 조건', 그리고 그 아래에 더 넣는 '+ 자식 추가'와 '+ NPC 자식 추가'. 대화는 '이름'으로 오브젝트를 찾으며, '순서'가 낮을수록 더 뒤에 그려집니다. NPCs는 장소 자체의 오브젝트로, 모든 캐릭터가 거기에 섭니다.
+
+# Note under a game level's preview: where its objects are made and set
+# en: The hierarchy beside the picture is the game's level as it is, with what your pack adds to it. + Object and + Character add your own, and Fill from vanilla hierarchy brings in any of the game's objects not listed yet. Click one and its settings are to the right of the picture. Your pack keeps only what it changes: the game's objects you leave alone are not saved.
+places.levelObjectsHelp = 그림 옆 계층은 게임의 레벨을 있는 그대로 보여 주며, 내 팩이 더한 것도 함께 나옵니다. '+ 오브젝트'와 '+ 캐릭터'로 내 것을 추가하고, '게임 계층에서 채우기'로 아직 목록에 없는 게임 오브젝트를 가져옵니다. 하나를 클릭하면 그림 오른쪽에 설정이 나옵니다. 팩에는 바꾼 것만 남습니다. 손대지 않은 게임 오브젝트는 저장되지 않습니다.
+
 # Heading of the object list in the place preview
 # en: Hierarchy
 preview.place.hierarchy = 계층
+
+# Button over the object list in the place preview: adds an object
+# en: + Object
+preview.object.add = + 오브젝트
+
+# Tooltip on "+ Object"
+# en: Add an object to the place, in the middle of the picture: art, a prop, or a container for other objects. It is picked, with its settings to the right of the picture.
+preview.object.add.tip = 장소의 그림 한가운데에 오브젝트를 추가합니다. 그림, 소품, 또는 다른 오브젝트를 담는 그릇. 선택된 채로 추가되며, 설정은 그림 오른쪽에 나옵니다.
+
+# Button over the object list in the place preview: places an NPC
+# en: + Character
+preview.character.add = + 캐릭터
+
+# Tooltip on "+ Character"
+# en: Place one of your NPCs here: on the picked object when it can hold characters (an object under NPCs), otherwise under the place's NPCs object. It is picked: choose its NPC to the right of the picture, then drag it where it should stand.
+preview.character.add.tip = 내 NPC 하나를 여기에 배치합니다. 선택한 오브젝트가 캐릭터를 담을 수 있으면(NPCs 아래의 오브젝트) 그 오브젝트에, 아니면 장소의 NPCs 오브젝트 아래에 놓입니다. 선택된 채로 놓이니, 그림 오른쪽에서 그 NPC를 고른 다음 서 있어야 할 곳으로 끌어다 놓으세요.
+
+# Tooltip on the heading of the object list in the place preview: its keys
+# en: Keys, after a click on the picture or on this list: Ctrl+C copies the object picked, with everything under it. Ctrl+V pastes it under the object picked (with nothing picked, among the place's own). Ctrl+D duplicates the object picked beside itself. Delete sends it to the recycle bin at the bottom of this list. On the game's own objects, a copy of a light is a light of your own and a copy of anything else is a copy of the game's object, and Delete switches the game's object off where it stands. The NPCs object is the place's one: paste characters under it.
+preview.place.keys.tip = 키(그림이나 이 목록을 클릭한 뒤): Ctrl+C는 선택한 오브젝트를 그 아래의 모든 것과 함께 복사합니다. Ctrl+V는 선택한 오브젝트 아래에 붙여 넣습니다(아무것도 선택하지 않았으면 장소 자체의 오브젝트들 사이에). Ctrl+D는 선택한 오브젝트를 바로 옆에 복제합니다. Delete는 이 목록 맨 아래의 휴지통으로 보냅니다. 게임 자체의 오브젝트에서는 조명의 복사본은 내 조명이 되고 다른 것의 복사본은 게임 오브젝트의 복사본이 되며, Delete는 게임 오브젝트를 그 자리에서 끕니다. NPCs 오브젝트는 장소에 하나뿐입니다. 캐릭터는 그 아래에 붙여 넣으세요.
+
+# Heading of the recycle bin at the bottom of the place preview's object list; {count} is how many it holds
+# en: Recycle bin ({count})
+preview.place.bin = 휴지통({count})
+
+# Tooltip on the recycle bin's heading
+# en: What you delete from this place waits here, with everything that was under it, until you put it back or empty the bin. It is saved with the pack and left out of what you export. Click to show or hide what it holds.
+preview.place.bin.tip = 이 장소에서 삭제한 것은 그 아래에 있던 모든 것과 함께, 되돌리거나 휴지통을 비울 때까지 여기서 기다립니다. 팩과 함께 저장되며, 내보내는 것에는 들어가지 않습니다. 클릭하면 들어 있는 것을 보이거나 숨깁니다.
+
+# Tooltip on the arrow beside something in the recycle bin
+# en: Put it back where it was, under the same object
+preview.place.bin.restore.tip = 같은 오브젝트 아래, 원래 있던 곳으로 되돌립니다
+
+# Tooltip on the cross beside something in the recycle bin
+# en: Delete it for good. Ctrl+Z still brings it back.
+preview.place.bin.forget.tip = 완전히 삭제합니다. 그래도 Ctrl+Z로 되돌릴 수 있습니다.
+
+# Button under what the recycle bin holds
+# en: Empty the bin
+preview.place.bin.empty = 휴지통 비우기
+
+# Tooltip on "Empty the bin"
+# en: Delete everything in the bin for good. Ctrl+Z still brings it back.
+preview.place.bin.empty.tip = 휴지통의 모든 것을 완전히 삭제합니다. 그래도 Ctrl+Z로 되돌릴 수 있습니다.
+
+# Tooltip on something in the recycle bin; {path} is the objects it was under, top first
+# en: Was under {path}
+preview.place.bin.under = {path} 아래에 있었음
+
+# Tooltip on something in the recycle bin that was one of the place's top objects
+# en: Was one of the place's own objects, at the top of the list
+preview.place.bin.top = 장소 자체의 오브젝트로, 목록 맨 위에 있었음
+
+# Tooltip on one of the game's own objects in the recycle bin
+# en: One of the game's own, switched off where it stands: the game's object cannot be taken out of the game. The arrow switches it back on as it was.
+preview.place.bin.switchedOff = 게임 자체의 오브젝트로, 그 자리에서 꺼졌습니다. 게임의 오브젝트는 게임에서 빼낼 수 없습니다. 화살표를 누르면 원래대로 다시 켜집니다.
 
 # Tooltip on the arrow beside an object in the hierarchy
 # en: Fold this object's children
@@ -24580,6 +25164,38 @@ preview.gizmo.rotate = 회전
 # On the toolbar over what is selected in the place preview: what dragging the handles does
 # en: Scale
 preview.gizmo.scale = 크기
+
+# On the toolbar over an object selected in the place preview that has a light or an effect: the handles move the object itself
+# en: Object
+preview.gizmo.object = 오브젝트
+
+# Tooltip on "Object"
+# en: Move, turn and size the object itself.
+preview.gizmo.object.tip = 오브젝트 자체를 옮기고, 돌리고, 크기를 바꿉니다.
+
+# On the toolbar over an object selected in the place preview: the handles are for the object's light
+# en: Light
+preview.gizmo.light = 조명
+
+# Tooltip on "Light"
+# en: The object's light: drag its reach, how far it stays full and its cone. The light stays where the object is.
+preview.gizmo.light.tip = 오브젝트의 조명입니다. 도달 거리, 최대 세기를 유지하는 범위, 원뿔을 끌어서 정하세요. 조명은 오브젝트가 있는 곳에 그대로 있습니다.
+
+# On the toolbar over an object selected in the place preview: the handles are for the effect the object plays
+# en: Effect
+preview.gizmo.effect = 효과
+
+# Tooltip on "Effect"
+# en: The effect the object plays: drag inside its box to move it away from the object, drag a corner or a side to make it bigger or smaller.
+preview.gizmo.effect.tip = 오브젝트가 재생하는 효과입니다. 상자 안을 끌면 오브젝트에서 떨어뜨려 옮기고, 모서리나 변을 끌면 크게 또는 작게 만듭니다.
+
+# Tooltip inside the box drawn round an object's effect in the place preview
+# en: Drag to move the effect away from its object. It moves with the object.
+preview.effect.box.tip = 끌어서 효과를 오브젝트에서 떨어뜨려 옮깁니다. 효과는 오브젝트와 함께 움직입니다.
+
+# Tooltip on the small squares on the box round an object's effect in the place preview
+# en: Drag to make the effect bigger or smaller (its Scale).
+preview.effect.grip.tip = 끌어서 효과를 크게 또는 작게 만듭니다('배율').
 
 # Beside the place preview: which character to show standing in the place
 # en: Character in the place
@@ -24722,8 +25338,8 @@ preview.light.shape.round.tip = 가운데서 사방으로, 또는 원뿔 모양�
 preview.light.shape.free = 자유 모양
 
 # Tooltip on the free light shape
-# en: A light in the exact shape you draw, point by point, with a soft edge around it.
-preview.light.shape.free.tip = 한 점씩 그린 모양 그대로 비추고, 둘레에 부드러운 가장자리가 있는 조명.
+# en: A light in the shape you draw, point by point: full strength inside it, shining out from all of its edge as far as its reach.
+preview.light.shape.free.tip = 한 점씩 그린 모양대로 비추는 조명. 안쪽은 최대 세기이고, 가장자리 전체에서 도달 거리까지 바깥으로 빛을 냅니다.
 
 # Button beside the place preview: the light's shape
 # en: Picture
@@ -24825,13 +25441,93 @@ preview.light.point.tip = 끌어서 조명 모양의 이 모서리를 옮깁니�
 # en: Drag to add a corner here.
 preview.light.addPoint.tip = 끌어서 여기에 모서리를 추가합니다.
 
-# Label beside the place preview: the width of a free-shape light's soft edge
-# en: Soft edge
-preview.light.edge = 부드러운 가장자리
+# Label beside the place preview: how far a free-shape light shines out from its shape
+# en: Reach
+preview.light.edge = 도달 거리
 
-# Tooltip on a free-shape light's soft edge
-# en: How far outside its shape the light fades to nothing, in the game's units.
-preview.light.edge.tip = 모양 바깥으로 빛이 사라질 때까지의 거리(게임 단위)입니다.
+# Tooltip on a free-shape light's reach
+# en: How far the light shines out from its shape, fading as it goes - as a round light fades from its middle, and round at the corners - in the game's units. Drag the knob on the dashed line in the preview.
+preview.light.edge.tip = 빛이 모양에서 바깥으로 얼마나 멀리 비추는지입니다(게임 단위). 원형 조명이 가운데서부터 흐려지듯 멀어질수록 흐려지며, 모서리에서는 둥글게 퍼집니다. 미리보기에서 점선 위의 손잡이를 끌어 정하세요.
+
+# Tooltip on the knob on a free-shape light's dashed reach line in the place preview
+# en: Drag to set how far the light shines out from its shape.
+preview.light.edge.drag.tip = 끌어서 빛이 모양 바깥으로 얼마나 멀리 비출지 정합니다.
+
+# Label beside the place preview: how a light drifts as the cursor moves (with the place's back picture, its front, or its own)
+# en: Moves with
+preview.light.drift = 함께 움직임
+
+# Tooltip on "Moves with"
+# en: How the light drifts with the place as the cursor moves (its parallax): with the place's back picture, with its front picture, or by a strength of its own. It is its object's drift, so a picture on the same object drifts with it. The game's own lamps keep what the game gave them.
+preview.light.drift.tip = 커서가 움직일 때 조명이 장소와 함께 어떻게 흘러가는지(시차)입니다. 장소의 뒤 그림과 함께, 앞 그림과 함께, 또는 자체 세기로. 조명이 달린 오브젝트의 움직임이므로, 같은 오브젝트의 그림도 함께 흘러갑니다. 게임 자체의 램프는 게임이 준 값을 그대로 유지합니다.
+
+# Button beside the place preview: the light drifts with the place's back picture
+# en: Back
+preview.light.drift.back = 뒤
+
+# Tooltip on "Back"
+# en: Drift with the place's back picture, as something far away does: the moon, a street lamp seen through a window. What a new light does.
+preview.light.drift.back.tip = 멀리 있는 것처럼 장소의 뒤 그림과 함께 흘러갑니다. 달, 창문 너머로 보이는 가로등. 새 조명이 하는 방식입니다.
+
+# Tooltip on "Back" on a level of the game's that has no back picture to drift with
+# en: This level of the game's has no back picture of the kind a pack place has, so there is none to drift with. Front, or a strength of its own, can match how any of its pictures drifts.
+preview.light.drift.noBack.tip = 게임의 이 레벨에는 팩 장소에 있는 것 같은 뒤 그림이 없으므로, 함께 흘러갈 대상이 없습니다. '앞'이나 자체 세기로 이 레벨의 어느 그림의 움직임에든 맞출 수 있습니다.
+
+# Button beside the place preview: the light drifts with the place's front picture
+# en: Front
+preview.light.drift.front = 앞
+
+# Tooltip on "Front"
+# en: Drift with the place's front picture: the light stays on the lamp, window or screen it shines from. What every light made before this did, and what the game's own lamps do.
+preview.light.drift.front.tip = 장소의 앞 그림과 함께 흘러갑니다. 조명이 비추어 나오는 램프, 창문, 화면에 그대로 머뭅니다. 이 설정이 생기기 전에 만든 모든 조명이 이렇게 했고, 게임 자체의 램프도 이렇게 합니다.
+
+# Button beside the place preview: the light drifts by a strength of its own
+# en: Own
+preview.light.drift.own = 자체
+
+# Tooltip on "Own"
+# en: Drift by a strength of its own, set below. It starts where the light drifts now.
+preview.light.drift.own.tip = 아래에서 정하는 자체 세기로 흘러갑니다. 지금 조명이 흘러가는 정도에서 시작합니다.
+
+# Label beside the place preview: how far a light drifts by its own strength
+# en: Drift strength
+preview.light.drift.strength = 움직임 세기
+
+# Tooltip on "Drift strength"
+# en: How far the light drifts as the cursor moves, on top of the place's front picture: 0 drifts with the front, higher drifts further. The game's own pictures use 0.1 to 1.5.
+preview.light.drift.strength.tip = 커서가 움직일 때 조명이 장소의 앞 그림에 더해 얼마나 멀리 흘러가는지입니다. 0이면 앞 그림과 함께, 높을수록 더 멀리 흘러갑니다. 게임 자체의 그림은 0.1에서 1.5를 씁니다.
+
+# Tick box beside the place preview: the light drifts the other way
+# en: Reversed
+preview.light.drift.reversed = 반대로
+
+# Tooltip on "Reversed"
+# en: Drift with the cursor instead of against it. Until you change it, this is the way the place's back picture drifts, so it starts ticked where the back picture is reversed.
+preview.light.drift.reversed.tip = 커서와 반대가 아니라 커서와 같은 방향으로 흘러갑니다. 바꾸기 전까지는 장소의 뒤 그림이 흘러가는 방향을 따르므로, 뒤 그림이 반대로 움직이는 곳에서는 처음부터 체크되어 있습니다.
+
+# Tooltip on "Moves with" beside the place preview, for a character standing in the place
+# en: How the character drifts with the place as the cursor moves (their parallax): with the place's front picture, as the floor they stand on does, with its back picture, or by a strength of their own. Their shadow, blink, reflection and anything they hold drift with them.
+preview.character.drift.tip = 커서가 움직일 때 캐릭터가 장소와 함께 어떻게 흘러가는지(시차)입니다. 서 있는 바닥처럼 장소의 앞 그림과 함께, 뒤 그림과 함께, 또는 자체 세기로. 그림자, 눈 깜빡임, 반사, 그리고 들고 있는 것도 함께 흘러갑니다.
+
+# Tooltip on "Back", for a character
+# en: Drift with the place's back picture, as someone far away does: a figure on a distant hill, a crowd seen through a window.
+preview.character.drift.back.tip = 멀리 있는 사람처럼 장소의 뒤 그림과 함께 흘러갑니다. 먼 언덕 위의 인물, 창문 너머로 보이는 군중.
+
+# Tooltip on "Back" for a character, on a level of the game's with no back picture to drift with
+# en: This level of the game's has no back picture of the kind a pack place has, so there is none to drift with. Front, or a strength of their own, can match how any of its pictures drifts.
+preview.character.drift.noBack.tip = 게임의 이 레벨에는 팩 장소에 있는 것 같은 뒤 그림이 없으므로, 함께 흘러갈 대상이 없습니다. '앞'이나 자체 세기로 이 레벨의 어느 그림의 움직임에든 맞출 수 있습니다.
+
+# Tooltip on "Front", for a character
+# en: Drift with the place's front picture: the character stays on the floor they stand on. What every character placed before this did, and what the game's own characters do.
+preview.character.drift.front.tip = 장소의 앞 그림과 함께 흘러갑니다. 캐릭터가 서 있는 바닥에 그대로 머뭅니다. 이 설정이 생기기 전에 배치한 모든 캐릭터가 이렇게 했고, 게임 자체의 캐릭터도 이렇게 합니다.
+
+# Tooltip on "Own", for a character
+# en: Drift by a strength of their own, set below. It starts where the character drifts now.
+preview.character.drift.own.tip = 아래에서 정하는 자체 세기로 흘러갑니다. 지금 캐릭터가 흘러가는 정도에서 시작합니다.
+
+# Tooltip on "Drift strength", for a character
+# en: How far the character drifts as the cursor moves, on top of what they stand under: 0 drifts with it, higher drifts further. The game's own pictures use 0.1 to 1.5.
+preview.character.drift.strength.tip = 커서가 움직일 때 캐릭터가 자기가 속한 오브젝트에 더해 얼마나 멀리 흘러가는지입니다. 0이면 그 오브젝트와 함께, 높을수록 더 멀리 흘러갑니다. 게임 자체의 그림은 0.1에서 1.5를 씁니다.
 
 # Label beside the place preview: the picture a picture light is made of
 # en: Picture
@@ -25328,6 +26024,18 @@ migration.cueVolumes = 패턴이 쓰인 글자 크기에 맞춰 소리가 더 �
 # In the list of what opening a pack changed: lines with more than one sound, their timing written down so they play as before
 # en: lines with more than one sound given their timing, so each keeps playing when it did
 migration.cueTiming = 소리가 둘 이상인 대사에 타이밍을 기록해, 각 소리가 전과 같은 때에 나도록 했습니다
+
+# In the list of what opening a pack changed: places and game levels now following the new rules for their objects' masks
+# en: places whose objects now stay still unless given a mask (each object keeps moving as it did)
+migration.objectMasks = 이제 마스크를 주지 않으면 오브젝트가 움직이지 않는 장소(각 오브젝트는 예전처럼 움직입니다)
+
+# In the list of what opening a pack changed: objects that moved with the back layer's mask, now set to say so
+# en: objects that moved with the place's back layer's mask, now set to "The back layer's mask" so they keep moving
+migration.objectMasksBackLayer = 장소 뒤 레이어의 마스크에 따라 움직이던 오브젝트로, 계속 움직이도록 이제 '뒤 레이어의 마스크'로 설정됨
+
+# In the list of what opening a pack changed: objects with a mask of their own that did nothing in the game, because the place's back layer had no mask, and are now set to stay still as they did
+# en: objects with a mask of their own that the game left still (the place's back layer had no mask), now set to "Nothing (still)" - choose "Its own mask" to make them move
+migration.objectMasksOwn = 게임이 움직이지 않게 둔, 자체 마스크가 있는 오브젝트(장소의 뒤 레이어에 마스크가 없었음)로, 이제 '없음(고정)'으로 설정됨. 움직이게 하려면 '자체 마스크'를 고르세요
 
 # One line of the list of what was brought up to date
 # en: Given a version to start from ({version})

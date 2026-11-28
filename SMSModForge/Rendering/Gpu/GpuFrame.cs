@@ -20,8 +20,8 @@ internal sealed class GpuFrame : IDisposable
 {
     private const int N = BackdropRender.FrameSize, S = JiggleShader.Size;
     private readonly GpuDevice _gpu;
-    private readonly ID3D11ComputeShader _light, _roomPass, _background, _clear, _layer, _overlay, _glow, _copy, _lampsAdd;
-    private readonly GpuConstants _frameCb;
+    private readonly ID3D11ComputeShader _light, _roomPass, _background, _clear, _layer, _overlay, _glow, _copy, _lampsAdd, _dropsPass;
+    private readonly GpuConstants _frameCb, _dropCb;
     public GpuBody Body { get; }
     public GpuPost Post { get; }
 
@@ -49,9 +49,73 @@ internal sealed class GpuFrame : IDisposable
         _layer = gpu.Kernel(source, "LayerPass", "Frame");
         _overlay = gpu.Kernel(source, "OverlayPass", "Frame");
         _glow = gpu.Kernel(source, "GlowPass", "Frame");
+        _dropsPass = gpu.Kernel(source, "DropsPass", "Frame");
         _copy = gpu.Kernel(source, "CopyOut", "Frame");
         _lampsAdd = gpu.Kernel(source, "LampsAddPass", "Frame");
         _frameCb = new GpuConstants(gpu, 16);
+        _dropCb = new GpuConstants(gpu, 8);
+    }
+
+    // A wet bust's drops (after 1.10.0): their rows (made again as their number grows, filled every frame) and the
+    // particle texture's copies, read by CopyOut.
+    private const int DropStride = 12;
+    private ID3D11Buffer? _drops, _dropAlpha;
+    private ID3D11ShaderResourceView? _dropsRead, _dropAlphaRead;
+    private float[]? _dropRows;
+    private int _dropsRoom;
+
+    /// <summary>The drops CopyOut blends over the frame (WetDrops.BlendInto on the processor), or none. The caller
+    /// holds the device's gate.</summary>
+    private void BindDrops(WetDrops.Over? drops)
+    {
+        var ctx = _gpu.Context;
+        int count = drops?.Count ?? 0;
+        float U(int v) => BitConverter.Int32BitsToSingle(v);
+        if (count > 0)
+        {
+            var mips = drops!.Mips;
+            _dropAlpha ??= Floats(mips.Alpha, false, out _dropAlphaRead);
+            if (_drops == null || _dropsRoom < count)
+            {
+                _dropsRead?.Dispose(); _drops?.Dispose();
+                _dropsRoom = Math.Max(16, count * 2);
+                _dropRows = new float[_dropsRoom * DropStride];
+                _drops = Rows(_dropRows, DropStride * 4, out _dropsRead);
+            }
+            var rows = _dropRows!;
+            Array.Clear(rows);
+            for (int i = 0; i < count; i++)
+            {
+                ref readonly var d = ref drops.Drops[i];
+                int o = i * DropStride;
+                rows[o] = (float)d.X; rows[o + 1] = (float)d.Y; rows[o + 2] = (float)d.W; rows[o + 3] = (float)d.H; rows[o + 4] = d.Alpha;
+                rows[o + 5] = WetDrops.Linear(d.R); rows[o + 6] = WetDrops.Linear(d.G); rows[o + 7] = WetDrops.Linear(d.B); rows[o + 8] = d.Solid ? 1f : 0f; rows[o + 9] = d.Lit ? 1f : 0f;
+            }
+            unsafe
+            {
+                fixed (float* p = rows) ctx.UpdateSubresource(_drops!, 0, null, (IntPtr)p, 0, 0);
+            }
+            _dropCb.Upload(_gpu, new[] { U(count), U(mips.Full), U(mips.Levels), _w / drops.CanvasW, drops.CanvasW, drops.CanvasH, 0f, 0f });
+            ctx.CSSetShaderResource(9, _dropsRead!);
+            ctx.CSSetShaderResource(10, _dropAlphaRead!);
+        }
+        else _dropCb.Upload(_gpu, new[] { U(0), U(0), U(0), 0f, 0f, 0f, 0f, 0f });
+        ctx.CSSetConstantBuffer(1, _dropCb.Buffer);
+    }
+
+    private ID3D11Buffer Rows(float[] data, int stride, out ID3D11ShaderResourceView read)
+    {
+        unsafe
+        {
+            fixed (float* p = data)
+            {
+                var buffer = _gpu.Device.CreateBuffer(new BufferDescription((uint)(data.Length * 4), BindFlags.ShaderResource, ResourceUsage.Default,
+                                                                            CpuAccessFlags.None, ResourceOptionFlags.BufferStructured, (uint)stride),
+                                                      new SubresourceData((IntPtr)p));
+                read = _gpu.Device.CreateShaderResourceView(buffer);
+                return buffer;
+            }
+        }
     }
 
     /// <summary>One for a preview, or null when the PC has no card to draw on.</summary>
@@ -136,7 +200,7 @@ internal sealed class GpuFrame : IDisposable
     private void UnbindAll()
     {
         var ctx = _gpu.Context;
-        for (uint i = 0; i < 9; i++) ctx.CSSetShaderResource(i, null);
+        for (uint i = 0; i < 11; i++) ctx.CSSetShaderResource(i, null);
         for (uint i = 0; i < 5; i++) ctx.CSSetUnorderedAccessView(i, null);
     }
 
@@ -148,7 +212,8 @@ internal sealed class GpuFrame : IDisposable
     /// </summary>
     public void Draw(GameLamp lamp, float[] shadow, BackdropScene scene, byte[] baseTex, byte[] maskTex, JiggleParams p,
                      (float r, float g, float b, float a) tint, float time, bool giOn, int bustBottom, bool bodyShows, float silhouette,
-                     byte[]? expression, byte[]? mouth, byte[]? blink, BackdropRender.PostParts parts, int zoom, byte[] output)
+                     byte[]? expression, byte[]? mouth, byte[]? blink, BackdropRender.PostParts parts, int zoom, byte[] output,
+                     WetDrops.Over? drops = null)
     {
         lock (_gpu.Gate)
         {
@@ -209,7 +274,11 @@ internal sealed class GpuFrame : IDisposable
                 Run(_layer, N / 16, N / 16);
             }
             ctx.CSSetShaderResource(6, null);
+            // A wet outfit's drops: before the glow, which the game adds over them too (WetDrops.BlendInto).
+            BindDrops(drops);
+            if (drops != null && drops.Count > 0) Run(_dropsPass, (_w + 15) / 16, (_h + 15) / 16);
             Run(_glow, (_w + 15) / 16, (_h + 15) / 16);
+            BindDrops(null);
             Run(_copy, (_w + 15) / 16, (_h + 15) / 16);
             UnbindAll();
 
@@ -255,7 +324,8 @@ internal sealed class GpuFrame : IDisposable
     /// </summary>
     public void DrawNoLamp(BackdropScene scene, byte[] baseTex, byte[] maskTex, JiggleParams p,
                            (float r, float g, float b, float a) tint, float time, bool giOn, int bustBottom, bool bodyShows, float silhouette,
-                           byte[]? expression, byte[]? mouth, byte[]? blink, BackdropRender.PostParts parts, int zoom, byte[] output)
+                           byte[]? expression, byte[]? mouth, byte[]? blink, BackdropRender.PostParts parts, int zoom, byte[] output,
+                           WetDrops.Over? drops = null)
     {
         lock (_gpu.Gate)
         {
@@ -292,6 +362,7 @@ internal sealed class GpuFrame : IDisposable
             ctx.CSSetShaderResource(6, null);
             ctx.CSSetShaderResource(8, _lightFrameRead!);
             Run(_lampsAdd, N / 16, N / 16);
+            BindDrops(drops);
             Run(_copy, (_w + 15) / 16, (_h + 15) / 16);
             UnbindAll();
             Post.PresentFrom(_frameOut, scene, parts, output);
@@ -310,7 +381,8 @@ internal sealed class GpuFrame : IDisposable
     /// </summary>
     public void DrawNpc(BackdropScene scene, FakeGi gi, bool giOn, NpcLight light, byte[] baseTex, byte[]? blinkTex, byte[] maskTex, int w, int h,
                         JiggleParams p, (float r, float g, float b, float a) tint, float time,
-                        float left, float bottom, float width, float height, BackdropRender.PostParts parts, int zoom, byte[] output)
+                        float left, float bottom, float width, float height, BackdropRender.PostParts parts, int zoom, byte[] output,
+                        WetDrops.Over? drops = null)
     {
         lock (_gpu.Gate)
         {
@@ -371,11 +443,20 @@ internal sealed class GpuFrame : IDisposable
                 Run(_layer, N / 16, N / 16);
             }
             ctx.CSSetShaderResource(6, null);
-            if (lamp != null) Run(_glow, (_w + 15) / 16, (_h + 15) / 16);
+            // The NPC's wet drops as a wet bust's (NpcRender.Compose): with a lamp before its glow, counted as drawn
+            // over; without one blended over everything on the way out (CopyOut).
+            if (lamp != null)
+            {
+                BindDrops(drops);
+                if (drops != null && drops.Count > 0) Run(_dropsPass, (_w + 15) / 16, (_h + 15) / 16);
+                BindDrops(null);
+                Run(_glow, (_w + 15) / 16, (_h + 15) / 16);
+            }
             else
             {
                 ctx.CSSetShaderResource(8, _lightFrameRead!);
                 Run(_lampsAdd, N / 16, N / 16);
+                BindDrops(drops);
             }
             Run(_copy, (_w + 15) / 16, (_h + 15) / 16);
             UnbindAll();
@@ -403,6 +484,8 @@ internal sealed class GpuFrame : IDisposable
             ReleaseScene();
             foreach (var f in _faces.Values) f.Dispose();
             _frameCb.Dispose();
+            _dropCb.Dispose();
+            _dropsRead?.Dispose(); _drops?.Dispose(); _dropAlphaRead?.Dispose(); _dropAlpha?.Dispose();
             _npc?.Dispose();
         }
         Body.Dispose();

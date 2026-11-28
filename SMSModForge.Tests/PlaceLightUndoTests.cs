@@ -205,7 +205,8 @@ public sealed class PlaceLightUndoTests : IDisposable
             Pick();
             Try("lights the characters ticked", () =>
             {
-                var tick = Descendants(Field<StackPanel>(preview, "_lightFields")).OfType<CheckBox>().Single();
+                var tick = Descendants(Field<StackPanel>(preview, "_lightFields")).OfType<CheckBox>()
+                    .Single(c => System.Windows.Data.BindingOperations.GetBinding(c, System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty)?.Path.Path == nameof(LightViewModel.LightsCharacters));
                 typeof(ButtonBase).GetMethod("OnClick", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(tick, null);
             });
             Pick();

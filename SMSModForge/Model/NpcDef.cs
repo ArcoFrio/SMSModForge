@@ -198,4 +198,23 @@ public sealed class NpcWetDef
     /// <summary>Whether the particle GameObject starts active.</summary>
     [JsonProperty("startActive", Order = 2)]
     public bool StartActive { get; set; } = true;
+
+    // How its drops look (after 1.10.0, the author: "NPC sets them, placements can change"): every placement of the
+    // NPC starts from these, and one set on a placement (WetEffectDef) changes that placed character alone. Each
+    // optional: absent, the game's own. The box and the shower's top and floor are the room's - the placement's.
+
+    /// <summary>Which of the game's two wet effects: absent the wet (Anna's towel), "shower" the bathroom's.</summary>
+    [JsonProperty("kind", Order = 3, NullValueHandling = NullValueHandling.Ignore)] public string? Kind { get; set; }
+
+    /// <summary>A colour (#RRGGBB or #RRGGBBAA) the game's drop colour is multiplied by.</summary>
+    [JsonProperty("tint", Order = 4, NullValueHandling = NullValueHandling.Ignore)] public string? Tint { get; set; }
+
+    /// <summary>Times the game's drops a second.</summary>
+    [JsonProperty("amount", Order = 5, NullValueHandling = NullValueHandling.Ignore)] public float? Amount { get; set; }
+
+    /// <summary>Times the game's drop size.</summary>
+    [JsonProperty("size", Order = 6, NullValueHandling = NullValueHandling.Ignore)] public float? Size { get; set; }
+
+    /// <summary>Times the game's fall.</summary>
+    [JsonProperty("fall", Order = 7, NullValueHandling = NullValueHandling.Ignore)] public float? Fall { get; set; }
 }

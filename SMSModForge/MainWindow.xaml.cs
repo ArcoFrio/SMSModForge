@@ -27,6 +27,8 @@ public partial class MainWindow : Window
         InitializeComponent();
         ApplyBustPreviewSplit();
         ApplyNpcPreviewSplit();
+        // F11 puts the Places tab's preview over the whole screen and back; Esc back (MainWindow.FullScreen).
+        KeyDown += OnFullScreenKey;
 
         // Clicking the picture selects what is under the pointer. Without it a
         // full-screen object's box covers the pane and nothing beneath it can
@@ -113,10 +115,16 @@ public partial class MainWindow : Window
                             break;
                     }
                 };
-                vm.PreviewPickRequested += node =>
+                vm.PreviewPickRequested += row =>
                 {
-                    foreach (var preview in FindVisualChildren<View.Controls.PlacePreview>(this))
-                        if (preview.IsVisible && preview.PickNode(node)) break;
+                    bool Picked()
+                    {
+                        foreach (var preview in FindVisualChildren<View.Controls.PlacePreview>(this))
+                            if (preview.IsVisible && preview.PickRow(row)) return true;
+                        return false;
+                    }
+                    // A place chosen just before (a tutorial step opening it): its preview comes on screen once laid out.
+                    if (!Picked()) Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() => Picked()));
                 };
                 Coach.SizeChanged += (_, _) => KeepDimOffCoach();
                 Coach.IsVisibleChanged += (_, _) => KeepDimOffCoach();
@@ -2143,7 +2151,27 @@ public partial class MainWindow : Window
         var host = secondary ? place.SecondaryMaskHost : place.BaseMaskHost;
         string name = place.DisplayName + " - " + Loc.T(secondary ? "maskStudio.layer.back" : "maskStudio.layer.front");
         OpenMaskStudio(host, Loc.F("maskStudio.title", "name", name), Loc.T("maskStudio.kind.level"),
-                       () => PlacePreviewFor(vm, place), "mask.saveFirst.level");
+                       () => PlacePreviewFor(vm, place), "mask.saveFirst.level",
+                       shown => (shown as PlacePreview)?.PaintingLayer(secondary) ?? (() => null));
+    }
+
+    /// <summary>
+    /// The studio on an object's own mask (after 1.10.0, the author: "a way to add masks to other GOs in the place ...
+    /// edit like we'd edit either"): a level's one plane or a jiggle's three, over the object's picture, beside the
+    /// place preview of whichever place it is in - one of the pack's or a game level the pack extends.
+    /// </summary>
+    private void EditObjectMask_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm || (sender as FrameworkElement)?.DataContext is not GameObjectViewModel o) return;
+        static bool Holds(IEnumerable<GameObjectViewModel> nodes, GameObjectViewModel o)
+            => nodes.Any(n => ReferenceEquals(n, o) || Holds(n.Children, o));
+        string name = Loc.F("maskStudio.object", "name", o.Display);
+        string kind = Loc.T(o.MaskIsJiggle ? "maskStudio.kind.bust" : "maskStudio.kind.level");
+        Func<FrameworkElement, Func<Rendering.MaskCover?>> cover = shown => (shown as PlacePreview)?.PaintingObject(o) ?? (() => null);
+        if (vm.SelectedPlace is { } place && Holds(place.GameObjects, o))
+            OpenMaskStudio(o.MaskHost, Loc.F("maskStudio.title", "name", name), kind, () => PlacePreviewFor(vm, place), "mask.saveFirst.level", cover);
+        else if (vm.SelectedVanillaExtension is { } ext && Holds(ext.GameObjects, o))
+            OpenMaskStudio(o.MaskHost, Loc.F("maskStudio.title", "name", name), kind, () => ExtensionPreviewFor(vm, ext), "mask.saveFirst.level", cover);
     }
 
     private void EditNpcMask_Click(object sender, RoutedEventArgs e)
@@ -2169,7 +2197,8 @@ public partial class MainWindow : Window
     internal MaskStudio? CurrentMaskStudio => _studio;
 
     private void OpenMaskStudio(IMaskEditorHost host, string title, string subtitle,
-                                Func<FrameworkElement> preview, string saveFirstKey)
+                                Func<FrameworkElement> preview, string saveFirstKey,
+                                Func<FrameworkElement, Func<Rendering.MaskCover?>>? cover = null)
     {
         if (DataContext is not MainViewModel vm) return;
         if (string.IsNullOrWhiteSpace(vm.PackRoot))
@@ -2185,7 +2214,10 @@ public partial class MainWindow : Window
         }
         CommitPendingEdits();
 
-        var studio = new MaskStudio(host, vm.PackRoot!, title, subtitle, preview());
+        var shown = preview();
+        var studio = new MaskStudio(host, vm.PackRoot!, title, subtitle, shown);
+        // What covers the layer painted, from the place preview beside it (after 1.10.0).
+        if (cover != null) studio.CoverSource = cover(shown);
         studio.Closed += (_, _) => PutTheTabsBack(studio);
         _studio = studio;
         _languageBarWas = EditingLanguageBar.Visibility;
@@ -2297,12 +2329,44 @@ public partial class MainWindow : Window
         Bind(PlacePreview.LiveSecondaryMaskBgraProperty, nameof(PlaceViewModel.LiveSecondaryMask));
         Bind(PlacePreview.ButtonsProperty, nameof(PlaceViewModel.NavigatorButtons));
         Bind(PlacePreview.GameObjectsProperty, nameof(PlaceViewModel.GameObjects));
+        Bind(PlacePreview.ObjectsProperty, nameof(PlaceViewModel.Objects));
         Bind(PlacePreview.LevelArtOrderProperty, nameof(PlaceViewModel.BaseSortingOrder));
         Bind(PlacePreview.LevelArtSecondaryOrderProperty, nameof(PlaceViewModel.SecondarySortingOrder));
         Bind(PlacePreview.LevelParallaxProperty, nameof(PlaceViewModel.ParallaxStrength));
         Bind(PlacePreview.LevelParallaxSecondaryProperty, nameof(PlaceViewModel.ParallaxSecondaryStrength));
         Bind(PlacePreview.LevelParallaxReversedProperty, nameof(PlaceViewModel.ParallaxReversed));
         Bind(PlacePreview.LevelParallaxSecondaryReversedProperty, nameof(PlaceViewModel.ParallaxSecondaryReversed));
+        return p;
+    }
+
+    /// <summary>A game level the pack extends as the Places tab shows it, its shaders on: an object's mask is only
+    /// seen moving through them.</summary>
+    private FrameworkElement ExtensionPreviewFor(MainViewModel vm, VanillaPlaceExtensionViewModel ext)
+    {
+        var p = new PlacePreview { DataContext = ext, Shaders = true, ParallaxPreview = false, LevelArtIsTheGames = true,
+                                   DimUnderInactiveParent = true, DimInactive = true };
+        void Bind(DependencyProperty dp, string path) => p.SetBinding(dp, new Binding(path) { Mode = BindingMode.OneWay });
+        p.SetBinding(PlacePreview.PackRootProperty, From(vm, nameof(MainViewModel.PackRoot)));
+        p.SetBinding(PlacePreview.NpcCatalogProperty, From(vm, nameof(MainViewModel.Npcs)));
+        Bind(PlacePreview.BaseSpriteProperty, nameof(VanillaPlaceExtensionViewModel.PreviewBaseSprite));
+        Bind(PlacePreview.LevelArtOrderProperty, nameof(VanillaPlaceExtensionViewModel.PreviewArtOrder));
+        Bind(PlacePreview.LevelParallaxProperty, nameof(VanillaPlaceExtensionViewModel.PreviewLevelParallax));
+        Bind(PlacePreview.LevelParallaxReversedProperty, nameof(VanillaPlaceExtensionViewModel.PreviewLevelParallaxReversed));
+        Bind(PlacePreview.HasBackLayerProperty, nameof(VanillaPlaceExtensionViewModel.PreviewHasBackLayer));
+        Bind(PlacePreview.LevelParallaxSecondaryProperty, nameof(VanillaPlaceExtensionViewModel.PreviewBackParallax));
+        Bind(PlacePreview.LevelParallaxSecondaryReversedProperty, nameof(VanillaPlaceExtensionViewModel.PreviewBackParallaxReversed));
+        Bind(PlacePreview.LevelArtPpuProperty, nameof(VanillaPlaceExtensionViewModel.PreviewArtPpu));
+        Bind(PlacePreview.LevelArtPivotXProperty, nameof(VanillaPlaceExtensionViewModel.PreviewArtPivotX));
+        Bind(PlacePreview.LevelArtPivotYProperty, nameof(VanillaPlaceExtensionViewModel.PreviewArtPivotY));
+        Bind(PlacePreview.LevelPositionXProperty, nameof(VanillaPlaceExtensionViewModel.PreviewLevelPositionX));
+        Bind(PlacePreview.LevelPositionYProperty, nameof(VanillaPlaceExtensionViewModel.PreviewLevelPositionY));
+        Bind(PlacePreview.LevelVideoScreenProperty, nameof(VanillaPlaceExtensionViewModel.PreviewVideoScreen));
+        Bind(PlacePreview.LevelVideoStillProperty, nameof(VanillaPlaceExtensionViewModel.PreviewVideoStill));
+        Bind(PlacePreview.LevelArtUnlitProperty, nameof(VanillaPlaceExtensionViewModel.PreviewArtUnlit));
+        Bind(PlacePreview.LevelScaleProperty, nameof(VanillaPlaceExtensionViewModel.PreviewLevelScale));
+        Bind(PlacePreview.NpcsObjectScaleProperty, nameof(VanillaPlaceExtensionViewModel.PreviewNpcsScale));
+        Bind(PlacePreview.GameObjectsProperty, nameof(VanillaPlaceExtensionViewModel.GameObjects));
+        Bind(PlacePreview.ObjectsProperty, nameof(VanillaPlaceExtensionViewModel.Objects));
         return p;
     }
 
@@ -2503,6 +2567,20 @@ public partial class MainWindow : Window
     {
         if (sender is not System.Windows.Controls.Button { DataContext: EffectViewModel effect }) return;
         if (PickHex(string.IsNullOrEmpty(effect.Color) ? "#FFFFFFFF" : effect.Color) is { } picked) WithUndo(() => effect.Color = picked);
+    }
+
+    /// <summary>A placed character's wet tint: the picker on its own (after 1.10.0).</summary>
+    private void PickWetTint_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { DataContext: NpcPlacementViewModel placed }) return;
+        if (PickHex(string.IsNullOrEmpty(placed.WetTint) ? "#FFFFFFFF" : placed.WetTint) is { } picked) WithUndo(() => placed.WetTint = picked);
+    }
+
+    /// <summary>The NPC's own wet tint (the NPCs tab), what every placement of it starts from.</summary>
+    private void PickNpcWetTint_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { DataContext: NpcViewModel npc }) return;
+        if (PickHex(string.IsNullOrEmpty(npc.WetTint) ? "#FFFFFFFF" : npc.WetTint) is { } picked) WithUndo(() => npc.WetTint = picked);
     }
 
     /// <summary>Win32 RGB picker seeded with <paramref name="current"/>; null on cancel.</summary>
@@ -3060,15 +3138,20 @@ public partial class MainWindow : Window
                 if (pl == null) return true;
                 vm.SelectedPlace = pl;
                 Reveal(field, PlaceTreeView, pl);
+                if (IssueRowIn(pl.GameObjects, where[head.Length..]) is { } row) vm.PickInPreview(row);
                 break;
             }
             case "vanillaExtensions":
             {
                 MainTabs.SelectedIndex = TabPlaces;
-                if (TryLeadingIndex(inner, vm.VanillaExtensions.Count, out var i))
+                // By its place in the list, or (an object's issue) by the level it extends.
+                int i = TryLeadingIndex(inner, vm.VanillaExtensions.Count, out var at) ? at
+                      : vm.VanillaExtensions.ToList().FindIndex(x => string.Equals(x.Source, inner, StringComparison.Ordinal));
+                if (i >= 0)
                 {
                     vm.SelectedVanillaExtension = vm.VanillaExtensions[i];
                     Reveal(field, VanillaExtList, vm.VanillaExtensions[i]);
+                    if (IssueRowIn(vm.VanillaExtensions[i].GameObjects, where[head.Length..]) is { } row) vm.PickInPreview(row);
                 }
                 break;
             }
@@ -3236,6 +3319,46 @@ public partial class MainWindow : Window
     }
 
     /// <summary>Parses the leading integer of an issue index token ("3" in "3:Beach").</summary>
+    /// <summary>
+    /// The object or character of a place an issue is about, from what follows the place in its Where, to pick in
+    /// the place preview - where every object's settings are, now that the GameObjects list below it is gone (after
+    /// 1.10.0). An object's issues name it by the names down to it (<c>.Table.Cup.light.points</c>: the deepest
+    /// name that is an object); a character's by where it is among the place's characters (<c>.npcs[2]</c>, in the
+    /// order the check collects them). Null when it names neither.
+    /// </summary>
+    internal static object? IssueRowIn(IEnumerable<GameObjectViewModel> top, string rest)
+    {
+        var npc = Regex.Match(rest, @"\.npcs\[(?<i>\d+)\]");
+        if (npc.Success && int.TryParse(npc.Groups["i"].Value, out int wanted))
+        {
+            int n = 0;
+            NpcPlacementViewModel? Placements(IEnumerable<GameObjectViewModel> rows)
+            {
+                foreach (var r in rows)
+                {
+                    foreach (var p in r.Npcs)
+                    {
+                        if (n++ == wanted) return p;
+                        if (Placements(p.Children) is { } deeper) return deeper;
+                    }
+                    if (Placements(r.Children) is { } under) return under;
+                }
+                return null;
+            }
+            return Placements(top);
+        }
+        GameObjectViewModel? found = null;
+        IEnumerable<GameObjectViewModel> level = top;
+        foreach (var name in rest.TrimStart('.').Split('.'))
+        {
+            var next = level.FirstOrDefault(r => string.Equals(r.Name, name, StringComparison.Ordinal));
+            if (next == null) break;
+            found = next;
+            level = next.Children;
+        }
+        return found;
+    }
+
     private static bool TryLeadingIndex(string inner, int count, out int index)
     {
         index = -1;

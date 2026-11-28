@@ -60,6 +60,23 @@ public sealed partial class PlacePreview
     private GpuPlaceScene? CardScene() { lock (_cardGate) return _cardScene ??= GpuPlaceScene.TryCreate(); }
     private GpuPost? CardPost() { lock (_cardGate) return _lookCard ??= GpuPost.TryCreate(); }
 
+    /// <summary>
+    /// Let go of this preview's scene and look on the card now, for a preview made to draw a picture or two and then
+    /// dropped (the game's levels drawn one after another). Each kept a device's worth of its level's pictures until
+    /// the collector came round, which it seldom does for so little of its own: the check drawing all 146 levels in one
+    /// process grew past 14 GB (after 1.10.0). Made again on the next use.
+    /// </summary>
+    internal void ReleaseCard()
+    {
+        lock (_cardGate)
+        {
+            _cardScene?.Dispose();
+            _cardScene = null;
+            _lookCard?.Dispose();
+            _lookCard = null;
+        }
+    }
+
     /// <summary>The look is no longer the card's own drawing of the scene: the shaders' pictures, which stayed on
     /// the card meanwhile, are drawn into their bitmaps at once, and their own clock takes them from there.</summary>
     private void CardLookOver()
@@ -118,13 +135,12 @@ public sealed partial class PlacePreview
                     Put(ref item, BoxOf(disc));
                     break;
                 }
-                case Canvas host:
-                    if (!DescribeMarker(f, host)) return false;
-                    break;
                 default:
                     return false;
             }
         }
+        // The NPCs' wet drops: not in the scene's list - blended over it once it is lit (PlacePreview.Wet).
+        CollectDrops(f);
         // The shaders' pictures change with their clock, the list staying the same.
         f.Stamp = !shaders ? 0 : forCard ? _shaderClock.ElapsedTicks : ShaderSteps;
         return true;
@@ -149,8 +165,10 @@ public sealed partial class PlacePreview
                 var quality = Services.PreviewQualityManager.Current.Sampling;
                 f.DrawFirst.Add(() => picture.Drawn = DrawOnCard(target, t, quality));
                 // A level's layer is read by its nearest pixel, as WPF reads it; an NPC's between four - or, drawn
-                // coarser (a lower quality), by its blocks.
-                if (target.Params != null) sampling = quality.Step > 1 ? PlaceSampling.Nearest : PlaceSampling.Linear;
+                // coarser (a lower quality), by its blocks; enlarged past its own pixels, by its nearest, as WPF reads
+                // it then (PlacePreview.SharpenWhenEnlarged).
+                if (target.Params != null)
+                    sampling = quality.Step > 1 || mode == BitmapScalingMode.NearestNeighbor ? PlaceSampling.Nearest : PlaceSampling.Linear;
             }
             else item.Bitmap = bmp;
         }
@@ -176,86 +194,18 @@ public sealed partial class PlacePreview
     {
         if (s.Params != null)
         {
+            // At the art's own size, one sample a pixel at its middle, as on the processor (PlacePreview.Draw).
+            if (s.OutW >= s.SrcW && s.OutH >= s.SrcH) sampling = new JiggleShader.Sampling(1, 1, 1);
             var card = s.Card ??= GpuAlone.TryCreate();
             if (card == null) return () => (null, 0, 0);
-            card.DrawOnCard(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params, s.Tint, t, s.OutW, s.OutH, sampling, maskStill: true);
+            if (s.LiveSource != null) OnArtGrid(s.LiveSource, s.SrcW, s.SrcH, s.Mask);
+            card.DrawOnCard(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params, s.Tint, t, s.OutW, s.OutH, sampling, maskStill: !s.LiveMask);
             return () => card.OnCard;
         }
         var milk = s.Milk ??= GpuMilking.TryCreate();
         if (milk == null) return () => (null, 0, 0);
         milk.DrawOnCard(s.Base, s.SrcW, s.SrcH, s.Mask, s.MaskW, s.MaskH, s.Milking, t, s.OutW, s.OutH, maskStill: !s.LiveMask);
         return () => milk.OnCard;
-    }
-
-    /// <summary>
-    /// A Wet marker (an NPC's spray): its line and its drops, each its own picture - a plain fill for the line, a
-    /// disc for a drop, its outline's colour under its fill's. The marker's own opacity goes to each.
-    /// </summary>
-    private static bool DescribeMarker(PlaceFrame f, Canvas host)
-    {
-        var hostMatrix = host.RenderTransform?.Value ?? Matrix.Identity;
-        float group = (float)host.Opacity;
-        foreach (UIElement child in host.Children)
-        {
-            if (child.Visibility != Visibility.Visible) continue;
-            switch (child)
-            {
-                case Line line when line.Stroke is SolidColorBrush stroke:
-                {
-                    double dx = line.X2 - line.X1, dy = line.Y2 - line.Y1, len = Math.Sqrt(dx * dx + dy * dy), th = line.StrokeThickness;
-                    if (len < 1e-9 || th <= 0) break;
-                    double ux = dx / len, uy = dy / len, nx = -uy, ny = ux;
-                    // Along the line and half its thickness past each end (its round caps), its thickness across.
-                    var m = new Matrix(ux * (len + th), uy * (len + th), nx * th, ny * th,
-                                       line.X1 - ux * th / 2 - nx * th / 2, line.Y1 - uy * th / 2 - ny * th / 2);
-                    m.Append(hostMatrix);
-                    ref var item = ref f.Add();
-                    item.BuiltIn = PlaceBuiltIn.Solid;
-                    item.Kind = PlaceItemKind.Tint;
-                    item.Sampling = PlaceSampling.Nearest;
-                    Colour(ref item, stroke);
-                    item.Opacity = (float)line.Opacity * group;
-                    Put(ref item, m);
-                    break;
-                }
-                case Ellipse drop when drop.Fill is SolidColorBrush fill:
-                {
-                    float opacity = (float)drop.Opacity * group;
-                    if (!(opacity > 0f)) break;
-                    var box = BoxOf(drop);
-                    double th = drop.Stroke is SolidColorBrush ? drop.StrokeThickness : 0;
-                    if (drop.Stroke is SolidColorBrush outline && th > 0)
-                    {
-                        var m = box;
-                        m.Append(hostMatrix);
-                        ref var ring = ref f.Add();
-                        ring.BuiltIn = PlaceBuiltIn.Disc;
-                        ring.Kind = PlaceItemKind.Tint;
-                        ring.Sampling = PlaceSampling.Smooth;
-                        Colour(ref ring, outline);
-                        ring.Opacity = opacity;
-                        Put(ref ring, m);
-                    }
-                    // The fill, inside half the outline's thickness: the unit square drawn in from its sides.
-                    double w = Math.Max(1e-6, drop.Width), h = Math.Max(1e-6, drop.Height);
-                    double ix = Math.Min(0.49, th / 2 / w), iy = Math.Min(0.49, th / 2 / h);
-                    var inner = new Matrix(1 - 2 * ix, 0, 0, 1 - 2 * iy, ix, iy);
-                    inner.Append(box);
-                    inner.Append(hostMatrix);
-                    ref var item = ref f.Add();
-                    item.BuiltIn = PlaceBuiltIn.Disc;
-                    item.Kind = PlaceItemKind.Tint;
-                    item.Sampling = PlaceSampling.Smooth;
-                    Colour(ref item, fill);
-                    item.Opacity = opacity;
-                    Put(ref item, inner);
-                    break;
-                }
-                default:
-                    return false;
-            }
-        }
-        return true;
     }
 
     /// <summary>An element's box on the canvas: its unit square through its size, its own transform, and where the
@@ -311,6 +261,7 @@ public sealed partial class PlacePreview
     private void CardLook(PlaceFrame frame, Rect rect, int vw, int vh)
     {
         var output = _lookOut != null && _lookOut.Length == vw * vh * 4 ? _lookOut : (_lookOut = new byte[vw * vh * 4]);
+        double dropsAt = _dropsCollectedAt;   // the frame's drops' moment (it was described just now)
         _cardLookCovers = true;
         if (frame.DrawFirst.Count > 0) ShaderSteps++;
         _lookInFlight = true;
@@ -339,6 +290,7 @@ public sealed partial class PlacePreview
                 }
                 if (!IsVisible) return;
                 ShowLook(output, vw, vh, rect);
+                LookDropsShown(dropsAt);
             }, ui);
     }
 
@@ -368,17 +320,18 @@ public sealed partial class PlacePreview
     /// 1920x1080) - for tests, which hold it to the processor's. Null with no card, or while the game's look is
     /// still loading.
     /// </summary>
-    internal byte[]? RenderStillOnCard(bool look = true, bool lights = true)
+    internal byte[]? RenderStillOnCard(bool look = true, bool lights = true, int width = 0, int height = 0)
     {
         FlushRebuild();
         var scene = Services.PreviewBackdropManager.GameLook;
         if (scene == null) return null;
         var frame = new PlaceFrame();
         if (!DescribeScene(frame, forCard: true)) return null;
-        int w = (int)CanvasWidth, h = (int)CanvasHeight;
+        // At the game's 1920x1080 screen, or at another size of it (the in-game checks' 960x540 test screen).
+        int w = width > 0 ? width : (int)CanvasWidth, h = height > 0 ? height : (int)CanvasHeight;
         Frame(frame, new Rect(0, 0, CanvasWidth, CanvasHeight), w, h,
               look ? new BackdropRender.PostParts(true, true, true) : new BackdropRender.PostParts(false, false, false),
-              scene, lights && LookLights ? _placeLights : null);
+              scene, lights && LookLights ? LightsNow() : null);
         var card = CardScene();
         var post = CardPost();
         if (card == null || post == null) return null;

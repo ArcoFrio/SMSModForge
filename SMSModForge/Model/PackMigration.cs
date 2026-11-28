@@ -199,6 +199,14 @@ public static class PackMigration
         if (paced > 0)
             report.Note(Loc.T("migration.cueTiming"), paced);
 
+        var (places, backLayers, ownMasks) = ObjectMaskKinds(pack, packRoot);
+        if (places > 0)
+            report.Note(Loc.T("migration.objectMasks"), places);
+        if (backLayers > 0)
+            report.Note(Loc.T("migration.objectMasksBackLayer"), backLayers);
+        if (ownMasks > 0)
+            report.Note(Loc.T("migration.objectMasksOwn"), ownMasks);
+
         if (GiveItAVersion(pack))
             report.Note(Loc.F("migration.versionGiven", "version", pack.Version));
 
@@ -775,6 +783,56 @@ public static class PackMigration
             given++;
         }
         return given;
+    }
+
+    /// <summary>
+    /// Objects' masks (after 1.10.0, the author: "a way to add masks to other GOs in the place"; asked, "no mask"
+    /// is still). A place or extension saved before says no rules (<see cref="PlaceDef.ObjectMasks"/> 0): there an
+    /// object without a mask of its own took the back layer's (the game clones a place's objects from its back
+    /// layer), and one with a mask moved only if the back layer had a mask too. Each object with a picture of its
+    /// own is given the kind that keeps it doing what it did - the back layer's, where the back layer has a mask
+    /// (counted) - and one with its own mask keeps it, moving now whatever the back layer has (counted where that
+    /// starts it moving: the back layer had none, or it is a game level's). The place then says the rules.
+    /// </summary>
+    private static (int Places, int BackLayers, int OwnMasks) ObjectMaskKinds(ModPack pack, string? packRoot)
+    {
+        int places = 0, backLayers = 0, ownMasks = 0;
+        bool Exists(string rel) => !string.IsNullOrWhiteSpace(rel)
+            && (packRoot == null || File.Exists(Path.Combine(packRoot, rel.Replace('/', Path.DirectorySeparatorChar))));
+        void Give(IEnumerable<GameObjectDef> nodes, bool backMasked)
+        {
+            foreach (var o in nodes)
+            {
+                if (o.AppliesOwnVisuals && !string.IsNullOrWhiteSpace(o.Sprite) && string.IsNullOrEmpty(o.MaskKind))
+                {
+                    if (string.IsNullOrEmpty(o.Mask))
+                    {
+                        if (backMasked) { o.MaskKind = GameObjectDef.MaskBackLayer; backLayers++; }
+                    }
+                    // Its own mask on a still material moved nothing, so it stays still; the mask is kept for when the
+                    // author chooses it. It used to be set moving and reported (the author, after loading SMSAndroids:
+                    // "I'm noticing GOs with movement that wasn't there before at all" - its Solid on a game level).
+                    else if (!backMasked) { o.MaskKind = GameObjectDef.MaskNone; ownMasks++; }
+                }
+                Give(o.Children, backMasked);
+            }
+        }
+        foreach (var place in pack.Places)
+        {
+            if (place.ObjectMasks != 0) continue;
+            Give(place.GameObjects, Exists(place.SecondaryMaskSprite));
+            place.ObjectMasks = PlaceDef.CurrentObjectMasks;
+            places++;
+        }
+        // A game level's objects are cloned from its own second picture, which keeps the game's plain material.
+        foreach (var ext in pack.VanillaExtensions)
+        {
+            if (ext.ObjectMasks != 0) continue;
+            Give(ext.GameObjects, false);
+            ext.ObjectMasks = VanillaPlaceExtensionDef.CurrentObjectMasks;
+            places++;
+        }
+        return (places, backLayers, ownMasks);
     }
 
     /// <summary>

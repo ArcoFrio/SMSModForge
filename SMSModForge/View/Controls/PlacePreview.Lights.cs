@@ -70,8 +70,8 @@ public sealed partial class PlacePreview
     /// <summary>The scene entry of the picked object, from the last walk.</summary>
     private SceneEntry? SelectedEntry()
         => _selNode == null ? null
-         : _scene.FirstOrDefault(e => e.Node != null && e.Path == _selNodePath)
-           ?? _scene.FirstOrDefault(e => ReferenceEquals(e.Node, _selNode));
+         : _scene.FirstOrDefault(e => ReferenceEquals(e.Node, _selNode))
+           ?? AtPath(_scene, _selNodePath, _selNodeTwin, npc: false);
 
     // ── The suns ────────────────────────────────────────────────────────
 
@@ -88,9 +88,16 @@ public sealed partial class PlacePreview
             var sun = Sun(colour, node.Model.RemoveLight);
             Canvas.SetLeft(sun, c.X - SunSize / 2); Canvas.SetTop(sun, c.Y - SunSize / 2);
             var n = node; var p = e.Path;
-            sun.MouseLeftButtonDown += (_, ev) => { SelectNode(n, p); ev.Handled = true; };
+            // The sun is the light: on an object with a picture or an effect as well, its Light part (ObjectParts).
+            sun.MouseLeftButtonDown += (_, ev) =>
+            {
+                SelectNode(n, p);
+                if (LightIsApart(n)) SetObjectPart(ObjectPart.Light);
+                ev.Handled = true;
+            };
             sun.ToolTip = node.Display;
             _lightLayer.Children.Add(sun);
+            TrackParallax(sun, e.ParallaxGain, e);
         }
     }
 
@@ -214,7 +221,7 @@ public sealed partial class PlacePreview
 
     private static bool IsLightHandle(GizmoHandle h)
         => h is GizmoHandle.LightOuter or GizmoHandle.LightInner or GizmoHandle.LightOuterAngle or GizmoHandle.LightInnerAngle
-             or GizmoHandle.LightPoint;
+             or GizmoHandle.LightPoint or GizmoHandle.LightEdge;
 
     // ── A free shape's points ───────────────────────────────────────────
 
@@ -246,6 +253,7 @@ public sealed partial class PlacePreview
         var shade = new Polygon { Stroke = Brushes.Black, StrokeThickness = 5, Opacity = 0.5, IsHitTestVisible = false, Points = new PointCollection(onCanvas) };
         _gizmoLayer.Children.Add(shade);
         _gizmoLayer.Children.Add(outline);
+        DrawReach(light, e.World);
         for (int i = 0; i < onCanvas.Count; i++)
         {
             int at = i;
@@ -276,6 +284,110 @@ public sealed partial class PlacePreview
         }
     }
 
+    // ── A free shape's reach ────────────────────────────────────────────
+    //
+    // The author (after 1.10.0): "a hybrid round approach, where we shape how the source is going to be, and it emits
+    // outward like a round light (respecting the shape of the origin)". That is what a free light is in the game: the
+    // shape drawn is the light at full strength, and it shines out from all of its edge as far as its reach, fading
+    // as a round light fades from its middle (the falloff), round at the corners (LightShape). What the preview did
+    // not show was how far: the reach was a number in the panel. Now it is the dashed line where the light is gone,
+    // with a knob to drag it out or in.
+
+    private const double ReachKnobAway = 30;   // the knob stands at least this far out from its corner (canvas px)
+    private float _lightStartEdge;
+    private double _lightStartReach;
+
+    /// <summary>An object's own space on the canvas (<see cref="ObjectToCanvas"/> as a matrix).</summary>
+    private Matrix ObjectToCanvasMatrix(in Aff w)
+        => new(WorldPpu * w.A, -WorldPpu * w.B, WorldPpu * w.C, -WorldPpu * w.D, WorldOriginX + WorldPpu * w.Tx, WorldOriginY - WorldPpu * w.Ty);
+
+    private static System.Collections.Generic.List<Point> PointsOf(LightViewModel light)
+        => light.Points.Where(q => q.Length >= 2).Select(q => new Point(q[0], q[1])).ToList();
+
+    /// <summary>The line where a free light is gone, on the canvas: its shape grown by its reach all round, round at
+    /// the corners - the ring URP draws round the shape (Clipper, round joins), in the object's own space. Null for a
+    /// shape of fewer than three points, or no reach.</summary>
+    private Geometry? ReachOutline(LightViewModel light, in Aff w)
+    {
+        var pts = PointsOf(light);
+        if (pts.Count < 3 || light.Edge <= 0f) return null;
+        var figure = new PathFigure { StartPoint = pts[0], IsClosed = true, IsFilled = true };
+        figure.Segments.Add(new PolyLineSegment(pts.Skip(1), true));
+        var shape = new PathGeometry(new[] { figure });
+        // Fine enough for the canvas at any zoom: a hundredth of the reach, in the object's units.
+        double tolerance = light.Edge / 100.0;
+        var ring = shape.GetWidenedPathGeometry(new Pen(Brushes.Black, light.Edge * 2.0) { LineJoin = PenLineJoin.Round }, tolerance, ToleranceType.Absolute);
+        var reach = Geometry.Combine(shape, ring, GeometryCombineMode.Union, null, tolerance, ToleranceType.Absolute);
+        reach.Transform = new MatrixTransform(ObjectToCanvasMatrix(w));
+        return reach;
+    }
+
+    /// <summary>Where the reach knob is drawn and the point of the reach line it stands for: out from the shape's
+    /// corner furthest right on the canvas (always one that sticks out), half way between its two sides' outward
+    /// directions - on the line, or <see cref="ReachKnobAway"/> out where the reach is less, so it is never under the
+    /// corner's own knob.</summary>
+    private (Point Knob, Point OnLine)? ReachKnob(LightViewModel light, in Aff w)
+    {
+        var pts = PointsOf(light);
+        int n = pts.Count;
+        if (n < 3) return null;
+        var wc = w;
+        var canvas = pts.Select(q => ObjectToCanvas(wc, q.X, q.Y)).ToList();
+        int i = Enumerable.Range(0, n).OrderByDescending(k => canvas[k].X).First();
+        double area = 0;
+        for (int k = 0; k < n; k++) area += pts[k].X * pts[(k + 1) % n].Y - pts[(k + 1) % n].X * pts[k].Y;
+        Vector Out(int a, int b)
+        {
+            var d = pts[b] - pts[a];
+            if (d.Length < 1e-9) return new Vector();
+            var normal = area >= 0 ? new Vector(d.Y, -d.X) : new Vector(-d.Y, d.X);
+            normal.Normalize();
+            return normal;
+        }
+        var dir = Out((i - 1 + n) % n, i) + Out(i, (i + 1) % n);
+        if (dir.Length < 1e-9) dir = new Vector(1, 0);
+        dir.Normalize();
+        var corner = canvas[i];
+        var onLine = ObjectToCanvas(w, pts[i].X + dir.X * light.Edge, pts[i].Y + dir.Y * light.Edge);
+        var unit = ObjectToCanvas(w, pts[i].X + dir.X, pts[i].Y + dir.Y) - corner;
+        if (unit.Length < 1e-9) return null;
+        unit.Normalize();
+        double away = Math.Max((onLine - corner).Length, ReachKnobAway);
+        return (corner + unit * away, onLine);
+    }
+
+    /// <summary>How far a point of the object's own space is outside the shape (inside, how far in, as less than 0).</summary>
+    private static double OutsideBy(System.Collections.Generic.List<Point> pts, Point p)
+    {
+        double best = double.MaxValue;
+        bool inside = false;
+        for (int k = 0, j = pts.Count - 1; k < pts.Count; j = k++)
+        {
+            Point a = pts[j], b = pts[k];
+            if ((b.Y > p.Y) != (a.Y > p.Y) && p.X < (a.X - b.X) * (p.Y - b.Y) / (a.Y - b.Y) + b.X) inside = !inside;
+            var ab = b - a;
+            double t = ab.LengthSquared < 1e-18 ? 0 : Math.Clamp(Vector.Multiply(p - a, ab) / ab.LengthSquared, 0, 1);
+            best = Math.Min(best, (p - (a + ab * t)).Length);
+        }
+        return inside ? -best : best;
+    }
+
+    private void DrawReach(LightViewModel light, in Aff w)
+    {
+        if (ReachOutline(light, w) is { } reach)
+        {
+            _gizmoLayer.Children.Add(new Path { Data = reach, Stroke = Brushes.Black, StrokeThickness = 4, Opacity = 0.5, IsHitTestVisible = false });
+            _gizmoLayer.Children.Add(new Path { Data = reach, Stroke = LightInnerBrush, StrokeThickness = 2, IsHitTestVisible = false,
+                                                StrokeDashArray = new DoubleCollection { 5, 4 } });
+        }
+        if (ReachKnob(light, w) is not { } knob) return;
+        if ((knob.Knob - knob.OnLine).Length > 1)
+            _gizmoLayer.Children.Add(new Line { X1 = knob.OnLine.X, Y1 = knob.OnLine.Y, X2 = knob.Knob.X, Y2 = knob.Knob.Y,
+                                                Stroke = LightInnerBrush, StrokeThickness = 1.5, IsHitTestVisible = false,
+                                                StrokeDashArray = new DoubleCollection { 2, 2 } });
+        AddLightHandle(knob.Knob, LightInnerBrush, GizmoHandle.LightEdge, "preview.light.edge.drag.tip", diamond: true);
+    }
+
     private Shape AddPointHandle(Point at, Brush brush, string tipKey, bool plus, Action<MouseButtonEventArgs> down)
     {
         double size = plus ? LightHandle * 0.8 : LightHandle;
@@ -304,6 +416,11 @@ public sealed partial class PlacePreview
         if (light == null) return;
         _lightStartOuter = light.OuterRadius;
         _lightStartInner = light.InnerRadius;
+        // The reach is dragged by how far the pointer moves out or in from the shape, from where it was taken: the
+        // knob may stand further out than the reach (ReachKnob), and taking it must not jump the reach there.
+        _lightStartEdge = light.Edge;
+        var (x, y) = CanvasToObject(_lightWorld, _dragStartMouse);
+        _lightStartReach = light.IsFree ? OutsideBy(PointsOf(light), new Point(x, y)) : 0;
     }
 
     /// <summary>A light handle dragged to <paramref name="p"/> (canvas): the radii are the pointer's distance from
@@ -319,6 +436,13 @@ public sealed partial class PlacePreview
             {
                 var (x, y) = CanvasToObject(_lightWorld, p);
                 light.SetPoint(_lightPoint, x, y);
+                break;
+            }
+            case GizmoHandle.LightEdge:
+            {
+                var (x, y) = CanvasToObject(_lightWorld, p);
+                double outside = OutsideBy(PointsOf(light), new Point(x, y));
+                light.Edge = (float)Math.Round(Math.Max(0, _lightStartEdge + outside - _lightStartReach), 2);
                 break;
             }
             case GizmoHandle.LightOuter:
@@ -345,12 +469,13 @@ public sealed partial class PlacePreview
 
     /// <summary>A freeform or picture light's footprint on the game's screen, from its object's transform (the scene's
     /// walk, through the level's scale as the canvas draws it); null for a picture that cannot be read.</summary>
-    private Rendering.LightShape? ShapeOf(LightDef def, SceneEntry e)
+    private Rendering.LightShape? ShapeOf(LightDef def, SceneEntry e, Vector shift = default)
     {
         var w = e.World;
         double kx = Rendering.PlaceLights.ScreenW / CanvasWidth, ky = Rendering.PlaceLights.ScreenH / CanvasHeight;
-        double a = WorldPpu * w.A * kx, c = WorldPpu * w.C * kx, tx = (WorldOriginX + WorldPpu * w.Tx) * kx;
-        double b = WorldPpu * w.B * ky, d = WorldPpu * w.D * ky, ty = (CanvasHeight - WorldOriginY + WorldPpu * w.Ty) * ky;
+        // shift: how far its object has drifted on the canvas (canvas Y down).
+        double a = WorldPpu * w.A * kx, c = WorldPpu * w.C * kx, tx = (WorldOriginX + WorldPpu * w.Tx + shift.X) * kx;
+        double b = WorldPpu * w.B * ky, d = WorldPpu * w.D * ky, ty = (CanvasHeight - WorldOriginY + WorldPpu * w.Ty - shift.Y) * ky;
         if (def.IsFree)
         {
             var pts = def.Points.Where(q => q.Length >= 2).ToList();
@@ -404,28 +529,34 @@ public sealed partial class PlacePreview
 
     // ── "+ Light" ───────────────────────────────────────────────────────
 
-    /// <summary>The "+ Light" and "+ Darkness" buttons over the hierarchy, when the host can make them.</summary>
+    /// <summary>The buttons over the hierarchy that make something, as the host can: "+ Object" and "+ Character"
+    /// (from the GameObjects list that was below the preview), "+ Light", "+ Darkness", "+ Effect", and a game's
+    /// level's "Fill from vanilla hierarchy". Null when there are none.</summary>
     private UIElement? AddLightButton()
     {
-        if (AddLightCommand == null) return null;
-        var b = MakeChip(Chip("preview.light.add"), () => AddLightHere());
-        LocText.Bind(b, ToolTipProperty, "preview.light.add.tip");
-        var dark = MakeChip(Chip("preview.light.addDarkness"), () => AddLightHere(LightObjects.Darkness));
-        LocText.Bind(dark, ToolTipProperty, "preview.light.addDarkness.tip");
-        foreach (var chip in new[] { b, dark }) Paint(chip, false);
-        // What the tutorials point at (1.10.0: the lights tutorial).
-        TutorialAnchor.SetId(b, "btn:addLight");
-        TutorialAnchor.SetId(dark, "btn:addDarkness");
         var row = new WrapPanel { Margin = new Thickness(0, 0, 0, 4), HorizontalAlignment = HorizontalAlignment.Left };
         // Wrapped at the list's visible width: inside a list that scrolls sideways it was given all the width it
         // wanted, never wrapped, and showing + Effect scrolled the whole list sideways - its heading read "lierarchy"
         // (review of every tutorial step, 1.10.0).
         if (_objectMenuScroll != null)
             row.SetBinding(MaxWidthProperty, new System.Windows.Data.Binding(nameof(ScrollViewer.ViewportWidth)) { Source = _objectMenuScroll });
-        row.Children.Add(b);
-        row.Children.Add(dark);
+        foreach (var made in MakeChips()) row.Children.Add(made);
+        if (AddLightCommand != null)
+        {
+            var b = MakeChip(Chip("preview.light.add"), () => AddLightHere());
+            LocText.Bind(b, ToolTipProperty, "preview.light.add.tip");
+            var dark = MakeChip(Chip("preview.light.addDarkness"), () => AddLightHere(LightObjects.Darkness));
+            LocText.Bind(dark, ToolTipProperty, "preview.light.addDarkness.tip");
+            foreach (var chip in new[] { b, dark }) Paint(chip, false);
+            // What the tutorials point at (1.10.0: the lights tutorial).
+            TutorialAnchor.SetId(b, "btn:addLight");
+            TutorialAnchor.SetId(dark, "btn:addDarkness");
+            row.Children.Add(b);
+            row.Children.Add(dark);
+        }
         if (AddEffectChip() is { } effect) row.Children.Add(effect);
-        return row;
+        if (FillChip() is { } fill) row.Children.Add(fill);
+        return row.Children.Count > 0 ? row : null;
     }
 
     /// <summary>Make a light object in the middle of what the view shows - or, given <see cref="LightObjects.Darkness"/>,
@@ -537,6 +668,9 @@ public sealed partial class PlacePreview
         _pictureFields.Children.Add(Field("preview.light.picture", "preview.light.picture.tip", picture));
         _lightFields.Children.Add(_pictureFields);
 
+        // How the lamp drifts (PlacePreview.Drift).
+        _lightFields.Children.Add(BuildDriftField(_lightDrift, LampTips, "panel:lightDrift", "btn:lightDriftBack"));
+
         _lightPanel.Children.Add(_lightFields);
 
         _lightRestore = MakeChip(Chip("preview.light.restore"), () => _selNode?.RestoreLightCommand.Execute(null));
@@ -636,7 +770,7 @@ public sealed partial class PlacePreview
         var node = _selNode;
         // With nothing picked the panel shows no light at all - not, out of sight, the last one it showed
         // (which an undo may since have taken out of the pack).
-        if (node == null || _selPlacement != null) { _lightPanel.Visibility = Visibility.Collapsed; _lightPanel.DataContext = null; return; }
+        if (node == null || _selPlacement != null) { _lightPanel.Visibility = Visibility.Collapsed; _lightPanel.DataContext = null; UpdateDrift(); return; }
         _lightPanel.Visibility = Visibility.Visible;
         var light = node.Light;
         _lightGive.Visibility = light == null && !node.LightRemoved ? Visibility.Visible : Visibility.Collapsed;
@@ -649,6 +783,7 @@ public sealed partial class PlacePreview
         _lightNote.Text = note;
         _lightNote.Visibility = note.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
         _lightPanel.DataContext = light;
+        UpdateDrift();
         if (light == null) return;
         Paint(_shapeRound, light.IsRound);
         Paint(_shapeFree, light.IsFree);

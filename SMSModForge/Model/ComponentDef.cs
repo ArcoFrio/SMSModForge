@@ -19,12 +19,15 @@ public static class PackComponentType
     public const string RandomChildActivator = "RandomChildActivator";
     /// <summary>Toggle a SpriteRenderer's alpha between min/max on an interval (blink / pulse).</summary>
     public const string BlinkingSprite = "BlinkingSprite";
+    /// <summary>Float the object up and down, smoothly, for ever (after 1.10.0, the author: "I have a few monsters in
+    /// vats ... and I wanted the full sprites to move up and down in a smooth way").</summary>
+    public const string FloatingSprite = "FloatingSprite";
 
     /// <summary>The four the plugin reimplements itself, each with a purpose-built
     /// editor below. Anything else names a component the GAME defines, which the
     /// runtime resolves and configures by reflection.</summary>
     public static readonly string[] BuiltIn =
-        { FadeInSprite, FadeOutSprite, RandomChildActivator, BlinkingSprite };
+        { FadeInSprite, FadeOutSprite, RandomChildActivator, BlinkingSprite, FloatingSprite };
 
     public static bool IsBuiltIn(string type) => System.Array.IndexOf(BuiltIn, type) >= 0;
 }
@@ -86,6 +89,24 @@ public sealed class ComponentDef
     [JsonProperty("maxAlpha", Order = 10)]
     public float MaxAlpha { get; set; } = 1f;
 
+    // ── FloatingSprite ────────────────────────────────────────────────
+    /// <summary>How far it travels from its lowest point to its highest, in its parent's units.</summary>
+    [JsonProperty("floatHeight", Order = 11)]
+    public float FloatHeight { get; set; } = 0.3f;
+    /// <summary>Seconds for one whole rise and fall.</summary>
+    [JsonProperty("floatPeriod", Order = 12)]
+    public float FloatPeriod { get; set; } = 3f;
+    /// <summary>How far it also sways from side to side, in its parent's units (0: straight up and down). The sway
+    /// takes 1.618 times as long, so the two never fall into step.</summary>
+    [JsonProperty("floatSway", Order = 13)]
+    public float FloatSway { get; set; } = 0f;
+    /// <summary>Where in its rise and fall it starts, 0 to 1 (0: at its middle, going up).</summary>
+    [JsonProperty("floatStart", Order = 14)]
+    public float FloatStart { get; set; } = 0f;
+    /// <summary>Start somewhere at random instead, so several of them do not move in step.</summary>
+    [JsonProperty("floatRandomStart", Order = 15)]
+    public bool FloatRandomStart { get; set; } = true;
+
     // Serialize only the fields the chosen type uses. A game component uses none
     // of them — its values live in Params.
     public bool ShouldSerializeFadeDuration() => Type == PackComponentType.FadeInSprite;
@@ -97,4 +118,9 @@ public sealed class ComponentDef
     public bool ShouldSerializeBlinkInterval() => Type == PackComponentType.BlinkingSprite;
     public bool ShouldSerializeMinAlpha() => Type == PackComponentType.BlinkingSprite;
     public bool ShouldSerializeMaxAlpha() => Type == PackComponentType.BlinkingSprite;
+    public bool ShouldSerializeFloatHeight() => Type == PackComponentType.FloatingSprite;
+    public bool ShouldSerializeFloatPeriod() => Type == PackComponentType.FloatingSprite;
+    public bool ShouldSerializeFloatSway() => Type == PackComponentType.FloatingSprite;
+    public bool ShouldSerializeFloatStart() => Type == PackComponentType.FloatingSprite;
+    public bool ShouldSerializeFloatRandomStart() => Type == PackComponentType.FloatingSprite;
 }
